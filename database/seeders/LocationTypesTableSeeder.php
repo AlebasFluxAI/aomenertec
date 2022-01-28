@@ -30,6 +30,5 @@ class LocationTypesTableSeeder extends Seeder
             'type' => 'RESGUARDO INDIGENA',
             'acronym' => 'RI',
         ]);
-
     }
 }

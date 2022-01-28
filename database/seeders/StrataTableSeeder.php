@@ -46,6 +46,5 @@ class StrataTableSeeder extends Seeder
             'acronym' => 'IND',
             'name' => 'Industrial',
         ]);
-
     }
 }

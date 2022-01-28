@@ -107,22 +107,22 @@ class AddUser extends Component
                 NetworkOperator::create([
                     'user_id' => $user->id,
                 ]);
-            } elseif ($user->hasRole('seller')){
+            } elseif ($user->hasRole('seller')) {
                 Seller::create([
                     'user_id' => $user->id,
                     'network_operator_id' => $this->network_operator_id,
                 ]);
-            }elseif ($user->hasRole('technician')){
+            } elseif ($user->hasRole('technician')) {
                 Technician::create([
                     'user_id' => $user->id,
                     'network_operator_id' => $this->network_operator_id,
                 ]);
-            }elseif ($user->hasRole('consumer')){
+            } elseif ($user->hasRole('consumer')) {
                 Consumer::create([
                     'user_id' => $user->id,
                     'network_operator_id' => $this->network_operator_id,
                 ]);
-            }elseif ($user->hasRole('support')){
+            } elseif ($user->hasRole('support')) {
                 Support::create([
                     'user_id' => $user->id,
                 ]);

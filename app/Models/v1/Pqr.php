@@ -11,27 +11,32 @@ class Pqr extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function pqrState(){
+    public function pqrState()
+    {
         return $this->belongsTo(PqrState::class);
     }
-    public function pqrType(){
+    public function pqrType()
+    {
         return $this->belongsTo(PqrType::class);
     }
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function client(){
+    public function client()
+    {
         return $this->belongsTo(Client::class);
     }
-    public function networkOperator(){
+    public function networkOperator()
+    {
         return $this->belongsTo(NetworkOperator::class);
     }
-    public function support(){
+    public function support()
+    {
         return $this->belongsTo(Support::class);
     }
-    public function pqrPosts(){
+    public function pqrPosts()
+    {
         return $this->hasMany(PqrPost::class);
     }
-
-
 }

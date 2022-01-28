@@ -10,5 +10,4 @@ class EquipmentAssignment extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
 }

@@ -10,5 +10,4 @@ class EquipmentFailure extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
 }

@@ -11,14 +11,16 @@ class Municipality extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function clients(){
+    public function clients()
+    {
         return $this->hasMany(Client::class);
     }
-    public function locations(){
+    public function locations()
+    {
         return $this->hasMany(Location::class);
     }
-    public function department(){
+    public function department()
+    {
         return $this->belongsTo(Department::class);
     }
-
 }

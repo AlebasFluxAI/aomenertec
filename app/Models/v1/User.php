@@ -66,20 +66,24 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function networkOperator(){
+    public function networkOperator()
+    {
         return $this->hasOne(NetworkOperator::class);
     }
-    public function seller(){
+    public function seller()
+    {
         return $this->hasOne(Seller::class);
     }
-    public function technician(){
+    public function technician()
+    {
         return $this->hasOne(Technician::class);
     }
-    public function support(){
+    public function support()
+    {
         return $this->hasOne(Support::class);
     }
-    public function pqrs(){
+    public function pqrs()
+    {
         return $this->hasMany(Pqr::class);
     }
-
 }

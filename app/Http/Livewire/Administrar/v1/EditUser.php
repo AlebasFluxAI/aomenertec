@@ -91,21 +91,21 @@ class EditUser extends Component
             $this->role = "seller";
             $this->network_operator_id = $user->seller->network_operator_id;
             $this->network_operator = $user->seller->networkOperator->user->identification;
-        }elseif ($user->hasRole('technician')) {
+        } elseif ($user->hasRole('technician')) {
             $this->role = "technician";
             $this->network_operator_id = $user->technician->network_operator_id;
             $this->network_operator = $user->technician->networkOperator->user->identification;
-        }elseif ($user->hasRole('consumer')) {
+        } elseif ($user->hasRole('consumer')) {
             $this->role = "consumer";
             $this->network_operator_id = $user->consumer->network_operator_id;
             $this->network_operator = $user->consumer->networkOperator->user->identification;
-        }else {
-                $this->role = $user->getRoleNames();
-                $this->network_operator_id = "";
-                $this->network_operator = "";
-                $this->picked = false;
-                $this->messageU = "";
-                $this->messageP = "Digite identification del operador de red";
+        } else {
+            $this->role = $user->getRoleNames();
+            $this->network_operator_id = "";
+            $this->network_operator = "";
+            $this->picked = false;
+            $this->messageU = "";
+            $this->messageP = "Digite identification del operador de red";
         }
     }
     public function assignUserFirst()
@@ -128,13 +128,13 @@ class EditUser extends Component
                 if ($user->hasRole('seller')) {
                     $this->network_operator_id = $user->seller->network_operator_id;
                     $this->network_operator = $user->seller->networkOperator->user->identification;
-                }elseif ($user->hasRole('technician')) {
+                } elseif ($user->hasRole('technician')) {
                     $this->network_operator_id = $user->technician->network_operator_id;
                     $this->network_operator = $user->technician->networkOperator->user->identification;
-                }elseif ($user->hasRole('consumer')) {
+                } elseif ($user->hasRole('consumer')) {
                     $this->network_operator_id = $user->consumer->networkOperator_id;
                     $this->network_operator = $user->consumer->networkOperator->user->identification;
-                }else {
+                } else {
                     $this->network_operator_id = "";
                     $this->network_operator = "";
                     $this->picked = false;
@@ -193,14 +193,14 @@ class EditUser extends Component
             $user->save();
             $user->syncRoles([$this->role]);
             $role_update = $user->getRoleNames();
-            if ($role != $role_update){
+            if ($role != $role_update) {
                 if ($role == 'seller') {
                     $user->seller->delete();
-                }elseif ($role == 'technician') {
+                } elseif ($role == 'technician') {
                     $user->technician->delete();
-                }elseif ($role == 'consumer') {
+                } elseif ($role == 'consumer') {
                     $user->consumer->delete();
-                }elseif ($role == 'support') {
+                } elseif ($role == 'support') {
                     $user->support->delete();
                 }
             }
@@ -209,17 +209,17 @@ class EditUser extends Component
                     ['user_id' => $user->id],
                     ['network_operator_id' => $this->network_operator_id]
                 );
-            }elseif ($user->hasRole('technician')) {
+            } elseif ($user->hasRole('technician')) {
                 Technician::updateOrCreate(
                     ['user_id' => $user->id],
                     ['network_operator_id' => $this->network_operator_id]
                 );
-            }elseif ($user->hasRole('consumer')) {
+            } elseif ($user->hasRole('consumer')) {
                 Consumer::updateOrCreate(
                     ['user_id' => $user->id],
                     ['network_operator_id' => $this->network_operator_id]
                 );
-            }elseif ($user->hasRole('suport')) {
+            } elseif ($user->hasRole('suport')) {
                 Support::updateOrCreate(
                     ['user_id' => $user->id],
                 );
@@ -234,11 +234,11 @@ class EditUser extends Component
             $user = User::find($this->user_id);
             if ($user->hasRole('seller')) {
                 $user->seller->delete();
-            }elseif ($user->hasRole('technician')) {
+            } elseif ($user->hasRole('technician')) {
                 $user->technician->delete();
-            }elseif ($user->hasRole('consumer')) {
+            } elseif ($user->hasRole('consumer')) {
                 $user->consumer->delete();
-            }elseif ($user->hasRole('suport')) {
+            } elseif ($user->hasRole('suport')) {
                 $user->support->delete();
             }
             $user->delete();

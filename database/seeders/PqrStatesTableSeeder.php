@@ -30,6 +30,5 @@ class PqrStatesTableSeeder extends Seeder
             'state' => 'CERRADO',
             'description' => 'PQR con diagnostico y solucion aceptados',
         ]);
-
     }
 }

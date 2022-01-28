@@ -11,23 +11,29 @@ class NetworkOperator extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function clients(){
+    public function clients()
+    {
         return $this->hasMany(Client::class);
     }
-    public function sellers(){
+    public function sellers()
+    {
         return $this->hasMany(Seller::class);
     }
-    public function technicians(){
+    public function technicians()
+    {
         return $this->hasMany(Technician::class);
     }
-    public function consumers(){
+    public function consumers()
+    {
         return $this->hasMany(Consumer::class);
     }
 
-    public function pqrs(){
+    public function pqrs()
+    {
         return $this->hasMany(Pqr::class);
     }
 }

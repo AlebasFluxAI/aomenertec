@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\v1\HomeController;
 use App\Http\Livewire;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,4 +29,3 @@ Route::group(['middleware' => ['permission:add_user']], function () {
     Route::get('/administrar/v1/usuarios/agregar', Livewire\Administrar\v1\AddUser::class)->name('administrar.adduser');
 });
 Route::get('/administrar/v1/usuarios/editar', Livewire\Administrar\v1\EditUser::class)->name('administrar.edituser')->middleware('permission:edit_user');
-

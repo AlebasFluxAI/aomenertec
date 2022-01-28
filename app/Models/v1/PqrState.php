@@ -10,7 +10,8 @@ class PqrState extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    public function pqrs(){
+    public function pqrs()
+    {
         return $this->hasMany(Pqr::class);
     }
 }
