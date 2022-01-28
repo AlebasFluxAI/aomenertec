@@ -11,11 +11,12 @@ class Equipment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function equipmentType(){
+    public function equipmentType()
+    {
         return $this->hasOne(EquipmentType::class);
     }
-    public function equipmentCondition(){
+    public function equipmentCondition()
+    {
         return $this->hasOne(EquipmentCondition::class);
     }
-
 }

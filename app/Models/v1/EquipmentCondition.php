@@ -11,8 +11,8 @@ class EquipmentCondition extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function Equipments(){
+    public function Equipments()
+    {
         return $this->hasMany(Equipment::class);
     }
-
 }

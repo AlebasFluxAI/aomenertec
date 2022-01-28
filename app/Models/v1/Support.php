@@ -11,10 +11,12 @@ class Support extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function pqrs(){
+    public function pqrs()
+    {
         return $this->hasMany(Pqr::class);
     }
 }

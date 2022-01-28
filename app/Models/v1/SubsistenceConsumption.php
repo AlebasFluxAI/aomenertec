@@ -11,7 +11,8 @@ class SubsistenceConsumption extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function clients(){
+    public function clients()
+    {
         return $this->hasMany(Client::class);
     }
 }

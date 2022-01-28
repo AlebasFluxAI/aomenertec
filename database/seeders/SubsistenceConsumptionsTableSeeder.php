@@ -18,10 +18,9 @@ class SubsistenceConsumptionsTableSeeder extends Seeder
            'value' => 173,
            'description' => 'Para clientes ubicados en municipios de clima calido (por debajo de 1.000 MSNM)',
         ]);
-         SubsistenceConsumption::create([
+        SubsistenceConsumption::create([
            'value' => 130,
            'description' => 'Para usuarios ubicados en municipios de climas templados y fríos (por encima de 1.000 MSNM))',
         ]);
-
     }
 }

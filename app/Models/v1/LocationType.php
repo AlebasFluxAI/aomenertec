@@ -11,7 +11,8 @@ class LocationType extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function locations(){
+    public function locations()
+    {
         return $this->hasMany(Location::class);
     }
 }

@@ -14,7 +14,7 @@ class EquipmentTypesTableSeeder extends Seeder
      */
     public function run()
     {
-// DB::table('equipment_types')->truncate();
+        // DB::table('equipment_types')->truncate();
         DB::table('equipment_types')->insert([
             ['name'=> 'PANEL SOLAR', 'pqr_type_id' => 2, 'description' => 'Fallas o resultados no deseados en la plataforma web o aplicativo movil'],
             ['name'=> 'CONTROLADOR', 'pqr_type_id' => 2, 'description' => 'Fallas o averias en los equipos de generacion o almacenamiento de energia electrica'],

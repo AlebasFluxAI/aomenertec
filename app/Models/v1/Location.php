@@ -11,14 +11,16 @@ class Location extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function clients(){
+    public function clients()
+    {
         return $this->hasMany(Client::class);
     }
-    public function municipality(){
+    public function municipality()
+    {
         return $this->belongsTo(Municipality::class);
     }
-    public function locationType(){
+    public function locationType()
+    {
         return $this->belongsTo(LocationType::class);
     }
-
 }

@@ -11,11 +11,12 @@ class Department extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function clients(){
+    public function clients()
+    {
         return $this->hasMany(Client::class);
     }
-    public function municipalities(){
+    public function municipalities()
+    {
         return $this->hasMany(Municipality::class);
     }
-
 }

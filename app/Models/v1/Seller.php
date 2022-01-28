@@ -11,10 +11,12 @@ class Seller extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function networkOperator(){
+    public function networkOperator()
+    {
         return $this->belongsTo(NetworkOperator::class);
     }
 }

@@ -26,6 +26,5 @@ class NetworkTopologiesTableSeeder extends Seeder
             'topology' => 'TRIFÁSICA',
             'description' => 'Red eléctrica de tres fases y 5 lineas (3F-N-T)'
         ]);
-
     }
 }

@@ -38,6 +38,5 @@ class VoltageLevelsTableSeeder extends Seeder
             'level' => 'NIVEL 4',
             'description' => 'Sistemas con tension nominal mayor a 57.5kV',
         ]);
-
     }
 }

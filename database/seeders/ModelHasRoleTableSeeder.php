@@ -21,18 +21,16 @@ class ModelHasRoleTableSeeder extends Seeder
         $network_operator = User::where("name", "like", '%' . "Prestador" . "%")->get();
         $admin = User::find(1);
         $support = User::find(2);
-        foreach ($seller as $item){
+        foreach ($seller as $item) {
             $item->assignRole('seller');
         }
-        foreach ($technician as $item){
+        foreach ($technician as $item) {
             $item->assignRole('technician');
         }
-        foreach ($network_operator as $item){
+        foreach ($network_operator as $item) {
             $item->assignRole('network_operator');
         }
         $admin->assignRole('administrator');
         $support->assignRole('support');
-
-
     }
 }
