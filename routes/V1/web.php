@@ -4,8 +4,8 @@ use App\Http\Controllers\V1\HomeController;
 use App\Http\Livewire;
 use App\Http\Livewire\Index;
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\Admin\V1\AddUser;
-use App\Http\Livewire\Admin\V1\EditUser;
+use App\Http\Livewire\V1\Admin\AddUser;
+use App\Http\Livewire\V1\Admin\EditUser;
 
 /*
 |--------------------------------------------------------------------------

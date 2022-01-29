@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\V1;
+namespace App\Http\Livewire\V1\Admin;
 
 use Livewire\Component;
 use function view;

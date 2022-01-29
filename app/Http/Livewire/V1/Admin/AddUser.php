@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\V1;
+namespace App\Http\Livewire\V1\Admin;
 
 use App\Models\V1\Consumer;
 use App\Models\V1\NetworkOperator;
