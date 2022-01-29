@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/enertec
+hooks:
+    AfterInstall:
+      - location: scripts/afterInstall.sh
+        runas: root
