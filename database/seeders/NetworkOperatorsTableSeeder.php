@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\NetworkOperator;
+use App\Models\V1\NetworkOperator;
 use Illuminate\Database\Seeder;
-use App\Models\v1\User;
+use App\Models\V1\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 

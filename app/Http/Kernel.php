@@ -14,12 +14,12 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
-        // \App\Http\Middleware\v1\TrustHosts::class,
-        \App\Http\Middleware\v1\TrustProxies::class,
+        // \App\Http\Middleware\V1\TrustHosts::class,
+        \App\Http\Middleware\V1\TrustProxies::class,
         \Fruitcake\Cors\HandleCors::class,
-        \App\Http\Middleware\v1\PreventRequestsDuringMaintenance::class,
+        \App\Http\Middleware\V1\PreventRequestsDuringMaintenance::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\v1\TrimStrings::class,
+        \App\Http\Middleware\V1\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
@@ -30,12 +30,12 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\v1\EncryptCookies::class,
+            \App\Http\Middleware\V1\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Laravel\Jetstream\Http\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\v1\VerifyCsrfToken::class,
+            \App\Http\Middleware\V1\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -54,15 +54,15 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\v1\Authenticate::class,
+        'auth' => \App\Http\Middleware\V1\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\v1\RedirectIfAuthenticated::class,
+        'guest' => \App\Http\Middleware\V1\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'permission' => \App\Http\Middleware\v1\PermissionMiddleware::class,
+        'permission' => \App\Http\Middleware\V1\PermissionMiddleware::class,
     ];
 }

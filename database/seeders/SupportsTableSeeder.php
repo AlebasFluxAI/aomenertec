@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\Support;
-use App\Models\v1\User;
+use App\Models\V1\Support;
+use App\Models\V1\User;
 use Illuminate\Database\Seeder;
 
 class SupportsTableSeeder extends Seeder

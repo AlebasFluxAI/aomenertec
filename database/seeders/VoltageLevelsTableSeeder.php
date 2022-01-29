@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\VoltageLevel;
+use App\Models\V1\VoltageLevel;
 use Illuminate\Database\Seeder;
 
 class VoltageLevelsTableSeeder extends Seeder

@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\NetworkTopology;
+use App\Models\V1\NetworkTopology;
 use Illuminate\Database\Seeder;
 
 class NetworkTopologiesTableSeeder extends Seeder

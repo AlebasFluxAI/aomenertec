@@ -21,9 +21,7 @@ class CreateEquipmentsPerClientsTable extends Migration
             $table->boolean("active");
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('equipment_id')
-                ->references('id')
-                ->on('equipments');
+            $table->foreignId('equipment_id');
         });
     }
 

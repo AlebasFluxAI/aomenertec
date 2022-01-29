@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\Stratum;
+use App\Models\V1\Stratum;
 use Illuminate\Database\Seeder;
 
 class StrataTableSeeder extends Seeder

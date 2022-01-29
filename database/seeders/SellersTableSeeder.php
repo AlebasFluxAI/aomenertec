@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\Seller;
-use App\Models\v1\User;
+use App\Models\V1\Seller;
+use App\Models\V1\User;
 use Illuminate\Database\Seeder;
 
 class SellersTableSeeder extends Seeder
