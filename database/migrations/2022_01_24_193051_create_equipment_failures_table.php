@@ -16,7 +16,6 @@ class CreateEquipmentFailuresTable extends Migration
         Schema::create('equipment_failures', function (Blueprint $table) {
             $table->id();
             $table->foreignId("pqr_id")->constrained();
-            $table->unsignedBigInteger("equipment_id");
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('equipment_id');

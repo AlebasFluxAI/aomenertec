@@ -10,13 +10,14 @@ use App\Http\Livewire\V1\Admin\EditUser;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
-|--------------------------------------------------------------------------
+|---------------------------------------ß-----------------------------------
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::post('', [\App\Http\Controllers\testFile::class,'upload']);
 
 Route::get('/v1/login', function () {
     return view('auth.v1.login');

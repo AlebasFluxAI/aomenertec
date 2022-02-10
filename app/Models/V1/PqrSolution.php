@@ -11,12 +11,12 @@ class PqrSolution extends Model
     use HasFactory;
     use SoftDeletes;
 
-    const STATUS_PENDING = 'pending';
-    const STATUS_ACCEPTED = 'accepted';
-    const STATUS_REJECTED = 'rejected';
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_ACCEPTED = 'accepted';
+    public const STATUS_REJECTED = 'rejected';
 
-    const ACCEPTED_TYPE_USER = 'user';
-    const ACCEPTED_TYPE_NETWORK_OPERATOR = 'network_operator';
+    public const ACCEPTED_TYPE_USER = 'user';
+    public const ACCEPTED_TYPE_NETWORK_OPERATOR = 'network_operator';
 
     protected $fillable = [
         'pqr_id',
@@ -30,12 +30,13 @@ class PqrSolution extends Model
     ];
 
 
-    public function pqr(){
+    public function pqr()
+    {
         return $this->belongsTo(Pqr::class);
     }
 
     public function images()
     {
-        return $this->morphMany(Image::class,'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

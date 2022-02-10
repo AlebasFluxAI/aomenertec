@@ -16,7 +16,6 @@ class CreateEquipmentsPerClientsTable extends Migration
         Schema::create('equipments_per_clients', function (Blueprint $table) {
             $table->id();
             $table->foreignId("client_id")->constrained();
-            $table->unsignedBigInteger("equipment_id");
             $table->foreignId("pqr_id")->nullable()->constrained();
             $table->boolean("active");
             $table->timestamps();

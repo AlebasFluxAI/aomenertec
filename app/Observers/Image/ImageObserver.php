@@ -92,16 +92,8 @@ class ImageObserver
         if ('pdf' == last(explode('.', $image->path))) {
             return;
         }
-
-        if (Storage::disk('public')->exists($image->path)) {
-            if ('tinify' == config('image.encoder')) {
-                $this->optimizeImageTinify($image);
-            } else {
-                $this->optimizeImageIntervention($image);
-            }
-            $this->storeS3($image);
-        }
-
+        $this->optimizeImageIntervention($image);
+        $this->storeS3($image);
     }
 
     private function storeS3(Image $image)
