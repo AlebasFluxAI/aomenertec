@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\V1\Admin;
+namespace App\Http\Services\V1\Admin\User;
 
 use App\Http\Livewire\Administrar\v1\Administrar\v1\EditUser;
 use App\Http\Services\Singleton;

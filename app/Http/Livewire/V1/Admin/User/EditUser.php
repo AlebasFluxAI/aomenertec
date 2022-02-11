@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Livewire\V1\Admin;
+namespace App\Http\Livewire\V1\Admin\User;
 
-use App\Http\Services\V1\Admin\EditUserService;
+use App\Http\Services\V1\Admin\User\EditUserService;
 use Livewire\Component;
 use function view;
 
@@ -24,7 +24,7 @@ class EditUser extends Component
     public $pickedU;
     public $messageU;
     public $users = [];
-    public $editUserService;
+    private $editUserService;
 
     protected $rules = [
         'network_operator' => 'required|min:2',

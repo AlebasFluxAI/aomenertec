@@ -15,10 +15,11 @@ class CreateEquipmentsTable extends Migration
     {
         Schema::create('equipments', function (Blueprint $table) {
             $table->id();
+            $table->string("name")->nullable();
             $table->foreignId('equipment_type_id')->constrained();
             $table->string('serial');
             $table->string('description');
-            $table->foreignId('equipment_condition_id')->default(1)->constrained();
+            $table->foreignId('equipment_condition_id')->nullable()->constrained();
             $table->boolean('assigned')->default(false);
             $table->timestamps();
             $table->softDeletes();

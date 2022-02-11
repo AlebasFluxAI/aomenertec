@@ -3,9 +3,9 @@
 use App\Http\Controllers\V1\HomeController;
 use App\Http\Livewire;
 use App\Http\Livewire\Index;
+use App\Http\Livewire\V1\Admin\User\AddUser;
+use App\Http\Livewire\V1\Admin\User\EditUser;
 use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\V1\Admin\AddUser;
-use App\Http\Livewire\V1\Admin\EditUser;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,11 +34,16 @@ Route::prefix("v1")->group(function () {
 });
 
 
-Route::middleware([ 'permission:add_user','permission:edit_user'])->group(function () {
+Route::middleware([])->group(function () {
     Route::prefix("v1")->group(function () {
         Route::prefix("administrar")->group(function () {
-            Route::get('usuarios/agregar', AddUser::class);
-            Route::get('usuarios/editar', EditUser::class);
+            Route::prefix("usuarios")->group(function () {
+            Route::get('agregar', AddUser::class);
+            Route::get('editar', EditUser::class)->name("v1.administrar.edit.user");
+        });
+            Route::prefix("equipos")->group(function () {
+                Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class);
+            });
         });
     });
 });

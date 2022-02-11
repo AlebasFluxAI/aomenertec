@@ -15,9 +15,8 @@ class CreateEquipmentTypesTable extends Migration
     {
         Schema::create('equipment_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('type');
             $table->string('description');
-            $table->foreignId('pqr_type_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

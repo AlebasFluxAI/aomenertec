@@ -8,8 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Equipment extends Model
 {
-    use HasFactory;
+    protected $table="equipments";
+
     use SoftDeletes;
+    protected $fillable=[
+        "name",
+        'equipment_type_id',
+        'serial',
+        'description',
+        'equipment_condition_id',
+        'assigned',
+    ];
 
     public function equipmentType()
     {

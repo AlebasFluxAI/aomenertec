@@ -11,7 +11,11 @@ class EquipmentType extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function Equipments()
+    protected $fillable=[
+        'type','description'
+    ];
+
+    public function equipments()
     {
         return $this->hasMany(Equipment::class);
     }

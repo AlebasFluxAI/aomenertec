@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\V1\Admin;
+namespace App\Http\Livewire\V1\Admin\User;
 
 use App\Models\V1\Consumer;
 use App\Models\V1\NetworkOperator;
@@ -47,18 +47,18 @@ class AddUser extends Component
 
     public function mount()
     {
-        $this->password = "";
-        $this->identification = "";
-        $this->name = "";
-        $this->phone = "";
-        $this->email = "";
-        $this->role = "";
-        $this->roles = Role::all();
-        $this->network_operator = "";
-        $this->picked = false;
-        $this->network_operator_id = "";
-        $this->network_operators = [];
-        $this->message = "Ingrese identificación del operador de red";
+        $this->fill(['password' => "",
+        'identification' => "",
+        'name' => "",
+        'phone' => "",
+        'email' => "",
+        'role' => "",
+        'roles' => Role::all(),
+        'network_operator' => "",
+        'picked' => false,
+        'network_operator_id' => "",
+        'network_operators' => [],
+        'message'=> "Ingrese identificación del 'operador' de red"]);
     }
 
     public function updatedNetworkOperator()
