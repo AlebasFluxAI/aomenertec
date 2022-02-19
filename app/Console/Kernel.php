@@ -16,6 +16,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+
+        $schedule->command("command:enertec:v1:outage_service_notification")
+            ->everyMinute();
     }
 
     /**
@@ -27,6 +30,6 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
 
-        require base_path('routes/v1/console.php');
+        require base_path('routes/V1/console.php');
     }
 }

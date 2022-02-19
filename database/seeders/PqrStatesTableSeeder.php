@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\PqrState;
+use App\Models\V1\PqrState;
 use Illuminate\Database\Seeder;
 
 class PqrStatesTableSeeder extends Seeder

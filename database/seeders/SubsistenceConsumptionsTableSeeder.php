@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\v1\SubsistenceConsumption;
+use App\Models\V1\SubsistenceConsumption;
 use Illuminate\Database\Seeder;
 
 class SubsistenceConsumptionsTableSeeder extends Seeder
