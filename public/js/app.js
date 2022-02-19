@@ -5764,7 +5764,7 @@ window.io = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.i
 
 window.canal = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'socket.io',
-  host: "127.0.0.1:6001",
+  host: "3.12.98.178:6001",
   transports: ['websocket']
 });
 window.canal.channel('channel-name').listen('.chat', function (e) {
