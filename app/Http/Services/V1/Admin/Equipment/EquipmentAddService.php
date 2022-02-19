@@ -10,7 +10,6 @@ use Livewire\Component;
 
 class EquipmentAddService extends Singleton
 {
-
     public function loadEquipmentType(AddEquipment $component)
     {
         $component->equipment_types=EquipmentType::get();
@@ -19,10 +18,9 @@ class EquipmentAddService extends Singleton
     {
         Equipment::create($component->all());
     }
-    public function updatedSelectedState(AddEquipment $component,$state)
+    public function updatedSelectedState(AddEquipment $component, $state)
     {
-        if(!is_null($state))
-        {
+        if (!is_null($state)) {
             $component->states=[
                 ["id"=>"2",
                     "name"=>"Kathe"]

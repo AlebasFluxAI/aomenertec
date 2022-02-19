@@ -11,7 +11,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ChatEvent implements ShouldBroadcastNow
+class ChatEvent implements ShouldBroadcast
 {
     use Dispatchable;
     use InteractsWithSockets;
@@ -24,7 +24,6 @@ class ChatEvent implements ShouldBroadcastNow
      */
     public function __construct()
     {
-        //
     }
 
     /**
@@ -34,6 +33,14 @@ class ChatEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('channel-name');
+        return new Channel("channel-name");
+    }
+    public function broadcastAs()
+    {
+        return 'chat';
+    }
+    public function broadcastWith()
+    {
+        return ["Hola"=>"mundo"];
     }
 }
