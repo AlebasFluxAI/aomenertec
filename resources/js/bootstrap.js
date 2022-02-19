@@ -27,3 +27,7 @@ window.canal = new Echo({
 
     });
 
+window.canal.channel('channel-name')
+    .listen('.chat', (e) => {
+        console.log('GOT IT');
+    });
