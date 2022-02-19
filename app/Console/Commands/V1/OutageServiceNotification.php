@@ -43,5 +43,6 @@ class OutageServiceNotification extends Command
           'type'=>'hola',
           'description'=>'cron'
       ]);
+      dd("creado");
     }
 }
