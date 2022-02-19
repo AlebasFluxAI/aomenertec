@@ -7,6 +7,3 @@ hooks:
     AfterInstall:
       - location: scripts/afterInstall.sh
         runas: root
-    AfterAllowTraffic:
-      - location: scripts/afterAllowTraffic.sh
-        runas: root
