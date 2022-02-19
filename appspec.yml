@@ -7,6 +7,6 @@ hooks:
     BeforeInstall:
       - location: scripts/beforeInstall.sh
         runas: root
-    AfterInstall:
+    AfterAllowTraffic:
       - location: scripts/afterInstall.sh
         runas: root
