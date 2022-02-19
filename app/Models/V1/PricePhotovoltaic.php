@@ -28,5 +28,4 @@ class PricePhotovoltaic extends Model
     {
         return $this->belongsTo(Stratum::class);
     }
-
 }

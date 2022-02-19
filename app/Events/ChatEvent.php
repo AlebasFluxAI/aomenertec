@@ -24,7 +24,6 @@ class ChatEvent implements ShouldBroadcast
      */
     public function __construct()
     {
-
     }
 
     /**

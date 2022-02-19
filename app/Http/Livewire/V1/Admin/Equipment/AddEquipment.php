@@ -24,7 +24,6 @@ class AddEquipment extends Component
     {
         $this->addEquipmentService = EquipmentAddService::getInstance();
         parent::__construct($id);
-
     }
 
     public function notifyNewOrder()
@@ -43,12 +42,10 @@ class AddEquipment extends Component
     {
         event(new ChatEvent());
         $this->addEquipmentService->loadEquipmentType($this);
-
     }
 
     public function updatedSelectedState($state)
     {
-
         $this->addEquipmentService->updatedSelectedState($this, $state);
     }
 

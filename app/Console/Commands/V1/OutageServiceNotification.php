@@ -37,6 +37,5 @@ class OutageServiceNotification extends Command
      */
     public function handle()
     {
-
     }
 }
