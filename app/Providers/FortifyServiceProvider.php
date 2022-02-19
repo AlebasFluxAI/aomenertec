@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\v1;
+namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;

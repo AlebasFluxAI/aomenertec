@@ -1,6 +1,6 @@
-{
-	"authHost": "http://localhost",
-	"authEndpoint": "/broadcasting/auth",
+    {
+	"authHost": "http://0.0.0.0",
+	"authEndpoint": "/broadcasting/autha",
 	"clients": [],
 	"database": "redis",
 	"databaseConfig": {

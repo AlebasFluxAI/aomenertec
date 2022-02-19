@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\Equipment;
 
+use App\Events\ChatEvent;
 use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
@@ -26,6 +27,11 @@ class AddEquipment extends Component
 
     }
 
+    public function notifyNewOrder()
+    {
+        $name="hols";
+    }
+
     public function mount()
     {
         $this->fill([
@@ -35,12 +41,14 @@ class AddEquipment extends Component
 
     public function loadEquipmentType()
     {
+        event(new ChatEvent());
         $this->addEquipmentService->loadEquipmentType($this);
 
     }
 
     public function updatedSelectedState($state)
     {
+
         $this->addEquipmentService->updatedSelectedState($this, $state);
     }
 

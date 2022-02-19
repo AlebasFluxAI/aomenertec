@@ -47,3 +47,7 @@ Route::middleware([])->group(function () {
         });
     });
 });
+
+Route::post('/broadcasting/autha', function() {
+    return true;
+});

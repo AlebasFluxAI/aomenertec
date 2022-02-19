@@ -1,6 +1,6 @@
 <?php
 
-use App\Providers\v1\RouteServiceProvider;
+use App\Providers\RouteServiceProvider;
 use Laravel\Fortify\Features;
 
 return [

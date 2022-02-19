@@ -56,6 +56,8 @@
     })
 </script>
 <script src="{{asset('assets/js/main.js')}}"></script>
+<script src="{{asset('js/app.js')}}"></script>
+
 </body>
 
 </html>
