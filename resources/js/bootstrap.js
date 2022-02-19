@@ -9,7 +9,7 @@ window._ = require('lodash');
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.io = require('socket.io-client');
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -20,14 +20,14 @@ window.io = require('socket.io-client');
 import Echo from 'laravel-echo';
 
 // window.Pusher = require('pusher-js');
-window.canal = new Echo({
-       broadcaster: 'socket.io',
-       host:`127.0.0.1:6001`,
-        transports:['websocket']
 
-    });
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: 'your-pusher-key'
+// });
 
-window.canal.channel('channel-name')
-    .listen('.chat', (e) => {
-        console.log('GOT IT');
-    });
+
+window.Echo = new Echo({
+    broadcaster: 'socket.io',
+    host: window.location.hostname + ':6001'
+});

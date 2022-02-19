@@ -34,5 +34,14 @@
         </div>
         </div>
     </section>
+    <script>
+
+        window.Echo.channel("channel-name")
+            .listen('.chat', (e) => {
+                alert("event por fin")
+            });
+
+    </script>
 
 </div>
+
