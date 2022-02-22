@@ -39,7 +39,18 @@
     </div>
 </header>
 <main id="main">
-    @yield('content')
+    <div class="bg-light">
+        <section class="top-info bg-light">
+            @yield('header')
+        </section>
+        <section class="top-info bg-light">
+            <div class="container">
+                      @yield('content')
+                <div class="mb-3 bg-light">
+                </div>
+            </div>
+        </section>
+    </div>
     @livewireScripts
 </main>
 <footer>
