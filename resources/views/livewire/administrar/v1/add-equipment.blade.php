@@ -1,47 +1,92 @@
+
 <div>
     <section class="top-info bg-light">
+        @include("layouts.v1.app_admin_header")
         <div class="container">
-            <div class="row">
-            <div class="col-md-6 p-3 offset-3 bg-warning">
-                <form wire:submit.prevent="submitForm">
-                    <div class="m-4">
-                        <i class="fa-solid fa-computer-speaker"></i><label><i class="fa-solid fa-id-card text-secondary"></i> Nombre del equipo</label>
-                        <input wire:model="name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="textHelp" placeholder="Nombre del equipo">
-                    </div>
+            @include("partials.v1.title",[
+                    "first_title"=>"Añadir",
+                    "second_title"=>"Equipos"
+                ])
 
-                    <div class="m-4">
-                        <i class="fa-solid fa-computer-speaker"></i><label for="serial"><i class="fa-solid fa-barcode text-secondary"></i> Serial del equipo</label>
-                        <input wire:model="serial" type="text" class="form-control" id="serial" aria-describedby="textHelp" placeholder="Serial del equipo">
-                    </div>
-                    <div class="m-4">
-                        <i class="fa-solid fa-computer-speaker"></i><label><i class="fa-solid fa-comment text-secondary"></i> Descripcion del equipo</label>
-                        <input wire:model="description" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="textHelp" placeholder="Descripcion del equipo">
-                    </div>
-                    <div class="m-4">
-                        <i class="fa-solid fa-computer-speaker"></i><label><i class="fa-solid fa-comment text-secondary"></i> Selecciona el tipo del equipo</label>
-                        <select wire:model="equipment_type_id" wire:click="loadEquipmentType" class="form-control">
-                            <option value="">Seleccione la opción</option>
-                            @foreach($equipment_types as $equipmentType)
-                                <option value="{{ $equipmentType->id }}">{{ $equipmentType->type }}</option>
-                            @endforeach
-                        </select>
-                        <button class="btn-lg btn-secondary">Guardar</button>
-                    </div>
-                    @csrf
-                </form>
+            {{--optiones de cabecera de formulario--}}
 
+            @include("partials.v1.table_nav",
+                 ["nav_options"=>[
+                            ["button_align"=>"right",
+                            "click_action"=>"",
+                            "button_icon"=>"fas fa-list",
+                            "button_content"=>"Ver listado"
+                            ],
+                        ]
+                ])
+
+            {{--------------------------------------------}}
+
+
+
+            @if (session()->has('message'))
+                <div class="alert alert-success">
+                    {{ session('message') }}
+                </div>
+            @endif
+            <div class="contenedor-grande">
+                <div class="row content pt-6">
+                    <form  wire:submit.prevent="submit" id="equipmentForm" class="needs-validation"   role="form">
+                        <div class="row ">
+                            @include("partials.v1.form.form_input_icon",[
+                                    "input_model"=>"equipmentName",
+                                     "icon_class"=>"fas fa-user",
+                                     "placeholder"=>"Nombre del equipo",
+                                     "col_with"=>12,
+                                     "required"=>true
+                            ])
+
+                            @include("partials.v1.form.form_input_icon",[
+                                    "input_model"=>"equipmentSerial",
+                                    "icon_class"=>"fas fa-barcode",
+                                    "placeholder"=>"Serial del equipo",
+                                    "col_with"=>12,
+                                    "required"=>true
+                           ])
+
+
+                            @include("partials.v1.form.form_input_icon",[
+                                 "input_model"=>"equipmentDescription",
+                                  "icon_class"=>"fas fa-file",
+                                  "placeholder"=>"Descripcion del equipo",
+                                   "col_with"=>12,
+                                   "input_rows"=>3,
+                                   "required"=>false,
+
+                         ])
+
+                        @include("partials.v1.form.form_dropdown_input_searchable",[
+                                      "icon_class"=>"fas fa-desktop",
+                                      "placeholder"=>"Seleccione el tipo de equipo",
+                                      "col_with"=>12,
+                                      "dropdown_model"=>"equipmentTypeId",
+                                      "dropdown_enter_function"=>"updatedEquipmentTypeId",
+                                      "picked_variable"=>$picked,
+                                      "dropdown_results"=>$equipmentTypes,
+                                      "selected_value_function"=>"setEquipmentType",
+                                      "dropdown_result_id"=>"id",
+                                      "dropdown_result_value"=>"type",
+
+                        ])
+
+                        @include("partials.v1.form.form_submit_button",[
+                                    "button_align"=>"right" ,
+                                    "button_content"=>"Guardar"
+                        ])
+
+                    </form>
+                </div>
+                <div class="mb-3">
+
+                </div>
             </div>
         </div>
-        </div>
     </section>
-    <script>
-
-        window.Echo.channel("channel-name")
-            .listen('.chat', (e) => {
-                alert("event por fin")
-            });
-
-    </script>
 
 </div>
 

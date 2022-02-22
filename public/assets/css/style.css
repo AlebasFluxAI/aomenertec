@@ -1,6 +1,10 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+:root {
+    --enertec_primary: #009599;
+    --enertec_secondary: gray;
+}
 body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
@@ -30,6 +34,25 @@ h1, h2, h3, h4, h5, h6 {
 .imagen-logo-login{
   padding: 0 80px;
 }
+
+/*------------------
+primary
+ */
+.primary-content button {
+  background-color: transparent;
+  border: none #009599 1px;
+  padding: 4px 10px;
+  margin: 3px;
+  color: var(--enertec_secondary);
+  transition: 0.4s;
+  border-radius: 13px;
+  font-size: 0.9rem;
+}
+.primary-content .navbar-nav {
+    margin-left: auto;
+}
+
+
 /*--------------------------------------------------------------
 # Login
 --------------------------------------------------------------*/

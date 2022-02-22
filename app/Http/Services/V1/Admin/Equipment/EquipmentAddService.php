@@ -10,15 +10,28 @@ use Livewire\Component;
 
 class EquipmentAddService extends Singleton
 {
-    public function loadEquipmentType(AddEquipment $component)
+    public function loadEquipmentType(Component $component)
     {
-        $component->equipment_types=EquipmentType::get();
+        $component->equipment_types=EquipmentType::paginate();
     }
-    public function submitForm(AddEquipment $component)
+    public function submitForm(Component $component)
     {
-        Equipment::create($component->all());
+        $equipment=Equipment::create($this->mapper($component));
+        session()->flash('message', 'Equipo '.$equipment->name.' creado con exito.');
+        $component->mount();
+
     }
-    public function updatedSelectedState(AddEquipment $component, $state)
+
+    private function mapper(Component  $component)
+    {
+        return [
+            "serial"=>$component->equipmentSerial,
+            "name"=>$component->equipmentName,
+            "description"=>$component->equipmentDescription,
+            "equipment_type_id"=>$component->equipmentTypeId,
+        ];
+    }
+    public function updatedSelectedState(Component $component, $state)
     {
         if (!is_null($state)) {
             $component->states=[

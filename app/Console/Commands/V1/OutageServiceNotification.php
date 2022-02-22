@@ -39,10 +39,9 @@ class OutageServiceNotification extends Command
      */
     public function handle()
     {
-      EquipmentType::create([
+        EquipmentType::create([
           'type'=>'hola',
           'description'=>'cron'
       ]);
-      dd("creado");
     }
 }

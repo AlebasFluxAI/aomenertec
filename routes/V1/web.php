@@ -39,7 +39,7 @@ Route::middleware([])->group(function () {
         Route::prefix("administrar")->group(function () {
             Route::prefix("usuarios")->group(function () {
                 Route::get('agregar', AddUser::class);
-                Route::get('editar', EditUser::class)->name("v1.administrar.edit.user");
+                Route::get('editar', EditUser::class)->name("administrar.edituser");
             });
             Route::prefix("equipos")->group(function () {
                 Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class);

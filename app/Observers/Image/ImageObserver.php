@@ -113,20 +113,6 @@ class ImageObserver
             return;
         }
 
-        if ($this->isResizeClass($image)) {
-            $thumbImageMedium = ImageResize::make($getImage)->resize(null, 400, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $thumbImageSmall = ImageResize::make($getImage)->resize(null, 60, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-
-            Storage::disk('s3')->put(Image::URL_BASE.$imageData[1].'/medium_'.$imageData[2], $thumbImageMedium->stream());
-            Storage::disk('s3')->put(Image::URL_BASE.$imageData[1].'/small_'.$imageData[2], $thumbImageSmall->stream());
-
-            $image->url_medium = $publicUrl.Image::URL_BASE.$imageData[1].'/medium_'.$imageData[2];
-            $image->url_small = $publicUrl.Image::URL_BASE.$imageData[1].'/small_'.$imageData[2];
-        }
         $image->url = $publicUrl.$image->path;
         $image->save();
     }
