@@ -19,7 +19,6 @@ class EquipmentAddService extends Singleton
         $equipment=Equipment::create($this->mapper($component));
         session()->flash('message', 'Equipo '.$equipment->name.' creado con exito.');
         $component->mount();
-
     }
 
     private function mapper(Component  $component)
