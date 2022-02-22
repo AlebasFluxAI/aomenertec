@@ -22,8 +22,6 @@
 
             {{--------------------------------------------}}
 
-
-
             @if (session()->has('message'))
                 <div class="alert alert-success">
                     {{ session('message') }}
@@ -51,12 +49,12 @@
 
 
                             @include("partials.v1.form.form_input_icon",[
-                                 "input_model"=>"equipmentDescription",
+                                  "input_model"=>"equipmentDescription",
                                   "icon_class"=>"fas fa-file",
                                   "placeholder"=>"Descripcion del equipo",
-                                   "col_with"=>12,
-                                   "input_rows"=>3,
-                                   "required"=>false,
+                                  "col_with"=>12,
+                                  "input_rows"=>3,
+                                  "required"=>false,
 
                          ])
 

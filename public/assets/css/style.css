@@ -38,7 +38,7 @@ h1, h2, h3, h4, h5, h6 {
 /*------------------
 primary
  */
-.primary-content button {
+.table-nav-var-content button {
   background-color: transparent;
   border: none #009599 1px;
   padding: 4px 10px;
@@ -48,7 +48,11 @@ primary
   border-radius: 13px;
   font-size: 0.9rem;
 }
-.primary-content .navbar-nav {
+.table-nav-var-content  button:hover{
+    background-color: transparent;
+    color: var(--enertec_primary);
+}
+.table-nav-var-content .navbar-nav {
     margin-left: auto;
 }
 
