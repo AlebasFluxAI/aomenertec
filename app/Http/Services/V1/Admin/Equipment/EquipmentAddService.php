@@ -20,6 +20,23 @@ class EquipmentAddService extends Singleton
         session()->flash('message', 'Equipo '.$equipment->name.' creado con exito.');
         $component->mount();
     }
+    public function updatedEquipmentTypeId(Component $component)
+    {
+        $component->picked = false;
+        $component->equipmentTypes=EquipmentType::where('id', 'like', "%".$component->equipmentTypeId."%")->limit(3)->get();
+    }
+
+    public function updatingSearch(Component $component)
+    {
+        $component->equipment_types=EquipmentType::whereId($component->equipment_type_id)->paginate(15);
+    }
+
+    public function setEquipmentType(Component $component, $equipmentType)
+    {
+        $component->picked=true;
+        $equipmentType=json_decode($equipmentType);
+        $component->equipmentTypeId=$equipmentType->id;
+    }
 
     private function mapper(Component  $component)
     {

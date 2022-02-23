@@ -45,7 +45,7 @@
         </section>
         <section class="top-info bg-light">
             <div class="container">
-                      @yield('content')
+                @yield('content')
                 <div class="mb-3 bg-light">
                 </div>
             </div>

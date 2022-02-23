@@ -19,11 +19,11 @@ class Equipment extends Model
         'assigned',
     ];
 
-    public function equipmentType()
+    public function equipment_type()
     {
-        return $this->hasOne(EquipmentType::class);
+        return $this->belongsTo(EquipmentType::class);
     }
-    public function equipmentCondition()
+    public function equipment_condition()
     {
         return $this->hasOne(EquipmentCondition::class);
     }

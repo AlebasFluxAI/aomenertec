@@ -42,7 +42,9 @@ Route::middleware([])->group(function () {
                 Route::get('editar', EditUser::class)->name("administrar.edituser");
             });
             Route::prefix("equipos")->group(function () {
-                Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class);
+                Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class)->name("administrar.equipos.agregar");
+                Route::get('listado', Livewire\V1\Admin\Equipment\IndexEquipment::class)->name("administrar.equipos.listado");
+                Route::get('editar/{equipment}', Livewire\V1\Admin\Equipment\EditEquipment::class)->name("administrar.equipos.editar");
             });
         });
     });
