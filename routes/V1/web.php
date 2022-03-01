@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\testFile;
 use App\Http\Controllers\V1\HomeController;
 use App\Http\Livewire;
 use App\Http\Livewire\Index;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::post('', [\App\Http\Controllers\testFile::class,'upload']);
+Route::post('', [testFile::class, 'upload']);
 
 Route::get('/v1/login', function () {
     return view('auth.v1.login');
@@ -45,6 +46,11 @@ Route::middleware([])->group(function () {
                 Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class)->name("administrar.equipos.agregar");
                 Route::get('listado', Livewire\V1\Admin\Equipment\IndexEquipment::class)->name("administrar.equipos.listado");
                 Route::get('editar/{equipment}', Livewire\V1\Admin\Equipment\EditEquipment::class)->name("administrar.equipos.editar");
+                Route::prefix("alertas")->group(function () {
+                    Route::get('agregar', Livewire\V1\Admin\EquipmentAlert\AddEquipmentAlert::class)->name("administrar.equipos.alertas.agregar");
+                    Route::get('listado', Livewire\V1\Admin\EquipmentAlert\IndexEquipmentAlert::class)->name("administrar.equipos.alertas.listado");
+                    Route::get('editar/{equipment}', Livewire\V1\Admin\EquipmentAlert\EditEquipmentAlert::class)->name("administrar.equipos.alertas.editar");
+                });
             });
         });
     });
