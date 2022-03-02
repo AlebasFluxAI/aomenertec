@@ -8,16 +8,16 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use Livewire\Component;
 
-class EquipmentAddService extends Singleton
+class EquipmentEditService extends Singleton
 {
-    public function mount(Component $component)
+    public function mount(Component $component, Equipment $equipment)
     {
         $component->fill([
-            'equipmentName' => null,
-            'equipmentDescription' => null,
-            'equipmentSerial' => null,
-            'equipmentTypeId' => null,
-            'equipmentTypes' => [],
+            'equipmentName' => $equipment->name,
+            'equipmentDescription' => $equipment->description,
+            'equipmentSerial' => $equipment->serial,
+            'equipmentTypeId' => $equipment->equipment_type_id,
+            'equipmentTypes' => [$equipment->equipment_type],
             'picked' => false,
         ]);
     }
@@ -49,6 +49,7 @@ class EquipmentAddService extends Singleton
         $component->picked = false;
         $component->equipmentTypes = EquipmentType::where('id', 'ilike', "%" . $component->equipmentTypeId . "%")
             ->orWhere('type', 'ilike', "%" . $component->equipmentTypeId . "%")->limit(3)->get();
+
     }
 
     public function updatingSearch(Component $component)

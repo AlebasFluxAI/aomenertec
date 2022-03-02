@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 <div class="login">
     @section("header") {{--extended app.blade--}}
     @endsection
 
+=======
+@section("header") {{--extended app.blade--}}
+@endsection
+<div class="login">
+>>>>>>> 5a81a49 (default menu)
     @include("partials.v1.title",[
             "first_title"=>"Añadir",
             "second_title"=>"Equipos"

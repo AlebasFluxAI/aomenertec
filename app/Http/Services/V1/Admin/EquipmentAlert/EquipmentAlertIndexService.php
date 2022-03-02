@@ -18,11 +18,12 @@ class EquipmentAlertIndexService extends Singleton
     public function deleteEquipment(Component $component, $equipmentId)
     {
         Equipment::find($equipmentId)->delete();
+
         $component->render();
     }
 
     public function editEquipment(Component $component, $equipmentId)
     {
-        $component->redirectRoute("administrar.equipos.editar", ["equipment" => $equipmentId]);
+        $component->redirectRoute("administrar.v1.equipos.editar", ["equipment" => $equipmentId]);
     }
 }

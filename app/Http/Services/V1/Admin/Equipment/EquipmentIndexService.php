@@ -10,18 +10,20 @@ use Livewire\Component;
 
 class EquipmentIndexService extends Singleton
 {
+    public function deleteEquipment(Component $component, $equipmentId)
+    {
+        Equipment::find($equipmentId)->delete();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
+        $component->mount();
+    }
+
     public function getEquipments()
     {
         return Equipment::with("equipment_type")->paginate(15);
     }
-    public function deleteEquipment(Component $component,$equipmentId)
-    {
-        Equipment::find($equipmentId)->delete();
-        $component->render();
-    }
 
-    public function editEquipment(Component $component,$equipmentId)
+    public function editEquipment(Component $component, $equipmentId)
     {
-        $component->redirectRoute("administrar.equipos.editar",["equipment"=>$equipmentId]);
+        $component->redirectRoute("administrar.v1.equipos.editar", ["equipment" => $equipmentId]);
     }
 }

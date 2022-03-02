@@ -39,17 +39,17 @@ Route::middleware([])->group(function () {
     Route::prefix("v1")->group(function () {
         Route::prefix("administrar")->group(function () {
             Route::prefix("usuarios")->group(function () {
-                Route::get('agregar', AddUser::class);
-                Route::get('editar', EditUser::class)->name("administrar.edituser");
+                Route::get('agregar', AddUser::class)->name("administrar.v1.usuarios.agregar");
+                Route::get('editar', EditUser::class)->name("administrar.v1.usuarios.editar");
             });
             Route::prefix("equipos")->group(function () {
-                Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class)->name("administrar.equipos.agregar");
-                Route::get('listado', Livewire\V1\Admin\Equipment\IndexEquipment::class)->name("administrar.equipos.listado");
-                Route::get('editar/{equipment}', Livewire\V1\Admin\Equipment\EditEquipment::class)->name("administrar.equipos.editar");
+                Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class)->name("administrar.v1.equipos.agregar");
+                Route::get('listado', Livewire\V1\Admin\Equipment\IndexEquipment::class)->name("administrar.v1.equipos.listado");
+                Route::get('editar/{equipment}', Livewire\V1\Admin\Equipment\EditEquipment::class)->name("administrar.v1.equipos.editar");
                 Route::prefix("alertas")->group(function () {
-                    Route::get('agregar', Livewire\V1\Admin\EquipmentAlert\AddEquipmentAlert::class)->name("administrar.equipos.alertas.agregar");
-                    Route::get('listado', Livewire\V1\Admin\EquipmentAlert\IndexEquipmentAlert::class)->name("administrar.equipos.alertas.listado");
-                    Route::get('editar/{equipment}', Livewire\V1\Admin\EquipmentAlert\EditEquipmentAlert::class)->name("administrar.equipos.alertas.editar");
+                    Route::get('agregar', Livewire\V1\Admin\EquipmentAlert\AddEquipmentAlert::class)->name("administrar.v1.equipos.alertas.agregar");
+                    Route::get('listado', Livewire\V1\Admin\EquipmentAlert\IndexEquipmentAlert::class)->name("administrar.v1.equipos.alertas.listado");
+                    Route::get('editar/{equipment}', Livewire\V1\Admin\EquipmentAlert\EditEquipmentAlert::class)->name("administrar.v1.equipos.alertas.editar");
                 });
             });
         });

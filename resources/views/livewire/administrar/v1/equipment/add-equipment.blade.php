@@ -4,8 +4,8 @@
     @endsection
 =======
 @section("header") {{--extended app.blade--}}
-@include("layouts.v1.app_admin_header")
 @endsection
+<<<<<<< HEAD
 <div>
 <<<<<<< HEAD
             @include("partials.v1.title",[
@@ -33,6 +33,9 @@
 >>>>>>> d2b72f5 (add table component):resources/views/livewire/administrar/v1/equipment/add-equipment.blade.php
 
 =======
+=======
+<div class="login">
+>>>>>>> 5a81a49 (default menu)
     @include("partials.v1.title",[
             "first_title"=>"Añadir",
             "second_title"=>"Equipos"
@@ -47,6 +50,7 @@
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
+<<<<<<< HEAD
 <<<<<<< HEAD
                     "target_route"=>"administrar.v1.equipos.listado",
                     ],
@@ -137,11 +141,13 @@
                  ])
 =======
                     "target_route"=>"administrar.equipos.listado",
+=======
+                    "target_route"=>"administrar.v1.equipos.listado",
+>>>>>>> 5a81a49 (default menu)
                     ],
 
                 ]
         ])
-
     {{----------------------------------Formulario--------------------------}}
     @include("partials.v1.form.primary_form",[
             "form_toast"=>false,

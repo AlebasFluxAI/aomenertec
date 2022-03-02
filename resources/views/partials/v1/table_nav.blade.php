@@ -1,3 +1,4 @@
+{{--
 
 <<<<<<< HEAD
 <div class="table-nav-var-content">
@@ -9,7 +10,7 @@
 
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
-            <li class="nav-item">
+
 
                 @include("partials.v1.primary_navigator",[
                                       "button_align"=>$option["button_align"],
@@ -29,6 +30,4 @@
     </nav>
 
 </div>
-
-
-
+--}}

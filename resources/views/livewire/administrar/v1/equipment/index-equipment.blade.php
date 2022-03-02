@@ -1,10 +1,9 @@
-<div>
+<div class="login">
     @section("header") {{--extended app.blade--}}
-    @include("layouts.v1.app_admin_header")
     @include("partials.v1.title",[
-            "second_title"=>"de equipos",
-            "first_title"=>"Listado"
-        ])
+              "second_title"=>"de equipos",
+              "first_title"=>"Listado"
+          ])
 
     @endsection
 
@@ -15,7 +14,7 @@
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
                       "icon"=>"fa-solid fa-plus",
-                      "target_route"=>"administrar.equipos.agregar",
+                      "target_route"=>"administrar.v1.equipos.agregar",
                       ],
 
                   ]

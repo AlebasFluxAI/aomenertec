@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\Equipment;
 use App\Events\ChatEvent;
 use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
+use App\Models\Traits\MenuTrait;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
@@ -32,19 +33,19 @@ class IndexEquipment extends Component
 
     public function editEquipment($id)
     {
-        $this->indexEquipmentService->editEquipment($this,$id);
+        $this->indexEquipmentService->editEquipment($this, $id);
     }
 
     public function deleteEquipment($id)
     {
-        $this->indexEquipmentService->deleteEquipment($this,$id);
+        $this->indexEquipmentService->deleteEquipment($this, $id);
 
     }
 
     public function render()
     {
         return view('livewire.administrar.v1.equipment.index-equipment', [
-            "equipments"=>Equipment::paginate(15)
+            "equipments" => Equipment::paginate(15)
         ])->extends('layouts.v1.app');
     }
 }
