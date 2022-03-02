@@ -7,6 +7,7 @@ use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertIndexService;
 use App\Models\V1\Equipment;
+use App\Models\V1\EquipmentAlert;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use Livewire\Component;
@@ -45,7 +46,7 @@ class IndexEquipmentAlert extends Component
     public function render()
     {
         return view('livewire.administrar.v1.equipmentAlert.index-equipment-alert', [
-            "equipments" => Equipment::paginate(15)
+            "equipmentAlerts" => EquipmentAlert::paginate(15)
         ])->extends('layouts.v1.app');
     }
 }

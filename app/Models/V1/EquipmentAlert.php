@@ -16,7 +16,7 @@ class EquipmentAlert extends Model
     protected $fillable = [
         "type",
         "interval",
-        "equipment_id",
+        "equipments_id",
     ];
 
     public function equipment()

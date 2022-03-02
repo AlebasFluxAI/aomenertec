@@ -21,7 +21,11 @@
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
+<<<<<<< HEAD
                     "target_route"=>"administrar.v1.equipos.listado",
+=======
+                    "target_route"=>"administrar.v1.equipos.alertas.listado",
+>>>>>>> f466dd4 (default menu)
                     ],
 
                 ]

@@ -27,9 +27,8 @@ class EquipmentAlertAddService extends Singleton
     private function mapper(Component $component)
     {
         return [
-            "type" => $component->type,
             "interval" => $component->interval,
-            "equipment_id" => $component->equipmentId,
+            "equipments_id" => $component->equipmentId,
         ];
     }
 

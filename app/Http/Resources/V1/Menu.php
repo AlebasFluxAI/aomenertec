@@ -23,19 +23,22 @@ class Menu extends Singleton
             "base",
             "/",
             [
-
                 new Menu("Usuarios", null, [
                     new Menu("Agregar", "administrar.v1.usuarios.agregar", []),
                 ]),
                 new Menu("Equipos", null, [
-                    new Menu("Agregar", "administrar.v1.equipos.agregar", []),
-                    new Menu("Listar", "administrar.v1.equipos.listado", [],),
+                    new Menu("Equipos", "administrar.v1.equipos.listado", [],),
                     new Menu("Alertas", null, [
-                        new Menu("Agregar", "administrar.v1.equipos.alertas.agregar", []),
-                        new Menu("Listar", "administrar.v1.equipos.alertas.listado", [
-                        ],),
-                    ],)
-                ])
+                        new Menu("Alertas", "administrar.v1.equipos.alertas.listado", []),
+                        new Menu("Alertas", "administrar.v1.equipos.alertas.listado", [
+                            new Menu("Usuarios", null, [
+                                new Menu("Agregar", "administrar.v1.usuarios.agregar", [
+                                ]),
+                            ]),
+
+                        ]),
+                    ],),
+                ],)
             ])
         ];
     }
