@@ -1,23 +1,10 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 <div class="login">
     @section("header") {{--extended app.blade--}}
     @endsection
 
-=======
-@section("header") {{--extended app.blade--}}
-@endsection
-<div class="login">
->>>>>>> 5a81a49 (default menu)
-=======
-<div class="login">
-    @section("header") {{--extended app.blade--}}
-    @endsection
-
->>>>>>> 04e3cd3 (revision)
     @include("partials.v1.title",[
             "first_title"=>"Añadir",
-            "second_title"=>"Equipos"
+            "second_title"=>"Alertas para equipos"
         ])
 
     {{--optiones de cabecera de formulario--}}
@@ -28,64 +15,31 @@
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
-<<<<<<< HEAD
-                    "target_route"=>"administrar.v1.equipos.listado",
-=======
                     "target_route"=>"administrar.v1.equipos.alertas.listado",
->>>>>>> f466dd4 (default menu)
                     ],
 
                 ]
         ])
+
     {{----------------------------------Formulario--------------------------}}
     @include("partials.v1.form.primary_form",[
             "form_toast"=>false,
             "session_message"=>"message",
             "form_submit_action"=>"submitForm",
             "form_inputs"=>[
-<<<<<<< HEAD
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"equipmentName",
-                                        "icon_class"=>"fas fa-user",
-                                        "placeholder"=>"Nombre del equipo",
-                                        "col_with"=>12,
-                                        "required"=>true
-                            ],
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"equipmentSerial",
-                                        "icon_class"=>"fas fa-barcode",
-                                        "placeholder"=>"Serial del equipo",
-                                        "col_with"=>12,
-                                        "required"=>true
-                            ],
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"equipmentDescription",
-                                        "icon_class"=>"fas fa-file",
-                                         "placeholder"=>"Descripcion del equipo",
-                                        "col_with"=>12,
-                                        "input_rows"=>3,
-                                        "required"=>false,
-
-                             ],
-                             [
-=======
 
                                  [
->>>>>>> 04e3cd3 (revision)
                                         "input_type"=>"dropdown-search",
                                         "icon_class"=>"fas fa-desktop",
-                                        "placeholder"=>"Seleccione el tipo de equipo",
-                                        "col_with"=>12,
-                                        "dropdown_model"=>"equipmentTypeId",
-                                        "dropdown_enter_function"=>"updatedEquipmentTypeId",
+                                        "placeholder"=>"Seleccione el equipo",
+                                        "col_with"=>6,
+                                        "dropdown_model"=>"equipmentId",
+                                        "dropdown_enter_function"=>"updatedEquipmentId",
                                         "picked_variable"=>$picked,
-                                        "dropdown_results"=>$equipmentTypes,
-                                        "selected_value_function"=>"setEquipmentType",
+                                        "dropdown_results"=>$equipments,
+                                        "selected_value_function"=>"setEquipment",
                                         "dropdown_result_id"=>"id",
-                                        "dropdown_result_value"=>"type",
+                                        "dropdown_result_value"=>"name",
 
                             ],
                              [
