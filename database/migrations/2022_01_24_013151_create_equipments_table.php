@@ -17,7 +17,7 @@ class CreateEquipmentsTable extends Migration
             $table->id();
             $table->string("name")->nullable();
             $table->foreignId('equipment_type_id')->constrained();
-            $table->string('serial');
+            $table->string('serial')->unique(true);
             $table->string('description');
             $table->foreignId('equipment_condition_id')->nullable()->constrained();
             $table->boolean('assigned')->default(false);

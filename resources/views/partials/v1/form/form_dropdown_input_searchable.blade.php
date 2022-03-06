@@ -14,23 +14,24 @@
 
 <div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-{{$col_with??12}}">
     <div class="input-group">
-        <div  class="input-group-prepend">
-                                    <span class="input-group-text" >
+        <div class="input-group-prepend">
+                                    <span class="input-group-text">
                                      <i class="{{$icon_class??"fas fa-user"}}"></i>
                                     </span>
         </div>
 
         <input wire:model="{{$dropdown_model}}"
-               wire:keydown.enter="{{$dropdown_enter_function}}" type="text" class="form-control" autocomplete="off" placeholder="{{$placeholder??""}}" required="{{$required??false}}" >
+               type="text" class="form-control" autocomplete="off"
+               placeholder="{{$placeholder??""}}" required="{{$required??false}}">
         <div class="input-group-append">
-                                        <span class="input-group-text" >
+                                        <span class="input-group-text">
                                             @if($picked_variable)
                                                 <span class="badge badge-success">
                                                     <i class="fa-solid fa-check"></i>
                                                 </span>
                                             @else
                                                 <span class="badge badge-danger">
-                                                        <i class="fa-solid fa-xmark"></i>
+                                                      <i class="fa-solid fa-xmark"></i>
                                                 </span>
                                             @endif
                                         </span>
@@ -38,15 +39,15 @@
     </div>
 
 
-
-    @if(count($dropdown_results)>0)
+    @if(count($dropdown_results??[])>0)
         @if(!$picked_variable)
             <ul class="dropdown-menu list-search">
                 <h6 class="dropdown-header"><b>Seleccione opción</b></h6>
                 @foreach($dropdown_results as $dropdown_result)
-                    <li  class="dropdown-item">
-                        <a wire:click="{{$selected_value_function}}('{{ $dropdown_result }}')" type="button" >
-                            {{ $dropdown_result->{$dropdown_result_id} }} - {{ $dropdown_result->{$dropdown_result_value} }}
+                    <li class="dropdown-item">
+                        <a wire:click="{{$selected_value_function}}('{{ $dropdown_result }}')" type="button">
+                            {{ $dropdown_result->{$dropdown_result_id} }}
+                            - {{ $dropdown_result->{$dropdown_result_value} }}
                         </a>
                     </li>
                 @endforeach

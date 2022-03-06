@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\Equipment;
 
 use App\Events\ChatEvent;
 use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
+use App\Models\Traits\MenuTrait;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
@@ -22,12 +23,12 @@ class AddEquipment extends Component
     public $equipmentTypes;
     public $picked;
 
-    private $addEquipmentService;
 
     protected $rules = [
         'equipmentName' => 'required|min:2',
-        'equipmentSerial'=> 'unique:equipments,serial'
+        'equipmentSerial' => 'unique:equipments,serial'
     ];
+    private $addEquipmentService;
 
     public function __construct($id = null)
     {
@@ -38,27 +39,18 @@ class AddEquipment extends Component
 
     public function mount()
     {
-        $this->fill([
-            'equipmentName'=>null,
-            'equipmentDescription'=>null,
-            'equipmentSerial'=>null,
-            'equipmentTypeId' => null,
-            'equipmentTypes'=>[],
-            'picked'=>false,
-        ]);
+        $this->addEquipmentService->mount($this);
     }
 
     public function updatedEquipmentTypeId()
     {
-        $this->picked = false;
-        $this->equipmentTypes=EquipmentType::where('id', 'like', "%".$this->equipmentTypeId."%")->limit(3)->get();
+
+        $this->addEquipmentService->updatedEquipmentTypeId($this);
     }
 
     public function setEquipmentType($equipmentType)
     {
-        $this->picked=true;
-        $equipmentType=json_decode($equipmentType);
-        $this->equipmentTypeId=$equipmentType->id;
+        $this->addEquipmentService->setEquipmentType($this, $equipmentType);
     }
 
     public function updatedSelectedState($state)
@@ -66,17 +58,19 @@ class AddEquipment extends Component
         $this->addEquipmentService->updatedSelectedState($this, $state);
     }
 
-    public function submit()
+    public function submitForm()
     {
         $this->addEquipmentService->submitForm($this);
     }
+
     public function updatingSearch()
     {
-        $this->equipment_types=EquipmentType::whereId($this->equipment_type_id)->paginate(15);
+        $this->addEquipmentService->updatingSearch($this);
     }
+
     public function render()
     {
-        return view('livewire.administrar.v1.add-equipment')
+        return view('livewire.administrar.v1.equipment.add-equipment')
             ->extends('layouts.v1.app');
     }
 }

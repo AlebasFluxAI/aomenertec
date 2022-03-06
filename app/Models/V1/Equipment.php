@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Equipment extends Model
 {
     use SoftDeletes;
-    protected $table="equipments";
-    protected $fillable=[
+
+    protected $table = "equipments";
+    protected $fillable = [
         "name",
         'equipment_type_id',
         'serial',
@@ -19,12 +20,18 @@ class Equipment extends Model
         'assigned',
     ];
 
-    public function equipmentType()
+    public function equipment_type()
     {
-        return $this->hasOne(EquipmentType::class);
+        return $this->belongsTo(EquipmentType::class);
     }
-    public function equipmentCondition()
+
+    public function equipment_condition()
     {
         return $this->hasOne(EquipmentCondition::class);
+    }
+
+    public function alerts()
+    {
+        return $this->hasMany(EquipmentAlert::class, "equipments_id");
     }
 }

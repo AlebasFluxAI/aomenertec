@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "065ddf25dfa961e82e16464175725abc",
+    "content-hash": "be00558aec32559df9801850a33d657c",
     "packages": [
+        {
+            "name": "ascsoftw/livewire-toast",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ascsoftw/livewire-toast.git",
+                "reference": "8f88eb937e618ef8d34c89e9dbc19dfa6a2396af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ascsoftw/livewire-toast/zipball/8f88eb937e618ef8d34c89e9dbc19dfa6a2396af",
+                "reference": "8f88eb937e618ef8d34c89e9dbc19dfa6a2396af",
+                "shasum": ""
+            },
+            "require-dev": {
+                "livewire/livewire": "^2.4",
+                "orchestra/testbench": "^6.17"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ascsoftw\\LivewireToast\\LivewireToastServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ascsoftw\\LivewireToast\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "AscSoftwares",
+                    "email": "support@ascsoftwares.com"
+                }
+            ],
+            "description": "Livewire Package to display Toast Notifications",
+            "keywords": [
+                "LivewireToast",
+                "laravel",
+                "livewire",
+                "notifications",
+                "toast"
+            ],
+            "support": {
+                "issues": "https://github.com/ascsoftw/livewire-toast/issues",
+                "source": "https://github.com/ascsoftw/livewire-toast/tree/1.0.1"
+            },
+            "time": "2021-05-25T11:07:52+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",
@@ -255,6 +310,65 @@
                 "source": "https://github.com/Bacon/BaconQrCode/tree/2.0.4"
             },
             "time": "2021-06-18T13:26:35+00:00"
+        },
+        {
+            "name": "beyondcode/laravel-prose-linter",
+            "version": "dev-review",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beyondcode/laravel-prose-linter.git",
+                "reference": "f2425616001c81c1e4b95635fa1b5e13723276fc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beyondcode/laravel-prose-linter/zipball/f2425616001c81c1e4b95635fa1b5e13723276fc",
+                "reference": "f2425616001c81c1e4b95635fa1b5e13723276fc",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^8.0",
+                "php": "^7.4|^8.0",
+                "symfony/finder": "^4.0|^5.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Beyondcode\\LaravelProseLinter\\LaravelProseLinterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Beyondcode\\LaravelProseLinter\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Diana Scharf",
+                    "email": "diana@beyondco.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Aweeeeesomeeeee",
+            "homepage": "https://github.com/beyondcode/laravel-prose-linter",
+            "keywords": [
+                "beyondcode",
+                "laravel-prose-linter"
+            ],
+            "support": {
+                "issues": "https://github.com/beyondcode/laravel-prose-linter/issues",
+                "source": "https://github.com/beyondcode/laravel-prose-linter/tree/review"
+            },
+            "time": "2021-06-07T12:55:03+00:00"
         },
         {
             "name": "brick/math",
@@ -9348,7 +9462,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "beyondcode/laravel-prose-linter": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

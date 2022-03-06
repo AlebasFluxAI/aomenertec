@@ -1,0 +1,56 @@
+import paho.mqtt.client as paho
+import time
+import psycopg2
+from psycopg2 import Error
+from datetime import datetime, timezone
+import pytz
+import threading
+
+broker = "3.12.98.178"
+port = 1883
+topic = "test"
+username = 'enertec'
+password = 'enertec2020**'
+client = paho.Client("2",clean_session=False)
+client.username_pw_set(username=username, password=password)
+client.connect(broker)
+client.subscribe(topic)
+tz = pytz.timezone("America/Bogota")
+dt = datetime.now(tz=tz)
+connection = psycopg2.connect(user="enertec",
+                              password="rootenertec",
+                              host="127.0.0.1",
+                              port="5432",
+                              database="enertec")
+
+
+
+cursor = connection.cursor()
+
+def on_connect(client, userdata, flags, rc):
+    global flag_connected
+    flag_connected = 1
+
+
+def on_disconnect(client, userdata, rc):
+    global flag_connected
+    flag_connected = 0
+
+def on_message(client, userdata, message):
+    try:
+
+        cursor.execute("insert into equipment_types(type,description,created_at) VALUES (%s,'nuevo',%s);",
+                       (message.payload.decode("utf-8"), dt,))
+
+        connection.commit()
+        print("saved " +message.payload.decode("utf-8"))
+
+    except (Exception, Error) as error:
+        print("Error while connecting to PostgreSQL", error)
+
+
+
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.on_message = on_message
+client.loop_forever()
