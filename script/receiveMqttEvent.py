@@ -1,10 +1,9 @@
 import paho.mqtt.client as paho
-import time
 import psycopg2
 from psycopg2 import Error
-from datetime import datetime, timezone
+from datetime import datetime,
 import pytz
-import threading
+import requests
 
 broker = "3.12.98.178"
 port = 1883
@@ -38,13 +37,7 @@ def on_disconnect(client, userdata, rc):
 
 def on_message(client, userdata, message):
     try:
-
-        cursor.execute("insert into equipment_types(type,description,created_at) VALUES (%s,'nuevo',%s);",
-                       (message.payload.decode("utf-8"), dt,))
-
-        connection.commit()
-        print("saved " +message.payload.decode("utf-8"))
-
+     requests.post("localhost/api/v1/mqtt_input",message)
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
 
