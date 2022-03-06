@@ -1,7 +1,7 @@
 import paho.mqtt.client as paho
 import psycopg2
 from psycopg2 import Error
-from datetime import datetime,
+from datetime import datetime
 import pytz
 import requests
 
@@ -10,7 +10,7 @@ port = 1883
 topic = "test"
 username = 'enertec'
 password = 'enertec2020**'
-client = paho.Client("2",clean_session=False)
+client = paho.Client("main_receiver",clean_session=False)
 client.username_pw_set(username=username, password=password)
 client.connect(broker)
 client.subscribe(topic)
@@ -37,7 +37,8 @@ def on_disconnect(client, userdata, rc):
 
 def on_message(client, userdata, message):
     try:
-     requests.post("localhost/api/v1/mqtt_input",message)
+     requests.post("http://localhost/api/v1/mqtt_input",str(message.payload.decode("utf-8")))
+     print(str(message.payload.decode("utf-8")))
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
 
