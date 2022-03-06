@@ -12,6 +12,7 @@ class EditEquipment extends Component
 {
 
     public $equipmentSerial;
+    public $equipment;
     public $serial;
     public $description;
     public $equipmentName;
@@ -30,7 +31,6 @@ class EditEquipment extends Component
 
     public function mount(Equipment $equipment)
     {
-
         $this->editEquipmentService->mount($this, $equipment);
     }
 
@@ -44,6 +44,11 @@ class EditEquipment extends Component
     {
 
         $this->editEquipmentService->updatedEquipmentTypeId($this);
+    }
+
+    public function submitForm()
+    {
+        $this->editEquipmentService->submitForm($this);
     }
 
 

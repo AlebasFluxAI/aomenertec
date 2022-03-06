@@ -16,8 +16,8 @@ class CreateTableEquipmentAlerts extends Migration
         Schema::create('equipment_alerts', function (Blueprint $table) {
             $table->id();
             $table->foreignId("equipments_id")->constrained();
-            $table->enum("type", ["TYPE_ALERT"]);
-            $table->integer("interval")->nullable();
+            $table->foreignId("alert_type_id")->constrained();
+            $table->double("value")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

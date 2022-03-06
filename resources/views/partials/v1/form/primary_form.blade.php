@@ -11,6 +11,7 @@
                 @if($form_input["input_type"]=="text" || $form_input["input_type"]=="number")
                     @include("partials.v1.form.form_input_icon",[
                               "input_model"=>$form_input["input_model"],
+                              "input_field"=>$form_input["input_field"]??"",
                               "input_type"=>$form_input["input_type"],
                               "icon_class"=>$form_input["icon_class"],
                               "placeholder"=>$form_input["placeholder"],
@@ -23,6 +24,7 @@
                     @include("partials.v1.form.form_dropdown_input_searchable",[
                                   "icon_class"=>$form_input["icon_class"],
                                   "placeholder"=>$form_input["placeholder"],
+                                  "input_field"=>$form_input["input_field"]??"",
                                   "col_with"=>$form_input["col_with"],
                                   "dropdown_model"=>$form_input["dropdown_model"],
                                   "dropdown_enter_function"=>$form_input["dropdown_enter_function"],
@@ -31,6 +33,21 @@
                                   "selected_value_function"=>$form_input["selected_value_function"],
                                   "dropdown_result_id"=>$form_input["dropdown_result_id"],
                                   "dropdown_result_value"=>$form_input["dropdown_result_value"],
+
+                        ])
+
+                @elseif($form_input["input_type"]=="dropdown")
+
+                    @include("partials.v1.form.form_dropdown",[
+                                  "icon_class"=>$form_input["icon_class"],
+                                  "dropdown_editing"=>$form_input["dropdown_editing"],
+                                  "dropdown_refresh"=>$form_input["dropdown_refresh"],
+                                  "placeholder"=>$form_input["placeholder"],
+                                  "input_field"=>$form_input["input_field"]??"",
+                                  "col_with"=>$form_input["col_with"],
+                                  "dropdown_model"=>$form_input["dropdown_model"],
+                                  "dropdown_values"=>$form_input["dropdown_values"],
+
 
                         ])
                 @endif

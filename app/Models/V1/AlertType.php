@@ -11,10 +11,11 @@ class AlertType extends Model
     use HasFactory;
     use SoftDeletes;
 
-    const TYPE_VOLTAGE = "voltage";
-    const TYPE_CURRENT = "current";
+
     protected $fillable = [
-        "types"
+        "name",
+        "unit",
+        "value",
     ];
 
     public function equipmentAlerts()

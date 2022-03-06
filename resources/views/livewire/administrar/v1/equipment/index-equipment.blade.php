@@ -1,11 +1,12 @@
-<div class="login">
+<div>
     @section("header") {{--extended app.blade--}}
-    @include("partials.v1.title",[
-              "second_title"=>"de equipos",
-              "first_title"=>"Listado"
-          ])
 
     @endsection
+
+    @include("partials.v1.title",[
+          "second_title"=>"de equipos",
+          "first_title"=>"Listado"
+      ])
 
 
 
@@ -29,8 +30,9 @@
 
                 ],
                  "table_actions"=>[
-                                   "edit"=>"editEquipment",
-                                   "delete"=>"deleteEquipment"
+                                    "details"=>"details",
+                                    "edit"=>"edit",
+                                    "delete"=>"delete"
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}
@@ -39,5 +41,5 @@
                "table_rows"=>$equipments
 
            ])
-
 </div>
+

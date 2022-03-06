@@ -1,11 +1,10 @@
-<div class="login">
+<div>
     @section("header") {{--extended app.blade--}}
+    @endsection
     @include("partials.v1.title",[
             "second_title"=>"de alertas",
             "first_title"=>"Listado"
         ])
-
-    @endsection
 
 
     @include("partials.v1.table_nav",
@@ -21,14 +20,15 @@
           ])
     @include("partials.v1.table.primary-table",[
                "table_headers"=>["ID"=>"id",
-                                 "Nombre"=>"name",
+                                 "Nombre"=>"alertType.name",
                                  "Equipo"=>"equipment.serial",
 
 
                 ],
                  "table_actions"=>[
-                                   "edit"=>"editEquipment",
-                                   "delete"=>"deleteEquipment"
+                                   "edit"=>"edit",
+                                   "delete"=>"delete",
+                                   "details"=>"details"
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}

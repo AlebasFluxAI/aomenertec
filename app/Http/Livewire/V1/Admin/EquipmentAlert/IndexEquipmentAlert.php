@@ -27,19 +27,20 @@ class IndexEquipmentAlert extends Component
         parent::__construct($id);
     }
 
-    public function getEquipments()
+    public function edit($id)
     {
-        return $this->indexEquipmentService->getEquipments();
+        $this->indexEquipmentService->edit($this, $id);
     }
 
-    public function editEquipment($id)
+    public function delete($id)
     {
-        $this->indexEquipmentService->editEquipment($this, $id);
+        $this->indexEquipmentService->delete($this, $id);
+
     }
 
-    public function deleteEquipment($id)
+    public function details($id)
     {
-        $this->indexEquipmentService->deleteEquipment($this, $id);
+        $this->indexEquipmentService->details($this, $id);
 
     }
 

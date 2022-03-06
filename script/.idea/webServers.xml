@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3c3e9aa1-e33d-4c8e-858f-9e62deb9278f" name="Enertec" url="3.12.98.178">
+        <fileTransfer rootFolder="/home/ubuntu/scripting" accessType="SFTP" host="3.12.98.178" port="22" sshConfigId="eaee7c38-7fc6-46f1-b95e-b51e070e56b7" sshConfig="ubuntu@3.12.98.178:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

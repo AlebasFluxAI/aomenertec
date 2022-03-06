@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\EquipmentAlert;
 
 use App\Http\Livewire\V1\Admin\Equipment\AddEquipment;
 use App\Http\Services\Singleton;
+use App\Models\V1\AlertType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentAlert;
 use App\Models\V1\EquipmentType;
@@ -11,6 +12,27 @@ use Livewire\Component;
 
 class EquipmentAlertAddService extends Singleton
 {
+
+    public function mount(Component $component)
+    {
+        foreach (AlertType::get() as $alertType) {
+            $component->alertTypes[] = [
+                "key" => $alertType->name . " (" . $alertType->unit . ")",
+                "value" => $alertType->id,
+            ];
+        }
+
+        $component->fill([
+            'type' => "alert",
+            'value' => null,
+            'equipments' => [],
+            'equipmentId' => null,
+            'picked' => [],
+
+        ]);
+
+    }
+
     public function loadEquipmentType(Component $component)
     {
         $component->equipment_types = EquipmentType::paginate();
@@ -18,17 +40,18 @@ class EquipmentAlertAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         $equipment = EquipmentAlert::create($this->mapper($component));
-        session()->flash('message', 'Equipo ' . $equipment->name . ' creado con exito.');
-        $component->mount();
+        $component->emitTo('livewire-toast', 'show', 'Alerta para equipo ' . $equipment->equipment->serial . ' creada con exito.');
+
     }
 
     private function mapper(Component $component)
     {
+        
         return [
-            "interval" => $component->interval,
-            "equipments_id" => $component->equipmentId,
+            "value" => $component->value,
+            "alert_type_id" => $component->alertType,
+            "equipments_id" => $component->equipmentId
         ];
     }
 
@@ -39,8 +62,9 @@ class EquipmentAlertAddService extends Singleton
 
     public function updatedEquipmentId(Component $component)
     {
-        $component->picked = false;
-        $component->equipments = Equipment::where('id', 'like', "%" . $component->equipmentId . "%")->limit(3)->get();
+        $component->equipments = Equipment::where('id', 'like', "%" . $component->equipmentId . "%")
+            ->orWhere('name', 'like', "%" . $component->equipmentId . "%")
+            ->limit(3)->get();
 
     }
 
@@ -52,13 +76,4 @@ class EquipmentAlertAddService extends Singleton
         $component->equipmentId = $equipment->id;
     }
 
-    public function updatedSelectedState(Component $component, $state)
-    {
-        if (!is_null($state)) {
-            $component->states = [
-                ["id" => "2",
-                    "name" => "Kathe"]
-            ];
-        }
-    }
 }

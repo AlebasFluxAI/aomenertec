@@ -11,6 +11,7 @@ use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use Livewire\Component;
 use Livewire\WithPagination;
+use PhpMqtt\Client\Facades\MQTT;
 use function view;
 
 class IndexEquipment extends Component
@@ -31,14 +32,19 @@ class IndexEquipment extends Component
         return $this->indexEquipmentService->getEquipments();
     }
 
-    public function editEquipment($id)
+    public function details($id)
     {
-        $this->indexEquipmentService->editEquipment($this, $id);
+        $this->indexEquipmentService->details($this, $id);
     }
 
-    public function deleteEquipment($id)
+    public function edit($id)
     {
-        $this->indexEquipmentService->deleteEquipment($this, $id);
+        $this->indexEquipmentService->edit($this, $id);
+    }
+
+    public function delete($id)
+    {
+        $this->indexEquipmentService->delete($this, $id);
 
     }
 

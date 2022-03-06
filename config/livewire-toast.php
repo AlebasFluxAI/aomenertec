@@ -8,7 +8,7 @@ return [
     //bottom-right, bottom-left, top-right, top-left
     'position' => 'top-right', //default is bottom-right
     //duration in ms for which the Toast is visible. Specify 0 if you do not want to hide it.
-    'duration' => 2000, //default is 3000
+    'duration' => 1000, //default is 3000
     //Whether to show icon next to message.
     'show_icon' => true, //default is true
     //Whether to hide message on click.
@@ -16,10 +16,10 @@ return [
     //Background Color used by TailwindCss for various types.
     'color' => [
         'bg' => [
-            'success' => 'green',
-            'warning' => 'yellow',
-            'info' => 'blue',
-            'error' => 'red',
+            'success' => 'success',
+            'warning' => 'warning',
+            'info' => 'info',
+            'error' => 'danger',
         ]
     ],
     //Text Color used by TailwindCss class. If using color other than white or black, provide full color like red-300.

@@ -101,7 +101,11 @@ notification-nav {
 /*___________ TAB DE CONTENIDO _________*/
 #custom-tab button {
     color: black;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 04e3cd3 (revision)
     font-weight: 300;
 
 
@@ -190,6 +194,15 @@ primary
 
 .primary-content th {
     text-align: left;
+<<<<<<< HEAD
+    margin-top: 20px;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.primary-content thead {
+    background-color: whitesmoke;
+=======
     margin-top: 20px;
     font-weight: 300;
     font-size: 15px;
@@ -225,6 +238,45 @@ primary
 
 .detail-table thead {
     background-color: #f2f2f2;
+>>>>>>> 04e3cd3 (revision)
+    margin-top: 20px;
+    font-weight: 300;
+    font-size: 14px;
+}
+<<<<<<< HEAD
+=======
+
+.detail-table tr td {
+    text-align: left;
+    font-weight: 200;
+    font-size: 13px;
+    background-color: whitesmoke;
+>>>>>>> 04e3cd3 (revision)
+
+.primary-content tr td {
+    text-align: left;
+    font-weight: 200;
+    font-size: 13px;
+}
+
+
+<<<<<<< HEAD
+/*-----------TABLA DE DETALLES-----------/*
+--------------------------------------------------------------*/
+.detail-table .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: whitesmoke;
+}
+
+.detail-table th {
+    text-align: left;
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 15px;
+    width: 10rem;
+}
+
+.detail-table thead {
+    background-color: #f2f2f2;
     margin-top: 20px;
     font-weight: 300;
     font-size: 14px;
@@ -239,6 +291,8 @@ primary
 }
 
 
+=======
+>>>>>>> 04e3cd3 (revision)
 .detail-table .table-bordered > tbody > tr > td {
     border: 1px solid #f2f2f2;
 }

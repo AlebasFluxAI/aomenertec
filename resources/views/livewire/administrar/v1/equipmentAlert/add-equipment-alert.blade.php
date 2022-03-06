@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 <div class="login">
     @section("header") {{--extended app.blade--}}
     @endsection
@@ -8,6 +9,12 @@
 @endsection
 <div class="login">
 >>>>>>> 5a81a49 (default menu)
+=======
+<div class="login">
+    @section("header") {{--extended app.blade--}}
+    @endsection
+
+>>>>>>> 04e3cd3 (revision)
     @include("partials.v1.title",[
             "first_title"=>"Añadir",
             "second_title"=>"Equipos"
@@ -36,6 +43,7 @@
             "session_message"=>"message",
             "form_submit_action"=>"submitForm",
             "form_inputs"=>[
+<<<<<<< HEAD
                             [
                                         "input_type"=>"text",
                                         "input_model"=>"equipmentName",
@@ -63,6 +71,10 @@
 
                              ],
                              [
+=======
+
+                                 [
+>>>>>>> 04e3cd3 (revision)
                                         "input_type"=>"dropdown-search",
                                         "icon_class"=>"fas fa-desktop",
                                         "placeholder"=>"Seleccione el tipo de equipo",
@@ -75,10 +87,27 @@
                                         "dropdown_result_id"=>"id",
                                         "dropdown_result_value"=>"type",
 
-                            ]
+                            ],
+                             [
+                                        "input_type"=>"number",
+                                        "input_model"=>"value",
+                                        "icon_class"=>"fa-solid fa-list-ol",
+                                        "placeholder"=>"Valor a alarmar",
+                                        "input_field"=>"Valor a alarmar",
+                                        "col_with"=>6,
+                                        "required"=>true
+                            ],
+                                    [
+                                        "input_type"=>"dropdown",
+                                        "input_model"=>"value",
+                                        "placeholder"=>"Tipo de alarma",
+                                        "icon_class"=>"fa-solid fa-bell",
+                                        "col_with"=>6,
+                                        "dropdown_model"=>"alertType",
+                                        "dropdown_values"=>$alertTypes
+                            ],
 
                          ]
                  ])
-
 
 </div>

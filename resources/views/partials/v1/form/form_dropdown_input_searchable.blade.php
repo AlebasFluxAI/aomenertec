@@ -21,7 +21,7 @@
         </div>
 
         <input wire:model="{{$dropdown_model}}"
-               wire:keydown.enter="{{$dropdown_enter_function}}" type="text" class="form-control" autocomplete="off"
+               type="text" class="form-control" autocomplete="off"
                placeholder="{{$placeholder??""}}" required="{{$required??false}}">
         <div class="input-group-append">
                                         <span class="input-group-text">
@@ -39,7 +39,7 @@
     </div>
 
 
-    @if(count($dropdown_results)>0)
+    @if(count($dropdown_results??[])>0)
         @if(!$picked_variable)
             <ul class="dropdown-menu list-search">
                 <h6 class="dropdown-header"><b>Seleccione opción</b></h6>

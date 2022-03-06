@@ -13,11 +13,12 @@ class EquipmentEditService extends Singleton
     public function mount(Component $component, Equipment $equipment)
     {
         $component->fill([
+            'equipment' => $equipment,
             'equipmentName' => $equipment->name,
             'equipmentDescription' => $equipment->description,
             'equipmentSerial' => $equipment->serial,
-            'equipmentTypeId' => $equipment->equipment_type_id,
-            'equipmentTypes' => [$equipment->equipment_type],
+            'equipmentTypeId' => $equipment->equipment_type->type,
+            'equipmentTypes' => [],
             'picked' => false,
         ]);
     }
@@ -29,8 +30,9 @@ class EquipmentEditService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $equipment = Equipment::create($this->mapper($component));
-        $component->emitTo('livewire-toast', 'show', "Equipo {$equipment->name} creado exitosamente");
+        $component->equipment->fill($this->mapper($component));
+        $component->equipment->update();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$component->equipment->name} creado exitosamente");
 
     }
 

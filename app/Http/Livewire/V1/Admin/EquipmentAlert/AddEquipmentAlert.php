@@ -15,10 +15,12 @@ use function view;
 class AddEquipmentAlert extends Component
 {
     public $type;
-    public $interval;
+    public $value;
     public $equipments;
     public $equipmentId;
     public $picked;
+    public $alertTypes = [];
+    public $alertType;
     protected $rules = [
         'equipmentName' => 'required|min:2',
         'equipmentSerial' => 'unique:equipments,serial'
@@ -34,14 +36,7 @@ class AddEquipmentAlert extends Component
 
     public function mount()
     {
-        $this->fill([
-            'type' => "alert",
-            'interval' => null,
-            'equipments' => [],
-            'equipmentId' => null,
-            'picked' => [],
-
-        ]);
+        $this->addEquipmentAlertService->mount($this);
     }
 
     public function updatedEquipmentId()
@@ -61,6 +56,7 @@ class AddEquipmentAlert extends Component
 
     public function submitForm()
     {
+
         $this->addEquipmentAlertService->submitForm($this);
     }
 

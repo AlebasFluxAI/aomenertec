@@ -9,8 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Equipment extends Model
 {
     use SoftDeletes;
-    protected $table="equipments";
-    protected $fillable=[
+
+    protected $table = "equipments";
+    protected $fillable = [
         "name",
         'equipment_type_id',
         'serial',
@@ -23,8 +24,14 @@ class Equipment extends Model
     {
         return $this->belongsTo(EquipmentType::class);
     }
+
     public function equipment_condition()
     {
         return $this->hasOne(EquipmentCondition::class);
+    }
+
+    public function alerts()
+    {
+        return $this->hasMany(EquipmentAlert::class, "equipments_id");
     }
 }

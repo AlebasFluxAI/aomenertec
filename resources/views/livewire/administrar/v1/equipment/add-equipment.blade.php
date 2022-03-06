@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <<<<<<< HEAD:resources/views/livewire/administrar/v1/add-equipment.blade.php
 <div class="login">
     @section("header") {{--extended app.blade--}}
@@ -36,6 +37,12 @@
 =======
 <div class="login">
 >>>>>>> 5a81a49 (default menu)
+=======
+<div class="login">
+    @section("header") {{--extended app.blade--}}
+    @endsection
+
+>>>>>>> 04e3cd3 (revision)
     @include("partials.v1.title",[
             "first_title"=>"Añadir",
             "second_title"=>"Equipos"

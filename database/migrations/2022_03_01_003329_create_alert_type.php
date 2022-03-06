@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlertTypes extends Migration
+class CreateAlertType extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,9 @@ class CreateAlertTypes extends Migration
     {
         Schema::create('alert_types', function (Blueprint $table) {
             $table->id();
-            $table->string("type");
+            $table->string("name");
+            $table->string("unit");
+            $table->double("value");
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +30,6 @@ class CreateAlertTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alert_types');
+        Schema::dropIfExists('alert_type');
     }
 }

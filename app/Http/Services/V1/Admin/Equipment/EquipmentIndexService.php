@@ -10,11 +10,11 @@ use Livewire\Component;
 
 class EquipmentIndexService extends Singleton
 {
-    public function deleteEquipment(Component $component, $equipmentId)
+    public function delete(Component $component, $equipmentId)
     {
         Equipment::find($equipmentId)->delete();
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
-        $component->mount();
+        $component->reset();
     }
 
     public function getEquipments()
@@ -22,8 +22,13 @@ class EquipmentIndexService extends Singleton
         return Equipment::with("equipment_type")->paginate(15);
     }
 
-    public function editEquipment(Component $component, $equipmentId)
+    public function edit(Component $component, $equipmentId)
     {
         $component->redirectRoute("administrar.v1.equipos.editar", ["equipment" => $equipmentId]);
+    }
+
+    public function details(Component $component, $equipmentId)
+    {
+        $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipmentId]);
     }
 }

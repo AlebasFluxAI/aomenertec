@@ -14,13 +14,18 @@ class EquipmentAlert extends Model
     const TYPE_ALERT = "alert";
 
     protected $fillable = [
-        "type",
-        "interval",
+        "value",
         "equipments_id",
+        "alert_type_id",
     ];
+
+    public function alertType()
+    {
+        return $this->belongsTo(AlertType::class);
+    }
 
     public function equipment()
     {
-        return $this->belongsTo(Equipment::class);
+        return $this->belongsTo(Equipment::class, "equipments_id");
     }
 }
