@@ -4,16 +4,16 @@ from psycopg2 import Error
 from datetime import datetime
 import pytz
 import requests
-
+import json
 broker = "3.12.98.178"
 port = 1883
-topic = "test"
+topic = "mc/data"
 username = 'enertec'
 password = 'enertec2020**'
 client = paho.Client("main_receiver",clean_session=False)
 client.username_pw_set(username=username, password=password)
 client.connect(broker)
-client.subscribe(topic)
+client.subscribe(topic,qos=0)
 tz = pytz.timezone("America/Bogota")
 dt = datetime.now(tz=tz)
 connection = psycopg2.connect(user="enertec",
@@ -37,8 +37,8 @@ def on_disconnect(client, userdata, rc):
 
 def on_message(client, userdata, message):
     try:
-     requests.post("http://localhost/api/v1/mqtt_input",str(message.payload.decode("utf-8")))
-     print(str(message.payload.decode("utf-8")))
+     res=requests.post("http://localhost/api/v1/mqtt_input",{"message":message.payload})
+     print(" -> "+ str(res.status_code))
     except (Exception, Error) as error:
         print("Error while connecting to PostgreSQL", error)
 

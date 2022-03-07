@@ -5,7 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcf9c512-e263-40e7-9151-eecadbbb1fbf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../resources/views/livewire/administrar/v1/equipment/equipment-real-time-switch.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/V1/MqttInput/MqttInputController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/V1/MqttInput/MqttInputController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Kernel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Providers/RouteServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Providers/RouteServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../appspec.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../appspec.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../public/assets/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/../public/assets/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/livewire/administrar/v1/equipment/detail-equipment.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/livewire/administrar/v1/equipment/detail-equipment.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/partials/v1/form/primary_form.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/partials/v1/form/primary_form.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/receiveMqttEvent.py" beforeDir="false" afterPath="$PROJECT_DIR$/receiveMqttEvent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sendMqttEvent.py" beforeDir="false" afterPath="$PROJECT_DIR$/sendMqttEvent.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,7 +39,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="web.server" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -70,6 +80,8 @@
       <updated>1646446722488</updated>
       <workItem from="1646446723647" duration="10723000" />
       <workItem from="1646606300712" duration="2733000" />
+      <workItem from="1646623559355" duration="4056000" />
+      <workItem from="1646654732485" duration="4517000" />
     </task>
     <servers />
   </component>
