@@ -14,5 +14,5 @@ while(True):
     a+=1
     client.publish("test",str(a),qos=0)
     print(str(a))
-    time.sleep(0.2)
+    time.sleep(0.01)
 
