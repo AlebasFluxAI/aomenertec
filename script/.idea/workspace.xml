@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcf9c512-e263-40e7-9151-eecadbbb1fbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../app/Http/Controllers/V1/MqttInput/MqttRealTimeInputController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Jobs/V1/Enertec/SaveMicrocontrollerDataJob.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Models/V1/MicrocontrollerData.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Observers/MicrocontrollerData/MicrocontrollerDataObserver.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../database/migrations/2022_03_10_001847_create_microcontroller_data.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../database/migrations/2022_03_10_003018_create_jobs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/Http/Controllers/V1/MqttInput/MqttInputController.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Controllers/V1/MqttInput/MqttInputController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/Observers/Driver/PqrMessageObserver.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Observers/Pqr/PqrMessageObserver.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../scripts/afterInstall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../scripts/afterInstall.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../scripts/beforeInstall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../scripts/beforeInstall.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
