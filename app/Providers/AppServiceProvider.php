@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\V1\Image;
+use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\PqrMessage;
-use App\Observers\Driver\PqrMessageObserver;
+use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
+use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,5 +31,6 @@ class AppServiceProvider extends ServiceProvider
     {
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
+        MicrocontrollerData::observe(MicrocontrollerDataObserver::class);
     }
 }

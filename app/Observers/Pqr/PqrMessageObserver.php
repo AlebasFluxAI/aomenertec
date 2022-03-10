@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Observers\Driver;
+namespace App\Observers\Pqr;
 
 use App\Models\V1\PqrMessage;
 
