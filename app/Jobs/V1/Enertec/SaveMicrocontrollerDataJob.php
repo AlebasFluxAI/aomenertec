@@ -33,6 +33,7 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
+
         MicrocontrollerData::create([
             "raw_json" => $this->raw_json
         ]);

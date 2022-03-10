@@ -13,7 +13,6 @@ class MqttRealTimeInputController extends Controller
     public function __invoke(Request $request)
     {
         dispatch(new PushRealTimeMicrocontrollerDataJob($request->message));
-
     }
 
 }
