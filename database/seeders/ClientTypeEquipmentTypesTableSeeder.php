@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\V1\ClientTypeEquipmentTypes;
 
-class EquipmentAssignmentsTableSeeder extends Seeder
+class ClientTypeEquipmentTypesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +16,7 @@ class EquipmentAssignmentsTableSeeder extends Seeder
     public function run()
     {
         // DB::table('equipment_assignments')->truncate();
-        DB::table('equipment_assignments')->insert([
+        $types =[
             ['equipment_type_id'=> 1, 'client_type_id' => 1],
             ['equipment_type_id'=> 2, 'client_type_id' => 1],
             ['equipment_type_id'=> 3, 'client_type_id' => 1],
@@ -69,7 +70,9 @@ class EquipmentAssignmentsTableSeeder extends Seeder
             ['equipment_type_id'=> 6, 'client_type_id' => 9],
             ['equipment_type_id'=> 7, 'client_type_id' => 9],
             ['equipment_type_id'=> 8, 'client_type_id' => 9],
-
-        ]);
+        ];
+        foreach ($types as $type) {
+            $create = ClientTypeEquipmentTypes::create($type);
+        }
     }
 }

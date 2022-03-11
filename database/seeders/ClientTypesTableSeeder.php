@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use App\Models\V1\ClientType;
 
 class ClientTypesTableSeeder extends Seeder
 {
@@ -15,7 +16,7 @@ class ClientTypesTableSeeder extends Seeder
     public function run()
     {
         // DB::table('client_types')->truncate();
-        DB::table('client_types')->insert([
+        $types = [
             ['type'=> 'SFVI', 'description' => 'Cliente con solucion fotovoltaica individual sin medición'],
             ['type'=> 'SFVI PREPAGO', 'description' => 'Cliente con solucion fotovoltaica individual con medición prepago'],
             ['type'=> 'SFVI PREPAGO-TELEMETRIA', 'description' => 'Cliente con solucion fotovoltaica individual con medición prepago y telemetria'],
@@ -25,6 +26,9 @@ class ClientTypesTableSeeder extends Seeder
             ['type'=> 'CONVENCIONAL PREPAGO-TELEMETRIA', 'description' => 'Cliente con red convencional con medición prepago y telemetria'],
             ['type'=> 'CONVENCIONAL POSTPAGO', 'description' => 'Cliente con red convencional con medición postpago'],
             ['type'=> 'CONVENCIONAL POSTPAGO-TELEMETRIA', 'description' => 'Cliente con red convencional con medición postpago y telemetria'],
-            ]);
+        ];
+        foreach ($types as $type) {
+            $create = ClientType::create($type);
+        }
     }
 }

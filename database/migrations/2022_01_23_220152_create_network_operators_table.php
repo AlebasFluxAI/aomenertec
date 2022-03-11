@@ -16,6 +16,7 @@ class CreateNetworkOperatorsTable extends Migration
         Schema::create('network_operators', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
+            $table->foreignId('admin_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });

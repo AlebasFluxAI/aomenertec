@@ -9,14 +9,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Equipment extends Model
 {
     use SoftDeletes;
+    public const STATUS_NEW = 'new';
+    public const STATUS_REPAIRED = 'repaired';
+    public const STATUS_REPAIR = 'repair';
+    public const STATUS_DISREPAIR = 'disrepair';
 
-    protected $table = "equipments";
+
     protected $fillable = [
         "name",
         'equipment_type_id',
         'serial',
         'description',
-        'equipment_condition_id',
+        'status',
         'assigned',
     ];
 

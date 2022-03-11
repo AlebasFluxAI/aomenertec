@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\V1\Admin\User;
+namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\User\EditUser;
 use App\Http\Services\Singleton;
@@ -14,7 +14,7 @@ use Spatie\Permission\Models\Role;
 use function auth;
 use function session;
 
-class EditUserService extends Singleton
+class EditClientService extends Singleton
 {
     public function mount(Component $component)
     {

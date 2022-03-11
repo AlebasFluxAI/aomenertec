@@ -19,8 +19,9 @@ class ModelHasRoleTableSeeder extends Seeder
         $seller = User::where("name", "like", '%' . "Vendedor" . "%")->get();
         $technician = User::where("name", "like", '%' . "Tecnico" . "%")->get();
         $network_operator = User::where("name", "like", '%' . "Prestador" . "%")->get();
-        $admin = User::find(1);
-        $support = User::find(2);
+        $super_admin = User::find(1);
+        $admin = User::find(2);
+        $support = User::find(3);
         foreach ($seller as $item) {
             $item->assignRole('seller');
         }
@@ -30,6 +31,7 @@ class ModelHasRoleTableSeeder extends Seeder
         foreach ($network_operator as $item) {
             $item->assignRole('network_operator');
         }
+        $super_admin->assignRole('super_administrator');
         $admin->assignRole('administrator');
         $support->assignRole('support');
     }

@@ -27,9 +27,9 @@ class NetworkOperator extends Model
     {
         return $this->hasMany(Technician::class);
     }
-    public function consumers()
+    public function supervisors()
     {
-        return $this->hasMany(Consumer::class);
+        return $this->hasMany(Supervisor::class);
     }
 
     public function pqrs()

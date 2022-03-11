@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClientAlert extends Migration
+class CreateTableEquipmentAlerts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateClientAlert extends Migration
      */
     public function up()
     {
-        Schema::create('client_alert', function (Blueprint $table) {
+        Schema::create('equipment_alerts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("client_id")->constrained();
+            $table->foreignId("equipment_id")->constrained();
             $table->foreignId("alert_type_id")->constrained();
-            $table->double("value");
+            $table->double("value")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateClientAlert extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('client_alert');
+        Schema::dropIfExists('table_equipment_alerts');
     }
 }

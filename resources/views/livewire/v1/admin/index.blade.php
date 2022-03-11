@@ -146,12 +146,12 @@
                             <ul class="dropdown-menu" aria-labelledby="DropdownClientes">
                                 <li class="dropdown-item">
                                     <h1 class="tituloServiciosHome">
-                                        <a href="{{ route('administrar.adduser') }}" class="linkServiciosHome ">Agregar</a>
+                                        <a href="{{ route('administrar.v1.usuarios.agregar') }}" class="linkServiciosHome ">Agregar</a>
                                     </h1>
                                 </li>
                                 <li class="dropdown-item">
                                     <h1 class="tituloServiciosHome">
-                                        <a href="{{ route('administrar.edituser') }}" class="linkServiciosHome ">Editar</a>
+                                        <a href="{{ route('administrar.v1.usuarios.editar') }}" class="linkServiciosHome ">Editar</a>
                                     </h1>
                                 </li>
                             </ul>

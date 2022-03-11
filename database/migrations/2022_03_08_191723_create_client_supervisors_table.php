@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNetworkTopologiesTable extends Migration
+class CreateClientSupervisorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateNetworkTopologiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('network_topologies', function (Blueprint $table) {
+        Schema::create('client_supervisors', function (Blueprint $table) {
             $table->id();
-            $table->string("topology");
-            $table->string("description");
+            $table->foreignId('supervisors_id')->constrained();
+            $table->foreignId('client_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +29,6 @@ class CreateNetworkTopologiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('network_topologies');
+        Schema::dropIfExists('client_supervisors');
     }
 }

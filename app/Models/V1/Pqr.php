@@ -11,6 +11,11 @@ class Pqr extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const STATUS_CREATED = 'created';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_RESOLVED = 'resolved';
+    public const STATUS_CLOSED = 'closed';
+
     public function pqrState()
     {
         return $this->belongsTo(PqrState::class);
@@ -37,6 +42,6 @@ class Pqr extends Model
     }
     public function pqrPosts()
     {
-        return $this->hasMany(PqrPost::class);
+        return $this->hasMany(PqrMessage::class);
     }
 }
