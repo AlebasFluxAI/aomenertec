@@ -33,6 +33,6 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        // Logica para envio de eventos a fornt
+        // Logica para envio de eventos a fornt por livewire.
     }
 }

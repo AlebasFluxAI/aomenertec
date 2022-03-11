@@ -19,7 +19,8 @@ class MicrocontrollerData extends Model
         "interval_real_consumption",
         "interval_reactive_consumption",
         "accumulated_reactive_consumption",
-        "source_timestamp"
+        "source_timestamp",
+        "type",
     ];
 
     public function client()

@@ -35,7 +35,7 @@ return [
         'default' => [
 
             // The host and port to which the client shall connect.
-            'host' => env('MQTT_HOST', "3.12.98.178"),
+            'host' => env('MQTT_HOST', "localhost"),
             'port' => env('MQTT_PORT', 1883),
 
             // The MQTT protocol version used for the connection.
@@ -78,8 +78,8 @@ return [
 
                 // Credentials used for authentication and authorization.
                 'auth' => [
-                    'username' => env('MQTT_AUTH_USERNAME', "enertec"),
-                    'password' => env('MQTT_AUTH_PASSWORD', "enertec2020**"),
+                    'username' => env('MQTT_AUTH_USERNAME', ""),
+                    'password' => env('MQTT_AUTH_PASSWORD', ""),
                 ],
 
                 // Can be used to declare a last will during connection. The last will
