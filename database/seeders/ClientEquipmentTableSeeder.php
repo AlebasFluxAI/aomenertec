@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class EquipmentsPerClientsTableSeeder extends Seeder
+class ClientEquipmentTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.

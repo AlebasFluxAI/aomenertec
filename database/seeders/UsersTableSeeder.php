@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\V1\User;
 
 class UsersTableSeeder extends Seeder
 {
@@ -16,12 +17,20 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         // DB::table('users')->truncate();
-        DB::table('users')->insert([
+        $users = [
             [
-                'name' => "ENERTEC LATINOAMERICA SAS",
-                'identification' => '901091737',
-                'phone' => '3058139238',
-                'email' => 'soporte@enerteclatam.com',
+                'name' => "Super Administrador Prueba",
+                'identification' => '11111111',
+                'phone' => '3011111111',
+                'email' => 'sadminprueba@enerteclatam.com',
+                'password'       => bcrypt('12345678'),
+                'remember_token' => Str::random(60),
+            ],
+            [
+                'name' => "Administrador Prueba",
+                'identification' => '66666666',
+                'phone' => '3066666666',
+                'email' => 'adminprueba@enerteclatam.com',
                 'password'       => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
             ],
@@ -89,7 +98,7 @@ class UsersTableSeeder extends Seeder
                 'password'       => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
             ],
-[
+            [
                 'name' => "Tecnico Prueba SFVI",
                 'identification' => '22888888',
                 'phone' => '322888888',
@@ -97,7 +106,7 @@ class UsersTableSeeder extends Seeder
                 'password'       => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
             ],
-[
+            [
                 'name' => "Tecnico Prueba RED",
                 'identification' => '22777777',
                 'phone' => '322777777',
@@ -106,6 +115,9 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => Str::random(60),
             ],
 
-        ]);
+        ];
+        foreach ($users as $user) {
+            $create = User::create($user);
+        }
     }
 }

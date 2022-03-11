@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\V1\Equipment;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,7 @@ class EquipmentsTableSeeder extends Seeder
     public function run()
     {
         // DB::table('equipments')->truncate();
-        DB::table('equipments')->insert([
+        $equipment = [
             ['equipment_type_id'=> 1, 'serial' => '999999', 'description' => 'MONOPERC 380W'],
             ['equipment_type_id'=> 1, 'serial' => '999998', 'description' => 'MONOPERC 380W'],
             ['equipment_type_id'=> 1, 'serial' => '999997', 'description' => 'MONOPERC 380W'],
@@ -58,6 +59,9 @@ class EquipmentsTableSeeder extends Seeder
             ['equipment_type_id'=> 7, 'serial' => '999996', 'description' => 'TARJETA DE CONTROL GP'],
             ['equipment_type_id'=> 7, 'serial' => '999995', 'description' => 'TARJETA DE CONTROL GP'],
             ['equipment_type_id'=> 7, 'serial' => '999994', 'description' => 'TARJETA DE CONTROL GP'],
-        ]);
+        ];
+        foreach ($equipment as $item){
+            $create = Equipment::create($item);
+        }
     }
 }

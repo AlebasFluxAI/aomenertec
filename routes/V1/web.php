@@ -6,6 +6,8 @@ use App\Http\Livewire;
 use App\Http\Livewire\Index;
 use App\Http\Livewire\V1\Admin\User\AddUser;
 use App\Http\Livewire\V1\Admin\User\EditUser;
+use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Livewire\V1\Admin\Client\EditClient;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,27 +22,26 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('', [testFile::class, 'upload']);
 
-Route::get('/v1/login', function () {
+Route::get('/', function () {
     return view('auth.v1.login');
 });
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-});
-
-Route::prefix("v1")->group(function () {
-    Route::prefix("administrar")->group(function () {
-        Route::get('/', Index::class);
-    });
-});
-
-
-Route::middleware([])->group(function () {
     Route::prefix("v1")->group(function () {
         Route::prefix("administrar")->group(function () {
-            Route::prefix("usuarios")->group(function () {
-                Route::get('agregar', AddUser::class)->name("administrar.v1.usuarios.agregar");
-                Route::get('editar', EditUser::class)->name("administrar.v1.usuarios.editar");
+            Route::get('/', Index::class);
+            Route::middleware([ 'permission:add_user','permission:edit_user'])->group(function () {
+                Route::prefix("usuarios")->group(function () {
+                    Route::get('agregar', AddUser::class)->name("administrar.v1.usuarios.agregar");
+                    Route::get('editar', EditUser::class)->name("administrar.v1.usuarios.editar");
+                });
+            });
+            Route::middleware([ 'permission:add_client','permission:edit_client'])->group(function () {
+                Route::prefix("clientes")->group(function () {
+                    Route::get('agregar', AddClient::class)->name('admin.add-client');
+                    Route::get('editar', EditClient::class)->name('admin.edit-client');
+                });
             });
             Route::prefix("equipos")->group(function () {
                 Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class)->name("administrar.v1.equipos.agregar");

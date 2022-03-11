@@ -18,7 +18,7 @@ class PermissionMiddleware
     public function handle(Request $request, Closure $next, $permission)
     {
         if (Auth::guest()) {
-            return redirect('/login');
+            return redirect('/v1/login');
         }
         if (! $request->user()->can($permission)) {
             abort(403);

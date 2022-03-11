@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEquipmentsPerClientsTable extends Migration
+class CreateEquipmentTypePqrTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateEquipmentsPerClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('equipments_per_clients', function (Blueprint $table) {
+        Schema::create('equipment_type_pqr_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("client_id")->constrained();
-            $table->foreignId("pqr_id")->nullable()->constrained();
-            $table->boolean("active");
+            $table->foreignId('equipment_type_id')->constrained();
+            $table->foreignId('pqr_type_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('equipment_id');
         });
     }
 
@@ -31,6 +29,6 @@ class CreateEquipmentsPerClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('equipments_per_clients');
+        Schema::dropIfExists('equipment_type_pqr_types');
     }
 }

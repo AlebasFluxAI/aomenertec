@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePqrPostsTable extends Migration
+class CreatePqrMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreatePqrPostsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pqr_posts', function (Blueprint $table) {
+        Schema::create('pqr_messages', function (Blueprint $table) {
             $table->id();
-            $table->text('post')->nullable();
-            $table->foreignId('pqr_id')->constrained();
-            $table->foreignId('user_id')->nullable()->constrained();
-            $table->string('image')->nullable();
-            $table->timestamps();
+            $table->string("message")->nullable();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -31,6 +28,6 @@ class CreatePqrPostsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pqr_posts');
+        Schema::dropIfExists('pqr_messages');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEquipmentsTable extends Migration
+class CreateClientTypeEquipmentTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateEquipmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('equipments', function (Blueprint $table) {
+        Schema::create('client_type_equipment_types', function (Blueprint $table) {
             $table->id();
-            $table->string("name")->nullable();
             $table->foreignId('equipment_type_id')->constrained();
-            $table->string('serial')->unique(true);
-            $table->string('description');
-            $table->foreignId('equipment_condition_id')->nullable()->constrained();
-            $table->boolean('assigned')->default(false);
+            $table->foreignId('client_type_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -33,6 +29,6 @@ class CreateEquipmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('equipments');
+        Schema::dropIfExists('client_type_equipment_types');
     }
 }

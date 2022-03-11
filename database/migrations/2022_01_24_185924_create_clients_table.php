@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\V1\Client;
 
 class CreateClientsTable extends Migration
 {
@@ -34,7 +35,7 @@ class CreateClientsTable extends Migration
             $table->foreignId("subsistence_consumption_id")->default(1)->constrained();
             $table->foreignId("voltage_level_id")->default(1)->constrained();
             $table->foreignId("stratum_id")->constrained();
-            $table->foreignId("network_topology_id")->constrained();
+            $table->enum("network_topology", [Client::MONOPHASIC, Client::BIPHASIC, Client::TRIPHASIC])->default(Client::MONOPHASIC);
             $table->timestamps();
             $table->softDeletes();
         });

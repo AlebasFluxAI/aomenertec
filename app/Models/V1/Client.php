@@ -10,6 +10,11 @@ class Client extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public const MONOPHASIC = 'monophasic';
+    public const BIPHASIC = 'biphasic';
+    public const TRIPHASIC = 'triphasic';
+
     protected $filliable = ['identification'];
     public function networkOperator()
     {

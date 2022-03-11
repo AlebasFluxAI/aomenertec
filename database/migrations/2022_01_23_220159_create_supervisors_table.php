@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEquipmentFailuresTable extends Migration
+class CreateSupervisorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateEquipmentFailuresTable extends Migration
      */
     public function up()
     {
-        Schema::create('equipment_failures', function (Blueprint $table) {
+        Schema::create('supervisors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("pqr_id")->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('network_operator_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreignId('equipment_id');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateEquipmentFailuresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('equipment_failures');
+        Schema::dropIfExists('supervisors');
     }
 }

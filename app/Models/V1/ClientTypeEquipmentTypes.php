@@ -6,13 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class NetworkTopology extends Model
+class ClientTypeEquipmentTypes extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
-    public function clients()
-    {
-        return $this->hasMany(Client::class);
-    }
 }

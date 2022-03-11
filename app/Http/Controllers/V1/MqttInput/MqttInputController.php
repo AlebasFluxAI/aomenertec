@@ -15,5 +15,4 @@ class MqttInputController extends Controller
             "description" => "Nuevo"
         ]);
     }
-
 }
