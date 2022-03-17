@@ -8,7 +8,7 @@
         <form wire:submit.prevent="{{$form_submit_action}}" class="needs-validation" role="form">
             <div class="row ">
             @foreach($form_inputs as $form_input)
-                @if($form_input["input_type"]=="text" || $form_input["input_type"]=="number")
+                @if($form_input["input_type"]=="text" || $form_input["input_type"]=="number" || $form_input["input_type"]=="password"|| $form_input["input_type"]=="email")
                     @include("partials.v1.form.form_input_icon",[
                               "input_model"=>$form_input["input_model"],
                               "input_field"=>$form_input["input_field"]??"",
@@ -19,6 +19,8 @@
                               "required"=>$form_input["required"],
                               "input_rows"=>$form_input["input_rows"]??0,
                          ])
+
+
                 @elseif($form_input["input_type"]=="dropdown-search")
 
                     @include("partials.v1.form.form_dropdown_input_searchable",[

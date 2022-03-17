@@ -53,8 +53,10 @@
 <main id="main" class="bg-light">
 
     <div class="bg-light ">
+        @auth
+            @include("layouts.menu.v1.header_menu")
+        @endauth
 
-        @include("layouts.menu.v1.header_menu")
         <section class="top-info bg-light">
             @yield('header')
         </section>
@@ -77,6 +79,10 @@
     var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
     var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
         return new bootstrap.Dropdown(dropdownToggleEl)
+    });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
 

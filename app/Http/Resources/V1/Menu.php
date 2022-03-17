@@ -25,7 +25,11 @@ class Menu extends Singleton
             [
 
                 new Menu("Usuarios", null, [
-                    new Menu("Agregar", "administrar.v1.usuarios.agregar", []),
+                    new Menu("Agregar", "administrar.v1.usuarios.agregar", [
+                        new Menu("Super administradored", null, [
+                            new Menu("Agregar", "administrar.v1.usuarios.superadmin.listado", []),
+                        ]),
+                    ]),
                 ]),
 
                 new Menu("Equipos", null, [
@@ -53,8 +57,34 @@ class Menu extends Singleton
                             [
                                 "title" => "Agregar",
                                 "route" => "administrar.v1.usuarios.agregar",
+                                "submenu" => [],
+
+                            ]
+                            ,
+                            [
+                                "title" => "Super administradores",
+                                "route" => "administrar.v1.usuarios.superadmin.listado",
+                                "submenu" => []
+                            ],
+                            ["title" => "Administradores",
+                                "route" => "administrar.v1.usuarios.admin.listado",
+                                "submenu" => []
+                            ],
+                            ["title" => "Operadores de red",
+                                "route" => "administrar.v1.usuarios.operadores_de_red.listado",
+                                "submenu" => []
+                            ],
+                            [
+                                "title" => "Vendedores",
+                                "route" => "administrar.v1.usuarios.vendedores.listado",
+                                "submenu" => []
+                            ],
+                            [
+                                "title" => "Supervisores",
+                                "route" => "administrar.v1.usuarios.supervisores.listado",
                                 "submenu" => []
                             ]
+
                         ],
                     ],
                     [

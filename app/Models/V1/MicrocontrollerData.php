@@ -14,7 +14,6 @@ class MicrocontrollerData extends Model
     protected $fillable = [
         "raw_json",
         "client_id",
-        "equipment_id",
         "accumulated_real_consumption",
         "interval_real_consumption",
         "interval_reactive_consumption",

@@ -32,6 +32,7 @@ class User extends Authenticatable
         'identification',
         'phone',
         'name',
+        'last_name',
         'email',
         'password',
     ];
@@ -70,18 +71,32 @@ class User extends Authenticatable
     {
         return $this->hasOne(NetworkOperator::class);
     }
+
     public function seller()
     {
         return $this->hasOne(Seller::class);
     }
+
     public function technician()
     {
         return $this->hasOne(Technician::class);
     }
+
     public function support()
     {
         return $this->hasOne(Support::class);
     }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+    public function superAdmin()
+    {
+        return $this->hasOne(SuperAdmin::class);
+    }
+
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);

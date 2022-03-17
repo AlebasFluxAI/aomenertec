@@ -1,4 +1,3 @@
-
 @extends('layouts.v1.app')
 
 @section('content')
@@ -9,7 +8,9 @@
                     <div class="col-12">
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="/"><img class="imagen-logo" src="https://aom.enerteclatam.com/images/logo-horizontal.svg" alt=""></a>
+                                <a class="navbar-brand" href="/"><img class="imagen-logo"
+                                                                      src="https://aom.enerteclatam.com/images/logo-horizontal.svg"
+                                                                      alt=""></a>
                             </div>
                         </nav>
                     </div>
@@ -20,7 +21,8 @@
             <div class="container pb-2" data-aos="fade-up">
                 <div class="row d-flex justify-content-center">
                     <div class="col-12">
-                        <h2 class="text-center"><b><span class="naranja">Servicios</span> <span class="azul"> AOM</span></b></h2>
+                        <h2 class="text-center"><b><span class="naranja">Servicios</span> <span class="azul"> AOM</span></b>
+                        </h2>
                     </div>
                 </div>
             </div>
@@ -28,11 +30,13 @@
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="row d-flex mt-2 justify-content-center">
-                            <h5 class="text-center p3"><b><span class="naranja">Post</span><span class="azul">pago</span></b></h5>
+                            <h5 class="text-center p3"><b><span class="naranja">Post</span><span
+                                        class="azul">pago</span></b></h5>
                             <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2 ">
                                 <div class="col-6">
                                     <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="assets/images/icons/icons-aom-03.svg">
+                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                             src="assets/images/icons/icons-aom-03.svg">
                                     </a>
                                 </div>
                                 <div class="col-sm-12 col-md-10">
@@ -46,7 +50,8 @@
                             <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                                 <div class="col-6">
                                     <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="assets/images/icons/icons-aom-10.svg">
+                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                             src="assets/images/icons/icons-aom-10.svg">
                                     </a>
                                 </div>
                                 <div class="col-sm-12 col-md-10">
@@ -60,7 +65,8 @@
                             <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                                 <div class="col-6">
                                     <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="assets/images/icons/icons-aom-06.svg">
+                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                             src="assets/images/icons/icons-aom-06.svg">
                                     </a>
                                 </div>
                                 <div class="col-sm-12 col-md-10">
@@ -71,11 +77,13 @@
                                     </h3>
                                 </div>
                             </div>
-                            <h5 class="text-center p3"><b><span class="naranja">Pre</span><span class="azul">pago</span></b></h5>
+                            <h5 class="text-center p3"><b><span class="naranja">Pre</span><span class="azul">pago</span></b>
+                            </h5>
                             <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                                 <div class="col-6">
                                     <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="assets/images/icons/icons-aom-03.svg">
+                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                             src="assets/images/icons/icons-aom-03.svg">
                                     </a>
                                 </div>
                                 <div class="col-sm-12 col-md-10">
@@ -89,7 +97,8 @@
                             <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                                 <div class="col-6">
                                     <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="assets/images/icons/icons-aom-04.svg">
+                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                             src="assets/images/icons/icons-aom-04.svg">
                                     </a>
                                 </div>
                                 <div class="col-sm-12 col-md-10">
@@ -103,7 +112,8 @@
                             <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                                 <div class="col-6">
                                     <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="assets/images/icons/icons-aom-07.svg">
+                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                             src="assets/images/icons/icons-aom-07.svg">
                                     </a>
                                 </div>
                                 <div class="col-sm-12 col-md-10">
@@ -123,31 +133,38 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <form action="{{ route('login') }}"  method="post" role="form" class="contenedor-grande">
+                        <form action="{{ route('login') }}" method="post" role="form" class="contenedor-grande">
                             @csrf
-                            <h2 class="text-center p3"><b><span class="naranja">Iniciar</span> <span class="azul">Sesión</span></b></h2>
+                            <h2 class="text-center p3"><b><span class="naranja">Iniciar</span> <span
+                                        class="azul">Sesión</span></b></h2>
                             <hr>
+
                             <div class="form-group">
                                 <label for="email">{{ __('E-MAIL') }}</label>
-                                <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                       name="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>{{ __('login.'.$message) }}</strong>
                                     </span>
                                 @enderror
                             </div>
                             <div class="form-group">
                                 <label for="password">{{ __('CONTRASEÑA') }}</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="current-password" required>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                       name="password" autocomplete="current-password" required>
                                 @error('password')
                                 <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
-                            <div class="text-center"><button type="submit">Ingresar</button></div>
+                            <div class="text-center">
+                                <button type="submit">Ingresar</button>
+                            </div>
                             @if (Route::has('password.request'))
-                                <div class="text-center"><a href="{{ route('password.request') }}">¿Olvidaste la contraseña?</a></div>
+                                <div class="text-center"><a href="{{ route('password.request') }}">¿Olvidaste la
+                                        contraseña?</a></div>
                             @endif
 
                         </form>

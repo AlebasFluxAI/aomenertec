@@ -26,6 +26,7 @@
                     </ul>
                 </div>
                 @include("layouts.menu.v1.notifications")
+                @include("layouts.menu.v1.profile")
 
             </div>
         </nav>

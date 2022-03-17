@@ -1,17 +1,4 @@
 <div>
-    <section class="top-info">
-        <div class="container">
-            <div class="contenedor-grande">
-                <div class="col-12">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <div class="container-fluid">
-                            <a class="navbar-brand" href="/"><img class="imagen-logo" src="https://aom.enerteclatam.com/images/logo-horizontal.svg" alt=""></a>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </section>
     <section class="login">
         <div class="container pb-2" data-aos="fade-up">
             <div class="row d-flex justify-content-center">
@@ -25,12 +12,14 @@
                 <div class="col-lg-12">
                     <div class="row d-flex mt-2 justify-content-center">
                         <div class="dropdown show col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2 ">
-                            <div class=" dropdown-toggle col-6" id="DropdownClientes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class=" dropdown-toggle col-6" id="DropdownClientes" role="button"
+                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <a href="#" class="linkServiciosHome dropdown-toggle">
-                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="/assets/images/icons/icons-aom-03.svg">
+                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                         src="/assets/images/icons/icons-aom-03.svg">
                                 </a>
-                                <h3 class="tituloServiciosHome" >
-                                    <a class="linkServiciosHome " href="#"  >
+                                <h3 class="tituloServiciosHome">
+                                    <a class="linkServiciosHome " href="#">
                                         Clientes ▼
                                     </a>
                                 </h3>
@@ -49,12 +38,14 @@
                             </ul>
                         </div>
                         <div class="dropdown show col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2 ">
-                            <div class="dropdown-toggle col-6" id="DropdownPrecios" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="dropdown-toggle col-6" id="DropdownPrecios" role="button"
+                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <a href="#" class="linkServiciosHome dropdown-toggle">
-                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="/assets/images/icons/icons-aom-03.svg">
+                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                         src="/assets/images/icons/icons-aom-03.svg">
                                 </a>
-                                <h3 class="tituloServiciosHome" >
-                                    <a class="linkServiciosHome" href="#"  >
+                                <h3 class="tituloServiciosHome">
+                                    <a class="linkServiciosHome" href="#">
                                         Precios ▼
                                     </a>
                                 </h3>
@@ -79,7 +70,8 @@
                         <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                             <div class="col-6">
                                 <a href="#" class="linkServiciosHome">
-                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="/assets/images/icons/icons-aom-06.svg">
+                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                         src="/assets/images/icons/icons-aom-06.svg">
                                 </a>
                             </div>
                             <div class="col-sm-12 col-md-10">
@@ -93,7 +85,8 @@
                         <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                             <div class="col-6">
                                 <a href="#" class="linkServiciosHome">
-                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="/assets/images/icons/icons-aom-03.svg">
+                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                         src="/assets/images/icons/icons-aom-03.svg">
                                 </a>
                             </div>
                             <div class="col-sm-12 col-md-10">
@@ -107,7 +100,8 @@
                         <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                             <div class="col-6">
                                 <a href="#" class="linkServiciosHome">
-                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="/assets/images/icons/icons-aom-04.svg">
+                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                         src="/assets/images/icons/icons-aom-04.svg">
                                 </a>
                             </div>
                             <div class="col-sm-12 col-md-10">
@@ -121,7 +115,8 @@
                         <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
                             <div class="col-6">
                                 <a href="#" class="linkServiciosHome">
-                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="/assets/images/icons/icons-aom-07.svg">
+                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                         src="/assets/images/icons/icons-aom-07.svg">
                                 </a>
                             </div>
                             <div class="col-sm-12 col-md-10">
@@ -133,12 +128,14 @@
                             </div>
                         </div>
                         <div class="dropdown show col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2 ">
-                            <div class=" dropdown-toggle col-6" id="DropdownClientes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class=" dropdown-toggle col-6" id="DropdownClientes" role="button"
+                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 <a href="#" class="linkServiciosHome dropdown-toggle">
-                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones" src="/assets/images/icons/icons-aom-03.svg">
+                                    <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
+                                         src="/assets/images/icons/icons-aom-03.svg">
                                 </a>
-                                <h3 class="tituloServiciosHome" >
-                                    <a class="linkServiciosHome " href="#"  >
+                                <h3 class="tituloServiciosHome">
+                                    <a class="linkServiciosHome " href="#">
                                         Usuarios ▼
                                     </a>
                                 </h3>
@@ -146,12 +143,14 @@
                             <ul class="dropdown-menu" aria-labelledby="DropdownClientes">
                                 <li class="dropdown-item">
                                     <h1 class="tituloServiciosHome">
-                                        <a href="{{ route('administrar.v1.usuarios.agregar') }}" class="linkServiciosHome ">Agregar</a>
+                                        <a href="{{ route('administrar.v1.usuarios.agregar') }}"
+                                           class="linkServiciosHome ">Agregar</a>
                                     </h1>
                                 </li>
                                 <li class="dropdown-item">
                                     <h1 class="tituloServiciosHome">
-                                        <a href="{{ route('administrar.v1.usuarios.editar') }}" class="linkServiciosHome ">Editar</a>
+                                        <a href="{{ route('administrar.v1.usuarios.editar') }}"
+                                           class="linkServiciosHome ">Editar</a>
                                     </h1>
                                 </li>
                             </ul>
