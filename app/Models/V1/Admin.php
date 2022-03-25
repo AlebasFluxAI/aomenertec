@@ -11,7 +11,12 @@ class Admin extends Model
     use HasFactory;
 
     protected $fillable = [
-        "user_id"
+        "user_id",
+        'identification',
+        'phone',
+        'name',
+        'last_name',
+        'email',
     ];
 
     public static function getRole()
@@ -19,8 +24,97 @@ class Admin extends Model
         return "administrator";
     }
 
+    public static function menu()
+    {
+        return [
+            "title" => "base",
+            "route" => "/",
+            "submenu" =>
+                [
+                    [
+                        "title" => "Usuarios",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Super administradores",
+                                "route" => "administrar.v1.usuarios.superadmin.listado",
+                                "submenu" => [
+                                    [
+                                        "title" => "Usuario sporte",
+                                        "route" => "administrar.v1.usuarios.admin.listado",
+                                        "submenu" => []
+                                    ],
+                                ]
+                            ],
+                            ["title" => "Administradores",
+                                "route" => "administrar.v1.usuarios.admin.listado",
+                                "submenu" => []
+                            ],
+                            ["title" => "Operadores de red",
+                                "route" => "administrar.v1.usuarios.operadores.listado",
+                                "submenu" => [
+                                    [
+                                        "title" => "Vendedores",
+                                        "route" => "administrar.v1.usuarios.vendedores.listado",
+                                        "submenu" => []
+                                    ],
+                                    [
+                                        "title" => "Supervisores",
+                                        "route" => "administrar.v1.usuarios.supervisores.listado",
+                                        "submenu" => []
+                                    ]
+                                ]
+                            ],
+
+
+                        ],
+                    ],
+                    [
+                        "title" => "Equipos",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Equipos",
+                                "route" => "administrar.v1.equipos.listado",
+                                "submenu" => [],
+                            ],
+                            [
+                                "title" => "Tipos",
+                                "route" => "administrar.v1.equipos.tipos.listado",
+                                "submenu" => []
+                            ],
+                            [
+                                "title" => "Alertas",
+                                "route" => "administrar.v1.equipos.alertas.listado",
+                                "submenu" => [
+                                    [
+                                        "title" => "Alertas",
+                                        "route" => "administrar.v1.equipos.alertas.listado",
+                                        "submenu" => []
+                                    ],
+                                    [
+                                        "title" => "Tipos de alerta",
+                                        "route" => "administrar.v1.equipos.alertas.tipos.listado",
+                                        "submenu" => [
+
+                                        ]
+                                    ]
+                                ],
+                            ],
+                        ]
+                    ],
+                ]
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
+    public function networkOperators()
+    {
+        return $this->hasMany(NetworkOperator::class);
+    }
+
 }

@@ -5,31 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcf9c512-e263-40e7-9151-eecadbbb1fbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/AddSuperAdmin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/DetailsSuperAdmin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/EditSuperAdmin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/IndexSuperAdmin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/Supervisor/AddSupervisor.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/Supervisor/DetailsSupervisor.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/Supervisor/EditSupervisor.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/Supervisor/IndexSupervisor.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminAddService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminDetailsService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminEditService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminIndexService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/Supervisor/SupervisorAddService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/Supervisor/SupervisorDetailsService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/Supervisor/SupervisorEditService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/Supervisor/SupervisorIndexService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../app/Models/V1/SuperAdmin.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../database/migrations/2022_03_16_233659_create_super_admins.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/superAdmin/add-super-admin.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/superAdmin/detail-super-admin.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/superAdmin/edit-super-admin.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/superAdmin/index-super-admin.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config_mc.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../app/Models/V1/MicrocontrollerData.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Models/V1/MicrocontrollerData.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/../database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/DetailsSuperAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/DetailsSuperAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/IndexSuperAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/IndexSuperAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminDetailsService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminDetailsService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminIndexService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminIndexService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/detail-super-admin.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/detail-super-admin.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/index-super-admin.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/index-super-admin.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../routes/V1/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/../routes/V1/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
@@ -100,6 +82,7 @@
       <workItem from="1646654732485" duration="4517000" />
       <workItem from="1647038178829" duration="16000" />
       <workItem from="1647492511517" duration="600000" />
+      <workItem from="1647527505682" duration="598000" />
     </task>
     <servers />
   </component>

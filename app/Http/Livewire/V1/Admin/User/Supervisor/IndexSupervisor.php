@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 
 
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
+use App\Http\Services\V1\Admin\User\Supervisor\SupervisorIndexService;
 use App\Models\V1\Supervisor;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -14,39 +15,34 @@ class IndexSupervisor extends Component
     use WithPagination;
 
 
-    private $indexEquipmentService;
+    private $indexSupervisorService;
 
     public function __construct($id = null)
     {
-        $this->indexEquipmentService = EquipmentIndexService::getInstance();
+        $this->indexSupervisorService = SupervisorIndexService::getInstance();
         parent::__construct($id);
-    }
-
-    public function getEquipments()
-    {
-        return $this->indexEquipmentService->getEquipments();
     }
 
     public function details($id)
     {
-        $this->indexEquipmentService->details($this, $id);
+        $this->indexSupervisorService->details($this, $id);
     }
 
     public function edit($id)
     {
-        $this->indexEquipmentService->edit($this, $id);
+        $this->indexSupervisorService->edit($this, $id);
     }
 
     public function delete($id)
     {
-        $this->indexEquipmentService->delete($this, $id);
+        $this->indexSupervisorService->delete($this, $id);
 
     }
 
     public function render()
     {
-        return view('livewire.administrar.v1.equipment.index-equipment', [
-            "equipments" => Supervisor::paginate(15)
+        return view('livewire.v1.admin.user.supervisor.index-supervisor', [
+            "data" => Supervisor::paginate(15)
         ])->extends('layouts.v1.app');
     }
 }

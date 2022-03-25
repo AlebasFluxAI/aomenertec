@@ -2,68 +2,40 @@
 
 namespace App\Observers\User\SuperAdmin;
 
+use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
 
 class UserSuperAdminObserver
 {
-    /**
-     * Handle the SuperAdmin "created" event.
-     *
-     * @param SuperAdmin $superAdmin
-     * @return void
-     */
-    public function created(SuperAdmin $superAdmin)
+    public function creating(SuperAdmin $superAdmin)
     {
-        User::create([
-            "name" => $superAdmin->name,
-            "last_name" => $superAdmin->last_name,
-            "phone" => $superAdmin->phone,
-            "identification" => $superAdmin->identification
-        ]);
+        $user = $superAdmin->user;
+        if (!$user) {
+            return;
+        }
+        $superAdmin->email = $user->email;
+        $superAdmin->name = $user->name;
+        $superAdmin->last_name = $user->last_name;
+        $superAdmin->phone = $user->phone;
+        $superAdmin->identification = $user->identification;
+
     }
 
-    /**
-     * Handle the SuperAdmin "updated" event.
-     *
-     * @param SuperAdmin $superAdmin
-     * @return void
-     */
+
     public function updated(SuperAdmin $superAdmin)
     {
-        //
-    }
+        $user = $superAdmin->user;
+        if (!$user) {
+            return;
+        }
 
-    /**
-     * Handle the SuperAdmin "deleted" event.
-     *
-     * @param SuperAdmin $superAdmin
-     * @return void
-     */
-    public function deleted(SuperAdmin $superAdmin)
-    {
-        //
-    }
-
-    /**
-     * Handle the SuperAdmin "restored" event.
-     *
-     * @param SuperAdmin $superAdmin
-     * @return void
-     */
-    public function restored(SuperAdmin $superAdmin)
-    {
-        //
-    }
-
-    /**
-     * Handle the SuperAdmin "force deleted" event.
-     *
-     * @param SuperAdmin $superAdmin
-     * @return void
-     */
-    public function forceDeleted(SuperAdmin $superAdmin)
-    {
-        //
+        $user->update([
+            "name" => $superAdmin->name,
+            "last_name" => $superAdmin->last_name,
+            "email" => $superAdmin->email,
+            "phone" => $superAdmin->phone,
+            "identification" => $superAdmin->identification,
+        ]);
     }
 }

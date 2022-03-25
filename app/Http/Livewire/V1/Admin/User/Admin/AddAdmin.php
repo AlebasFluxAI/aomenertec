@@ -16,6 +16,14 @@ class AddAdmin extends Component
     public $message;
     private $superAdminAddService;
 
+
+    protected $rules = [
+        'identification' => 'required|min:6|unique:users,identification',
+        'name' => 'required|min:8',
+        'phone' => 'min:7',
+        'email' => 'required|email|unique:users,email',
+    ];
+    
     public function __construct($id = null)
     {
         parent::__construct($id);

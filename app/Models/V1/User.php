@@ -22,7 +22,13 @@ class User extends Authenticatable
     use HasRoles;
     use SoftDeletes;
 
-
+    const TYPE_SUPER_ADMIN = "super_administrator";
+    const TYPE_ADMIN = "administrator";
+    const TYPE_SUPPORT = "support";
+    const TYPE_NETWORK_OPERATOR = "network_operator";
+    const TYPE_SELLER = "seller";
+    const TYPE_TECHNICIAN = "technician";
+    const TYPE_SUPERVISOR = "supervisor";
     /**
      * The attributes that are mass assignable.
      *
@@ -35,6 +41,8 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'enabled',
+        'type'
     ];
 
     /**
@@ -80,6 +88,12 @@ class User extends Authenticatable
     public function technician()
     {
         return $this->hasOne(Technician::class);
+    }
+
+
+    public function supervisor()
+    {
+        return $this->hasOne(Supervisor::class);
     }
 
     public function support()

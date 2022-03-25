@@ -2,62 +2,38 @@
 
 namespace App\Observers\User\Seller;
 
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 
 class UserSellerObserver
 {
-    /**
-     * Handle the Seller "created" event.
-     *
-     * @param  \App\Models\V1\Seller  $seller
-     * @return void
-     */
-    public function created(Seller $seller)
+    public function creating(Seller $seller)
     {
-        //
+        $user = $seller->user;
+        if (!$user) {
+            return;
+        }
+        $seller->email = $user->email;
+        $seller->name = $user->name;
+        $seller->last_name = $user->last_name;
+        $seller->phone = $user->phone;
+        $seller->identification = $user->identification;
+
     }
 
-    /**
-     * Handle the Seller "updated" event.
-     *
-     * @param  \App\Models\V1\Seller  $seller
-     * @return void
-     */
     public function updated(Seller $seller)
     {
-        //
-    }
+        $user = $seller->user;
+        if (!$user) {
+            return;
+        }
 
-    /**
-     * Handle the Seller "deleted" event.
-     *
-     * @param  \App\Models\V1\Seller  $seller
-     * @return void
-     */
-    public function deleted(Seller $seller)
-    {
-        //
-    }
-
-    /**
-     * Handle the Seller "restored" event.
-     *
-     * @param  \App\Models\V1\Seller  $seller
-     * @return void
-     */
-    public function restored(Seller $seller)
-    {
-        //
-    }
-
-    /**
-     * Handle the Seller "force deleted" event.
-     *
-     * @param  \App\Models\V1\Seller  $seller
-     * @return void
-     */
-    public function forceDeleted(Seller $seller)
-    {
-        //
+        $user->update([
+            "name" => $seller->name,
+            "last_name" => $seller->last_name,
+            "email" => $seller->email,
+            "phone" => $seller->phone,
+            "identification" => $seller->identification,
+        ]);
     }
 }

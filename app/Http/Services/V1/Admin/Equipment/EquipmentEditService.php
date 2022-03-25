@@ -66,13 +66,4 @@ class EquipmentEditService extends Singleton
         $component->equipmentTypeId = $equipmentType->id;
     }
 
-    public function updatedSelectedState(Component $component, $state)
-    {
-        if (!is_null($state)) {
-            $component->states = [
-                ["id" => "2",
-                    "name" => "Kathe"]
-            ];
-        }
-    }
 }

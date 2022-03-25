@@ -4,8 +4,10 @@ namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Admin\AdminIndexService;
+use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorIndexService;
 use App\Models\V1\Admin;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,37 +17,37 @@ class IndexNetworkOperator extends Component
     use WithPagination;
 
 
-    private $indexEquipmentService;
+    private $indexNetworkOperatorService;
 
     public function __construct($id = null)
     {
-        $this->indexEquipmentService = AdminIndexService::getInstance();
+        $this->indexNetworkOperatorService = NetworkOperatorIndexService::getInstance();
         parent::__construct($id);
     }
 
 
     public function edit($id)
     {
-        $this->indexEquipmentService->edit($this, $id);
+        $this->indexNetworkOperatorService->edit($this, $id);
     }
 
     public function delete($id)
     {
-        $this->indexEquipmentService->delete($this, $id);
+        $this->indexNetworkOperatorService->delete($this, $id);
 
     }
 
     public function details($id)
     {
-        $this->indexEquipmentService->details($this, $id);
+        $this->indexNetworkOperatorService->details($this, $id);
 
     }
 
     public function render()
     {
-        return view('livewire.v1.admin.user.admin.index-admin',
+        return view('livewire.v1.admin.user.network-operator.index-network-operator',
             [
-                "data" => Admin::paginate(15)
+                "data" => NetworkOperator::paginate(15)
             ])->extends('layouts.v1.app');
     }
 

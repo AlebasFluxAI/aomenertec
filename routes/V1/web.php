@@ -23,8 +23,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('', [testFile::class, 'upload']);
 
 Route::get('/', function () {
-    return view('auth.v1.login');
+    return view('auth.login');
 });
+
+
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 
@@ -39,29 +41,39 @@ Route::prefix("v1")->group(function () {
                 Route::prefix("super_administrador")->group(function () {
                     Route::get('listado', Livewire\V1\Admin\User\SuperAdmin\IndexSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.listado");
                     Route::get('agregar', Livewire\V1\Admin\User\SuperAdmin\AddSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.agregar");
+                    Route::get('detalle/{superAdmin}', Livewire\V1\Admin\User\SuperAdmin\DetailsSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.detalles");
+                    Route::get('editar/{superAdmin}', Livewire\V1\Admin\User\SuperAdmin\EditSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.editar");
                 });
 
                 Route::prefix("administrador")->group(function () {
                     Route::get('listado', Livewire\V1\Admin\User\Admin\IndexAdmin::class)->name("administrar.v1.usuarios.admin.listado");
                     Route::get('agregar', Livewire\V1\Admin\User\Admin\AddAdmin::class)->name("administrar.v1.usuarios.admin.agregar");
+                    Route::get('editar/{admin}', Livewire\V1\Admin\User\Admin\EditAdmin::class)->name("administrar.v1.usuarios.admin.editar");
+                    Route::get('detalle/{admin}', Livewire\V1\Admin\User\Admin\DetailsAdmin::class)->name("administrar.v1.usuarios.admin.detalles");
                 });
 
 
                 Route::prefix("operador")->group(function () {
-                    Route::get('listado', Livewire\V1\Admin\User\NetworkOperator\IndexNetworkOperator::class)->name("administrar.v1.usuarios.operadores_de_red.listado");
-                    Route::get('agregar', Livewire\V1\Admin\User\NetworkOperator\AddNetworkOperator::class)->name("administrar.v1.usuarios.operadores_de_red.agregar");
+                    Route::get('listado', Livewire\V1\Admin\User\NetworkOperator\IndexNetworkOperator::class)->name("administrar.v1.usuarios.operadores.listado");
+                    Route::get('agregar', Livewire\V1\Admin\User\NetworkOperator\AddNetworkOperator::class)->name("administrar.v1.usuarios.operadores.agregar");
+                    Route::get('editar/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\EditNetworkOperator::class)->name("administrar.v1.usuarios.operadores.editar");
+                    Route::get('detalle/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\DetailsNetworkOperator::class)->name("administrar.v1.usuarios.operadores.detalles");
                 });
 
 
                 Route::prefix("vendedor")->group(function () {
                     Route::get('listado', Livewire\V1\Admin\User\Seller\IndexSeller::class)->name("administrar.v1.usuarios.vendedores.listado");
                     Route::get('agregar', Livewire\V1\Admin\User\Seller\AddSeller::class)->name("administrar.v1.usuarios.vendedores.agregar");
+                    Route::get('editar/{seller}', Livewire\V1\Admin\User\Seller\EditSeller::class)->name("administrar.v1.usuarios.vendedores.editar");
+                    Route::get('detalle/{seller}', Livewire\V1\Admin\User\Seller\DetailsSeller::class)->name("administrar.v1.usuarios.vendedores.detalles");
                 });
 
 
                 Route::prefix("supervisor")->group(function () {
                     Route::get('listado', Livewire\V1\Admin\User\Supervisor\IndexSupervisor::class)->name("administrar.v1.usuarios.supervisores.listado");
                     Route::get('agregar', Livewire\V1\Admin\User\Supervisor\AddSupervisor::class)->name("administrar.v1.usuarios.supervisores.agregar");
+                    Route::get('detalle/{supervisor}', Livewire\V1\Admin\User\Supervisor\DetailsSupervisor::class)->name("administrar.v1.usuarios.supervisores.detalles");
+                    Route::get('editar/{supervisor}', Livewire\V1\Admin\User\Supervisor\EditSupervisor::class)->name("administrar.v1.usuarios.supervisores.editar");
                 });
 
             });

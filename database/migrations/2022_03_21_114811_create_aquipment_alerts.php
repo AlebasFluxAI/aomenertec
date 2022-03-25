@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTableEquipmentAlert extends Migration
+class CreateAquipmentAlerts extends Migration
 {
     /**
      * Run the migrations.
@@ -30,6 +30,6 @@ class CreateTableEquipmentAlert extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_equipment_alerts');
+        Schema::dropIfExists('aquipment_alerts');
     }
 }

@@ -3,7 +3,7 @@
 <div class="login">
     @include("partials.v1.title",[
             "first_title"=>"Detalles de",
-            "second_title"=>"Equipo"
+            "second_title"=>"administrador"
         ])
 
     {{--optiones de cabecera de formulario--}}
@@ -14,7 +14,7 @@
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
-                    "target_route"=>"administrar.v1.equipos.listado",
+                    "target_route"=>"administrar.v1.usuarios.admin.listado",
                     ],
 
                 ]
@@ -26,9 +26,11 @@
                                                     "title"=>"Detalles",
 
                                                 ],
-                                                [
-                                                    "title"=>"Alarmas",
-                                                ]
+                                                  [
+                                                    "title"=>"Operadores de red",
+
+                                                ],
+
                                            ],
 
                             "tab_contents"=>[
@@ -38,44 +40,44 @@
                                                                         "table_info"=>[
                                                                          [
                                                                              "key"=>"Id",
-                                                                             "value"=>$equipment->id
+                                                                             "value"=>$model->id
                                                                          ],
                                                                          [
                                                                              "key"=>"Nombre",
-                                                                             "value"=>$equipment->name
+                                                                             "value"=>$model->name
                                                                          ],
                                                                          [
-                                                                             "key"=>"Descripción",
-                                                                             "value"=>$equipment->description
+                                                                             "key"=>"Apellido",
+                                                                             "value"=>$model->last_name
                                                                          ],
                                                                          [
-                                                                             "key"=>"Serial",
-                                                                             "value"=>$equipment->serial
+                                                                             "key"=>"Correo electronico",
+                                                                             "value"=>$model->email
                                                                          ],
                                                                          [
-                                                                             "key"=>"Tipo de equipo",
-                                                                             "value"=>$equipment->equipment_type->type
+                                                                             "key"=>"Telefono",
+                                                                             "value"=>$model->phone
                                                                          ],
                                                                      ]
-                                                            ]
+                                                            ],
+
+
                                                 ],
                                                 [
                                                    "view_name"=>"partials.v1.table.primary-table",
                                                     "view_values"=>[
                                                                         "table_pageable"=>false,
                                                                        "table_headers"=>["ID"=>"id",
-                                                                                         "Tipo de alarma"=>"alertType.name",
-                                                                                         "Valor a alarmar"=>"value",
-
-
-
+                                                                                         "Nombre"=>"name",
                                                                         ],
 
-                                                                       "table_rows"=>$equipment->alerts
+                                                                       "table_rows"=>$model->networkOperators
 
                                                                    ]
                                                 ]
-                                          ]
+
+
+                                                                                        ]
          ])
 
 

@@ -3,6 +3,13 @@
 namespace App\Http\Resources\V1;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Admin;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\Seller;
+use App\Models\V1\SuperAdmin;
+use App\Models\V1\Supervisor;
+use App\Models\V1\User;
+use Illuminate\Support\Facades\Auth;
 
 class Menu extends Singleton
 {
@@ -55,23 +62,22 @@ class Menu extends Singleton
                         "route" => null,
                         "submenu" => [
                             [
-                                "title" => "Agregar",
-                                "route" => "administrar.v1.usuarios.agregar",
-                                "submenu" => [],
-
-                            ]
-                            ,
-                            [
                                 "title" => "Super administradores",
                                 "route" => "administrar.v1.usuarios.superadmin.listado",
-                                "submenu" => []
+                                "submenu" => [
+                                    [
+                                        "title" => "Usuario sporte",
+                                        "route" => "administrar.v1.usuarios.admin.listado",
+                                        "submenu" => []
+                                    ],
+                                ]
                             ],
                             ["title" => "Administradores",
                                 "route" => "administrar.v1.usuarios.admin.listado",
                                 "submenu" => []
                             ],
                             ["title" => "Operadores de red",
-                                "route" => "administrar.v1.usuarios.operadores_de_red.listado",
+                                "route" => "administrar.v1.usuarios.operadores.listado",
                                 "submenu" => []
                             ],
                             [
@@ -124,6 +130,40 @@ class Menu extends Singleton
                 ]
         ];
     }
+
+
+    static function getMenuV3()
+    {
+        if (Auth::user() == null) {
+            return [];
+        }
+        $userRole = Auth::user()->roles->first()->name;
+
+
+        $menu = [];
+        switch ($userRole) {
+            case User::TYPE_NETWORK_OPERATOR:
+                $menu = NetworkOperator::menu();
+                break;
+            case User::TYPE_ADMIN:
+                $menu = Admin::menu();
+                break;
+            case User::TYPE_SUPER_ADMIN:
+                $menu = SuperAdmin::menu();
+                break;
+            case User::TYPE_SELLER:
+                $menu = Seller::menu();
+                break;
+            case User::TYPE_SUPERVISOR:
+                $menu = Supervisor::menu();
+                break;
+            default:
+                $menu = [];
+        }
+        return $menu;
+
+    }
+
 
 }
 

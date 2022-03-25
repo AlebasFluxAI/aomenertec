@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\User\SuperAdmin;
 
-use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
-use App\Http\Services\V1\Admin\User\Admin\AdminIndexService;
+
+use App\Http\Services\V1\Admin\User\SuperAdmin\SuperAdminIndexService;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\SuperAdmin;
 use Livewire\Component;
@@ -14,29 +14,29 @@ class IndexSuperAdmin extends Component
     use WithPagination;
 
 
-    private $indexEquipmentService;
+    private $indexSuperAdminService;
 
     public function __construct($id = null)
     {
-        $this->indexEquipmentService = AdminIndexService::getInstance();
+        $this->indexSuperAdminService = SuperAdminIndexService::getInstance();
         parent::__construct($id);
     }
 
 
     public function edit($id)
     {
-        $this->indexEquipmentService->edit($this, $id);
+        $this->indexSuperAdminService->edit($this, $id);
     }
 
     public function delete($id)
     {
-        $this->indexEquipmentService->delete($this, $id);
+        $this->indexSuperAdminService->delete($this, $id);
 
     }
 
     public function details($id)
     {
-        $this->indexEquipmentService->details($this, $id);
+        $this->indexSuperAdminService->details($this, $id);
 
     }
 

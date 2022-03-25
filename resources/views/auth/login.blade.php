@@ -145,7 +145,7 @@
                                        name="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
                                 @error('email')
                                 <span class="invalid-feedback" role="alert">
-                                        <strong>{{ __('login.'.$message) }}</strong>
+                                        <strong>{{ $message }}</strong>`
                                     </span>
                                 @enderror
                             </div>

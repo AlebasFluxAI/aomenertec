@@ -1,9 +1,10 @@
-@section("header") {{--extended app.blade--}}
-@endsection
 <div class="login">
+    @section("header") {{--extended app.blade--}}
+    @endsection
+
     @include("partials.v1.title",[
             "first_title"=>"Editar",
-            "second_title"=>"Equipos"
+            "second_title"=>"Super usuario"
         ])
 
     {{--optiones de cabecera de formulario--}}
@@ -14,7 +15,7 @@
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
-                    "target_route"=>"administrar.v1.equipos.listado",
+                    "target_route"=>"administrar.v1.usuarios.superadmin.listado",
                     ],
 
                 ]
@@ -27,44 +28,58 @@
             "form_inputs"=>[
                             [
                                         "input_type"=>"text",
-                                        "input_model"=>"equipmentName",
+                                        "input_model"=>"name",
                                         "icon_class"=>"fas fa-user",
-                                        "placeholder"=>"Nombre del equipo",
-                                        "col_with"=>12,
+                                        "placeholder"=>"Nombre ",
+                                        "col_with"=>6,
                                         "required"=>true
                             ],
                             [
                                         "input_type"=>"text",
-                                        "input_model"=>"equipmentSerial",
-                                        "icon_class"=>"fas fa-barcode",
-                                        "placeholder"=>"Serial del equipo",
-                                        "col_with"=>12,
+                                        "input_model"=>"last_name",
+                                        "icon_class"=>"fas fa-user",
+                                        "placeholder"=>"Apellido",
+                                        "col_with"=>6,
+                                        "required"=>true
+                            ],
+                            [
+                                        "input_type"=>"email",
+                                        "input_model"=>"email",
+                                        "icon_class"=>"fas fa-envelope",
+                                        "placeholder"=>"Correo electronico ",
+                                        "col_with"=>6,
                                         "required"=>true
                             ],
                             [
                                         "input_type"=>"text",
-                                        "input_model"=>"equipmentDescription",
+                                        "input_model"=>"phone",
                                         "icon_class"=>"fas fa-file",
-                                         "placeholder"=>"Descripcion del equipo",
-                                        "col_with"=>12,
-                                        "input_rows"=>3,
+                                         "placeholder"=>"Telefono",
+                                        "col_with"=>6,
+
                                         "required"=>false,
 
                              ],
                              [
-                                        "input_type"=>"dropdown-search",
-                                        "icon_class"=>"fas fa-desktop",
-                                        "placeholder"=>"Seleccione el tipo de equipo",
-                                        "col_with"=>12,
-                                        "dropdown_model"=>"equipmentTypeId",
-                                        "dropdown_enter_function"=>"updatedEquipmentTypeId",
-                                        "picked_variable"=>$picked,
-                                        "dropdown_results"=>$equipmentTypes,
-                                        "selected_value_function"=>"setEquipmentType",
-                                        "dropdown_result_id"=>"id",
-                                        "dropdown_result_value"=>"type",
+                                        "input_type"=>"text",
+                                        "input_model"=>"identification",
+                                        "icon_class"=>"fas fa-file",
+                                         "placeholder"=>"Identificacion",
+                                        "col_with"=>6,
 
-                            ]
+                                        "required"=>false,
+
+                             ],
+                             [
+                                        "input_type"=>"password",
+                                        "input_model"=>"password",
+                                        "icon_class"=>"fas fa-file",
+                                         "placeholder"=>"Contrasena",
+                                        "col_with"=>6,
+
+                                        "required"=>false,
+
+                             ],
 
                          ]
                  ])

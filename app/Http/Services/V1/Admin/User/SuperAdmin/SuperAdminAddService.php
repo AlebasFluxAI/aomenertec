@@ -13,10 +13,20 @@ class SuperAdminAddService extends Singleton
 
     public function submitForm(Component $component)
     {
+        $component->validate();
 
-        $user = User::create($this->mapper($component));
-        $user->superAdmin()->create();
-        $user->assignRole(SuperAdmin::getRole());
+
+        $superAdmin = SuperAdmin::create($this->mapper($component));
+        $user = User::create(array_merge($this->mapper($component), [
+            "password" => bcrypt($component->password),
+            "type" => User::TYPE_SUPER_ADMIN
+        ]));
+        $superAdmin->update([
+            "user_id" => $user->id
+        ]);
+
+        $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $superAdmin->id]);
+
     }
 
     private function mapper($component)
@@ -26,7 +36,6 @@ class SuperAdminAddService extends Singleton
             "last_name" => $component->last_name,
             "email" => $component->email,
             "phone" => $component->phone,
-            "password" => bcrypt($component->password),
             "identification" => $component->identification
         ];
     }

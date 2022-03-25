@@ -11,10 +11,37 @@ class Seller extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'identification',
+        'phone',
+        'name',
+        'last_name',
+        'email',
+        'user_id',
+        'network_operator_id'
+    ];
+
+    public static function getRole()
+    {
+        return User::TYPE_SELLER;
+    }
+
+    public static function menu()
+    {
+        return [
+            "title" => "base",
+            "route" => "/",
+            "submenu" =>
+                [
+                ]
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);

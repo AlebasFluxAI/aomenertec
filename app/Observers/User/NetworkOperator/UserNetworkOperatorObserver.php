@@ -6,58 +6,34 @@ use App\Models\V1\NetworkOperator;
 
 class UserNetworkOperatorObserver
 {
-    /**
-     * Handle the NetworkOperator "created" event.
-     *
-     * @param  \App\Models\V1\NetworkOperator  $networkOperator
-     * @return void
-     */
-    public function created(NetworkOperator $networkOperator)
+    public function creating(NetworkOperator $networkOperator)
     {
-        //
+        $user = $networkOperator->user;
+        if (!$user) {
+            return;
+        }
+
+        $networkOperator->email = $user->email;
+        $networkOperator->name = $user->name;
+        $networkOperator->last_name = $user->last_name;
+        $networkOperator->phone = $user->phone;
+        $networkOperator->identification = $user->identification;
+
     }
 
-    /**
-     * Handle the NetworkOperator "updated" event.
-     *
-     * @param  \App\Models\V1\NetworkOperator  $networkOperator
-     * @return void
-     */
     public function updated(NetworkOperator $networkOperator)
     {
-        //
-    }
+        $user = $networkOperator->user;
+        if (!$user) {
+            return;
+        }
 
-    /**
-     * Handle the NetworkOperator "deleted" event.
-     *
-     * @param  \App\Models\V1\NetworkOperator  $networkOperator
-     * @return void
-     */
-    public function deleted(NetworkOperator $networkOperator)
-    {
-        //
-    }
-
-    /**
-     * Handle the NetworkOperator "restored" event.
-     *
-     * @param  \App\Models\V1\NetworkOperator  $networkOperator
-     * @return void
-     */
-    public function restored(NetworkOperator $networkOperator)
-    {
-        //
-    }
-
-    /**
-     * Handle the NetworkOperator "force deleted" event.
-     *
-     * @param  \App\Models\V1\NetworkOperator  $networkOperator
-     * @return void
-     */
-    public function forceDeleted(NetworkOperator $networkOperator)
-    {
-        //
+        $user->update([
+            "name" => $networkOperator->name,
+            "last_name" => $networkOperator->last_name,
+            "email" => $networkOperator->email,
+            "phone" => $networkOperator->phone,
+            "identification" => $networkOperator->identification,
+        ]);
     }
 }

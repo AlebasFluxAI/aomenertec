@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400&display=swap" rel="stylesheet">
     <script src="{{asset('assets/js/main.js')}}"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <link rel="icon" type="image/x-icon" href="https://enerteclatam.com/media/wkvhaio3/favicon.png">
     <script src="{{asset('js/app.js')}}"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

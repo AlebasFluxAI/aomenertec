@@ -16,24 +16,24 @@
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
                       "icon"=>"fa-solid fa-plus",
-                      "target_route"=>"administrar.v1.usuarios.admin.agregar",
+                    "target_route"=>"administrar.v1.usuarios.admin.agregar",
                       ],
 
                   ]
           ])
+
     @include("partials.v1.table.primary-table",[
                "table_headers"=>["ID"=>"id",
-                                 "Nombre"=>"user.name",
-                                 "Apellido"=>"user.last_name",
-                                 "Correo electronico"=>"user.email",
-                                 "Telefono"=>"user.phone",
+                                 "Nombre"=>"name",
+                                 "Apellido"=>"last_name",
+                                 "Correo electronico"=>"email",
+                                 "Telefono"=>"phone",
 
 
                 ],
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
-                                    "delete"=>"delete"
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}

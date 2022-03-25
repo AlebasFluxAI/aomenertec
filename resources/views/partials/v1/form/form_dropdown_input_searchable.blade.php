@@ -36,6 +36,11 @@
                                             @endif
                                         </span>
         </div>
+        @error("{{$dropdown_model}}")
+        <div class="error-container">
+            <small class="form-text text-danger">{{$message}}</small>
+        </div>
+        @enderror
     </div>
 
 
