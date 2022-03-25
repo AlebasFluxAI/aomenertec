@@ -25,7 +25,10 @@ class Menu extends Singleton
             [
 
                 new Menu("Usuarios", null, [
-                    new Menu("Agregar", "administrar.v1.usuarios.agregar", []),
+                    new Menu("Agregar", "v1.admin.user.add.user", []),
+                ]),
+                new Menu("Clientes", null, [
+                    new Menu("Agregar", "v1.admin.client.add.client", []),
                 ]),
 
                 new Menu("Equipos", null, [
@@ -52,11 +55,23 @@ class Menu extends Singleton
                         "submenu" => [
                             [
                                 "title" => "Agregar",
-                                "route" => "administrar.v1.usuarios.agregar",
+                                "route" => "v1.admin.user.add.user",
                                 "submenu" => []
                             ]
                         ],
                     ],
+                    [
+                        "title" => "Clientes",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Agregar",
+                                "route" => "v1.admin.client.add.client",
+                                "submenu" => []
+                            ]
+                        ],
+                    ],
+
                     [
                         "title" => "Equipos",
                         "route" => null,

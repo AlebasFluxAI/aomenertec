@@ -11,5 +11,9 @@ class EquipmentTypePqrType extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'equipment_type_id',
+        'pqr_type_id'
+    ];
 
 }

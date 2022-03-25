@@ -29,7 +29,7 @@ class DetailEquipment extends Component
 
     public function render()
     {
-        return view('livewire.administrar.v1.equipment.detail-equipment')
+        return view('livewire.v1.admin.equipment.detail-equipment')
             ->extends('layouts.v1.app');
     }
 }

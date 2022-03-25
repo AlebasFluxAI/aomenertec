@@ -11,6 +11,14 @@ class Municipality extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'id',
+        'name',
+        'latitude',
+        'longitude',
+        'department_id'
+    ];
+
     public function clients()
     {
         return $this->hasMany(Client::class);

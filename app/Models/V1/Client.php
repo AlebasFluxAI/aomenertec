@@ -15,7 +15,28 @@ class Client extends Model
     public const BIPHASIC = 'biphasic';
     public const TRIPHASIC = 'triphasic';
 
-    protected $filliable = ['identification'];
+    protected $fillable = [
+        'code',
+        'identification',
+        'name',
+        'email',
+        'phone',
+        'direction',
+        'latitude',
+        'longitude',
+        'contribution',
+        'public_lighting_tax',
+        'active_client',
+        'network_operator_id',
+        'department_id',
+        'municipality_id',
+        'location_id',
+        'client_type_id',
+        'subsistence_consumption_id',
+        'voltage_level_id',
+        'stratum_id',
+        'network_topology'];
+
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
@@ -48,16 +69,23 @@ class Client extends Model
     {
         return $this->belongsTo(Stratum::class);
     }
-    public function networkTopology()
-    {
-        return $this->belongsTo(NetworkTopology::class);
-    }
     public function equipments()
     {
-        return $this->belongsToMany(Equipment::class, 'equipments_per_clients');
+        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id')
+            ->withPivot('current_assigned')
+            ->using(EquipmentClient::class);
     }
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);
+    }
+    public function microcontrollerData()
+    {
+        return $this->hasMany(MicrocontrollerData::class);
+    }
+
+    public function supervisors()
+    {
+        return $this->belongsToMany(Supervisor::class, 'client_supervisors')->withPivot('active');
     }
 }

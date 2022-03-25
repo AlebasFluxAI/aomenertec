@@ -54,7 +54,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Tipo de equipo",
-                                                                             "value"=>$equipment->equipment_type->type
+                                                                             "value"=>$equipment->equipmentType->type
                                                                          ],
                                                                      ]
                                                             ]

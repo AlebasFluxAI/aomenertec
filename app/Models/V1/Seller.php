@@ -11,6 +11,11 @@ class Seller extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'user_id',
+        'network_operator_id'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

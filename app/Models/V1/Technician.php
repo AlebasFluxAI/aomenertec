@@ -11,6 +11,11 @@ class Technician extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'user_id',
+        'network_operator_id'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -18,5 +23,9 @@ class Technician extends Model
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
+    }
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'client_technicians')->withPivot('active');
     }
 }

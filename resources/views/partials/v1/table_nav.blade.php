@@ -1,5 +1,5 @@
-<div class="primary-content bg-dark">
-    <nav class="navbar navbar-expand-sm bg-light table-nav">
+
+    <nav class="navbar navbar-expand-sm table-nav">
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
                 <li>
@@ -14,5 +14,5 @@
         </ul>
     </nav>
 
-</div>
+
 

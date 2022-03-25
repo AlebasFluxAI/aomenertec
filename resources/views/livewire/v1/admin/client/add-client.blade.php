@@ -1,27 +1,32 @@
 <div>
-    <section class="top-info">
-        @include("layouts.v1.app_admin_header")
     <section class="login">
-        <div class="container">
+        @section("header") {{--extended app.blade--}}
+        @endsection
+            @if (session()->has('success'))
+                <div class="alert alert-succes">
+                    {{ session('success') }}
+                </div>
+            @endif
             @include("partials.v1.title",[
                     "first_title"=>"Añadir",
                     "second_title"=>"Clientes"
                 ])
-            @include("partials.v1.table_nav",
+
+
+            <div class="contenedor-grande">
+                <div class="row content pt-3">
+                    @include("partials.v1.table_nav",
                  ["nav_options"=>[
                     ["button_align"=>"right",
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
-                    "target_route"=>"administrar.v1.equipos.listado",
+                    "target_route"=>"v1.admin.client.list.client",
                     ],
 
                 ]
         ])
-
-            <div class="contenedor-grande">
-                <div class="row content pt-3">
-                    <form  action="#" method="post"  enctype="multipart/form-data" >
+                   {{-- <form  action="#" method="post"  enctype="multipart/form-data" >
                         @csrf
                         <div>&nbsp;&nbsp;<strong>Importar desde archivo excel</strong> </div>
                         <div class="row mb-4">
@@ -99,10 +104,10 @@
                                 <button type="submit" id="importar" class="px-5 py-2" >Importar </button>
                             </div>
                         </div>
-                    </form>
+                    </form>--}}
 
                     <form  wire:submit.prevent="save" id="formulario" class="needs-validation"   role="form">
-                        <div> &nbsp;&nbsp; <strong> Agregar manualmente</strong></div>
+                        {{--<div> &nbsp;&nbsp; <strong> Agregar manualmente</strong></div>--}}
                         <div class="row ">
                             @include("partials.v1.form.form_input_icon",[
                                     "input_model"=>"identification",
@@ -259,15 +264,31 @@
                                     @endif
                                 @endif
                             @endif
-                            <div class="input-group mb-2 col-md-4 col-sm-12">
+
+                            <div class="form-group mb-2 col-md-4 col-sm-12">
                                 <select wire:model="network_topology" class="custom-select" name="topologia" id="topologia" required>
                                     <option  value="">Topologia red...</option>
-                                    <option value="MONOFASICO">MONOFASICO</option>
-                                    <option value=BIFASICO">BIFASICO</option>
-                                    <option value="TRIFASICO">TRIFASICO</option>
+                                    <option value="monophasic">MONOFASICO</option>
+                                    <option value=biphasic">BIFASICO</option>
+                                    <option value="triphasic">TRIFASICO</option>
                                 </select>
                             </div>
-                            <div class="form-group mb-2 col-md-4 col-sm-12">
+                            @include("partials.v1.form.form_dropdown_input_searchable",[
+                                      "col_with" => 4,
+                                      "icon_class" => "fas fa-user",
+                                      "dropdown_model" => "network_operator",
+                                      "placeholder" => "Operador de red",
+                                      "required" => true,
+                                      "picked_variable" => $picked_network_operator,
+                                      "message_variable" => $message_network_operator,
+                                      "dropdown_results" => $network_operators,
+                                      "selected_value_function" => "assignNetworkOperator",
+                                      "dropdown_result_id" => "id",
+                                      "dropdown_result_value" => "name",
+                                      "count_bool" => (count($network_operators)>0),
+
+                            ])
+                            {{--<div class="form-group mb-2 col-md-4 col-sm-12">
                                 <div class="input-group">
                                     <div  class="input-group-prepend">
                                     <span for="sponsor" class="input-group-text" >
@@ -313,7 +334,7 @@
                                         @if(!$picked_network_operator)
                                             <div class="px-4 pt-2 pb-0 rounded shadow" >
                                                 @foreach($network_operators as $user)
-                                                    <a  wire:click="assignSNetworkOperator('{{ $user }}')"style="cursor: pointer;">
+                                                    <a  wire:click="assignNetworkOperator('{{ $user }}')"style="cursor: pointer;">
                                                         {{ $user->name }}
                                                     </a>
                                                     <hr>
@@ -326,18 +347,44 @@
                                         </div>
                                     @endif
                                     @enderror
-                            </div>
+                            </div>--}}
                             @if($client_type_id != "")
-                                <div class="col-12 text-left"> &nbsp;&nbsp; <strong> Seriales de Equipos asignados</strong></div>
-                                    @foreach($equipment_types as $index => $type)
-                                        <div wire:key="equipment-field-{{ $type->id }}" class="form-group mb-2 align-content-start col-md-3 col-sm-12">
-                                            <label><b>{{ $type->name }}</b></label>
-                                            <div class="input-group">
-                                                <input wire:model="equipment.{{ $type->id }}"
-                                                    wire:keydown.enter="assignEquipmentFirst({{$type->id}})" type="number" class="form-control" id="equipment.{{ $index }}.serial" autocomplete="off" placeholder="{{ $type->name }}" required >
+
+                                <div class="col-12 text-left"> &nbsp;&nbsp; <strong> Seriales de componentes</strong></div>
+                                    @foreach($equipment as $index => $item)
+                                        <div wire:key="equipment-field-{{ $index }}" class="form-group mb-2 align-content-start col-md-3 col-sm-12">
+                                                    @include("partials.v1.form.form_list",[
+                                                 "col_with"=>4,
+                                                 "mb"=>0,
+                                                 "disabled" => $item['disable'],
+                                                 "aux_class"=>"no-border",
+                                                 "list_model" => "equipment.".$index.".type_id",
+                                                 "list_default" => "Seleccione equipo...",
+                                                 "list_options" => $equipment_types,
+                                                 "list_option_value"=>"id",
+                                                 "list_option_view"=>"type",
+                                                 "list_option_title"=>""
+                                        ])
+                                                    @include("partials.v1.form.form_dropdown_input_searchable",[
+                                                  "form_group" => false,
+                                                  "dropdown_model" => "equipment.".$index.".serial",
+                                                  "placeholder" => $item['type'],
+                                                  "required" => true,
+                                                  "picked_variable" => $item['picked'],
+                                                  "message_variable" => $item['post'],
+                                                  "variable_2" => $index??0,
+                                                  "dropdown_results" => $serials,
+                                                  "count_bool" => $serials->contains('equipment_type_id', $item['type_id']),
+                                                  "selected_value_function" => "assignEquipment",
+                                                  "dropdown_result_id" => "id",
+                                                  "dropdown_result_value" => "serial",
+                                        ])
+                                            {{--<div class="input-group">
+                                                <input wire:model="equipment.{{ $index }}.serial" value="{{$item['serial']}}"
+                                                    wire:keydown.enter="assignEquipmentFirst({{$item['index']}})" type="number" class="form-control" id="equipment.{{ $index }}.serial" autocomplete="off" placeholder="{{ $item['type'] }}" required >
                                                 <div class="input-group-append">
                                                  <span class="input-group-text" >
-                                                     @if($pickeds[$type->id])
+                                                     @if($item['picked'])
                                                          <span class="badge badge-success">
                                                              <i>
                                                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
@@ -358,453 +405,60 @@
                                                  </span>
                                                 </div>
                                             </div>
-                                            @error("equipment.".$type->id."")
+                                            @error("equipment.".$index.".serial")
                                             <div  class="error-container">
                                                 <small class="form-text text-danger">{{$message}}</small>
                                             </div>
                                             @else
-                                                @if($serials->contains('equipment_type_id', $type->id))
-                                                    @if(!$pickeds[$type->id])
-                                                        @if(strlen($equipment[$type->id])>= 2)
+                                                @if($serials->contains('equipment_type_id', $item['type_id']))
+                                                    @if(!$item['picked'])
 
-                                                            <ul class="dropdown-menu list-search">
-                                                                <h6 class="dropdown-header"><b>Seleccione opción</b></h6>
-                                                                @foreach($serials as $item)
-                                                                    <li class="dropdown-item ">
-                                                                        <a  wire:click="assignEquipment('{{ $item->id }}')" type="button">
-                                                                            {{ $item->serial }}
-                                                                        </a>
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-
-                                                        @endif
+                                                        <ul class="dropdown-menu list-search">
+                                                            <h6 class="dropdown-header"><b>Seleccione {{$item['type']}}</b></h6>
+                                                            @foreach($serials as $serial)
+                                                                <li class="dropdown-item ">
+                                                                    <a  wire:click="assignEquipment({{ $serial->id }}, {{ $index }} )" type="button">
+                                                                        {{ $serial->serial }}
+                                                                    </a>
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
                                                     @endif
                                                 @else
                                                     <div class="">
-                                                        <small class="form-text text-muted">{{$posts[$type->id]}}</small>
+                                                        <small class="form-text text-muted">{{$item['post']}}</small>
                                                     </div>
                                                 @endif
-                                            @enderror
+                                            @enderror--}}
                                         </div>
                                     @endforeach
-                                {{--<div class="form-group mb-2 align-content-start col-md-3 col-sm-12">
-                                         <label><b>Precinto:</b></label>
-                                         <div class="input-group">
-                                             <input wire:model="seal"
-                                                    wire:keydown.enter="assignSealFirst()" type="number" class="form-control" id="seal" autocomplete="off" placeholder="Precinto" required >
-                                             <div class="input-group-append">
-                                                 <span class="input-group-text" >
-                                                     @if($picked_seal)
-                                                         <span class="badge badge-success">
-                                                             <i>
-                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                     <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                 </svg>
-                                                             </i>
-                                                         </span>
-                                                     @else
-                                                         <span class="badge badge-danger">
-                                                             <i>
-                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                     <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                     <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                 </svg>
-                                                             </i>
-                                                         </span>
-                                                     @endif
-                                                 </span>
-                                             </div>
-                                         </div>
-                                         @error("seal")
-                                             <div  class="error-container">
-                                                 <small class="form-text text-danger">{{$message}}</small>
-                                             </div>
-                                         @else
-                                             @if(count($seals)>0)
-                                                 @if(!$picked_seal)
-                                                     <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                         @foreach($seals as $item)
-                                                             <a  wire:click="assignSeal('{{ $item }}')"style="cursor: pointer;">
-                                                                 {{ $item->serial }}
-                                                             </a>
-                                                             <hr>
-                                                         @endforeach
-                                                     </div>
-                                                 @endif
-                                             @else
-                                                 <div class="">
-                                                     <small class="form-text text-muted">{{$message_seal}}</small>
-                                                 </div>
-                                             @endif
-                                         @enderror
-                                     </div>
-                                 @if($client_type != "")
-                                     @if($client_type->type != "SFVI")
-                                         <div class="form-group align-content-start mb-2 col-md-3 col-sm-12">
-                                             <label><b>Medidor:</b></label>
-                                             <div class="input-group">
-                                                 <input wire:model="meter"
-                                                        wire:keydown.enter="assignMeterFirst()" type="number" class="form-control" id="meter" autocomplete="off" placeholder="Medidor" required >
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" >
-                                                         @if($picked_meter)
-                                                             <span class="badge badge-success">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @else
-                                                             <span class="badge badge-danger">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @endif
-                                                     </span>
-                                                 </div>
-                                             </div>
-                                             @error("meter")
-                                                 <div  class="error-container">
-                                                     <small class="form-text text-danger">{{$message}}</small>
-                                                 </div>
-                                             @else
-                                                 @if(count($meters)>0)
-                                                     @if(!$picked_meter)
-                                                         <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                             @foreach($meters as $item)
-                                                                 <a  wire:click="assignMeter('{{ $item }}')"style="cursor: pointer;">
-                                                                     {{ $item->serial }}
-                                                                 </a>
-                                                                 <hr>
-                                                             @endforeach
-                                                         </div>
-                                                     @endif
-                                                 @else
-                                                     <div class="">
-                                                         <small class="form-text text-muted">{{$message_meter}}</small>
-                                                     </div>
-                                                 @endif
-                                             @enderror
-                                         </div>
-                                         <div class="form-group align-content-start mb-2 col-md-3 col-sm-12">
-                                             <label><b>Tarjeta:</b></label>
-                                             <div class="input-group">
-                                                 <input wire:model="card"
-                                                        wire:keydown.enter="assignCardFirst()" type="number" class="form-control" id="card" autocomplete="off" placeholder="Tarjeta" required >
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" >
-                                                         @if($picked_card)
-                                                             <span class="badge badge-success">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @else
-                                                             <span class="badge badge-danger">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @endif
-                                                     </span>
-                                                 </div>
-                                             </div>
-                                             @error("card")
-                                                 <div  class="error-container">
-                                                     <small class="form-text text-danger">{{$message}}</small>
-                                                 </div>
-                                             @else
-                                                 @if(count($cards)>0)
-                                                     @if(!$picked_card)
-                                                         <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                             @foreach($cards as $item)
-                                                                 <a  wire:click="assignCard('{{ $item }}')"style="cursor: pointer;">
-                                                                     {{ $item->serial }}
-                                                                 </a>
-                                                                 <hr>
-                                                             @endforeach
-                                                         </div>
-                                                     @endif
-                                                 @else
-                                                     <div class="">
-                                                         <small class="form-text text-muted">{{$message_card}}</small>
-                                                     </div>
-                                                 @endif
-                                             @enderror
-                                         </div>
-                                         <div class="form-group align-content-start mb-2 col-md-3 col-sm-12">
-                                             <label><b>Contactor:</b></label>
-                                             <div class="input-group">
-                                                 <input wire:model="contactor"
-                                                        wire:keydown.enter="assignContactorFirst()" type="number" class="form-control" id="contactor" autocomplete="off" placeholder="Contactor" required >
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" >
-                                                         @if($picked_contactor)
-                                                             <span class="badge badge-success">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @else
-                                                             <span class="badge badge-danger">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @endif
-                                                     </span>
-                                                 </div>
-                                             </div>
-                                             @error("contactor")
-                                                 <div  class="error-container">
-                                                     <small class="form-text text-danger">{{$message}}</small>
-                                                 </div>
-                                             @else
-                                                 @if(count($contactors)>0)
-                                                     @if(!$picked_contactor)
-                                                         <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                             @foreach($contactors as $item)
-                                                                 <a  wire:click="assignContactor('{{ $item }}')"style="cursor: pointer;">
-                                                                     {{ $item->serial }}
-                                                                 </a>
-                                                                 <hr>
-                                                             @endforeach
-                                                         </div>
-                                                     @endif
-                                                 @else
-                                                     <div class="">
-                                                         <small class="form-text text-muted">{{$message_contactor}}</small>
-                                                     </div>
-                                                 @endif
-                                             @enderror
-                                         </div>
-                                     @endif
 
-                                     @if(strpos($client_type->type, "SFVI") != false)
-                                         <div class="form-group align-content-start mb-2 col-md-3 col-sm-12">
-                                             <label><b>Controlador:</b></label>
-                                             <div class="input-group">
-                                                 <input wire:model="controller"
-                                                        wire:keydown.enter="assignControllerFirst()" type="number" class="form-control" id="controller" autocomplete="off" placeholder="Controlador" required >
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" >
-                                                         @if($picked_controller)
-                                                             <span class="badge badge-success">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @else
-                                                             <span class="badge badge-danger">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @endif
-                                                     </span>
-                                                 </div>
-                                             </div>
-                                             @error("controller")
-                                                 <div  class="error-container">
-                                                     <small class="form-text text-danger">{{$message}}</small>
-                                                 </div>
-                                             @else
-                                                 @if(count($controllers)>0)
-                                                     @if(!$picked_controller)
-                                                         <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                             @foreach($controllers as $item)
-                                                                 <a  wire:click="assignController('{{ $item }}')"style="cursor: pointer;">
-                                                                     {{ $item->serial }}
-                                                                 </a>
-                                                                 <hr>
-                                                             @endforeach
-                                                         </div>
-                                                     @endif
-                                                 @else
-                                                     <div class="">
-                                                         <small class="form-text text-muted">{{$message_controller}}</small>
-                                                     </div>
-                                                 @endif
-                                             @enderror
-                                         </div>
-                                         <div class="form-group align-content-start mb-2 col-md-3 col-sm-12">
-                                             <label><b>Inversor:</b></label>
-                                             <div class="input-group">
-                                                 <input wire:model="inverter"
-                                                        wire:keydown.enter="assignInverterFirst()" type="number" class="form-control" id="inverter" autocomplete="off" placeholder="Inversor" required >
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" >
-                                                         @if($picked_inverter)
-                                                             <span class="badge badge-success">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @else
-                                                             <span class="badge badge-danger">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @endif
-                                                     </span>
-                                                 </div>
-                                             </div>
-                                             @error("inverter")
-                                                 <div  class="error-container">
-                                                     <small class="form-text text-danger">{{$message}}</small>
-                                                 </div>
-                                             @else
-                                                 @if(count($inverter)>0)
-                                                     @if(!$picked_inverter)
-                                                         <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                             @foreach($inverter as $item)
-                                                                 <a  wire:click="assignInversor('{{ $item }}')"style="cursor: pointer;">
-                                                                     {{ $item->serial }}
-                                                                 </a>
-                                                                 <hr>
-                                                             @endforeach
-                                                         </div>
-                                                     @endif
-                                                 @else
-                                                     <div class="">
-                                                         <small class="form-text text-muted">{{$message_inverter}}</small>
-                                                     </div>
-                                                 @endif
-                                             @enderror
-                                         </div>
-                                         <div class="form-group align-content-start mb-2 col-md-3 col-sm-12">
-                                             <label><b>Bateria:</b></label>
-                                             <div class="input-group">
-                                                 <input wire:model="battery"
-                                                        wire:keydown.enter="assignBatteryFirst()" type="number" class="form-control" id="battery" autocomplete="off" placeholder="Bateria" required >
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" >
-                                                         @if($picked_battery)
-                                                             <span class="badge badge-success">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @else
-                                                             <span class="badge badge-danger">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @endif
-                                                     </span>
-                                                 </div>
-                                             </div>
-                                             @error("battery")
-                                                 <div  class="error-container">
-                                                     <small class="form-text text-danger">{{$message}}</small>
-                                                 </div>
-                                             @else
-                                                 @if(count($batteries)>0)
-                                                     @if(!$picked_battery)
-                                                         <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                             @foreach($batteries as $item)
-                                                                 <a  wire:click="assignBateria('{{ $item }}')"style="cursor: pointer;">
-                                                                     {{ $item->serial }}
-                                                                 </a>
-                                                                 <hr>
-                                                             @endforeach
-                                                         </div>
-                                                     @endif
-                                                 @else
-                                                     <div class="">
-                                                         <small class="form-text text-muted">{{$message_battery}}</small>
-                                                     </div>
-                                                 @endif
-                                             @enderror
-                                         </div>
-                                         <div class="form-group align-content-start mb-2 col-md-3 col-sm-12">
-                                             <label><b>Panel solar:</b></label>
-                                             <div class="input-group">
-                                                 <input wire:model="solar_panel"
-                                                        wire:keydown.enter="assignSolarPanelFirst()" type="number" class="form-control" id="solar_panel" autocomplete="off" placeholder="Bateria" required >
-                                                 <div class="input-group-append">
-                                                     <span class="input-group-text" >
-                                                         @if($picked_solar_panel)
-                                                             <span class="badge badge-success">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-                                                                         <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @else
-                                                             <span class="badge badge-danger">
-                                                                 <i>
-                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
-                                                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
-                                                                     </svg>
-                                                                 </i>
-                                                             </span>
-                                                         @endif
-                                                     </span>
-                                                 </div>
-                                             </div>
-                                             @error("solar_panel")
-                                                 <div  class="error-container">
-                                                     <small class="form-text text-danger">{{$message}}</small>
-                                                 </div>
-                                             @else
-                                                 @if(count($solar_panels)>0)
-                                                     @if(!$picked_solar_panel)
-                                                         <div class="px-4 pt-2 pb-0 rounded shadow" >
-                                                             @foreach($solar_panels as $item)
-                                                                 <a  wire:click="assignSolarPanel('{{ $item }}')"style="cursor: pointer;">
-                                                                     {{ $item->serial }}
-                                                                 </a>
-                                                                 <hr>
-                                                             @endforeach
-                                                         </div>
-                                                     @endif
-                                                 @else
-                                                     <div class="">
-                                                         <small class="form-text text-muted">{{$message_solar_panel}}</small>
-                                                     </div>
-                                                 @endif
-                                             @enderror
-                                         </div>
-                                     @endif
-                                 @endif--}}
+                                <div class="d-flex align-items-center col-md-2 col-sm-12">
+                                    @include("partials.v1.primary_button",[
+                                                                 "button_align"=>"right" ,
+                                                                 "click_action" => "addInputEquipment()",
+                                                                 "button_content"=>"",
+                                                                 "button_icon" => "fas fa-plus",
+                                                                 "class_button"=>"b-success"
+
+                                                     ])
+                                    @include("partials.v1.primary_button",[
+                                                                 "button_align"=>"right" ,
+                                                                 "click_action" => "deleteInputEquipment()",
+                                                                 "button_content"=>"",
+                                                                 "button_icon" => "fas fa-minus",
+                                                                 "class_button"=>"b-danger"
+                                                     ])
+                                </div>
                             @endif
-                            <hr>
+                            @if (session()->has('no_delete'))
+                                <div class="alert alert-danger">
+                                    {{ session('no_delete') }}
+                                </div>
+                            @endif
+
+
+
                             <div class="text-center">
                                 <button id="add" type="submit" class="mb-2 py-2 px-4" @if(!$picked_network_operator) disabled="true" @endif>
                                     <b>
@@ -816,7 +470,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+
     </section>
     <script>
         document.addEventListener('livewire:load', function () {

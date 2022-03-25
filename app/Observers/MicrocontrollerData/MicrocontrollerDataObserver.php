@@ -14,9 +14,7 @@ class MicrocontrollerDataObserver
      */
     public function created(MicrocontrollerData $microcontrollerData)
     {
-        // Minado de json ->
         $microcontrollerData->miningData();
-
     }
 
 }

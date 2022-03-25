@@ -4,22 +4,19 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
-use App\Models\V1\ClientEquipment;
+use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
-use App\Models\V1\Consumer;
 use App\Models\V1\Department;
 use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentCondition;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Location;
 use App\Models\V1\LocationType;
 use App\Models\V1\Municipality;
 use App\Models\V1\NetworkOperator;
-use App\Models\V1\NetworkTopology;
 use App\Models\V1\Seller;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
-use App\Models\V1\Support;
+use App\Models\V1\Client;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
@@ -36,6 +33,7 @@ class AddClientService extends Singleton
     {
         $component->fill([
             'serials' => collect([]),
+            'equipment' => [],
             'strata' => Stratum::get(), 'client_type_id' => '',
             'client_types' => ClientType::get(),
             'voltage_levels' => VoltageLevel::get(),
@@ -43,6 +41,7 @@ class AddClientService extends Singleton
             'location_types' => LocationType::get(), 'locations' => [],
             'departments' => Department::get(),
             'municipalities' => [],
+            'equipment_types'=> [],
             'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red', 'network_operators' => [],
             'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red', 'aux_network_operators' => [],
             ]);
@@ -81,13 +80,20 @@ class AddClientService extends Singleton
     public function updatedClientTypeId(Component $component)
     {
         if ($component->client_type_id != "") {
+            $component->equipment= [];
             $component->client_type = ClientType::find($component->client_type_id);
             $component->equipment_types = $component->client_type->equipmentTypes;
-            foreach ($component->equipment_types as $type) {
-                $component->equipment[$type->id] = "";
-                $component->equipment_id[$type->id] = "";
-                $component->pickeds[$type->id] = false;
-                $component->posts[$type->id] = "Digite serial de " . $type->name;
+            foreach ($component->equipment_types as $index=>$type) {
+                array_push($component->equipment,[
+                    "index"=>$index,
+                    "id" => "",
+                    "type_id" => $type->id,
+                    "type" => $type->type,
+                    "serial" => "",
+                    "picked"=>false,
+                    "post"=>"Digite serial de " . $type->type,
+                    "disable"=>true,
+                ]) ;
                 $component->serials = collect([]);
             }
         }
@@ -110,7 +116,7 @@ class AddClientService extends Singleton
         $component->network_operator_id = $obj->id;
         $component->picked_network_operator= true;
     }
-    public function assingnNetworkOperatorFirst(Component $component)
+    public function assignNetworkOperatorFirst(Component $component)
     {
         if (!empty($component->network_operator)) {
             $usuario = User::role('network_operator')->where("identification", "like", '%' . $component->network_operator . "%")
@@ -125,93 +131,99 @@ class AddClientService extends Singleton
         }
     }
 
-    public function updatedAuxNetworkOperator(Component $component)
-    {
-        $component->picked_aux_network_operator = false;
-        $component->message_aux_network_operator = "No hay operador de red registrado con esta identificación";
-
-        if ($component->aux_network_operator != "") {
-            $component->aux_network_operators = User::role('network_operator')->where("identification", "like", '%' . $component->aux_network_operator . "%")
-                ->take(3)->get();
+    public function addInputEquipment(Component $component){
+        $component->equipment_types = EquipmentType::whereSerialized(true)->get();
+        array_push($component->equipment,[
+            "index"=>count($component->equipment),
+            "id" => "",
+            "type_id" => "",
+            "type" => "",
+            "serial" => "",
+            "picked"=>false,
+            "post"=>"Seleccione tipo de equipo",
+            "disable"=>false,
+        ]);
+    }
+    public function deleteInputEquipment(Component $component){
+        $necessary_equipment = count($component->client_type->equipmentTypes);
+        $current_equipment =count($component->equipment);
+        if ($current_equipment > $necessary_equipment){
+            array_pop($component->equipment);
+        } else{
+            session()->flash('no_delete', 'Los equipos actuales son obligatorios');
         }
-    }
-    public function assignAuxNetworkOperator(Component $component, $network_operator)
-    {
-        $obj = json_decode($network_operator);
-        $component->aux_network_operator = $obj->identification;
-        $component->aux_network_operator_id = $obj->id;
-        $component->picked_aux_network_operator= true;
-    }
-    public function assingnAuxNetworkOperatorFirst(Component $component)
-    {
-        if (!empty($component->aux_network_operator)) {
-            $usuario = User::role('network_operator')->where("identification", "like", '%' . $component->aux_network_operator . "%")
-                ->first();
-            if ($usuario) {
-                $component->aux_network_operator = $usuario->identification;
-                $component->aux_network_operator_id= $usuario->id;
-            } else {
-                $component->aux_network_operator = "...";
-            }
-            $component->picked_aux_network_operator = true;
-        }
-    }
 
+    }
 
     public function updated(Component $component, $property_name, $value){
 
-        if (strpos($property_name, "equipment") !== false){
+        if (strpos($property_name, "serial") !== false){
             $id = filter_var($property_name, FILTER_SANITIZE_NUMBER_INT);
-            $equipment_type = EquipmentType::find($id);
-            $component->pickeds[$id] = false;
-            foreach ($component->equipment_types as $type) {
-                $component->posts[$type->id] = "";
-            }
-            if (strlen($value) >= 2){
-                $component->serials = Equipment::where([
-                    ["serial", "like", '%' . $value . "%"],
-                    ["equipment_condition_id", 1],
-                    ["equipment_type_id", $id ],
-                ])->whereNotIn('assigned', [true])
-                    ->take(3)->get();
-                if (count($component->serials)<=0){
-                    $component->posts[$id] = "No existe ".$equipment_type->name;
+            if ($component->equipment[$id]['type_id'] == ""){
+                $component->equipment[$id]['post'] == "Seleccione tipo de equipo";
+            } else {
+                $component->equipment[$id]['picked'] = false;
+                $component->equipment[$id]['post'] == "No registrado";
+                $type_id = $component->equipment[$id]['type_id'];
+                if (strlen($value) >= 2) {
+                    $component->serials = Equipment::where([
+                        ["serial", "like", '%' . $value . "%"],
+                        ["equipment_type_id", $type_id],
+                    ])->whereNotIn('assigned', [true])
+                        ->whereNotIn("status", [Equipment::STATUS_DISREPAIR, Equipment::STATUS_REPAIR])
+                        ->take(3)->get();
+                    if (count($component->serials) == 0) {
+                        $component->equipment[$id]['post'] = "No registrado";
+                    }
                 }
             }
+        } elseif (strpos($property_name, "type_id") !== false){
+            $id = filter_var($property_name, FILTER_SANITIZE_NUMBER_INT);
+            if ($value != 0) {
+                $equipment_type = EquipmentType::find($value);
+                $component->equipment[$id]['picked'] = false;
+                $component->equipment[$id]['serial'] = "";
+                $component->equipment[$id]['type_id'] = $equipment_type->id;
+                $component->equipment[$id]['type'] = $equipment_type->type;
+                $component->equipment[$id]['post'] = "Digite serial de " . $equipment_type->type;
+            } else{
+                $component->equipment[$id]['picked'] = false;
+                $component->equipment[$id]['serial'] = "";
+                $component->equipment[$id]['type_id'] = "";
+                $component->equipment[$id]['type'] = "";
+                $component->equipment[$id]['post'] = "Seleccione tipo de equipo";
+            }
         }
+    }
+    public function assignEquipment(Component $component, $id, $aux){
+        $equipment = Equipment::find($id);
+        $component->equipment[$aux]['serial'] = $equipment->serial;
+        $component->equipment[$aux]['id'] = $equipment->id;
+        $component->equipment[$aux]['picked'] = true;
+        $component->equipment[$aux]['post'] = "";
 
     }
-    public function assignEquipment(Component $component, $id){
-        $equipment = Equipment::find($id);
-        $component->equipment[$equipment->equipment_type_id] = $equipment->serial;
-        $component->equipment_id[$equipment->equipment_type_id] = $equipment->id;
-        $component->pickeds[$equipment->equipment_type_id] = true;
-        foreach ($component->equipment_types as $type) {
-            $component->posts[$type->id] = "Digite serial de " . $type->name;
-        }
-        $component->posts[$equipment->equipment_type_id] = "";
-    }
-    public function assignEquipmentFirst(Component $component, $id){
-        if (strlen($component->equipment[$id]) >= 2) {
-            $equipment_type = EquipmentType::find($id);
+    public function assignEquipmentFirst(Component $component, $index){
+        if (strlen($component->equipment[$index]['serial']) >= 2) {
+            $equipment_type = EquipmentType::find($component->equipment[$index]['type_id']);
             $equipment = Equipment::where([
-                ["serial", "like", '%' . $component->equipment[$equipment_type->id]. "%"],
-                ["equipment_condition_id", 1],
+                ["serial", "like", '%' . $component->equipment[$index]['serial']. "%"],
                 ["equipment_type_id",$equipment_type->id ],
             ])->whereNotIn('assigned', [true])
+                ->whereNotIn("status", [Equipment::STATUS_DISREPAIR, Equipment::STATUS_REPAIR])
                 ->first();
             if ($equipment) {
-                $component->equipment[$equipment_type->id] = $equipment->serial;
-                $component->equipment_id[$equipment_type->id] = $equipment->id;
-                $component->posts[$equipment_type->id] = "";
+                $component->equipment[$index]['serial'] = $equipment->serial;
+                $component->equipment[$index]['id'] = $equipment->id;
+                $component->equipment[$index]['post'] = "";
+                $component->equipment[$index]['picked'] = true;
             } else {
                 $component->solar_panel = "...";
             }
-            $component->pickeds[$equipment_type->id] = true;
         }
     }
 
-    public function userCode($input ='0123456789', $strength = 10) {
+    public function clientCode($input ='0123456789', $strength = 10) {
         $input_length = strlen($input);
         $random_codigo = "";
         for($i = 0; $i < $strength; $i++) {
@@ -222,8 +234,8 @@ class AddClientService extends Singleton
     }
     public function save(Component $component){
         while (true){
-            $code = $this->generate_codigo();
-            if (!(Client::whereCodigo($code)->exists())){
+            $code = $this->clientCode();
+            if (!(Client::whereCode($code)->exists())){
                 break;
             }
         }
@@ -239,24 +251,25 @@ class AddClientService extends Singleton
             'network_topology' => $component->network_topology,
             'active' => $component->active,
             'contribution' => $component->contribution,
-            'public_lighting_tax' => $component->public_lighting_tax,
-            'network_operator_id' => $component->network_operator_id,
+            'public_lighting_tax' => $component->public_lighting_tax??true,
+            'network_operator_id' => User::find($component->network_operator_id)->networkOperator->id,
             'department_id' => $component->department_id,
             'municipality_id' => $component->municipality_id,
             'location_id' => $component->location_id,
             'client_type_id' => $component->client_type_id,
-            'subsistence_consumption_id' => $component->subsistence_consumption,
-            'voltage_level_id' => $component->voltage_level,
-            'stratum_id' => $component->stratum,
+            'subsistence_consumption_id' => $component->subsistence_consumption_id??1,
+            'voltage_level_id' => $component->voltage_level_id,
+            'stratum_id' => $component->stratum_id,
         ]);
-        foreach ($component->equipment_id as $equipment){
-            ClientEquipment::create([
+        foreach ($component->equipment as $item){
+            EquipmentClient::create([
                 'client_id' => $client->id,
-                'equipment_id' => $equipment->id,
-                'active' => true,
+                'equipment_id' => $item['id'],
+                'current_assigned' => true,
             ]);
-            Equipment::whereEquipmentId($equipment->id)->update(['assigned' => true]);
+            Equipment::find($item['id'])->update(['assigned' => true]);
         }
+        session()->flash('success', 'Cliente creado con exito');
     }
 
 }

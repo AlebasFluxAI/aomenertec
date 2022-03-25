@@ -12,17 +12,22 @@ class EquipmentType extends Model
     use SoftDeletes;
 
 
-    protected $fillable=[
-        'type','description'
+    protected $fillable = [
+        'id','type','description'
     ];
 
-    public function equipments()
+    public function equipment()
     {
         return $this->hasMany(Equipment::class);
     }
 
     public function clientTypes()
     {
-        return $this->belongsToMany(Client::class, 'equipment_assignments');
+        return $this->belongsToMany(ClientType::class, 'client_type_equipment_types');
     }
+    public function pqrTypes()
+    {
+        return $this->belongsToMany(PqrType::class, 'equipment_type_pqr_types');
+    }
+
 }

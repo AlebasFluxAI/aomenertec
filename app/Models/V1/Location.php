@@ -11,6 +11,13 @@ class Location extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'id',
+        'location_type_id',
+        'name',
+        'municipality_id'
+    ];
+
     public function clients()
     {
         return $this->hasMany(Client::class);

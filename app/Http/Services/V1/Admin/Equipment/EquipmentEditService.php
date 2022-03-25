@@ -17,7 +17,7 @@ class EquipmentEditService extends Singleton
             'equipmentName' => $equipment->name,
             'equipmentDescription' => $equipment->description,
             'equipmentSerial' => $equipment->serial,
-            'equipmentTypeId' => $equipment->equipment_type->type,
+            'equipmentTypeId' => $equipment->equipmentType->type,
             'equipmentTypes' => [],
             'picked' => false,
         ]);

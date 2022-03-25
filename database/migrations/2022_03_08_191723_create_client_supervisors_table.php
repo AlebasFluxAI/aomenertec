@@ -15,8 +15,9 @@ class CreateClientSupervisorsTable extends Migration
     {
         Schema::create('client_supervisors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('supervisors_id')->constrained();
+            $table->foreignId('supervisor_id')->constrained();
             $table->foreignId('client_id')->constrained();
+            $table->boolean('active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -13,14 +13,14 @@ class PriceConventional extends Model
 
     protected $fillable=[
         "network_operator_id",
-"stratum_id",
-"voltage_level_id",
-"generation",
-"commercialization",
-"loss",
-"optional_rate",
-"total",
-"use_optional",
+        "stratum_id",
+        "voltage_level_id",
+        "generation",
+        "commercialization",
+        "loss",
+        "optional_rate",
+        "total",
+        "use_optional",
     ];
 
     public function network_operator()

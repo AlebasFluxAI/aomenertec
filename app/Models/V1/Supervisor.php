@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use Database\Seeders\ClientsTableSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -11,6 +12,11 @@ class Supervisor extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'user_id',
+        'network_operator_id'
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -18,5 +24,9 @@ class Supervisor extends Model
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
+    }
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'client_supervisors')->withPivot('active');
     }
 }

@@ -82,6 +82,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Support::class);
     }
+    public function supervisor()
+    {
+        return $this->hasOne(Supervisor::class);
+    }
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);

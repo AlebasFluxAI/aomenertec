@@ -30,6 +30,7 @@ class AddClient extends Component
     public $network_operator_id, $network_operator, $picked_network_operator, $network_operators, $message_network_operator;
     public $equipment, $serials;
     public $pickeds, $posts, $equipment_id;
+    public $equipment_types;
     private $addClientService;
 
     protected $rules = [
@@ -39,8 +40,14 @@ class AddClient extends Component
         'email' => 'email|unique:users,email',
         'network_operator' => 'required|min:2',
         'aux_network_operator' => 'required|min:2',
-        'equipment.*' => 'required|min:2',
-        'pickeds.*' => 'required',
+        'equipment.*.id' => 'required|min:2',
+        'equipment.*.index' => 'required|min:2',
+        'equipment.*.type_id' => 'required',
+        'equipment.*.type' => 'required|min:2',
+        'equipment.*.serial' => 'required|min:2',
+        'equipment.*.picked' => 'required',
+        'equipment.*.post' => 'required|min:2',
+        'equipment.*.disable' => 'required|min:2',
     ];
 
     public function __construct()
@@ -54,6 +61,10 @@ class AddClient extends Component
         if ($this->validateOnly($property_name)) {
             $this->addClientService->updated($this, $property_name, $value);
         }
+    }
+    public function assignEquipment($equipment, $aux)
+    {
+        $this->addClientService->assignEquipment($this, $equipment, $aux);
     }
     public function assignEquipmentFirst($type_id){
         $this->addClientService->assignEquipmentFirst($this, $type_id);
@@ -97,134 +108,11 @@ class AddClient extends Component
         $this->addClientService->assignNetworkOperatorFirst($this);
     }
 
-    public function updatedAuxNetworkOperator()
-    {
-        $this->addClientService->updatedAuxNetworkOperator($this);
+    public function addInputEquipment(){
+        $this->addClientService->AddInputEquipment($this);
     }
-    public function assignAuxNetworkOperator($network_operator)
-    {
-        $this->addClientService->assignAuxNetworkOperator($this, $network_operator);
-    }
-    public function assignAuxNetworkOperatorFirst()
-    {
-        $this->addClientService->assignAuxNetworkOperatorFirst($this);
-    }
-
-    public function updatedCabinet()
-    {
-        $this->addClientService->updatedCabinet($this);
-    }
-    public function assignEquipment($equipment)
-    {
-        $this->addClientService->assignEquipment($this, $equipment);
-    }
-    public function assignCabinetFirst()
-    {
-        $this->addClientService->assignCabinetFirst($this);
-    }
-
-    public function updatedSeal()
-    {
-        $this->addClientService->updatedSeal($this);
-    }
-    public function assignSeal($equipment)
-    {
-        $this->addClientService->assignSeal($this, $equipment);
-    }
-    public function assignSealFirst()
-    {
-        $this->addClientService->assignSealFirst($this);
-    }
-
-    public function updatedMeter()
-    {
-        $this->addClientService->updatedMeter($this);
-    }
-    public function assignMeter($equipment)
-    {
-        $this->addClientService->assignMeter($this, $equipment);
-    }
-    public function assignMeterFirst()
-    {
-        $this->addClientService->assignMeterFirst($this);
-    }
-
-    public function updatedCard()
-    {
-        $this->addClientService->updatedCard($this);
-    }
-    public function assignCard($equipment)
-    {
-        $this->addClientService->assignCard($this, $equipment);
-    }
-    public function assignCardFirst()
-    {
-        $this->addClientService->assignCardFirst($this);
-    }
-
-    public function updatedController()
-    {
-        $this->addClientService->updatedController($this);
-    }
-    public function assignController($equipment)
-    {
-        $this->addClientService->assignController($this, $equipment);
-    }
-    public function assignControllerFirst()
-    {
-        $this->addClientService->assignControllerFirst($this);
-    }
-
-    public function updatedInverter()
-    {
-        $this->addClientService->updatedInverter($this);
-    }
-    public function assignInverter($equipment)
-    {
-        $this->addClientService->assignInverter($this, $equipment);
-    }
-    public function assignInverterFirst()
-    {
-        $this->addClientService->assignInverterFirst($this);
-    }
-
-    public function updatedBattery()
-    {
-        $this->addClientService->updatedBattery($this);
-    }
-    public function assignBattery($equipment)
-    {
-        $this->addClientService->assignBattery($this, $equipment);
-    }
-    public function assignBatteryFirst()
-    {
-        $this->addClientService->assignBatteryFirst($this);
-    }
-
-    public function updatedContactor()
-    {
-        $this->addClientService->updatedContactor($this);
-    }
-    public function assignContactor($equipment)
-    {
-        $this->addClientService->assignContactor($this, $equipment);
-    }
-    public function assignContactorFirst()
-    {
-        $this->addClientService->assignContactorFirst($this);
-    }
-
-    public function updatedSolarPanel()
-    {
-        $this->addClientService->updatedSolarPanel($this);
-    }
-    public function assignSolarPanel($equipment)
-    {
-        $this->addClientService->assignSolarPanel($this, $equipment);
-    }
-    public function assignSolarPanelFirst()
-    {
-        $this->addClientService->assignSolarPanelFirst($this);
+    public function deleteInputEquipment(){
+        $this->addClientService->deleteInputEquipment($this);
     }
 
     public function save()

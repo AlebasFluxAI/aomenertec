@@ -14,5 +14,4 @@ class MqttRealTimeInputController extends Controller
     {
         dispatch(new PushRealTimeMicrocontrollerDataJob($request->message));
     }
-
 }
