@@ -45,7 +45,7 @@
                             [
                                         "input_type"=>"text",
                                         "input_model"=>"phone",
-                                        "icon_class"=>"fas fa-file",
+                                        "icon_class"=>"fas fa-phone",
                                          "placeholder"=>"Telefono",
                                         "col_with"=>6,
 
@@ -55,7 +55,7 @@
                              [
                                         "input_type"=>"text",
                                         "input_model"=>"identification",
-                                        "icon_class"=>"fas fa-file",
+                                        "icon_class"=>"fas fa-barcode",
                                          "placeholder"=>"Identificacion",
                                         "col_with"=>6,
 
@@ -63,7 +63,7 @@
 
                              ],
 
-                                            [
+                            [
                                         "input_type"=>"email",
                                         "input_model"=>"email",
                                         "icon_class"=>"fas fa-envelope",
@@ -71,15 +71,51 @@
                                         "col_with"=>6,
                                         "required"=>true
                             ],
-                                         [
+                           [
+                                        "input_type"=>"text",
+                                        "input_model"=>"address",
+                                        "icon_class"=>"fas fa-location-pin",
+                                        "placeholder"=>"Direccion ",
+                                        "col_with"=>6,
+                                        "required"=>true
+                            ],
+                             [
+                                        "input_type"=>"text",
+                                        "input_model"=>"nit",
+                                        "icon_class"=>"fas fa-barcode",
+                                        "placeholder"=>"NIT ",
+                                        "col_with"=>6,
+                                        "required"=>true
+                            ],
+                            [
                                         "input_type"=>"password",
                                         "input_model"=>"password",
-                                        "icon_class"=>"fas fa-file",
+                                        "icon_class"=>"fas fa-key",
                                          "placeholder"=>"Contrasena",
                                         "col_with"=>6,
                                         "required"=>false,
 
                              ],
+                              [
+                                        "input_type"=>"text",
+                                        "input_model"=>"style",
+                                        "icon_class"=>"fas fa-pencil",
+                                         "placeholder"=>"Archivo de estilos",
+                                        "col_with"=>12,
+                                        "required"=>false,
+
+                             ],
+
+                                   [
+                                        "input_type"=>"file",
+                                        "input_model"=>"icon",
+                                        "icon_class"=>"fas fa-file",
+                                         "placeholder"=>"Logo del administrador",
+                                        "col_with"=>6,
+                                        "required"=>false,
+
+                             ],
+
 
                          ]
                  ])

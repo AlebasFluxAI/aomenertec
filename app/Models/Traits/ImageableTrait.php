@@ -10,17 +10,38 @@ use Illuminate\Support\Facades\Request;
 
 trait ImageableTrait
 {
+    public function buildOneImageFromFile($image_name, $imageInput)
+    {
+        $image = new Image();
+        $image->id = time() . mt_rand(0, 9999999);
+        $image->type = $image_name;
+        $image->name = 'no_found.png';
+        $image->file_name = 'no_found.png';
+        $no_found_path = '/img/no_found.png';
+        $image->size = '40400';
+        $image->mime_type = 'image/png';
+        $image->path = $no_found_path;
+        $image->url = $no_found_path;
+        $this->{$image_name}()->save($image);
+
+        $image = $imageInput;
+        $this->{$image_name}->setDataImage($image);
+        $this->{$image_name}->name = $image->getClientOriginalName();
+        $this->{$image_name}->update();
+
+    }
+
     public function buildOneImage(array $image_names)
     {
         foreach ($image_names as $type) {
             $image = new Image();
-            $image->id = time().mt_rand(0, 9999999);
+            $image->id = time() . mt_rand(0, 9999999);
             $image->type = $type;
-            $image->name = 'no_found.jpg';
-            $image->file_name = 'no_found.jpg';
-            $no_found_path = '/img/no_found.jpg';
+            $image->name = 'no_found.png';
+            $image->file_name = 'no_found.png';
+            $no_found_path = '/img/no_found.png';
             $image->size = '40400';
-            $image->mime_type = 'image/jpeg';
+            $image->mime_type = 'image/png';
             $image->path = $no_found_path;
             $image->url = $no_found_path;
             $this->{$type}()->save($image);
@@ -38,13 +59,13 @@ trait ImageableTrait
     {
         foreach ($image_names as $type) {
             $image = new Image();
-            $image->id = time().mt_rand(0, 9999999);
+            $image->id = time() . mt_rand(0, 9999999);
             $image->type = $type;
-            $image->name = 'no_found.jpg';
-            $image->file_name = 'no_found.jpg';
-            $no_found_path = '/img/no_found.jpg';
+            $image->name = 'no_found.png';
+            $image->file_name = 'no_found.png';
+            $no_found_path = '/img/no_found.png';
             $image->size = '40400';
-            $image->mime_type = 'image/jpeg';
+            $image->mime_type = 'image/png';
             $image->path = $no_found_path;
             $image->url = $no_found_path;
             $this->{$type}()->save($image);

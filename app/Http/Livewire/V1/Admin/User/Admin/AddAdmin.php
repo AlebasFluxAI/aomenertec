@@ -4,26 +4,32 @@ namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AddAdmin extends Component
 {
+
+    use WithFileUploads;
+
     public $password;
     public $identification;
     public $name;
+    public $address;
+    public $nit;
     public $last_name;
     public $phone;
     public $email;
     public $message;
-    private $superAdminAddService;
-
-
+    public $icon;
+    public $style;
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification',
-        'name' => 'required|min:8',
+        'name' => 'required',
         'phone' => 'min:7',
         'email' => 'required|email|unique:users,email',
     ];
-    
+    private $superAdminAddService;
+
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -34,6 +40,7 @@ class AddAdmin extends Component
     {
         $this->superAdminAddService->submitForm($this);
     }
+
 
     public function render()
     {

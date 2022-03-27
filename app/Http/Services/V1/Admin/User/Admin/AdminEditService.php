@@ -12,21 +12,31 @@ class AdminEditService extends Singleton
     {
         $component->fill([
             'model' => $model,
-            'name' => $model->user->name,
-            'last_name' => $model->user->last_name,
-            'phone' => $model->user->phone,
-            'email' => $model->user->email,
-            'password' => $model->user->password,
-            'identification' => $model->user->identification,
+            'name' => $model->name,
+            'last_name' => $model->last_name,
+            'phone' => $model->phone,
+            'email' => $model->email,
+            'address' => $model->address,
+            'nit' => $model->nit,
+            'password' => $model->password,
+            'identification' => $model->identification,
+            'style' => $model->css_file,
+
         ]);
     }
 
 
     public function submitForm(Component $component)
     {
+        if ($component->icon) {
+            $image = $component->icon;
+            $component->model->icon->setDataImage($image);
+            $component->model->icon->name = $image->getClientOriginalName();
+            $component->model->icon->update();
+        }
         $component->model->fill($this->mapper($component));
         $component->model->update();
-        $component->emitTo('livewire-toast', 'show', "Administrador {$component->model->name} creado exitosamente");
+        $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
 
     }
 
@@ -37,8 +47,10 @@ class AdminEditService extends Singleton
             "last_name" => $component->last_name,
             "email" => $component->email,
             "phone" => $component->phone,
-            "password" => bcrypt($component->password),
-            "identification" => $component->identification
+            "address" => $component->address,
+            "nit" => $component->nit,
+            "identification" => $component->identification,
+            "css_file" => $component->style
         ];
     }
 }

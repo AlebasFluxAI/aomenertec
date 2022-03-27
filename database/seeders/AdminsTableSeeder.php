@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\V1\User;
 use Illuminate\Database\Seeder;
 use App\Models\V1\Admin;
+use Faker;
 
 class AdminsTableSeeder extends Seeder
 {
@@ -15,9 +16,12 @@ class AdminsTableSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker\Factory::create();
         $admin = User::find(1);
         $create = Admin::create([
-            'user_id' => $admin->id
+            'user_id' => $admin->id,
+            'address' => $faker->address,
+            'nit' => $faker->numerify,
         ]);
     }
 }

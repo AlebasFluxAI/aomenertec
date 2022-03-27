@@ -17,10 +17,13 @@ class CreateAdminsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('last_name');
+            $table->string('css_file')->default("style");
             $table->string('enabled')->default(true);
             $table->string('identification')->unique();
             $table->string('phone')->unique();
             $table->string('email')->unique();
+            $table->string('nit')->unique();
+            $table->string('address')->nullable();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->timestamps();
             $table->softDeletes();

@@ -19,6 +19,7 @@
 
                 ]
         ])
+
     @include("partials.v1.tab.v1.tab",[
 
                             "tab_titles"=>[
@@ -40,23 +41,38 @@
                                                                         "table_info"=>[
                                                                          [
                                                                              "key"=>"Id",
+
                                                                              "value"=>$model->id
                                                                          ],
                                                                          [
                                                                              "key"=>"Nombre",
+
                                                                              "value"=>$model->name
                                                                          ],
                                                                          [
                                                                              "key"=>"Apellido",
+
                                                                              "value"=>$model->last_name
                                                                          ],
                                                                          [
                                                                              "key"=>"Correo electronico",
+
                                                                              "value"=>$model->email
                                                                          ],
                                                                          [
                                                                              "key"=>"Telefono",
+
                                                                              "value"=>$model->phone
+                                                                         ],
+                                                                                  [
+                                                                             "key"=>"Archivo de estilos",
+
+                                                                             "value"=>$model->css_file
+                                                                         ],
+                                                                           [
+                                                                             "key"=>"Logo",
+                                                                             "type"=>"image",
+                                                                             "value"=>$model->icon->url
                                                                          ],
                                                                      ]
                                                             ],

@@ -38,7 +38,7 @@
     <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
-    <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
+    <link href="{{asset(\App\Http\Resources\V1\Style::getStyle())}}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/277123ced7.js" crossorigin="anonymous"></script>
 
     @livewireStyles

@@ -5,11 +5,11 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-    --enertec_primary: #009599;
-    --enertec_secondary: #f2f2f2;
-    --enertec_header_color: #292929;
-    --enertec_orange: #f9b000;
-    --enertec_orange_light: #f2c968;
+    --style_primary: #38b1c9;
+    --style_secondary: #259441;
+    --style_header_color: #547bba;
+    --style_orange: #259441;
+    --style_orange_light: #97dea8;
 }
 
 /*______ESTILOS MENU_____*/
@@ -21,17 +21,17 @@
 /*______ESTILOS SUB MENU_____*/
 .contenedor-grande .nav-item a button:hover {
 
-    border-bottom-color: var(--enertec_primary);
+    border-bottom-color: var(--style_primary);
     border-radius: 5px;
     border-bottom-width: 3px;
-    color: var(--enertec_orange_light);
+    color: var(--style_orange_light);
     background-color: transparent;
 }
 
 /*------- HEADER ----*/
 .navbar-custom {
-    background-color: var(--enertec_header_color);
-    border-bottom-color: var(--enertec_orange);
+    background-color: var(--style_header_color);
+    border-bottom-color: var(--style_orange);
     border-bottom-width: .2rem;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .contenedor-grande .nav-item ul li :hover {
-    color: var(--enertec_orange);
+    color: var(--style_orange);
     transition: .3s;
 }
 
@@ -63,11 +63,11 @@ notification-nav {
 }
 
 .primary-content .table-nav ul li .table-nav-button :hover {
-    text-decoration-color: var(--enertec_primary);
+    text-decoration-color: var(--style_primary);
     text-decoration: underline;
     border-radius: 5px;
     border-bottom-width: 3px;
-    color: var(--enertec_primary);
+    color: var(--style_primary);
     background-color: transparent;
 }
 
@@ -85,14 +85,14 @@ notification-nav {
 
 
 .content-block button:hover {
-    background-color: var(--enertec_primary);
+    background-color: var(--style_primary);
     transition: .5s;
     color: white;
     border-radius: .5rem;
 }
 
 .content-block .edit-table button:hover {
-    background-color: var(--enertec_orange);
+    background-color: var(--style_orange);
     transition: .5s;
     padding: .5rem;
     border-radius: .5rem;
@@ -108,7 +108,7 @@ notification-nav {
 }
 
 #custom-tab button:hover {
-    color: var(--enertec_orange);
+    color: var(--style_orange);
     transition: .5s;
 
 }
@@ -135,11 +135,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .primary-text {
-    color: var(--enertec_primary);
+    color: var(--style_primary);
 }
 
 .secondary-text {
-    color: var(--enertec_orange);
+    color: var(--style_secondary);
 }
 
 .imagen-logo-login {
@@ -165,7 +165,7 @@ primary
     border: none #009599 1px;
     padding: 4px 10px;
     margin: 3px;
-    color: var(--enertec_secondary);
+    color: var(--style_secondary);
     transition: 0.4s;
     border-radius: 13px;
     font-size: 0.9rem;
@@ -177,7 +177,7 @@ primary
 }
 
 .primary-content a {
-    color: var(--enertec_secondary);
+    color: var(--style_secondary);
 }
 
 .contenedor-grande .nav-item {

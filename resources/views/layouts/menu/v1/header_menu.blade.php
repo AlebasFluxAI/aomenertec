@@ -5,7 +5,8 @@
                 <div class="col-md-2">
                     <a class="navbar-brand" href="/">
                         <img class="imagen-logo"
-                             src="https://aom.enerteclatam.com/images/logo-horizontal.svg"
+                             src='{{\App\Http\Resources\V1\Icon::getIcon()}}'
+
                              alt="">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

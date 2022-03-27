@@ -7,16 +7,23 @@ use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditAdmin extends Component
 {
+    use WithFileUploads;
+
     public $model;
     public $name;
     public $last_name;
     public $phone;
+    public $address;
+    public $nit;
+    public $icon;
     public $password;
     public $email;
     public $identification;
+    public $style;
     private $editAdminService;
 
     public function __construct($id = null)

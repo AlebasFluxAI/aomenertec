@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\ImageableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Jetstream\Role;
@@ -9,14 +10,18 @@ use Laravel\Jetstream\Role;
 class Admin extends Model
 {
     use HasFactory;
+    use ImageableTrait;
 
     protected $fillable = [
         "user_id",
         'identification',
         'phone',
+        'nit',
+        'address',
         'name',
         'last_name',
         'email',
+        'css_file'
     ];
 
     public static function getRole()
@@ -35,21 +40,6 @@ class Admin extends Model
                         "title" => "Usuarios",
                         "route" => null,
                         "submenu" => [
-                            [
-                                "title" => "Super administradores",
-                                "route" => "administrar.v1.usuarios.superadmin.listado",
-                                "submenu" => [
-                                    [
-                                        "title" => "Usuario sporte",
-                                        "route" => "administrar.v1.usuarios.admin.listado",
-                                        "submenu" => []
-                                    ],
-                                ]
-                            ],
-                            ["title" => "Administradores",
-                                "route" => "administrar.v1.usuarios.admin.listado",
-                                "submenu" => []
-                            ],
                             ["title" => "Operadores de red",
                                 "route" => "administrar.v1.usuarios.operadores.listado",
                                 "submenu" => [
@@ -107,6 +97,7 @@ class Admin extends Model
         ];
     }
 
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -115,6 +106,11 @@ class Admin extends Model
     public function networkOperators()
     {
         return $this->hasMany(NetworkOperator::class);
+    }
+
+    public function icon()
+    {
+        return $this->morphOne(Image::class, "imageable") ?? new Image(["url" => "https://aom.enerteclatam.com/images/logo-horizontal.svg"]);
     }
 
 }

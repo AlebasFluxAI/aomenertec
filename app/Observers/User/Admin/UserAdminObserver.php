@@ -15,6 +15,7 @@ class UserAdminObserver
      */
     public function creating(Admin $admin)
     {
+
         $user = $admin->user;
         if (!$user) {
             return;
@@ -27,6 +28,7 @@ class UserAdminObserver
         $admin->identification = $user->identification;
 
     }
+
 
     /**
      * Handle the SuperAdmin "updated" event.
@@ -49,17 +51,6 @@ class UserAdminObserver
             "identification" => $admin->identification,
         ]);
 
-    }
-
-    /**
-     * Handle the SuperAdmin "deleted" event.
-     *
-     * @param Admin $admin
-     * @return void
-     */
-    public function deleted(Admin $admin)
-    {
-        //
     }
 
     /**
