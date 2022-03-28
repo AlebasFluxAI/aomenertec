@@ -21,12 +21,17 @@ class SellerIndexService extends Singleton
     public function edit(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.vendedores.editar", ["seller" => $modelId]);
-
     }
 
     public function details(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.vendedores.detalles", ["seller" => $modelId]);
+    }
+
+    public function addClients(Component $component, $modelId)
+    {
+        $component->redirectRoute("administrar.v1.usuarios.vendedores.agregar_clientes", ["seller" => $modelId]);
+
     }
 
     public function getData()
@@ -38,5 +43,4 @@ class SellerIndexService extends Singleton
         }
         return Seller::paginate(15);
     }
-
 }

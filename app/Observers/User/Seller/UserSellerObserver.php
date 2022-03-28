@@ -18,7 +18,6 @@ class UserSellerObserver
         $seller->last_name = $user->last_name;
         $seller->phone = $user->phone;
         $seller->identification = $user->identification;
-
     }
 
     public function updated(Seller $seller)

@@ -72,7 +72,7 @@
                                                                            [
                                                                              "key"=>"Logo",
                                                                              "type"=>"image",
-                                                                             "value"=>$model->icon->url
+                                                                             "value"=>$model->icon?$model->icon->url:"https://aom.enerteclatam.com/images/logo-horizontal.svg"
                                                                          ],
                                                                      ]
                                                             ],

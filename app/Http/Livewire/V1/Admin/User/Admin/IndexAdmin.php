@@ -32,22 +32,20 @@ class IndexAdmin extends Component
     public function delete($id)
     {
         $this->indexEquipmentService->delete($this, $id);
-
     }
 
     public function details($id)
     {
         $this->indexEquipmentService->details($this, $id);
-
     }
 
     public function render()
     {
-        return view('livewire.v1.admin.user.admin.index-admin',
+        return view(
+            'livewire.v1.admin.user.admin.index-admin',
             [
                 "data" => Admin::paginate(15)
-            ])->extends('layouts.v1.app');
+            ]
+        )->extends('layouts.v1.app');
     }
-
-
 }

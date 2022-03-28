@@ -28,7 +28,6 @@ trait ImageableTrait
         $this->{$image_name}->setDataImage($image);
         $this->{$image_name}->name = $image->getClientOriginalName();
         $this->{$image_name}->update();
-
     }
 
     public function buildOneImage(array $image_names)

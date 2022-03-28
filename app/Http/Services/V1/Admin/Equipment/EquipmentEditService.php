@@ -17,7 +17,7 @@ class EquipmentEditService extends Singleton
             'equipmentName' => $equipment->name,
             'equipmentDescription' => $equipment->description,
             'equipmentSerial' => $equipment->serial,
-            'equipmentTypeId' => $equipment->equipment_type->type,
+            'equipmentTypeId' => $equipment->equipmentType->type,
             'equipmentTypes' => [],
             'picked' => false,
         ]);
@@ -33,7 +33,6 @@ class EquipmentEditService extends Singleton
         $component->equipment->fill($this->mapper($component));
         $component->equipment->update();
         $component->emitTo('livewire-toast', 'show', "Equipo {$component->equipment->name} creado exitosamente");
-
     }
 
     private function mapper(Component $component)
@@ -51,7 +50,6 @@ class EquipmentEditService extends Singleton
         $component->picked = false;
         $component->equipmentTypes = EquipmentType::where('id', 'ilike', "%" . $component->equipmentTypeId . "%")
             ->orWhere('type', 'ilike', "%" . $component->equipmentTypeId . "%")->limit(3)->get();
-
     }
 
     public function updatingSearch(Component $component)
@@ -65,5 +63,4 @@ class EquipmentEditService extends Singleton
         $equipmentType = json_decode($equipmentType);
         $component->equipmentTypeId = $equipmentType->id;
     }
-
 }

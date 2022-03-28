@@ -22,13 +22,13 @@ class User extends Authenticatable
     use HasRoles;
     use SoftDeletes;
 
-    const TYPE_SUPER_ADMIN = "super_administrator";
-    const TYPE_ADMIN = "administrator";
-    const TYPE_SUPPORT = "support";
-    const TYPE_NETWORK_OPERATOR = "network_operator";
-    const TYPE_SELLER = "seller";
-    const TYPE_TECHNICIAN = "technician";
-    const TYPE_SUPERVISOR = "supervisor";
+    public const TYPE_SUPER_ADMIN = "super_administrator";
+    public const TYPE_ADMIN = "administrator";
+    public const TYPE_SUPPORT = "support";
+    public const TYPE_NETWORK_OPERATOR = "network_operator";
+    public const TYPE_SELLER = "seller";
+    public const TYPE_TECHNICIAN = "technician";
+    public const TYPE_SUPERVISOR = "supervisor";
     /**
      * The attributes that are mass assignable.
      *
@@ -110,6 +110,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(SuperAdmin::class);
     }
+
 
     public function pqrs()
     {

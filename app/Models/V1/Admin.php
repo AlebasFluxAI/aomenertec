@@ -6,6 +6,7 @@ use App\Models\Traits\ImageableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Jetstream\Role;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Admin extends Model
 {
@@ -112,5 +113,4 @@ class Admin extends Model
     {
         return $this->morphOne(Image::class, "imageable") ?? new Image(["url" => "https://aom.enerteclatam.com/images/logo-horizontal.svg"]);
     }
-
 }

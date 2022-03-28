@@ -12,7 +12,6 @@ use Livewire\Component;
 
 class AlertTypeAddService extends Singleton
 {
-
     public function mount(Component $component)
     {
         $component->fill([
@@ -21,7 +20,6 @@ class AlertTypeAddService extends Singleton
             "unit" => ''
 
         ]);
-
     }
 
 
@@ -31,6 +29,4 @@ class AlertTypeAddService extends Singleton
         $component->emitTo('livewire-toast', 'show', 'Tipo de alarma ' . $component->name . ' creada con exito.');
         $component->mount();
     }
-
-
 }

@@ -12,12 +12,12 @@ class SupervisorEditService extends Singleton
     {
         $component->fill([
             'model' => $model,
-            'name' => $model->user->name,
-            'last_name' => $model->user->last_name,
-            'phone' => $model->user->phone,
-            'email' => $model->user->email,
-            'password' => $model->user->password,
-            'identification' => $model->user->identification,
+            'name' => $model->name,
+            'last_name' => $model->last_name,
+            'phone' => $model->phone,
+            'email' => $model->email,
+            'password' => $model->password,
+            'identification' => $model->identification,
         ]);
     }
 
@@ -26,7 +26,6 @@ class SupervisorEditService extends Singleton
         $component->model->fill($this->mapper($component));
         $component->model->update();
         $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $component->model->id]);
-
     }
 
     private function mapper(Component $component)
@@ -40,6 +39,4 @@ class SupervisorEditService extends Singleton
             "identification" => $component->identification
         ];
     }
-
-
 }

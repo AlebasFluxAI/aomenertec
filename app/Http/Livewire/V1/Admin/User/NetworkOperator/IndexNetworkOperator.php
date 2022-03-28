@@ -34,22 +34,20 @@ class IndexNetworkOperator extends Component
     public function delete($id)
     {
         $this->indexNetworkOperatorService->delete($this, $id);
-
     }
 
     public function details($id)
     {
         $this->indexNetworkOperatorService->details($this, $id);
-
     }
 
     public function render()
     {
-        return view('livewire.v1.admin.user.network-operator.index-network-operator',
+        return view(
+            'livewire.v1.admin.user.network-operator.index-network-operator',
             [
                 "data" => NetworkOperator::paginate(15)
-            ])->extends('layouts.v1.app');
+            ]
+        )->extends('layouts.v1.app');
     }
-
-
 }

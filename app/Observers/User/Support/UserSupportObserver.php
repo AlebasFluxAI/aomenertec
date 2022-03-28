@@ -19,7 +19,6 @@ class UserSupportObserver
         $support->last_name = $user->last_name;
         $support->phone = $user->phone;
         $support->identification = $user->identification;
-
     }
 
     public function updated(Support $support)

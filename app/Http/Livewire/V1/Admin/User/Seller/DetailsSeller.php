@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Seller;
 
-
 use App\Http\Services\V1\Admin\User\Seller\SellerDetailsService;
 use App\Models\V1\Seller;
 use Livewire\Component;

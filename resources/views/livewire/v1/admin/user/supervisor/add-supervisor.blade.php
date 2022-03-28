@@ -143,18 +143,19 @@
                                             "required"=>false,
 
                                  ],
-                                               [
+                                                   [
                                             "input_type"=>"dropdown-search",
                                             "icon_class"=>"fas fa-desktop",
                                             "placeholder"=>"Seleccione el operador de red",
-                                            "col_with"=>12,
-                                            "dropdown_model"=>"network_operator_id",
-                                            "dropdown_enter_function"=>"updatedNetworkOperatorId",
+                                            "col_with"=>6,
+                                            "dropdown_model"=>"network_operator",
                                             "picked_variable"=>$picked,
-                                            "dropdown_results"=>$networkOperators,
-                                            "selected_value_function"=>"setNetworkOperatorId",
+                                            "dropdown_results"=>$network_operators,
+                                            "dropdown_enter_function"=>"assignNetworkOperator",
+                                            "selected_value_function" => "assignNetworkOperator",
                                             "dropdown_result_id"=>"id",
                                             "dropdown_result_value"=>"name",
+                                            "count_bool" => (count($network_operators)>0),
 
                                 ]
 

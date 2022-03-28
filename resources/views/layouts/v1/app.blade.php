@@ -45,11 +45,6 @@
 </head>
 
 <body>
-<header id="header" class="fixed-bottom">
-    <div class="container">
-        @include("partials.v1.nav")
-    </div>
-</header>
 <main id="main" class="bg-light">
 
     <div class="bg-light ">

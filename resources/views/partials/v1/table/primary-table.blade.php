@@ -54,6 +54,15 @@
                                                          "model_id"=>$table_row->{$table_headers[array_keys($table_headers)[0]]},
                                                          "icon"=>"fas fa-search"
                                                      ])
+                                            @elseif($action_type=="customs")
+                                                @foreach($action_value  as $custom)
+                                                    @include("partials.v1.table.table-action-button",[
+                                                             "button_action"=>$custom["function"],
+                                                             "icon_color"=>"secondary",
+                                                             "model_id"=>$table_row->{$table_headers[array_keys($table_headers)[0]]},
+                                                             "icon"=>$custom["icon"]
+                                                         ])
+                                                @endforeach
                                             @endif
                                         @endforeach
                                     </div>

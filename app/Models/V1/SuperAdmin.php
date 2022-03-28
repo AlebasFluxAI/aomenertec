@@ -56,12 +56,31 @@ class SuperAdmin extends Model
                                         "title" => "Supervisores",
                                         "route" => "administrar.v1.usuarios.supervisores.listado",
                                         "submenu" => []
+                                    ],
+                                    [
+                                        "title" => "Tecnicos",
+                                        "route" => "administrar.v1.usuarios.tecnicos.listado",
+                                        "submenu" => []
                                     ]
                                 ]
                             ],
 
 
                         ],
+                    ],
+                    [
+                        "title" => "Clientes",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Clientes",
+                                "route" => "v1.admin.client.list.client",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ]
+
                     ],
                     [
                         "title" => "Equipos",

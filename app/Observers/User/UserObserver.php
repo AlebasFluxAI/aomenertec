@@ -36,7 +36,5 @@ class UserObserver
             default:
                 $user->assignRole(Admin::getRole());
         }
-
-
     }
 }

@@ -8,8 +8,6 @@ use Livewire\Component;
 
 class DetailsSuperAdmin extends Component
 {
-
-
     public $model;
     private $superAdminDetailService;
 

@@ -9,7 +9,6 @@ use Livewire\Component;
 
 class EditSuperAdmin extends Component
 {
-
     public $model;
     public $name;
     public $last_name;

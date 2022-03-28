@@ -17,7 +17,6 @@ class AdminDetailsService extends Singleton
     public function edit(Component $component)
     {
         $component->redirectRoute("administrar.v1.usuarios.admin.editar", ["admin" => $component->model->id]);
-
     }
 
     public function details(Component $component, $modelId)

@@ -36,12 +36,10 @@ class EquipmentAlertEditService extends Singleton
         $component->model->update();
         $component->emitTo('livewire-toast', 'show', "Equipo {$component->model->name} editado exitosamente");
         $component->redirectRoute("administrar.v1.equipos.alertas.detalle", ["equipmentAlert" => $component->model->id]);
-
     }
 
     private function mapper(Component $component)
     {
-
         return [
             "value" => $component->value,
             "alert_type_id" => $component->alertType,
@@ -53,7 +51,6 @@ class EquipmentAlertEditService extends Singleton
         $component->picked = false;
         $component->equipmentTypes = EquipmentType::where('id', 'ilike', "%" . $component->equipmentTypeId . "%")
             ->orWhere('type', 'ilike', "%" . $component->equipmentTypeId . "%")->limit(3)->get();
-
     }
 
     public function updatingSearch(Component $component)

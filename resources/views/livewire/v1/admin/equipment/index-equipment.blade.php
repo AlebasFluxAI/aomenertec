@@ -1,4 +1,5 @@
 <div>
+    <section class="login">
     @section("header") {{--extended app.blade--}}
 
     @endsection
@@ -9,7 +10,7 @@
       ])
 
 
-
+        <div class="contenedor-grande">
     @include("partials.v1.table_nav",
            ["nav_options"=>[
                       ["button_align"=>"right",
@@ -21,11 +22,12 @@
 
                   ]
           ])
+
     @include("partials.v1.table.primary-table",[
                "table_headers"=>["ID"=>"id",
-                                 "Nombre"=>"name",
+                                 "Nombre"=>"equipmentType.type",
                                  "Descripcion"=>"description",
-                                 "Tipo de equipo"=>"equipment_type.type",
+                                 "Asignado"=>"assigned",
 
 
                 ],
@@ -34,12 +36,15 @@
                                     "edit"=>"edit",
                                     "delete"=>"delete"
                                     ],
+
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}
                                                 _delete_button => {boton de borrado, siempre tomando como identificador la primera colunma de la tabla - ID}
                                                   ]*/
-               "table_rows"=>$equipments
+               "table_rows"=>$equipment
 
            ])
+        </div>
+        </section>
 </div>
 

@@ -32,7 +32,6 @@ class EquipmentAddService extends Singleton
         $equipment = Equipment::create($this->mapper($component));
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipment->name} creado exitosamente");
         $component->reset();
-
     }
 
     private function mapper(Component $component)

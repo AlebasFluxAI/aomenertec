@@ -14,7 +14,6 @@ use Throwable;
 
 class Style extends Singleton
 {
-
     public static function getStyle()
     {
         try {
@@ -22,7 +21,5 @@ class Style extends Singleton
         } catch (Throwable $e) {
             return "assets/css/style.css";
         }
-
     }
-
 }

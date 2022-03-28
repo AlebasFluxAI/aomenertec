@@ -10,4 +10,9 @@ class ClientTypeEquipmentTypes extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = [
+        'equipment_type_id',
+        'client_type_id',
+    ];
 }

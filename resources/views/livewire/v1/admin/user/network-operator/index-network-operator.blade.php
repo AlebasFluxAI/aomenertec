@@ -28,6 +28,7 @@
                                  "Apellido"=>"last_name",
                                  "Correo electronico"=>"email",
                                  "Telefono"=>"phone",
+                                 "Identificacion"=>"identification",
 
 
                 ],

@@ -18,7 +18,6 @@ class UserNetworkOperatorObserver
         $networkOperator->last_name = $user->last_name;
         $networkOperator->phone = $user->phone;
         $networkOperator->identification = $user->identification;
-
     }
 
     public function updated(NetworkOperator $networkOperator)

@@ -155,6 +155,7 @@
                                             "selected_value_function"=>"setNetworkOperatorId",
                                             "dropdown_result_id"=>"id",
                                             "dropdown_result_value"=>"name",
+                                            "count_bool" => (count($networkOperators)>0),
 
                                 ]
 

@@ -27,7 +27,6 @@ class NetworkOperatorEditService extends Singleton
         $component->model->fill($this->mapper($component));
         $component->model->update();
         $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $component->model->id]);
-
     }
 
     private function mapper(Component $component)
@@ -40,6 +39,4 @@ class NetworkOperatorEditService extends Singleton
             "identification" => $component->identification
         ];
     }
-
-
 }

@@ -15,7 +15,6 @@ class UserAdminObserver
      */
     public function creating(Admin $admin)
     {
-
         $user = $admin->user;
         if (!$user) {
             return;
@@ -26,7 +25,6 @@ class UserAdminObserver
         $admin->last_name = $user->last_name;
         $admin->phone = $user->phone;
         $admin->identification = $user->identification;
-
     }
 
 
@@ -50,7 +48,6 @@ class UserAdminObserver
             "phone" => $admin->phone,
             "identification" => $admin->identification,
         ]);
-
     }
 
     /**

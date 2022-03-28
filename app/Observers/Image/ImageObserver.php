@@ -23,7 +23,6 @@ class ImageObserver
 
     public function creating(Image $image)
     {
-
         $images = $image->getDataImage() ? $image->getDataImage() : $this->request->file($this->image_key);
         $image->id = time() . mt_rand(0, 9999999);
 
@@ -102,7 +101,6 @@ class ImageObserver
             $this->optimizeImageIntervention($image);
             $this->storeS3($image);
         }
-
     }
 
     private function optimizeImageIntervention(Image $image)
@@ -194,6 +192,4 @@ class ImageObserver
      *
      * @param mixed $image
      */
-
-
 }

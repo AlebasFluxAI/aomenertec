@@ -12,10 +12,8 @@ use Livewire\Component;
 
 class EquipmentTypeEditService extends Singleton
 {
-
     public function mount(Component $component, $model)
     {
-
         $component->model = $model;
         $component->fill([
             'type' => $model->type,
@@ -39,5 +37,4 @@ class EquipmentTypeEditService extends Singleton
             'description' => $component->description,
         ];
     }
-
 }

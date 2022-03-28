@@ -16,6 +16,7 @@ class Technician extends Model
         'name',
         'last_name',
         'email',
+        'network_operator_id',
         'user_id'];
 
     public static function menu()
@@ -104,6 +105,7 @@ class Technician extends Model
         return "technician";
     }
 
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -112,5 +114,9 @@ class Technician extends Model
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
+    }
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'client_technicians')->withPivot('active');
     }
 }

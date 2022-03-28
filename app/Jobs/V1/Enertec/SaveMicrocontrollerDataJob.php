@@ -12,14 +12,18 @@ use Illuminate\Queue\SerializesModels;
 
 class SaveMicrocontrollerDataJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    private $raw_json;
+    public $raw_json;
+    public $data;
 
     public function __construct($raw_json)
     {
@@ -33,9 +37,8 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-
-        MicrocontrollerData::create([
-            "raw_json" => $this->raw_json
+        $this->data = MicrocontrollerData::create([
+            "raw_json" => $this->raw_json,
         ]);
     }
 }

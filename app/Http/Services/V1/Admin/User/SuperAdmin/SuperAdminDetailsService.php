@@ -17,7 +17,6 @@ class SuperAdminDetailsService extends Singleton
     public function edit(Component $component)
     {
         $component->redirectRoute("administrar.v1.usuarios.superadmin.editar", ["superAdmin" => $component->model->id]);
-
     }
 
     public function details(Component $component, $modelId)

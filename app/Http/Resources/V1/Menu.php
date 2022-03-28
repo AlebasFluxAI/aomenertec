@@ -24,7 +24,7 @@ class Menu extends Singleton
         $this->menus = $menus;
     }
 
-    static function getMenu()
+    public static function getMenu()
     {
         return [new Menu(
             "base",
@@ -40,17 +40,18 @@ class Menu extends Singleton
                 ]),
 
                 new Menu("Equipos", null, [
-                    new Menu("Equipos", "administrar.v1.equipos.listado", [],),
+                    new Menu("Equipos", "administrar.v1.equipos.listado", [], ),
                     new Menu("Alertas", null, [
                         new Menu("Alertas", "administrar.v1.equipos.alertas.listado", []),
-                    ],),
-                ],)
-            ])
+                    ], ),
+                ], )
+            ]
+        )
         ];
     }
 
 
-    static function getMenuV2()
+    public static function getMenuV2()
     {
         return [
             "title" => "base",
@@ -94,6 +95,18 @@ class Menu extends Singleton
                         ],
                     ],
                     [
+                        "title" => "Clientes",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Agregar",
+                                "route" => "v1.admin.client.add.client",
+                                "submenu" => []
+                            ]
+                        ],
+                    ],
+
+                    [
                         "title" => "Equipos",
                         "route" => null,
                         "submenu" => [
@@ -132,7 +145,7 @@ class Menu extends Singleton
     }
 
 
-    static function getMenuV3()
+    public static function getMenuV3()
     {
         if (Auth::user() == null) {
             return [];
@@ -161,9 +174,5 @@ class Menu extends Singleton
                 $menu = [];
         }
         return $menu;
-
     }
-
-
 }
-

@@ -17,12 +17,10 @@ class SellerDetailsService extends Singleton
     public function edit(Component $component)
     {
         $component->redirectRoute("administrar.v1.usuarios.vendedores.editar", ["supervisor" => $component->model->id]);
-
     }
 
     public function details(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.vendedores.detalles", ["supervisor" => $modelId]);
     }
-
 }

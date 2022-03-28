@@ -112,7 +112,12 @@ notification-nav {
     transition: .5s;
 
 }
-
+select.no-border{
+    border: 0px;
+    outline: 0px;
+    font-weight: bold;
+    font-size: small;
+}
 /*___________*/
 body {
     font-family: "Cairo", sans-serif;
@@ -251,7 +256,7 @@ primary
     width: 100%;
     border-top: 3px solid #009599;
     border-bottom: 3px solid #009599;
-    padding: 30px;
+    padding: 10px;
     background: #fff;
     box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.12);
 }
@@ -340,16 +345,31 @@ dialog {
     border-radius: 13px;
     font-size: 0.9rem;
 }
+.contenedor-grande .b-danger:hover {
+    background: #b02a37;
+    color: white;
+}
+.contenedor-grande .b-success {
+    background-color: white;
+    border: solid #2e7555 1px;
+    padding: 4px 10px;
+    margin: 3px;
+    color: #2e7555;
+    transition: 0.4s;
+    border-radius: 13px;
+    font-size: 0.9rem;
+}
+.contenedor-grande .b-success:hover {
+    background: #2e7555;
+    color: white;
+}
 
 #table-action-cell {
     width: 20%;
     white-space: nowrap;
 }
 
-.contenedor-grande .b-danger:hover {
-    background: #b02a37;
-    color: white;
-}
+
 
 .contenedor-grande .imagen-logo {
     width: 200px;
@@ -373,8 +393,8 @@ dialog {
 .contenedor-grande .list-search {
     display: block;
     position: absolute;
-    margin: 0 0 0 50px;
-    padding: 0 10px;
+    margin: 0 0 0 0px;
+    padding: 0 0px;
     z-index: 99;
     opacity: 1;
     visibility: visible;

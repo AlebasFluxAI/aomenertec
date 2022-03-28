@@ -20,7 +20,6 @@ class UserTechnicianObserver
         $technician->last_name = $user->last_name;
         $technician->phone = $user->phone;
         $technician->identification = $user->identification;
-
     }
 
     public function updated(Technician $technician)

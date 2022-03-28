@@ -10,14 +10,13 @@
 
 --}}
 
- <div class="input-group mb-2 col-md-{{$col_with??12}} col-sm-12">
-     <select wire:model="{{$list_model}}" class="custom-select" required="{{$required??false}}">
-         <option  value=""> {{$list_default}} </option>
+ <div class="form-group mb-2  col-md-{{$col_with??12}} col-sm-12">
+     <select wire:model="{{$list_model}}" class="{{$aux_class??"custom-select"}} " required="{{$required??false}}" @if($disabled??false)disabled @endif>
+         <option  value="0"> {{$list_default}} </option>
          @foreach($list_options as $option)
-             @if($option->{$list_option_view} != "EXPANSION URBANA" || $option->{$list_option_view} != "SIN DEFINIR" )
-                <option @if($list_option_title != "")title="{{ $option->{$list_option_title} }}@endif" value="{{ $option->{$list_option_value} }}">{{ $option->{$list_option_view} }}</option>
+             @if($option[$list_option_view] != "EXPANSION URBANA" || $option[$list_option_view]!= "SIN DEFINIR" )
+                <option @if($list_option_title != "")title="{{ $option[$list_option_title] }}"@endif value="{{ $option[$list_option_value] }}">{{ $option[$list_option_view] }}</option>
              @endif
          @endforeach
      </select>
  </div>
-

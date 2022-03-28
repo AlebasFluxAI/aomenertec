@@ -33,8 +33,8 @@ class DatabaseSeeder extends Seeder
             SubsistenceConsumptionsTableSeeder::class,
             VoltageLevelsTableSeeder::class,
             LocationTypesTableSeeder::class,
-            ClientTypeEquipmentTypesTableSeeder::class,
             RoleHasPermissionsTableSeeder::class,
+            //ClientsTableSeeder::class,
         ]);
     }
 }

@@ -36,7 +36,6 @@ class AddEquipmentType extends Component
 
     public function submitForm()
     {
-
         $this->addEquipmentTypeService->submitForm($this);
     }
 

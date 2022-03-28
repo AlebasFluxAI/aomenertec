@@ -24,11 +24,9 @@ class NetworkOperatorAddService extends Singleton
 
     public function updatedAdminId(Component $component)
     {
-
         $component->picked = false;
         $component->admins = Admin::where('id', 'ilike', "%" . $component->admin_id . "%")
             ->orWhere('name', 'ilike', "%" . $component->admin_id . "%")->limit(3)->get();
-
     }
 
     public function setAdminId(Component $component, $admin)
@@ -41,7 +39,6 @@ class NetworkOperatorAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         $operator = NetworkOperator::create($this->mapper($component));
         $user = User::create(array_merge($this->mapper($component), [
             "password" => bcrypt($component->password),

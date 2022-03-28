@@ -35,6 +35,12 @@
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
+                                      "customs"=>[
+                                               [
+                                                "function"=>"addClients",
+                                                "icon"=>"fas fa-users"
+                                                ]
+                                            ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}

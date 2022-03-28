@@ -11,6 +11,17 @@ class Pqr extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'detail',
+        'equipment_id',
+        'pqr_type_id',
+        'network_operator_id',
+        'user_id',
+        'client_id',
+        'support_id',
+        'status'
+    ];
+
     public const STATUS_CREATED = 'created';
     public const STATUS_PROCESSING = 'processing';
     public const STATUS_RESOLVED = 'resolved';

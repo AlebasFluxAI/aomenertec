@@ -11,19 +11,22 @@
 "dropdown_result_value"=> "atributo del objeto que se presentara en el dropdown",
 --}}
 
+@if($form_group??true)
+    <div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-12">
+        @endif
+        <div class="input-group text-center">
+            @if($icon_class??"" != "")
+                <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                         <i class="{{$icon_class??"fas fa-user"}}"></i>
+                                        </span>
+                </div>
+            @endif
 
-<div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-{{$col_with??12}}">
-    <div class="input-group">
-        <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                     <i class="{{$icon_class??"fas fa-user"}}"></i>
-                                    </span>
-        </div>
-
-        <input wire:model="{{$dropdown_model}}"
-               type="text" class="form-control" autocomplete="off"
-               placeholder="{{$placeholder??""}}" required="{{$required??false}}">
-        <div class="input-group-append">
+            <input wire:model="{{$dropdown_model}}"
+                   type="text" class="form-control" autocomplete="off"
+                   placeholder="{{$placeholder??""}}" required="{{$required??false}}">
+            <div class="input-group-append">
                                         <span class="input-group-text">
                                             @if($picked_variable)
                                                 <span class="badge badge-success">
@@ -35,29 +38,48 @@
                                                 </span>
                                             @endif
                                         </span>
+            </div>
+            @error("{{$dropdown_model}}")
+            <div class="error-container">
+                <small class="form-text text-danger">{{$message}}</small>
+            </div>
+            @enderror
         </div>
-        @error("{{$dropdown_model}}")
+        @error("$dropdown_model")
         <div class="error-container">
             <small class="form-text text-danger">{{$message}}</small>
         </div>
-        @enderror
+        @else
+
+            @if($count_bool??false)
+                @if(!$picked_variable)
+                    <ul class="dropdown-menu list-search">
+                        <h6 class="dropdown-header"><b>Seleccione {{$title_dropdowm??"opción"}}</b></h6>
+                        @foreach($dropdown_results as $dropdown_result)
+                            <li class="dropdown-item">
+                                @if($form_group??true)
+                                    <a wire:click="{{$selected_value_function}}('{{ $dropdown_result }}')"
+                                       type="button">
+                                        {{ $dropdown_result->{$dropdown_result_id} }}
+                                        - {{ $dropdown_result->{$dropdown_result_value} }}
+                                    </a>
+                                @else
+                                    <a wire:click="{{$selected_value_function}}({{ $dropdown_result->{$dropdown_result_id} }}, {{ $variable_2 }})"
+                                       type="button">
+                                        {{ $dropdown_result->{$dropdown_result_id} }}
+                                        - {{ $dropdown_result->{$dropdown_result_value} }}
+                                    </a>
+                                @endif
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+            @else
+                <div class="">
+                    <small class="form-text text-muted">{{ $message_variable??"" }}</small>
+                </div>
+            @endif
+            @enderror
+            @if($form_group??true)
     </div>
-
-
-    @if(count($dropdown_results??[])>0)
-        @if(!$picked_variable)
-            <ul class="dropdown-menu list-search">
-                <h6 class="dropdown-header"><b>Seleccione opción</b></h6>
-                @foreach($dropdown_results as $dropdown_result)
-                    <li class="dropdown-item">
-                        <a wire:click="{{$selected_value_function}}('{{ $dropdown_result }}')" type="button">
-                            {{ $dropdown_result->{$dropdown_result_id} }}
-                            - {{ $dropdown_result->{$dropdown_result_value} }}
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        @endif
-    @endif
-
-</div>
+@endif

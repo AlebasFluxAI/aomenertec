@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Equipment extends Model
 {
+    use HasFactory;
     use SoftDeletes;
+
     public const STATUS_NEW = 'new';
     public const STATUS_REPAIRED = 'repaired';
     public const STATUS_REPAIR = 'repair';
@@ -16,6 +18,7 @@ class Equipment extends Model
 
 
     protected $fillable = [
+        'id',
         "name",
         'equipment_type_id',
         'serial',
@@ -23,19 +26,14 @@ class Equipment extends Model
         'status',
         'assigned',
     ];
-
-    public function equipment_type()
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'equipment_clients', 'client_id', 'equipment_id')
+            ->withPivot('current_assigned')
+            ->using(EquipmentClient::class);
+    }
+    public function equipmentType()
     {
         return $this->belongsTo(EquipmentType::class);
-    }
-
-    public function equipment_condition()
-    {
-        return $this->hasOne(EquipmentCondition::class);
-    }
-
-    public function alerts()
-    {
-        return $this->hasMany(EquipmentAlert::class, "equipments_id");
     }
 }

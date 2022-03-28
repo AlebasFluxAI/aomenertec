@@ -19,7 +19,6 @@ class UserSuperAdminObserver
         $superAdmin->last_name = $user->last_name;
         $superAdmin->phone = $user->phone;
         $superAdmin->identification = $user->identification;
-
     }
 
 

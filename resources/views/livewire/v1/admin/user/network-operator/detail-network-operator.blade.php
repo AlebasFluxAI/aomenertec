@@ -62,6 +62,10 @@
                                                                              "key"=>"Telefono",
                                                                              "value"=>$model->phone
                                                                          ],
+                                                                          [
+                                                                             "key"=>"Identificacion",
+                                                                             "value"=>$model->identification
+                                                                         ],
                                                                      ]
                                                             ]
                                                 ],

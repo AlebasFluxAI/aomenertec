@@ -10,7 +10,6 @@ use Livewire\Component;
 
 class SuperAdminAddService extends Singleton
 {
-
     public function submitForm(Component $component)
     {
         $component->validate();
@@ -26,7 +25,6 @@ class SuperAdminAddService extends Singleton
         ]);
 
         $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $superAdmin->id]);
-
     }
 
     private function mapper($component)

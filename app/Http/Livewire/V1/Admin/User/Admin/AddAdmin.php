@@ -8,7 +8,6 @@ use Livewire\WithFileUploads;
 
 class AddAdmin extends Component
 {
-
     use WithFileUploads;
 
     public $password;
@@ -47,5 +46,4 @@ class AddAdmin extends Component
         return view('livewire.v1.admin.user.admin.add-admin')
             ->extends('layouts.v1.app');
     }
-
 }

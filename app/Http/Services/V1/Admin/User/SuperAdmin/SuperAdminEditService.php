@@ -27,7 +27,6 @@ class SuperAdminEditService extends Singleton
         $component->model->fill($this->mapper($component));
         $component->model->update();
         $component->emitTo('livewire-toast', 'show', "Equipo {$component->model->name} creado exitosamente");
-
     }
 
     private function mapper(Component $component)
@@ -41,6 +40,4 @@ class SuperAdminEditService extends Singleton
             "identification" => $component->identification
         ];
     }
-
-
 }

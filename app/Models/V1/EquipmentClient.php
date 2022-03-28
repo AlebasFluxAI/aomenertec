@@ -4,17 +4,19 @@ namespace App\Models\V1;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClientAlert extends Model
+class EquipmentClient extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
+    public $incrementing = true;
 
     protected $fillable = [
-        "client_id",
-        "alert_type_id",
-        "value"
+        'client_id',
+        'equipment_id',
+        'current_assigned'
     ];
 }

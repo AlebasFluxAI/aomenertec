@@ -63,6 +63,7 @@
                                         "selected_value_function"=>"setEquipmentType",
                                         "dropdown_result_id"=>"id",
                                         "dropdown_result_value"=>"type",
+                                        "count_bool" => (count($equipmentTypes)>0)
 
                             ]
 

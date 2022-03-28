@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User\SuperAdmin;
 
-
 use App\Http\Services\V1\Admin\User\SuperAdmin\SuperAdminIndexService;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\SuperAdmin;
@@ -31,22 +30,20 @@ class IndexSuperAdmin extends Component
     public function delete($id)
     {
         $this->indexSuperAdminService->delete($this, $id);
-
     }
 
     public function details($id)
     {
         $this->indexSuperAdminService->details($this, $id);
-
     }
 
     public function render()
     {
-        return view('livewire.v1.admin.user.super.index-super-admin',
+        return view(
+            'livewire.v1.admin.user.super.index-super-admin',
             [
                 "data" => SuperAdmin::paginate(15)
-            ])->extends('layouts.v1.app');
+            ]
+        )->extends('layouts.v1.app');
     }
-
-
 }

@@ -18,7 +18,6 @@ class CreateMicrocontrollerData extends Migration
             $table->foreignId("client_id")->nullable()->constrained();
             $table->foreignId("equipment_id")->nullable()->constrained();
             $table->text("raw_json");
-            $table->string("type");
             $table->dateTime("source_timestamp")->nullable();
             $table->double("accumulated_real_consumption")->nullable();
             $table->double("interval_real_consumption")->nullable();

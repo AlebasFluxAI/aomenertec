@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use Database\Seeders\ClientsTableSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -109,5 +110,9 @@ class Supervisor extends Model
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
+    }
+    public function clients()
+    {
+        return $this->belongsToMany(Client::class, 'client_supervisors')->withPivot('active');
     }
 }

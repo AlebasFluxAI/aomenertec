@@ -10,11 +10,8 @@ use Livewire\Component;
 
 class AdminAddService extends Singleton
 {
-
-
     public function submitForm(Component $component)
     {
-
         $component->validate([
             'icon' => 'image|max:10240', // 1MB Max
         ]);

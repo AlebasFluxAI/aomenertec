@@ -15,7 +15,6 @@ class SellerAddService extends Singleton
 {
     public function mount(Component $component)
     {
-
         $component->fill($this->getMountData());
     }
 
@@ -25,6 +24,7 @@ class SellerAddService extends Singleton
         if ($user->hasRole(User::TYPE_NETWORK_OPERATOR)) {
             return [
                 'admins' => [],
+                "networkOperators" => [],
                 "network_operator_id" => $user->networkOperator->id,
                 'picked' => false
             ];
@@ -33,17 +33,28 @@ class SellerAddService extends Singleton
         return [
             'network_operator_id' => null,
             'admins' => [],
+            "networkOperators" => [],
             'picked' => false
         ];
     }
 
-    public function updatedNetworkOperatorId(Component $component)
+    public function updatedNetworkOperator(Component $component)
     {
+        $component->picked_network_operator = false;
+        $component->message_network_operator = "No hay operador de red registrado con esta identificación";
+        if ($component->network_operator != "") {
+            $component->network_operators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
+                ->orWhere("name", "like", '%' . $component->network_operator . "%")
+                ->take(3)->get();
+        }
+    }
 
-        $component->picked = false;
-        $component->networkOperators = NetworkOperator::where('id', 'ilike', "%" . $component->network_operator_id . "%")
-            ->orWhere('name', 'ilike', "%" . $component->network_operator_id . "%")->limit(3)->get();
-
+    public function assignNetworkOperator(Component $component, $network_operator)
+    {
+        $obj = json_decode($network_operator);
+        $component->network_operator = $obj->identification . " - " . $obj->name;
+        $component->network_operator_id = $obj->id;
+        $component->picked = true;
     }
 
     public function setNetworkOperatorId(Component $component, $admin)
@@ -53,10 +64,8 @@ class SellerAddService extends Singleton
         $component->network_operator_id = $admin->id;
     }
 
-
     public function submitForm(Component $component)
     {
-
         $seller = Seller::create($this->mapper($component));
         $user = User::create(array_merge($this->mapper($component), [
             "password" => bcrypt($component->password),

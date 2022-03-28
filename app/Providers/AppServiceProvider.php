@@ -57,6 +57,5 @@ class AppServiceProvider extends ServiceProvider
         Technician::observe(UserTechnicianObserver::class);
         Support::observe(UserSupportObserver::class);
         User::observe(UserObserver::class);
-
     }
 }

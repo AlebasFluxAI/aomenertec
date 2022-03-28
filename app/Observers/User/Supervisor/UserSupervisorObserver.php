@@ -18,7 +18,6 @@ class UserSupervisorObserver
         $supervisor->last_name = $user->last_name;
         $supervisor->phone = $user->phone;
         $supervisor->identification = $user->identification;
-
     }
 
 

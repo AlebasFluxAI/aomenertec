@@ -37,7 +37,6 @@ class AdminEditService extends Singleton
         $component->model->fill($this->mapper($component));
         $component->model->update();
         $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
-
     }
 
     private function mapper(Component $component)

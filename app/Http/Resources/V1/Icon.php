@@ -22,5 +22,4 @@ class Icon extends Singleton
             return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
         }
     }
-
 }

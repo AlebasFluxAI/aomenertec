@@ -16,8 +16,6 @@ class CreateAlertType extends Migration
         Schema::create('alert_types', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("unit");
-            $table->double("value");
             $table->softDeletes();
             $table->timestamps();
         });

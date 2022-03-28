@@ -1,4 +1,4 @@
-<div class="form-group mb-2 col-md-{{$col_with}} col-sm-{{$col_with}}">
+<div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-12">
 
     <div class="input-group">
 

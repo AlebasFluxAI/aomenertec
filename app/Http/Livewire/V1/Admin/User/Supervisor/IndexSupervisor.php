@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 
-
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorIndexService;
 use App\Models\V1\Supervisor;
@@ -36,7 +35,11 @@ class IndexSupervisor extends Component
     public function delete($id)
     {
         $this->indexSupervisorService->delete($this, $id);
+    }
 
+    public function addClients($id)
+    {
+        $this->indexSupervisorService->addClients($this, $id);
     }
 
     public function render()

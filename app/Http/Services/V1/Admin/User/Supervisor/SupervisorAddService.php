@@ -12,10 +12,8 @@ use Livewire\Component;
 
 class SupervisorAddService extends Singleton
 {
-
     public function mount(Component $component)
     {
-
         $component->fill($this->getMountData());
     }
 
@@ -25,6 +23,7 @@ class SupervisorAddService extends Singleton
         if ($user->hasRole(User::TYPE_NETWORK_OPERATOR)) {
             return [
                 'admins' => [],
+                "network_operators" => [],
                 "network_operator_id" => $user->networkOperator->id,
                 'picked' => false
             ];
@@ -33,6 +32,7 @@ class SupervisorAddService extends Singleton
         return [
             'network_operator_id' => null,
             'admins' => [],
+            "network_operators" => [],
             'picked' => false
         ];
     }
@@ -49,7 +49,6 @@ class SupervisorAddService extends Singleton
         ]);
 
         $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $supervisor->id]);
-
     }
 
     private function mapper($component)
@@ -65,13 +64,23 @@ class SupervisorAddService extends Singleton
         ];
     }
 
-    public function updatedNetworkOperatorId(Component $component)
+    public function updatedNetworkOperator(Component $component)
     {
+        $component->picked_network_operator = false;
+        $component->message_network_operator = "No hay operador de red registrado con esta identificación";
+        if ($component->network_operator != "") {
+            $component->network_operators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
+                ->orWhere("name", "like", '%' . $component->network_operator . "%")
+                ->take(3)->get();
+        }
+    }
 
-        $component->picked = false;
-        $component->networkOperators = NetworkOperator::where('id', 'ilike', "%" . $component->network_operator_id . "%")
-            ->orWhere('name', 'ilike', "%" . $component->network_operator_id . "%")->limit(3)->get();
-
+    public function assignNetworkOperator(Component $component, $network_operator)
+    {
+        $obj = json_decode($network_operator);
+        $component->network_operator = $obj->identification . " - " . $obj->name;
+        $component->network_operator_id = $obj->id;
+        $component->picked = true;
     }
 
     public function setNetworkOperatorId(Component $component, $admin)
@@ -80,4 +89,5 @@ class SupervisorAddService extends Singleton
         $admin = json_decode($admin);
         $component->network_operator_id = $admin->id;
     }
+
 }

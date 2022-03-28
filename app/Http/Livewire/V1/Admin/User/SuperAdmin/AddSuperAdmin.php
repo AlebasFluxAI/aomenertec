@@ -40,5 +40,4 @@ class AddSuperAdmin extends Component
         return view('livewire.v1.admin.user.super.add-super-admin')
             ->extends('layouts.v1.app');
     }
-
 }

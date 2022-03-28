@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="mb-1 text-sm text-blue-700">
-        {{ __('forgot password') }}
+        {{ __("login.forgot password") }}
     </div>
 
     @if (session('status'))
@@ -21,14 +21,14 @@
         @csrf
 
         <div class="block">
-            <x-jet-label for="email" value="{{ __('Email') }}"/>
+            <x-jet-label for="email" value="{{ __('login.email') }}"/>
             <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
                          autofocus/>
         </div>
 
         <div class="flex items-center justify-end mt-4">
             <x-jet-button>
-                {{ __('forgot password button') }}
+                {{ __('login.forgot password button') }}
             </x-jet-button>
         </div>
     </form>

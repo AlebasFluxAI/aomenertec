@@ -11,6 +11,11 @@ class LocationType extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'type',
+        'acronym',
+    ];
+
     public function locations()
     {
         return $this->hasMany(Location::class);

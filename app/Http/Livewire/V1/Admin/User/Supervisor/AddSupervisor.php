@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 
-
 use App\Http\Services\V1\Admin\User\SuperAdmin\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
 use Livewire\Component;
@@ -17,8 +16,9 @@ class AddSupervisor extends Component
     public $email;
     public $message;
     public $picked;
-    public $networkOperators;
+    public $network_operators;
     public $network_operator_id;
+    public $network_operator;
 
 
     protected $rules = [
@@ -36,15 +36,14 @@ class AddSupervisor extends Component
     }
 
 
-    public function updatedNetworkOperatorId()
+    public function assignNetworkOperator($network_operator)
     {
-        $this->supervisorAddService->updatedNetworkOperatorId($this);
+        $this->supervisorAddService->assignNetworkOperator($this, $network_operator);
     }
 
-
-    public function setNetworkOperatorId($admin)
+    public function updatedNetworkOperator()
     {
-        $this->supervisorAddService->setNetworkOperatorId($this, $admin);
+        $this->supervisorAddService->updatedNetworkOperator($this);
     }
 
     public function mount()

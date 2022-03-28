@@ -17,12 +17,10 @@ class SupervisorDetailsService extends Singleton
     public function edit(Component $component)
     {
         $component->redirectRoute("administrar.v1.usuarios.supervisores.editar", ["supervisor" => $component->model->id]);
-
     }
 
     public function details(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $modelId]);
     }
-
 }
