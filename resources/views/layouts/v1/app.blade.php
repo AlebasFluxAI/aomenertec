@@ -61,9 +61,12 @@
 
         </section>
     </div>
-    @livewireScripts
+
 </main>
 
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+@livewireScripts
+@livewireChartsScripts
 
 <!-- Vendor JS Files -->
 <script src="{{asset('assets/vendor/bootstrap/js/bootstrap.bundle.js')}}"></script>

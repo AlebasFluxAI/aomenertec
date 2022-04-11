@@ -29,105 +29,53 @@ use function session;
 
 class DetailClientService extends Singleton
 {
-    public function mount(Component $component)
+    public function mount(Component $component, Client $client)
     {
         $component->fill([
+            'client' => $client,
+            'equipment'=>[],
             'serials' => collect([]),
-            'equipment' => [],
-            'strata' => Stratum::get(), 'client_type_id' => '',
             'client_types' => ClientType::get(),
-            'voltage_levels' => VoltageLevel::get(),
-            'subsistence_consumptions' => SubsistenceConsumption::get(), 'contribution' => true,
-            'location_types' => LocationType::get(), 'locations' => [],
-            'departments' => Department::get(),
-            'municipalities' => [],
-            'equipment_types'=> [],
-            'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red', 'network_operators' => [],
-            'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red', 'aux_network_operators' => [],
+            'client_type_id' => $client->client_type_id,
+            'client_type' => ClientType::find($client->client_type_id),
+            'equipment_types' => ClientType::find($client->client_type_id)->equipmentTypes,
             ]);
-    }
 
-    public function updatedLocationTypeId(Component $component)
-    {
-        $component->location_id = "";
-        if ($component->municipality_id != ""){
-            $component->locations = Location::whereMunicipalityId($component->municipality_id)
-                ->whereLocationTypeId($component->location_type_id)
-                ->get();
-        } else{
-            $component->locations = [];
-        }
-    }
+        $equipment = $client->equipment;
 
-    public function updatedDepartmentId(Component $component)
-    {
-        $component->municipality_id = "";
-        $component->municipalities = Department::find($component->department_id)->municipalities;
-    }
-
-    public function updatedMunicipalityId(Component $component)
-    {
-        $component->location_id = "";
-        if ($component->location_type_id != ""){
-            $component->locations = Location::whereMunicipalityId($component->municipality_id)
-                ->whereLocationTypeId($component->location_type_id)
-                ->get();
-        } else{
-            $component->locations = [];
-        }
-    }
-
-    public function updatedClientTypeId(Component $component)
-    {
-        if ($component->client_type_id != "") {
-            $component->equipment= [];
-            $component->client_type = ClientType::find($component->client_type_id);
-            $component->equipment_types = $component->client_type->equipmentTypes;
-            foreach ($component->equipment_types as $index=>$type) {
-                array_push($component->equipment,[
-                    "index"=>$index,
-                    "id" => "",
-                    "type_id" => $type->id,
-                    "type" => $type->type,
-                    "serial" => "",
-                    "picked"=>false,
-                    "post"=>"Digite serial de " . $type->type,
-                    "disable"=>true,
-                ]) ;
-                $component->serials = collect([]);
+        $equipment_type_id = [];
+        foreach ($component->equipment_types as $index=>$type) {
+            if (!in_array($type->id, $equipment_type_id)) {
+                foreach ($equipment as $item){
+                    if ($item->equipment_type_id == $type->id) {
+                        array_push($component->equipment, [
+                            "index" => $index,
+                            "id" => $item->id,
+                            "type_id" => $type->id,
+                            "type" => $type->type,
+                            "serial" => $item->serial,
+                            "picked" => true,
+                            "post" => "",
+                            "disable" => true,
+                        ]);
+                        array_push($equipment_type_id, $type->id);
+                    }
+                }
             }
         }
-    }
-
-    public function updatedNetworkOperator(Component $component)
-    {
-        $component->picked_network_operator = false;
-        $component->message_network_operator = "No hay operador de red registrado con esta identificación";
-
-        if ($component->network_operator != "") {
-            $component->network_operators = User::role('network_operator')->where("identification", "like", '%' . $component->network_operator . "%")
-                ->take(3)->get();
-        }
-    }
-    public function assignNetworkOperator(Component $component, $network_operator)
-    {
-        $obj = json_decode($network_operator);
-        $component->network_operator = $obj->identification;
-        $component->network_operator_id = $obj->id;
-        $component->picked_network_operator= true;
-    }
-    public function assignNetworkOperatorFirst(Component $component)
-    {
-        if (!empty($component->network_operator)) {
-            $usuario = User::role('network_operator')->where("identification", "like", '%' . $component->network_operator . "%")
-                ->first();
-            if ($usuario) {
-                $component->network_operator = $usuario->identification;
-                $component->network_operator_id= $usuario->id;
-            } else {
-                $component->network_operator = "...";
-            }
-            $component->picked_network_operator = true;
+        $aux = count($component->equipment);
+        $extra_equipment = $equipment->whereNotIn("equipment_type_id", $equipment_type_id);
+        foreach ($extra_equipment as $index => $item){
+            array_push($component->equipment, [
+                "index" => $index + $aux,
+                "id" => $item->id,
+                "type_id" => $item->equipment_type_id,
+                "type" => $item->equipmentType->type,
+                "serial" => $item->serial,
+                "picked" => true,
+                "post" => "",
+                "disable" => false,
+            ]);
         }
     }
 
@@ -222,55 +170,6 @@ class DetailClientService extends Singleton
                 $component->solar_panel = "...";
             }
         }
-    }
-
-    public function clientCode($input ='0123456789', $strength = 10) {
-        $input_length = strlen($input);
-        $random_codigo = "";
-        for($i = 0; $i < $strength; $i++) {
-            $random_character = $input[mt_rand(0, $input_length - 1)];
-            $random_codigo .= $random_character;
-        }
-        return $random_codigo;
-    }
-    public function save(Component $component){
-        while (true){
-            $code = $this->clientCode();
-            if (!(Client::whereCode($code)->exists())){
-                break;
-            }
-        }
-        $client = Client::create([
-            'name' => $component->name,
-            'email' => $component->email,
-            'code' => $code,
-            'phone' => $component->phone,
-            'identification' => $component->identification,
-            'latitude' => $component->latitude,
-            'longitude' => $component->longitude,
-            'direction' => $component->direction,
-            'network_topology' => $component->network_topology,
-            'active' => $component->active,
-            'contribution' => $component->contribution,
-            'public_lighting_tax' => $component->public_lighting_tax??true,
-            'network_operator_id' => User::find($component->network_operator_id)->networkOperator->id,
-            'department_id' => $component->department_id,
-            'municipality_id' => $component->municipality_id,
-            'location_id' => $component->location_id,
-            'client_type_id' => $component->client_type_id,
-            'subsistence_consumption_id' => $component->subsistence_consumption_id??1,
-            'voltage_level_id' => $component->voltage_level_id,
-            'stratum_id' => $component->stratum_id,
-        ]);
-        foreach ($component->equipment as $item){
-            EquipmentClient::create([
-                'client_id' => $client->id,
-                'equipment_id' => $item['id'],
-                'current_assigned' => true,
-            ]);
-            Equipment::find($item['id'])->update(['assigned' => true]);
-        }
-        session()->flash('success', 'Cliente creado con exito');
     }
 
 }

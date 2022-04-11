@@ -69,11 +69,10 @@ class Client extends Model
     {
         return $this->belongsTo(Stratum::class);
     }
-    public function equipments()
+    public function equipment()
     {
         return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id')
-            ->withPivot('current_assigned')
-            ->using(EquipmentClient::class);
+            ->withPivot('current_assigned');
     }
     public function pqrs()
     {
@@ -81,7 +80,7 @@ class Client extends Model
     }
     public function microcontrollerData()
     {
-        return $this->hasMany(MicrocontrollerData::class);
+        return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp', 'asc');;
     }
 
     public function supervisors()

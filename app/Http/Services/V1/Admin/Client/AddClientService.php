@@ -116,6 +116,7 @@ class AddClientService extends Singleton
         $component->network_operator_id = $obj->id;
         $component->picked_network_operator= true;
     }
+
     public function assignNetworkOperatorFirst(Component $component)
     {
         if (!empty($component->network_operator)) {
@@ -132,6 +133,7 @@ class AddClientService extends Singleton
     }
 
     public function addInputEquipment(Component $component){
+        $component->serials = collect([]);
         $component->equipment_types = EquipmentType::whereSerialized(true)->get();
         array_push($component->equipment,[
             "index"=>count($component->equipment),
@@ -144,6 +146,7 @@ class AddClientService extends Singleton
             "disable"=>false,
         ]);
     }
+
     public function deleteInputEquipment(Component $component){
         $necessary_equipment = count($component->client_type->equipmentTypes);
         $current_equipment =count($component->equipment);
@@ -152,7 +155,6 @@ class AddClientService extends Singleton
         } else{
             session()->flash('no_delete', 'Los equipos actuales son obligatorios');
         }
-
     }
 
     public function updated(Component $component, $property_name, $value){
@@ -165,13 +167,18 @@ class AddClientService extends Singleton
                 $component->equipment[$id]['picked'] = false;
                 $component->equipment[$id]['post'] == "No registrado";
                 $type_id = $component->equipment[$id]['type_id'];
+                $selected_serials = [];
+                foreach ($component->equipment as $item){
+                    array_push($selected_serials, $item['serial']);
+                }
                 if (strlen($value) >= 2) {
                     $component->serials = Equipment::where([
                         ["serial", "like", '%' . $value . "%"],
                         ["equipment_type_id", $type_id],
                     ])->whereNotIn('assigned', [true])
+                      ->whereNotIn('serial', $selected_serials)
                         ->whereNotIn("status", [Equipment::STATUS_DISREPAIR, Equipment::STATUS_REPAIR])
-                        ->take(3)->get();
+                        ->limit(3)->get();
                     if (count($component->serials) == 0) {
                         $component->equipment[$id]['post'] = "No registrado";
                     }
@@ -195,14 +202,15 @@ class AddClientService extends Singleton
             }
         }
     }
+
     public function assignEquipment(Component $component, $id, $aux){
         $equipment = Equipment::find($id);
         $component->equipment[$aux]['serial'] = $equipment->serial;
         $component->equipment[$aux]['id'] = $equipment->id;
         $component->equipment[$aux]['picked'] = true;
         $component->equipment[$aux]['post'] = "";
-
     }
+
     public function assignEquipmentFirst(Component $component, $index){
         if (strlen($component->equipment[$index]['serial']) >= 2) {
             $equipment_type = EquipmentType::find($component->equipment[$index]['type_id']);
@@ -232,6 +240,7 @@ class AddClientService extends Singleton
         }
         return $random_codigo;
     }
+
     public function save(Component $component){
         while (true){
             $code = $this->clientCode();

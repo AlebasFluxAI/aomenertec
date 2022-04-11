@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Events\NewPointDataMonitoringEvent;
 use App\Models\V1\AlertHistory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -72,31 +73,31 @@ class MicrocontrollerData extends Model
                 echo 'Excepción capturada: ',  $e->getMessage(), "\n";
             }
         }
-        $current_time = new \DateTime("@$timestamp_unix");
+
+        $unixTime = time();//delete
+        $current_time = new \DateTime();
+        $aux = $unixTime - ($unixTime%60);//delete
+        $current_time->setTimestamp($aux);//$aux --> $timestamp_unix
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                             ->first();
-        $aux = EquipmentClient::whereEquipmentId($equipment->id)->whereCurrentAssigned(true)->first();
-        $this->client_id= $aux->client_id;
-        /*$clients = $equipment->clients();
-        foreach ($clients as $client){
-            if($client->pivot->current_assigned){
-                $this->raw_json= $client->id;
-            }
-        }*/
-        $client = Client::find($aux->client_id);
+        $client = $equipment->clients->first();
+        $this->client_id= $client->id;
+
         if (count($client->microcontrollerData) == 0){
             $this->interval_real_consumption = 0;
             $this->interval_reactive_consumption = 0;
         } else{
-            $module = $timestamp_unix%3600;
+            $module = $aux%3600;
+
             if ($module < 60) {
-                $previous_hour_unix = $timestamp_unix - (3600 + $module);
+                $previous_hour_unix = $aux - (3600 + $module);
             } else{
-                $previous_hour_unix = $timestamp_unix - $module;
+                $previous_hour_unix = $aux - $module;
             }
-            $reference_hour = new \DateTime("@$previous_hour_unix");
+            $reference_hour = new \DateTime();
+            $reference_hour->setTimestamp($previous_hour_unix);
             $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
-                ->first();
+                            ->first();
             if (empty($reference_data)){
                 $this->interval_real_consumption = 0;
                 $this->interval_reactive_consumption = 0;
@@ -104,13 +105,13 @@ class MicrocontrollerData extends Model
                 $this->interval_real_consumption = $wh - $reference_data->accumulated_real_consumption;
                 $this->interval_reactive_consumption = $varh - $reference_data->accumulated_reactive_consumption;
             }
-
         }
         $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         $this->accumulated_real_consumption = $wh;
         $this->accumulated_reactive_consumption = $varh;
         $this->raw_json = $json;
         $this->update();
+
     }
     private function alert(){
         $flags_frame = config('data-frame.flags_frame');

@@ -1,5 +1,3 @@
-<div class="mb-3">
-    <div class="detail-table">
 <div class="contenedor-grande">
     @if ($form_toast??false and session()->has($session_message))
         <div class="alert alert-success">
@@ -22,7 +20,6 @@
                               "input_rows"=>$form_input["input_rows"]??0,
                          ])
                 @elseif($form_input["input_type"]=="dropdown-search")
-
                     @include("partials.v1.form.form_dropdown_input_searchable",[
                                   "icon_class"=>$form_input["icon_class"],
                                   "placeholder"=>$form_input["placeholder"],
@@ -65,10 +62,19 @@
                                      "list_option_value"=>$form_input["list_option_value"],
                                      "list_option_view"=>$form_input["list_option_view"],
                                      "list_option_title"=>$form_input["list_option_title"],
+                                     "disabled"=>$form_input["disabled"],
 
                         ])
+                    @elseif($form_input["input_type"]=="multi_input_equipment")
 
-                @endif
+                        @include("partials.v1.form.multi_list_input_searchable_equipment",[
+                                         "equipment"=>$form_input["equipment"],
+                                         "equipment_types" => $form_input["equipment_types"],
+                                         "serials" => $form_input["serials"],
+
+                            ])
+
+                    @endif
 
 
 
@@ -77,6 +83,7 @@
                                      "button_align"=>"right" ,
                                      "button_content"=>"Guardar"
                          ])
+            </div>
         </form>
     </div>
     <div class="mb-3">

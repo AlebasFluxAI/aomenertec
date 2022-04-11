@@ -1,5 +1,5 @@
 <nav>
-    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <div class="nav nav-tabs" id="nav-tab" role="tablist" wire:ignore>
     @foreach($tab_titles as $index=>$tab_title)
 
         @if($index==0)
@@ -33,11 +33,11 @@
 
     @foreach($tab_contents as $index=>$tab_content)
         @if($index==0)
-            <div class="tab-pane fade show active" id="tab-{{$index}}" role="tabpanel" aria-labelledby="nav-{{$index}}-tab">
+            <div class="tab-pane fade active show " id="tab-{{$index}}" role="tabpanel" aria-labelledby="nav-{{$index}}-tab" wire:ignore.self>
                 @include($tab_content["view_name"],$tab_content["view_values"])
             </div>
         @else
-            <div class="tab-pane fade" id="tab-{{$index}}" role="tabpanel" aria-labelledby="nav-{{$index}}-tab">
+            <div class="tab-pane fade" id="tab-{{$index}}" role="tabpanel" aria-labelledby="nav-{{$index}}-tab" wire:ignore.self>
                 @include($tab_content["view_name"],$tab_content["view_values"])
             </div>
         @endif
