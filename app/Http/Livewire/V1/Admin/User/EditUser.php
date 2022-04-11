@@ -86,7 +86,7 @@ class EditUser extends Component
     }
     public function render()
     {
-        return view('livewire.administrar.v1.edit-user')
+        return view('livewire.v1.admin.user.edit-user')
             ->extends('layouts.v1.app');
     }
 }

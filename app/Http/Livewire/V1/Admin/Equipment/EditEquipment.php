@@ -10,7 +10,6 @@ use function view;
 
 class EditEquipment extends Component
 {
-
     public $equipmentSerial;
     public $equipment;
     public $serial;
@@ -42,7 +41,6 @@ class EditEquipment extends Component
 
     public function updatedEquipmentTypeId()
     {
-
         $this->editEquipmentService->updatedEquipmentTypeId($this);
     }
 
@@ -54,7 +52,7 @@ class EditEquipment extends Component
 
     public function render()
     {
-        return view('livewire.administrar.v1.equipment.edit-equipment')
+        return view('livewire.v1.admin.equipment.edit-equipment')
             ->extends('layouts.v1.app');
     }
 }

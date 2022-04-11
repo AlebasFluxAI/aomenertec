@@ -19,7 +19,7 @@ class EquipmentIndexService extends Singleton
 
     public function getEquipments()
     {
-        return Equipment::with("equipment_type")->paginate(15);
+        return Equipment::with("equipmentType")->paginate(15);
     }
 
     public function edit(Component $component, $equipmentId)

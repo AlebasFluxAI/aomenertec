@@ -12,18 +12,13 @@ use Livewire\Component;
 
 class EquipmentAlertDetailService extends Singleton
 {
-
     public function mount(Component $component, $model)
     {
-
         $component->model = $model;
-
     }
 
     public function edit(Component $component)
     {
         $component->redirectRoute("administrar.v1.equipos.alertas.editar", ["equipmentAlert" => $component->model->id]);
-
     }
-
 }

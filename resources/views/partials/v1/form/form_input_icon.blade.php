@@ -1,4 +1,4 @@
-<div class="form-group mb-2 col-md-{{$col_with}} col-sm-{{$col_with}}">
+<div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-12">
 
     <div class="input-group">
 
@@ -17,7 +17,7 @@
                    placeholder="{{$placeholder??""}}" required="{{$required??false}}">
         @endif
     </div>
-    @error("{{$input_model}}")
+    @error($input_model)
     <div class="error-container">
         <small class="form-text text-danger">{{$message}}</small>
     </div>
