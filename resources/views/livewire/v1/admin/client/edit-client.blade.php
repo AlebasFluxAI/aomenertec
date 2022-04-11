@@ -19,22 +19,7 @@
 
                 ]
         ])
-    @include("partials.v1.tab.v1.tab",[
-
-                            "tab_titles"=>[
-                                                [
-                                                    "title"=>"Datos",
-
-                                                ],
-                                                [
-                                                    "title"=>"Equipos",
-                                                ]
-                                           ],
-
-                            "tab_contents"=>[
-                                                [
-                                                    "view_name"=>"partials.v1.form.primary_form",
-                                                    "view_values"=>  [
+    @include("partials.v1.form.primary_form",[
                                                                         "form_toast"=>true,
                                                                         "session_message"=>"message",
                                                                         "form_submit_action"=>"submitForm",
@@ -75,7 +60,7 @@
                                                                                                      "list_option_title"=>"",
 
                                                                                         ],
-                                                                                        [
+                                                                                       [
                                                                                                      "input_type"=>"list",
                                                                                                      "col_with"=>4,
                                                                                                      "list_model" => "department_id",
@@ -196,29 +181,6 @@
                                                                                         ],
 
                                                                                      ]
-                                                            ]
-                                                ],
-                                                [
-                                                    "view_name"=>"partials.v1.table.primary-details-table",
-                                                    "view_values"=>  [
-                                                                        "table_info"=>[
-                                                                         [
-                                                                             "key"=>"Id",
-                                                                             "value"=>$client->id
-                                                                         ],
-                                                                         [
-                                                                             "key"=>"Nombre",
-                                                                             "value"=>$client->name
-                                                                         ],
-                                                                         [
-                                                                             "key"=>"Descripción",
-                                                                             "value"=>$client->code
-                                                                         ],
-
-                                                                     ]
-                                                            ]
-                                                ],
-                                          ]
          ])
 
 
