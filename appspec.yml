@@ -3,9 +3,4 @@ os: linux
 files:
   - source: /
     destination: /var/www/enertec
-hooks:
-  BeforeInstall:
-    - location: scripts/beforeInstall.sh
-      runas: root
-    - location: scripts/afterInstall.sh
-      runas: root
+
