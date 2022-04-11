@@ -15,8 +15,8 @@
                       ["button_align"=>"right",
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
-                      "icon"=>"fa-solid fa-plus",
-                    "target_route"=>"administrar.v1.usuarios.tecnicos.agregar",
+                      "button_icon"=>"fas fa-plus",
+                     "target_route"=>"administrar.v1.usuarios.tecnicos.agregar",
                       ],
 
                   ]
