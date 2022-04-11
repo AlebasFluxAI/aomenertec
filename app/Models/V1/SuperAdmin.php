@@ -120,13 +120,13 @@ class SuperAdmin extends Model
         ];
     }
 
+    public static function getRole()
+    {
+        return "super_administrator";
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function getRole()
-    {
-        return "super_administrator";
     }
 }

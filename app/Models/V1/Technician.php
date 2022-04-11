@@ -100,7 +100,7 @@ class Technician extends Model
         ];
     }
 
-    public function getRole()
+    public static function getRole()
     {
         return "technician";
     }
