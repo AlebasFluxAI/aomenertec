@@ -39,7 +39,7 @@ class RealTimeMonitoringEvent implements ShouldBroadcast
     }
     public function broadcastAs()
     {
-        return 'dataEvent';
+        return 'dataEventRealTime';
     }
     public function broadcastWith()
     {
