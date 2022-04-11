@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Models\V1;
+
+use App\Models\Traits\ImageableTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Laravel\Jetstream\Role;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Admin extends Model
+{
+    use HasFactory;
+    use ImageableTrait;
+
+    protected $fillable = [
+        "user_id",
+        'identification',
+        'phone',
+        'nit',
+        'address',
+        'name',
+        'last_name',
+        'email',
+        'css_file'
+    ];
+
+    public static function getRole()
+    {
+        return "administrator";
+    }
+
+    public static function menu()
+    {
+        return [
+            "title" => "base",
+            "route" => "/",
+            "submenu" =>
+                [
+                    [
+                        "title" => "Usuarios",
+                        "route" => null,
+                        "submenu" => [
+                            ["title" => "Operadores de red",
+                                "route" => "administrar.v1.usuarios.operadores.listado",
+                                "submenu" => [
+                                    [
+                                        "title" => "Vendedores",
+                                        "route" => "administrar.v1.usuarios.vendedores.listado",
+                                        "submenu" => []
+                                    ],
+                                    [
+                                        "title" => "Supervisores",
+                                        "route" => "administrar.v1.usuarios.supervisores.listado",
+                                        "submenu" => []
+                                    ]
+                                ]
+                            ],
+
+
+                        ],
+                    ],
+                    [
+                        "title" => "Equipos",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Equipos",
+                                "route" => "administrar.v1.equipos.listado",
+                                "submenu" => [],
+                            ],
+                            [
+                                "title" => "Tipos",
+                                "route" => "administrar.v1.equipos.tipos.listado",
+                                "submenu" => []
+                            ],
+                            [
+                                "title" => "Alertas",
+                                "route" => "administrar.v1.equipos.alertas.listado",
+                                "submenu" => [
+                                    [
+                                        "title" => "Alertas",
+                                        "route" => "administrar.v1.equipos.alertas.listado",
+                                        "submenu" => []
+                                    ],
+                                    [
+                                        "title" => "Tipos de alerta",
+                                        "route" => "administrar.v1.equipos.alertas.tipos.listado",
+                                        "submenu" => [
+
+                                        ]
+                                    ]
+                                ],
+                            ],
+                        ]
+                    ],
+                ]
+        ];
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function networkOperators()
+    {
+        return $this->hasMany(NetworkOperator::class);
+    }
+
+    public function icon()
+    {
+        return $this->morphOne(Image::class, "imageable") ?? new Image(["url" => "https://aom.enerteclatam.com/images/logo-horizontal.svg"]);
+    }
+}

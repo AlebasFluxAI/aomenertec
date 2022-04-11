@@ -38,7 +38,6 @@ class AddAlertType extends Component
 
     public function submitForm()
     {
-
         $this->addEquipmentAlertTypeService->submitForm($this);
     }
 

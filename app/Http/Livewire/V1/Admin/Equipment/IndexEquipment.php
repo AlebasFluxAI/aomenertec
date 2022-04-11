@@ -45,13 +45,12 @@ class IndexEquipment extends Component
     public function delete($id)
     {
         $this->indexEquipmentService->delete($this, $id);
-
     }
 
     public function render()
     {
-        return view('livewire.administrar.v1.equipment.index-equipment', [
-            "equipments" => Equipment::paginate(15)
+        return view('livewire.v1.admin.equipment.index-equipment', [
+            "equipment" => Equipment::paginate(15)
         ])->extends('layouts.v1.app');
     }
 }

@@ -14,5 +14,4 @@ class MqttInputController extends Controller
     {
         dispatch(new SaveMicrocontrollerDataJob($request->message));
     }
-
 }

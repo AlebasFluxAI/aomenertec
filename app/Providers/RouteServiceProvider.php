@@ -2,14 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\V1\EquipmentType;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use function base_path;
-use function optional;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -39,7 +36,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
-       
 
         $this->routes(function () {
             Route::prefix('api')

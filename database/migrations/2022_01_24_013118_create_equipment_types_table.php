@@ -17,6 +17,7 @@ class CreateEquipmentTypesTable extends Migration
             $table->id();
             $table->string('type');
             $table->string('description');
+            $table->boolean('serialized')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

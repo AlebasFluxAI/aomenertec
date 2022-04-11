@@ -16,8 +16,9 @@ class CreateMicrocontrollerData extends Migration
         Schema::create('microcontroller_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId("client_id")->nullable()->constrained();
-            $table->foreignId("equipments_id")->nullable()->constrained();
+            $table->foreignId("equipment_id")->nullable()->constrained();
             $table->text("raw_json");
+            $table->dateTime("source_timestamp")->nullable();
             $table->double("accumulated_real_consumption")->nullable();
             $table->double("interval_real_consumption")->nullable();
             $table->double("interval_reactive_consumption")->nullable();

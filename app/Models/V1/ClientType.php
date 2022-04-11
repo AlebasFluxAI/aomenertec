@@ -12,12 +12,17 @@ class ClientType extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $fillable = [
+        'type',
+        'description',
+    ];
+
     public function clients()
     {
         return $this->hasMany(Client::class);
     }
     public function equipmentTypes()
     {
-        return $this->belongsToMany(EquipmentType::class, 'equipment_assignments');
+        return $this->belongsToMany(EquipmentType::class, 'client_type_equipment_types');
     }
 }

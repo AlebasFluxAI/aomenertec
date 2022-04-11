@@ -20,7 +20,5 @@ class EquipmentDetailService extends Singleton
     public function edit(Component $component)
     {
         $component->redirectRoute("administrar.v1.equipos.alertas.editar", ["equipmentAlert" => $component->model->id]);
-
     }
-
 }

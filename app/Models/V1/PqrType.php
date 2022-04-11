@@ -15,4 +15,8 @@ class PqrType extends Model
     {
         return $this->hasMany(Pqr::class);
     }
+    public function equipmentTypes()
+    {
+        return $this->belongsToMany(EquipmentType::class, 'equipment_type_pqr_types');
+    }
 }

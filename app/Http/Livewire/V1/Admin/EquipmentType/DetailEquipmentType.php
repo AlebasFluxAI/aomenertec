@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\EquipmentType;
 
-
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeDetailService;
 use App\Models\V1\AlertType;
 use App\Models\V1\Equipment;
@@ -13,8 +12,6 @@ use function view;
 
 class DetailEquipmentType extends Component
 {
-
-
     public $model;
     private $detailAlertTypeService;
 
@@ -27,7 +24,6 @@ class DetailEquipmentType extends Component
 
     public function mount(EquipmentType $equipmentType)
     {
-
         $this->detailAlertTypeService->mount($this, $equipmentType);
     }
 

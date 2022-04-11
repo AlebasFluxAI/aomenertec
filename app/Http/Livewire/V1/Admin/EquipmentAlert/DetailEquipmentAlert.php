@@ -11,8 +11,6 @@ use function view;
 
 class DetailEquipmentAlert extends Component
 {
-
-
     public $model;
     private $detailEquipmentAlertService;
 

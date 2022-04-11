@@ -18,8 +18,8 @@ class AlertType extends Model
         "value",
     ];
 
-    public function equipmentAlerts()
+    public function alertHistories()
     {
-        return $this->hasMany(EquipmentAlert::class);
+        return $this->hasMany(AlertHistory::class);
     }
 }

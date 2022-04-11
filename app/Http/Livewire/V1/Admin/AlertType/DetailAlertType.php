@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\AlertType;
 
-
 use App\Http\Services\V1\Admin\AlertType\AlertTypeDetailService;
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeDetailService;
 use App\Models\V1\AlertType;
@@ -12,8 +11,6 @@ use function view;
 
 class DetailAlertType extends Component
 {
-
-
     public $alertType;
     private $detailAlertTypeService;
 
