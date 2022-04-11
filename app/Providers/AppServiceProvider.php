@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\V1\Admin;
+use App\Models\V1\ClientConfiguration;
 use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
@@ -13,6 +14,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Observers\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
@@ -57,5 +59,6 @@ class AppServiceProvider extends ServiceProvider
         Technician::observe(UserTechnicianObserver::class);
         Support::observe(UserSupportObserver::class);
         User::observe(UserObserver::class);
+        ClientConfiguration::observe(ClientConfigurationObserver::class);
     }
 }

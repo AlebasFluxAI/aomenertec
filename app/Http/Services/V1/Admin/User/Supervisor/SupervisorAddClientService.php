@@ -25,7 +25,9 @@ class SupervisorAddClientService extends Singleton
                 'admins' => [],
                 "clients" => [],
                 'picked' => false,
-                'model' => $model
+                'model' => $model,
+                "clientsRelated" => $model->clientSupervisors
+
             ];
         }
 
@@ -34,7 +36,9 @@ class SupervisorAddClientService extends Singleton
             'admins' => [],
             "clients" => [],
             'picked' => false,
-            'model' => $model
+            'model' => $model,
+            "clientsRelated" => $model->clientSupervisors
+
         ];
     }
 
@@ -57,6 +61,7 @@ class SupervisorAddClientService extends Singleton
         $component->client = $obj->identification . " - " . $obj->name;
         $component->client_id = $obj->id;
         $component->picked = true;
+        $component->client_picked = true;
     }
 
 
@@ -70,9 +75,36 @@ class SupervisorAddClientService extends Singleton
 
     public function addClient(Component $component)
     {
-        $client = Client::first($component->client_id);
-        $component->model->clients()->save($client);
-        $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $component->model->id]);
+        if (!$component->client_picked) {
+            return;
+        }
+        if ($component->model->clientSupervisors()->whereClientId($component->client_id)->exists()) {
+            $this->refreshClientList($component);
+            return;
+        }
+        $component->model->clientSupervisors()->create(
+            [
+                "active" => true,
+                "client_id" => $component->client_id
+            ]
+        );
+        $this->refreshClientList($component);
+
+    }
+
+    public function refreshClientList(Component $component)
+    {
+        $component->clientsRelated = $component->model->clientSupervisors()->get();
+        $component->client = null;
+        $component->client_id = null;
+        $component->picked = false;
+        $component->client_picked = false;
+    }
+
+    public function delete(Component $component, $clientId)
+    {
+        $component->model->clientSupervisors()->whereClientId($clientId)->delete();
+        $this->refreshClientList($component);
     }
 
 

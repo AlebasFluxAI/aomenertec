@@ -22,32 +22,39 @@ class AddClientSupervisor extends Component
     public $client_picked;
     public $client_id;
     public $message_client;
-    private $editSupervisorService;
+    public $clientsRelated;
+    private $addClientSupervisorService;
 
     public function __construct($id = null)
     {
-        $this->editSupervisorService = SupervisorAddClientService::getInstance();
+        $this->addClientSupervisorService = SupervisorAddClientService::getInstance();
         parent::__construct($id);
     }
 
     public function mount(Supervisor $supervisor)
     {
-        $this->editSupervisorService->mount($this, $supervisor);
+        $this->addClientSupervisorService->mount($this, $supervisor);
     }
 
     public function addClient()
     {
-        $this->editSupervisorService->addClient($this);
+        $this->addClientSupervisorService->addClient($this);
     }
 
     public function updatedClient()
     {
-        $this->editSupervisorService->updatedClient($this);
+        $this->addClientSupervisorService->updatedClient($this);
     }
 
     public function assignClient($client)
     {
-        $this->editSupervisorService->assignClient($this, $client);
+        $this->addClientSupervisorService->assignClient($this, $client);
+    }
+
+
+    public function delete($client)
+    {
+        $this->addClientSupervisorService->delete($this, $client["id"]);
     }
 
 

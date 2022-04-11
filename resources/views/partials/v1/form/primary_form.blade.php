@@ -10,21 +10,24 @@
                 <form wire:submit.prevent="{{$form_submit_action}}" class="needs-validation" role="form">
                     <div class="row ">
                         @foreach($form_inputs as $form_input)
-                            @if($form_input["input_type"]=="text" || $form_input["input_type"]=="number" || $form_input["input_type"]=="email")
+                            @if($form_input["input_type"]=="text" ||
+                                $form_input["input_type"]=="checkbox"||
+                                $form_input["input_type"]=="number" || $form_input["input_type"]=="email" || $form_input["input_type"]=="password")
                                 @include("partials.v1.form.form_input_icon",[
                                           "input_model"=>$form_input["input_model"],
                                           "input_field"=>$form_input["input_field"]??"",
                                           "input_type"=>$form_input["input_type"],
-                                          "icon_class"=>$form_input["icon_class"],
+                                          "icon_class"=>$form_input["icon_class"]??null,
                                           "placeholder"=>$form_input["placeholder"],
                                           "col_with"=>$form_input["col_with"],
                                           "required"=>$form_input["required"],
                                           "input_rows"=>$form_input["input_rows"]??0,
                                      ])
+
                             @elseif($form_input["input_type"]=="dropdown-search")
 
                                 @include("partials.v1.form.form_dropdown_input_searchable",[
-                                              "icon_class"=>$form_input["icon_class"],
+                                              "icon_class"=>$form_input["icon_class"]??null,
                                               "placeholder"=>$form_input["placeholder"],
                                               "input_field"=>$form_input["input_field"]??"",
                                               "col_with"=>$form_input["col_with"],
@@ -37,12 +40,12 @@
                                               "dropdown_result_id"=>$form_input["dropdown_result_id"],
                                               "dropdown_result_value"=>$form_input["dropdown_result_value"],
                                               "required"=>$form_input["required"]??true,
-                                              "count_bool" => $form_input['count_bool'],
+                                              "count_bool" => $form_input['count_bool']??false  ,
                                           ])
                             @elseif($form_input["input_type"]=="dropdown")
 
                                 @include("partials.v1.form.form_dropdown",[
-                                              "icon_class"=>$form_input["icon_class"],
+                                              "icon_class"=>$form_input["icon_class"]??null,
                                               "dropdown_editing"=>$form_input["dropdown_editing"],
                                               "dropdown_refresh"=>$form_input["dropdown_refresh"],
                                               "placeholder"=>$form_input["placeholder"],
@@ -70,7 +73,7 @@
 
                                 @include("partials.v1.form.form_input_file",[
                                               "input_model"=>$form_input["input_model"],
-                                              "icon_class"=>$form_input["icon_class"],
+                                              "icon_class"=>$form_input["icon_class"]??null,
                                               "placeholder"=>$form_input["placeholder"],
                                               "input_field"=>$form_input["input_field"]??"",
                                               "col_with"=>$form_input["col_with"],

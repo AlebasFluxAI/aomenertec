@@ -64,6 +64,16 @@
 
                                                                              "value"=>$model->phone
                                                                          ],
+                                                                                      [
+                                                                             "key"=>"Nit",
+
+                                                                             "value"=>$model->nit
+                                                                         ],
+                                                                                                [
+                                                                             "key"=>"Direccion",
+
+                                                                             "value"=>$model->address
+                                                                         ],
                                                                                   [
                                                                              "key"=>"Archivo de estilos",
 

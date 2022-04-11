@@ -16,11 +16,11 @@ class TechnicianDetailsService extends Singleton
 
     public function edit(Component $component)
     {
-        $component->redirectRoute("administrar.v1.usuarios.admin.editar", ["admin" => $component->model->id]);
+        $component->redirectRoute("administrar.v1.usuarios.tecnicos.editar", ["technician" => $component->model->id]);
     }
 
     public function details(Component $component, $modelId)
     {
-        $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $modelId]);
+        $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $modelId]);
     }
 }

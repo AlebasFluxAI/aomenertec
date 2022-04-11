@@ -22,34 +22,41 @@ class AddClientTechnician extends Component
     public $client_picked;
     public $client_id;
     public $message_client;
-    private $editTechnicianService;
+    public $clientsRelated;
+    private $addTechnicianClient;
 
     public function __construct($id = null)
     {
-        $this->editTechnicianService = TechnicianAddClientService::getInstance();
+        $this->addTechnicianClient = TechnicianAddClientService::getInstance();
         parent::__construct($id);
     }
 
     public function mount(Technician $technician)
     {
-        $this->editTechnicianService->mount($this, $technician);
+        $this->addTechnicianClient->mount($this, $technician);
     }
+
 
     public function addClient()
     {
-        $this->editTechnicianService->addClient($this);
+        $this->addTechnicianClient->addClient($this);
     }
 
     public function updatedClient()
     {
-        $this->editTechnicianService->updatedClient($this);
+        $this->addTechnicianClient->updatedClient($this);
     }
 
     public function assignClient($client)
     {
-        $this->editTechnicianService->assignClient($this, $client);
+        $this->addTechnicianClient->assignClient($this, $client);
     }
 
+
+    public function delete($client)
+    {
+        $this->addTechnicianClient->delete($this, $client["id"]);
+    }
 
     public function render()
     {

@@ -26,6 +26,10 @@
                                                     "title"=>"Detalles",
 
                                                 ],
+                                                [
+                                                    "title"=>"Clientes",
+
+                                                ],
 
                                            ],
 
@@ -64,8 +68,25 @@
 
 
                                                 ],
+                                                [
+                                                    "view_name"=>"partials.v1.table.primary-table",
+                                                    "view_values"=>  [
 
-                 ]
+                                                                              "table_pageable"=>false,
+                                                                               "table_headers"=>[
+                                                                                        "ID"=>"client.id",
+                                                                                        "Nombre"=>"client.name",
+                                                                                        "Apellido"=>"client.last_name",
+                                                                                        "Correo electronico"=>"client.email",
+                                                                                        "Telefono"=>"client.phone",
+                                                                                 ],
+                                                                               "table_rows"=>$model->clientTechnicians,
+                                                                                  ]
+                                                                            ]
+
+
+                                                ],
+
          ])
 
 

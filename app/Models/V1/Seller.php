@@ -46,4 +46,9 @@ class Seller extends Model
     {
         return $this->belongsTo(NetworkOperator::class);
     }
+
+    public function clientSellers()
+    {
+        return $this->hasMany(ClientSeller::class);
+    }
 }

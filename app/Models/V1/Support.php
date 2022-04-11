@@ -108,4 +108,9 @@ class Support extends Model
     {
         return $this->hasMany(Pqr::class);
     }
+
+    public function clientSupports()
+    {
+        return $this->hasMany(ClientSupport::class);
+    }
 }

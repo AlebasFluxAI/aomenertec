@@ -17,39 +17,46 @@ class AddClientSeller extends Component
     public $phone;
     public $email;
     public $identification;
+    public $clientsRelated;
     public $clients;
     public $client;
     public $client_picked;
     public $client_id;
     public $message_client;
-    private $editSellerService;
+    public $test;
+    private $addClientSellerService;
 
     public function __construct($id = null)
     {
-        $this->editSellerService = SellerAddClientService::getInstance();
+        $this->addClientSellerService = SellerAddClientService::getInstance();
         parent::__construct($id);
     }
 
     public function mount(Seller $seller)
     {
-        $this->editSellerService->mount($this, $seller);
+        $this->addClientSellerService->mount($this, $seller);
     }
 
     public function addClient()
     {
-        $this->editSellerService->addClient($this);
+        $this->addClientSellerService->addClient($this);
     }
 
     public function updatedClient()
     {
-        $this->editSellerService->updatedClient($this);
+        $this->addClientSellerService->updatedClient($this);
     }
 
     public function assignClient($client)
     {
-        $this->editSellerService->assignClient($this, $client);
+        $this->addClientSellerService->assignClient($this, $client);
     }
 
+
+    public function delete($client)
+    {
+        $this->addClientSellerService->delete($this, $client["id"]);
+    }
 
     public function render()
     {

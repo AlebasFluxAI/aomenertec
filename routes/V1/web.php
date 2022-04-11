@@ -39,7 +39,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::prefix("v1")->group(function () {
         Route::prefix("administrar")->group(function () {
             Route::get('/', Index::class);
-            Route::middleware(['permission:add_user', 'permission:edit_user'])->group(function () {
+            Route::middleware([])->group(function () {
                 Route::prefix("usuarios")->group(function () {
                     Route::get('agregar', AddUser::class)->name("administrar.v1.usuarios.agregar");
                     Route::get('editar', EditUser::class)->name("administrar.v1.usuarios.editar");
@@ -94,6 +94,15 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('editar/{technician}', Livewire\V1\Admin\User\Technician\EditTechnician::class)->name("administrar.v1.usuarios.tecnicos.editar");
                         Route::get('agregar_clientes/{technician}', Livewire\V1\Admin\User\Technician\AddClientTechnician::class)->name("administrar.v1.usuarios.tecnicos.agregar_clientes");
                     });
+
+
+                    Route::prefix("soporte")->group(function () {
+                        Route::get('listado', Livewire\V1\Admin\User\Support\IndexSupport::class)->name("administrar.v1.usuarios.soporte.listado");
+                        Route::get('agregar', Livewire\V1\Admin\User\Support\AddSupport::class)->name("administrar.v1.usuarios.soporte.agregar");
+                        Route::get('detalle/{support}', Livewire\V1\Admin\User\Support\DetailsSupport::class)->name("administrar.v1.usuarios.soporte.detalles");
+                        Route::get('editar/{support}', Livewire\V1\Admin\User\Support\EditSupport::class)->name("administrar.v1.usuarios.soporte.editar");
+                        Route::get('agregar_clientes/{support}', Livewire\V1\Admin\User\Support\AddClientSupport::class)->name("administrar.v1.usuarios.soporte.agregar_clientes");
+                    });
                 });
                 //Route::middleware([ 'permission:add_client','permission:edit_client'])->group(function () {
                 Route::prefix("clientes")->group(function () {
@@ -101,6 +110,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get('listado', IndexClient::class)->name("v1.admin.client.list.client");
                     Route::get('detalle/{client}', DetailClient::class)->name("v1.admin.client.detail.client");
                     Route::get('editar/{client}', EditClient::class)->name("v1.admin.client.edit.client");
+                    Route::get('configuraciones/{client}', Livewire\V1\Admin\Client\ConfigurationClient::class)->name("v1.admin.client.settings");
+
                 });
                 // });
                 Route::prefix("equipos")->group(function () {

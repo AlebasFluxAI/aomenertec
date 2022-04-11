@@ -115,8 +115,14 @@ class Technician extends Model
     {
         return $this->belongsTo(NetworkOperator::class);
     }
+
     public function clients()
     {
         return $this->belongsToMany(Client::class, 'client_technicians')->withPivot('active');
+    }
+
+    public function clientTechnicians()
+    {
+        return $this->hasMany(ClientTechnician::class);
     }
 }

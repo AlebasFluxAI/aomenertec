@@ -16,4 +16,14 @@ class ClientSupervisor extends Model
         'client_id',
         'active'
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function seller()
+    {
+        return $this->belongsTo(Seller::class);
+    }
 }

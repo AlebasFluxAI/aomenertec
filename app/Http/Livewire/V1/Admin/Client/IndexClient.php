@@ -41,6 +41,12 @@ class IndexClient extends Component
     {
         $this->indexClientService->delete($this, $id);
     }
+
+    public function settings($id)
+    {
+        $this->indexClientService->settings($this, $id);
+    }
+
     public function render()
     {
         return view('livewire.v1.admin.client.index-client', [

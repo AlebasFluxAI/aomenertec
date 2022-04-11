@@ -20,7 +20,8 @@
                     <tr class="shadow-sm">
                         @foreach($table_headers as $header_name=>$table_header)
                             <td>
-                                @if(str_contains($table_header,".") and !str_contains($table_header,"*"))
+                                @if(str_contains($table_header,".") and !str_contains($table_header,"*") and $table_row->{explode(".",$table_header)[0]})
+
                                     {{ $table_row->{explode(".",$table_header)[0]}->{explode(".",$table_header)[1]} }}  {{--Se usa para traer datos de una relacion user.client.name--}}
                                 @else
                                     {{$table_row->{$table_header} }}
@@ -59,7 +60,8 @@
                                                     @include("partials.v1.table.table-action-button",[
                                                              "button_action"=>$custom["function"],
                                                              "icon_color"=>"secondary",
-                                                             "model_id"=>$table_row->{$table_headers[array_keys($table_headers)[0]]},
+                                                             "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                $table_row->{$table_headers[array_keys($table_headers)[0]]},
                                                              "icon"=>$custom["icon"]
                                                          ])
                                                 @endforeach

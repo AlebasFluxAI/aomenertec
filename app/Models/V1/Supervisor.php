@@ -111,8 +111,14 @@ class Supervisor extends Model
     {
         return $this->belongsTo(NetworkOperator::class);
     }
+
     public function clients()
     {
         return $this->belongsToMany(Client::class, 'client_supervisors')->withPivot('active');
+    }
+
+    public function clientSupervisors()
+    {
+        return $this->hasMany(ClientSupervisor::class);
     }
 }

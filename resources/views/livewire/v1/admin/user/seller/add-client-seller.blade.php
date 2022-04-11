@@ -1,4 +1,4 @@
-<div class="login">
+<div>
     @section("header") {{--extended app.blade--}}
     @endsection
 
@@ -39,48 +39,12 @@
                             ] ,
                          ]
         ])
-    @include("partials.v1.form.primary_form",[
-    "form_toast"=>false,
-    "session_message"=>"message",
-    "form_submit_action"=>"addClient",
-    "form_submit_action_text"=>"Agregar cliente",
-    "form_inputs"=>[
-                                   [
-                                        "input_type"=>"dropdown-search",
-                                        "icon_class" => "fas fa-user",
-                                        "dropdown_model" => "client",
-                                        "placeholder" => "Cliente",
-                                        'col_with'=>12,
-                                        "required" => true,
-                                        "picked_variable" => $client_picked,
-                                        "message_variable" => $message_client,
-                                        "dropdown_results" => $clients,
-                                        "selected_value_function" => "assignClient",
-                                        "dropdown_result_id" => "id",
-                                        "dropdown_result_value" => "name",
-                                        "count_bool" => (count($clients)>0),
 
-                    ]
-
-                 ]
-         ])
-
-
-    @include("partials.v1.table.primary-table", [
-                           "table_pageable"=>false,
-                                                                 "table_headers"=>["ID"=>"id",
-                                                                     "Nombre"=>"name",
-                                                                     "Apellido"=>"last_name",
-                                                                     "Correo electronico"=>"email",
-                                                                     "Telefono"=>"phone",
-
-                                                                     ],
-                                                                 "table_actions"=>[
-                                                                        "delete"=>"delete",
-
-                                                                        ],
-                                                                 "table_rows"=>$model->clients,
-
-             ])
-
+    @include("partials.v1.clientAssignation.client_assignation",[
+                                   'client_picked'=>$client_picked,
+                                  'message_client'=>$message_client,
+                                  'clients'=>$clients,
+                                  'clients'=>$clients,
+                                  'clientsRelated'=>$clientsRelated,
+          ])
 </div>
