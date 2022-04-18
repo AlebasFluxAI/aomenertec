@@ -150,6 +150,7 @@ class Admin extends Model
             "blue_red_black_header" => "Azul - Rojo | Header negro",
             "purple_pink" => "Morado - Rosa",
             "purple_pink_black_header" => "Morado - Rosa | Header negro",
+            "ecoenergia" => "Coenergia",
         };
     }
 }
