@@ -37,8 +37,8 @@ Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::prefix("v1")->group(function () {
+        Route::get('/inicio', Livewire\V1\Admin\User\ProfileUser::class)->name("administrar.v1.perfil");
         Route::prefix("administrar")->group(function () {
-            Route::get('/', Index::class);
             Route::middleware([])->group(function () {
                 Route::prefix("usuarios")->group(function () {
                     Route::get('agregar', AddUser::class)->name("administrar.v1.usuarios.agregar");

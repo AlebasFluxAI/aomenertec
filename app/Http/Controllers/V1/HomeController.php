@@ -9,6 +9,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-        return redirect('/v1/administrar');
+        return redirect('/v1/inicio');
     }
 }

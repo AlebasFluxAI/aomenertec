@@ -17,7 +17,7 @@
                       ["button_align"=>"right",
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
-                      "icon"=>"fa-solid fa-plus",
+                      "button_icon"=>"fa-solid fa-plus",
                     "target_route"=>"administrar.v1.usuarios.admin.agregar",
                       ],
 

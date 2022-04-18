@@ -11,7 +11,6 @@
 "dropdown_result_value"=> "atributo del objeto que se presentara en el dropdown",
 --}}
 
-
 <div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-{{$col_with??12}}">
     <div class="input-group">
         <div class="input-group-prepend">
@@ -24,9 +23,9 @@
                 aria-label="Default select example"
                 placeholder="{{$placeholder??""}}">
             @if($dropdown_editing??true)
-
                 <option value=""></option>
             @endif
+
             @foreach($dropdown_values as $dropdown_value)
                 <option value="{{$dropdown_value["value"]}}">{{$dropdown_value["key"]}}</option>
             @endforeach

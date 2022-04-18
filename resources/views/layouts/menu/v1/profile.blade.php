@@ -2,12 +2,10 @@
     <ul class="navbar-nav">
 
         <li class="nav-item dropdown">
-            <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                <button type="submit" class="btn btn-lg">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-                {{ csrf_field() }}
-            </form>
+            <a class="btn btn-lg" href="{{ route('administrar.v1.perfil') }}">
+                <i class="fa-solid fa-user"></i>
+            </a>
+
         </li>
 
     </ul>

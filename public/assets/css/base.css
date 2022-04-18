@@ -44,10 +44,20 @@
     border-bottom-width: .2rem;
 }
 
+.btn-redirect {
+    transition: 500ms;
+}
+
+.btn-redirect:hover {
+    background-color: var(--style_primary);;
+    color: white;
+    transition: 500ms;
+}
+
 /*______ESTILOS SUB MENU_____*/
 .custom-nav-button {
     margin-bottom: 10px;
-    
+
 }
 
 /*______ESTILOS SUB MENU_____*/
@@ -355,8 +365,8 @@ dialog {
 }
 
 .contenedor-grande .imagen-logo {
-    width: 200px;
-    height: 100px;
+    width: 100px;
+    height: 30px;
 }
 
 .contenedor-grande .fecha-to {

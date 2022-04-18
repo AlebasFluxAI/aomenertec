@@ -33,8 +33,27 @@ class Seller extends Model
             "route" => "/",
             "submenu" =>
                 [
+                    [
+                        "title" => "Clientes",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Clientes",
+                                "route" => "v1.admin.client.list.client",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ]
+
+                    ],
                 ]
         ];
+    }
+
+    public static function getHome()
+    {
+        return "livewire.v1.admin.user.seller.profile-seller";
     }
 
     public function user()

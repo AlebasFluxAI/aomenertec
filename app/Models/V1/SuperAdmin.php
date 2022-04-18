@@ -48,6 +48,11 @@ class SuperAdmin extends Model
                                 "route" => "administrar.v1.usuarios.operadores.listado",
                                 "submenu" => [
                                     [
+                                        "title" => "Operadores de red",
+                                        "route" => "administrar.v1.usuarios.operadores.listado",
+                                        "submenu" => []
+                                    ],
+                                    [
                                         "title" => "Vendedores",
                                         "route" => "administrar.v1.usuarios.vendedores.listado",
                                         "submenu" => []
@@ -120,13 +125,20 @@ class SuperAdmin extends Model
         ];
     }
 
+    public static function getHome()
+    {
+        return "livewire.v1.admin.user.super.profile-super-admin";
+    }
+
+    public static function getRole()
+    {
+        return "super_administrator";
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function getRole()
-    {
-        return "super_administrator";
-    }
+
 }

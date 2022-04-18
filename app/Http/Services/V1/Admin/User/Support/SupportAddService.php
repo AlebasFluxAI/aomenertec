@@ -65,16 +65,16 @@ class SupportAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $seller = Support::create($this->mapper($component));
+        $model = Support::create($this->mapper($component));
         $user = User::create(array_merge($this->mapper($component), [
             "password" => bcrypt($component->password),
-            "type" => User::TYPE_TECHNICIAN
+            "type" => User::TYPE_SUPPORT
         ]));
-        $seller->update([
+        $model->update([
             "user_id" => $user->id
         ]);
 
-        $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["seller" => $seller->id]);
+        $component->redirectRoute("administrar.v1.usuarios.soporte.detalles", ["support" => $model->id]);
     }
 
 

@@ -20,7 +20,6 @@ class NetworkOperatorsTableSeeder extends Seeder
     {
         $providers = User::where("name", "like", '%' . "Prestador" . "%")->get();
         $admin = Admin::find(1);
-        // DB::table('service_providers')->truncate();
         foreach ($providers as $item) {
             NetworkOperator::create([
                 'user_id' => $item->id,
