@@ -15,7 +15,7 @@
                       ["button_align"=>"right",
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
-                      "icon"=>"fa-solid fa-plus",
+                      "button_icon"=>"fa-solid fa-plus",
                       "target_route"=>"administrar.v1.usuarios.operadores.agregar",
                       ],
 
@@ -35,6 +35,13 @@
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
+                                    "customs"=>[
+                                        [
+                                                "function"=>"deleteNetworkOperator",
+                                                "conditional"=>"conditionalDelete",
+                                                "icon"=>"fas fa-trash"
+                                        ]
+                                       ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}

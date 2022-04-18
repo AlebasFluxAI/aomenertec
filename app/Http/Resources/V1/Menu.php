@@ -8,7 +8,10 @@ use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
+use App\Models\V1\Support;
+use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Auth;
 
 class Menu extends Singleton
@@ -40,11 +43,11 @@ class Menu extends Singleton
                 ]),
 
                 new Menu("Equipos", null, [
-                    new Menu("Equipos", "administrar.v1.equipos.listado", [], ),
+                    new Menu("Equipos", "administrar.v1.equipos.listado", [],),
                     new Menu("Alertas", null, [
                         new Menu("Alertas", "administrar.v1.equipos.alertas.listado", []),
-                    ], ),
-                ], )
+                    ],),
+                ],)
             ]
         )
         ];
@@ -170,9 +173,57 @@ class Menu extends Singleton
             case User::TYPE_SUPERVISOR:
                 $menu = Supervisor::menu();
                 break;
+            case User::TYPE_TECHNICIAN:
+                $menu = Technician::menu();
+                break;
+            case User::TYPE_SUPPORT:
+                $menu = Support::menu();
+                break;
             default:
                 $menu = [];
         }
         return $menu;
+    }
+
+    
+    public static function getHome()
+    {
+        if (Auth::user() == null) {
+            return [];
+        }
+
+        $userRole = Auth::user()->roles->first()->name;
+
+
+        $home = match ($userRole) {
+            User::TYPE_SUPER_ADMIN => SuperAdmin::getHome(),
+
+            User::TYPE_NETWORK_OPERATOR => NetworkOperator::getHome(),
+            User::TYPE_ADMIN => Admin::getHome(),
+            User::TYPE_SELLER => Seller::getHome(),
+            User::TYPE_SUPERVISOR => Supervisor::getHome(),
+            User::TYPE_SUPPORT => Support::getHome(),
+            User::TYPE_TECHNICIAN => Technician::getHome(),
+            default => [],
+        };
+        return $home;
+    }
+
+    public static function getUserModel()
+    {
+        $user = Auth::user();
+        $userRole = $user->roles->first()->name;
+        $model = match ($userRole) {
+            User::TYPE_NETWORK_OPERATOR => $user->networkOperator,
+            User::TYPE_ADMIN => $user->admin,
+            User::TYPE_SUPER_ADMIN => $user->superAdmin,
+            User::TYPE_SELLER => $user->seller,
+            User::TYPE_SUPERVISOR => $user->supervisor,
+            User::TYPE_SUPPORT => $user->support,
+            User::TYPE_TECHNICIAN => $user->technician,
+            default => [],
+        };
+
+        return $model;
     }
 }

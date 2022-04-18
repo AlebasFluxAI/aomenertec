@@ -7,6 +7,7 @@ use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
+use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 
@@ -32,6 +33,9 @@ class UserObserver
                 break;
             case User::TYPE_SELLER:
                 $user->assignRole(Seller::getRole());
+                break;
+            case User::TYPE_SUPPORT:
+                $user->assignRole(Support::getRole());
                 break;
             default:
                 $user->assignRole(Admin::getRole());

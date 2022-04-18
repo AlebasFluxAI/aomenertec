@@ -29,78 +29,33 @@ class Supervisor extends Model
             "submenu" =>
                 [
                     [
-                        "title" => "Usuarios",
+                        "title" => "Clientes",
                         "route" => null,
                         "submenu" => [
                             [
-                                "title" => "Super administradores",
-                                "route" => "administrar.v1.usuarios.superadmin.listado",
+                                "title" => "Clientes",
+                                "route" => "v1.admin.client.list.client",
                                 "submenu" => [
-                                    [
-                                        "title" => "Usuario sporte",
-                                        "route" => "administrar.v1.usuarios.admin.listado",
-                                        "submenu" => []
-                                    ],
+
                                 ]
-                            ],
-                            ["title" => "Administradores",
-                                "route" => "administrar.v1.usuarios.admin.listado",
-                                "submenu" => []
-                            ],
-                            ["title" => "Operadores de red",
-                                "route" => "administrar.v1.usuarios.operadores.listado",
-                                "submenu" => []
-                            ],
-                            [
-                                "title" => "Vendedores",
-                                "route" => "administrar.v1.usuarios.vendedores.listado",
-                                "submenu" => []
-                            ],
-                            [
-                                "title" => "Supervisores",
-                                "route" => "administrar.v1.usuarios.supervisores.listado",
-                                "submenu" => []
                             ]
-
-                        ],
-                    ],
-                    [
-                        "title" => "Equipos",
-                        "route" => null,
-                        "submenu" => [
-                            [
-                                "title" => "Equipos",
-                                "route" => "administrar.v1.equipos.listado",
-                                "submenu" => [],
-                            ],
-                            [
-                                "title" => "Tipos",
-                                "route" => "administrar.v1.equipos.tipos.listado",
-                                "submenu" => []
-                            ],
-                            [
-                                "title" => "Alertas",
-                                "route" => "administrar.v1.equipos.alertas.listado",
-                                "submenu" => [
-                                    [
-                                        "title" => "Alertas",
-                                        "route" => "administrar.v1.equipos.alertas.listado",
-                                        "submenu" => []
-                                    ],
-                                    [
-                                        "title" => "Tipos de alerta",
-                                        "route" => "administrar.v1.equipos.alertas.tipos.listado",
-                                        "submenu" => [
-
-                                        ]
-                                    ]
-                                ],
-                            ],
                         ]
+
                     ],
                 ]
         ];
     }
+
+    public static function getHome()
+    {
+        return "livewire.v1.admin.user.supervisor.profile-supervisor";
+    }
+
+    public static function getRole()
+    {
+        return "supervisor";
+    }
+
 
     public function user()
     {

@@ -85,6 +85,7 @@ class User extends Authenticatable
         return $this->hasOne(Seller::class);
     }
 
+
     public function technician()
     {
         return $this->hasOne(Technician::class);
@@ -116,4 +117,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pqr::class);
     }
+
+
 }

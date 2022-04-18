@@ -24,6 +24,7 @@ class EditAdmin extends Component
     public $email;
     public $identification;
     public $style;
+    public $styles;
     private $editAdminService;
 
     public function __construct($id = null)
@@ -42,6 +43,11 @@ class EditAdmin extends Component
         $this->editAdminService->submitForm($this);
     }
 
+    public function setStyle()
+    {
+        $this->editAdminService->setStyle($this);
+
+    }
 
     public function render()
     {

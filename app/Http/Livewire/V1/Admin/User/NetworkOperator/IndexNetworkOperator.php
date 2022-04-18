@@ -46,8 +46,26 @@ class IndexNetworkOperator extends Component
         return view(
             'livewire.v1.admin.user.network-operator.index-network-operator',
             [
-                "data" => NetworkOperator::paginate(15)
+                "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');
+    }
+
+    public function getData()
+    {
+        return $this->indexNetworkOperatorService->getData();
+    }
+
+    public function deleteNetworkOperator($networkOperatorId)
+    {
+        $operatorName = NetworkOperator::find($networkOperatorId)->name;
+        $this->indexNetworkOperatorService->deleteNetworkOperator($networkOperatorId);
+        $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operatorName} eliminado"]);
+
+    }
+
+    public function conditionalDelete($networkOperatorId)
+    {
+        return $this->indexNetworkOperatorService->conditionalDelete($networkOperatorId);
     }
 }

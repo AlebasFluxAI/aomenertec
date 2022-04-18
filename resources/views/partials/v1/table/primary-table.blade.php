@@ -57,13 +57,28 @@
                                                      ])
                                             @elseif($action_type=="customs")
                                                 @foreach($action_value  as $custom)
-                                                    @include("partials.v1.table.table-action-button",[
-                                                             "button_action"=>$custom["function"],
-                                                             "icon_color"=>"secondary",
-                                                             "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                $table_row->{$table_headers[array_keys($table_headers)[0]]},
-                                                             "icon"=>$custom["icon"]
-                                                         ])
+                                                    @if(array_key_exists("conditional",$custom) and $this->{$custom["conditional"]}(isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                    $table_row->{$table_headers[array_keys($table_headers)[0]]}))
+                                                    @else
+                                                        @if(array_key_exists("redirect",$custom))
+                                                            @include("partials.v1.table.table-redirect-button",[
+                                                                     "button_route"=>$custom["redirect"]["route"],
+                                                                     "button_binding"=>$custom["redirect"]["binding"],
+                                                                     "icon_color"=>"secondary",
+                                                                     "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                        $table_row->{$table_headers[array_keys($table_headers)[0]]},
+                                                                     "icon"=>$custom["icon"]
+                                                                 ])
+                                                        @else
+                                                            @include("partials.v1.table.table-action-button",[
+                                                                   "button_action"=>$custom["function"],
+                                                                   "icon_color"=>"secondary",
+                                                                   "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                      $table_row->{$table_headers[array_keys($table_headers)[0]]},
+                                                                   "icon"=>$custom["icon"]
+                                                               ])
+                                                        @endif
+                                                    @endif
                                                 @endforeach
                                             @endif
                                         @endforeach

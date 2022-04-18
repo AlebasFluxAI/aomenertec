@@ -10,13 +10,22 @@
 
     @include("partials.v1.table_nav",
          ["nav_options"=>[
-                    ["button_align"=>"right",
-                    "click_action"=>"",
-                    "button_icon"=>"fas fa-list",
-                    "button_content"=>"Ver listado",
-                    "target_route"=>"administrar.v1.usuarios.admin.listado",
+                    [
+                        "button_align"=>"right",
+                        "click_action"=>"",
+                        "button_icon"=>"fas fa-pencil",
+                        "button_content"=>"Editar",
+                        "target_route"=>"administrar.v1.usuarios.admin.editar",
+                        "target_binding"=>"admin",
+                        "target_binding_value"=>$model->id
                     ],
-
+                    [
+                        "button_align"=>"right",
+                        "click_action"=>"",
+                        "button_icon"=>"fas fa-list",
+                        "button_content"=>"Ver listado",
+                        "target_route"=>"administrar.v1.usuarios.admin.listado",
+                    ],
                 ]
         ])
 
@@ -77,7 +86,7 @@
                                                                                   [
                                                                              "key"=>"Archivo de estilos",
 
-                                                                             "value"=>$model->css_file
+                                                                             "value"=>$model->css_file_name
                                                                          ],
                                                                            [
                                                                              "key"=>"Logo",

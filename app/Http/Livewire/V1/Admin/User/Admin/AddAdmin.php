@@ -20,11 +20,13 @@ class AddAdmin extends Component
     public $email;
     public $message;
     public $icon;
+    public $styles;
     public $style;
+
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification',
         'name' => 'required',
-        'phone' => 'min:7',
+        'phone' => 'min:7|unique:users,phone',
         'email' => 'required|email|unique:users,email',
     ];
     private $superAdminAddService;
@@ -35,11 +37,21 @@ class AddAdmin extends Component
         $this->superAdminAddService = AdminAddService::getInstance();
     }
 
+    public function mount()
+    {
+        $this->superAdminAddService->mount($this);
+    }
+
     public function submitForm()
     {
         $this->superAdminAddService->submitForm($this);
     }
 
+    public function setStyle()
+    {
+        $this->superAdminAddService->setStyle($this);
+
+    }
 
     public function render()
     {
