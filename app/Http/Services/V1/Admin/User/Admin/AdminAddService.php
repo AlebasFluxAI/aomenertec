@@ -15,6 +15,10 @@ class AdminAddService extends Singleton
         $component->fill([
             "styles" => [
                 [
+                    "key" => "Coenergia",
+                    "value" => "ecoenergia"
+                ],
+                [
                     "key" => "Verde - Naranja",
                     "value" => "green_orange"
                 ],
@@ -98,6 +102,6 @@ class AdminAddService extends Singleton
 
     public function setStyle(Component $component)
     {
-        
+
     }
 }
