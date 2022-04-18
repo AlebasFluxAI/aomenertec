@@ -87,17 +87,20 @@
                                         "col_with"=>6,
                                         "required"=>true
                             ],
-
-                         [
-                                        "input_type"=>"text",
+                            [
+                                        "input_type"=>"dropdown",
                                         "input_model"=>"style",
                                         "icon_class"=>"fas fa-pencil",
-                                         "placeholder"=>"Archivo de estilos",
+                                        "placeholder"=>"Archivo de estilos",
                                         "col_with"=>12,
+                                        "dropdown_editing"=>false,
+                                        "dropdown_refresh"=>"setStyle",
+                                        "dropdown_model"=>"style",
+                                        "dropdown_values"=>$styles,
                                         "required"=>false,
 
                              ],
-                                   [
+                              [
                                         "input_type"=>"file",
                                         "input_model"=>"icon",
                                         "icon_class"=>"fas fa-file",

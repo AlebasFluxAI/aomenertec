@@ -1,4 +1,4 @@
-<div class="login">
+<div>
     @section("header") {{--extended app.blade--}}
     @endsection
 
@@ -17,7 +17,6 @@
                     "button_content"=>"Ver listado",
                     "target_route"=>"administrar.v1.usuarios.tecnicos.listado",
                     ],
-
                 ]
         ])
     {{----------------------------------Formulario--------------------------}}

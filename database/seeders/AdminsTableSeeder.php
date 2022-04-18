@@ -16,12 +16,15 @@ class AdminsTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker\Factory::create();
-        $admin = User::find(1);
-        $create = Admin::create([
-            'user_id' => $admin->id,
-            'address' => $faker->address,
-            'nit' => $faker->numerify,
-        ]);
+        foreach (User::whereType(User::TYPE_ADMIN)->get() as $user) {
+            $user->admin()->create([
+                "name" => $user->name,
+                "last_name" => $user->last_name,
+                "identification" => $user->identification,
+                "nit" => $user->nit ?? $user->identification,
+                "phone" => $user->phone,
+                "email" => $user->email,
+            ]);
+        }
     }
 }

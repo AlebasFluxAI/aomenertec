@@ -70,7 +70,6 @@
                                                                                                 "icon_class"=>"fas fa-file",
                                                                                                  "placeholder"=>"Telefono",
                                                                                                 "col_with"=>6,
-
                                                                                                 "required"=>false,
 
                                                                                      ],
@@ -80,7 +79,6 @@
                                                                                                 "icon_class"=>"fas fa-file",
                                                                                                  "placeholder"=>"Identificacion",
                                                                                                 "col_with"=>6,
-
                                                                                                 "required"=>false,
 
                                                                                      ],

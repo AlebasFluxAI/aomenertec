@@ -15,11 +15,24 @@ class NetworkOperatorAddService extends Singleton
 {
     public function mount(Component $component)
     {
-        $component->fill([
+        $component->fill($this->getMountData());
+    }
+
+    public function getMountData()
+    {
+        $user = Auth::user();
+        if ($user->admin) {
+            return [
+                'admins' => [],
+                "admin_id" => $user->admin->id,
+                'picked' => false
+            ];
+        }
+        return [
             'admin_id' => null,
             'admins' => [],
             'picked' => false
-        ]);
+        ];
     }
 
     public function updatedAdminId(Component $component)
@@ -39,6 +52,8 @@ class NetworkOperatorAddService extends Singleton
 
     public function submitForm(Component $component)
     {
+
+
         $operator = NetworkOperator::create($this->mapper($component));
         $user = User::create(array_merge($this->mapper($component), [
             "password" => bcrypt($component->password),

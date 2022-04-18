@@ -43,9 +43,28 @@ class NetworkOperator extends Model
                                 "title" => "Supervisores",
                                 "route" => "administrar.v1.usuarios.supervisores.listado",
                                 "submenu" => []
+                            ],
+                            [
+                                "title" => "Tecnicos",
+                                "route" => "administrar.v1.usuarios.tecnicos.listado",
+                                "submenu" => []
                             ]
 
                         ],
+                    ],
+                    [
+                        "title" => "Clientes",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Clientes",
+                                "route" => "v1.admin.client.list.client",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ]
+
                     ],
                     [
                         "title" => "Equipos",
@@ -85,7 +104,12 @@ class NetworkOperator extends Model
         ];
     }
 
-    public function getRole()
+    public static function getHome()
+    {
+        return "livewire.v1.admin.user.network-operator.profile-network-operator";
+    }
+
+    public static function getRole()
     {
         return User::TYPE_NETWORK_OPERATOR;
     }
@@ -94,10 +118,12 @@ class NetworkOperator extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function admin()
     {
         return $this->belongsTo(Admin::class);
     }
+
     public function clients()
     {
         return $this->hasMany(Client::class);

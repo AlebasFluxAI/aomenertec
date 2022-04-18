@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Services\V1\Admin\User;
+
+use App\Http\Livewire\V1\Admin\User\EditUser;
+use App\Http\Resources\V1\Menu;
+use App\Http\Services\Singleton;
+use App\Models\V1\Admin;
+use App\Models\V1\Consumer;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\Seller;
+use App\Models\V1\SuperAdmin;
+use App\Models\V1\Supervisor;
+use App\Models\V1\Support;
+use App\Models\V1\Technician;
+use App\Models\V1\User;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Spatie\Permission\Models\Role;
+use function auth;
+use function session;
+
+class ProfileUserService extends Singleton
+{
+    public function mount(Component $component)
+    {
+        $component->model = $this->getModelByUser();
+    }
+
+    private function getModelByUser()
+    {
+
+        return Menu::getUserModel();
+
+    }
+
+    public function getViewName()
+    {
+        return Menu::getHome();
+    }
+}

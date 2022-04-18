@@ -26,13 +26,20 @@
                                                     "title"=>"Detalles",
 
                                                 ],
+                                                [
+                                                    "title"=>"Clientes",
 
+                                                ],
                                                 [
                                                     "title"=>"Vendedores",
 
                                                 ],
                                                 [
                                                     "title"=>"Supervisores",
+
+                                                ],
+                                                [
+                                                    "title"=>"Tecnicos",
 
                                                 ],
                                            ],
@@ -69,34 +76,119 @@
                                                                      ]
                                                             ]
                                                 ],
-                                                [
-                                                   "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>[
-                                                                        "table_pageable"=>false,
-                                                                       "table_headers"=>["ID"=>"id",
-                                                                                         "Nombre"=>"name",
-                                                                                          "Apellido"=>"last_name",
-                                                                                          "Telefono"=>"phone",
-                                                                        ],
+                                            [
+                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                       "table_pageable"=>false,
+                                                                      "table_headers"=>["ID"=>"id",
+                                                                                        "Nombre"=>"name",
+                                                                                        "Identificacion"=>"identification",
+                                                                       ],
+                                                                      "table_actions"=>[
+                                                                                    "customs"=>[
+                                                                                           [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"v1.admin.client.detail.client",
+                                                                                                            "binding"=>"client"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-search"
+                                                                                            ],
+                                                                                        ]
+                                                                                    ],
+                                                                      "table_rows"=>$model->clients
 
-                                                                       "table_rows"=>$model->sellers
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                       "table_pageable"=>false,
+                                                                      "table_headers"=>["ID"=>"id",
+                                                                                        "Nombre"=>"name",
+                                                                                        "Identificacion"=>"identification",
+                                                                       ],
+                                                                      "table_actions"=>[
+                                                                                    "customs"=>[
+                                                                                           [
+                                                                                                "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.detalles",
+                                                                                                            "binding"=>"seller"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-search"
+                                                                                            ],
+                                                                                            [
+                                                                                                "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.editar",
+                                                                                                            "binding"=>"seller"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-pencil"
+                                                                                            ]
+                                                                                        ]
+                                                                                    ],
+                                                                      "table_rows" => $model->sellers
 
-                                                                   ]
-                                                ],
-                                                [
-                                                   "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>[
-                                                                        "table_pageable"=>false,
-                                                                       "table_headers"=>["ID"=>"id",
-                                                                                         "Nombre"=>"name",
-                                                                                          "Apellido"=>"last_name",
-                                                                                          "Telefono"=>"phone",
-                                                                        ],
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                       "table_pageable"=>false,
+                                                                      "table_headers"=>["ID"=>"id",
+                                                                                        "Nombre"=>"name",
+                                                                                        "Identificacion"=>"identification",
+                                                                       ],
+                                                                      "table_actions"=>[
+                                                                                    "customs"=>[
+                                                                                           [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.detalles",
+                                                                                                            "binding"=>"supervisor"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-search"
+                                                                                            ],
+                                                                                            [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.editar",
+                                                                                                            "binding"=>"supervisor"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-pencil"
+                                                                                            ]
+                                                                                        ]
+                                                                                    ],
+                                                                      "table_rows"=>$model->supervisors
 
-                                                                       "table_rows"=>$model->supervisors
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                       "table_pageable"=>false,
+                                                                      "table_headers"=>["ID"=>"id",
+                                                                                        "Nombre"=>"name",
+                                                                                        "Identificacion"=>"identification",
+                                                                       ],
+                                                                      "table_actions"=>[
+                                                                                    "customs"=>[
+                                                                                           [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.detalles",
+                                                                                                            "binding"=>"technician"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-search"
+                                                                                            ],
+                                                                                            [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.editar",
+                                                                                                            "binding"=>"technician"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-pencil"
+                                                                                            ]
+                                                                                        ]
+                                                                                    ],
+                                                                      "table_rows"=>$model->technicians
 
-                                                                   ]
-                                                ]
+                                                                  ]
+                                               ]
 
                                                                                         ]
          ])

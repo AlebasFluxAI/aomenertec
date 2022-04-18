@@ -3,17 +3,13 @@
         <nav class="navbar navbar-expand-lg navbar-custom ">
             <div class="container-fluid ">
                 <div class="col-md-2">
-                    <a class="navbar-brand" href="/">
+                    <a class="navbar-brand" href="{{route("administrar.v1.perfil")}}">
                         <img class="imagen-logo"
                              src='{{\App\Http\Resources\V1\Icon::getIcon()}}'
 
                              alt="">
                     </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                            aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+
                 </div>
                 <div class="collapse navbar-collapse">
                     @isset(\App\Http\Resources\V1\Menu::getMenuV3()["submenu"])
