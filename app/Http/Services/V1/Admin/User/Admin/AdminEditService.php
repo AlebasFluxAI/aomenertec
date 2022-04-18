@@ -63,6 +63,10 @@ class AdminEditService extends Singleton
     {
         $component->styles = [
             [
+                "key" => "Coenergia",
+                "value" => "ecoenergia"
+            ],
+            [
                 "key" => "Verde - Naranja",
                 "value" => "green_orange"
             ],
