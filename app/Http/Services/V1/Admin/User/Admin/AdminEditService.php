@@ -61,7 +61,12 @@ class AdminEditService extends Singleton
 
     public function setStyle(Component $component)
     {
+        $component->style = "";
         $component->styles = [
+            [
+                "key" => "",
+                "value" => ""
+            ],
             [
                 "key" => "Coenergia",
                 "value" => "ecoenergia"

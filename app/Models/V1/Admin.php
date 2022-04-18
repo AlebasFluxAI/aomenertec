@@ -140,6 +140,7 @@ class Admin extends Model
     public function getCssFileNameAttribute()
     {
         return match ($this->css_file) {
+            "" => "",
             "green_orange" => "Verde - Naranja",
             "green_orange_black_header" => "Verde - Naranja | Header negro",
             "orange_brown" => "Naranja - Cafe",
