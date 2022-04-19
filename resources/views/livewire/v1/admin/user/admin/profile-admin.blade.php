@@ -93,7 +93,8 @@
                                                                                                             "route"=>"administrar.v1.usuarios.operadores.detalles",
                                                                                                             "binding"=>"networkOperator"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-search"
+                                                                                                    "icon"=>"fas fa-search",
+                                                                                                    "tooltip_title"=>"Detalles",
                                                                                             ]
                                                                                         ]
                                                                                     ],

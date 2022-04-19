@@ -38,14 +38,17 @@
                                                             "button_action"=>$action_value,
                                                             "icon_color"=>"secondary",
                                                             "model_id"=>$table_row->{$table_headers[array_keys($table_headers)[0]]},
-                                                            "icon"=>"fas fa-pencil"
+                                                            "icon"=>"fas fa-pencil",
+                                                            "tooltip_title"=>"Editar"
+
                                                         ])
                                             @elseif($action_type=="delete")
                                                 @include("partials.v1.table.table-action-button",[
                                                          "button_action"=>$action_value,
                                                          "icon_color"=>"secondary",
                                                          "model_id"=>$table_row->{$table_headers[array_keys($table_headers)[0]]},
-                                                         "icon"=>"fas fa-trash"
+                                                         "icon"=>"fas fa-trash",
+                                                         "tooltip_title"=>"Eliminar"
                                                      ])
 
                                             @elseif($action_type=="details")
@@ -53,7 +56,8 @@
                                                          "button_action"=>$action_value,
                                                          "icon_color"=>"secondary",
                                                          "model_id"=>$table_row->{$table_headers[array_keys($table_headers)[0]]},
-                                                         "icon"=>"fas fa-search"
+                                                         "icon"=>"fas fa-search",
+                                                         "tooltip_title"=>"Detalles"
                                                      ])
                                             @elseif($action_type=="customs")
                                                 @foreach($action_value  as $custom)
@@ -67,7 +71,8 @@
                                                                      "icon_color"=>"secondary",
                                                                      "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
                                                                         $table_row->{$table_headers[array_keys($table_headers)[0]]},
-                                                                     "icon"=>$custom["icon"]
+                                                                     "icon"=>$custom["icon"],
+                                                                     "tooltip_title"=>$custom["tooltip_title"] ?? ''
                                                                  ])
                                                         @else
                                                             @include("partials.v1.table.table-action-button",[
@@ -75,7 +80,8 @@
                                                                    "icon_color"=>"secondary",
                                                                    "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
                                                                       $table_row->{$table_headers[array_keys($table_headers)[0]]},
-                                                                   "icon"=>$custom["icon"]
+                                                                   "icon"=>$custom["icon"],
+                                                                   "tooltip_title"=>$custom["tooltip_title"] ?? ''
                                                                ])
                                                         @endif
                                                     @endif

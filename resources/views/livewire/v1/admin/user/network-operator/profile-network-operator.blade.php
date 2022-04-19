@@ -86,7 +86,8 @@
                                                                                                             "route"=>"v1.admin.client.detail.client",
                                                                                                             "binding"=>"client"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-search"
+                                                                                                    "icon"=>"fas fa-search",
+                                                                                                    "tooltip_title"=>"Detalles",
                                                                                             ],
                                                                                         ]
                                                                                     ],
@@ -109,14 +110,16 @@
                                                                                                             "route"=>"administrar.v1.usuarios.vendedores.detalles",
                                                                                                             "binding"=>"seller"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-search"
+                                                                                                    "icon"=>"fas fa-search",
+                                                                                                    "tooltip_title"=>"Detalles",
                                                                                             ],
                                                                                             [
                                                                                                 "redirect"=>[
                                                                                                             "route"=>"administrar.v1.usuarios.vendedores.editar",
                                                                                                             "binding"=>"seller"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-pencil"
+                                                                                                    "icon"=>"fas fa-pencil",
+                                                                                                    "tooltip_title"=>"Editar",
                                                                                             ]
                                                                                         ]
                                                                                     ],
@@ -139,14 +142,16 @@
                                                                                                             "route"=>"administrar.v1.usuarios.supervisores.detalles",
                                                                                                             "binding"=>"supervisor"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-search"
+                                                                                                    "icon"=>"fas fa-search",
+                                                                                                    "tooltip_title"=>"Detalles",
                                                                                             ],
                                                                                             [
                                                                                                     "redirect"=>[
                                                                                                             "route"=>"administrar.v1.usuarios.supervisores.editar",
                                                                                                             "binding"=>"supervisor"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-pencil"
+                                                                                                    "icon"=>"fas fa-pencil",
+                                                                                                    "tooltip_title"=>"Editar",
                                                                                             ]
                                                                                         ]
                                                                                     ],
@@ -169,14 +174,17 @@
                                                                                                             "route"=>"administrar.v1.usuarios.tecnicos.detalles",
                                                                                                             "binding"=>"technician"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-search"
+                                                                                                    "icon"=>"fas fa-search",
+                                                                                                    "tooltip_title"=>"Detalles",
+
                                                                                             ],
                                                                                             [
                                                                                                     "redirect"=>[
                                                                                                             "route"=>"administrar.v1.usuarios.tecnicos.editar",
                                                                                                             "binding"=>"technician"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-pencil"
+                                                                                                    "icon"=>"fas fa-pencil",
+                                                                                                    "tooltip_title"=>"Editar",
                                                                                             ]
                                                                                         ]
                                                                                     ],

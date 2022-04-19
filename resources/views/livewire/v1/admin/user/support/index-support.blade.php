@@ -38,7 +38,8 @@
                                     "customs"=>[
                                                    [
                                                     "function"=>"addClients",
-                                                    "icon"=>"fas fa-users"
+                                                    "icon"=>"fas fa-users",
+                                                    "tooltip_title"=>"Ver clientes"
                                                     ]
                                                 ]
                                     ],

@@ -39,7 +39,8 @@
                                         [
                                                 "function"=>"deleteNetworkOperator",
                                                 "conditional"=>"conditionalDelete",
-                                                "icon"=>"fas fa-trash"
+                                                "icon"=>"fas fa-trash",
+                                                "tooltip_title"=>"Eliminar"
                                         ]
                                        ]
                                     ],

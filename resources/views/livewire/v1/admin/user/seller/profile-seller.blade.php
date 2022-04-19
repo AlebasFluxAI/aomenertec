@@ -75,7 +75,9 @@
                                                                                                             "route"=>"v1.admin.client.detail.client",
                                                                                                             "binding"=>"client"
                                                                                                       ],
-                                                                                                    "icon"=>"fas fa-search"
+                                                                                                    "icon"=>"fas fa-search",
+                                                                                                     "tooltip_title"=>"Detalles",
+
                                                                                             ]
                                                                                         ]
                                                                                     ],
