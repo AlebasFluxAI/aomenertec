@@ -7,6 +7,7 @@
             "second_title"=>"Super Administrador"
         ])
 
+
     {{----------------------------------Formulario--------------------------}}
     @include("partials.v1.tab.v1.tab",[
 
@@ -68,5 +69,6 @@
                  ],
              ]
      ])
+
 
 </div>
