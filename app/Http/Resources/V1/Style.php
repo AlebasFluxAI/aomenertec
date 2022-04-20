@@ -18,12 +18,14 @@ class Style extends Singleton
     {
         try {
             return "assets/css/" . self::getUserStyle() . '.css';
-        } catch (Throwable $e) {
+        } catch (Throwable $exception) {
             return "assets/css/style.css";
+
         }
+
     }
 
-    private function getUserStyle()
+    private static function getUserStyle()
     {
 
         if ($admin = Auth::user()->admin) {

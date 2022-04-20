@@ -43,7 +43,7 @@ class IndexAdmin extends Component
 
     public function conditionalDelete($id)
     {
-        $this->indexAdminService->conditionalDelete($this, $id);
+        return $this->indexAdminService->conditionalDelete($this, $id);
     }
 
     public function render()
