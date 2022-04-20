@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\IndexClientService;
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
+use App\Models\Traits\FilterTrait;
 use App\Models\V1\Client;
 use App\Models\V1\Equipment;
 use Livewire\Component;
@@ -12,6 +13,7 @@ use Livewire\WithPagination;
 class IndexClient extends Component
 {
     use WithPagination;
+    use FilterTrait;
 
 
     private $indexClientService;
@@ -50,7 +52,12 @@ class IndexClient extends Component
     public function render()
     {
         return view('livewire.v1.admin.client.index-client', [
-            "clients" => Client::paginate(15)
+            "data" => $this->getData()
         ])->extends('layouts.v1.app');
+    }
+
+    public function getData()
+    {
+        return $this->indexClientService->getData($this);
     }
 }
