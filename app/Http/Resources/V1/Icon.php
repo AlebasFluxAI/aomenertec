@@ -17,9 +17,33 @@ class Icon extends Singleton
     public static function getIcon()
     {
         try {
-            return Auth::user()->admin->icon->url;
+            return self::getUserIcon();
         } catch (Throwable $e) {
             return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
         }
+    }
+
+    private static function getUserIcon()
+    {
+
+        if ($admin = Auth::user()->admin) {
+            return $admin->icon->url;
+        }
+        if ($networkOperator = Auth::user()->networkOperator) {
+            return $networkOperator->admin->icon->url;
+        }
+
+        if ($seller = Auth::user()->seller) {
+            return $seller->networkOperator->admin->icon->url;
+        }
+        if ($supervisor = Auth::user()->supervisor) {
+            return $supervisor->networkOperator->admin->icon->url;
+
+        }
+        if ($technician = Auth::user()->technician) {
+            return $technician->networkOperator->admin->icon->url;
+
+        }
+        return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
     }
 }
