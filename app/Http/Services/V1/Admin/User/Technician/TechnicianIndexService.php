@@ -37,12 +37,14 @@ class TechnicianIndexService extends Singleton
     public function getData(Component $component)
     {
         $user = Auth::user();
+
         if ($networkOperator = $user->networkOperator) {
             if ($component->filter) {
                 return $networkOperator->technicians()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
             }
             return $networkOperator->technicians()->paginate(15);
         }
+
         if ($admin = $user->admin) {
             if ($component->filter) {
                 return Technician::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
