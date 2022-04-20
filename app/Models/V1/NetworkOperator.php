@@ -104,6 +104,7 @@ class NetworkOperator extends Model
         ];
     }
 
+
     public static function getHome()
     {
         return "livewire.v1.admin.user.network-operator.profile-network-operator";

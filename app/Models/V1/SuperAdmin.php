@@ -125,10 +125,12 @@ class SuperAdmin extends Model
         ];
     }
 
+
     public static function getHome()
     {
         return "livewire.v1.admin.user.super.profile-super-admin";
     }
+
 
     public static function getRole()
     {
@@ -140,5 +142,5 @@ class SuperAdmin extends Model
         return $this->belongsTo(User::class);
     }
 
-
+  
 }

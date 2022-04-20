@@ -17,6 +17,4 @@ trait ValidateUserFormTrait
         'phone' => 'min:7|unique:users,phone',
         'email' => 'required|email|unique:users,email',
     ];
-
-
 }

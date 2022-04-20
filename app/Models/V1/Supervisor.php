@@ -46,6 +46,7 @@ class Supervisor extends Model
         ];
     }
 
+
     public static function getHome()
     {
         return "livewire.v1.admin.user.supervisor.profile-supervisor";
@@ -55,7 +56,6 @@ class Supervisor extends Model
     {
         return "supervisor";
     }
-
 
     public function user()
     {

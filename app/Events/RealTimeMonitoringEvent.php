@@ -35,7 +35,7 @@ class RealTimeMonitoringEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('real-time-monitoring');
+        return new Channel('data-monitoring');
     }
     public function broadcastAs()
     {

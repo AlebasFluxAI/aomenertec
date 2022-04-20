@@ -31,7 +31,6 @@ class SupervisorIndexService extends Singleton
     public function addClients(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.supervisores.agregar_clientes", ["supervisor" => $modelId]);
-
     }
 
 

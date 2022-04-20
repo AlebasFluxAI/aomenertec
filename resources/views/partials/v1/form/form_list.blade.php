@@ -10,8 +10,8 @@
 
 --}}
 
- <div class="form-group mb-2  col-md-{{$col_with??12}} col-sm-12">
-     <select wire:model="{{$list_model}}" class="{{$aux_class??"custom-select"}} " required="{{$required??false}}" @if($disabled??false)disabled @endif>
+ <div class="form-group mb-{{$mb??2}} mt-{{$mt??0}}  @if($aux_class??"" != 'no-border-card') col-sm-12 col-md-{{$col_with??12}}@endif ">
+     <select  wire:model="{{$list_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "  required="{{$required??false}}" @if($disabled??false)disabled @endif>
          <option  value="0"> {{$list_default}} </option>
          @foreach($list_options as $option)
              @if($option[$list_option_view] != "EXPANSION URBANA" || $option[$list_option_view]!= "SIN DEFINIR" )

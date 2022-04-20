@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateDailyMicrocontrollerDataTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('daily_microcontroller_data', function (Blueprint $table) {
+            $table->id();
+            $table->string("year");
+            $table->string("month");
+            $table->string("day");
+            $table->string("hour");
+            $table->foreignId('client_id')->constrained();
+            $table->unsignedBigInteger("microcontroller_data_id");
+            $table->foreign("microcontroller_data_id")
+                ->references("id")
+                ->on("microcontroller_data");
+            $table->softDeletes();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('daily_microcontroller_data');
+    }
+}

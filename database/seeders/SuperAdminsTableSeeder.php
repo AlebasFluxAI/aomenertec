@@ -25,7 +25,6 @@ class SuperAdminsTableSeeder extends Seeder
                 "phone" => $user->phone,
                 "email" => $user->email,
             ]);
-
         }
     }
 }
