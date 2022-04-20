@@ -20,6 +20,7 @@ use App\Models\V1\Client;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -55,6 +56,32 @@ class IndexClientService extends Singleton
     {
         $component->redirectRoute("v1.admin.client.settings", ["client" => $clientId]);
 
+    }
+
+    public function getData(Component $component)
+    {
+        $user = Auth::user();
+        if ($networkOperator = $user->networkOperator) {
+            if ($component->filter) {
+                return $networkOperator->clients()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return $networkOperator->clients()->paginate(15);
+        }
+
+        if ($admin = $user->admin) {
+            if ($component->filter) {
+                return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->paginate(15);
+        }
+
+
+        if ($component->filter) {
+            return Client::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+        }
+
+        return Client::paginate(15);
     }
 
 
