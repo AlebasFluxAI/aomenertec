@@ -3,30 +3,123 @@
 namespace App\Http\Livewire\V1\Monitoring;
 
 use App\Models\V1\Client;
+use App\Models\V1\HourlyMicrocontrollerData;
 use Asantibanez\LivewireCharts\Models\LineChartModel;
 use Livewire\Component;
 use Asantibanez\LivewireCharts\Facades\LivewireCharts;
 use Asantibanez\LivewireCharts\Models\ColumnChartModel;
+use Illuminate\Support\Collection;
 
 class Monitoring extends Component
 {
-    protected $listeners = ['echo:data-monitoring,.dataEventAdd' => 'addData'];
+    protected $listeners = ['echo:data-monitoring,.dataEventAdd' => 'addData1', 'changeDateRange'];
 
 
     public $data;
-    public $test;
+    public $data_chart;
+    public $last_data;
+    public $data_frame;
+    public $data_frame_collect;
+    public $variables;
+    public $variables_selected;
+    public $cards;
+    public $variable_chart_id;
+    public $time_id;
+    public $date_range;
+    protected $rules = [
 
+        'cards.*.color' => 'required',
+        'cards.*.id' => 'required',
+        'cards.*.icon' => 'required',
+        'cards.*.list_model_variable' => 'required',
+    ];
     public function mount()
     {
-        $unixTime = time();//delete
-        $current_time = new \DateTime();
-        $current_time->setTimestamp($unixTime);
-        $current_hour = new \DateTime();
-        $aux = $unixTime - ($unixTime%3600);//delete
-        $current_hour->setTimestamp($aux);
-        $this->data = Client::find(2)->microcontrollerData->whereBetween("source_timestamp", [$current_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')]);
-        $this->test = [];
+        $last_data = Client::find(2)->microcontrollerData->last();
+        $this->last_data = json_decode($last_data->raw_json, true);
+        $this->data_frame = config('data-frame.data_frame');
+        $this->data_frame_collect = new Collection();
+        $this->data_frame_collect = collect($this->data_frame);
+        $this->variables = config('data-frame.variables');
 
+        $this->cards = [];
+        foreach ($this->variables as $index=>$variable) {
+            $aux = [];
+            foreach ($this->data_frame as $item){
+                if ($item['variable_id'] == $variable['id']) {
+                    array_push($aux, $item);
+                }
+            }
+            array_push($this->cards, [
+                "id" => $variable['id'],
+                "color" => $variable['style'],
+                "icon" => $variable['icon'],
+                "list_model_variable" => $variable['id'],
+                "variables_selected" => $aux,
+            ]);
+            if (count($this->cards) == 6){
+                break;
+            }
+        }
+        $this->variable_chart_id = 1;
+        $this->time_id = 1;
+        $this->variables_selected = [];
+        foreach ($this->data_frame as $item){
+            if ($item['variable_id'] == $this->variable_chart_id) {
+                array_push($this->variables_selected, $item);
+            }
+        }
+    }
+
+    public function changeDateRange($start, $end){
+        $this->date_range = $start." - ".$end;
+    }
+
+    public function updatedVariableChartId(){
+        $this->variables_selected = [];
+        foreach ($this->data_frame as $item){
+            if ($item['variable_id'] == $this->variable_chart_id) {
+                array_push($this->variables_selected, $item);
+            }
+        }
+        $this->emit('changeVariable', $this->variables_selected);
+    }
+    public function updatedTimeId(){
+        $this->emit('changeTime', $this->time_id);
+    }
+
+    public function updated($property_name, $value){
+
+
+        if (strpos($property_name, "cards") !== false){
+            $variables = new Collection();
+            foreach($this->variables as $item){
+                $variables->push((object)$item);
+            }
+            $variable_select = $variables->where('id', $value)->first();
+            $id = filter_var($property_name, FILTER_SANITIZE_NUMBER_INT);
+            $data_frame_collect = new Collection();
+            foreach($this->data_frame as $item){
+                $data_frame_collect->push((object)$item);
+            }
+            $aux = [];
+            foreach ($this->data_frame as $item){
+                if ($item['variable_id'] == $value) {
+                    array_push($aux, $item);
+                }
+            }
+            $this->cards = array_replace($this->cards, [
+                $id =>
+                ['id' => $variable_select->id,
+                 'color' => $variable_select->style,
+                'icon' => $variable_select->icon,
+                'list_model_variable' => $variable_select->id,
+                'variables_selected' => $aux]
+            ]);
+
+            $last_data = Client::find(2)->microcontrollerData->last();
+            $this->last_data = json_decode($last_data->raw_json, true);
+        }
 
     }
 
@@ -38,6 +131,7 @@ class Monitoring extends Component
      }*/
     public function newData($data)
     {
+<<<<<<< HEAD
         $this->test = $data['data'];
     }
     public function addData(){
@@ -48,23 +142,39 @@ class Monitoring extends Component
         $aux = $unixTime - ($unixTime%3600);//delete
         $current_hour->setTimestamp($aux);
         $this->data = Client::find(2)->microcontrollerData->whereBetween("source_timestamp", [$current_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')]);
+=======
+        return [
+            "echo-private:real-time-monitoring.{$this->raw_json['client_id']},RealTimeMonitoringEvent" => 'newData',
+        ];
+    }*/
+    /*public function newData($data){
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
 
+    }*/
+    public function addData1(){
+        $last_data = Client::find(2)->microcontrollerData->last();
+        $this->last_data = json_decode($last_data->raw_json, true);
+        $data_frame_collect = new Collection();
+        foreach($this->data_frame as $item){
+            $data_frame_collect->push((object)$item);
+        }
+        $update_cards = new Collection();
+        $update_cards = $this->cards;
+        $this->cards = new Collection();
+        foreach ($update_cards as $index=>$variable) {
+            $this->cards->push((object)[
+                "id" => $variable['id'],
+                "color" => $variable['color'],
+                "icon" => $variable['icon'],
+                "list_model_variable" => $variable['list_model_variable'],
+                "variables_selected" => $data_frame_collect->where('variable_id', $variable['id']),
+            ]);
+        }
     }
     public function render()
     {
-        $lineChartModel = (new LineChartModel())
-            ->setTitle('Voltaje')
-            ->setAnimated(true)
-            ->setDataLabelsEnabled(false)
-            ->withLegend()
-        ;
-        foreach ($this->data as $item){
-            $data=json_decode($item->raw_json);
-            $explode_time = explode(" ", $item->source_timestamp);
-            $lineChartModel->addPoint($explode_time[1],round($data->ph1_volt, 2));
-        }
+
         return view('livewire.v1.monitoring.monitoring')
-            ->with(["lineChartModel" => $lineChartModel])
             ->extends('layouts.v1.app');
     }
 }

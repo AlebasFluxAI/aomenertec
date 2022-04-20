@@ -15,6 +15,7 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('location_code');
             $table->foreignId("location_type_id")->constrained();
             $table->string('name');
             $table->foreignId('municipality_id')->constrained();

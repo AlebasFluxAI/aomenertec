@@ -127,6 +127,7 @@
                                 "required"=>true
                        ])
 
+<<<<<<< HEAD
                         @include("partials.v1.form.form_input_icon",[
                                 "input_model"=>"phone",
                                 "icon_class"=>"fas fa-barcode",
@@ -164,6 +165,45 @@
                                  "list_option_view"=>"name",
                                  "list_option_title"=>"",
                         ])
+=======
+                            @include("partials.v1.form.form_input_icon",[
+                                    "input_model"=>"phone",
+                                    "icon_class"=>"fas fa-barcode",
+                                    "placeholder"=>"Telefono",
+                                    "col_with"=>3,
+                                    "input_type"=>"text",
+                           ])
+                            @include("partials.v1.form.form_list",[
+                                     "col_with"=>4,
+                                     "input_type"=>"text",
+                                     "list_model" => "location_type_id",
+                                     "list_default" => "Tipo ubicación...",
+                                     "list_options" => $location_types,
+                                     "list_option_value"=>"id",
+                                     "list_option_view"=>"type",
+                                     "list_option_title"=>"",
+                            ])
+                            @include("partials.v1.form.form_list",[
+                                     "col_with"=>4,
+                                     "input_type"=>"text",
+                                     "list_model" => "department_id",
+                                     "list_default" => "Departamento...",
+                                     "list_options" => $departments,
+                                     "list_option_value"=>"id",
+                                     "list_option_view"=>"name",
+                                     "list_option_title"=>"",
+                            ])
+                            @include("partials.v1.form.form_list",[
+                                     "col_with"=>4,
+                                     "input_type"=>"text",
+                                     "list_model" => "municipality_id",
+                                     "list_default" => "Municipio...",
+                                     "list_options" => $municipalities,
+                                     "list_option_value"=>"id",
+                                     "list_option_view"=>"name",
+                                     "list_option_title"=>"",
+                            ])
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
 
                         @include("partials.v1.form.form_list",[
                                  "col_with"=>4,
