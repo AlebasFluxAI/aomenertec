@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\V1\Client;
 use App\Models\V1\Equipment;
-use App\Models\V1\HourlyMicrocontrollerData;
-
 
 use Illuminate\Support\Facades\Config;
 use PhpOption\None;
@@ -29,10 +27,6 @@ class MicrocontrollerData extends Model
         "accumulated_reactive_consumption",
         "source_timestamp",
         "type",
-        "interval_reactive_inductive_consumption",
-        "interval_reactive_capacitive_consumption",
-        "accumulated_reactive_capacitive_consumption",
-        "accumulated_reactive_inductive_consumption",
     ];
 
     public function client()
@@ -49,16 +43,8 @@ class MicrocontrollerData extends Model
     {
         $this->updateData();
         //$this->alert();
-    }
-<<<<<<< HEAD
-    private function updateData()
-    {
-        $data_frame = config('data-frame.data_frame');
-        $decode = bin2hex(base64_decode($this->raw_json));
-        //$decode = $this->raw_json;
 
-        foreach ($data_frame as $data) {
-=======
+    }
     public function intervalMiningData(){
         $unix_time = $this->raw_json["timestamp"];
         if ($unix_time%60 == 0){
@@ -114,21 +100,20 @@ class MicrocontrollerData extends Model
         $varch = 0;
         $varih = 0;
         foreach ($data_frame as $data){
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
             try {
-                $split = substr($decode, ($data['start']), ($data['lenght']));
+                $split = substr($decode, ($data['start']), ($data['lenght'] ));
                 $bin = hex2bin($split);
                 $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                if (is_nan($json[$data['variable_name']])) {
+                if (is_nan( $json[$data['variable_name']])){
                     $json[$data['variable_name']] = null;
                 }
-                if ($data['variable_name'] == "equipment_id") {
+                if ($data['variable_name'] == "equipment_id"){
                     $equipment_serial = $json[$data['variable_name']];
-                } elseif ($data['variable_name'] == "timestamp") {
+                } elseif ($data['variable_name'] == "timestamp"){
                     $timestamp_unix = $json[$data['variable_name']];
-                } elseif ($data['variable_name'] == "import_wh") {
+                } elseif ($data['variable_name'] == "import_wh"){
                     $wh = $json[$data['variable_name']];
-                } elseif ($data['variable_name'] == "import_VArh") {
+                } elseif ($data['variable_name'] == "import_VArh"){
                     $varh = $json[$data['variable_name']];
                 } elseif ($data['variable_name'] == "ph1_varih"){
                     $varih = $varih + $json[$data['variable_name']];
@@ -147,34 +132,20 @@ class MicrocontrollerData extends Model
                 echo 'Excepción capturada: ',  $e->getMessage(), "\n";
             }
         }
-<<<<<<< HEAD
-        $current_time = new \DateTime("@$timestamp_unix");
-=======
 
         $unixTime = time();//delete
         $current_time = new \DateTime();
         $aux = $unixTime - ($unixTime%60);//delete
         $current_time->setTimestamp($aux);//$aux --> $timestamp_unix
         $json['timestamp'] = $aux;
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                             ->first();
-        $aux = EquipmentClient::whereEquipmentId($equipment->id)->whereCurrentAssigned(true)->first();
-        $this->client_id= $aux->client_id;
-        /*$clients = $equipment->clients();
-        foreach ($clients as $client){
-            if($client->pivot->current_assigned){
-                $this->raw_json= $client->id;
-            }
-        }*/
-        $client = Client::find($aux->client_id);
-        if (count($client->microcontrollerData) == 0) {
+        $client = $equipment->clients->first();
+        $this->client_id= $client->id;
+
+        if (count($client->microcontrollerData) == 0){
             $this->interval_real_consumption = 0;
             $this->interval_reactive_consumption = 0;
-<<<<<<< HEAD
-        } else {
-            $module = $timestamp_unix%3600;
-=======
             $this->interval_reactive_capacitive_consumption = 0;
             $this->interval_reactive_inductive_consumption = 0;
             $this->accumulated_reactive_inductive_consumption = $varih;
@@ -183,35 +154,26 @@ class MicrocontrollerData extends Model
         } else{
             $module = $aux%3600;
 
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
             if ($module < 60) {
-                $previous_hour_unix = $timestamp_unix - (3600 + $module);
-            } else {
-                $previous_hour_unix = $timestamp_unix - $module;
+                $previous_hour_unix = $aux - (3600 + $module);
+            } else{
+                $previous_hour_unix = $aux - $module;
             }
-<<<<<<< HEAD
-            $reference_hour = new \DateTime("@$previous_hour_unix");
-=======
             $last_data = $client->microcontrollerData->last();
             $this->accumulated_reactive_inductive_consumption = $last_data->accumulated_reactive_inductive_consumption + $varih;
             $this->accumulated_reactive_capacitive_consumption = $last_data->accumulated_reactive_capacitive_consumption + $varch;
 
             $reference_hour = new \DateTime();
             $reference_hour->setTimestamp($previous_hour_unix);
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
             $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
-                ->first();
-            if (empty($reference_data)) {
+                            ->first();
+            if (empty($reference_data)){
                 $this->interval_real_consumption = 0;
                 $this->interval_reactive_consumption = 0;
-<<<<<<< HEAD
-            } else {
-=======
                 $this->interval_reactive_capacitive_consumption = 0;
                 $this->interval_reactive_inductive_consumption = 0;
 
             } else{
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
                 $this->interval_real_consumption = $wh - $reference_data->accumulated_real_consumption;
                 $this->interval_reactive_consumption = $varh - $reference_data->accumulated_reactive_consumption;
                 $this->interval_reactive_capacitive_consumption = $this->accumulated_reactive_capacitive_consumption - $reference_data->accumulated_reactive_capacitive_consumption;
@@ -264,5 +226,4 @@ class MicrocontrollerData extends Model
             }////// notificar alertas
         }
     }
-
 }
