@@ -7,9 +7,6 @@ hooks:
   BeforeInstall:
     - location: scripts/beforeInstall.sh
       runas: root
-<<<<<<< HEAD
   AfterInstall:
-=======
->>>>>>> develop_v2
     - location: scripts/afterInstall.sh
       runas: root
