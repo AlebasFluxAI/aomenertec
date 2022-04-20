@@ -12,7 +12,6 @@ use Livewire\Component;
 
 class EquipmentAlertAddService extends Singleton
 {
-
     public function mount(Component $component)
     {
         foreach (AlertType::get() as $alertType) {
@@ -30,7 +29,6 @@ class EquipmentAlertAddService extends Singleton
             'picked' => [],
 
         ]);
-
     }
 
     public function loadEquipmentType(Component $component)
@@ -42,12 +40,10 @@ class EquipmentAlertAddService extends Singleton
     {
         $equipment = EquipmentAlert::create($this->mapper($component));
         $component->emitTo('livewire-toast', 'show', 'Alerta para equipo ' . $equipment->equipment->serial . ' creada con exito.');
-
     }
 
     private function mapper(Component $component)
     {
-        
         return [
             "value" => $component->value,
             "alert_type_id" => $component->alertType,
@@ -65,7 +61,6 @@ class EquipmentAlertAddService extends Singleton
         $component->equipments = Equipment::where('id', 'like', "%" . $component->equipmentId . "%")
             ->orWhere('name', 'like', "%" . $component->equipmentId . "%")
             ->limit(3)->get();
-
     }
 
 
@@ -75,5 +70,4 @@ class EquipmentAlertAddService extends Singleton
         $equipment = json_decode($equipment);
         $component->equipmentId = $equipment->id;
     }
-
 }

@@ -86,7 +86,6 @@ class EditUserService extends Singleton
             $component->network_operator_id = $user->consumer->network_operator_id;
             $component->network_operator = $user->consumer->networkOperator->user->identification;
         } else {
-
             $component->network_operator_id = "";
             $component->network_operator = "";
             $component->picked = false;

@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,50 +38,70 @@ class Client extends Model
         'stratum_id',
         'network_topology'];
 
+    public function clientConfiguration(): HasOne
+    {
+        return $this->hasOne(ClientConfiguration::class);
+    }
+
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
     }
+
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
+
     public function municipality()
     {
         return $this->belongsTo(Municipality::class);
     }
+
     public function location()
     {
         return $this->belongsTo(Location::class);
     }
+
     public function clientType()
     {
         return $this->belongsTo(ClientType::class);
     }
+
     public function subsistenceConsumption()
     {
         return $this->belongsTo(SubsistenceConsumption::class);
     }
+
     public function voltageLevel()
     {
         return $this->belongsTo(VoltageLevel::class);
     }
+
     public function stratum()
     {
         return $this->belongsTo(Stratum::class);
     }
-    public function equipment()
+
+    public function equipments()
     {
         return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id')
-            ->withPivot('current_assigned');
+            ->withPivot('current_assigned')
+            ->using(EquipmentClient::class);
     }
+
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);
     }
+
     public function microcontrollerData()
     {
+<<<<<<< HEAD
+        return $this->hasMany(MicrocontrollerData::class);
+=======
         return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp', 'asc');
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
     }
 
     public function supervisors()

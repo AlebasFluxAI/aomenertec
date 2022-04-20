@@ -21,6 +21,5 @@ class AlertTypeDetailService extends Singleton
     public function edit(Component $component)
     {
         $component->redirectRoute("administrar.v1.equipos.alertas.tipos.editar", ["alertType" => $component->alertType->id]);
-
     }
 }

@@ -6,8 +6,22 @@
             @foreach($table_info  as $info)
                 <tr>
                     <th>{{$info["key"]}}</th>
+                    @isset($info["type"])
+                        @if($info["type"]=="text")
 
-                    <td>{{$info["value"]}}</td>
+                            <td>{{$info["value"]}}</td>
+                        @elseif($info["type"]=="image")
+
+                            <td>
+
+                                <img src='{{$info["value"]}}' class="rounded img-fluid" alt="Logo" width="150px"
+                                     height="150px">
+                            </td>
+                        @endif
+
+                    @else
+                        <td>{{$info["value"]}}</td>
+                    @endisset
                 </tr>
             @endforeach
         </table>

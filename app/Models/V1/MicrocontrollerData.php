@@ -2,15 +2,12 @@
 
 namespace App\Models\V1;
 
-use App\Events\NewPointDataMonitoringEvent;
 use App\Models\V1\AlertHistory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\V1\Client;
 use App\Models\V1\Equipment;
-use App\Models\V1\HourlyMicrocontrollerData;
-
 
 use Illuminate\Support\Facades\Config;
 use PhpOption\None;
@@ -24,17 +21,12 @@ class MicrocontrollerData extends Model
         "id",
         "raw_json",
         "client_id",
-        "equipment_id",
         "accumulated_real_consumption",
         "interval_real_consumption",
         "interval_reactive_consumption",
         "accumulated_reactive_consumption",
         "source_timestamp",
         "type",
-        "interval_reactive_inductive_consumption",
-        "interval_reactive_capacitive_consumption",
-        "accumulated_reactive_capacitive_consumption",
-        "accumulated_reactive_inductive_consumption",
     ];
 
     public function client()
@@ -193,17 +185,17 @@ class MicrocontrollerData extends Model
         $this->accumulated_reactive_consumption = $varh;
         $this->raw_json = $json;
         $this->update();
-
     }
-    private function alert(){
+    private function alert()
+    {
         $flags_frame = config('data-frame.flags_frame');
-        $binary_flags = sprintf('%064b',  $this->raw_json['flags']);
+        $binary_flags = sprintf('%064b', $this->raw_json['flags']);
         $split = substr($binary_flags, (61), (3));
-        if ($split == "100"){
-            foreach ($flags_frame as $flag){
+        if ($split == "100") {
+            foreach ($flags_frame as $flag) {
                 $split = substr($binary_flags, ($flag['index']), (1));
-                if ($split == "1"){
-                    if ($flag['flag_name'] == 'flagOpened'){
+                if ($split == "1") {
+                    if ($flag['flag_name'] == 'flagOpened') {
                         $value = 1;
                     } else {
                         $value = $this->raw_json[$flag['variable_name']];
@@ -216,16 +208,16 @@ class MicrocontrollerData extends Model
                     ///notificar alerta
                 }
             }
-        } else{
+        } else {
             $percent_reactive_consumption = ($this->interval_reactive_consumption * 100) / $this->interval_real_consumption;
-            if($percent_reactive_consumption >= 50){////50% is dinamyc value
+            if ($percent_reactive_consumption >= 50) {////50% is dinamyc value
                 AlertHistory::create([
                     'microcontroller_data_id' => $this->id,
                     'flag_index' => 14,
                     'value' => $percent_reactive_consumption,
                 ]);
             }
-            if ($this->interval_real_consumption >= 1200){//// 1200 es dinamyc value
+            if ($this->interval_real_consumption >= 1200) {//// 1200 es dinamyc value
                 AlertHistory::create([
                     'microcontroller_data_id' => $this->id,
                     'flag_index' => 13,
@@ -234,5 +226,4 @@ class MicrocontrollerData extends Model
             }////// notificar alertas
         }
     }
-
 }

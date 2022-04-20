@@ -2,7 +2,6 @@
 
 namespace App\Http\Services;
 
-
 use PhpMqtt\Client\Facades\MQTT;
 
 abstract class MqttConfigSender extends Singleton

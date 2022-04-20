@@ -56,7 +56,6 @@ class AddEquipmentAlert extends Component
 
     public function submitForm()
     {
-
         $this->addEquipmentAlertService->submitForm($this);
     }
 

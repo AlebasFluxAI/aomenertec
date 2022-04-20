@@ -29,5 +29,4 @@ class EquipmentType extends Model
     {
         return $this->belongsToMany(PqrType::class, 'equipment_type_pqr_types');
     }
-
 }

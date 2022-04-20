@@ -12,7 +12,6 @@ use Livewire\Component;
 
 class AlertTypeEditService extends Singleton
 {
-
     public function mount(Component $component, AlertType $alertType)
     {
         $component->alertType = $alertType;
@@ -41,5 +40,4 @@ class AlertTypeEditService extends Singleton
             "unit" => $component->unit,
         ];
     }
-
 }

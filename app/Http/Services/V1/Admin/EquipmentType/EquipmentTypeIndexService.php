@@ -11,8 +11,6 @@ use Livewire\Component;
 
 class EquipmentTypeIndexService extends Singleton
 {
-
-
     public function delete(Component $component, $dataId)
     {
         EquipmentType::find($dataId)->delete();

@@ -25,13 +25,11 @@ class EditAlertType extends Component
 
     public function mount(AlertType $alertType)
     {
-
         $this->editAlertTypeService->mount($this, $alertType);
     }
 
     public function submitForm()
     {
-
         $this->editAlertTypeService->submitForm($this);
     }
 

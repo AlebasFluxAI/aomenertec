@@ -25,9 +25,8 @@ class RolesTableSeeder extends Seeder
             ['name' => "technician", 'display_name' => 'TÉCNICO', 'guard_name' => 'web'],
             ['name' => "supervisor", 'display_name' => 'SUPERVISOR', 'guard_name' => 'web']
         ];
-        foreach($roles as $role){
+        foreach ($roles as $role) {
             $create = Role::create($role);
         }
-
     }
 }

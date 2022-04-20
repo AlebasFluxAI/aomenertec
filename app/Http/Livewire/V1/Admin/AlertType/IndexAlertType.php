@@ -43,13 +43,11 @@ class IndexAlertType extends Component
     public function delete($id)
     {
         $this->indexEquipmentService->delete($this, $id);
-
     }
 
     public function details($id)
     {
         $this->indexEquipmentService->details($this, $id);
-
     }
 
     public function render()

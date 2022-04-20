@@ -5,31 +5,53 @@ namespace App\Http\Livewire\V1\Admin\Client;
 use App\Http\Services\V1\Admin\Client\AddClientService;
 use Livewire\Component;
 
-
 class AddClient extends Component
 {
-
-    public $aux_network_operator_id, $aux_network_operator, $message_aux_network_operator, $picked_aux_network_operator, $aux_network_operators;
+    public $aux_network_operator_id;
+    public $aux_network_operator;
+    public $message_aux_network_operator;
+    public $picked_aux_network_operator;
+    public $aux_network_operators;
     public $message;
     public $file;
     public $identification;
     public $name;
     public $phone;
-    public $location_type_id, $location_types;
-    public $department_id, $departments;
-    public $municipality_id, $municipalities;
-    public $location_id, $locations;
+    public $location_type_id;
+    public $location_types;
+    public $department_id;
+    public $departments;
+    public $municipality_id;
+    public $municipalities;
+    public $location_id;
+    public $locations;
     public $direction;
     public $email;
-    public $latitude, $longitude;
-    public $stratum_id, $strata;
-    public $client_type, $client_type_id, $client_types;
-    public $voltage_level_id, $voltage_levels;
-    public $subsistence_consumption_id, $subsistence_consumptions;
-    public $contribution, $public_lighting_tax, $active, $network_topology;
-    public $network_operator_id, $network_operator, $picked_network_operator, $network_operators, $message_network_operator;
-    public $equipment, $serials;
-    public $pickeds, $posts, $equipment_id;
+    public $latitude;
+    public $longitude;
+    public $stratum_id;
+    public $strata;
+    public $client_type;
+    public $client_type_id;
+    public $client_types;
+    public $voltage_level_id;
+    public $voltage_levels;
+    public $subsistence_consumption_id;
+    public $subsistence_consumptions;
+    public $contribution;
+    public $public_lighting_tax;
+    public $active;
+    public $network_topology;
+    public $network_operator_id;
+    public $network_operator;
+    public $picked_network_operator;
+    public $network_operators;
+    public $message_network_operator;
+    public $equipment;
+    public $serials;
+    public $pickeds;
+    public $posts;
+    public $equipment_id;
     public $equipment_types;
     private $addClientService;
 
@@ -66,7 +88,8 @@ class AddClient extends Component
     {
         $this->addClientService->assignEquipment($this, $equipment, $aux);
     }
-    public function assignEquipmentFirst($type_id){
+    public function assignEquipmentFirst($type_id)
+    {
         $this->addClientService->assignEquipmentFirst($this, $type_id);
     }
 
@@ -108,10 +131,12 @@ class AddClient extends Component
         $this->addClientService->assignNetworkOperatorFirst($this);
     }
 
-    public function addInputEquipment(){
+    public function addInputEquipment()
+    {
         $this->addClientService->AddInputEquipment($this);
     }
-    public function deleteInputEquipment(){
+    public function deleteInputEquipment()
+    {
         $this->addClientService->deleteInputEquipment($this);
     }
 

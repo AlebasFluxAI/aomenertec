@@ -24,7 +24,7 @@ class PqrTypesTableSeeder extends Seeder
             ['type'=> 'FALLA EN ACOMETIDA ELECTRICA', 'description' => 'Fallas o averias en la linea de conexion electrica'],
             ['type'=> 'PRECINTO DE SEGURIDAD', 'description' => 'Precinto de seguridad forzado'],
         ];
-        foreach ($types as $type){
+        foreach ($types as $type) {
             $create = PqrType::create($type);
         }
     }

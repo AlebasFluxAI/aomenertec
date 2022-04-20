@@ -44,7 +44,6 @@ class AddEquipment extends Component
 
     public function updatedEquipmentTypeId()
     {
-
         $this->addEquipmentService->updatedEquipmentTypeId($this);
     }
 
