@@ -12,9 +12,7 @@ class AdminAddService extends Singleton
 {
     public function submitForm(Component $component)
     {
-        $component->validate([
-            'icon' => 'image|max:10240', // 1MB Max
-        ]);
+ 
         $component->validate();
         $admin = Admin::create($this->mapper($component));
         $admin->buildOneImageFromFile("icon", $component->icon);

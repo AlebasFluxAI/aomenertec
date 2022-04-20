@@ -102,6 +102,11 @@ class Supervisor extends Model
         ];
     }
 
+    public static function getRole()
+    {
+        return "supervisor";
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

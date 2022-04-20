@@ -85,7 +85,7 @@ class NetworkOperator extends Model
         ];
     }
 
-    public function getRole()
+    public static function getRole()
     {
         return User::TYPE_NETWORK_OPERATOR;
     }
@@ -94,10 +94,12 @@ class NetworkOperator extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function admin()
     {
         return $this->belongsTo(Admin::class);
     }
+
     public function clients()
     {
         return $this->hasMany(Client::class);
