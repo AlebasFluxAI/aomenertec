@@ -46,23 +46,17 @@ class Supervisor extends Model
         ];
     }
 
-<<<<<<< HEAD
+
     public static function getHome()
     {
         return "livewire.v1.admin.user.supervisor.profile-supervisor";
     }
 
-=======
->>>>>>> develop_v2
     public static function getRole()
     {
         return "supervisor";
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> develop_v2
     public function user()
     {
         return $this->belongsTo(User::class);
