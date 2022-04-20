@@ -48,14 +48,12 @@ class NetworkOperatorIndexService extends Singleton
 
     public function deleteNetworkOperator($networkOperatorId)
     {
-
         NetworkOperator::whereId($networkOperatorId)->delete();
 
     }
 
     public function conditionalDelete($networkOperatorId)
     {
-
         return Client::whereNetworkOperatorId($networkOperatorId)->exists();
     }
 }
