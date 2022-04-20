@@ -11,12 +11,14 @@ class Support extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['identification',
+    protected $fillable = [
+        'identification',
         'phone',
         'name',
         'last_name',
         'email',
-        'user_id'];
+        'user_id'
+    ];
 
     public static function menu()
     {

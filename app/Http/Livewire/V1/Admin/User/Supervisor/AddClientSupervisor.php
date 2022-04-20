@@ -5,12 +5,14 @@ namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddClientService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorEditService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Supervisor;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class AddClientSupervisor extends Component
 {
+
     public $model;
     public $name;
     public $last_name;
@@ -23,6 +25,7 @@ class AddClientSupervisor extends Component
     public $client_id;
     public $message_client;
     public $clientsRelated;
+
     private $addClientSupervisorService;
 
     public function __construct($id = null)

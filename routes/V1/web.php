@@ -11,6 +11,7 @@ use App\Http\Livewire\V1\Admin\Client\EditClient;
 use App\Http\Livewire\V1\Admin\Client\IndexClient;
 use App\Http\Livewire\V1\Admin\Client\DetailClient;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,9 @@ use Illuminate\Support\Facades\Route;
 Route::post('', [testFile::class, 'upload']);
 
 Route::get('/', function () {
+    if (Auth::user()) {
+        return redirect()->route("administrar.v1.perfil");
+    }
     return view('auth.login');
 });
 

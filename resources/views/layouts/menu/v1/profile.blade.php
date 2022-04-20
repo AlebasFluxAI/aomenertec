@@ -2,7 +2,10 @@
     <ul class="navbar-nav">
 
         <li class="nav-item dropdown">
-            <a class="btn btn-lg" href="{{ route('administrar.v1.perfil') }}">
+            <a class="btn btn-lg"
+               data-toggle="tooltip" data-placement="{{$tooltip_position??"top"}}" title="Mi    Perfil"
+
+               href="{{ route('administrar.v1.perfil') }}">
                 <i class="fa-solid fa-user"></i>
             </a>
 
