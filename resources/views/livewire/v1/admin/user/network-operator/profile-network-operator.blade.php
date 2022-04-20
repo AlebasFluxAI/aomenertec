@@ -120,6 +120,14 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-pencil",
                                                                                                     "tooltip_title"=>"Editar",
+                                                                                            ],
+                                                                                            [
+                                                                                                "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.agregar_clientes",
+                                                                                                            "binding"=>"seller"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-users",
+                                                                                                    "tooltip_title"=>"Asociar clientes",
                                                                                             ]
                                                                                         ]
                                                                                     ],
@@ -152,6 +160,14 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-pencil",
                                                                                                     "tooltip_title"=>"Editar",
+                                                                                            ],
+                                                                                            [
+                                                                                                "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.agregar_clientes",
+                                                                                                            "binding"=>"supervisor"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-users",
+                                                                                                    "tooltip_title"=>"Asociar clientes",
                                                                                             ]
                                                                                         ]
                                                                                     ],
@@ -185,6 +201,14 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-pencil",
                                                                                                     "tooltip_title"=>"Editar",
+                                                                                            ],
+                                                                                              [
+                                                                                                "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.agregar_clientes",
+                                                                                                            "binding"=>"technician"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-users",
+                                                                                                    "tooltip_title"=>"Asociar clientes",
                                                                                             ]
                                                                                         ]
                                                                                     ],
