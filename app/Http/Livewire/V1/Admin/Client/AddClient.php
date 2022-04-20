@@ -75,24 +75,24 @@ class AddClient extends Component
         $this->addClientService->mount($this);
     }
 
-    public function updatedDepartment()
+    public function updatedDepartmentId()
     {
-        $this->addClientService->updatedDepartment($this);
+        $this->addClientService->updatedDepartmentId($this);
     }
     public function updatedClientTypeId()
     {
         $this->addClientService->updatedClientTypeId($this);
     }
 
-    public function updatedMunicipality()
+    public function updatedMunicipalityId()
     {
-        $this->addClientService->updatedMunicipality($this);
+        $this->addClientService->updatedMunicipalityId($this);
     }
 
 
-    public function updatedLocationType()
+    public function updatedLocationTypeId()
     {
-        $this->addClientService->updatedLocationType($this);
+        $this->addClientService->updatedLocationTypeId($this);
     }
 
     public function updatedNetworkOperator()

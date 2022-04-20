@@ -19,10 +19,12 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <script src="//unpkg.com/alpinejs" defer></script>
 
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -32,10 +34,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-    <!--Regular Datatables CSS-->
-    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
-    <!--Responsive Extension Datatables CSS-->
-    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
@@ -65,11 +63,13 @@
 </main>
 
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
-@livewireScripts
-@livewireChartsScripts
+
+
 
 <!-- Vendor JS Files -->
+
 <script src="{{asset('assets/vendor/bootstrap/js/bootstrap.bundle.js')}}"></script>
+<script src="{{asset('js/app.js')}}"></script>
 <!-- Template Main JS File -->
 <script>
     var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
@@ -77,8 +77,7 @@
         return new bootstrap.Dropdown(dropdownToggleEl)
     })
 </script>
-
-
+@livewireScripts
 </body>
 
 </html>

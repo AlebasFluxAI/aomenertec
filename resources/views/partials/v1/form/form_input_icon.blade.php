@@ -1,4 +1,4 @@
-<div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-12">
+<div class="form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_with??12}} col-sm-12">
 
     <div class="input-group">
 
@@ -13,8 +13,8 @@
                       class="form-control" autocomplete="on" placeholder="{{$placeholder??""}}"
                       required="{{$required??false}}"></textarea>
         @else
-            <input wire:model="{{$input_model}}" type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
-                   placeholder="{{$placeholder??""}}" required="{{$required??false}}">
+            <input wire:model="{{$input_model}}" type="{{$input_type??"text"}}" class="form-control" autocomplete="{{$autocomplete??"on"}}"
+                   name="{{$input_name??""}}" placeholder="{{$placeholder??""}}" required="{{$required??false}}">
         @endif
     </div>
     @error("{{$input_model}}")

@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RealTimeMonitoringEvent implements ShouldBroadcast
+class NewPointDataMonitoringEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,11 +19,9 @@ class RealTimeMonitoringEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public $raw_json;
-
-    public function __construct($raw_json)
+    public function __construct()
     {
-        $this->raw_json = $raw_json;
+        //
     }
 
     /**
@@ -37,10 +35,6 @@ class RealTimeMonitoringEvent implements ShouldBroadcast
     }
     public function broadcastAs()
     {
-        return 'dataEventRealTime';
-    }
-    public function broadcastWith()
-    {
-        return ["data" => $this->raw_json];
+        return 'dataEventAdd';
     }
 }

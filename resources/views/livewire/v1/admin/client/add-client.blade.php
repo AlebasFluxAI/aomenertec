@@ -141,7 +141,7 @@
                                      "list_default" => "Tipo ubicación...",
                                      "list_options" => $location_types,
                                      "list_option_value"=>"id",
-                                     "list_option_view"=>"location",
+                                     "list_option_view"=>"type",
                                      "list_option_title"=>"",
                             ])
                             @include("partials.v1.form.form_list",[

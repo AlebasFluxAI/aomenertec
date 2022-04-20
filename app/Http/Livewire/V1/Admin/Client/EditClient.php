@@ -62,9 +62,9 @@ class EditClient extends Component
         $this->editClientService->mount($this, $client);
     }
 
-    public function updatedDepartment()
+    public function updatedDepartmentId()
     {
-        $this->editClientService->updatedDepartment($this);
+        $this->editClientService->updatedDepartmentId($this);
     }
 
     public function updatedMunicipality()
@@ -73,9 +73,9 @@ class EditClient extends Component
     }
 
 
-    public function updatedLocationType()
+    public function updatedLocationTypeId()
     {
-        $this->editClientService->updatedLocationType($this);
+        $this->editClientService->updatedLocationTypeId($this);
     }
 
     public function updatedNetworkOperator()
