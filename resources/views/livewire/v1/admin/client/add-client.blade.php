@@ -120,8 +120,8 @@
 
                             @include("partials.v1.form.form_input_icon",[
                                     "input_model"=>"name",
-                                    "icon_class"=>"fas fa-barcode",
-                                    "placeholder"=>"Serial del equipo",
+                                    "icon_class"=>"fas fa-user",
+                                    "placeholder"=>"Nombre",
                                     "col_with"=>5,
                                     "input_type"=>"text",
                                     "required"=>true
