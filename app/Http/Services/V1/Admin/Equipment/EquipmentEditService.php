@@ -30,6 +30,8 @@ class EquipmentEditService extends Singleton
 
     public function submitForm(Component $component)
     {
+        $component->validate();
+
         $component->equipment->fill($this->mapper($component));
         $component->equipment->update();
         $component->emitTo('livewire-toast', 'show', "Equipo {$component->equipment->name} creado exitosamente");

@@ -1,11 +1,11 @@
 <div class="mb-3">
     <div class="primary-content">
-
         <table class="table table-bordered">
             <thead style="position: sticky;top: 0;z-index: 2">
             <tr>
                 @foreach($table_headers as $header_name=>$table_header)
-                    <th>{{$header_name}}</th>
+                    <th>{{$header_name}}
+                    </th>
                 @endforeach
                 @isset($table_actions)
                     <th>Acciones</th>

@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\SuperAdmin;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 
 class SuperAdminIndexService extends Singleton
@@ -23,5 +24,13 @@ class SuperAdminIndexService extends Singleton
     public function details(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $modelId]);
+    }
+
+    public function getData(Component $component)
+    {
+        if ($component->filter) {
+            return SuperAdmin::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+        }
+        return SuperAdmin::paginate(15);
     }
 }

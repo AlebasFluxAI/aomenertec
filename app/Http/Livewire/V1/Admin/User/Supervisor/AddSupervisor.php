@@ -4,10 +4,13 @@ namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 
 use App\Http\Services\V1\Admin\User\SuperAdmin\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
+use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 
 class AddSupervisor extends Component
 {
+    use ValidateUserFormTrait;
+
     public $password;
     public $identification;
     public $name;
@@ -21,12 +24,6 @@ class AddSupervisor extends Component
     public $network_operator;
 
 
-    protected $rules = [
-        'identification' => 'required|min:6|unique:users,identification',
-        'name' => 'required|min:8',
-        'phone' => 'min:7',
-        'email' => 'required|email|unique:users,email',
-    ];
     private $supervisorAddService;
 
     public function __construct($id = null)

@@ -1,56 +1,22 @@
-@if ($paginator->hasPages())
-    <ul class="pagination" role="navigation" >
-        {{-- Previous Page Link --}}
-        @if ($paginator->onFirstPage())
-            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.previous')">
-                <span class="page-link" aria-hidden="true">
-                    <span class="d-none d-md-block">&lsaquo;</span>
-                    <span class="d-block d-md-none">@lang('pagination.previous')</span>
-                </span>
-            </li>
-        @else
-            <li class="page-item">
-                <button type="button" class="page-link" wire:click="previousPage" rel="prev" aria-label="@lang('pagination.previous')">
-                    <span class="d-none d-md-block">&lsaquo;</span>
-                    <span class="d-block d-md-none">@lang('pagination.previous')</span>
-                </button>
-            </li>
-        @endif
+<div class="btn-group">
+    <button class="dropdown-toggle " data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+        <span class="fas fa-search"></span>
+    </button>
+    <div class="dropdown-menu p-1 container">
+        <div class="row">
 
-        {{-- Pagination Elements --}}
-        @foreach ($elements as $element)
-            {{-- "Three Dots" Separator --}}
-            @if (is_string($element))
-                <li class="page-item disabled d-none d-md-block" aria-disabled="true"><span class="page-link">{{ $element }}</span></li>
-            @endif
+            <div class="col-md-12 mb-2">
+                <input wire:model.defer="filter" class="form-control form-text" type="text" placeholder="Buscar">
 
-            {{-- Array Of Links --}}
-            @if (is_array($element))
-                @foreach ($element as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <li class="page-item active d-none d-md-block" aria-current="page"><span class="page-link">{{ $page }}</span></li>
-                    @else
-                        <li class="page-item d-none d-md-block"><button type="button" class="page-link" wire:click="gotoPage({{ $page }})">{{ $page }}</button></li>
-                    @endif
-                @endforeach
-            @endif
-        @endforeach
+            </div>
+            <div class="col-md-6 ">
+                <button wire:click="cleanFilter" class="filter-button"> Limpiar</button>
+            </div>
+            <div class="col-md-6">
+                <button wire:click="setFilterCol('{{$col_name}}')">Buscar</button>
+            </div>
 
-        {{-- Next Page Link --}}
-        @if ($paginator->hasMorePages())
-            <li class="page-item">
-                <button type="button" class="page-link" wire:click="nextPage" rel="next" aria-label="@lang('pagination.next')">
-                    <span class="d-block d-md-none">@lang('pagination.next')</span>
-                    <span class="d-none d-md-block">&rsaquo;</span>
-                </button>
-            </li>
-        @else
-            <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">
-                <span class="page-link" aria-hidden="true">
-                    <span class="d-block d-md-none">@lang('pagination.next')</span>
-                    <span class="d-none d-md-block">&rsaquo;</span>
-                </span>
-            </li>
-        @endif
-    </ul>
-@endif
+        </div>
+    </div>
+</div>

@@ -3,6 +3,8 @@
 namespace App\Http\Services\V1\Admin\User\Support;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Support;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class SupportIndexService extends Singleton
@@ -29,5 +31,14 @@ class SupportIndexService extends Singleton
     {
         $component->redirectRoute("administrar.v1.usuarios.soporte.agregar_clientes", ["support" => $modelId]);
 
+    }
+
+    public function getData(Component $component)
+    {
+
+        if ($component->filter) {
+            return Support::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+        }
+        return Support::paginate(15);
     }
 }

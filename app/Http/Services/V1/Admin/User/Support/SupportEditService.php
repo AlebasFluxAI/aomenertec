@@ -26,6 +26,7 @@ class SupportEditService extends Singleton
 
     public function submitForm(Component $component)
     {
+        $component->validate();
         $component->model->fill($this->mapper($component));
         $component->model->update();
         $component->redirectRoute("administrar.v1.usuarios.soporte.detalles", ["support" => $component->model->id]);

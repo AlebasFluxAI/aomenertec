@@ -12,7 +12,8 @@
 
     @include("partials.v1.table_nav",
            ["nav_options"=>[
-                      ["button_align"=>"right",
+                      [
+                      "button_align"=>"right",
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
                       "icon"=>"fa-solid fa-plus",
@@ -22,12 +23,38 @@
                   ]
           ])
 
-    @include("partials.v1.table.primary-table",[
-               "table_headers"=>["ID"=>"id",
-                                 "Nombre"=>"name",
-                                 "Apellido"=>"last_name",
-                                 "Correo electronico"=>"email",
-                                 "Telefono"=>"phone",
+    @include("partials.v2.table.primary-table",[
+               "table_headers"=>[
+                  [
+                       "col_name" =>"ID",
+                       "col_data" =>"id",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Nombre",
+                       "col_data" =>"name",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Apellido",
+                       "col_data" =>"last_name",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Correo electronico",
+                       "col_data" =>"email",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Telefono",
+                       "col_data" =>"phone",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Identificacion",
+                       "col_data" =>"identification",
+                       "col_filter"=>true
+                   ],
 
 
                 ],

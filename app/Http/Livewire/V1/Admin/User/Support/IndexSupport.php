@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Support;
 
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Support\SupportIndexService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Support;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Admin;
@@ -13,7 +14,7 @@ use Livewire\WithPagination;
 class IndexSupport extends Component
 {
     use WithPagination;
-
+    use ValidateUserFormTrait;
 
     private $indexEquipmentService;
 
@@ -49,8 +50,13 @@ class IndexSupport extends Component
         return view(
             'livewire.v1.admin.user.support.index-support',
             [
-                "data" => Support::paginate(15)
+                "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');
+    }
+
+    public function getData()
+    {
+        return $this->indexEquipmentService->getData($this);
     }
 }

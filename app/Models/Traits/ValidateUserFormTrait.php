@@ -7,20 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Request;
+use Livewire\Component;
 
-trait FilterTrait
+trait ValidateUserFormTrait
 {
-    public $filter;
-    public $filterCol;
+    protected $rules = [
+        'identification' => 'required|min:6|unique:users,identification',
+        'name' => 'required|min:6',
+        'phone' => 'min:7|unique:users,phone',
+        'admin_id' => 'required',
+        'email' => 'required|email|unique:users,email',
+    ];
 
-    public function cleanFilter()
-    {
-        $this->filterCol = null;
-        $this->filter = null;
-    }
 
-    public function setFilterCol($filterCol)
-    {
-        $this->filterCol = $filterCol;
-    }
 }

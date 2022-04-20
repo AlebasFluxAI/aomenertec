@@ -23,6 +23,8 @@ class SupervisorEditService extends Singleton
 
     public function submitForm(Component $component)
     {
+        $component->validate();
+
         $component->model->fill($this->mapper($component));
         $component->model->update();
         $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $component->model->id]);

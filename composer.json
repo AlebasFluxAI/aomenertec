@@ -14,7 +14,7 @@
         "beyondcode/laravel-prose-linter": "dev-review",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
-        "intervention/image": "^2.5",
+        "intervention/image": "^2.7",
         "kartik-v/bootstrap-fileinput": "dev-master",
         "laravel/framework": "^8.75",
         "laravel/jetstream": "^2.6",

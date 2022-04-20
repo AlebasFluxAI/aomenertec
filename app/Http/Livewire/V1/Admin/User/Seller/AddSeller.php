@@ -3,10 +3,13 @@
 namespace App\Http\Livewire\V1\Admin\User\Seller;
 
 use App\Http\Services\V1\Admin\User\Seller\SellerAddService;
+use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 
 class AddSeller extends Component
 {
+    use ValidateUserFormTrait;
+
     public $password;
     public $identification;
     public $name;
@@ -19,12 +22,6 @@ class AddSeller extends Component
     public $network_operator_id;
 
 
-    protected $rules = [
-        'identification' => 'required|min:6|unique:users,identification',
-        'name' => 'required|min:8',
-        'phone' => 'min:7',
-        'email' => 'required|email|unique:users,email',
-    ];
     private $sellerAddService;
 
     public function __construct($id = null)

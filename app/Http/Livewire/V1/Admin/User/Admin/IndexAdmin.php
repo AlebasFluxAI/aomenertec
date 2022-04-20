@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Admin\AdminIndexService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\SuperAdmin;
@@ -13,7 +14,7 @@ use Livewire\WithPagination;
 class IndexAdmin extends Component
 {
     use WithPagination;
-
+    use ValidateUserFormTrait;
 
     private $indexEquipmentService;
 
@@ -44,8 +45,13 @@ class IndexAdmin extends Component
         return view(
             'livewire.v1.admin.user.admin.index-admin',
             [
-                "data" => Admin::paginate(15)
+                "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');
+    }
+
+    public function getData()
+    {
+        return $this->indexEquipmentService->getData($this);
     }
 }

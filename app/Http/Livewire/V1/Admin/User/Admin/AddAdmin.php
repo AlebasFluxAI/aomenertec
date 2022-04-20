@@ -3,13 +3,15 @@
 namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
+use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class AddAdmin extends Component
 {
     use WithFileUploads;
-
+    use ValidateUserFormTrait;
+    
     public $password;
     public $identification;
     public $name;
@@ -23,12 +25,7 @@ class AddAdmin extends Component
     public $styles;
     public $style;
 
-    protected $rules = [
-        'identification' => 'required|min:6|unique:users,identification',
-        'name' => 'required',
-        'phone' => 'min:7|unique:users,phone',
-        'email' => 'required|email|unique:users,email',
-    ];
+
     private $superAdminAddService;
 
     public function __construct($id = null)

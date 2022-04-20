@@ -5,12 +5,15 @@ namespace App\Http\Livewire\V1\Admin\User\Seller;
 use App\Http\Services\V1\Admin\User\Seller\SellerAddClientService;
 use App\Http\Services\V1\Admin\User\Seller\SellerAddService;
 use App\Http\Services\V1\Admin\User\Seller\SellerEditService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Seller;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class AddClientSeller extends Component
 {
+
+
     public $model;
     public $name;
     public $last_name;
@@ -24,6 +27,8 @@ class AddClientSeller extends Component
     public $client_id;
     public $message_client;
     public $test;
+
+
     private $addClientSellerService;
 
     public function __construct($id = null)
