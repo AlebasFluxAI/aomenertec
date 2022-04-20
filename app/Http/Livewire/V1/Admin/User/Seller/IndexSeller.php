@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Seller;
 
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Http\Services\V1\Admin\User\Seller\SellerIndexService;
+use App\Models\Traits\FilterTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Seller;
 use App\Models\V1\Supervisor;
@@ -14,7 +15,7 @@ use function view;
 class IndexSeller extends Component
 {
     use WithPagination;
-    use ValidateUserFormTrait;
+    use FilterTrait;
 
 
     private $indexSellerService;
