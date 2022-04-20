@@ -32,7 +32,6 @@
                                                                        "table_info"=>[
                                                                         [
                                                                             "key"=>"Id",
-
                                                                             "value"=>$model->id
                                                                         ],
                                                                         [
