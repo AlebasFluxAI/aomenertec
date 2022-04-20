@@ -11,21 +11,21 @@
                 "first_title"=>"Añadir",
                 "second_title"=>"Clientes"
             ])
+        @include("partials.v1.table_nav",
+        ["nav_options"=>[
+           ["button_align"=>"right",
+           "click_action"=>"",
+           "button_icon"=>"fas fa-list",
+           "button_content"=>"Ver listado",
+           "target_route"=>"v1.admin.client.list.client",
+           ],
 
+       ]
+])
 
         <div class="contenedor-grande">
             <div class="row content pt-3">
-                @include("partials.v1.table_nav",
-             ["nav_options"=>[
-                ["button_align"=>"right",
-                "click_action"=>"",
-                "button_icon"=>"fas fa-list",
-                "button_content"=>"Ver listado",
-                "target_route"=>"v1.admin.client.list.client",
-                ],
 
-            ]
-    ])
                 {{-- <form  action="#" method="post"  enctype="multipart/form-data" >
                      @csrf
                      <div>&nbsp;&nbsp;<strong>Importar desde archivo excel</strong> </div>
@@ -277,21 +277,23 @@
                                 <option value="triphasic">TRIFASICO</option>
                             </select>
                         </div>
-                        @include("partials.v1.form.form_dropdown_input_searchable",[
-                                  "col_with" => 4,
-                                  "icon_class" => "fas fa-user",
-                                  "dropdown_model" => "network_operator",
-                                  "placeholder" => "Operador de red",
-                                  "required" => true,
-                                  "picked_variable" => $picked_network_operator,
-                                  "message_variable" => $message_network_operator,
-                                  "dropdown_results" => $network_operators,
-                                  "selected_value_function" => "assignNetworkOperator",
-                                  "dropdown_result_id" => "id",
-                                  "dropdown_result_value" => "name",
-                                  "count_bool" => (count($network_operators)>0),
+                        @if(!(\Illuminate\Support\Facades\Auth::user()->networkOperator))
+                            @include("partials.v1.form.form_dropdown_input_searchable",[
+                                      "col_with" => 4,
+                                      "icon_class" => "fas fa-user",
+                                      "dropdown_model" => "network_operator",
+                                      "placeholder" => "Operador de red",
+                                      "required" => true,
+                                      "picked_variable" => $picked_network_operator,
+                                      "message_variable" => $message_network_operator,
+                                      "dropdown_results" => $network_operators,
+                                      "selected_value_function" => "assignNetworkOperator",
+                                      "dropdown_result_id" => "id",
+                                      "dropdown_result_value" => "name",
+                                      "count_bool" => (count($network_operators)>0),
 
-                        ])
+                            ])
+                        @endif
                         {{--<div class="form-group mb-2 col-md-4 col-sm-12">
                             <div class="input-group">
                                 <div  class="input-group-prepend">

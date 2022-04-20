@@ -1,45 +1,81 @@
 <div>
-    <section class="login">
-        @section("header") {{--extended app.blade--}}
 
-        @endsection
+    @section("header") {{--extended app.blade--}}
 
-        @include("partials.v1.title",[
-              "second_title"=>"de clientes",
-              "first_title"=>"Listado"
-          ])
+    @endsection
+
+    @include("partials.v1.title",[
+          "second_title"=>"de clientes",
+          "first_title"=>"Listado"
+      ])
+    @if(\Illuminate\Support\Facades\Auth::user()->admin || \Illuminate\Support\Facades\Auth::user()->networkOperator)
+
+        @include("partials.v1.table_nav",
+               ["nav_options"=>[
+                          ["button_align"=>"right",
+                          "click_action"=>"",
+                          "button_content"=>"Crear nuevo",
+                          "button_icon"=>"fa-solid fa-plus",
+                          "target_route"=>"v1.admin.client.add.client",
+                          ],
+
+                      ]
+              ])
+    @endif
 
 
-        <div class="contenedor-grande">
+    @include("partials.v2.table.primary-table",[
+               "table_headers"=>[
+              [
+                   "col_name" =>"ID",
+                   "col_data" =>"id",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Codigo",
+                   "col_data" =>"code",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Nombre",
+                   "col_data" =>"name",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Apellido",
+                   "col_data" =>"last_name",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Correo electronico",
+                   "col_data" =>"email",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Telefono",
+                   "col_data" =>"phone",
+                   "col_filter"=>true
+               ],
 
-            @include("partials.v1.table.primary-table",[
-                       "table_headers"=>["ID"=>"id",
-                                         "Codigo"=>"code",
-                                         "Identificación"=>"identification",
-                                         "Nombre"=>"name",
-                                         "Email"=>"email",
+                ],
+                 "table_actions"=>[
+                                    "details"=>"details",
+                                    "edit"=>"edit",
+                                    "delete"=>"delete",
+                                    "customs"=>[
+                                       [
+                                        "function"=>"settings",
+                                        "icon"=>"fas fa-gear"
+                                        ]
+                                    ]
+                                    ],
 
+                                                /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
+                                                _edit_button=>{ruta para redireccionar a edicion}
+                                                _delete_button => {boton de borrado, siempre tomando como identificador la primera colunma de la tabla - ID}
+                                                  ]*/
+               "table_rows"=>$data
 
-                        ],
-                         "table_actions"=>[
-                                            "details"=>"details",
-                                            "edit"=>"edit",
-                                            "delete"=>"delete",
-                                            "customs"=>[
-                                               [
-                                                "function"=>"settings",
-                                                "icon"=>"fas fa-gear"
-                                                ]
-                                            ]
-                                            ],
-
-                                                        /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
-                                                        _edit_button=>{ruta para redireccionar a edicion}
-                                                        _delete_button => {boton de borrado, siempre tomando como identificador la primera colunma de la tabla - ID}
-                                                          ]*/
-                       "table_rows"=>$clients
-
-                   ])
-        </div>
-    </section>
+           ])
 </div>
+

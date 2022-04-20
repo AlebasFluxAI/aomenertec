@@ -20,6 +20,7 @@ use App\Models\V1\Client;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -42,6 +43,7 @@ class AddClientService extends Singleton
             'departments' => Department::get(),
             'municipalities' => [],
             'equipment_types' => [],
+            'network_operator_id' => Auth::user()->networkOperator ? Auth::user()->networkOperator->id : null,
             'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red', 'network_operators' => [],
             'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red', 'aux_network_operators' => [],
         ]);
