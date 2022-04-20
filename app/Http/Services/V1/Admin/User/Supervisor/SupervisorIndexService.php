@@ -44,6 +44,16 @@ class SupervisorIndexService extends Singleton
             }
             return $networkOperator->supervisors()->paginate(15);
         }
+
+        if ($admin = $user->admin) {
+            if ($component->filter) {
+                return Supervisor::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return Supervisor::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->paginate(15);
+        }
+
+
         if ($component->filter) {
             return Supervisor::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
         }

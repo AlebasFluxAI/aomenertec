@@ -43,6 +43,15 @@ class TechnicianIndexService extends Singleton
             }
             return $networkOperator->technicians()->paginate(15);
         }
+        if ($admin = $user->admin) {
+            if ($component->filter) {
+                return Technician::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return Technician::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->paginate(15);
+        }
+
+
         if ($component->filter) {
             return Technician::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
         }
