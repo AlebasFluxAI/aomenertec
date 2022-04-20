@@ -17,28 +17,33 @@ class IndexAdmin extends Component
     use WithPagination;
     use FilterTrait;
 
-    private $indexEquipmentService;
+    private $indexAdminService;
 
     public function __construct($id = null)
     {
-        $this->indexEquipmentService = AdminIndexService::getInstance();
+        $this->indexAdminService = AdminIndexService::getInstance();
         parent::__construct($id);
     }
 
 
     public function edit($id)
     {
-        $this->indexEquipmentService->edit($this, $id);
+        $this->indexAdminService->edit($this, $id);
     }
 
     public function delete($id)
     {
-        $this->indexEquipmentService->delete($this, $id);
+        $this->indexAdminService->delete($this, $id);
     }
 
     public function details($id)
     {
-        $this->indexEquipmentService->details($this, $id);
+        $this->indexAdminService->details($this, $id);
+    }
+
+    public function conditionalDelete($id)
+    {
+        return $this->indexAdminService->conditionalDelete($this, $id);
     }
 
     public function render()
@@ -53,6 +58,6 @@ class IndexAdmin extends Component
 
     public function getData()
     {
-        return $this->indexEquipmentService->getData($this);
+        return $this->indexAdminService->getData($this);
     }
 }

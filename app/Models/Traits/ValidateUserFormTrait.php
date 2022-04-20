@@ -15,7 +15,6 @@ trait ValidateUserFormTrait
         'identification' => 'required|min:6|unique:users,identification',
         'name' => 'required|min:6',
         'phone' => 'min:7|unique:users,phone',
-        'admin_id' => 'required',
         'email' => 'required|email|unique:users,email',
     ];
 
