@@ -32,7 +32,6 @@ class AdminIndexService extends Singleton
         $admin = Admin::find($modelId);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} eliminado"]);
         $admin->delete();
-
     }
 
     public function getData(Component $component)
@@ -47,5 +46,4 @@ class AdminIndexService extends Singleton
     {
         return NetworkOperator::whereAdminId($modelId)->exists();
     }
-
 }

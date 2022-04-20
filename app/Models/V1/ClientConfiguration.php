@@ -111,4 +111,3 @@ class ClientConfiguration extends Model
         ));
     }
 }
-

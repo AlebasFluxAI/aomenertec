@@ -13,7 +13,7 @@ use Livewire\WithFileUploads;
 class AddClientSupport extends Component
 {
     use ValidateUserFormTrait;
-    
+
     public $model;
     public $name;
     public $last_name;

@@ -231,12 +231,10 @@ class ClientConfigurationService extends Singleton
     public function settings(Component $component, $clientId)
     {
         $component->redirectRoute("v1.admin.client.settings", ["client" => $clientId]);
-
     }
 
     public function submitForm(Component $component)
     {
-
         if ($component->client->clientConfiguration) {
             $component->client->clientConfiguration->update($this->getConfigurations($component));
             return;
@@ -331,6 +329,4 @@ class ClientConfigurationService extends Singleton
 
         ];
     }
-
-
 }

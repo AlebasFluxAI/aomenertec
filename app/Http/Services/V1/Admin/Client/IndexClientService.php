@@ -55,7 +55,6 @@ class IndexClientService extends Singleton
     public function settings(Component $component, $clientId)
     {
         $component->redirectRoute("v1.admin.client.settings", ["client" => $clientId]);
-
     }
 
     public function getData(Component $component)
@@ -83,6 +82,4 @@ class IndexClientService extends Singleton
 
         return Client::paginate(15);
     }
-
-
 }

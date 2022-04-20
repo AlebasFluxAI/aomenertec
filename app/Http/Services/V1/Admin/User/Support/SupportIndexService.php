@@ -30,12 +30,10 @@ class SupportIndexService extends Singleton
     public function addClients(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.soporte.agregar_clientes", ["support" => $modelId]);
-
     }
 
     public function getData(Component $component)
     {
-
         if ($component->filter) {
             return Support::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
         }

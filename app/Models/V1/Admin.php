@@ -60,6 +60,11 @@ class Admin extends Model
                                         "title" => "Supervisores",
                                         "route" => "administrar.v1.usuarios.supervisores.listado",
                                         "submenu" => []
+                                    ],
+                                    [
+                                        "title" => "Tecnicos",
+                                        "route" => "administrar.v1.usuarios.tecnicos.listado",
+                                        "submenu" => []
                                     ]
                                 ]
                             ],

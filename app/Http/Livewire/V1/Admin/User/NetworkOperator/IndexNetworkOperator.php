@@ -63,7 +63,6 @@ class IndexNetworkOperator extends Component
         $operatorName = NetworkOperator::find($networkOperatorId)->name;
         $this->indexNetworkOperatorService->deleteNetworkOperator($networkOperatorId);
         $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operatorName} eliminado"]);
-
     }
 
     public function conditionalDelete($networkOperatorId)

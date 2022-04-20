@@ -12,8 +12,6 @@ use Livewire\WithFileUploads;
 
 class AddClientTechnician extends Component
 {
-
-
     public $model;
     public $name;
     public $last_name;

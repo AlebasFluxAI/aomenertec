@@ -29,9 +29,7 @@ class ProfileUserService extends Singleton
 
     private function getModelByUser()
     {
-
         return Menu::getUserModel();
-
     }
 
     public function getViewName()

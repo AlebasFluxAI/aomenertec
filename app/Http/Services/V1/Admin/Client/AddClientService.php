@@ -264,7 +264,6 @@ class AddClientService extends Singleton
             'stratum_id' => $component->stratum_id,
         ]);
         foreach ($component->equipment as $item) {
-
             EquipmentClient::create([
                 'client_id' => $client->id,
                 'equipment_id' => $item['id'],

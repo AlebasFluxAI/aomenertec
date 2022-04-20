@@ -44,7 +44,6 @@ class AdminEditService extends Singleton
                 $component->model->icon->name = $image->getClientOriginalName();
                 $component->model->icon->update();
             }
-
         }
         $component->model->fill($this->mapper($component));
         $component->model->update();
@@ -120,5 +119,4 @@ class AdminEditService extends Singleton
 
         ];
     }
-
 }

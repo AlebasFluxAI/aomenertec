@@ -12,7 +12,6 @@ use Livewire\WithFileUploads;
 
 class AddClientSupervisor extends Component
 {
-
     public $model;
     public $name;
     public $last_name;

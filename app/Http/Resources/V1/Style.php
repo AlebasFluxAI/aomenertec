@@ -20,14 +20,11 @@ class Style extends Singleton
             return "assets/css/" . self::getUserStyle() . '.css';
         } catch (Throwable $exception) {
             return "assets/css/style.css";
-
         }
-
     }
 
     private static function getUserStyle()
     {
-
         if ($admin = Auth::user()->admin) {
             return $admin->css_file;
         }
@@ -40,13 +37,10 @@ class Style extends Singleton
         }
         if ($supervisor = Auth::user()->supervisor) {
             return $supervisor->networkOperator->admin->css_file;
-
         }
         if ($technician = Auth::user()->technician) {
             return $technician->networkOperator->admin->css_file;
-
         }
         return "style";
     }
-
 }

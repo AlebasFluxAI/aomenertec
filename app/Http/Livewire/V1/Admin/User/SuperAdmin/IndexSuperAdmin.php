@@ -48,7 +48,6 @@ class IndexSuperAdmin extends Component
                 "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');
-
     }
 
     public function getData()

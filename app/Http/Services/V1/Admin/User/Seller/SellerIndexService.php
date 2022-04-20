@@ -31,7 +31,6 @@ class SellerIndexService extends Singleton
     public function addClients(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.vendedores.agregar_clientes", ["seller" => $modelId]);
-
     }
 
     public function getData(Component $component)

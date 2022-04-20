@@ -12,8 +12,6 @@ use Livewire\WithFileUploads;
 
 class AddClientSeller extends Component
 {
-
-
     public $model;
     public $name;
     public $last_name;

@@ -45,7 +45,6 @@ class SupervisorAddClientService extends Singleton
 
     public function updatedClient(Component $component)
     {
-
         $component->picked_client = false;
         $component->message_client = "No se encontraron clientes para este filtro";
         if ($component->client != "") {
@@ -89,7 +88,6 @@ class SupervisorAddClientService extends Singleton
             ]
         );
         $this->refreshClientList($component);
-
     }
 
     public function refreshClientList(Component $component)
