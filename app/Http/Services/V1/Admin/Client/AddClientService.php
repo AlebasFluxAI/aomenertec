@@ -234,6 +234,7 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
+        $component->validate();
         while (true) {
             $code = $this->clientCode();
             if (!(Client::whereCode($code)->exists())) {
