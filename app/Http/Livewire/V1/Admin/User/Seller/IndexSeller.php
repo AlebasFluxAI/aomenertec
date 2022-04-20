@@ -61,5 +61,4 @@ class IndexSeller extends Component
     {
         return $this->indexSellerService->getData($this);
     }
-
 }

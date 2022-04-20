@@ -91,5 +91,4 @@ class SupervisorAddService extends Singleton
         $admin = json_decode($admin);
         $component->network_operator_id = $admin->id;
     }
-
 }

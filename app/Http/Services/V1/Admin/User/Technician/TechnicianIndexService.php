@@ -31,7 +31,6 @@ class TechnicianIndexService extends Singleton
     public function addClients(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.tecnicos.agregar_clientes", ["technician" => $modelId]);
-
     }
 
     public function getData(Component $component)

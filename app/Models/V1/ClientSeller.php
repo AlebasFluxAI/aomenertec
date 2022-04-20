@@ -24,5 +24,4 @@ class ClientSeller extends Model
     {
         return $this->belongsTo(Seller::class);
     }
-
 }

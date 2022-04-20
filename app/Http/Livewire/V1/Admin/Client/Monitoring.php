@@ -45,7 +45,7 @@ class Monitoring extends Component
         $this->cards = [];
         foreach ($this->variables as $index=>$variable) {
             $aux = [];
-            foreach ($this->data_frame as $item){
+            foreach ($this->data_frame as $item) {
                 if ($item['variable_id'] == $variable['id']) {
                     array_push($aux, $item);
                 }
@@ -57,53 +57,55 @@ class Monitoring extends Component
                 "list_model_variable" => $variable['id'],
                 "variables_selected" => $aux,
             ]);
-            if (count($this->cards) == 6){
+            if (count($this->cards) == 6) {
                 break;
             }
         }
         $this->variable_chart_id = 1;
         $this->time_id = 1;
         $this->variables_selected = [];
-        foreach ($this->data_frame as $item){
+        foreach ($this->data_frame as $item) {
             if ($item['variable_id'] == $this->variable_chart_id) {
                 array_push($this->variables_selected, $item);
             }
         }
     }
 
-    public function changeDateRange($start, $end){
+    public function changeDateRange($start, $end)
+    {
         $this->date_range = $start." - ".$end;
     }
 
-    public function updatedVariableChartId(){
+    public function updatedVariableChartId()
+    {
         $this->variables_selected = [];
-        foreach ($this->data_frame as $item){
+        foreach ($this->data_frame as $item) {
             if ($item['variable_id'] == $this->variable_chart_id) {
                 array_push($this->variables_selected, $item);
             }
         }
         $this->emit('changeVariable', $this->variables_selected);
     }
-    public function updatedTimeId(){
+    public function updatedTimeId()
+    {
         $this->emit('changeTime', $this->time_id);
     }
 
-    public function updated($property_name, $value){
-
-
-        if (strpos($property_name, "cards") !== false){
+    public function updated($property_name, $value)
+    {
+        if (strpos($property_name, "cards") !== false) {
             $variables = new Collection();
-            foreach($this->variables as $item){
+            foreach ($this->variables as $item) {
                 $variables->push((object)$item);
             }
             $variable_select = $variables->where('id', $value)->first();
             $id = filter_var($property_name, FILTER_SANITIZE_NUMBER_INT);
             $data_frame_collect = new Collection();
-            foreach($this->data_frame as $item){
+            foreach ($this->data_frame as $item) {
                 $data_frame_collect->push((object)$item);
             }
             $aux = [];
-            foreach ($this->data_frame as $item){
+            foreach ($this->data_frame as $item) {
                 if ($item['variable_id'] == $value) {
                     array_push($aux, $item);
                 }
@@ -120,23 +122,23 @@ class Monitoring extends Component
             $last_data = Client::find(2)->microcontrollerData->last();
             $this->last_data = json_decode($last_data->raw_json, true);
         }
-
     }
 
-   /* public function getListeners()
-    {
-        return [
-            "echo-private:real-time-monitoring.{$this->raw_json['client_id']},RealTimeMonitoringEvent" => 'newData',
-        ];
-    }*/
+    /* public function getListeners()
+     {
+         return [
+             "echo-private:real-time-monitoring.{$this->raw_json['client_id']},RealTimeMonitoringEvent" => 'newData',
+         ];
+     }*/
     /*public function newData($data){
 
     }*/
-    public function addData1(){
+    public function addData1()
+    {
         $last_data = Client::find(2)->microcontrollerData->last();
         $this->last_data = json_decode($last_data->raw_json, true);
         $data_frame_collect = new Collection();
-        foreach($this->data_frame as $item){
+        foreach ($this->data_frame as $item) {
             $data_frame_collect->push((object)$item);
         }
         $update_cards = new Collection();
@@ -154,7 +156,6 @@ class Monitoring extends Component
     }
     public function render()
     {
-
         return view('livewire.v1.admin.client.monitoring')
             ->extends('layouts.v1.app');
     }

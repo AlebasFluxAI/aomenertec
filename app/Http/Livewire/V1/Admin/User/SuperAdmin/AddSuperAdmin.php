@@ -10,7 +10,7 @@ use Livewire\Component;
 class AddSuperAdmin extends Component
 {
     use ValidateUserFormTrait;
-    
+
     public $password;
     public $identification;
     public $name;

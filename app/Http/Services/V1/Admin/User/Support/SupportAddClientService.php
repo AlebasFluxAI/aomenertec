@@ -43,7 +43,6 @@ class SupportAddClientService extends Singleton
 
     public function updatedClient(Component $component)
     {
-
         $component->picked_client = false;
         $component->message_client = "No se encontraron clientes para este filtro";
         if ($component->client != "") {
@@ -60,7 +59,6 @@ class SupportAddClientService extends Singleton
         $component->client_id = $obj->id;
         $component->picked = true;
         $component->client_picked = true;
-
     }
 
 
@@ -86,7 +84,6 @@ class SupportAddClientService extends Singleton
             ]
         );
         $this->refreshClients($component);
-
     }
 
     public function refreshClients(Component $component)

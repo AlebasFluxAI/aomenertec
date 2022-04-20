@@ -77,7 +77,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('editar/{seller}', Livewire\V1\Admin\User\Seller\EditSeller::class)->name("administrar.v1.usuarios.vendedores.editar");
                         Route::get('detalle/{seller}', Livewire\V1\Admin\User\Seller\DetailsSeller::class)->name("administrar.v1.usuarios.vendedores.detalles");
                         Route::get('agregar_clientes/{seller}', Livewire\V1\Admin\User\Seller\AddClientSeller::class)->name("administrar.v1.usuarios.vendedores.agregar_clientes");
-
                     });
 
 
@@ -87,7 +86,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('detalle/{supervisor}', Livewire\V1\Admin\User\Supervisor\DetailsSupervisor::class)->name("administrar.v1.usuarios.supervisores.detalles");
                         Route::get('editar/{supervisor}', Livewire\V1\Admin\User\Supervisor\EditSupervisor::class)->name("administrar.v1.usuarios.supervisores.editar");
                         Route::get('agregar_clientes/{supervisor}', Livewire\V1\Admin\User\Supervisor\AddClientSupervisor::class)->name("administrar.v1.usuarios.supervisores.agregar_clientes");
-
                     });
 
 
@@ -114,7 +112,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get('detalle/{client}', DetailClient::class)->name("v1.admin.client.detail.client");
                     Route::get('editar/{client}', EditClient::class)->name("v1.admin.client.edit.client");
                     Route::get('configuraciones/{client}', Livewire\V1\Admin\Client\ConfigurationClient::class)->name("v1.admin.client.settings");
-
                 });
 
 
