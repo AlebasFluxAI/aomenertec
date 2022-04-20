@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Support;
 
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Support\SupportIndexService;
+use App\Models\Traits\FilterTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Support;
 use App\Models\V1\EquipmentType;
@@ -14,7 +15,7 @@ use Livewire\WithPagination;
 class IndexSupport extends Component
 {
     use WithPagination;
-    use ValidateUserFormTrait;
+    use FilterTrait;
 
     private $indexEquipmentService;
 
