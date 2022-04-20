@@ -11,7 +11,7 @@ class AddAdmin extends Component
 {
     use WithFileUploads;
     use ValidateUserFormTrait;
-    
+
     public $password;
     public $identification;
     public $name;
@@ -47,7 +47,6 @@ class AddAdmin extends Component
     public function setStyle()
     {
         $this->superAdminAddService->setStyle($this);
-
     }
 
     public function render()

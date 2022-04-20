@@ -26,8 +26,6 @@ class Monitoring extends Component
         $current_hour->setTimestamp($aux);
         $this->data = Client::find(2)->microcontrollerData->whereBetween("source_timestamp", [$current_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')]);
         $this->test = [];
-
-
     }
 
     /* public function getListeners()
@@ -40,7 +38,8 @@ class Monitoring extends Component
     {
         $this->test = $data['data'];
     }
-    public function addData(){
+    public function addData()
+    {
         $unixTime = time();//delete
         $current_time = new \DateTime();
         $current_time->setTimestamp($unixTime);
@@ -48,7 +47,6 @@ class Monitoring extends Component
         $aux = $unixTime - ($unixTime%3600);//delete
         $current_hour->setTimestamp($aux);
         $this->data = Client::find(2)->microcontrollerData->whereBetween("source_timestamp", [$current_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')]);
-
     }
     public function render()
     {
@@ -58,10 +56,10 @@ class Monitoring extends Component
             ->setDataLabelsEnabled(false)
             ->withLegend()
         ;
-        foreach ($this->data as $item){
+        foreach ($this->data as $item) {
             $data=json_decode($item->raw_json);
             $explode_time = explode(" ", $item->source_timestamp);
-            $lineChartModel->addPoint($explode_time[1],round($data->ph1_volt, 2));
+            $lineChartModel->addPoint($explode_time[1], round($data->ph1_volt, 2));
         }
         return view('livewire.v1.monitoring.monitoring')
             ->with(["lineChartModel" => $lineChartModel])

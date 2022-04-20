@@ -20,14 +20,11 @@ class Icon extends Singleton
             return self::getUserIcon();
         } catch (Throwable $exception) {
             return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
-
         }
-
     }
 
     private static function getUserIcon()
     {
-
         if ($admin = Auth::user()->admin) {
             return $admin->icon->url;
         }
@@ -40,11 +37,9 @@ class Icon extends Singleton
         }
         if ($supervisor = Auth::user()->supervisor) {
             return $supervisor->networkOperator->admin->icon->url;
-
         }
         if ($technician = Auth::user()->technician) {
             return $technician->networkOperator->admin->icon->url;
-
         }
         return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
     }

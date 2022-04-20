@@ -12,7 +12,6 @@ use Livewire\WithPagination;
 
 class ConfigurationClient extends Component
 {
-
     public $client;
     public $client_id;
     public $ssid;

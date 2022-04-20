@@ -46,7 +46,6 @@ class EditAdmin extends Component
     public function setStyle()
     {
         $this->editAdminService->setStyle($this);
-
     }
 
     public function render()

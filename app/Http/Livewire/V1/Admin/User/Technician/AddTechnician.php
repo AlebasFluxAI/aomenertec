@@ -10,7 +10,7 @@ use Livewire\WithFileUploads;
 class AddTechnician extends Component
 {
     use ValidateUserFormTrait;
-    
+
     public $password;
     public $identification;
     public $name;
