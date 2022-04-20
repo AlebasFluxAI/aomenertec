@@ -29,15 +29,22 @@ class NetworkOperatorIndexService extends Singleton
         $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $modelId]);
     }
 
-    public function getData()
+    public function getData(Component $component)
     {
         $user = Auth::user();
         $admin = $user->admin;
         if ($admin) {
+            if ($component->filter) {
+                return $admin->networkOperators()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
             return $admin->networkOperators()->paginate(15);
+        }
+        if ($component->filter) {
+            return NetworkOperator::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
         }
         return NetworkOperator::paginate(15);
     }
+
 
     public function deleteNetworkOperator($networkOperatorId)
     {

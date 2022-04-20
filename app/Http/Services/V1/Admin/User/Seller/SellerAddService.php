@@ -66,6 +66,8 @@ class SellerAddService extends Singleton
 
     public function submitForm(Component $component)
     {
+        $component->validate();
+
         $seller = Seller::create($this->mapper($component));
         $user = User::create(array_merge($this->mapper($component), [
             "password" => bcrypt($component->password),

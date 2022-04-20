@@ -3,6 +3,9 @@
 namespace App\Http\Services\V1\Admin\User\Technician;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Supervisor;
+use App\Models\V1\Technician;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class TechnicianIndexService extends Singleton
@@ -29,5 +32,20 @@ class TechnicianIndexService extends Singleton
     {
         $component->redirectRoute("administrar.v1.usuarios.tecnicos.agregar_clientes", ["technician" => $modelId]);
 
+    }
+
+    public function getData(Component $component)
+    {
+        $user = Auth::user();
+        if ($networkOperator = $user->networkOperator) {
+            if ($component->filter) {
+                return $networkOperator->technicians()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return $networkOperator->technicians()->paginate(15);
+        }
+        if ($component->filter) {
+            return Technician::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+        }
+        return Technician::paginate(15);
     }
 }

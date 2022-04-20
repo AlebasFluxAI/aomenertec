@@ -95,6 +95,14 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-search",
                                                                                                     "tooltip_title"=>"Detalles",
+                                                                                            ],
+                                                                                            [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.usuarios.operadores.editar",
+                                                                                                            "binding"=>"networkOperator"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-pencil",
+                                                                                                    "tooltip_title"=>"Editar",
                                                                                             ]
                                                                                         ]
                                                                                     ],

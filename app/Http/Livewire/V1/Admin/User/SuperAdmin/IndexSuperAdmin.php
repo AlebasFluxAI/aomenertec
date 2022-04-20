@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\User\SuperAdmin;
 
 use App\Http\Services\V1\Admin\User\SuperAdmin\SuperAdminIndexService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\SuperAdmin;
 use Livewire\Component;
@@ -11,6 +12,7 @@ use Livewire\WithPagination;
 class IndexSuperAdmin extends Component
 {
     use WithPagination;
+    use ValidateUserFormTrait;
 
 
     private $indexSuperAdminService;
@@ -42,8 +44,14 @@ class IndexSuperAdmin extends Component
         return view(
             'livewire.v1.admin.user.super.index-super-admin',
             [
-                "data" => SuperAdmin::paginate(15)
+                "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');
+
+    }
+
+    public function getData()
+    {
+        return $this->indexSuperAdminService->getData($this);
     }
 }

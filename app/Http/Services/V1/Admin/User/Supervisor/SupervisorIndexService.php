@@ -3,6 +3,9 @@
 namespace App\Http\Services\V1\Admin\User\Supervisor;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Seller;
+use App\Models\V1\Supervisor;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class SupervisorIndexService extends Singleton
@@ -29,5 +32,21 @@ class SupervisorIndexService extends Singleton
     {
         $component->redirectRoute("administrar.v1.usuarios.supervisores.agregar_clientes", ["supervisor" => $modelId]);
 
+    }
+
+
+    public function getData(Component $component)
+    {
+        $user = Auth::user();
+        if ($networkOperator = $user->networkOperator) {
+            if ($component->filter) {
+                return $networkOperator->supervisors()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return $networkOperator->supervisors()->paginate(15);
+        }
+        if ($component->filter) {
+            return Supervisor::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+        }
+        return Supervisor::paginate(15);
     }
 }

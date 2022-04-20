@@ -5,12 +5,15 @@ namespace App\Http\Livewire\V1\Admin\User\Technician;
 use App\Http\Services\V1\Admin\User\Technician\TechnicianAddClientService;
 use App\Http\Services\V1\Admin\User\Technician\TechnicianAddService;
 use App\Http\Services\V1\Admin\User\Technician\TechnicianEditService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Technician;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class AddClientTechnician extends Component
 {
+
+
     public $model;
     public $name;
     public $last_name;
@@ -23,6 +26,7 @@ class AddClientTechnician extends Component
     public $client_id;
     public $message_client;
     public $clientsRelated;
+
     private $addTechnicianClient;
 
     public function __construct($id = null)

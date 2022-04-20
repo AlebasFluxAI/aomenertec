@@ -34,12 +34,17 @@ class SellerIndexService extends Singleton
 
     }
 
-    public function getData()
+    public function getData(Component $component)
     {
         $user = Auth::user();
-        if ($user->hasRole(User::TYPE_NETWORK_OPERATOR)) {
-            $networkOperator = $user->networkOperator;
+        if ($networkOperator = $user->networkOperator) {
+            if ($component->filter) {
+                return $networkOperator->sellers()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
             return $networkOperator->sellers()->paginate(15);
+        }
+        if ($component->filter) {
+            return Seller::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
         }
         return Seller::paginate(15);
     }

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Admin\AdminIndexService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorIndexService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\NetworkOperator;
@@ -15,7 +16,7 @@ use Livewire\WithPagination;
 class IndexNetworkOperator extends Component
 {
     use WithPagination;
-
+    use ValidateUserFormTrait;
 
     private $indexNetworkOperatorService;
 
@@ -53,7 +54,7 @@ class IndexNetworkOperator extends Component
 
     public function getData()
     {
-        return $this->indexNetworkOperatorService->getData();
+        return $this->indexNetworkOperatorService->getData($this);
     }
 
     public function deleteNetworkOperator($networkOperatorId)

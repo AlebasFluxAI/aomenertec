@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,7 @@ class Admin extends Model
 {
     use HasFactory;
     use ImageableTrait;
+
 
     protected $fillable = [
         "user_id",

@@ -5,12 +5,15 @@ namespace App\Http\Livewire\V1\Admin\User\Support;
 use App\Http\Services\V1\Admin\User\Support\SupportAddClientService;
 use App\Http\Services\V1\Admin\User\Support\SupportAddService;
 use App\Http\Services\V1\Admin\User\Support\SupportEditService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Support;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class AddClientSupport extends Component
 {
+    use ValidateUserFormTrait;
+    
     public $model;
     public $name;
     public $last_name;
@@ -23,6 +26,8 @@ class AddClientSupport extends Component
     public $client_id;
     public $clientsRelated;
     public $message_client;
+
+
     private $addSupportClient;
 
     public function __construct($id = null)

@@ -22,13 +22,39 @@
                   ]
           ])
 
-    @include("partials.v1.table.primary-table",[
-               "table_headers"=>["ID"=>"id",
-                                 "Nombre"=>"name",
-                                 "Apellido"=>"last_name",
-                                 "Correo electronico"=>"email",
-                                 "Telefono"=>"phone",
-                                 "Operador de red"=>"networkOperator.name"
+    @include("partials.v2.table.primary-table",[
+               "table_headers"=>[
+                    [
+                       "col_name" =>"ID",
+                       "col_data" =>"id",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Nombre",
+                       "col_data" =>"name",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Apellido",
+                       "col_data" =>"last_name",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Correo electronico",
+                       "col_data" =>"email",
+                       "col_filter"=>true
+                   ],
+                   [
+                       "col_name" =>"Telefono",
+                       "col_data" =>"phone",
+                       "col_filter"=>true
+                   ],
+
+                                   [
+                       "col_name" =>"Operador de red",
+                       "col_data" =>"networkOperator.name",
+                       "col_filter"=>false
+                   ],
 
 
                 ],

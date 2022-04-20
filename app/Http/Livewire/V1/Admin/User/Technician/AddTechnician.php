@@ -3,11 +3,14 @@
 namespace App\Http\Livewire\V1\Admin\User\Technician;
 
 use App\Http\Services\V1\Admin\User\Technician\TechnicianAddService;
+use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class AddTechnician extends Component
 {
+    use ValidateUserFormTrait;
+    
     public $password;
     public $identification;
     public $name;
@@ -20,12 +23,7 @@ class AddTechnician extends Component
     public $network_operator;
     public $network_operator_id;
 
-    protected $rules = [
-        'identification' => 'required|min:6|unique:users,identification',
-        'name' => 'required',
-        'phone' => 'min:7',
-        'email' => 'required|email|unique:users,email',
-    ];
+
     private $superTechnicianAddService;
 
     public function __construct($id = null)
