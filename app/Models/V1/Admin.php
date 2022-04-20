@@ -129,11 +129,6 @@ class Admin extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function networkOperators()
-    {
-        return $this->hasMany(NetworkOperator::class);
-    }
-
     public function icon()
     {
         return $this->morphOne(Image::class, "imageable") ?? new Image(["url" => "https://aom.enerteclatam.com/images/logo-horizontal.svg"]);
@@ -155,5 +150,15 @@ class Admin extends Model
             "purple_pink_black_header" => "Morado - Rosa | Header negro",
             "ecoenergia" => "Coenergia",
         };
+    }
+
+    public function getClientsAttribute()
+    {
+        return Client::whereIn("network_operator_id", $this->networkOperators()->pluck("id"))->get();
+    }
+
+    public function networkOperators()
+    {
+        return $this->hasMany(NetworkOperator::class);
     }
 }
