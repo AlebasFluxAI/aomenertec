@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400&display=swap" rel="stylesheet">
     <script src="{{asset('assets/js/main.js')}}"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
+    <link rel="icon" type="image/x-icon" href="https://enerteclatam.com/media/wkvhaio3/favicon.png">
     <script src="{{asset('js/app.js')}}"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +36,7 @@
 
 
     <!-- Template Main CSS File -->
-    <link href="{{asset('assets/css/style.css')}}" rel="stylesheet">
+    <link href="{{asset(\App\Http\Resources\V1\Style::getStyle())}}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/277123ced7.js" crossorigin="anonymous"></script>
 
     @livewireStyles
@@ -46,8 +46,10 @@
 <main id="main" class="bg-light">
 
     <div class="bg-light ">
+        @auth
+            @include("layouts.menu.v1.header_menu")
+        @endauth
 
-        @include("layouts.menu.v1.header_menu")
         <section class="top-info bg-light">
             @yield('header')
         </section>
@@ -75,6 +77,10 @@
     var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
     var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
         return new bootstrap.Dropdown(dropdownToggleEl)
+    });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
 @livewireScripts

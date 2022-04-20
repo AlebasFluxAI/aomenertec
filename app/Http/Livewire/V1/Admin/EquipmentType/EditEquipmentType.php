@@ -25,13 +25,11 @@ class EditEquipmentType extends Component
 
     public function mount(EquipmentType $equipmentType)
     {
-
         $this->editAlertTypeService->mount($this, $equipmentType);
     }
 
     public function submitForm()
     {
-
         $this->editAlertTypeService->submitForm($this);
     }
 

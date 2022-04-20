@@ -38,20 +38,20 @@ class IndexEquipmentType extends Component
     public function delete($id)
     {
         $this->indexEquipmentService->delete($this, $id);
-
     }
 
     public function details($id)
     {
         $this->indexEquipmentService->details($this, $id);
-
     }
 
     public function render()
     {
-        return view('livewire.administrar.v1.equipmentType.index-equipment-type',
+        return view(
+            'livewire.administrar.v1.equipmentType.index-equipment-type',
             [
                 "data" => EquipmentType::paginate(15)
-            ])->extends('layouts.v1.app');
+            ]
+        )->extends('layouts.v1.app');
     }
 }

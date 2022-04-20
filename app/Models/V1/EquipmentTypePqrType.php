@@ -15,5 +15,4 @@ class EquipmentTypePqrType extends Model
         'equipment_type_id',
         'pqr_type_id'
     ];
-
 }

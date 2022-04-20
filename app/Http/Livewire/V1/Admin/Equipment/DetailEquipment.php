@@ -9,8 +9,6 @@ use function view;
 
 class DetailEquipment extends Component
 {
-
-
     public $equipment;
     private $detailEquipmentService;
 

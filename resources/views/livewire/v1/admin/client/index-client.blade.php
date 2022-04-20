@@ -11,17 +11,6 @@
 
 
         <div class="contenedor-grande">
-            @include("partials.v1.table_nav",
-                   ["nav_options"=>[
-                              ["button_align"=>"right",
-                              "click_action"=>"",
-                              "button_content"=>"Crear nuevo",
-                              "icon"=>"fa-solid fa-plus",
-                              "target_route"=>"v1.admin.client.add.client",
-                              ],
-
-                          ]
-                  ])
 
             @include("partials.v1.table.primary-table",[
                        "table_headers"=>["ID"=>"id",
@@ -35,7 +24,13 @@
                          "table_actions"=>[
                                             "details"=>"details",
                                             "edit"=>"edit",
-                                            "delete"=>"delete"
+                                            "delete"=>"delete",
+                                            "customs"=>[
+                                               [
+                                                "function"=>"settings",
+                                                "icon"=>"fas fa-gear"
+                                                ]
+                                            ]
                                             ],
 
                                                         /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

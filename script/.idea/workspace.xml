@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fcf9c512-e263-40e7-9151-eecadbbb1fbf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/DetailsSuperAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/DetailsSuperAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/IndexSuperAdmin.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Livewire/V1/Admin/User/SuperAdmin/IndexSuperAdmin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminDetailsService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminDetailsService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminIndexService.php" beforeDir="false" afterPath="$PROJECT_DIR$/../app/Http/Services/V1/Admin/User/SuperAdmin/SuperAdminIndexService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/detail-super-admin.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/detail-super-admin.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/index-super-admin.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/../resources/views/livewire/v1/admin/user/super/index-super-admin.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../routes/V1/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/../routes/V1/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../scripts/afterInstall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../scripts/afterInstall.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../scripts/beforeInstall.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../scripts/beforeInstall.sh" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +80,9 @@
       <workItem from="1646606300712" duration="2733000" />
       <workItem from="1646623559355" duration="4056000" />
       <workItem from="1646654732485" duration="4517000" />
+      <workItem from="1647038178829" duration="16000" />
+      <workItem from="1647492511517" duration="600000" />
+      <workItem from="1647527505682" duration="598000" />
     </task>
     <servers />
   </component>

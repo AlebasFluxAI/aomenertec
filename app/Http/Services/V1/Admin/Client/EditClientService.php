@@ -76,17 +76,15 @@ class EditClientService extends Singleton
             "id" => Client::TRIPHASIC,
             "value" => "TRIFASICO",
         ]);
-
-
     }
     public function updatedLocationTypeId(Component $component)
     {
         $component->location_id = "";
-        if ($component->municipality_id != ""){
+        if ($component->municipality_id != "") {
             $component->locations = Location::whereMunicipalityId($component->municipality_id)
                 ->whereLocationTypeId($component->location_type_id)
                 ->get();
-        } else{
+        } else {
             $component->locations = [];
         }
     }
@@ -100,11 +98,11 @@ class EditClientService extends Singleton
     public function updatedMunicipalityId(Component $component)
     {
         $component->location_id = "";
-        if ($component->location_type_id != ""){
+        if ($component->location_type_id != "") {
             $component->locations = Location::whereMunicipalityId($component->municipality_id)
                 ->whereLocationTypeId($component->location_type_id)
                 ->get();
-        } else{
+        } else {
             $component->locations = [];
         }
     }
@@ -157,6 +155,4 @@ class EditClientService extends Singleton
             'stratum_id' => $component->stratum_id,
         ];
     }
-
-
 }

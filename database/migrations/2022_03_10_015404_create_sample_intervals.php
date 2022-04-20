@@ -15,7 +15,7 @@ class CreateSampleIntervals extends Migration
     {
         Schema::create('sample_intervals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("equipment")->constrained();
+            $table->foreignId("equipment_id")->constrained();
             $table->integer("interval")->default(15);
             $table->timestamps();
         });

@@ -10,7 +10,6 @@ use function view;
 
 class EditEquipment extends Component
 {
-
     public $equipmentSerial;
     public $equipment;
     public $serial;
@@ -42,7 +41,6 @@ class EditEquipment extends Component
 
     public function updatedEquipmentTypeId()
     {
-
         $this->editEquipmentService->updatedEquipmentTypeId($this);
     }
 

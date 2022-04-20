@@ -12,7 +12,10 @@ use Illuminate\Queue\SerializesModels;
 
 class SaveMicrocontrollerDataJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -34,10 +37,9 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-
+        dd("Wilder");
         $this->data = MicrocontrollerData::create([
             "raw_json" => $this->raw_json,
         ]);
-
     }
 }

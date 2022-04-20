@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User;
 
-
 use App\Http\Services\V1\Admin\User\AddUserService;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;

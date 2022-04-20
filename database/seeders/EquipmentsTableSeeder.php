@@ -81,7 +81,7 @@ class EquipmentsTableSeeder extends Seeder
 
         ];
 
-        foreach ($equipment as $item){
+        foreach ($equipment as $item) {
             $create = Equipment::create($item);
         }
     }

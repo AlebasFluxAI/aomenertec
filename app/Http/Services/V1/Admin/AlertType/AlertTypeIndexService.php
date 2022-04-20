@@ -11,7 +11,6 @@ use Livewire\Component;
 
 class AlertTypeIndexService extends Singleton
 {
-
     public function delete(Component $component, $dataId)
     {
         AlertType::find($dataId)->delete();

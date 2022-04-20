@@ -45,7 +45,6 @@ class IndexEquipment extends Component
     public function delete($id)
     {
         $this->indexEquipmentService->delete($this, $id);
-
     }
 
     public function render()

@@ -54,7 +54,6 @@ class EditEquipmentAlert extends Component
 
     public function submitForm()
     {
-
         $this->addEquipmentAlertService->submitForm($this);
     }
 
@@ -69,6 +68,4 @@ class EditEquipmentAlert extends Component
         return view('livewire.administrar.v1.equipmentAlert.edit-equipment-alert')
             ->extends('layouts.v1.app');
     }
-
-
 }

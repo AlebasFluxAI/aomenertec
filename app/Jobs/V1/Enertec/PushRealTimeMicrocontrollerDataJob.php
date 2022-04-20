@@ -16,7 +16,10 @@ use Illuminate\Queue\SerializesModels;
 
 class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -41,22 +44,23 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
         $data = $this->unpackData();
         event(new RealTimeMonitoringEvent($data));
     }
-    private function unpackData(){
+    private function unpackData()
+    {
         $data_frame = config('data-frame.data_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
         //$decode = $this->raw_json;
 
-        foreach ($data_frame as $data){
+        foreach ($data_frame as $data) {
             try {
-                $split = substr($decode, ($data['start']), ($data['lenght'] ));
+                $split = substr($decode, ($data['start']), ($data['lenght']));
                 $bin = hex2bin($split);
                 $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                if (is_nan( $json[$data['variable_name']])){
+                if (is_nan($json[$data['variable_name']])) {
                     $json[$data['variable_name']] = null;
                 }
-                if ($data['variable_name'] == "equipment_id"){
+                if ($data['variable_name'] == "equipment_id") {
                     $equipment_serial = $json[$data['variable_name']];
-                } elseif ($data['variable_name'] == "timestamp"){
+                } elseif ($data['variable_name'] == "timestamp") {
                     $timestamp_unix = $json[$data['variable_name']];
                 }
             } catch (Exception $e) {
