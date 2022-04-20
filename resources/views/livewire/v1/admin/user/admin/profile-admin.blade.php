@@ -126,16 +126,16 @@
                                                                                     "customs"=>[
                                                                                            [
                                                                                                     "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.operadores.detalles",
-                                                                                                            "binding"=>"networkOperator"
+                                                                                                            "route"=>"v1.admin.client.detail.client",
+                                                                                                            "binding"=>"client"
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-search",
                                                                                                     "tooltip_title"=>"Detalles",
                                                                                             ],
                                                                                             [
                                                                                                     "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.operadores.editar",
-                                                                                                            "binding"=>"networkOperator"
+                                                                                                            "route"=>"v1.admin.client.edit.client",
+                                                                                                            "binding"=>"client"
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-pencil",
                                                                                                     "tooltip_title"=>"Editar",
