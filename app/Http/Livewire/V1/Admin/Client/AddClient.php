@@ -53,10 +53,8 @@ class AddClient extends Component
     public $posts;
     public $equipment_id;
     public $equipment_types;
-    private $addClientService;
-
     protected $rules = [
-        'identification' => 'required|min:6|unique:users,identification',
+        'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
         'name' => 'required|min:8',
         'phone' => 'min:7',
         'email' => 'email|unique:users,email',
@@ -71,6 +69,7 @@ class AddClient extends Component
         'equipment.*.post' => 'required|min:2',
         'equipment.*.disable' => 'required|min:2',
     ];
+    private $addClientService;
 
     public function __construct()
     {
@@ -84,10 +83,12 @@ class AddClient extends Component
             $this->addClientService->updated($this, $property_name, $value);
         }
     }
+
     public function assignEquipment($equipment, $aux)
     {
         $this->addClientService->assignEquipment($this, $equipment, $aux);
     }
+
     public function assignEquipmentFirst($type_id)
     {
         $this->addClientService->assignEquipmentFirst($this, $type_id);
@@ -102,6 +103,7 @@ class AddClient extends Component
     {
         $this->addClientService->updatedDepartment($this);
     }
+
     public function updatedClientTypeId()
     {
         $this->addClientService->updatedClientTypeId($this);
@@ -122,10 +124,12 @@ class AddClient extends Component
     {
         $this->addClientService->updatedNetworkOperator($this);
     }
+
     public function assignNetworkOperator($network_operator)
     {
         $this->addClientService->assignNetworkOperator($this, $network_operator);
     }
+
     public function assignNetworkOperatorFirst()
     {
         $this->addClientService->assignNetworkOperatorFirst($this);
@@ -135,6 +139,7 @@ class AddClient extends Component
     {
         $this->addClientService->AddInputEquipment($this);
     }
+
     public function deleteInputEquipment()
     {
         $this->addClientService->deleteInputEquipment($this);
@@ -144,6 +149,7 @@ class AddClient extends Component
     {
         $this->addClientService->save($this);
     }
+
     public function importClient()
     {
         $this->addClientService->importClient($this);
