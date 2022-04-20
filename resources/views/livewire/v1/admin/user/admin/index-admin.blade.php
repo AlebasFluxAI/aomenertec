@@ -62,6 +62,14 @@
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
+                                    "customs"=>[
+                                        [
+                                                "function"=>"delete",
+                                                "conditional"=>"conditionalDelete",
+                                                "icon"=>"fas fa-trash",
+                                                "tooltip_title"=>"Eliminar"
+                                        ]
+                                       ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}
