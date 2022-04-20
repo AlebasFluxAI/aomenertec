@@ -44,11 +44,14 @@ class Technician extends Model
         ];
     }
 
+<<<<<<< HEAD
     public static function getHome()
     {
         return "livewire.v1.admin.user.technician.profile-technician";
     }
 
+=======
+>>>>>>> develop_v2
     public static function getRole()
     {
         return "technician";

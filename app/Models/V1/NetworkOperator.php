@@ -104,11 +104,14 @@ class NetworkOperator extends Model
         ];
     }
 
+<<<<<<< HEAD
     public static function getHome()
     {
         return "livewire.v1.admin.user.network-operator.profile-network-operator";
     }
 
+=======
+>>>>>>> develop_v2
     public static function getRole()
     {
         return User::TYPE_NETWORK_OPERATOR;

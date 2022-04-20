@@ -21,8 +21,12 @@ class CreateMicrocontrollerData extends Migration
             $table->dateTime("source_timestamp")->nullable();
             $table->double("accumulated_real_consumption")->nullable();
             $table->double("interval_real_consumption")->nullable();
-            $table->double("interval_reactive_consumption")->nullable();
             $table->double("accumulated_reactive_consumption")->nullable();
+            $table->double("interval_reactive_consumption")->nullable();
+            $table->double("accumulated_reactive_capacitive_consumption")->nullable();
+            $table->double("interval_reactive_capacitive_consumption")->nullable();
+            $table->double("accumulated_reactive_inductive_consumption")->nullable();
+            $table->double("interval_reactive_inductive_consumption")->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
