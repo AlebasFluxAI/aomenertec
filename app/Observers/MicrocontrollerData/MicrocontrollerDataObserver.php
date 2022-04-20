@@ -2,10 +2,10 @@
 
 namespace App\Observers\MicrocontrollerData;
 
-<<<<<<< HEAD
 use App\Models\V1\MicrocontrollerData;
 
 class MicrocontrollerDataObserver
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 use App\Models\V1\MicrocontrollerData;
@@ -22,6 +22,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class MicrocontrollerDataObserver implements ShouldQueue
 >>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
 >>>>>>> develop_v2
+=======
+>>>>>>> develop_v2
 {
     /**
      * Handle the MicrocontrollerData "created" event.
@@ -34,6 +36,7 @@ class MicrocontrollerDataObserver implements ShouldQueue
         $microcontrollerData->miningData();
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
 =======
@@ -44,5 +47,7 @@ class MicrocontrollerDataObserver implements ShouldQueue
     }
 
 >>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
+=======
 >>>>>>> develop_v2
 }

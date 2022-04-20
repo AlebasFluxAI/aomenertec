@@ -8,8 +8,11 @@
 @tailwind utilities;
 :root {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> develop_v2
+=======
 >>>>>>> develop_v2
     --style_primary: #009599;
     --style_secondary: #f2c968;
@@ -17,6 +20,7 @@
     --style_orange: #f9b000;
     --style_orange_light: #f2c968;
 }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 =======
@@ -1992,4 +1996,6 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 }
 
 >>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
+=======
 >>>>>>> develop_v2

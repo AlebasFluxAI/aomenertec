@@ -39,8 +39,11 @@ class Monitoring extends Component
     public function newData($data)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<< HEAD
+>>>>>>> develop_v2
+=======
 >>>>>>> develop_v2
         $this->test = $data['data'];
     }
@@ -53,6 +56,7 @@ class Monitoring extends Component
         $current_hour->setTimestamp($aux);
         $this->data = Client::find(2)->microcontrollerData->whereBetween("source_timestamp", [$current_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')]);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
         return [
@@ -61,6 +65,8 @@ class Monitoring extends Component
     }*/
     /*public function newData($data){
 >>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
+=======
 >>>>>>> develop_v2
 
     }
