@@ -44,6 +44,10 @@ class MicrocontrollerData extends Model
         $this->updateData();
         //$this->alert();
     }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> develop_v2
     private function updateData()
     {
         $data_frame = config('data-frame.data_frame');
@@ -51,6 +55,66 @@ class MicrocontrollerData extends Model
         //$decode = $this->raw_json;
 
         foreach ($data_frame as $data) {
+<<<<<<< HEAD
+=======
+=======
+    public function intervalMiningData(){
+        $unix_time = $this->raw_json["timestamp"];
+        if ($unix_time%60 == 0){
+            $year = date("Y", $unix_time);
+            $month = date("m", $unix_time);
+            $day = date("d", $unix_time);
+            $hour = date("H", $unix_time);
+            $minute = date("i", $unix_time);
+
+            HourlyMicrocontrollerData::create([
+                'year' => $year,
+                'month' => $month,
+                'day' => $day,
+                'hour' => $hour,
+                'minute' => $minute,
+                'client_id' => $this->client_id,
+                'microcontroller_data_id' => $this->id,
+            ]);
+        }
+        if ($unix_time%3600 == 0){
+            DailyMicrocontrollerData::create([
+                'year' => $year,
+                'month' => $month,
+                'day' => $day,
+                'hour' => $hour - 1,
+                'client_id' => $this->client_id,
+                'microcontroller_data_id' => $this->id
+            ]);
+        }
+        if ($hour == 0 && $minute == 0){
+            MonthlyMicrocontrollerData::create([
+                'year' => $year,
+                'month' => $month,
+                'day' => $day - 1,
+                'client_id' => $this->client_id,
+                'microcontroller_data_id' => $this->id
+            ]);
+        }
+        if ($day == 1 && $hour == 0 && $minute == 0){
+            AnnualMicrocontrollerData::create([
+                'year' => $year,
+                'month' => $month - 1,
+                'client_id' => $this->client_id,
+                'microcontroller_data_id' => $this->id
+            ]);
+        }
+    }
+
+    private function updateData(){
+        $data_frame = config('data-frame.data_frame');
+        $decode = bin2hex(base64_decode($this->raw_json));
+        //$decode = $this->raw_json;
+        $varch = 0;
+        $varih = 0;
+        foreach ($data_frame as $data){
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
             try {
                 $split = substr($decode, ($data['start']), ($data['lenght']));
                 $bin = hex2bin($split);
@@ -71,7 +135,20 @@ class MicrocontrollerData extends Model
                 echo 'Excepción capturada: ',  $e->getMessage(), "\n";
             }
         }
+<<<<<<< HEAD
         $current_time = new \DateTime("@$timestamp_unix");
+=======
+<<<<<<< HEAD
+        $current_time = new \DateTime("@$timestamp_unix");
+=======
+
+        $unixTime = time();//delete
+        $current_time = new \DateTime();
+        $aux = $unixTime - ($unixTime%60);//delete
+        $current_time->setTimestamp($aux);//$aux --> $timestamp_unix
+        $json['timestamp'] = $aux;
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                             ->first();
         $aux = EquipmentClient::whereEquipmentId($equipment->id)->whereCurrentAssigned(true)->first();
@@ -86,20 +163,60 @@ class MicrocontrollerData extends Model
         if (count($client->microcontrollerData) == 0) {
             $this->interval_real_consumption = 0;
             $this->interval_reactive_consumption = 0;
+<<<<<<< HEAD
         } else {
             $module = $timestamp_unix%3600;
+=======
+<<<<<<< HEAD
+        } else {
+            $module = $timestamp_unix%3600;
+=======
+            $this->interval_reactive_capacitive_consumption = 0;
+            $this->interval_reactive_inductive_consumption = 0;
+            $this->accumulated_reactive_inductive_consumption = $varih;
+            $this->accumulated_reactive_capacitive_consumption = $varch;
+
+        } else{
+            $module = $aux%3600;
+
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
             if ($module < 60) {
                 $previous_hour_unix = $timestamp_unix - (3600 + $module);
             } else {
                 $previous_hour_unix = $timestamp_unix - $module;
             }
+<<<<<<< HEAD
             $reference_hour = new \DateTime("@$previous_hour_unix");
+=======
+<<<<<<< HEAD
+            $reference_hour = new \DateTime("@$previous_hour_unix");
+=======
+            $last_data = $client->microcontrollerData->last();
+            $this->accumulated_reactive_inductive_consumption = $last_data->accumulated_reactive_inductive_consumption + $varih;
+            $this->accumulated_reactive_capacitive_consumption = $last_data->accumulated_reactive_capacitive_consumption + $varch;
+
+            $reference_hour = new \DateTime();
+            $reference_hour->setTimestamp($previous_hour_unix);
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
             $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
                 ->first();
             if (empty($reference_data)) {
                 $this->interval_real_consumption = 0;
                 $this->interval_reactive_consumption = 0;
+<<<<<<< HEAD
             } else {
+=======
+<<<<<<< HEAD
+            } else {
+=======
+                $this->interval_reactive_capacitive_consumption = 0;
+                $this->interval_reactive_inductive_consumption = 0;
+
+            } else{
+>>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
+>>>>>>> develop_v2
                 $this->interval_real_consumption = $wh - $reference_data->accumulated_real_consumption;
                 $this->interval_reactive_consumption = $varh - $reference_data->accumulated_reactive_consumption;
             }
