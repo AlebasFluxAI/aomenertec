@@ -2,22 +2,22 @@
 
 return [
     'variables' => [
-        ['id' => 1,  'display_name' =>  'Energia activa(KWH)',           'icon'=>'fas fa-user', 'variable_name'=> 'import_wh',          'style' => 'active_energy'],
-        ['id' => 2,  'display_name' =>  'Energia reactiva(KVARH)',       'icon'=>'fas fa-user', 'variable_name'=> 'import_VArh',        'style' => 'reactive_energy'],
-        ['id' => 3,  'display_name' =>  'Voltaje(V)',                    'icon'=>'fas fa-plus', 'variable_name'=> 'volt',               'style' => 'voltage'],
-        ['id' => 4,  'display_name' =>  'Corriente(A)',                  'icon'=>'fas fa-user', 'variable_name'=> 'current',            'style' => 'current'],
-        ['id' => 5,  'display_name' =>  'Potencia(W)',                   'icon'=>'fas fa-user', 'variable_name'=> 'power',              'style' => 'power'],
-        ['id' => 6,  'display_name' =>  'P. Aparente(VA)',               'icon'=>'fas fa-user', 'variable_name'=> 'VA',                 'style' => 'aparent_power'],
-        ['id' => 7,  'display_name' =>  'P. Reactiva(VAR)',              'icon'=>'fas fa-user', 'variable_name'=> 'VAr',                'style' => 'reactive_power'],
-        ['id' => 8,  'display_name' =>  'FP',                            'icon'=>'fas fa-user', 'variable_name'=> 'power_factor',       'style' => 'power_factor'],
-        ['id' => 9,  'display_name' =>  'Angulo fase',                   'icon'=>'fas fa-user', 'variable_name'=> 'phase_angle',        'style' => 'phase_angle'],
-        ['id' => 10, 'display_name' =>  'Voltaje fases(V)',              'icon'=>'fas fa-user', 'variable_name'=> 'volts',              'style' =>  'phases_voltage'],
-        ['id' => 11, 'display_name' =>  'THDI(%)',                       'icon'=>'fas fa-user', 'variable_name'=> 'current_thd',        'style' => 'thdi'],
-        ['id' => 12, 'display_name' =>  'THDV(%)',                       'icon'=>'fas fa-user', 'variable_name'=> 'volt_thd',           'style' => 'thdv'],
-        ['id' => 13, 'display_name' =>  'THDV fases(%)',                 'icon'=>'fas fa-user', 'variable_name'=> 'volts_thd',          'style' => 'phases_thdv'],
-        ['id' => 14, 'display_name' =>  'Consumo fases(KWH)',            'icon'=>'fas fa-user', 'variable_name'=> 'phase_import_kwh',   'style' => 'phase_energy'],
-        ['id' => 15, 'display_name' =>  'Consumo reactivo fases',        'icon'=>'fas fa-user', 'variable_name'=> 'phase_import_kvarh', 'style' => 'phase_energy_reactive'],
-        ['id' => 16, 'display_name' =>  'Frecuencia(Hz)',                'icon'=>'fas fa-user', 'variable_name'=> 'frecuency' ,         'style' => 'frecuency']
+        ['id' => 1,  'display_name' =>  'Energia activa(KWH)',           'icon'=>'fas fa-tachometer-alt', 'variable_name'=> 'import_wh',          'style' => 'active_energy'],
+        ['id' => 2,  'display_name' =>  'Energia reactiva(KVARH)',       'icon'=>'fas fa-atom', 'variable_name'=> 'import_VArh',        'style' => 'reactive_energy'],
+        ['id' => 3,  'display_name' =>  'Voltaje(V)',                    'icon'=>'fas fa-lightbulb', 'variable_name'=> 'volt',               'style' => 'voltage'],
+        ['id' => 4,  'display_name' =>  'Corriente(A)',                  'icon'=>'fas fa-bolt', 'variable_name'=> 'current',            'style' => 'current'],
+        ['id' => 5,  'display_name' =>  'Potencia(W)',                   'icon'=>'fas fa-long-arrow-alt-right', 'variable_name'=> 'power',              'style' => 'power'],
+        ['id' => 6,  'display_name' =>  'P. Aparente(VA)',               'icon'=>'fas fa-expand-alt', 'variable_name'=> 'VA',                 'style' => 'aparent_power'],
+        ['id' => 7,  'display_name' =>  'P. Reactiva(VAR)',              'icon'=>'fas fa-long-arrow-alt-up', 'variable_name'=> 'VAr',                'style' => 'reactive_power'],
+        ['id' => 8,  'display_name' =>  'FP',                            'icon'=>'fas fa-exchange-alt', 'variable_name'=> 'power_factor',       'style' => 'power_factor'],
+        ['id' => 9,  'display_name' =>  'Angulo fase',                   'icon'=>'fas fa-greater-than-equal', 'variable_name'=> 'phase_angle',        'style' => 'phase_angle'],
+        ['id' => 10, 'display_name' =>  'Voltaje fases(V)',              'icon'=>'fas fa-code-branch', 'variable_name'=> 'volts',              'style' =>  'phases_voltage'],
+        ['id' => 11, 'display_name' =>  'THDI(%)',                       'icon'=>'fas fa-hubspot', 'variable_name'=> 'current_thd',        'style' => 'thdi'],
+        ['id' => 12, 'display_name' =>  'THDV(%)',                       'icon'=>'fas fa-percentage', 'variable_name'=> 'volt_thd',           'style' => 'thdv'],
+        ['id' => 13, 'display_name' =>  'THDV fases(%)',                 'icon'=>'fas fa-percent', 'variable_name'=> 'volts_thd',          'style' => 'phases_thdv'],
+        ['id' => 14, 'display_name' =>  'Consumo fases(KWH)',            'icon'=>'fas fa-chart-bar', 'variable_name'=> 'phase_import_kwh',   'style' => 'phase_energy'],
+        ['id' => 15, 'display_name' =>  'Consumo reactivo fases',        'icon'=>'fas fa-chart-bar', 'variable_name'=> 'phase_import_kvarh', 'style' => 'phase_energy_reactive'],
+        ['id' => 16, 'display_name' =>  'Frecuencia(Hz)',                'icon'=>'fas fa-chart-line', 'variable_name'=> 'frecuency' ,         'style' => 'frecuency']
     ],
 
 
