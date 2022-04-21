@@ -27,6 +27,10 @@ class MicrocontrollerData extends Model
         "interval_reactive_consumption",
         "accumulated_reactive_consumption",
         "source_timestamp",
+        "accumulated_reactive_inductive_consumption",
+        "accumulated_reactive_capacitive_consumption",
+        "interval_reactive_capacitive_consumption",
+        "interval_reactive_inductive_consumption",
         "type",
     ];
 
