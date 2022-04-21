@@ -60,7 +60,7 @@
 
             </div>
             <div class="col-12 mt-0">
-                @livewire('v1.monitoring.charts.line-chart', ['variables_selected' => $variables_selected, 'time'=>$time_id])
+                @livewire('v1.monitoring.charts.line-chart', ['client'=>$client, 'variables_selected' => $variables_selected, 'time'=>$time_id])
             </div>
 
 

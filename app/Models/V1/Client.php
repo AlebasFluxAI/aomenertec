@@ -86,8 +86,7 @@ class Client extends Model
     public function equipments()
     {
         return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id')
-            ->withPivot('current_assigned')
-            ->using(EquipmentClient::class);
+            ;
     }
 
     public function pqrs()
