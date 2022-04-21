@@ -6,6 +6,7 @@ use App\Http\Livewire\V1\Admin\User\EditUser;
 use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
+use App\Models\V1\Client;
 use App\Models\V1\Consumer;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
@@ -35,5 +36,18 @@ class ProfileUserService extends Singleton
     public function getViewName()
     {
         return Menu::getHome();
+    }
+
+    public function deleteNetworkOperator(Component $component, $networkOperatorId)
+    {
+        $operatorName = NetworkOperator::find($networkOperatorId)->name;
+        NetworkOperator::whereId($networkOperatorId)->delete();
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operatorName} eliminado"]);
+    }
+
+    public function conditionalNetworkOperatorDelete($networkOperatorId)
+    {
+        return Client::whereNetworkOperatorId($networkOperatorId)->exists();
+
     }
 }

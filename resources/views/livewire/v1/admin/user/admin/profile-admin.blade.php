@@ -107,7 +107,13 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-pencil",
                                                                                                     "tooltip_title"=>"Editar",
-                                                                                            ]
+                                                                                            ],
+                                                                                               [
+                                                                                                        "function"=>"deleteNetworkOperator",
+                                                                                                        "conditional"=>"conditionalNetworkOperatorDelete",
+                                                                                                        "icon"=>"fas fa-trash",
+                                                                                                        "tooltip_title"=>"Eliminar"
+                                                                                                ]
                                                                                         ]
                                                                                     ],
                                                                       "table_rows"=>$model->networkOperators
