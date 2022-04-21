@@ -2,10 +2,10 @@
 
 namespace App\Observers\MicrocontrollerData;
 
+use App\Events\NewPointDataMonitoringEvent;
 use App\Models\V1\MicrocontrollerData;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MicrocontrollerDataObserver implements ShouldQueue
+class MicrocontrollerDataObserver
 {
     /**
      * Handle the MicrocontrollerData "created" event.
@@ -17,10 +17,9 @@ class MicrocontrollerDataObserver implements ShouldQueue
     {
         $microcontrollerData->miningData();
     }
-
     public function updated(MicrocontrollerData $microcontrollerData)
     {
-        $microcontrollerData->intervalMiningData();
+        $microcontrollerData->IntervalMiningData();
         event(new NewPointDataMonitoringEvent());
     }
 }
