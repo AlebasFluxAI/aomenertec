@@ -27,10 +27,10 @@ class MicrocontrollerData extends Model
         "interval_reactive_consumption",
         "accumulated_reactive_consumption",
         "source_timestamp",
-        "accumulated_reactive_inductive_consumption",
-        "accumulated_reactive_capacitive_consumption",
-        "interval_reactive_capacitive_consumption",
-        "interval_reactive_inductive_consumption",
+       // "accumulated_reactive_inductive_consumption",
+       // "accumulated_reactive_capacitive_consumption",
+       // "interval_reactive_capacitive_consumption",
+       // "interval_reactive_inductive_consumption",
         "type",
     ];
 
@@ -106,8 +106,8 @@ class MicrocontrollerData extends Model
             }
             $reference_hour = new DateTime("@$previous_hour_unix");
             $last_data = $client->microcontrollerData->last();
-            $this->accumulated_reactive_inductive_consumption = $last_data->accumulated_reactive_inductive_consumption + $varih;
-            $this->accumulated_reactive_capacitive_consumption = $last_data->accumulated_reactive_capacitive_consumption + $varch;
+            //$this->accumulated_reactive_inductive_consumption = $last_data->accumulated_reactive_inductive_consumption + $varih;
+            //$this->accumulated_reactive_capacitive_consumption = $last_data->accumulated_reactive_capacitive_consumption + $varch;
 
             $reference_hour = new DateTime();
             $reference_hour->setTimestamp($previous_hour_unix);
@@ -116,8 +116,8 @@ class MicrocontrollerData extends Model
             if (empty($reference_data)) {
                 $this->interval_real_consumption = 0;
                 $this->interval_reactive_consumption = 0;
-                $this->interval_reactive_capacitive_consumption = 0;
-                $this->interval_reactive_inductive_consumption = 0;
+                //$this->interval_reactive_capacitive_consumption = 0;
+                //$this->interval_reactive_inductive_consumption = 0;
 
             } else {
 
