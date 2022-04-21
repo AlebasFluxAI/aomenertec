@@ -40,6 +40,10 @@
                                                     "title"=>"Operadores de red",
 
                                                 ],
+                                                [
+                                                    "title"=>"Clientes",
+
+                                                ],
 
                                            ],
 
@@ -104,12 +108,30 @@
                                                                         "table_pageable"=>false,
                                                                        "table_headers"=>["ID"=>"id",
                                                                                          "Nombre"=>"name",
-                                                                        ],
+                                                                                         "Correo"=>"email",
+                                                                                         "Identificacion"=>"identification",
 
+                                                                        ],
                                                                        "table_rows"=>$model->networkOperators
 
                                                                    ]
+                                                ],
+                                                  [
+                                                   "view_name"=>"partials.v1.table.primary-table",
+                                                    "view_values"=>[
+                                                                        "table_pageable"=>false,
+                                                                       "table_headers"=>[
+                                                                                          "ID"=>"id",
+                                                                                         "Nombre"=>"name",
+                                                                                         "Correo"=>"email",
+                                                                                         "Identificacion"=>"identification",
+                                                                        ],
+
+                                                                       "table_rows"=>$model->clients
+
+                                                                   ]
                                                 ]
+
 
 
                                                                                         ]

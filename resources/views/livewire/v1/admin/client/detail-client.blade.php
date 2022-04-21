@@ -54,6 +54,10 @@
                                                                              "key"=>"Email",
                                                                              "value"=>$client->email
                                                                          ],
+                                                                         [
+                                                                             "key"=>"Operador de red",
+                                                                             "value"=>$client->networkOperator->id. "- ". $client->networkOperator->name
+                                                                         ],
 
 
                                                                      ]
