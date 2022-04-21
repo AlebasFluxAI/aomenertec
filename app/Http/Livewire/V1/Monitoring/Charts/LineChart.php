@@ -16,14 +16,15 @@ class LineChart extends Component
     public $data_chart;
     public $variables_selected;
     public $time;
-    public function mount($variables_selected, $time)
+    public $client;
+    public function mount(Client $client, $variables_selected, $time)
     {
         $this->time = $time;
         $this->L1 = [];
         $this->L2 = [];
         $this->L3 = [];
         $this->x_axis = [];
-        $client =  Client::find(2);
+        $this->client =  $client;
         if ($time == 1) {
             $this->data_chart = $client->hourlyMicrocontrollerData->take(60);
         } elseif ($time == 2) {
@@ -51,16 +52,16 @@ class LineChart extends Component
     }
     public function changeTime($time)
     {
-        $client =  Client::find(2);
+
         $this->time = $time;
         if ($time == 1) {
-            $this->data_chart = $client->hourlyMicrocontrollerData->take(60);
+            $this->data_chart = $this->client->hourlyMicrocontrollerData->take(60);
         } elseif ($time == 2) {
-            $this->data_chart = $client->dailyMicrocontrollerData->take(24);
+            $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
         } elseif ($time == 3) {
-            $this->data_chart = $client->monthlyMicrocontrollerData->take(31);
+            $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
         } else {
-            $this->data_chart = $client->annualMicrocontrollerData->take(12);
+            $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
         }
         $array_aux = $this->data_chart->reverse();
         $this->L1 = [];
@@ -86,15 +87,15 @@ class LineChart extends Component
 
     public function changeVariable($variables)
     {
-        $client =  Client::find(2);
+
         if ($this->time == 1) {
-            $this->data_chart = $client->hourlyMicrocontrollerData->take(60);
+            $this->data_chart = $this->client->hourlyMicrocontrollerData->take(60);
         } elseif ($this->time == 2) {
-            $this->data_chart = $client->dailyMicrocontrollerData->take(24);
+            $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
         } elseif ($this->time == 3) {
-            $this->data_chart = $client->monthlyMicrocontrollerData->take(31);
+            $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
         } else {
-            $this->data_chart = $client->annualMicrocontrollerData->take(12);
+            $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
         }
         $this->variables_selected = $variables;
         $array_aux = $this->data_chart->reverse();

@@ -26,6 +26,7 @@ class Monitoring extends Component
     public $variable_chart_id;
     public $time_id;
     public $date_range;
+    public $client;
     protected $rules = [
 
         'cards.*.color' => 'required',
@@ -33,11 +34,14 @@ class Monitoring extends Component
         'cards.*.icon' => 'required',
         'cards.*.list_model_variable' => 'required',
     ];
-    public function mount()
+    public function mount(Client $client)
     {
-        $last_data = Client::find(2)->microcontrollerData->last();
+        $this->client = $client;
+        $last_data = $this->client->microcontrollerData->last();
         $this->last_data = json_decode($last_data->raw_json, true);
+
         $this->data_frame = config('data-frame.data_frame');
+
         $this->data_frame_collect = new Collection();
         $this->data_frame_collect = collect($this->data_frame);
         $this->variables = config('data-frame.variables');
@@ -119,7 +123,7 @@ class Monitoring extends Component
                 'variables_selected' => $aux]
             ]);
 
-            $last_data = Client::find(2)->microcontrollerData->last();
+            $last_data = $this->client->microcontrollerData->last();
             $this->last_data = json_decode($last_data->raw_json, true);
         }
     }
@@ -135,7 +139,7 @@ class Monitoring extends Component
     }*/
     public function addData1()
     {
-        $last_data = Client::find(2)->microcontrollerData->last();
+        $last_data = Client::find(1)->microcontrollerData->last();
         $this->last_data = json_decode($last_data->raw_json, true);
         $data_frame_collect = new Collection();
         foreach ($this->data_frame as $item) {

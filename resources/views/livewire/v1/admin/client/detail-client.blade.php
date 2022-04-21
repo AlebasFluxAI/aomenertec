@@ -63,37 +63,13 @@
                                                                      ]
                                                             ]
                                                 ],
-                                                [
-                                                   "view_name"=>"partials.v1.form.primary_form",
-                                                    "view_values"=>[
-                                                                        "form_toast"=>true,
-                                                                        "session_message"=>"message",
-                                                                        "form_submit_action"=>"submitForm",
-                                                                        "form_inputs"=>[
-                                                                                        [
-                                                                                                    "input_type"=>"list",
-                                                                                                    "col_with"=>4,
-                                                                                                     "list_model" => "client_type_id",
-                                                                                                     "list_default" => "Tipo cliente...",
-                                                                                                     "list_options" => $client_types,
-                                                                                                     "list_option_value"=>"id",
-                                                                                                     "list_option_view"=>"type",
-                                                                                                     "list_option_title"=>"",
-                                                                                                     "disabled"=>true
+                                               [
+                                                    "view_name"=>"partials.v1.table.primary-details-table",
+                                                    "view_values"=>
+                                                            ["table_info" => $equipment]
 
-                                                                                        ],
-                                                                                          [
-                                                                                                    "input_type"=>"multi_input_equipment",
-                                                                                                    "equipment"=>$equipment,
-                                                                                                    "equipment_types"=>$equipment_types,
-                                                                                                    "serials"=>$serials,
-                                                                                        ],
+                                                ],
 
-
-
-                                                                                        ]
-                                                                    ]
-                                                ]
                                         ]
          ])
 

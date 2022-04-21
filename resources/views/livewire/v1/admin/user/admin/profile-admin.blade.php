@@ -139,7 +139,15 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-pencil",
                                                                                                     "tooltip_title"=>"Editar",
-                                                                                            ]
+                                                                                            ],
+                                                                                            [
+                                                                                                    "redirect"=>[
+                                                                                                                "route"=>"v1.admin.client.monitoring",
+                                                                                                                "binding"=>"client"
+                                                                                                          ],
+                                                                                                        "icon"=>"fa fa-connectdevelop",
+                                                                                                        "tooltip_title"=>"Monitoreo",
+                                                                                                ],
                                                                                         ]
                                                                                     ],
                                                                       "table_rows"=>$model->clients
