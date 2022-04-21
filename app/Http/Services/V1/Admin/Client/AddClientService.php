@@ -234,7 +234,8 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
-        $component->validate();
+
+        //$component->validate();
         while (true) {
             $code = $this->clientCode();
             if (!(Client::whereCode($code)->exists())) {
@@ -271,7 +272,7 @@ class AddClientService extends Singleton
             ]);
             Equipment::find($item['id'])->update(['assigned' => true]);
         }
-        session()->flash('success', 'Cliente creado con exito');
+        $component->emitTo('livewire-toast', 'show', "Cliente {$client->name} creado exitosamente");
     }
 
     public function clientCode($input = '0123456789', $strength = 10)

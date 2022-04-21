@@ -18,6 +18,17 @@ class ProfileUser extends Component
         $this->profileUserService = ProfileUserService::getInstance();
     }
 
+    public function deleteNetworkOperator($networkOperatorId)
+    {
+        $this->profileUserService->deleteNetworkOperator($this, $networkOperatorId);
+    }
+
+    public function conditionalNetworkOperatorDelete($networkOperatorId)
+    {
+        return $this->profileUserService->conditionalNetworkOperatorDelete($networkOperatorId);
+    }
+
+
     public function mount()
     {
         $this->profileUserService->mount($this);

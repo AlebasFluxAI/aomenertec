@@ -3,7 +3,7 @@
         <div class="card-body">
             <div class="d-flex flex-md-column flex-xl-row flex-wrap  align-items-center justify-content-between">
                 <div class="d-flex align-items-center icon-rounded-inverse icon-rounded-lg">
-                    <i class=" {{$icon_class??"fas fa-user"}} fa-2x">
+                    <i class=" {{$icon_class}} fa-2x">
                     </i>
                 </div>
                 <div >

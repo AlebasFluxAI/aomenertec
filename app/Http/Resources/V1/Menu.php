@@ -43,11 +43,11 @@ class Menu extends Singleton
                 ]),
 
                 new Menu("Equipos", null, [
-                    new Menu("Equipos", "administrar.v1.equipos.listado", [], ),
+                    new Menu("Equipos", "administrar.v1.equipos.listado", [],),
                     new Menu("Alertas", null, [
                         new Menu("Alertas", "administrar.v1.equipos.alertas.listado", []),
-                    ], ),
-                ], )
+                    ],),
+                ],)
             ]
         )
         ];
@@ -197,7 +197,6 @@ class Menu extends Singleton
 
         $home = match ($userRole) {
             User::TYPE_SUPER_ADMIN => SuperAdmin::getHome(),
-
             User::TYPE_NETWORK_OPERATOR => NetworkOperator::getHome(),
             User::TYPE_ADMIN => Admin::getHome(),
             User::TYPE_SELLER => Seller::getHome(),
