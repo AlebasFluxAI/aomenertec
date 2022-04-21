@@ -56,6 +56,11 @@
                    "col_data" =>"phone",
                    "col_filter"=>true
                ],
+                [
+                       "col_name" =>"Operador de red",
+                       "col_data" =>"networkOperator.name",
+                       "col_filter"=>false
+                   ],
 
                 ],
                  "table_actions"=>[
