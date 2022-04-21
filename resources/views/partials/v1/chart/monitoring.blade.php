@@ -1,12 +1,4 @@
 
-<section class="login">
-    @section("header") {{--extended app.blade--}}
-    @endsection
-
-    @include("partials.v1.title",[
-            "first_title"=>"Añadir",
-            "second_title"=>"equipos",
-        ])
         <div class="contenedor-grande">
             <div class="row pt-3">
                 @foreach($cards as $index => $item)
@@ -52,7 +44,7 @@
                                     "input_model"=>"date_range",
                                     "icon_class"=>"fas fa-calendar",
                                     "placeholder"=>"fechas",
-                                    "col_with"=>4,
+                                    "col_with"=>6,
                                     "input_type"=>"text",
                                     "input_name"=>"datetimes",
                                     "autocomplete"=> "off"
@@ -60,33 +52,14 @@
 
             </div>
             <div class="col-12 mt-0">
-                @livewire('v1.monitoring.charts.line-chart', ['variables_selected' => $variables_selected, 'time'=>$time_id])
+                @livewire('v1.monitoring.charts.line-chart', ['client'=>$client, 'variables_selected' => $variables_selected, 'time'=>$time_id])
             </div>
 
 
 
 
         </div>
-        <script>
-            $(function() {
-                $('input[name="datetimes"]').daterangepicker({
-                    timePicker: true,
-                    timePicker24Hour: true,
-                    startDate: moment().startOf('hour'),
-                    endDate: moment().startOf('hour').add(1, 'hour'),
-                    locale: {
-                        format: 'YYYY-MM-DD HH:mm'
-                    }
-                });
-            });
 
 
-            document.addEventListener('livewire:load', function () {
-                $('input[name="datetimes"]').on('apply.daterangepicker', function(ev, picker) {
-                    @this.changeDateRange(picker.startDate.format('YYYY-MM-DD HH:mm:00'),picker.endDate.format('YYYY-MM-DD HH:mm:00'))
-                });
-            })
-        </script>
-</section>
 
 
