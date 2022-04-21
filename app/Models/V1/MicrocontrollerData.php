@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\V1\AlertHistory;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,29 +44,94 @@ class MicrocontrollerData extends Model
     {
         $this->updateData();
         //$this->alert();
-<<<<<<< HEAD
     }
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> develop_v2
+
     private function updateData()
     {
         $data_frame = config('data-frame.data_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
         //$decode = $this->raw_json;
-
+        $varch = 0;
+        $varih = 0;
         foreach ($data_frame as $data) {
-<<<<<<< HEAD
-=======
-=======
-=======
 
+            try {
+                $split = substr($decode, ($data['start']), ($data['lenght']));
+                $bin = hex2bin($split);
+                $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                if (is_nan($json[$data['variable_name']])) {
+                    $json[$data['variable_name']] = null;
+                }
+                if ($data['variable_name'] == "equipment_id") {
+                    $equipment_serial = $json[$data['variable_name']];
+                } elseif ($data['variable_name'] == "timestamp") {
+                    $timestamp_unix = $json[$data['variable_name']];
+                } elseif ($data['variable_name'] == "import_wh") {
+                    $wh = $json[$data['variable_name']];
+                } elseif ($data['variable_name'] == "import_VArh") {
+                    $varh = $json[$data['variable_name']];
+                }
+            } catch (Exception $e) {
+                echo 'Excepción capturada: ', $e->getMessage(), "\n";
+            }
+        }
+
+        $current_time = new DateTime("@$timestamp_unix");
+
+        $unixTime = time();//delete
+        $current_time = new DateTime();
+        $aux = $unixTime - ($unixTime % 60);//delete
+        $current_time->setTimestamp($aux);//$aux --> $timestamp_unix
+        $json['timestamp'] = $aux;
+
+        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+            ->first();
+        $client = $equipment->clients->first();
+        $this->client_id = $client->id;
+
+        if (count($client->microcontrollerData) == 0) {
+            $this->interval_real_consumption = 0;
+            $this->interval_reactive_consumption = 0;
+
+        } else {
+            $module = $aux % 3600;
+            if ($module < 60) {
+                $previous_hour_unix = $aux - (3600 + $module);
+            } else {
+                $previous_hour_unix = $aux - $module;
+            }
+            $reference_hour = new DateTime("@$previous_hour_unix");
+            $last_data = $client->microcontrollerData->last();
+            $this->accumulated_reactive_inductive_consumption = $last_data->accumulated_reactive_inductive_consumption + $varih;
+            $this->accumulated_reactive_capacitive_consumption = $last_data->accumulated_reactive_capacitive_consumption + $varch;
+
+            $reference_hour = new DateTime();
+            $reference_hour->setTimestamp($previous_hour_unix);
+            $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
+                ->first();
+            if (empty($reference_data)) {
+                $this->interval_real_consumption = 0;
+                $this->interval_reactive_consumption = 0;
+                $this->interval_reactive_capacitive_consumption = 0;
+                $this->interval_reactive_inductive_consumption = 0;
+
+            } else {
+
+                $this->interval_real_consumption = $wh - $reference_data->accumulated_real_consumption;
+                $this->interval_reactive_consumption = $varh - $reference_data->accumulated_reactive_consumption;
+            }
+        }
+        $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
+        $this->accumulated_real_consumption = $wh;
+        $this->accumulated_reactive_consumption = $varh;
+        $this->raw_json = $json;
+        $this->update();
     }
->>>>>>> develop_v2
-    public function intervalMiningData(){
+
+    public function intervalMiningData()
+    {
         $unix_time = $this->raw_json["timestamp"];
-        if ($unix_time%60 == 0){
+        if ($unix_time % 60 == 0) {
             $year = date("Y", $unix_time);
             $month = date("m", $unix_time);
             $day = date("d", $unix_time);
@@ -82,7 +148,7 @@ class MicrocontrollerData extends Model
                 'microcontroller_data_id' => $this->id,
             ]);
         }
-        if ($unix_time%3600 == 0){
+        if ($unix_time % 3600 == 0) {
             DailyMicrocontrollerData::create([
                 'year' => $year,
                 'month' => $month,
@@ -92,7 +158,7 @@ class MicrocontrollerData extends Model
                 'microcontroller_data_id' => $this->id
             ]);
         }
-        if ($hour == 0 && $minute == 0){
+        if ($hour == 0 && $minute == 0) {
             MonthlyMicrocontrollerData::create([
                 'year' => $year,
                 'month' => $month,
@@ -101,7 +167,7 @@ class MicrocontrollerData extends Model
                 'microcontroller_data_id' => $this->id
             ]);
         }
-        if ($day == 1 && $hour == 0 && $minute == 0){
+        if ($day == 1 && $hour == 0 && $minute == 0) {
             AnnualMicrocontrollerData::create([
                 'year' => $year,
                 'month' => $month - 1,
@@ -111,148 +177,6 @@ class MicrocontrollerData extends Model
         }
     }
 
-    private function updateData(){
-        $data_frame = config('data-frame.data_frame');
-        $decode = bin2hex(base64_decode($this->raw_json));
-        //$decode = $this->raw_json;
-        $varch = 0;
-        $varih = 0;
-        foreach ($data_frame as $data){
-<<<<<<< HEAD
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
->>>>>>> develop_v2
-=======
->>>>>>> develop_v2
-            try {
-                $split = substr($decode, ($data['start']), ($data['lenght'] ));
-                $bin = hex2bin($split);
-                $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                if (is_nan( $json[$data['variable_name']])){
-                    $json[$data['variable_name']] = null;
-                }
-                if ($data['variable_name'] == "equipment_id"){
-                    $equipment_serial = $json[$data['variable_name']];
-                } elseif ($data['variable_name'] == "timestamp"){
-                    $timestamp_unix = $json[$data['variable_name']];
-                } elseif ($data['variable_name'] == "import_wh"){
-                    $wh = $json[$data['variable_name']];
-                } elseif ($data['variable_name'] == "import_VArh"){
-                    $varh = $json[$data['variable_name']];
-                }
-            } catch (Exception $e) {
-                echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-            }
-        }
-<<<<<<< HEAD
-<<<<<<< HEAD
-        $current_time = new \DateTime("@$timestamp_unix");
-=======
-<<<<<<< HEAD
-        $current_time = new \DateTime("@$timestamp_unix");
-=======
-=======
->>>>>>> develop_v2
-
-        $unixTime = time();//delete
-        $current_time = new \DateTime();
-        $aux = $unixTime - ($unixTime%60);//delete
-        $current_time->setTimestamp($aux);//$aux --> $timestamp_unix
-        $json['timestamp'] = $aux;
-<<<<<<< HEAD
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
->>>>>>> develop_v2
-=======
->>>>>>> develop_v2
-        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                            ->first();
-        $client = $equipment->clients->first();
-        $this->client_id= $client->id;
-
-        if (count($client->microcontrollerData) == 0){
-            $this->interval_real_consumption = 0;
-            $this->interval_reactive_consumption = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-        } else {
-            $module = $timestamp_unix%3600;
-=======
-<<<<<<< HEAD
-        } else {
-            $module = $timestamp_unix%3600;
-=======
-=======
->>>>>>> develop_v2
-            $this->interval_reactive_capacitive_consumption = 0;
-            $this->interval_reactive_inductive_consumption = 0;
-            $this->accumulated_reactive_inductive_consumption = $varih;
-            $this->accumulated_reactive_capacitive_consumption = $varch;
-
-        } else{
-            $module = $aux%3600;
-
-<<<<<<< HEAD
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
->>>>>>> develop_v2
-=======
->>>>>>> develop_v2
-            if ($module < 60) {
-                $previous_hour_unix = $aux - (3600 + $module);
-            } else{
-                $previous_hour_unix = $aux - $module;
-            }
-<<<<<<< HEAD
-<<<<<<< HEAD
-            $reference_hour = new \DateTime("@$previous_hour_unix");
-=======
-<<<<<<< HEAD
-            $reference_hour = new \DateTime("@$previous_hour_unix");
-=======
-=======
->>>>>>> develop_v2
-            $last_data = $client->microcontrollerData->last();
-            $this->accumulated_reactive_inductive_consumption = $last_data->accumulated_reactive_inductive_consumption + $varih;
-            $this->accumulated_reactive_capacitive_consumption = $last_data->accumulated_reactive_capacitive_consumption + $varch;
-
-            $reference_hour = new \DateTime();
-            $reference_hour->setTimestamp($previous_hour_unix);
-<<<<<<< HEAD
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
->>>>>>> develop_v2
-=======
->>>>>>> develop_v2
-            $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
-                            ->first();
-            if (empty($reference_data)){
-                $this->interval_real_consumption = 0;
-                $this->interval_reactive_consumption = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-            } else {
-=======
-<<<<<<< HEAD
-            } else {
-=======
-=======
->>>>>>> develop_v2
-                $this->interval_reactive_capacitive_consumption = 0;
-                $this->interval_reactive_inductive_consumption = 0;
-
-            } else{
-<<<<<<< HEAD
->>>>>>> 841826f7ca9fd2b0b887509f916d2701174f94cd
->>>>>>> develop_v2
-=======
->>>>>>> develop_v2
-                $this->interval_real_consumption = $wh - $reference_data->accumulated_real_consumption;
-                $this->interval_reactive_consumption = $varh - $reference_data->accumulated_reactive_consumption;
-            }
-        }
-        $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
-        $this->accumulated_real_consumption = $wh;
-        $this->accumulated_reactive_consumption = $varh;
-        $this->raw_json = $json;
-        $this->update();
-    }
     private function alert()
     {
         $flags_frame = config('data-frame.flags_frame');
