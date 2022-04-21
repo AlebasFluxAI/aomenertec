@@ -44,7 +44,7 @@ class SupervisorAddService extends Singleton
         $supervisor = Supervisor::create($this->mapper($component));
         $user = User::create(array_merge($this->mapper($component), [
             "password" => bcrypt($component->password),
-            "type" => User::TYPE_SELLER
+            "type" => User::TYPE_SUPERVISOR
         ]));
         $supervisor->update([
             "user_id" => $user->id
