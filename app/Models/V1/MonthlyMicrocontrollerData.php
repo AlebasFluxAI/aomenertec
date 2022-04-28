@@ -16,7 +16,9 @@ class MonthlyMicrocontrollerData extends Model
         'month',
         'day',
         'client_id',
-        'microcontroller_data_id'
+        'microcontroller_data_id',
+        "penalizable_reactive_capacitive_consumption",
+        "penalizable_reactive_inductive_consumption",
     ];
 
     public function microcontrollerData()

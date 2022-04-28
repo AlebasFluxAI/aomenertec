@@ -93,7 +93,7 @@ class MicrocontrollerData extends Model
         $unixTime = $date->getTimestamp();
         $current_time = $date->modify('-'.($unixTime % 60).' seconds');
         $timestamp_unix = $date->getTimestamp();//delete
-        $json['timestamp'] = $timestamp_unix - ($unixTime % 60);
+        $json['timestamp'] = $timestamp_unix;
         $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
 
         if (count($client->microcontrollerData) == 0) {
@@ -110,13 +110,14 @@ class MicrocontrollerData extends Model
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            $module = $timestamp_unix % 3600;
-            $previous_hour_unix = $timestamp_unix - $module;
-            $reference_hour = new DateTime("@$previous_hour_unix");
+
+            $reference_hour = new DateTime();
+            $reference_hour->setTimestamp($timestamp_unix - ($timestamp_unix%3600));
             $last_data = $client->microcontrollerData->last();
             $last_data_json = json_decode($last_data->raw_json, true);
             $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
                 ->first();
+
             if (empty($reference_data)) {
                 $json['kwh_interval'] = 0;
                 $json['varh_interval'] = 0;
