@@ -41,8 +41,8 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     public function handle()
     {
         // Logica para envio de eventos a fornt por livewire.
-        $data = $this->unpackData();
-        event(new RealTimeMonitoringEvent($data));
+       // $data = $this->unpackData();
+        //event(new RealTimeMonitoringEvent($data));
     }
     private function unpackData()
     {
