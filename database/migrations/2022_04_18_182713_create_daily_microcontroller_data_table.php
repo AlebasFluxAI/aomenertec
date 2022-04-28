@@ -24,6 +24,8 @@ class CreateDailyMicrocontrollerDataTable extends Migration
             $table->double("interval_real_consumption");
             $table->double("interval_reactive_capacitive_consumption");
             $table->double("interval_reactive_inductive_consumption");
+            $table->double("penalizable_reactive_capacitive_consumption");
+            $table->double("penalizable_reactive_inductive_consumption");
             $table->foreign("microcontroller_data_id")
                 ->references("id")
                 ->on("microcontroller_data");
