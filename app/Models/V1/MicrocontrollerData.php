@@ -27,10 +27,10 @@ class MicrocontrollerData extends Model
         "interval_reactive_consumption",
         "accumulated_reactive_consumption",
         "source_timestamp",
-       // "accumulated_reactive_inductive_consumption",
-       // "accumulated_reactive_capacitive_consumption",
-       // "interval_reactive_capacitive_consumption",
-       // "interval_reactive_inductive_consumption",
+        "accumulated_reactive_inductive_consumption",
+        "accumulated_reactive_capacitive_consumption",
+        "interval_reactive_capacitive_consumption",
+        "interval_reactive_inductive_consumption",
         "type",
     ];
 
@@ -111,7 +111,9 @@ class MicrocontrollerData extends Model
 
                 if ($data['variable_name'] == "import_wh") {
                     $wh = $json[$data['variable_name']];
-                }elseif ($data['variable_name'] == "import_VArh") {
+                } elseif ($data['variable_name'] == "timestamp"){
+                    $json[$data['variable_name']] = $timestamp_unix;
+                } elseif ($data['variable_name'] == "import_VArh") {
                     $varh = $json[$data['variable_name']];
                 } elseif ($data['variable_name'] == "ph3_varLh_acumm") {
                     break;
@@ -120,6 +122,8 @@ class MicrocontrollerData extends Model
                 echo 'Excepción capturada: ', $e->getMessage(), "\n";
             }
         }
+
+
 
         if (count($client->microcontrollerData) == 0) {
             $json['kwh_interval'] = 0;
@@ -197,8 +201,8 @@ class MicrocontrollerData extends Model
         $day = date("d", $unix_time);
         $hour = date("H", $unix_time);
         $minute = date("i", $unix_time);
+        echo "time";
         if ($unix_time % 60 == 0) {
-
             HourlyMicrocontrollerData::create([
                 'year' => $year,
                 'month' => $month,
@@ -210,13 +214,17 @@ class MicrocontrollerData extends Model
             ]);
         }
         if ($unix_time % 3600 == 0) {
+
             DailyMicrocontrollerData::create([
                 'year' => $year,
                 'month' => $month,
                 'day' => $day,
-                'hour' => $hour - 1,
+                'hour' => $hour,
                 'client_id' => $this->client_id,
-                'microcontroller_data_id' => $this->id
+                'microcontroller_data_id' => $this->id,
+                'interval_real_consumption' => $this->interval_real_consumption,
+                'interval_reactive_capacitive_consumption' => $this->interval_reactive_capacitive_consumption,
+                'interval_reactive_inductive_consumption' => $this->interval_reactive_inductive_consumption,
             ]);
         }
         if ($hour == 0 && $minute == 0) {
@@ -226,15 +234,12 @@ class MicrocontrollerData extends Model
                 'day' => $day - 1,
                 'client_id' => $this->client_id,
                 'microcontroller_data_id' => $this->id,
-                'interval_real_consumption' => $this->interval_real_consumption,
-                'interval_reactive_capacitive_consumption' => $this->interval_reactive_capacitive_consumption,
-                'interval_reactive_inductive_consumption' => $this->interval_reactive_inductive_consumption,
             ]);
         }
         if ($day == 1 && $hour == 0 && $minute == 0) {
             AnnualMicrocontrollerData::create([
                 'year' => $year,
-                'month' => $month - 1,
+                'month' => $month,
                 'client_id' => $this->client_id,
                 'microcontroller_data_id' => $this->id
             ]);
