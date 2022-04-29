@@ -17,7 +17,12 @@ return [
         ['id' => 13, 'display_name' =>  'THDV fases(%)',                 'icon'=>'fas fa-percent', 'variable_name'=> 'volts_thd',          'style' => 'phases_thdv'],
         ['id' => 14, 'display_name' =>  'Consumo fases(KWH)',            'icon'=>'fas fa-chart-bar', 'variable_name'=> 'phase_import_kwh',   'style' => 'phase_energy'],
         ['id' => 15, 'display_name' =>  'Consumo reactivo fases',        'icon'=>'fas fa-chart-bar', 'variable_name'=> 'phase_import_kvarh', 'style' => 'phase_energy_reactive'],
-        ['id' => 16, 'display_name' =>  'Frecuencia(Hz)',                'icon'=>'fas fa-chart-line', 'variable_name'=> 'frecuency' ,         'style' => 'frecuency']
+        ['id' => 16, 'display_name' =>  'Frecuencia(Hz)',                'icon'=>'fas fa-chart-line', 'variable_name'=> 'frecuency' ,         'style' => 'frecuency'],
+        ['id' => 17,  'display_name' =>  'Energia reactiva fases (kVARLh)',       'icon'=>'fas fa-atom', 'variable_name'=> 'import_VArh',        'style' => 'reactive_energy'],
+        ['id' => 18,  'display_name' =>  'Energia reactiva fases (kVARCh)',       'icon'=>'fas fa-atom', 'variable_name'=> 'import_VArh',        'style' => 'reactive_energy'],
+        ['id' => 19,  'display_name' =>  'Energia reactiva (kVARLh)',       'icon'=>'fas fa-atom', 'variable_name'=> 'import_VArh',        'style' => 'reactive_energy'],
+        ['id' => 20,  'display_name' =>  'Energia reactiva (kVARCh)',       'icon'=>'fas fa-atom', 'variable_name'=> 'import_VArh',        'style' => 'reactive_energy'],
+
     ],
 
 
@@ -81,16 +86,16 @@ return [
         ['variable_name'=> 'ph3_varCh_acumm', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 472, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
         ['variable_name'=> 'ph3_varLh_acumm', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 480, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
         ['variable_name'=> 'Wh_calc', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 488, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'ph1_varCh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 496, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'ph1_varLh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 504, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'ph2_varCh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 512, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'ph2_varLh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 520, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'ph3_varCh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 528, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'ph3_varLh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 536, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'ph1_varCh_interval', 'description' => '',               'variable_id'=> 18, 'key' => '',          'start' => 496, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'ph1_varLh_interval', 'description' => '',               'variable_id'=> 17, 'key' => '',          'start' => 504, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'ph2_varCh_interval', 'description' => '',               'variable_id'=> 18, 'key' => '',          'start' => 512, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'ph2_varLh_interval', 'description' => '',               'variable_id'=> 17, 'key' => '',          'start' => 520, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'ph3_varCh_interval', 'description' => '',               'variable_id'=> 18, 'key' => '',          'start' => 528, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'ph3_varLh_interval', 'description' => '',               'variable_id'=> 17, 'key' => '',          'start' => 536, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
         ['variable_name'=> 'varLh_acumm', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 544, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
         ['variable_name'=> 'varCh_acumm', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 552, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'varLh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 560, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
-        ['variable_name'=> 'varCh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 568, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'varLh_interval', 'description' => '',               'variable_id'=> 19, 'key' => '',          'start' => 560, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
+        ['variable_name'=> 'varCh_interval', 'description' => '',               'variable_id'=> 20, 'key' => '',          'start' => 568, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
         ['variable_name'=> 'kwh_interval', 'description' => '',               'variable_id'=> '', 'key' => '',          'start' => 568, 'lenght' => 8, 'type' => 'f', 'factor' => 1],
         ],
 
