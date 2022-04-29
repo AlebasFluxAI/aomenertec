@@ -174,7 +174,8 @@ class MicrocontrollerData extends Model
     public function intervalMiningData()
     {
         $unix_time = $this->raw_json["timestamp"];
-        $current_time = new DateTime("@$unix_time");
+        $current_time = new DateTime();
+        $current_time->setTimestamp($unix_time);
         $year = $current_time->format('Y');
         $month = $current_time->format('m');
         $day = $current_time->format('d');
