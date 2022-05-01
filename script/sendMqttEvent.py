@@ -3,7 +3,7 @@ import time
 import paho.mqtt.client as paho
 broker =  "3.12.98.178"
 port = 1883
-topic = "mc/data"
+topic = "mc/real_time"
 username = 'enertec'
 password = 'enertec2020**'
 client= paho.Client("client-001",clean_session=False)
@@ -12,7 +12,7 @@ client.connect(broker)#connect
 a=0
 while(True):
     a+=1
-    client.publish("test",str(a),qos=0)
+    client.publish(topic,str(a),qos=0)
     print(str(a))
-    time.sleep(0.1)
+    time.sleep(1)
 
