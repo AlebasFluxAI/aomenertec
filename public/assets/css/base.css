@@ -17,6 +17,10 @@
     border-radius: 2px;
 }
 
+#button-menu {
+    border-radius: 2px;
+}
+
 /*______ESTILOS MENU_____*/
 
 .contenedor-grande .nav-item {
@@ -47,6 +51,7 @@
     background-color: var(--style_header_color);
     border-bottom-color: var(--style_orange);
     border-bottom-width: .2rem;
+
 }
 
 .btn-redirect {
