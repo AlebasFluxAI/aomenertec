@@ -70,17 +70,6 @@
                                         "required"=>false,
 
                              ],
-                                         [
-                                        "input_type"=>"password",
-                                        "input_model"=>"password",
-                                        "icon_class"=>"fas fa-file",
-                                         "placeholder"=>"Contrasena",
-                                        "col_with"=>6,
-
-                                        "required"=>false,
-
-                             ],
-
                          ]
                  ])
 

@@ -54,7 +54,6 @@ class MicrocontrollerData extends Model
         $varch = 0;
         $varih = 0;
         foreach ($data_frame as $data) {
-
             try {
                 $split = substr($decode, ($data['start']), ($data['lenght']));
                 $bin = hex2bin($split);
@@ -92,7 +91,6 @@ class MicrocontrollerData extends Model
         if (count($client->microcontrollerData) == 0) {
             $this->interval_real_consumption = 0;
             $this->interval_reactive_consumption = 0;
-
         } else {
             $module = $aux % 3600;
             if ($module < 60) {
@@ -114,9 +112,7 @@ class MicrocontrollerData extends Model
                 $this->interval_reactive_consumption = 0;
                 $this->interval_reactive_capacitive_consumption = 0;
                 $this->interval_reactive_inductive_consumption = 0;
-
             } else {
-
                 $this->interval_real_consumption = $wh - $reference_data->accumulated_real_consumption;
                 $this->interval_reactive_consumption = $varh - $reference_data->accumulated_reactive_consumption;
             }

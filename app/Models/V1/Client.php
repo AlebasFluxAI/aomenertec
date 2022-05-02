@@ -16,6 +16,16 @@ class Client extends Model
     public const BIPHASIC = 'biphasic';
     public const TRIPHASIC = 'triphasic';
 
+    public const PERSON_TYPE_NATURAL = "natural";
+    public const PERSON_TYPE_JURIDICAL = "juridical";
+
+    public const IDENTIFICATION_TYPE_CC = 'CC';
+    public const IDENTIFICATION_TYPE_CE = 'CE';
+    public const IDENTIFICATION_TYPE_PEP = 'PEP';
+    public const IDENTIFICATION_TYPE_PP = 'PP';
+    public const IDENTIFICATION_TYPE_NIT = 'NIT';
+
+
     protected $fillable = [
         'code',
         'identification',
@@ -36,7 +46,10 @@ class Client extends Model
         'subsistence_consumption_id',
         'voltage_level_id',
         'stratum_id',
-        'network_topology'];
+        'network_topology',
+        "person_type",
+        "identification_type"
+    ];
 
     public function clientConfiguration(): HasOne
     {
@@ -97,7 +110,6 @@ class Client extends Model
 
     public function microcontrollerData()
     {
-
         return $this->hasMany(MicrocontrollerData::class);
     }
 

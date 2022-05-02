@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -116,5 +117,49 @@ class User extends Authenticatable
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);
+    }
+
+    public function setDefaultPassword()
+    {
+        $this->password = bcrypt($this->identification);
+    }
+
+    public function getName()
+    {
+        return "Nombre quemado";
+    }
+
+    public function getUserType()
+    {
+        return $this->roles->first()->name;
+    }
+
+    public function getAdmin()
+    {
+        if ($superAdmin = $this->superAdmin) {
+            return $superAdmin;
+        }
+        if ($admin = $this->admin) {
+            return $admin;
+        }
+        if ($networkOperator = $this->networkOperator) {
+            return $networkOperator->admin;
+        }
+
+        if ($seller = $this->seller) {
+            return $seller->networkOperator->admin;
+        }
+        if ($supervisor = $this->supervisor) {
+            return $supervisor->networkOperator->admin;
+        }
+        if ($technician = $this->technician) {
+            return $technician->networkOperator->admin;
+        }
+        return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
+    }
+
+    public function getPasswordRestoreUrl()
+    {
+        return "Holi";
     }
 }
