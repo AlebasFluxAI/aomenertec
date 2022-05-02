@@ -124,10 +124,6 @@ class User extends Authenticatable
         $this->password = bcrypt($this->identification);
     }
 
-    public function getName()
-    {
-        return "Nombre quemado";
-    }
 
     public function getUserType()
     {
@@ -156,10 +152,5 @@ class User extends Authenticatable
             return $technician->networkOperator->admin;
         }
         return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
-    }
-
-    public function getPasswordRestoreUrl()
-    {
-        return "Holi";
     }
 }
