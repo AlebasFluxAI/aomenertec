@@ -135,7 +135,13 @@ notification-nav {
     transition: .5s;
 
 }
-
+select. no-border{
+    border: 0px;
+    outline: 0px;
+    font-weight: bold;
+    font-size: small;
+    width: auto !important;
+}
 /*___________*/
 body {
     font-family: "Cairo", sans-serif;
@@ -1833,21 +1839,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 }
 
 
-.border-left-success {
-    border-left: .50em solid #9ccc65 !important
-}
 
-.border-left-primary {
-    border-left: .50em solid #00b0ff !important
-}
-
-.border-left-danger {
-    border-left: .50em solid #D685B0 !important
-}
-
-.border-left-warning {
-    border-left: .50em solid #d4e157 !important
-}
 
 .card1 {
     position: relative;
@@ -1861,6 +1853,19 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
     border-top-right-radius: 10px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 35px;
+    border-left: .50em solid;
+    border-top: .2em solid;
+    border-bottom: .2em solid;
+    border-right: .2em solid;
+}
+.no-border-card{
+    border: 0px;
+    outline: 0px;
+    font-weight: bolder !important;
+    font-size: medium !important;
+    text-align-last: right;
+    direction: rtl !important;
+
 }
 
 /*
@@ -1891,6 +1896,10 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 .icon-rounded-inverse.icon-rounded-lg {
     width: 3.75rem;
     height: 3.75rem;
+    border-left: 0.5em solid;
+    border-right: 0.2em solid;
+    border-top: 0.2em solid;
+    border-bottom: 0.2em solid;
 }
 
 .icon-rounded-inverse-con.icon-rounded-lg {
@@ -1917,21 +1926,54 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
     justify-content: center;
 }
 
-.icon-succes {
-    color: #28a745;
-    width: 50%;
-    margin: 0 auto;
+.voltage {
+    color: #9ccc65;
 }
 
-.icon-primary {
-    color: #17a2b8;
+.current {
+    color: #00b0ff;
 }
 
-.icon-danger {
-    color: #dc3545;
+.power {
+    color: #D685B0;
 }
 
-.icon-warning {
-    color: #ffc107;
+.active_energy {
+    color: #d4e157;
 }
-
+.reactive_energy {
+    color: #FFC764;
+}
+.power_factor {
+    color: #639B00;
+}
+.phase_angle {
+    color: #00BAAF;
+}
+.phases_voltage {
+    color: #907BB6;
+}
+.thdv {
+    color: #D300E8;
+}
+.phases_thdv {
+    color: #FF00C1;
+}
+.thdi {
+    color: #CFFEFF;
+}
+.frecuency {
+    color: #fff700;
+}
+.phase_energy {
+    color: #7D8E9C;
+}
+.phase_energy_reactive {
+    color:  #B7B7B7;
+}
+.aparent_power {
+    color: #000000;
+}
+.reactive_power {
+    color: #A36E73;
+}

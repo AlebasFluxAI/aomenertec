@@ -98,9 +98,7 @@ class Client extends Model
 
     public function equipments()
     {
-        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id')
-            ->withPivot('current_assigned')
-            ->using(EquipmentClient::class);
+        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id');
     }
 
     public function pqrs()
@@ -110,11 +108,31 @@ class Client extends Model
 
     public function microcontrollerData()
     {
-        return $this->hasMany(MicrocontrollerData::class);
+        return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp', 'asc');
     }
 
     public function supervisors()
     {
         return $this->belongsToMany(Supervisor::class, 'client_supervisors')->withPivot('active');
+    }
+
+    public function hourlyMicrocontrollerData()
+    {
+        return $this->hasMany(HourlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+    }
+
+    public function dailyMicrocontrollerData()
+    {
+        return $this->hasMany(DailyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+    }
+
+    public function monthlyMicrocontrollerData()
+    {
+        return $this->hasMany(MonthlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+    }
+
+    public function annualMicrocontrollerData()
+    {
+        return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at', 'desc');
     }
 }

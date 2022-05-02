@@ -17,7 +17,12 @@ class DailyMicrocontrollerData extends Model
         'day',
         'hour',
         'client_id',
-        'microcontroller_data_id'
+        'microcontroller_data_id',
+        "interval_real_consumption",
+        "interval_reactive_capacitive_consumption",
+        "interval_reactive_inductive_consumption",
+        "penalizable_reactive_capacitive_consumption",
+        "penalizable_reactive_inductive_consumption",
     ];
 
     public function microcontrollerData()

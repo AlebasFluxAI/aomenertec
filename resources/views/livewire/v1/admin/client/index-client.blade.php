@@ -71,7 +71,15 @@
                                        [
                                         "function"=>"settings",
                                         "icon"=>"fas fa-gear"
-                                        ]
+                                        ],
+                                        [
+                                            "redirect"=>[
+                                                        "route"=>"v1.admin.client.monitoring",
+                                                        "binding"=>"client"
+                                                  ],
+                                                "icon"=>"fa fa-connectdevelop",
+                                                "tooltip_title"=>"Monitoreo",
+                                        ],
                                     ]
                                     ],
 
