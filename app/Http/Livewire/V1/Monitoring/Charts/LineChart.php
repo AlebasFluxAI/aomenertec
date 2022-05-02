@@ -54,7 +54,8 @@ class LineChart extends Component
             array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
         }
     }
-    public function changeDateRange($start, $end){
+    public function changeDateRange($start, $end)
+    {
         $this->start = $start;
         $this->end = $end;
         if ($this->time == 1) {
@@ -127,7 +128,6 @@ class LineChart extends Component
 
     public function changeVariable($variables)
     {
-
         if ($this->time == 1) {
             $this->data_chart = $this->client->hourlyMicrocontrollerData
                 ->whereBetween("created_at", [$this->start, $this->end]);

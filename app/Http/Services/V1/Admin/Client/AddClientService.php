@@ -41,6 +41,12 @@ class AddClientService extends Singleton
             'subsistence_consumptions' => SubsistenceConsumption::get(), 'contribution' => true,
             'location_types' => LocationType::get(), 'locations' => [],
             'departments' => Department::get(),
+            "identification_types" => [],
+            'person_types' => [
+                ["key" => "Persona natural", "value" => Client::PERSON_TYPE_NATURAL,],
+                ["key" => "Persona juridica", "value" => Client::PERSON_TYPE_JURIDICAL,]
+
+            ],
             'municipalities' => [],
             'equipment_types' => [],
             'network_operator_id' => Auth::user()->networkOperator ? Auth::user()->networkOperator->id : null,
@@ -59,6 +65,36 @@ class AddClientService extends Singleton
         } else {
             $component->locations = [];
         }
+    }
+
+    public function updatedPersonType(Component $component)
+    {
+        $component->identification_types = match ($component->person_type) {
+            Client::PERSON_TYPE_JURIDICAL => [
+                [
+                    "key" => Client::IDENTIFICATION_TYPE_NIT,
+                    "value" => "NIT"
+                ]
+            ],
+            Client::PERSON_TYPE_NATURAL => [
+                [
+                    "key" => Client::IDENTIFICATION_TYPE_CC,
+                    "value" => Client::IDENTIFICATION_TYPE_CC,
+                ],
+                [
+                    "key" => Client::IDENTIFICATION_TYPE_CE,
+                    "value" => Client::IDENTIFICATION_TYPE_CE,
+                ],
+                [
+                    "key" => Client::IDENTIFICATION_TYPE_PEP,
+                    "value" => Client::IDENTIFICATION_TYPE_PEP,
+                ],
+                [
+                    "key" => Client::IDENTIFICATION_TYPE_PP,
+                    "value" => Client::IDENTIFICATION_TYPE_PP,
+                ]
+            ],
+        };
     }
 
     public function updatedDepartmentId(Component $component)
@@ -263,6 +299,8 @@ class AddClientService extends Singleton
             'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,
             'stratum_id' => $component->stratum_id,
+            'identification_type' => $component->identification_type,
+            'person_type' => $component->person_type,
         ]);
         foreach ($component->equipment as $item) {
             EquipmentClient::create([

@@ -16,6 +16,16 @@ class Client extends Model
     public const BIPHASIC = 'biphasic';
     public const TRIPHASIC = 'triphasic';
 
+    public const PERSON_TYPE_NATURAL = "natural";
+    public const PERSON_TYPE_JURIDICAL = "juridical";
+
+    public const IDENTIFICATION_TYPE_CC = 'CC';
+    public const IDENTIFICATION_TYPE_CE = 'CE';
+    public const IDENTIFICATION_TYPE_PEP = 'PEP';
+    public const IDENTIFICATION_TYPE_PP = 'PP';
+    public const IDENTIFICATION_TYPE_NIT = 'NIT';
+
+
     protected $fillable = [
         'code',
         'identification',
@@ -36,7 +46,10 @@ class Client extends Model
         'subsistence_consumption_id',
         'voltage_level_id',
         'stratum_id',
-        'network_topology'];
+        'network_topology',
+        "person_type",
+        "identification_type"
+    ];
 
     public function clientConfiguration(): HasOne
     {
@@ -85,8 +98,7 @@ class Client extends Model
 
     public function equipments()
     {
-        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id')
-            ;
+        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id');
     }
 
     public function pqrs()
@@ -98,22 +110,27 @@ class Client extends Model
     {
         return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp', 'asc');
     }
+
     public function supervisors()
     {
         return $this->belongsToMany(Supervisor::class, 'client_supervisors')->withPivot('active');
     }
+
     public function hourlyMicrocontrollerData()
     {
         return $this->hasMany(HourlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
     }
+
     public function dailyMicrocontrollerData()
     {
         return $this->hasMany(DailyMicrocontrollerData::class)->orderBy('created_at', 'desc');
     }
+
     public function monthlyMicrocontrollerData()
     {
         return $this->hasMany(MonthlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
     }
+
     public function annualMicrocontrollerData()
     {
         return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at', 'desc');
