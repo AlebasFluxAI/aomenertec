@@ -94,6 +94,7 @@ class AddClientService extends Singleton
                     "value" => Client::IDENTIFICATION_TYPE_PP,
                 ]
             ],
+            default => []
         };
     }
 
