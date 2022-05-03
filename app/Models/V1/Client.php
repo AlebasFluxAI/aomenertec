@@ -108,7 +108,7 @@ class Client extends Model
 
     public function microcontrollerData()
     {
-        return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp', 'asc');
+        return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp');
     }
 
     public function supervisors()
@@ -118,21 +118,21 @@ class Client extends Model
 
     public function hourlyMicrocontrollerData()
     {
-        return $this->hasMany(HourlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(HourlyMicrocontrollerData::class)->orderBy('created_at');
     }
 
     public function dailyMicrocontrollerData()
     {
-        return $this->hasMany(DailyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(DailyMicrocontrollerData::class)->orderBy('created_at');
     }
 
     public function monthlyMicrocontrollerData()
     {
-        return $this->hasMany(MonthlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(MonthlyMicrocontrollerData::class)->orderBy('created_at');
     }
 
     public function annualMicrocontrollerData()
     {
-        return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at');
     }
 }

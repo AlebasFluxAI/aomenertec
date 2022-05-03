@@ -20,7 +20,7 @@ class LineChart extends Component
     public $start;
     public $end;
     public $chart_type;
-    public function mount(Client $client, $variables_selected, $time, $chart_type)
+    public function mount(Client $client, $variables_selected, $time, $chart_type, $data_chart)
     {
         $this->time = $time;
         $this->chart_type = $chart_type;
@@ -29,20 +29,11 @@ class LineChart extends Component
         $this->L3 = [];
         $this->x_axis = [];
         $this->client =  $client;
-        if ($time == 1) {
-            $this->data_chart = $client->hourlyMicrocontrollerData->take(60);
-        } elseif ($time == 2) {
-            $this->data_chart = $client->dailyMicrocontrollerData->take(24);
-        } elseif ($time == 3) {
-            $this->data_chart = $client->monthlyMicrocontrollerData->take(31);
-        } else {
-            $this->data_chart = $client->annualMicrocontrollerData->take(12);
-        }
-        $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-        $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        $this->data_chart = $data_chart;
+        $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        $this->start = $this->data_chart->first()->microcontrollerData->source_timestamp;
         $this->variables_selected =$variables_selected;
-        $array_aux = $this->data_chart->reverse();
-        foreach ($array_aux as $item) {
+        foreach ($this->data_chart as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -70,8 +61,7 @@ class LineChart extends Component
         } else {
             $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
         }
-        $array_aux = $this->data_chart->reverse();
-        foreach ($array_aux as $item) {
+        foreach ($this->data_chart as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -103,12 +93,11 @@ class LineChart extends Component
             $this->data_chart = $this->client->annualMicrocontrollerData
                 ->whereBetween("created_at", [$this->start, $this->end]);
         }
-        $array_aux = $this->data_chart->reverse();
         $this->L1 = [];
         $this->L2 = [];
         $this->L3 = [];
         $this->x_axis = [];
-        foreach ($array_aux as $item) {
+        foreach ($this->data_chart as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -131,19 +120,21 @@ class LineChart extends Component
             $this->data_chart = $this->client->hourlyMicrocontrollerData
                 ->whereBetween("created_at", [$this->start, $this->end]);
         } elseif ($time == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
+            $this->data_chart = $this->client->dailyMicrocontrollerData
+                ->whereBetween("created_at", [$this->start, $this->end]);
         } elseif ($time == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
+            $this->data_chart = $this->client->monthlyMicrocontrollerData
+                ->whereBetween("created_at", [$this->start, $this->end]);
         } else {
             $this->data_chart = $this->client->annualMicrocontrollerData
                             ->whereBetween("created_at", [$this->start, $this->end]);
         }
-        $array_aux = $this->data_chart->reverse();
+
         $this->L1 = [];
         $this->L2 = [];
         $this->L3 = [];
         $this->x_axis = [];
-        foreach ($array_aux as $item) {
+        foreach ($this->data_chart as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -167,19 +158,21 @@ class LineChart extends Component
             $this->data_chart = $this->client->hourlyMicrocontrollerData
                 ->whereBetween("created_at", [$this->start, $this->end]);
         } elseif ($this->time == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
+            $this->data_chart = $this->client->dailyMicrocontrollerData
+            ->whereBetween("created_at", [$this->start, $this->end]);
         } elseif ($this->time == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
+            $this->data_chart = $this->client->monthlyMicrocontrollerData
+            ->whereBetween("created_at", [$this->start, $this->end]);
         } else {
-            $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
+            $this->data_chart = $this->client->annualMicrocontrollerData
+            ->whereBetween("created_at", [$this->start, $this->end]);
         }
         $this->variables_selected = $variables;
-        $array_aux = $this->data_chart->reverse();
         $this->L1 = [];
         $this->L2 = [];
         $this->L3 = [];
         $this->x_axis = [];
-        foreach ($array_aux as $item) {
+        foreach ($this->data_chart as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
