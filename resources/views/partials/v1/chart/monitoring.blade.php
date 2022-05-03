@@ -33,6 +33,8 @@
                                          "list_options" => [
                                                             ['id'=>1, 'display_name'=> 'Minuto'],
                                                             ['id'=>2, 'display_name'=> 'Hora'],
+                                                            ['id'=>3, 'display_name'=> 'Dia'],
+                                                            ['id'=>4, 'display_name'=> 'Mes'],
 
                                                            ],
                                          "list_option_value"=>"id",
@@ -55,8 +57,28 @@
             </div>
 
             <div class="col-12 mt-0">
-                @livewire('v1.monitoring.charts.line-chart', ['client'=>$client, 'variables_selected' => $variables_selected, 'time'=>$time_id, 'chart_type'=>$chart_type])
+                @livewire('v1.monitoring.charts.line-chart', ['client'=>$client, 'variables_selected' => $variables_selected, 'time'=>$time_id, 'chart_type'=>$chart_type, 'data_chart'=>$data_chart])
             </div>
+            <script>
+
+                $(function() {
+                    $('input[name="datetimes"]').daterangepicker({
+                        timePicker: true,
+                        timePicker24Hour: true,
+                        locale: {
+                            format: 'YYYY-MM-DD HH:mm'
+                        }
+                    });
+
+                });
+
+
+                document.addEventListener('livewire:load', function () {
+                    $('input[name="datetimes"]').on('apply.daterangepicker', function(ev, picker) {
+                    @this.emit('changeDateRange', picker.startDate.format('YYYY-MM-DD HH:mm:00'),picker.endDate.format('YYYY-MM-DD HH:mm:00'))
+                    });
+                })
+            </script>
         </div>
 
 
