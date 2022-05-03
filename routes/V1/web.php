@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\testFile;
 use App\Http\Controllers\V1\HomeController;
+use App\Http\Controllers\V1\MailTestController;
 use App\Http\Livewire;
 use App\Http\Livewire\Index;
 use App\Http\Livewire\V1\Admin\User\AddUser;
@@ -37,6 +38,7 @@ Route::get('test', Livewire\V1\Monitoring\Monitoring::class);
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
+Route::get("mail/test/user_created", (MailTestController::class) . "@userCreatedNotification");
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');

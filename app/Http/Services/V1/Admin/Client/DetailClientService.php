@@ -34,9 +34,8 @@ class DetailClientService extends Singleton
         $component->fill([
             'model' => $model,
             ]);
-        foreach ($model->equipments as $index=>$item){
+        foreach ($model->equipments as $index=>$item) {
             $component->equipment[$index] =["key"=>$item->equipmentType->type, "value" => $item->serial." - ".$item->description];
         }
     }
-
 }

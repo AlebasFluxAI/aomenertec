@@ -5,6 +5,7 @@ namespace App\Models\V1;
 use App\Models\V1\AlertHistory;
 use App\Models\V1\Client;
 use DateTime;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -52,9 +53,9 @@ class MicrocontrollerData extends Model
             try {
                 $split = substr($decode, ($data['start']), ($data['lenght']));
                 $bin = hex2bin($split);
-                if ($data['start']>=440){
-                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1])/1000;
-                } else{
+                if ($data['start'] >= 440) {
+                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                } else {
                     $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                 }
 
@@ -65,7 +66,7 @@ class MicrocontrollerData extends Model
                 if ($data['variable_name'] == "ph3_varLh_acumm") {
                     break;
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 echo 'Excepción capturada: ', $e->getMessage(), "\n";
             }
         }
@@ -75,7 +76,8 @@ class MicrocontrollerData extends Model
     }
 
 
-    private function jsonEdit($json){
+    private function jsonEdit($json)
+    {
         $decode = bin2hex(base64_decode($this->raw_json));
         $split = substr($decode, 16, 16);
         $bin = hex2bin($split);
@@ -92,7 +94,7 @@ class MicrocontrollerData extends Model
 
         $date = new DateTime();
         $unixTime = $date->getTimestamp();
-        $current_time = $date->modify('-'.($unixTime % 60).' seconds');
+        $current_time = $date->modify('-' . ($unixTime % 60) . ' seconds');
         $timestamp_unix = $date->getTimestamp();//delete
         $json['timestamp'] = $timestamp_unix;
         $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
@@ -111,9 +113,8 @@ class MicrocontrollerData extends Model
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-
             $reference_hour = new DateTime();
-            $reference_hour->setTimestamp($timestamp_unix - ($timestamp_unix%3600));
+            $reference_hour->setTimestamp($timestamp_unix - ($timestamp_unix % 3600));
             $last_data = $client->microcontrollerData->last();
             $last_data_json = json_decode($last_data->raw_json, true);
             $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
@@ -128,7 +129,7 @@ class MicrocontrollerData extends Model
                 $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_data_json['ph2_varLh_acumm'];
                 $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_data_json['ph3_varCh_acumm'];
                 $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_data_json['ph3_varLh_acumm'];
-                $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'] ;
+                $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
                 $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
                 $json['ph1_varCh_interval'] = 0;
                 $json['ph1_varLh_interval'] = 0;
@@ -196,10 +197,9 @@ class MicrocontrollerData extends Model
         }
         if ($minute == 59) {
             $percent_penalizable_inductive = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
-            if ($percent_penalizable_inductive >= 50){
-                $penalizable_inductive = ($this->interval_real_consumption * $percent_penalizable_inductive /100)-($this->interval_real_consumption * 0.5);
-            }
-            else{
+            if ($percent_penalizable_inductive >= 50) {
+                $penalizable_inductive = ($this->interval_real_consumption * $percent_penalizable_inductive / 100) - ($this->interval_real_consumption * 0.5);
+            } else {
                 $penalizable_inductive = 0;
             }
             DailyMicrocontrollerData::create([
@@ -219,7 +219,7 @@ class MicrocontrollerData extends Model
                 $penalizable_inductive_day = 0;
                 $penalizable_capacitive_day = 0;
                 $data_day = Client::find($this->client_id)->dailyMicrocontrollerData->where('year', $year)->where('month', $month)->where('day', $day);
-                foreach ($data_day as $item){
+                foreach ($data_day as $item) {
                     $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
                     $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
                 }
@@ -233,7 +233,7 @@ class MicrocontrollerData extends Model
                     'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
                 ]);
             }
-            if ($day == $last_day_month ) {
+            if ($day == $last_day_month) {
                 AnnualMicrocontrollerData::create([
                     'year' => $year,
                     'month' => $month,

@@ -87,15 +87,6 @@
                                         "col_with"=>6,
                                         "required"=>true
                             ],
-                            [
-                                        "input_type"=>"password",
-                                        "input_model"=>"password",
-                                        "icon_class"=>"fas fa-key",
-                                         "placeholder"=>"Contrasena",
-                                        "col_with"=>6,
-                                        "required"=>false,
-
-                             ],
                               [
                                         "input_type"=>"dropdown",
                                         "input_model"=>"style",
