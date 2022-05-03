@@ -1,5 +1,5 @@
 <div class="box shadow mt-4">
-    <div id="chart">
+    <div id="chart_line">
 
     </div>
     <script>
@@ -22,34 +22,41 @@
             var options = {
                 chart: {
                     id: 'line_chart',
-                    type: 'line',
-                    height: '450px'
+                    type: @js($chart_type),
+                    height: '450px',
+
                 },
                 series: series,
                 xaxis: {
                     categories: @js($x_axis)
+                },
+                stroke: {
+                    curve: 'smooth'
                 }
+
             }
 
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            var chart_line = new ApexCharts(document.querySelector("#chart_line"), options);
 
-            chart.render();
+            chart_line.render();
 
             @this.on('changeAxis',(e) =>{
                 series = []
+                console.log(@js($chart_type))
                 e.variables.forEach( function(item, index, array) {
                     if (index == 0){
-                        series[index] = {name: item.variable_name, data: e.L1 }
+                        series[index] = {name: item.variable_name, type: e.chart_type, data: e.L1 }
                     }
                     if (index == 1){
-                        series[index] = {name: item.variable_name, data: e.L2 }
+                        series[index] = {name: item.variable_name, type: e.chart_type, data: e.L2 }
                     }
                     if (index == 2){
-                        series[index] = {name: item.variable_name, data: e.L3 }
+                        series[index] = {name: item.variable_name, type: e.chart_type, data: e.L3 }
                     }
                 });
-                chart.updateSeries(series)
+
                 ApexCharts.exec('line_chart', "updateOptions", {
+                    series: series,
                     xaxis: {
                         categories: e.x_axis
                     }

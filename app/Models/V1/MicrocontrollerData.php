@@ -69,6 +69,7 @@ class MicrocontrollerData extends Model
                 echo 'Excepción capturada: ', $e->getMessage(), "\n";
             }
         }
+        echo $json['timestamp']."\n";
         $this->jsonEdit($json);
         //$this->alert();
     }
