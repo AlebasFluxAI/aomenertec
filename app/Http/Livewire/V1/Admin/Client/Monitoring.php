@@ -38,7 +38,7 @@ class Monitoring extends Component
     public function mount(Client $client)
     {
         $this->client = $client;
-        $last_data = $this->client->microcontrollerData()->latest()->first();
+        $last_data = $this->client->microcontrollerData->last();
         $this->last_data = json_decode($last_data->raw_json, true);
 
         $this->data_frame = config('data-frame.data_frame');
@@ -77,7 +77,7 @@ class Monitoring extends Component
         $this->chart_type = "line";
         $this->time_id = 1;
         if ($this->time_id == 1) {
-            $this->data_chart = $client->hourlyMicrocontrollerData()->limit(60)->get();
+            $this->data_chart = $client->hourlyMicrocontrollerData->take(60);
 
         } elseif ($this->time_id == 2) {
             $this->data_chart = $client->dailyMicrocontrollerData->take(24);
