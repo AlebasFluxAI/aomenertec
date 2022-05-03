@@ -39,25 +39,24 @@
                                          "list_option_view"=>"display_name",
                                          "list_option_title"=>"",
                                 ])
-                    @include("partials.v1.form.form_input_icon",[
+                    @include("partials.v1.form.form_input_icon_button",[
                                     "mt"=>4,
                                     "input_model"=>"date_range",
                                     "icon_class"=>"fas fa-calendar",
-                                    "placeholder"=>"fechas",
+                                    "placeholder"=>"Seleccione rango de fechas",
                                     "col_with"=>6,
                                     "input_type"=>"text",
                                     "input_name"=>"datetimes",
-                                    "autocomplete"=> "off"
+                                    "autocomplete"=> "off",
+                                    "button_name" => "Borrar",
+                                    "button_action"=> "restartDateRange"
                            ])
 
             </div>
+
             <div class="col-12 mt-0">
-                @livewire('v1.monitoring.charts.line-chart', ['client'=>$client, 'variables_selected' => $variables_selected, 'time'=>$time_id])
+                @livewire('v1.monitoring.charts.line-chart', ['client'=>$client, 'variables_selected' => $variables_selected, 'time'=>$time_id, 'chart_type'=>$chart_type])
             </div>
-
-
-
-
         </div>
 
 

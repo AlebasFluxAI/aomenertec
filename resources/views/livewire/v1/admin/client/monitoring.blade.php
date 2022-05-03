@@ -29,7 +29,8 @@
                                                                         "last_data"=>$last_data,
                                                                         "client"=>$client,
                                                                         "variables_selected"=>$variables_selected,
-                                                                        "time_id"=>$time_id
+                                                                        "time_id"=>$time_id,
+                                                                        "chart_type"=>$chart_type
 
                                                                      ]
                                                             ]

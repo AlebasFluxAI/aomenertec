@@ -27,6 +27,7 @@ class Monitoring extends Component
     public $time_id;
     public $date_range;
     public $client;
+    public $chart_type;
     protected $rules = [
 
         'cards.*.color' => 'required',
@@ -38,6 +39,7 @@ class Monitoring extends Component
     {
         $this->client = $client;
         $last_data = $this->client->microcontrollerData->last();
+
         $this->last_data = json_decode($last_data->raw_json, true);
 
         $this->data_frame = config('data-frame.data_frame');
@@ -66,6 +68,7 @@ class Monitoring extends Component
             }
         }
         $this->variable_chart_id = 1;
+        $this->chart_type = "line";
         $this->time_id = 1;
         $this->variables_selected = [];
         foreach ($this->data_frame as $item) {
@@ -82,13 +85,21 @@ class Monitoring extends Component
 
     public function updatedVariableChartId()
     {
+
+        foreach ($this->variables as $variable){
+
+            if ($variable['id'] == $this->variable_chart_id){
+                $this->chart_type = $variable['chart_type'];
+            }
+
+        }
         $this->variables_selected = [];
         foreach ($this->data_frame as $item) {
             if ($item['variable_id'] == $this->variable_chart_id) {
                 array_push($this->variables_selected, $item);
             }
         }
-        $this->emit('changeVariable', $this->variables_selected);
+        $this->emit('changeVariable', $this->variables_selected, $this->chart_type);
     }
     public function updatedTimeId()
     {
@@ -126,6 +137,29 @@ class Monitoring extends Component
             $last_data = $this->client->microcontrollerData->last();
             $this->last_data = json_decode($last_data->raw_json, true);
         }
+    }
+    public function restartDateRange(){
+
+            $this->L1 = [];
+            $this->L2 = [];
+            $this->L3 = [];
+            $this->x_axis = [];
+            if ($this->time_id == 1) {
+                $this->data_chart = $this->client->hourlyMicrocontrollerData->take(60);
+            } elseif ($this->time_id == 2) {
+                $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
+            } elseif ($this->time_id == 3) {
+                $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
+            } else {
+                $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
+            }
+
+            $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+            $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+            $this->date_range = $this->start." - ".$this->end;
+            $this->emit('startDateRange');
+
+
     }
 
     /* public function getListeners()

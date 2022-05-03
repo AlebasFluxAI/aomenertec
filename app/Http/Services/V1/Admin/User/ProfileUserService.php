@@ -48,6 +48,5 @@ class ProfileUserService extends Singleton
     public function conditionalNetworkOperatorDelete($networkOperatorId)
     {
         return Client::whereNetworkOperatorId($networkOperatorId)->exists();
-
     }
 }

@@ -53,6 +53,11 @@ class AddClient extends Component
     public $posts;
     public $equipment_id;
     public $equipment_types;
+    public $person_types;
+    public $person_type;
+    public $identification_type;
+    public $identification_types;
+
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
         'name' => 'required|min:8',
@@ -153,6 +158,11 @@ class AddClient extends Component
     public function importClient()
     {
         $this->addClientService->importClient($this);
+    }
+
+    public function updatedPersonType()
+    {
+        $this->addClientService->updatedPersonType($this);
     }
 
     public function render()

@@ -10,9 +10,15 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Notifications\User\UserCreatedNotification;
 
 class UserObserver
 {
+    public function creating(User $user)
+    {
+        $user->setDefaultPassword();
+    }
+
     public function created(User $user)
     {
         switch ($user->type) {
@@ -40,5 +46,7 @@ class UserObserver
             default:
                 $user->assignRole(Admin::getRole());
         }
+
+        $user->notify(new UserCreatedNotification());
     }
 }
