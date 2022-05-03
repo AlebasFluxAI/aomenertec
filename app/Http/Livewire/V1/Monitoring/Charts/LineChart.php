@@ -33,7 +33,8 @@ class LineChart extends Component
         $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
         $this->start = $this->data_chart->first()->microcontrollerData->source_timestamp;
         $this->variables_selected =$variables_selected;
-        foreach ($this->data_chart as $item) {
+        $array_aux = $this->data_chart->reverse();
+        foreach ($array_aux as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -61,7 +62,8 @@ class LineChart extends Component
         } else {
             $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
         }
-        foreach ($this->data_chart as $item) {
+        $array_aux = $this->data_chart->reverse();
+        foreach ($array_aux as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -97,7 +99,8 @@ class LineChart extends Component
         $this->L2 = [];
         $this->L3 = [];
         $this->x_axis = [];
-        foreach ($this->data_chart as $item) {
+        $array_aux = $this->data_chart->reverse();
+        foreach ($array_aux as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -134,7 +137,8 @@ class LineChart extends Component
         $this->L2 = [];
         $this->L3 = [];
         $this->x_axis = [];
-        foreach ($this->data_chart as $item) {
+        $array_aux = $this->data_chart->reverse();
+        foreach ($array_aux as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
@@ -172,7 +176,8 @@ class LineChart extends Component
         $this->L2 = [];
         $this->L3 = [];
         $this->x_axis = [];
-        foreach ($this->data_chart as $item) {
+        $array_aux = $this->data_chart->reverse();
+        foreach ($array_aux as $item) {
             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
             foreach ($this->variables_selected as $index=>$data) {
                 if ($index == 0) {
