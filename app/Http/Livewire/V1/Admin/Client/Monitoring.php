@@ -87,8 +87,8 @@ class Monitoring extends Component
         } else {
             $this->data_chart = $client->annualMicrocontrollerData->take(12);
         }
-        $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
-        $this->start = $this->data_chart->first()->microcontrollerData->source_timestamp;
+        $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+        $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
         $this->date_range = $this->start." - ".$this->end;
     }
 
