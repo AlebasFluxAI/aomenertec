@@ -26,7 +26,6 @@
                                                     "view_values"=>  [
                                                                         "cards"=>$cards,
                                                                         "variables"=>$variables,
-                                                                        "last_data"=>$last_data,
                                                                         "client"=>$client,
                                                                         "variables_selected"=>$variables_selected,
                                                                         "time_id"=>$time_id,

@@ -39,24 +39,18 @@ class Monitoring extends Component
     {
         $this->client = $client;
         $last_data = $this->client->microcontrollerData()->latest()->first();
-        $this->last_data = json_decode($last_data->raw_json, true);
-
-        $this->data_frame = config('data-frame.data_frame');
-        $this->variables = config('data-frame.variables');
-        $this->variables_collect = new Collection();
-        foreach ($this->variables as $item) {
-            $this->variables_collect->push((object)$item);
-        }
-
+        $this->last_data = collect(json_decode($last_data->raw_json, true));
+        $this->data_frame = collect(config('data-frame.data_frame'));
+        $this->variables = collect(config('data-frame.variables'));
         $this->cards = [];
         $this->variable_chart_id = 1;
         $this->variables_selected = [];
         foreach ($this->variables as $index => $variable) {
             $aux = [];
-            foreach ($this->data_frame as $item) {
-                if ($item['variable_id'] == $variable['id']) {
-                    array_push($aux, $item);
-                }
+            $var_data_frame = $this->data_frame->where('variable_id', $variable['id'])->all();
+            foreach ($var_data_frame as $item) {
+                $item['value'] = round($this->last_data[$item['variable_name']],2);
+                array_push($aux, $item);
             }
             array_push($this->cards, [
                 "id" => $variable['id'],
@@ -69,10 +63,9 @@ class Monitoring extends Component
                 break;
             }
         }
-        foreach ($this->data_frame as $item) {
-            if ($item['variable_id'] == $this->variable_chart_id) {
-                array_push($this->variables_selected, $item);
-            }
+        $var_data_frame = $this->data_frame->where('variable_id', $this->variable_chart_id)->all();
+        foreach ($var_data_frame as $item) {
+            array_push($this->variables_selected, $item);
         }
         $this->chart_type = "line";
         $this->time_id = 1;
@@ -124,14 +117,15 @@ class Monitoring extends Component
     {
         if (strpos($property_name, "cards") !== false) {
 
-            $variable_select = $this->variables_collect->where('id', $value)->first();
+            $variable_select = $this->variables->where('id', $value)->first();
             $id = filter_var($property_name, FILTER_SANITIZE_NUMBER_INT);
             $aux = [];
-            foreach ($this->data_frame as $item) {
-                if ($item['variable_id'] == $value) {
-                    array_push($aux, $item);
-                }
+            $var_data_frame = $this->data_frame->where('variable_id', $value)->all();
+            foreach ($var_data_frame as $item) {
+                $item['value'] = round($this->last_data[$item['variable_name']],2);
+                array_push($aux, $item);
             }
+
             $this->cards = array_replace($this->cards, [
                 $id =>
                     ['id' => $variable_select['id'],

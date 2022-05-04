@@ -26,7 +26,7 @@
 
                         @foreach($data as $index=>$option)
                             <div class="d-flex flex-md-column flex-xl-row  align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end">
-                                <h3 class="mb-0 mb-md-1 mb-lg-0 mr-1">{{ round($last_data[$option['variable_name']], 2) }}</h3>
+                                <h3 class="mb-0 mb-md-1 mb-lg-0 mr-1">{{ $option['value'] }}</h3>
                                 <small class="mb-0">{{ $option['key'] }}</small>
                             </div>
                         @endforeach
