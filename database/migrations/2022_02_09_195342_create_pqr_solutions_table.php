@@ -37,6 +37,6 @@ class CreatePqrSolutionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('r_solutions');
+        Schema::dropIfExists('pqr_solutions');
     }
 }
