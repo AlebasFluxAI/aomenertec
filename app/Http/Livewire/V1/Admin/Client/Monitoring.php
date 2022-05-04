@@ -12,9 +12,6 @@ use Illuminate\Support\Collection;
 
 class Monitoring extends Component
 {
-    protected $listeners = ['echo:data-monitoring,.dataEventAdd' => 'addData1', 'changeDateRange'];
-
-
     public $data;
     public $data_chart;
     public $last_data;
@@ -29,6 +26,7 @@ class Monitoring extends Component
     public $client;
     public $chart_type;
     public $variables_collect;
+    protected $listeners = ['echo:data-monitoring,.dataEventAdd' => 'addData1', 'changeDateRange'];
     protected $rules = [
 
         'cards.*.color' => 'required',
@@ -36,6 +34,7 @@ class Monitoring extends Component
         'cards.*.icon' => 'required',
         'cards.*.list_model_variable' => 'required',
     ];
+
     public function mount(Client $client)
     {
         $this->client = $client;
@@ -52,7 +51,7 @@ class Monitoring extends Component
         $this->cards = [];
         $this->variable_chart_id = 1;
         $this->variables_selected = [];
-        foreach ($this->variables as $index=>$variable) {
+        foreach ($this->variables as $index => $variable) {
             $aux = [];
             foreach ($this->data_frame as $item) {
                 if ($item['variable_id'] == $variable['id']) {
@@ -89,20 +88,20 @@ class Monitoring extends Component
         }
         $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
         $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
-        $this->date_range = $this->start." - ".$this->end;
+        $this->date_range = $this->start . " - " . $this->end;
     }
 
     public function changeDateRange($start, $end)
     {
-        $this->date_range = $start." - ".$end;
+        $this->date_range = $start . " - " . $end;
     }
 
     public function updatedVariableChartId()
     {
 
-        foreach ($this->variables as $variable){
+        foreach ($this->variables as $variable) {
 
-            if ($variable['id'] == $this->variable_chart_id){
+            if ($variable['id'] == $this->variable_chart_id) {
                 $this->chart_type = $variable['chart_type'];
             }
 
@@ -115,6 +114,7 @@ class Monitoring extends Component
         }
         $this->emit('changeVariable', $this->variables_selected, $this->chart_type);
     }
+
     public function updatedTimeId()
     {
         $this->emit('changeTime', $this->time_id);
@@ -134,34 +134,36 @@ class Monitoring extends Component
             }
             $this->cards = array_replace($this->cards, [
                 $id =>
-                ['id' => $variable_select['id'],
-                 'color' => $variable_select['style'],
-                'icon' => $variable_select['icon'],
-                'list_model_variable' => $variable_select['id'],
-                'variables_selected' => $aux]
+                    ['id' => $variable_select['id'],
+                        'color' => $variable_select['style'],
+                        'icon' => $variable_select['icon'],
+                        'list_model_variable' => $variable_select['id'],
+                        'variables_selected' => $aux]
             ]);
         }
     }
-    public function restartDateRange(){
 
-            $this->L1 = [];
-            $this->L2 = [];
-            $this->L3 = [];
-            $this->x_axis = [];
-            if ($this->time_id == 1) {
-                $this->data_chart = $this->client->hourlyMicrocontrollerData->take(60);
-            } elseif ($this->time_id == 2) {
-                $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
-            } elseif ($this->time_id == 3) {
-                $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
-            } else {
-                $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
-            }
+    public function restartDateRange()
+    {
 
-            $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-            $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
-            $this->date_range = $this->start." - ".$this->end;
-            $this->emit('startDateRange');
+        $this->L1 = [];
+        $this->L2 = [];
+        $this->L3 = [];
+        $this->x_axis = [];
+        if ($this->time_id == 1) {
+            $this->data_chart = $this->client->hourlyMicrocontrollerData->take(60);
+        } elseif ($this->time_id == 2) {
+            $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
+        } elseif ($this->time_id == 3) {
+            $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
+        } else {
+            $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
+        }
+
+        $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+        $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        $this->date_range = $this->start . " - " . $this->end;
+        $this->emit('startDateRange');
 
 
     }
@@ -186,7 +188,7 @@ class Monitoring extends Component
         $update_cards = new Collection();
         $update_cards = $this->cards;
         $this->cards = new Collection();
-        foreach ($update_cards as $index=>$variable) {
+        foreach ($update_cards as $index => $variable) {
             $this->cards->push((object)[
                 "id" => $variable['id'],
                 "color" => $variable['color'],
@@ -196,6 +198,7 @@ class Monitoring extends Component
             ]);
         }
     }
+
     public function render()
     {
         return view('livewire.v1.admin.client.monitoring')
