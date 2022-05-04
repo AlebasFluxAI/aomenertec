@@ -54,13 +54,13 @@ class LineChart extends Component
         $this->L3 = [];
         $this->x_axis = [];
         if ($this->time == 1) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData->take(60);
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
         } elseif ($this->time == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
+            $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
         } elseif ($this->time == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
+            $this->data_chart = $this->client->monthlyMicrocontrollerData()->limit(31)->get();
         } else {
-            $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
+            $this->data_chart = $this->client->annualMicrocontrollerData()->limit(12)->get();
         }
         $array_aux = $this->data_chart->reverse();
         foreach ($array_aux as $item) {
@@ -83,17 +83,17 @@ class LineChart extends Component
         $this->start = $start;
         $this->end = $end;
         if ($this->time == 1) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData
-                ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()
+                ->whereBetween("created_at", [$this->start, $this->end])->get();
         } elseif ($this->time == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData
-            ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->dailyMicrocontrollerData()
+            ->whereBetween("created_at", [$this->start, $this->end])->get();
         } elseif ($this->time == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData
-            ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->monthlyMicrocontrollerData()
+            ->whereBetween("created_at", [$this->start, $this->end])->get();
         } else {
-            $this->data_chart = $this->client->annualMicrocontrollerData
-                ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->annualMicrocontrollerData()
+                ->whereBetween("created_at", [$this->start, $this->end])->get();
         }
         $this->L1 = [];
         $this->L2 = [];
@@ -120,17 +120,17 @@ class LineChart extends Component
     {
         $this->time = $time;
         if ($time == 1) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData
-                ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()
+                ->whereBetween("created_at", [$this->start, $this->end])->get();
         } elseif ($time == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData
-                ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->dailyMicrocontrollerData()
+                ->whereBetween("created_at", [$this->start, $this->end])->get();
         } elseif ($time == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData
-                ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->monthlyMicrocontrollerData()
+                ->whereBetween("created_at", [$this->start, $this->end])->get();
         } else {
-            $this->data_chart = $this->client->annualMicrocontrollerData
-                            ->whereBetween("created_at", [$this->start, $this->end]);
+            $this->data_chart = $this->client->annualMicrocontrollerData()
+                            ->whereBetween("created_at", [$this->start, $this->end])->get();
         }
 
         $this->L1 = [];
@@ -158,19 +158,6 @@ class LineChart extends Component
     public function changeVariable($variables, $chart_type)
     {
         $this->chart_type = $chart_type;
-        if ($this->time == 1) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData
-                ->whereBetween("created_at", [$this->start, $this->end]);
-        } elseif ($this->time == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData
-            ->whereBetween("created_at", [$this->start, $this->end]);
-        } elseif ($this->time == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData
-            ->whereBetween("created_at", [$this->start, $this->end]);
-        } else {
-            $this->data_chart = $this->client->annualMicrocontrollerData
-            ->whereBetween("created_at", [$this->start, $this->end]);
-        }
         $this->variables_selected = $variables;
         $this->L1 = [];
         $this->L2 = [];
