@@ -20,6 +20,7 @@ class LineChart extends Component
     public $chart_type;
     public function mount(Client $client, $variables_selected, $time, $chart_type, $data_chart)
     {
+        $this->emit('loading');
         $this->time = $time;
         $this->chart_type = $chart_type;
         $this->client =  $client;
@@ -41,7 +42,9 @@ class LineChart extends Component
                 $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
     }
+
     public function startDateRange(){
+        $this->emit('loading');
 
         if ($this->time == 1) {
             $data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
@@ -71,6 +74,7 @@ class LineChart extends Component
 
     }
     public function changeDateRange($start, $end){
+        $this->emit('loading');
         $this->start = $start;
         $this->end = $end;
         if ($this->time == 1) {
@@ -104,7 +108,8 @@ class LineChart extends Component
         $this->emit('changeAxis', ['series' => $this->series,  'x_axis'=>$this->x_axis]);
     }
     public function changeTime($time)
-    {
+    {$this->emit('loading');
+
         $this->time = $time;
         if ($time == 1) {
             $data_chart = $this->client->hourlyMicrocontrollerData()
@@ -138,6 +143,7 @@ class LineChart extends Component
 
     public function changeVariable($variables, $chart_type)
     {
+        $this->emit('loading');
         $this->chart_type = $chart_type;
         $this->variables_selected = $variables;
         $array_aux = $this->data_chart->reverse();
