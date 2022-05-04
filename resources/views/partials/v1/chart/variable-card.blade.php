@@ -6,30 +6,31 @@
                     <i class=" {{$icon_class}} fa-2x">
                     </i>
                 </div>
-                <div >
+                <div>
 
-                        @include("partials.v1.form.form_list",[
-                                                     "col_with1"=>6,
-                                                     "mb"=>0,
-                                                     "background"=>$color??"voltage",
-                                                     "disabled" => false,
-                                                     "aux_class"=>"no-border-card",
-                                                     "list_model" => $list_model_variable,
-                                                     "list_default" => "Variable...",
-                                                     "list_options" => $list_variable_options,
-                                                     "list_option_value"=>"id",
-                                                     "list_option_view"=>"display_name",
-                                                     "list_option_title"=>""
-                                            ])
+                    @include("partials.v1.form.form_list",[
+                                                 "col_with1"=>6,
+                                                 "mb"=>0,
+                                                 "background"=>$color??"voltage",
+                                                 "disabled" => false,
+                                                 "aux_class"=>"no-border-card",
+                                                 "list_model" => $list_model_variable,
+                                                 "list_default" => "Variable...",
+                                                 "list_options" => $list_variable_options,
+                                                 "list_option_value"=>"id",
+                                                 "list_option_view"=>"display_name",
+                                                 "list_option_title"=>""
+                                        ])
 
 
 
-                        @foreach($data as $index=>$option)
-                            <div class="d-flex flex-md-column flex-xl-row  align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end">
-                                <h3 class="mb-0 mb-md-1 mb-lg-0 mr-1">{{ round($last_data[$option['variable_name']], 2) }}</h3>
-                                <small class="mb-0">{{ $option['key'] }}</small>
-                            </div>
-                        @endforeach
+                    @foreach($data as $index=>$option)
+                        <div
+                            class="d-flex flex-md-column flex-xl-row  align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end">
+                            <h3 class="mb-0 mb-md-1 mb-lg-0 mr-1">{{ $option['value'] }}</h3>
+                            <small class="mb-0">{{ $option['key'] }}</small>
+                        </div>
+                    @endforeach
 
                 </div>
             </div>

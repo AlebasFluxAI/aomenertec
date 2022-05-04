@@ -20,7 +20,6 @@
                 ]
         ])
     @include("partials.v1.tab.v1.tab",[
-                            "edit_function"=>"edit",
                             "tab_titles"=>[
                                                 [
                                                     "title"=>"Detalles",

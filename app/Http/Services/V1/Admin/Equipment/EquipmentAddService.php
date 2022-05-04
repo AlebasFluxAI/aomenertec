@@ -17,9 +17,19 @@ class EquipmentAddService extends Singleton
             'equipmentDescription' => null,
             'equipmentSerial' => null,
             'equipmentTypeId' => null,
-            'equipmentTypes' => [],
+            'equipmentTypes' => $this->getEquipmentTypes(),
             'picked' => false,
         ]);
+    }
+
+    public function getEquipmentTypes()
+    {
+        return EquipmentType::get()->map(function ($equipmentType) {
+            return [
+                "key" => $equipmentType->id . "- " . $equipmentType->type,
+                "value" => $equipmentType->id,
+            ];
+        });
     }
 
     public function loadEquipmentType(Component $component)
@@ -46,9 +56,7 @@ class EquipmentAddService extends Singleton
 
     public function updatedEquipmentTypeId(Component $component)
     {
-        $component->picked = false;
-        $component->equipmentTypes = EquipmentType::where('id', 'ilike', "%" . $component->equipmentTypeId . "%")
-            ->orWhere('type', 'ilike', "%" . $component->equipmentTypeId . "%")->limit(3)->get();
+        //TODO
     }
 
     public function updatingSearch(Component $component)

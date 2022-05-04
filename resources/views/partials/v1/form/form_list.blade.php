@@ -1,4 +1,4 @@
- {{--
+{{--
 "icon_class"=>Clase de font awesome para icono del input "fas fa-user"
 "col_with"=> "Tamaño de la columna bootstrap",
 "list_model"=>"variable que tendra el valor del select wire:model del componente",
@@ -10,13 +10,16 @@
 
 --}}
 
- <div class="form-group mb-{{$mb??2}} mt-{{$mt??0}}  @if($aux_class??"" != 'no-border-card') col-sm-12 col-md-{{$col_with??12}}@endif ">
-     <select  wire:model="{{$list_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "  required="{{$required??false}}" @if($disabled??false)disabled @endif>
-         <option  value="0"> {{$list_default}} </option>
-         @foreach($list_options as $option)
-             @if($option[$list_option_view] != "EXPANSION URBANA" || $option[$list_option_view]!= "SIN DEFINIR" )
-                <option @if($list_option_title != "")title="{{ $option[$list_option_title] }}"@endif value="{{ $option[$list_option_value] }}">{{ $option[$list_option_view] }}</option>
-             @endif
-         @endforeach
-     </select>
- </div>
+<div
+    class="form-group mb-{{$mb??2}} mt-{{$mt??0}}  @if($aux_class??"" != 'no-border-card') col-sm-12 col-md-{{$col_with??12}}@endif ">
+    <select wire:model.lazy="{{$list_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
+            required="{{$required??false}}" @if($disabled??false)disabled @endif>
+        <option value="0"> {{$list_default}} </option>
+        @foreach($list_options as $option)
+            @if($option[$list_option_view] != "EXPANSION URBANA" || $option[$list_option_view]!= "SIN DEFINIR" )
+                <option @if($list_option_title != "")title="{{ $option[$list_option_title] }}"
+                        @endif value="{{ $option[$list_option_value] }}">{{ $option[$list_option_view] }}</option>
+            @endif
+        @endforeach
+    </select>
+</div>
