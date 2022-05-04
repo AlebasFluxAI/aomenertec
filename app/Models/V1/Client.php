@@ -108,7 +108,7 @@ class Client extends Model
 
     public function microcontrollerData()
     {
-        return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp');
+        return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp', 'desc');
     }
 
     public function supervisors()
