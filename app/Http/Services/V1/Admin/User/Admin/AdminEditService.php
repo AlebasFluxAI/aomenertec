@@ -71,6 +71,5 @@ class AdminEditService extends Singleton
             "key" => "",
             "value" => ""
         ]], Admin::styles());
-
     }
 }
