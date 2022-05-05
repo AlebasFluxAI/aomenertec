@@ -15,7 +15,14 @@ class AnnualMicrocontrollerData extends Model
         'year',
         'month',
         'client_id',
-        'microcontroller_data_id'
+        'microcontroller_data_id',
+        'interval_real_consumption',
+        'interval_reactive_capacitive_consumption',
+        'interval_reactive_inductive_consumption',
+        'penalizable_reactive_capacitive_consumption',
+        'penalizable_reactive_inductive_consumption',
+        'raw_json',
+
     ];
 
     public function microcontrollerData()

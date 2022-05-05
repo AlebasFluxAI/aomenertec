@@ -17,8 +17,12 @@ class MonthlyMicrocontrollerData extends Model
         'day',
         'client_id',
         'microcontroller_data_id',
-        "penalizable_reactive_capacitive_consumption",
-        "penalizable_reactive_inductive_consumption",
+        'interval_real_consumption',
+        'interval_reactive_capacitive_consumption',
+        'interval_reactive_inductive_consumption',
+        'penalizable_reactive_capacitive_consumption',
+        'penalizable_reactive_inductive_consumption',
+        'raw_json',
     ];
 
     public function microcontrollerData()

@@ -20,7 +20,9 @@ class CreateMonthlyMicrocontrollerDataTable extends Migration
             $table->string("day");
             $table->foreignId('client_id')->constrained();
             $table->unsignedBigInteger("microcontroller_data_id");
-            $table->double('active_consumption');
+            $table->double("interval_real_consumption");
+            $table->double("interval_reactive_capacitive_consumption");
+            $table->double("interval_reactive_inductive_consumption");
             $table->double("penalizable_reactive_capacitive_consumption");
             $table->double("penalizable_reactive_inductive_consumption");
             $table->text("raw_json");

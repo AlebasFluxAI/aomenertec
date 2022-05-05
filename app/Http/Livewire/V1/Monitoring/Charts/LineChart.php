@@ -46,6 +46,7 @@ class LineChart extends Component
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
+
     }
 
     public function startDateRange()
@@ -80,6 +81,7 @@ class LineChart extends Component
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
+
         $this->data_chart = $data_chart;
         $this->emit('changeAxis', ['series' => $this->series,  'x_axis'=>$this->x_axis]);
     }
@@ -181,7 +183,6 @@ class LineChart extends Component
                     $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                     array_push($data[$index], round($raw_json[$data['variable_name']], 2));
                 }
-                array_push($data[$index], round($raw_json[$data['variable_name']], 2));
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
