@@ -230,7 +230,7 @@ class Admin extends Model
             "orange_brown" => "Cafe - naranja",
             "orange_brown_white_header" => "Cafe - naranja - Encabezado blanco",
             "orange_brown_black_header" => "Cafe - naranja - Encabezado negro",
-            "style" => "Por defecto"
+            default => "Por defecto"
         };
     }
 
