@@ -8,8 +8,9 @@
 @tailwind utilities;
 :root {
     --style_primary: #356908;
-    --style_secondary: #DDAB22;
-    --style_header_color: #356908;
-    --style_orange: #DDAB22;
+    --style_secondary: #634907;
+    --style_header_color: #125213;
+    --style_orange: #856410;
     --style_orange_light: #525F48;
+    --style_header_button: #ffffff;
 }

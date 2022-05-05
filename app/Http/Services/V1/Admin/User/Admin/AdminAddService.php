@@ -13,53 +13,7 @@ class AdminAddService extends Singleton
     public function mount(Component $component)
     {
         $component->fill([
-            "styles" => [
-                [
-                    "key" => "Coenergia",
-                    "value" => "ecoenergia"
-                ],
-                [
-                    "key" => "Verde - Naranja",
-                    "value" => "green_orange"
-                ],
-                [
-                    "key" => "Verde - Naranja | Header negro",
-                    "value" => "green_orange_black_header"
-                ],
-                [
-                    "key" => "Naranja - Cafe",
-                    "value" => "orange_brown"
-                ],
-                [
-                    "key" => "Naranja - Cafe | Header negro",
-                    "value" => "orange_brown_black_header"
-                ],
-                [
-                    "key" => "Negro - Naranja",
-                    "value" => "style"
-                ],
-                [
-                    "key" => "Gris - negro",
-                    "value" => "black_white"
-                ],
-                [
-                    "key" => "Azul - Rojo",
-                    "value" => "blue_red"
-                ],
-                [
-                    "key" => "Azul - Rojo | Header negro",
-                    "value" => "blue_red_black_header"
-                ],
-                [
-                    "key" => "Morado - Rosa",
-                    "value" => "purple_pink"
-                ],
-                [
-                    "key" => "Morado - Rosa | Header negro",
-                    "value" => "purple_pink_black_header"
-                ]
-
-            ],
+            "styles" => Admin::styles()
         ]);
     }
 
@@ -98,5 +52,9 @@ class AdminAddService extends Singleton
             "css_style" => $component->style
 
         ];
+    }
+
+    public function setStyle()
+    {
     }
 }

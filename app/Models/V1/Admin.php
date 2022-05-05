@@ -129,6 +129,74 @@ class Admin extends Model
         return "livewire.v1.admin.user.admin.profile-admin";
     }
 
+    public static function styles()
+    {
+        return [
+            [
+                "key" => "Azul - verde - Encabezado negro",
+                "value" => "blue_green_black_header"
+            ],
+            [
+                "key" => "Azul - verde - Encabezado blanco",
+                "value" => "blue_green_white_header"
+            ],
+            [
+                "key" => "Azul - rojo",
+                "value" => "blue_red"
+            ],
+            [
+                "key" => "Azul - rojo - Encabezado negro",
+                "value" => "blue_red_black_header"
+            ],
+            [
+                "key" => "Coenergia",
+                "value" => "ecoenergia"
+            ],
+            [
+                "key" => "Gris - negro",
+                "value" => "gray_black"
+            ],
+            [
+                "key" => "Gris - azul",
+                "value" => "gray_blue"
+            ],
+            [
+                "key" => "Gris - azul - Encabezado negro",
+                "value" => "gray_blue_black_header"
+            ],
+            [
+                "key" => "Gris - azul - Encabezado blanco",
+                "value" => "gray_blue_white_header"
+            ],
+            [
+                "key" => "Verde - naranja",
+                "value" => "green_orange"
+            ],
+            [
+                "key" => "Verde - naranja - Encabezado blanco",
+                "value" => "green_orange_white_header"
+            ],
+            [
+                "key" => "Verde - naranja - Encabezado negro",
+                "value" => "green_orange_black_header"
+            ],
+            [
+                "key" => "Cafe - naranja",
+                "value" => "orange_brown"
+            ],
+            [
+                "key" => "Cafe - naranja - Encabezado blanco",
+                "value" => "orange_brown_white_header"
+            ],
+            [
+                "key" => "Cafe - naranja - Encabezado negro",
+                "value" => "orange_brown_black_header"
+            ],
+
+
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -143,17 +211,21 @@ class Admin extends Model
     {
         return match ($this->css_file) {
             "" => "",
-            "green_orange" => "Verde - Naranja",
-            "green_orange_black_header" => "Verde - Naranja | Header negro",
-            "orange_brown" => "Naranja - Cafe",
-            "orange_brown_black_header" => "Naranja - Cafe | Header negro",
-            "style" => "Negro - Naranja",
-            "black_white" => "Gris - negro",
-            "blue_red" => "Azul - Rojo",
-            "blue_red_black_header" => "Azul - Rojo | Header negro",
-            "purple_pink" => "Morado - Rosa",
-            "purple_pink_black_header" => "Morado - Rosa | Header negro",
+            "blue_green_black_header" => "Azul - verde - Encabezado negro",
+            "blue_green_white_header" => "Azul - verde - Encabezado blanco",
+            "blue_red" => "Azul - rojo",
+            "blue_red_black_header" => "Azul - rojo - Encabezado negro",
             "ecoenergia" => "Coenergia",
+            "gray_black" => "Gris - negro",
+            "gray_blue" => "Gris - azul",
+            "gray_blue_black_header" => "Gris - azul - Encabezado negro",
+            "gray_blue_white_header" => "Gris - azul - Encabezado blanco",
+            "green_orange" => "Verde - naranja",
+            "green_orange_white_header" => "Verde - naranja - Encabezado blanco",
+            "green_orange_black_header" => "Verde - naranja - Encabezado negro",
+            "orange_brown" => "Cafe - naranja",
+            "orange_brown_white_header" => "Cafe - naranja - Encabezado blanco",
+            "orange_brown_black_header" => "Cafe - naranja - Encabezado negro",
         };
     }
 
