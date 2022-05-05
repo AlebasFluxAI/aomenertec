@@ -70,7 +70,7 @@
                                                                                  [
                                                                             "key"=>"Archivo de estilos",
 
-                                                                            "value"=>$model->css_file
+                                                                            "value"=>$model->css_file_name
                                                                         ],
                                                                           [
                                                                             "key"=>"Logo",
