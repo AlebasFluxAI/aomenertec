@@ -35,9 +35,14 @@ class LineChart extends Component
         foreach ($this->variables_selected as $index=>$data) {
             $data[$index] = [];
             foreach ($array_aux as $item) {
-                $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                array_push($data[$index], round($raw_json[$data['variable_name']], 2));
-                array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                if ($this->time == 3 || $this->time == 4){
+                    $raw_json = json_decode($item->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                } else{
+                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                }
+               array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
@@ -64,8 +69,13 @@ class LineChart extends Component
         foreach ($this->variables_selected as $index=>$data) {
             $data[$index] = [];
             foreach ($array_aux as $item) {
-                $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                if ($this->time == 3 || $this->time == 4){
+                    $raw_json = json_decode($item->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                } else{
+                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                }
                 array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
@@ -99,8 +109,13 @@ class LineChart extends Component
         foreach ($this->variables_selected as $index=>$data) {
             $data[$index] = [];
             foreach ($array_aux as $item) {
-                $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                if ($this->time == 3 || $this->time == 4){
+                    $raw_json = json_decode($item->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                } else{
+                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                }
                 array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
@@ -133,8 +148,13 @@ class LineChart extends Component
         foreach ($this->variables_selected as $index=>$data) {
             $data[$index] = [];
             foreach ($array_aux as $item) {
-                $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                if ($this->time == 3 || $this->time == 4){
+                    $raw_json = json_decode($item->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                } else{
+                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                }
                 array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
@@ -154,7 +174,13 @@ class LineChart extends Component
         foreach ($this->variables_selected as $index=>$data) {
             $data[$index] = [];
             foreach ($array_aux as $item) {
-                $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                if ($this->time == 3 || $this->time == 4){
+                    $raw_json = json_decode($item->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                } else{
+                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                    array_push($data[$index], round($raw_json[$data['variable_name']], 2));
+                }
                 array_push($data[$index], round($raw_json[$data['variable_name']], 2));
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];

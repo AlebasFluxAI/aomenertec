@@ -83,7 +83,7 @@ class MicrocontrollerData extends Model
         $equipment_serial = unpack('Q', $bin)[1];
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
-        $client = $equipment->clients->first();
+        $client = $equipment->clients()->first();
         $this->client_id = $client->id;
         /*$split = substr($decode, 64, 8);
         $bin = hex2bin($split);
@@ -94,17 +94,23 @@ class MicrocontrollerData extends Model
         $date = new DateTime();
         $unixTime = $date->getTimestamp();
         $current_time = $date->modify('-' . ($unixTime % 60) . ' seconds');
+        $last_data = $client->microcontrollerData()->latest()->first();
 
+        if ($last_data != null){
+            if ($last_data->source_timestamp == $current_time->format('Y-m-d H:i:s')){
+                $this->source_timestamp = $current_time->modify('+60 seconds');
+            } else{
+                $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
+            }
+            $last_raw_json = json_decode($last_data->raw_json, true);
+        } else{
 
-        $last_data = Client::find($this->client_id)->microcontrollerData()->latest()->first();
-        if ($last_data->sorce_timestamp == $current_time->format('Y-m-d H:i:s')) {
-            $aux = $current_time->modify('-60 seconds');
-        } else {
             $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         }
+
         $timestamp_unix = $current_time->getTimestamp();//delete
         $json['timestamp'] = $timestamp_unix;
-        $last_raw_json = json_decode($last_data->raw_json, true);
+
         if ($json['import_wh'] == 0) {
             $json['import_VArh'] = $last_raw_json['import_VArh'];
             $json['import_VArh'] = $last_raw_json['import_VArh'];
@@ -116,8 +122,7 @@ class MicrocontrollerData extends Model
             $json['ph3_import_kwh'] = $last_raw_json['ph3_import_kwh'];
         }
 
-
-        if (count($client->microcontrollerData) == 0) {
+        if (count($client->microcontrollerData()->get()) == 0) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
             $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
@@ -139,20 +144,20 @@ class MicrocontrollerData extends Model
         } else {
             $reference_hour = new DateTime();
             $reference_hour->setTimestamp($timestamp_unix - ($timestamp_unix % 3600));
-            $last_data = $client->microcontrollerData->last();
-            $last_data_json = json_decode($last_data->raw_json, true);
-            $reference_data = $client->microcontrollerData->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
-                ->first();
+
+            $reference_data = $client->microcontrollerData()->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
+                ->get()->last();
+
 
             if (empty($reference_data)) {
                 $json['kwh_interval'] = 0;
                 $json['varh_interval'] = 0;
-                $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_data_json['ph1_varCh_acumm'];
-                $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_data_json['ph1_varLh_acumm'];
-                $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_data_json['ph2_varCh_acumm'];
-                $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_data_json['ph2_varLh_acumm'];
-                $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_data_json['ph3_varCh_acumm'];
-                $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_data_json['ph3_varLh_acumm'];
+                $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
+                $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
+                $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
+                $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
+                $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
+                $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
                 $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
                 $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
                 $json['ph1_varCh_interval'] = 0;
@@ -173,12 +178,12 @@ class MicrocontrollerData extends Model
                 $reference_data_json = json_decode($reference_data->raw_json, true);
                 $json['kwh_interval'] = $json['import_wh'] - $reference_data_json['import_wh'];
                 $json['varh_interval'] = $json['import_VArh'] - $reference_data_json['import_VArh'];
-                $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_data_json['ph1_varCh_acumm'];
-                $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_data_json['ph1_varLh_acumm'];
-                $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_data_json['ph2_varCh_acumm'];
-                $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_data_json['ph2_varLh_acumm'];
-                $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_data_json['ph3_varCh_acumm'];
-                $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_data_json['ph3_varLh_acumm'];
+                $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
+                $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
+                $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
+                $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
+                $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
+                $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
                 $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
                 $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
                 $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $reference_data_json['ph1_varCh_acumm'];
@@ -187,12 +192,12 @@ class MicrocontrollerData extends Model
                 $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $reference_data_json['ph2_varLh_acumm'];
                 $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $reference_data_json['ph3_varCh_acumm'];
                 $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $reference_data_json['ph3_varLh_acumm'];
-                $json['ph1_kwh_interval'] = $json['ph1_kwh_interval'] - $reference_data_json['ph1_kwh_interval'];
-                $json['ph2_kwh_interval'] = $json['ph2_kwh_interval'] - $reference_data_json['ph2_kwh_interval'];
-                $json['ph3_kwh_interval'] = $json['ph3_kwh_interval'] - $reference_data_json['ph3_kwh_interval'];
-                $json['ph1_varh_interval'] = $json['ph1_varh_interval'] - $reference_data_json['ph1_varh_interval'];
-                $json['ph2_varh_interval'] = $json['ph2_varh_interval'] - $reference_data_json['ph2_varh_interval'];
-                $json['ph3_varh_interval'] = $json['ph3_varh_interval'] - $reference_data_json['ph3_varh_interval'];
+                $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $reference_data_json['ph1_import_kwh'];
+                $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $reference_data_json['ph2_import_kwh'];
+                $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $reference_data_json['ph3_import_kwh'];
+                $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $reference_data_json['ph1_import_kvarh'];
+                $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $reference_data_json['ph2_import_kvarh'];
+                $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $reference_data_json['ph3_import_kvarh'];
                 $json['varCh_interval'] = $json['varCh_acumm'] - $reference_data_json['varCh_acumm'];
                 $json['varLh_interval'] = $json['varLh_acumm'] - $reference_data_json['varLh_acumm'];
             }
@@ -252,14 +257,24 @@ class MicrocontrollerData extends Model
                 'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
             ]);
             if ($hour == 23) {
+                $json = $this->raw_json;
+                $data_frame = collect(config('data-frame.data_frame'));
+                $accum_variable = $data_frame->where('bolean_accum', true);
                 $penalizable_inductive_day = 0;
                 $penalizable_capacitive_day = 0;
                 $active_consumption = 0;
                 $data_day = Client::find($this->client_id)->dailyMicrocontrollerData()->where('year', $year)->where('month', $month)->where('day', $day)->get();
-                foreach ($data_day as $item) {
-                    $active_consumption = $active_consumption + $item->interval_real_consumption;
-                    $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
-                    $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
+                foreach ($accum_variable as $variable){
+                    $json[$variable['variable_name']] = 0;
+                    foreach ($data_day as $index => $item){
+                        $raw_json = json_decode($item->raw_json, true);
+                        $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
+                        if ($index == 0){
+                            $active_consumption = $active_consumption + $item->interval_real_consumption;
+                            $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
+                            $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
+                        }
+                    }
                 }
                 MonthlyMicrocontrollerData::create([
                     'year' => $year,
@@ -270,27 +285,37 @@ class MicrocontrollerData extends Model
                     'active_consumption' => $active_consumption,
                     'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_day,
                     'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
+                    'raw_json' => $json,
                 ]);
-            }
-            if ($day == $last_day_month) {
-                $penalizable_inductive_month = 0;
-                $penalizable_capacitive_month = 0;
-                $active_consumption = 0;
-                $data_month = Client::find($this->client_id)->dailyMicrocontrollerData()->where('year', $year)->where('month', $month)->get();
-                foreach ($data_month as $item) {
-                    $active_consumption = $active_consumption + $item->interval_real_consumption;
-                    $penalizable_inductive_month = $penalizable_inductive_month + $item->penalizable_reactive_inductive_consumption;
-                    $penalizable_capacitive_month = $penalizable_capacitive_month + $item->penalizable_reactive_capacitive_consumption;
+                if ($day == $last_day_month) {
+                    $json = $this->raw_json;
+                    $penalizable_inductive_month = 0;
+                    $penalizable_capacitive_month = 0;
+                    $active_consumption = 0;
+                    $data_month = Client::find($this->client_id)->monthlyMicrocontrollerData()->where('year', $year)->where('month', $month)->get();
+                    foreach ($accum_variable as $variable){
+                        $json[$variable['variable_name']] = 0;
+                        foreach ($data_day as $index => $item){
+                            $raw_json = json_decode($item->raw_json, true);
+                            $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
+                            if ($index == 0){
+                                $active_consumption = $active_consumption + $item->interval_real_consumption;
+                                $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
+                                $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
+                            }
+                        }
+                    }
+                    AnnualMicrocontrollerData::create([
+                        'year' => $year,
+                        'month' => $month,
+                        'client_id' => $this->client_id,
+                        'microcontroller_data_id' => $this->id,
+                        'active_consumption' => $active_consumption,
+                        'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_month,
+                        'penalizable_reactive_inductive_consumption' => $penalizable_inductive_month,
+                        'raw_json' => $json,
+                    ]);
                 }
-                AnnualMicrocontrollerData::create([
-                    'year' => $year,
-                    'month' => $month,
-                    'client_id' => $this->client_id,
-                    'microcontroller_data_id' => $this->id,
-                    'active_consumption' => $active_consumption,
-                    'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_month,
-                    'penalizable_reactive_inductive_consumption' => $penalizable_inductive_month,
-                ]);
             }
         }
     }
