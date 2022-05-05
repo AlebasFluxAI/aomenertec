@@ -63,7 +63,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('editar/{admin}', Livewire\V1\Admin\User\Admin\EditAdmin::class)->name("administrar.v1.usuarios.admin.editar");
                         Route::get('detalle/{admin}', Livewire\V1\Admin\User\Admin\DetailsAdmin::class)->name("administrar.v1.usuarios.admin.detalles");
                         Route::get('agregar_tipos_equipos/{admin}', Livewire\V1\Admin\User\Admin\AddEquipmentTypeAdmin::class)->name("administrar.v1.usuarios.admin.agregar_tipos_equipo");
-
                     });
 
 

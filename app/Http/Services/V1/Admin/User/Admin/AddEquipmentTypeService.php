@@ -14,17 +14,14 @@ class AddEquipmentTypeService extends Singleton
 
     public function addType(Component $component)
     {
-
     }
 
     public function updatedType(Component $component)
     {
-
     }
 
 
     public function assignType(Component $component)
     {
-
     }
 }

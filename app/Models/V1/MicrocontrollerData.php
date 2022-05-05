@@ -97,15 +97,15 @@ class MicrocontrollerData extends Model
 
 
         $last_data = Client::find($this->client_id)->microcontrollerData()->latest()->first();
-        if ($last_data->sorce_timestamp == $current_time->format('Y-m-d H:i:s')){
+        if ($last_data->sorce_timestamp == $current_time->format('Y-m-d H:i:s')) {
             $aux = $current_time->modify('-60 seconds');
-        } else{
+        } else {
             $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         }
         $timestamp_unix = $current_time->getTimestamp();//delete
         $json['timestamp'] = $timestamp_unix;
         $last_raw_json = json_decode($last_data->raw_json, true);
-        if ($json['import_wh'] == 0){
+        if ($json['import_wh'] == 0) {
             $json['import_VArh'] = $last_raw_json['import_VArh'];
             $json['import_VArh'] = $last_raw_json['import_VArh'];
             $json['ph1_import_kvarh'] = $last_raw_json['ph1_import_kvarh'];

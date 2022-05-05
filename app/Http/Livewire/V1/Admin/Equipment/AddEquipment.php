@@ -69,7 +69,6 @@ class AddEquipment extends Component
 
     public function refreshEquipmentTypes()
     {
-
     }
 
     public function render()
