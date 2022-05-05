@@ -33,8 +33,7 @@
                                          "list_options" => [
                                                             ['id'=>1, 'display_name'=> 'Minuto'],
                                                             ['id'=>2, 'display_name'=> 'Hora'],
-                                                            ['id'=>3, 'display_name'=> 'Dia'],
-                                                            ['id'=>4, 'display_name'=> 'Mes'],
+
 
                                                            ],
                                          "list_option_value"=>"id",
