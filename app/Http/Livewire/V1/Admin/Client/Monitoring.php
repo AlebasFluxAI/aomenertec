@@ -92,6 +92,7 @@ class Monitoring extends Component
     public function updatedVariableChartId()
     {
 
+
         foreach ($this->variables as $variable) {
 
             if ($variable['id'] == $this->variable_chart_id) {
@@ -138,20 +139,16 @@ class Monitoring extends Component
     public function restartDateRange()
     {
 
-        $this->L1 = [];
-        $this->L2 = [];
-        $this->L3 = [];
-        $this->x_axis = [];
         if ($this->time_id == 1) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData->take(60);
-        } elseif ($this->time_id == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData->take(24);
-        } elseif ($this->time_id == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData->take(31);
-        } else {
-            $this->data_chart = $this->client->annualMicrocontrollerData->take(12);
-        }
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
 
+        } elseif ($this->time_id == 2) {
+            $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
+        } elseif ($this->time_id == 3) {
+            $this->data_chart = $this->client->monthlyMicrocontrollerData()->limit(31)->get();
+        } else {
+            $this->data_chart = $this->client->annualMicrocontrollerData()->limit(12)->get();
+        }
         $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
         $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
         $this->date_range = $this->start . " - " . $this->end;

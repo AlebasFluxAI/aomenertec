@@ -18,6 +18,17 @@ class CreateClientsTable extends Migration
             $table->id();
             $table->string("code");
             $table->string("identification")->unique();
+            $table->enum("person_type", [
+                Client::PERSON_TYPE_JURIDICAL,
+                Client::PERSON_TYPE_NATURAL
+            ])->default(Client::PERSON_TYPE_NATURAL);
+            $table->enum("identification_type", [
+                Client::IDENTIFICATION_TYPE_CC,
+                Client::IDENTIFICATION_TYPE_CE,
+                Client::IDENTIFICATION_TYPE_PEP,
+                Client::IDENTIFICATION_TYPE_PP,
+                Client::IDENTIFICATION_TYPE_NIT,
+            ])->default(Client::IDENTIFICATION_TYPE_CC);
             $table->string("name");
             $table->string("email")->nullable()->unique();
             $table->string("phone")->nullable();

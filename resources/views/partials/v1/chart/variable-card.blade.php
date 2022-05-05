@@ -1,4 +1,4 @@
-<div class="col-md-{{$col_with??4}} mb-2 grid-margin stretch-card">
+<div wire:key="card-{{ $id }}" class="col-md-{{$col_with??4}} mb-2 grid-margin stretch-card">
     <div class="card1 shadow  {{$color??"voltage"}} ">
         <div class="card-body">
             <div class="d-flex flex-md-column flex-xl-row flex-wrap  align-items-center justify-content-between">
@@ -21,9 +21,6 @@
                                                  "list_option_view"=>"display_name",
                                                  "list_option_title"=>""
                                         ])
-
-
-
                     @foreach($data as $index=>$option)
                         <div
                             class="d-flex flex-md-column flex-xl-row  align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end">
@@ -31,6 +28,7 @@
                             <small class="mb-0">{{ $option['key'] }}</small>
                         </div>
                     @endforeach
+
 
                 </div>
             </div>

@@ -8,7 +8,7 @@
                                 "list_variable_options" => $variables,
                                 "list_model_variable" => 'cards.'.$index.'.list_model_variable',
                                 "data" => $item['variables_selected'],
-                                "last_data" => $last_data,
+                                "id"=>$item['id'],
                         ])
                 @endforeach
                     @include("partials.v1.form.form_list",[
