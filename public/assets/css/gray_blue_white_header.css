@@ -9,8 +9,8 @@
 :root {
     --style_primary: #223045;
     --style_secondary: #4287f5;
-    --style_header_color: #000000;
+    --style_header_color: #f2f2f2;
     --style_orange: #223045;
     --style_orange_light: #4287f5;
-    --style_header_button: #ffffff;
+    --style_header_button: #223045;
 }
