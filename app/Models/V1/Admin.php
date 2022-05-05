@@ -192,6 +192,10 @@ class Admin extends Model
                 "key" => "Cafe - naranja - Encabezado negro",
                 "value" => "orange_brown_black_header"
             ],
+            [
+                "key" => "Por defecto",
+                "value" => "style"
+            ],
 
 
         ];
@@ -226,6 +230,7 @@ class Admin extends Model
             "orange_brown" => "Cafe - naranja",
             "orange_brown_white_header" => "Cafe - naranja - Encabezado blanco",
             "orange_brown_black_header" => "Cafe - naranja - Encabezado negro",
+            "style" => "Por defecto"
         };
     }
 
