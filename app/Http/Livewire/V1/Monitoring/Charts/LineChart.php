@@ -39,11 +39,12 @@ class LineChart extends Component
                 array_push($data[$index], round($raw_json[$data['variable_name']], 2));
                 array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
             }
-                $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
+            $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
     }
 
-    public function startDateRange(){
+    public function startDateRange()
+    {
         $this->emit('loading');
 
         if ($this->time == 1) {
@@ -71,9 +72,9 @@ class LineChart extends Component
         }
         $this->data_chart = $data_chart;
         $this->emit('changeAxis', ['series' => $this->series,  'x_axis'=>$this->x_axis]);
-
     }
-    public function changeDateRange($start, $end){
+    public function changeDateRange($start, $end)
+    {
         $this->emit('loading');
         $this->start = $start;
         $this->end = $end;
@@ -108,7 +109,8 @@ class LineChart extends Component
         $this->emit('changeAxis', ['series' => $this->series,  'x_axis'=>$this->x_axis]);
     }
     public function changeTime($time)
-    {$this->emit('loading');
+    {
+        $this->emit('loading');
 
         $this->time = $time;
         if ($time == 1) {

@@ -25,7 +25,6 @@ class EquipmentTypeAddService extends Singleton
     {
         $equipmentType = EquipmentType::create($this->mapper($component));
         $component->redirectRoute("administrar.v1.equipos.tipos.detalle", ["equipmentType" => $equipmentType->id]);
-
     }
 
     private function mapper(Component $component)

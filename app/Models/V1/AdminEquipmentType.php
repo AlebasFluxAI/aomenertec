@@ -25,5 +25,4 @@ class AdminEquipmentType extends Model
     {
         return $this->hasOne(Admin::class);
     }
-
 }

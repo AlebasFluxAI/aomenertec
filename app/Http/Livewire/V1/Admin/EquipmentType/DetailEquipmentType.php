@@ -34,7 +34,7 @@ class DetailEquipmentType extends Component
 
     public function render()
     {
-        return view('livewire.v1.admin.equipmentType.detail-equipment-type',)
+        return view('livewire.v1.admin.equipmentType.detail-equipment-type', )
             ->extends('layouts.v1.app');
     }
 }

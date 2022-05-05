@@ -71,7 +71,6 @@ class Monitoring extends Component
         $this->time_id = 1;
         if ($this->time_id == 1) {
             $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
-
         } elseif ($this->time_id == 2) {
             $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
         } elseif ($this->time_id == 3) {
@@ -91,14 +90,10 @@ class Monitoring extends Component
 
     public function updatedVariableChartId()
     {
-
-
         foreach ($this->variables as $variable) {
-
             if ($variable['id'] == $this->variable_chart_id) {
                 $this->chart_type = $variable['chart_type'];
             }
-
         }
         $this->variables_selected = [];
         foreach ($this->data_frame as $item) {
@@ -138,10 +133,8 @@ class Monitoring extends Component
 
     public function restartDateRange()
     {
-
         if ($this->time_id == 1) {
             $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
-
         } elseif ($this->time_id == 2) {
             $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
         } elseif ($this->time_id == 3) {
@@ -153,8 +146,6 @@ class Monitoring extends Component
         $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
         $this->date_range = $this->start . " - " . $this->end;
         $this->emit('startDateRange');
-
-
     }
 
     /* public function getListeners()
@@ -192,6 +183,5 @@ class Monitoring extends Component
     {
         return view('livewire.v1.admin.client.monitoring')
             ->extends('layouts.v1.app');
-
     }
 }
