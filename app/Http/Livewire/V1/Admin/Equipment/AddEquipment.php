@@ -67,6 +67,11 @@ class AddEquipment extends Component
         $this->addEquipmentService->updatingSearch($this);
     }
 
+    public function refreshEquipmentTypes()
+    {
+
+    }
+
     public function render()
     {
         return view('livewire.v1.admin.equipment.add-equipment')

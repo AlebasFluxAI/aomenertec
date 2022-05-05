@@ -42,7 +42,7 @@ class AddEquipmentType extends Component
 
     public function render()
     {
-        return view('livewire.administrar.v1.equipmentType.add-equipment-type')
+        return view('livewire.v1.admin.equipmentType.add-equipment-type',)
             ->extends('layouts.v1.app');
     }
 }

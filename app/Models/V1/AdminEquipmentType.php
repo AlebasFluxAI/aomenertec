@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models\V1;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class AdminEquipmentType extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    protected $fillable = [
+        "admin_id",
+        "equipment_type_id"
+    ];
+
+    public function equipmentType()
+    {
+        return $this->hasOne(EquipmentType::class);
+    }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+}

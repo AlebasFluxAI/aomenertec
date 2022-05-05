@@ -7,11 +7,10 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-    --style_primary: #f5b042;
-    --style_secondary: #f58442;
-    --style_header_color: #f5e342;
-    --style_orange: #f5b042;
-    --style_orange_light: #f58442;
+    --style_primary: #223045;
+    --style_secondary: #4287f5;
+    --style_header_color: #f2f2f2;
+    --style_orange: #223045;
+    --style_orange_light: #4287f5;
+    --style_header_button: #223045;
 }
-
-

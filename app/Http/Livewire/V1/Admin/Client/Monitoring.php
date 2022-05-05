@@ -49,7 +49,7 @@ class Monitoring extends Component
             $aux = [];
             $var_data_frame = $this->data_frame->where('variable_id', $variable['id'])->all();
             foreach ($var_data_frame as $item) {
-                $item['value'] = round($this->last_data[$item['variable_name']],2);
+                $item['value'] = round($this->last_data[$item['variable_name']], 2);
                 array_push($aux, $item);
             }
             array_push($this->cards, [
@@ -122,7 +122,7 @@ class Monitoring extends Component
             $aux = [];
             $var_data_frame = $this->data_frame->where('variable_id', $value)->all();
             foreach ($var_data_frame as $item) {
-                $item['value'] = round($this->last_data[$item['variable_name']],2);
+                $item['value'] = round($this->last_data[$item['variable_name']], 2);
                 array_push($aux, $item);
             }
             $this->cards = array_replace($this->cards, [

@@ -23,9 +23,9 @@ class EquipmentTypeAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-        EquipmentType::create($this->mapper($component));
-        $component->emitTo('livewire-toast', 'show', 'Tipo de equipo ' . $component->type . ' creada con exito.');
-        $component->reset();
+        $equipmentType = EquipmentType::create($this->mapper($component));
+        $component->redirectRoute("administrar.v1.equipos.tipos.detalle", ["equipmentType" => $equipmentType->id]);
+
     }
 
     private function mapper(Component $component)
