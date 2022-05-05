@@ -17,6 +17,11 @@
                                                     "title"=>"Grafica",
 
                                                 ],
+[
+                                                    "title"=>"Reactivos",
+                                                    "action" => "emit('editAxisReactive')"
+
+                                                ],
 
                                            ],
 
@@ -33,8 +38,18 @@
                                                                         "data_chart" => $data_chart
 
                                                                      ]
-                                                            ]
                                                 ],
+                                                [
+                                                    "view_name"=>"partials.v1.chart.reactive_data",
+                                                    "view_values"=>  [
+
+                                                                        "variables"=>$reactive_variables,
+                                                                        "client"=>$client,
+
+                                                                     ]
+                                                ],
+
+                                            ],
 
 
 
