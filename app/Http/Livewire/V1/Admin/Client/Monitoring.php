@@ -26,6 +26,7 @@ class Monitoring extends Component
     public $client;
     public $chart_type;
     public $variables_collect;
+    public $reactive_variables;
     protected $listeners = ['echo:data-monitoring,.dataEventAdd' => 'addData1', 'changeDateRange'];
     protected $rules = [
 
@@ -42,6 +43,8 @@ class Monitoring extends Component
         $this->last_data = collect(json_decode($last_data->raw_json, true));
         $this->data_frame = collect(config('data-frame.data_frame'));
         $this->variables = collect(config('data-frame.variables'));
+        $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
+
         $this->cards = [];
         $this->variable_chart_id = 1;
         $this->variables_selected = [];

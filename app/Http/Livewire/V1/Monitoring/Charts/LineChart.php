@@ -42,10 +42,15 @@ class LineChart extends Component
                     $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                     array_push($data[$index], round($raw_json[$data['variable_name']], 2));
                 }
-               array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                if ($index == 0) {
+                    array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                }
             }
+
+
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
+
 
     }
 
@@ -77,7 +82,9 @@ class LineChart extends Component
                     $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                     array_push($data[$index], round($raw_json[$data['variable_name']], 2));
                 }
-                array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                if ($index == 0) {
+                    array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                }
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
@@ -118,7 +125,9 @@ class LineChart extends Component
                     $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                     array_push($data[$index], round($raw_json[$data['variable_name']], 2));
                 }
-                array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                if ($index == 0) {
+                    array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                }
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
@@ -157,7 +166,9 @@ class LineChart extends Component
                     $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                     array_push($data[$index], round($raw_json[$data['variable_name']], 2));
                 }
-                array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                if ($index == 0) {
+                    array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
+                }
             }
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data[$index]];
         }
