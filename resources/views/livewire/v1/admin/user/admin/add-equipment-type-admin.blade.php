@@ -40,11 +40,4 @@
                          ]
         ])
 
-    @include("partials.v1.clientAssignation.client_assignation",[
-                                   'client_picked'=>$client_picked,
-                                  'message_client'=>$message_client,
-                                  'clients'=>$clients,
-                                  'clients'=>$clients,
-                                  'clientsRelated'=>$clientsRelated,
-          ])
 </div>
