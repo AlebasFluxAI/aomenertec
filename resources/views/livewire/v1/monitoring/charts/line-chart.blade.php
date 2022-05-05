@@ -52,7 +52,7 @@
                         categories: []
                     },
                     noData: {
-                        text: 'Loading...'
+                        text: 'Datos no encontrados'
                     }
                 });
             })

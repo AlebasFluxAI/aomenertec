@@ -5,12 +5,12 @@ return [
         ['id' => 1,  'display_name' =>  'Energia activa(kWh)',         'icon'=>'fas fa-tachometer-alt',                  'variable_name'=> 'import_wh',          'chart_type' => 'line',   'style' => 'active_energy'],
         ['id' => 2,  'display_name' =>  'Horario(kWh)',                'icon'=>'fas fa-tachometer-alt',                  'variable_name'=> 'import_wh',          'chart_type' => 'column', 'style' => 'active_energy'],
         ['id' => 3,  'display_name' =>  'Acumulado fases(kWh)',        'icon'=>'fas fa-tachometer-alt',                  'variable_name'=> 'phase_import_kwh',   'chart_type' => 'line',   'style' => 'active_energy'],
-        ['id' => 4,  'display_name' =>  'Horario fases(kWh)',        'icon'=>'fas fa-tachometer-alt',                  'variable_name'=> 'phase_import_kwh',   'chart_type' => 'line',   'style' => 'active_energy'],
+        ['id' => 4,  'display_name' =>  'Horario fases(kWh)',        'icon'=>'fas fa-tachometer-alt',                  'variable_name'=> 'phase_import_kwh',   'chart_type' => 'column',   'style' => 'active_energy'],
 
         ['id' => 5,  'display_name' =>  'Energia reactiva(kVARh)',     'icon'=>'fas fa-atom',                            'variable_name'=> 'import_VArh',        'chart_type' => 'line',   'style' => 'reactive_energy'],
         ['id' => 6,  'display_name' =>  'Horario(kVARh)',              'icon'=>'fas fa-atom',                            'variable_name'=> 'import_wh',          'chart_type' => 'column', 'style' => 'reactive_energy'],
         ['id' => 7,  'display_name' =>  'Acumulado fases (kVARh)',     'icon'=>'fas fa-atom',                            'variable_name'=> 'phase_import_kvarh', 'chart_type' => 'line',   'style' => 'reactive_energy'],
-        ['id' => 8,  'display_name' =>  'Horario fases (kVARh)',     'icon'=>'fas fa-atom',                            'variable_name'=> 'phase_import_kvarh', 'chart_type' => 'line',   'style' => 'reactive_energy'],
+        ['id' => 8,  'display_name' =>  'Horario fases (kVARh)',     'icon'=>'fas fa-atom',                            'variable_name'=> 'phase_import_kvarh', 'chart_type' => 'column',   'style' => 'reactive_energy'],
 
         ['id' => 9,  'display_name' =>  'Reactiva Capacitiva(kVARCh)', 'icon'=>"fa-brands fa-creative-commons-nd",       'variable_name'=> 'phase_import_kvarh', 'chart_type' => 'line',   'style' => 'reactive_capacitive'],
         ['id' => 10,  'display_name' => 'Horario (kVARCh)',             'icon'=>'fa-brands fa-creative-commons-nd',       'variable_name'=> 'import_VArh',        'chart_type' => 'column', 'style' => 'reactive_capacitive'],
