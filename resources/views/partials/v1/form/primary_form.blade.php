@@ -47,7 +47,7 @@
                                 @include("partials.v1.form.form_dropdown",[
                                               "icon_class"=>$form_input["icon_class"]??null,
                                               "dropdown_editing"=>$form_input["dropdown_editing"],
-                                              "dropdown_refresh"=>$form_input["dropdown_refresh"],
+                                              "dropdown_refresh"=>$form_input["dropdown_refresh"]??null,
                                               "placeholder"=>$form_input["placeholder"],
                                               "input_field"=>$form_input["input_field"]??"",
                                               "col_with"=>$form_input["col_with"],

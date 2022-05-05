@@ -68,7 +68,15 @@
                                                 "conditional"=>"conditionalDelete",
                                                 "icon"=>"fas fa-trash",
                                                 "tooltip_title"=>"Eliminar"
-                                        ]
+                                        ],
+                                        [
+                                           "redirect"=>[
+                                                       "route"=>"administrar.v1.usuarios.admin.agregar_tipos_equipo",
+                                                       "binding"=>"admin"
+                                                 ],
+                                               "icon"=>"fas fa-computer",
+                                               "tooltip_title"=>"Asociar tipos de equipos",
+                                         ],
                                        ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

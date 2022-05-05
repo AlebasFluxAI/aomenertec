@@ -48,7 +48,7 @@ class IndexEquipmentType extends Component
     public function render()
     {
         return view(
-            'livewire.administrar.v1.equipmentType.index-equipment-type',
+            'livewire.v1.admin.equipmentType.index-equipment-type',
             [
                 "data" => EquipmentType::paginate(15)
             ]

@@ -35,7 +35,7 @@ class EditEquipmentType extends Component
 
     public function render()
     {
-        return view('livewire.administrar.v1.equipmentType.edit-equipment-type')
+        return view('livewire.v1.admin.equipmentType.edit-equipment-type',)
             ->extends('layouts.v1.app');
     }
 }
