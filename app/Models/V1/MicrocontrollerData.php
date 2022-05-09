@@ -74,7 +74,6 @@ class MicrocontrollerData extends Model
         //$this->alert();
     }
 
-
     private function jsonEdit($json)
     {
         $decode = bin2hex(base64_decode($this->raw_json));
@@ -90,6 +89,7 @@ class MicrocontrollerData extends Model
         $timestamp_unix = unpack('l', $bin)[1];   /////// timesatmp correct
         $timestamp_unix = $timestamp_unix - ($timestamp_unix % 60);
         $current_time = new DateTime("@$timestamp_unix");*/
+
 
         $date = new DateTime();
         $unixTime = $date->getTimestamp();
@@ -107,7 +107,6 @@ class MicrocontrollerData extends Model
 
             $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         }
-
         $timestamp_unix = $current_time->getTimestamp();//delete
         $json['timestamp'] = $timestamp_unix;
 
@@ -237,11 +236,15 @@ class MicrocontrollerData extends Model
             ]);
         }
         if ($minute == 59) {
-            $percent_penalizable_inductive = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
-            if ($percent_penalizable_inductive >= 50) {
-                $penalizable_inductive = ($this->interval_real_consumption * $percent_penalizable_inductive / 100) - ($this->interval_real_consumption * 0.5);
+            if ($this->interval_real_consumption == 0){
+                $penalizable_inductive = $this->interval_reactive_inductive_consumption;
             } else {
-                $penalizable_inductive = 0;
+                $percent_penalizable_inductive = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
+                if ($percent_penalizable_inductive >= 50) {
+                    $penalizable_inductive = ($this->interval_real_consumption * $percent_penalizable_inductive / 100) - ($this->interval_real_consumption * 0.5);
+                } else {
+                    $penalizable_inductive = 0;
+                }
             }
             DailyMicrocontrollerData::create([
                 'year' => $year,
@@ -256,6 +259,7 @@ class MicrocontrollerData extends Model
                 'penalizable_reactive_capacitive_consumption' => $this->interval_reactive_capacitive_consumption,
                 'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
             ]);
+
             if ($hour == 23) {
                 $json = $this->raw_json;
                 $data_frame = collect(config('data-frame.data_frame'));
@@ -265,20 +269,21 @@ class MicrocontrollerData extends Model
                 $interval_active_day = 0;
                 $interval_capacitive_day = 0;
                 $interval_inductive_day = 0;
-                $data_day = Client::find($this->client_id)->dailyMicrocontrollerData()->where('year', $year)->where('month', $month)->where('day', $day)->get();
-                foreach ($accum_variable as $variable){
+                foreach ($accum_variable as $variable) {
                     $json[$variable['variable_name']] = 0;
-                    foreach ($data_day as $index => $item){
-                        $raw_json = json_decode($item->raw_json, true);
-                        $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
-                        if ($index == 0){
-                            $interval_active_day = $interval_active_day + $item->interval_real_consumption;
-                            $interval_capacitive_day = $interval_capacitive_day + $item->interval_reactive_capacitive_consumption;
-                            $interval_inductive_day = $interval_inductive_day + $item->interval_reactive_inductive_consumption;
-                            $active_consumption = $active_consumption + $item->interval_real_consumption;
-                            $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
-                            $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
+                }
+                $data_day = Client::find($this->client_id)->dailyMicrocontrollerData()->where('year', $year)->where('month', $month)->where('day', $day)->get();
+                if (count($data_day) > 0) {
+                    foreach ($data_day as $item) {
+                        foreach ($accum_variable as $index=>$variable) {
+                            $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                            $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
                         }
+                        $interval_active_day = $interval_active_day + $item->interval_real_consumption;
+                        $interval_capacitive_day = $interval_capacitive_day + $item->interval_reactive_capacitive_consumption;
+                        $interval_inductive_day = $interval_inductive_day + $item->interval_reactive_inductive_consumption;
+                        $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
+                        $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
                     }
                 }
                 MonthlyMicrocontrollerData::create([
@@ -292,7 +297,7 @@ class MicrocontrollerData extends Model
                     'interval_reactive_inductive_consumption' => $interval_inductive_day,
                     'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_day,
                     'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
-                    'raw_json' => $json,
+                    'raw_json' => json_encode($json),
                 ]);
                 if ($day == $last_day_month) {
                     $json = $this->raw_json;
@@ -301,20 +306,21 @@ class MicrocontrollerData extends Model
                     $interval_active_month = 0;
                     $interval_capacitive_month = 0;
                     $interval_inductive_month = 0;
-                    $data_month = Client::find($this->client_id)->monthlyMicrocontrollerData()->where('year', $year)->where('month', $month)->get();
-                    foreach ($accum_variable as $variable){
+                    foreach ($accum_variable as $variable) {
                         $json[$variable['variable_name']] = 0;
-                        foreach ($data_month as $index => $item){
-                            $raw_json = json_decode($item->raw_json, true);
-                            $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
-                            if ($index == 0){
-                                $interval_active_month = $interval_active_month + $item->interval_real_consumption;
-                                $interval_capacitive_month = $interval_capacitive_month + $item->interval_reactive_capacitive_consumption;
-                                $interval_inductive_month = $interval_inductive_month + $item->interval_reactive_inductive_consumption;
-                                $active_consumption = $active_consumption + $item->interval_real_consumption;
-                                $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
-                                $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
+                    }
+                    $data_month = Client::find($this->client_id)->monthlyMicrocontrollerData()->where('year', $year)->where('month', $month)->get();
+                    if (count($data_month) > 0) {
+                        foreach ($data_month as $item) {
+                            foreach ($accum_variable as $variable) {
+                                $raw_json = json_decode($item->raw_json, true);
+                                $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
                             }
+                            $interval_active_month = $interval_active_month + $item->interval_real_consumption;
+                            $interval_capacitive_month = $interval_capacitive_month + $item->interval_reactive_capacitive_consumption;
+                            $interval_inductive_month = $interval_inductive_month + $item->interval_reactive_inductive_consumption;
+                            $penalizable_inductive_month = $penalizable_inductive_month + $item->penalizable_reactive_inductive_consumption;
+                            $penalizable_capacitive_month = $penalizable_capacitive_month + $item->penalizable_reactive_capacitive_consumption;
                         }
                     }
                     AnnualMicrocontrollerData::create([
@@ -327,7 +333,7 @@ class MicrocontrollerData extends Model
                         'interval_reactive_inductive_consumption' => $interval_inductive_month,
                         'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_month,
                         'penalizable_reactive_inductive_consumption' => $penalizable_inductive_month,
-                        'raw_json' => $json,
+                        'raw_json' => json_encode($json),
                     ]);
                 }
             }
