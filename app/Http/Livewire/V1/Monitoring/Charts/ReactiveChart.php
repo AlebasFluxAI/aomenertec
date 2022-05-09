@@ -30,13 +30,13 @@ class ReactiveChart extends Component
         $this->series_reactive = [];
         $this->x_axis_reactive = [];
 
+
     }
 
     public function editAxisReactive(){
         $this->series_reactive = [];
         $this->x_axis_reactive = [];
         $array_aux = $this->data_chart_reactive->reverse();
-
         foreach ($this->reactive_variables as $index=>$data) {
             $data_aux[$index] = [];
             foreach ($array_aux as $item) {
