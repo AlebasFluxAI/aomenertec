@@ -64,6 +64,7 @@
                     $('input[name="datetimes"]').daterangepicker({
                         timePicker: true,
                         timePicker24Hour: true,
+                        showDropdowns:true,
                         locale: {
                             format: 'YYYY-MM-DD HH:mm'
                         }

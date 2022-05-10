@@ -274,7 +274,7 @@
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#063b66;">
                                                     <ul>
                                                         <li> Ingrese al siguiente
-                                                            enlace: <a href="http://3.12.98.178/login">http://3.12.98.178/login"</a>.
+                                                            enlace: <a href="{{url("/login")}}">{{url("/login")}}</a>.
                                                         </li>
 
                                                         <li> Inicie sesion con su correo electronico
@@ -338,7 +338,7 @@
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;text-align:center;color:#063b66;">
                                                     Para cambiar tu contraseña por defecto ingresa al siguiente enlace:
                                                     <br><br><a
-                                                        href="http://3.12.98.178/forgot-password">http://3.12.98.178/forgot-password</a>
+                                                        href="{{url("/forgot-password")}}">{{url("/forgot-password")}}</a>
                                                 </div>
                                             </td>
                                         </tr>
