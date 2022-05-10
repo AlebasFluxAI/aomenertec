@@ -43,11 +43,11 @@ class Menu extends Singleton
                 ]),
 
                 new Menu("Equipos", null, [
-                    new Menu("Equipos", "administrar.v1.equipos.listado", [],),
+                    new Menu("Equipos", "administrar.v1.equipos.listado", [], ),
                     new Menu("Alertas", null, [
                         new Menu("Alertas", "administrar.v1.equipos.alertas.listado", []),
-                    ],),
-                ],)
+                    ], ),
+                ], )
             ]
         )
         ];
@@ -211,6 +211,5 @@ class Menu extends Singleton
     public static function getUserModel()
     {
         return User::getUserModel();
-
     }
 }

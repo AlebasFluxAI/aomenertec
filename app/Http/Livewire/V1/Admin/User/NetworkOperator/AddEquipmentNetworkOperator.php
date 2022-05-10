@@ -31,7 +31,6 @@ class AddEquipmentNetworkOperator extends Component
 
     public function submitForm()
     {
-
         $this->networkOperatorAddEquipmentService->submitForm($this);
     }
 
@@ -48,7 +47,6 @@ class AddEquipmentNetworkOperator extends Component
 
     public function delete($id)
     {
-
         $this->networkOperatorAddEquipmentService->delete($this, $id);
     }
 

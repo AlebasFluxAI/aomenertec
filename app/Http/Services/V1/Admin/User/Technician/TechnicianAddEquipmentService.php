@@ -58,12 +58,10 @@ class TechnicianAddEquipmentService extends Singleton
     {
         $component->equipmentRelated = $component->model->equipments()->get();
         $component->equipments = $this->getEquipments();
-
     }
 
     public function delete(Component $component, $equipmentId)
     {
-
         Equipment::whereId($equipmentId)
             ->update([
                 "technician_id" => null
@@ -74,12 +72,9 @@ class TechnicianAddEquipmentService extends Singleton
 
         $this->refreshAdminEquipmentType($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);
-
     }
 
     public function assignType(Component $component)
     {
     }
-
 }
-

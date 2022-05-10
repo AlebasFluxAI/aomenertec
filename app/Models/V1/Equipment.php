@@ -72,5 +72,4 @@ class Equipment extends Model
     {
         return $this->belongsTo(Technician::class);
     }
-
 }

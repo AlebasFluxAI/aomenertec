@@ -80,7 +80,6 @@ class TechnicianAddService extends Singleton
 
             $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $seller->id]);
         });
-        
     }
 
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Technician;
 
-
 use App\Http\Services\V1\Admin\User\Technician\TechnicianAddEquipmentService;
 use App\Models\V1\Technician;
 use Livewire\Component;
@@ -32,7 +31,6 @@ class AddEquipmentTechnician extends Component
 
     public function submitForm()
     {
-
         $this->technicianAddEquipmentTypeService->submitForm($this);
     }
 
@@ -49,7 +47,6 @@ class AddEquipmentTechnician extends Component
 
     public function delete($id)
     {
-
         $this->technicianAddEquipmentTypeService->delete($this, $id);
     }
 

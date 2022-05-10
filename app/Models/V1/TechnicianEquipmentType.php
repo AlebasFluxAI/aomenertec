@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TechnicianEquipmentType extends Model
 {
-
     use HasFactory;
     use SoftDeletes;
 

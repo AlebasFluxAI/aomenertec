@@ -42,7 +42,6 @@ class DatabaseSeeder extends Seeder
 
     public function call($class, $silent = false, $parameters = [])
     {
-        
         if (SeederModel::where('name', $class)->exists()) {
             return $this;
         }
@@ -53,5 +52,4 @@ class DatabaseSeeder extends Seeder
 
         return $return;
     }
-
 }

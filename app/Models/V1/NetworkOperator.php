@@ -118,10 +118,12 @@ class NetworkOperator extends Model
 
     public function networkOperatorEquipmentToTechnicianAsKeyValue()
     {
-        return (array_merge([[
+        return (array_merge(
+            [[
             "key" => "Seleccione el tipo de equipo ...",
             "value" => null
-        ]], ($this->equipments()
+        ]],
+            ($this->equipments()
             ->whereNull("technician_id")
             ->with("equipmentType")->get()->map(function ($equipment) {
                 return [

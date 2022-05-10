@@ -72,7 +72,6 @@ class TechnicianAddClientService extends Singleton
 
     public function addClient(Component $component)
     {
-
         DB::transaction(function () use ($component) {
             if (!$component->client_picked) {
                 return;

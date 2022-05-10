@@ -73,7 +73,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('editar/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\EditNetworkOperator::class)->name("administrar.v1.usuarios.operadores.editar");
                         Route::get('detalle/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\DetailsNetworkOperator::class)->name("administrar.v1.usuarios.operadores.detalles");
                         Route::get('agregar_equipos/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\AddEquipmentNetworkOperator::class)->name("administrar.v1.usuarios.operadores.agregar_equipos");
-
                     });
 
 
@@ -92,7 +91,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('detalle/{supervisor}', Livewire\V1\Admin\User\Supervisor\DetailsSupervisor::class)->name("administrar.v1.usuarios.supervisores.detalles");
                         Route::get('editar/{supervisor}', Livewire\V1\Admin\User\Supervisor\EditSupervisor::class)->name("administrar.v1.usuarios.supervisores.editar");
                         Route::get('agregar_clientes/{supervisor}', Livewire\V1\Admin\User\Supervisor\AddClientSupervisor::class)->name("administrar.v1.usuarios.supervisores.agregar_clientes");
-
                     });
 
 
