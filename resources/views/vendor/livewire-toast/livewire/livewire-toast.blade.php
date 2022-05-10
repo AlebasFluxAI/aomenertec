@@ -1,4 +1,4 @@
-<div class="fixed {{$positionCss}} @if($hideOnClick) cursor-pointer @endif"
+<div style="z-index: 1" class="fixed {{$positionCss}} @if($hideOnClick) cursor-pointer @endif"
      x-data="{show: false, timeout: null, duration: null}"
      @if($message)
      x-init="() => { duration = @this.duration; clearTimeout(timeout); show = true;

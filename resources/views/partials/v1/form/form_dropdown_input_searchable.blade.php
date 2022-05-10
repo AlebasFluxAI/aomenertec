@@ -56,6 +56,7 @@
                     <ul class="dropdown-menu list-search">
                         <h6 class="dropdown-header"><b>Seleccione {{$title_dropdowm??"opción"}}</b></h6>
                         @foreach($dropdown_results as $dropdown_result)
+
                             <li class="dropdown-item">
                                 @if($form_group??true)
                                     <a wire:click="{{$selected_value_function}}('{{ $dropdown_result }}')"

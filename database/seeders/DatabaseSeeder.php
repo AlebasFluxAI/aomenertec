@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\V1\ClientTypeEquipmentTypes;
 use Illuminate\Database\Seeder;
+use App\Models\V1\Seeder as SeederModel;
 
 class DatabaseSeeder extends Seeder
 {
@@ -37,5 +38,18 @@ class DatabaseSeeder extends Seeder
             RoleHasPermissionsTableSeeder::class,
             ClientsTableSeeder::class,
         ]);
+    }
+
+    public function call($class, $silent = false, $parameters = [])
+    {
+        if (SeederModel::where('name', $class)->exists()) {
+            return $this;
+        }
+
+        $return = parent::call($class, $silent = false);
+
+        SeederModel::create(['name' => $class]);
+
+        return $return;
     }
 }

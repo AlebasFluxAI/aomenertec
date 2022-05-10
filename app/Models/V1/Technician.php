@@ -74,4 +74,14 @@ class Technician extends Model
     {
         return $this->hasMany(ClientTechnician::class);
     }
+
+    public function technicianEquipmentTypes()
+    {
+        return $this->hasMany(TechnicianEquipmentType::class);
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
 }

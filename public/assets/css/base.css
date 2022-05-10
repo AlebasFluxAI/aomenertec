@@ -13,6 +13,22 @@
     --style_header_button: #f5b042;
 }
 
+.dot-success {
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: teal;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot-warning {
+    height: 1.5rem;
+    width: 1.5rem;
+    background-color: #cc0000;
+    border-radius: 50%;
+    display: inline-block;
+}
+
 .form-v2-input {
     background-color: #f2f2f2;
     border-radius: 2px;

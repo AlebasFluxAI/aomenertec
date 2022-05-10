@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Jetstream\Role;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Permission\Traits\HasPermissions;
 
 class Admin extends Model
 {
     use HasFactory;
     use ImageableTrait;
+    use HasPermissions;
 
 
     protected $fillable = [
@@ -94,11 +96,6 @@ class Admin extends Model
                                 "title" => "Equipos",
                                 "route" => "administrar.v1.equipos.listado",
                                 "submenu" => [],
-                            ],
-                            [
-                                "title" => "Tipos",
-                                "route" => "administrar.v1.equipos.tipos.listado",
-                                "submenu" => []
                             ],
                             [
                                 "title" => "Alertas",
@@ -242,5 +239,65 @@ class Admin extends Model
     public function networkOperators()
     {
         return $this->hasMany(NetworkOperator::class);
+    }
+
+    public function adminEquipmentTypesAsKeyValue()
+    {
+        return (array_merge(
+            [[
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]],
+            ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
+            return [
+                "key" => $equipmentType->equipmentType->id . "- " . $equipmentType->equipmentType->type,
+                "value" => $equipmentType->equipmentType->id,
+            ];
+        }))->toArray()
+        ));
+    }
+
+    public function adminEquipmentTypes()
+    {
+        return $this->hasMany(AdminEquipmentType::class);
+    }
+
+    public function adminEquipmentsAsKeyValue()
+    {
+        return (array_merge(
+            [[
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]],
+            ($this->equipments()->with("equipmentType")->get()->map(function ($equipment) {
+            return [
+                "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                "value" => $equipment->id,
+            ];
+        }))->toArray()
+        ));
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
+
+    public function adminEquipmentToNetworkOperatorsAsKeyValue()
+    {
+        return (array_merge(
+            [[
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]],
+            ($this->equipments()
+            ->whereNull("network_operator_id")
+            ->with("equipmentType")->get()->map(function ($equipment) {
+                return [
+                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                    "value" => $equipment->id,
+                ];
+            }))->toArray()
+        ));
     }
 }

@@ -8,6 +8,7 @@ use App\Models\V1\Support;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class SupportAddClientService extends Singleton
@@ -72,18 +73,20 @@ class SupportAddClientService extends Singleton
 
     public function addClient(Component $component)
     {
-        if ($component->model->clientSupports()->whereClientId($component->client_id)->exists()) {
-            $this->refreshClients($component);
+        DB::transaction(function () use ($component) {
+            if ($component->model->clientSupports()->whereClientId($component->client_id)->exists()) {
+                $this->refreshClients($component);
 
-            return;
-        }
-        $component->model->clientSupports()->create(
-            [
-                "active" => true,
-                "client_id" => $component->client_id
-            ]
-        );
-        $this->refreshClients($component);
+                return;
+            }
+            $component->model->clientSupports()->create(
+                [
+                    "active" => true,
+                    "client_id" => $component->client_id
+                ]
+            );
+            $this->refreshClients($component);
+        });
     }
 
     public function refreshClients(Component $component)

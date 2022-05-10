@@ -18,11 +18,11 @@ class AdminEquipmentType extends Model
 
     public function equipmentType()
     {
-        return $this->hasOne(EquipmentType::class);
+        return $this->belongsTo(EquipmentType::class);
     }
 
     public function admin()
     {
-        return $this->hasOne(Admin::class);
+        return $this->belongsTo(Admin::class);
     }
 }

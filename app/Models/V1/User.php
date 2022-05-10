@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -76,6 +77,24 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public static function getUserModel()
+    {
+        $user = Auth::user();
+        $userRole = $user->roles->first()->name;
+        $model = match ($userRole) {
+            User::TYPE_NETWORK_OPERATOR => $user->networkOperator,
+            User::TYPE_ADMIN => $user->admin,
+            User::TYPE_SUPER_ADMIN => $user->superAdmin,
+            User::TYPE_SELLER => $user->seller,
+            User::TYPE_SUPERVISOR => $user->supervisor,
+            User::TYPE_SUPPORT => $user->support,
+            User::TYPE_TECHNICIAN => $user->technician,
+            default => [],
+        };
+
+        return $model;
+    }
+
     public function networkOperator()
     {
         return $this->hasOne(NetworkOperator::class);
@@ -86,12 +105,10 @@ class User extends Authenticatable
         return $this->hasOne(Seller::class);
     }
 
-
     public function technician()
     {
         return $this->hasOne(Technician::class);
     }
-
 
     public function supervisor()
     {
@@ -113,7 +130,6 @@ class User extends Authenticatable
         return $this->hasOne(SuperAdmin::class);
     }
 
-
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);
@@ -123,7 +139,6 @@ class User extends Authenticatable
     {
         $this->password = bcrypt($this->identification);
     }
-
 
     public function getUserType()
     {

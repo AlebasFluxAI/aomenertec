@@ -1,0 +1,9 @@
+<?php
+
+namespace App\Http\Resources\V1;
+
+class ColTypeEnum
+{
+    public const COL_TYPE_BOOLEAN = "boolean";
+    public const COL_TYPE_TEXT = "text";
+}

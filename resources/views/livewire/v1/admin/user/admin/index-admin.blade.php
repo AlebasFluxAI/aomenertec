@@ -77,6 +77,14 @@
                                                "icon"=>"fas fa-computer",
                                                "tooltip_title"=>"Asociar tipos de equipos",
                                          ],
+                                            [
+                                           "redirect"=>[
+                                                       "route"=>"administrar.v1.usuarios.admin.agregar_equipos",
+                                                       "binding"=>"admin"
+                                                 ],
+                                               "icon"=>"fas fa-laptop-medical",
+                                               "tooltip_title"=>"Asociar equipos",
+                                         ],
                                        ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

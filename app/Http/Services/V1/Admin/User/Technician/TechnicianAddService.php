@@ -7,6 +7,7 @@ use App\Models\V1\Technician;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class TechnicianAddService extends Singleton
@@ -65,18 +66,20 @@ class TechnicianAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $component->validate();
+        DB::transaction(function () use ($component) {
+            $component->validate();
 
-        $seller = Technician::create($this->mapper($component));
-        $user = User::create(array_merge($this->mapper($component), [
-            "password" => bcrypt($component->password),
-            "type" => User::TYPE_TECHNICIAN
-        ]));
-        $seller->update([
-            "user_id" => $user->id
-        ]);
+            $seller = Technician::create($this->mapper($component));
+            $user = User::create(array_merge($this->mapper($component), [
+                "password" => bcrypt($component->password),
+                "type" => User::TYPE_TECHNICIAN
+            ]));
+            $seller->update([
+                "user_id" => $user->id
+            ]);
 
-        $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $seller->id]);
+            $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $seller->id]);
+        });
     }
 
 

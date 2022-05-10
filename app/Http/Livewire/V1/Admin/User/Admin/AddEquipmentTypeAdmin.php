@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Admin;
 
-use App\Http\Services\V1\Admin\User\Admin\AddEquipmentTypeService;
+use App\Http\Services\V1\Admin\User\Admin\AdminAddEquipmentTypeService;
 use App\Models\V1\Admin;
 use Livewire\Component;
 
@@ -13,40 +13,46 @@ class AddEquipmentTypeAdmin extends Component
     public $typeRelated;
     public $types;
     public $type_id;
+    public $equipmentTypeId;
+    public $equipmentTypes;
 
 
-    private $addEquipmentTypeService;
+    private $adminAddEquipmentTypeService;
 
     public function __construct($id = null)
     {
-        $this->addEquipmentTypeService = AddEquipmentTypeService::getInstance();
+        $this->adminAddEquipmentTypeService = AdminAddEquipmentTypeService::getInstance();
         parent::__construct($id);
     }
 
     public function mount(Admin $admin)
     {
-        $this->addEquipmentTypeService->mount($this, $admin);
+        $this->adminAddEquipmentTypeService->mount($this, $admin);
     }
 
-    public function addType()
+    public function submitForm()
     {
-        $this->addEquipmentTypeService->addType($this);
+        $this->adminAddEquipmentTypeService->submitForm($this);
     }
 
     public function updatedType()
     {
-        $this->addEquipmentTypeService->updatedType($this);
+        $this->adminAddEquipmentTypeService->updatedType($this);
     }
 
     public function assignType($client)
     {
-        $this->addEquipmentTypeService->assignType($this, $client);
+        $this->adminAddEquipmentTypeService->assignType($this, $client);
     }
 
 
-    public function delete($client)
+    public function delete($id)
     {
-        $this->addEquipmentTypeService->delete($this, $client["id"]);
+        $this->adminAddEquipmentTypeService->delete($this, $id);
+    }
+
+    public function pass()
+    {
     }
 
     public function render()

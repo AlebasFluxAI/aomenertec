@@ -210,19 +210,6 @@ class Menu extends Singleton
 
     public static function getUserModel()
     {
-        $user = Auth::user();
-        $userRole = $user->roles->first()->name;
-        $model = match ($userRole) {
-            User::TYPE_NETWORK_OPERATOR => $user->networkOperator,
-            User::TYPE_ADMIN => $user->admin,
-            User::TYPE_SUPER_ADMIN => $user->superAdmin,
-            User::TYPE_SELLER => $user->seller,
-            User::TYPE_SUPERVISOR => $user->supervisor,
-            User::TYPE_SUPPORT => $user->support,
-            User::TYPE_TECHNICIAN => $user->technician,
-            default => [],
-        };
-
-        return $model;
+        return User::getUserModel();
     }
 }

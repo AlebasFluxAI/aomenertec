@@ -8,6 +8,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class SupervisorAddService extends Singleton
@@ -39,18 +40,20 @@ class SupervisorAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $component->validate();
+        DB::transaction(function () use ($component) {
+            $component->validate();
 
-        $supervisor = Supervisor::create($this->mapper($component));
-        $user = User::create(array_merge($this->mapper($component), [
-            "password" => bcrypt($component->password),
-            "type" => User::TYPE_SUPERVISOR
-        ]));
-        $supervisor->update([
-            "user_id" => $user->id
-        ]);
+            $supervisor = Supervisor::create($this->mapper($component));
+            $user = User::create(array_merge($this->mapper($component), [
+                "password" => bcrypt($component->password),
+                "type" => User::TYPE_SUPERVISOR
+            ]));
+            $supervisor->update([
+                "user_id" => $user->id
+            ]);
 
-        $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $supervisor->id]);
+            $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $supervisor->id]);
+        });
     }
 
     private function mapper($component)

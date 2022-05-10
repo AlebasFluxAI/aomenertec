@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\Equipment;
 use App\Events\ChatEvent;
 use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
+use App\Models\Traits\FilterTrait;
 use App\Models\Traits\MenuTrait;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
@@ -17,7 +18,7 @@ use function view;
 class IndexEquipment extends Component
 {
     use WithPagination;
-
+    use FilterTrait;
 
     private $indexEquipmentService;
 
@@ -49,8 +50,17 @@ class IndexEquipment extends Component
 
     public function render()
     {
-        return view('livewire.v1.admin.equipment.index-equipment', [
-            "equipment" => Equipment::paginate(15)
-        ])->extends('layouts.v1.app');
+        return view(
+            'livewire.v1.admin.equipment.index-equipment',
+            [
+                "data" => $this->getData()
+
+            ]
+        )->extends('layouts.v1.app');
+    }
+
+    public function getData()
+    {
+        return $this->indexEquipmentService->getData($this);
     }
 }

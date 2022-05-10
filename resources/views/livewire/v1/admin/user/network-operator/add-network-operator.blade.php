@@ -128,6 +128,7 @@
                                             "dropdown_enter_function"=>"updateAdmins",
                                             "picked_variable"=>$picked,
                                             "dropdown_results"=>$admins,
+                                            "count_bool"=>true,
                                             "selected_value_function"=>"setAdminId",
                                             "dropdown_result_id"=>"id",
                                             "dropdown_result_value"=>"name",

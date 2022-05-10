@@ -6,6 +6,8 @@ use App\Http\Livewire\V1\Admin\Equipment\AddEquipment;
 use App\Http\Services\Singleton;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\User;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class EquipmentAddService extends Singleton
@@ -24,12 +26,13 @@ class EquipmentAddService extends Singleton
 
     public function getEquipmentTypes()
     {
-        return EquipmentType::get()->map(function ($equipmentType) {
-            return [
-                "key" => $equipmentType->id . "- " . $equipmentType->type,
-                "value" => $equipmentType->id,
-            ];
-        });
+        $user = Auth::user();
+        if ($user->superAdmin) {
+            return EquipmentType::getModelAsKeyValue();
+        }
+
+        $userModel = User::getUserModel();
+        return $userModel->adminEquipmentTypesAsKeyValue();
     }
 
     public function loadEquipmentType(Component $component)
@@ -40,15 +43,13 @@ class EquipmentAddService extends Singleton
     public function submitForm(Component $component)
     {
         $equipment = Equipment::create($this->mapper($component));
-        $component->emitTo('livewire-toast', 'show', "Equipo {$equipment->name} creado exitosamente");
-        $component->reset();
+        $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipment->id]);
     }
 
     private function mapper(Component $component)
     {
         return [
             "serial" => $component->equipmentSerial,
-            "name" => $component->equipmentName,
             "description" => $component->equipmentDescription,
             "equipment_type_id" => $component->equipmentTypeId,
         ];
@@ -73,11 +74,5 @@ class EquipmentAddService extends Singleton
 
     public function updatedSelectedState(Component $component, $state)
     {
-        if (!is_null($state)) {
-            $component->states = [
-                ["id" => "2",
-                    "name" => "Kathe"]
-            ];
-        }
     }
 }
