@@ -26,16 +26,22 @@
                         @foreach($table_headers as $table_header)
                             <td>
                                 @if(str_contains($table_header["col_data"],".") and !str_contains($table_header["col_data"],"*") and $table_row->{explode(".",$table_header["col_data"])[0]})
-
-                                    {{ $table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]} }}  {{--Se usa para traer datos de una relacion user.client.name--}}
+                                    @include("partials.v2.table.primary-table-column",[
+                                          "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]},
+                                          "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:""
+                                      ])
                                 @else
-                                    {{$table_row->{$table_header["col_data"]} }}
+                                    @include("partials.v2.table.primary-table-column",[
+                                   "col_data"=>$table_row->{$table_header["col_data"]},
+                                   "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:""
+                               ])
+
                                 @endif
                             </td>
                         @endforeach
                         @isset($table_actions)
                             <td id="table-action-cell">
-                                <div class="container">
+                                <div class="container-fluid">
                                     <div class="row">
                                         @foreach($table_actions as $action_type=>$action_value)
                                             @if($action_type=="edit")
@@ -66,29 +72,35 @@
                                                      ])
                                             @elseif($action_type=="customs")
                                                 @foreach($action_value  as $custom)
+                                                    @if(array_key_exists("limit_roles",$custom))
+                                                        @unlessrole($custom["limit_roles"])
+                                                        @continue
+                                                        @endunlessrole
+                                                    @endif
                                                     @if(array_key_exists("conditional",$custom) and $this->{$custom["conditional"]}(isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                    $table_row->{$table_headers[0]["col_data"]}))
+                                                                        $table_row->{$table_headers[0]["col_data"]}))
+                                                        @continue
+                                                    @endif
+
+                                                    @if(array_key_exists("redirect",$custom))
+                                                        @include("partials.v1.table.table-redirect-button",[
+                                                                 "button_route"=>$custom["redirect"]["route"],
+                                                                 "button_binding"=>$custom["redirect"]["binding"],
+                                                                 "icon_color"=>"secondary",
+                                                                 "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                    $table_row->{$table_headers[0]["col_data"]},
+                                                                 "icon"=>$custom["icon"],
+                                                                 "tooltip_title"=>$custom["tooltip_title"] ?? ''
+                                                             ])
                                                     @else
-                                                        @if(array_key_exists("redirect",$custom))
-                                                            @include("partials.v1.table.table-redirect-button",[
-                                                                     "button_route"=>$custom["redirect"]["route"],
-                                                                     "button_binding"=>$custom["redirect"]["binding"],
-                                                                     "icon_color"=>"secondary",
-                                                                     "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                        $table_row->{$table_headers[0]["col_data"]},
-                                                                     "icon"=>$custom["icon"],
-                                                                     "tooltip_title"=>$custom["tooltip_title"] ?? ''
-                                                                 ])
-                                                        @else
-                                                            @include("partials.v1.table.table-action-button  ",[
-                                                                   "button_action"=>$custom["function"],
-                                                                   "icon_color"=>"secondary",
-                                                                   "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                      $table_row->{$table_headers[0]["col_data"]},
-                                                                   "icon"=>$custom["icon"],
-                                                                   "tooltip_title"=>$custom["tooltip_title"] ?? ''
-                                                               ])
-                                                        @endif
+                                                        @include("partials.v1.table.table-action-button  ",[
+                                                               "button_action"=>$custom["function"],
+                                                               "icon_color"=>"secondary",
+                                                               "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                  $table_row->{$table_headers[0]["col_data"]},
+                                                               "icon"=>$custom["icon"],
+                                                               "tooltip_title"=>$custom["tooltip_title"] ?? ''
+                                                           ])
                                                     @endif
                                                 @endforeach
                                             @endif

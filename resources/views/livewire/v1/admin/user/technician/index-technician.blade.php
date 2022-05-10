@@ -50,6 +50,12 @@
                        "col_filter"=>true
                    ],
 
+                                    [
+                       "col_name" =>"Identificacion",
+                       "col_data" =>"identification",
+                       "col_filter"=>true
+                   ],
+
                                    [
                        "col_name" =>"Operador de red",
                        "col_data" =>"networkOperator.name",
@@ -66,8 +72,18 @@
                                                     "function"=>"addClients",
                                                     "icon"=>"fas fa-users",
                                                     "tooltip_title"=>"Ver clientes"
-                                                    ]
-                                                ]
+                                                    ],
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.tecnicos.agregar_equipos",
+                                                                   "binding"=>"technician"
+                                                             ],
+                                                         "icon"=>"fas fa-laptop-medical",
+                                                         "tooltip_title"=>"Asociar tipos de equipos",
+                                                         "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getTechnicianEquipmentTypeRoles()
+                                         ],
+                                                ],
+
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}

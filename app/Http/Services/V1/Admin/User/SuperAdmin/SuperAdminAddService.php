@@ -6,23 +6,26 @@ use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class SuperAdminAddService extends Singleton
 {
     public function submitForm(Component $component)
     {
-        $component->validate();
-        $superAdmin = SuperAdmin::create($this->mapper($component));
-        $user = User::create(array_merge($this->mapper($component), [
-            "password" => bcrypt($component->password),
-            "type" => User::TYPE_SUPER_ADMIN
-        ]));
-        $superAdmin->update([
-            "user_id" => $user->id
-        ]);
+        DB::transaction(function () use ($component) {
+            $component->validate();
+            $superAdmin = SuperAdmin::create($this->mapper($component));
+            $user = User::create(array_merge($this->mapper($component), [
+                "password" => bcrypt($component->password),
+                "type" => User::TYPE_SUPER_ADMIN
+            ]));
+            $superAdmin->update([
+                "user_id" => $user->id
+            ]);
 
-        $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $superAdmin->id]);
+            $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $superAdmin->id]);
+        });
     }
 
     private function mapper($component)

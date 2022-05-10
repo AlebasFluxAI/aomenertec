@@ -141,4 +141,14 @@ class SuperAdmin extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function equipmentTypes()
+    {
+        return $this->hasMany(EquipmentType::class);
+    }
+
+    public function equipments()
+    {
+        return Equipment::query();
+    }
 }

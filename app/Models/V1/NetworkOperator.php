@@ -66,40 +66,6 @@ class NetworkOperator extends Model
                         ]
 
                     ],
-                    [
-                        "title" => "Equipos",
-                        "route" => null,
-                        "submenu" => [
-                            [
-                                "title" => "Equipos",
-                                "route" => "administrar.v1.equipos.listado",
-                                "submenu" => [],
-                            ],
-                            [
-                                "title" => "Tipos",
-                                "route" => "administrar.v1.equipos.tipos.listado",
-                                "submenu" => []
-                            ],
-                            [
-                                "title" => "Alertas",
-                                "route" => "administrar.v1.equipos.alertas.listado",
-                                "submenu" => [
-                                    [
-                                        "title" => "Alertas",
-                                        "route" => "administrar.v1.equipos.alertas.listado",
-                                        "submenu" => []
-                                    ],
-                                    [
-                                        "title" => "Tipos de alerta",
-                                        "route" => "administrar.v1.equipos.alertas.tipos.listado",
-                                        "submenu" => [
-
-                                        ]
-                                    ]
-                                ],
-                            ],
-                        ]
-                    ],
                 ]
         ];
     }
@@ -148,5 +114,27 @@ class NetworkOperator extends Model
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);
+    }
+
+    public function networkOperatorEquipmentToTechnicianAsKeyValue()
+    {
+        return (array_merge([[
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]], ($this->equipments()
+            ->whereNull("technician_id")
+            ->with("equipmentType")->get()->map(function ($equipment) {
+                return [
+                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                    "value" => $equipment->id,
+                ];
+            }))->toArray()
+        ));
+    }
+
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
     }
 }
