@@ -8,6 +8,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class SupervisorAddClientService extends Singleton
@@ -74,20 +75,22 @@ class SupervisorAddClientService extends Singleton
 
     public function addClient(Component $component)
     {
-        if (!$component->client_picked) {
-            return;
-        }
-        if ($component->model->clientSupervisors()->whereClientId($component->client_id)->exists()) {
+        DB::transaction(function () use ($component) {
+            if (!$component->client_picked) {
+                return;
+            }
+            if ($component->model->clientSupervisors()->whereClientId($component->client_id)->exists()) {
+                $this->refreshClientList($component);
+                return;
+            }
+            $component->model->clientSupervisors()->create(
+                [
+                    "active" => true,
+                    "client_id" => $component->client_id
+                ]
+            );
             $this->refreshClientList($component);
-            return;
-        }
-        $component->model->clientSupervisors()->create(
-            [
-                "active" => true,
-                "client_id" => $component->client_id
-            ]
-        );
-        $this->refreshClientList($component);
+        });
     }
 
     public function refreshClientList(Component $component)

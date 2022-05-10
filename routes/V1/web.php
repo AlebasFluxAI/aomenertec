@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('editar/{admin}', Livewire\V1\Admin\User\Admin\EditAdmin::class)->name("administrar.v1.usuarios.admin.editar");
                         Route::get('detalle/{admin}', Livewire\V1\Admin\User\Admin\DetailsAdmin::class)->name("administrar.v1.usuarios.admin.detalles");
                         Route::get('agregar_tipos_equipos/{admin}', Livewire\V1\Admin\User\Admin\AddEquipmentTypeAdmin::class)->name("administrar.v1.usuarios.admin.agregar_tipos_equipo");
+                        Route::get('agregar_equipos/{admin}', Livewire\V1\Admin\User\Admin\AddEquipmentAdmin::class)->name("administrar.v1.usuarios.admin.agregar_equipos");
                     });
 
 
@@ -71,6 +72,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar', Livewire\V1\Admin\User\NetworkOperator\AddNetworkOperator::class)->name("administrar.v1.usuarios.operadores.agregar");
                         Route::get('editar/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\EditNetworkOperator::class)->name("administrar.v1.usuarios.operadores.editar");
                         Route::get('detalle/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\DetailsNetworkOperator::class)->name("administrar.v1.usuarios.operadores.detalles");
+                        Route::get('agregar_equipos/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\AddEquipmentNetworkOperator::class)->name("administrar.v1.usuarios.operadores.agregar_equipos");
+
                     });
 
 
@@ -89,6 +92,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('detalle/{supervisor}', Livewire\V1\Admin\User\Supervisor\DetailsSupervisor::class)->name("administrar.v1.usuarios.supervisores.detalles");
                         Route::get('editar/{supervisor}', Livewire\V1\Admin\User\Supervisor\EditSupervisor::class)->name("administrar.v1.usuarios.supervisores.editar");
                         Route::get('agregar_clientes/{supervisor}', Livewire\V1\Admin\User\Supervisor\AddClientSupervisor::class)->name("administrar.v1.usuarios.supervisores.agregar_clientes");
+
                     });
 
 
@@ -98,6 +102,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('detalle/{technician}', Livewire\V1\Admin\User\Technician\DetailsTechnician::class)->name("administrar.v1.usuarios.tecnicos.detalles");
                         Route::get('editar/{technician}', Livewire\V1\Admin\User\Technician\EditTechnician::class)->name("administrar.v1.usuarios.tecnicos.editar");
                         Route::get('agregar_clientes/{technician}', Livewire\V1\Admin\User\Technician\AddClientTechnician::class)->name("administrar.v1.usuarios.tecnicos.agregar_clientes");
+                        Route::get('agregar_equipos/{technician}', Livewire\V1\Admin\User\Technician\AddEquipmentTechnician::class)->name("administrar.v1.usuarios.tecnicos.agregar_equipos");
                     });
 
 

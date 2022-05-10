@@ -65,7 +65,16 @@
                                                 "conditional"=>"conditionalDelete",
                                                 "icon"=>"fas fa-trash",
                                                 "tooltip_title"=>"Eliminar"
-                                        ]
+                                        ],
+                                        [
+                                           "redirect"=>[
+                                                       "route"=>"administrar.v1.usuarios.operadores.agregar_equipos",
+                                                       "binding"=>"networkOperator"
+                                                 ],
+                                               "icon"=>"fas fa-laptop-medical",
+                                               "tooltip_title"=>"Asociar equipos",
+                                               "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getNetworkOperatorEquipmentTypeRoles()
+                                         ],
                                        ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

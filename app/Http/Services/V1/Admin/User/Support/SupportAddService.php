@@ -7,6 +7,7 @@ use App\Models\V1\Support;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class SupportAddService extends Singleton
@@ -65,18 +66,20 @@ class SupportAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $component->validate();
+        DB::transaction(function () use ($component) {
+            $component->validate();
 
-        $model = Support::create($this->mapper($component));
-        $user = User::create(array_merge($this->mapper($component), [
-            "password" => bcrypt($component->password),
-            "type" => User::TYPE_SUPPORT
-        ]));
-        $model->update([
-            "user_id" => $user->id
-        ]);
+            $model = Support::create($this->mapper($component));
+            $user = User::create(array_merge($this->mapper($component), [
+                "password" => bcrypt($component->password),
+                "type" => User::TYPE_SUPPORT
+            ]));
+            $model->update([
+                "user_id" => $user->id
+            ]);
 
-        $component->redirectRoute("administrar.v1.usuarios.soporte.detalles", ["support" => $model->id]);
+            $component->redirectRoute("administrar.v1.usuarios.soporte.detalles", ["support" => $model->id]);
+        });
     }
 
 

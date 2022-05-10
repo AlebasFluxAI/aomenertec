@@ -6,6 +6,7 @@ use App\Http\Livewire\V1\Admin\Equipment\AddEquipment;
 use App\Http\Services\Singleton;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\User;
 use Livewire\Component;
 
 class EquipmentIndexService extends Singleton
@@ -30,5 +31,11 @@ class EquipmentIndexService extends Singleton
     public function details(Component $component, $equipmentId)
     {
         $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipmentId]);
+    }
+
+    public function getData(Component $component)
+    {
+        $userModel = User::getUserModel();
+        return $userModel->equipments()->paginate();
     }
 }

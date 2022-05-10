@@ -8,6 +8,7 @@ use App\Models\V1\Technician;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class TechnicianAddClientService extends Singleton
@@ -71,21 +72,24 @@ class TechnicianAddClientService extends Singleton
 
     public function addClient(Component $component)
     {
-        if (!$component->client_picked) {
-            return;
-        }
-        if ($component->model->clientTechnicians()->whereClientId($component->client_id)->exists()) {
-            $this->refreshClientSeller($component);
 
-            return;
-        }
-        $component->model->clientTechnicians()->create(
-            [
-                "active" => true,
-                "client_id" => $component->client_id
-            ]
-        );
-        $this->refreshClientSeller($component);
+        DB::transaction(function () use ($component) {
+            if (!$component->client_picked) {
+                return;
+            }
+            if ($component->model->clientTechnicians()->whereClientId($component->client_id)->exists()) {
+                $this->refreshClientSeller($component);
+
+                return;
+            }
+            $component->model->clientTechnicians()->create(
+                [
+                    "active" => true,
+                    "client_id" => $component->client_id
+                ]
+            );
+            $this->refreshClientSeller($component);
+        });
     }
 
     public function refreshClientSeller(Component $component)

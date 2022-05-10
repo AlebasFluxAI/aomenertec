@@ -9,6 +9,7 @@ use App\Models\V1\NetworkOperator;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class NetworkOperatorAddService extends Singleton
@@ -37,9 +38,11 @@ class NetworkOperatorAddService extends Singleton
 
     public function updatedAdminId(Component $component)
     {
+
         $component->picked = false;
         $component->admins = Admin::where('id', 'ilike', "%" . $component->admin_id . "%")
             ->orWhere('name', 'ilike', "%" . $component->admin_id . "%")->limit(3)->get();
+        
     }
 
     public function setAdminId(Component $component, $admin)
@@ -52,16 +55,19 @@ class NetworkOperatorAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $operator = NetworkOperator::create($this->mapper($component));
-        $user = User::create(array_merge($this->mapper($component), [
-            "password" => bcrypt($component->password),
-            "type" => User::TYPE_NETWORK_OPERATOR
-        ]));
-        $operator->update([
-            "user_id" => $user->id
-        ]);
+        DB::transaction(function () use ($component) {
+            $component->validate();
+            $operator = NetworkOperator::create($this->mapper($component));
+            $user = User::create(array_merge($this->mapper($component), [
+                "password" => bcrypt($component->password),
+                "type" => User::TYPE_NETWORK_OPERATOR
+            ]));
+            $operator->update([
+                "user_id" => $user->id
+            ]);
 
-        $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $operator->id]);
+            $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $operator->id]);
+        });
     }
 
     private function mapper($component)

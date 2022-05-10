@@ -21,6 +21,10 @@
                                                    "title"=>"Mis clientes",
 
                                                ],
+                                                [
+                                                   "title"=>"Mis equipos",
+
+                                               ],
 
 
                                           ],
@@ -81,6 +85,30 @@
                                                                                         ]
                                                                                     ],
                                                                       "table_rows"=>$model->clients
+
+                                                                  ]
+                                               ],
+                                                [
+                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                       "table_pageable"=>false,
+                                                                      "table_headers"=>["ID"=>"id",
+                                                                                        "Nombre"=>"equipmentType.type",
+                                                                                        "Serial"=>"serial",
+                                                                       ],
+                                                                      "table_actions"=>[
+                                                                                    "customs"=>[
+                                                                                           [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"administrar.v1.equipos.detalle",
+                                                                                                            "binding"=>"equipment"
+                                                                                                      ],
+                                                                                                    "icon"=>"fas fa-search",
+                                                                                                     "tooltip_title"=>"Detalles",
+                                                                                            ]
+                                                                                        ]
+                                                                                    ],
+                                                                      "table_rows"=>$model->equipments
 
                                                                   ]
                                                ],
