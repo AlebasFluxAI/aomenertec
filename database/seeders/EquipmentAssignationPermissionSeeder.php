@@ -17,6 +17,5 @@ class EquipmentAssignationPermissionSeeder extends Seeder
         foreach (Admin::get() as $admin) {
             $admin->givePermissionTo("set_equipment_type_to_network_operator");
         }
-
     }
 }

@@ -33,8 +33,6 @@ class EquipmentAddService extends Singleton
 
         $userModel = User::getUserModel();
         return $userModel->adminEquipmentTypesAsKeyValue();
-
-
     }
 
     public function loadEquipmentType(Component $component)
@@ -46,7 +44,6 @@ class EquipmentAddService extends Singleton
     {
         $equipment = Equipment::create($this->mapper($component));
         $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipment->id]);
-
     }
 
     private function mapper(Component $component)

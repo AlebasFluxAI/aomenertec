@@ -50,11 +50,13 @@ class IndexEquipment extends Component
 
     public function render()
     {
-        return view('livewire.v1.admin.equipment.index-equipment',
+        return view(
+            'livewire.v1.admin.equipment.index-equipment',
             [
                 "data" => $this->getData()
 
-            ])->extends('layouts.v1.app');
+            ]
+        )->extends('layouts.v1.app');
     }
 
     public function getData()

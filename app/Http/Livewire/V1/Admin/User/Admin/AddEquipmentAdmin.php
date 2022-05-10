@@ -31,7 +31,6 @@ class AddEquipmentAdmin extends Component
 
     public function submitForm()
     {
-
         $this->adminAddEquipmentService->submitForm($this);
     }
 
@@ -48,7 +47,6 @@ class AddEquipmentAdmin extends Component
 
     public function delete($id)
     {
-
         $this->adminAddEquipmentService->delete($this, $id);
     }
 

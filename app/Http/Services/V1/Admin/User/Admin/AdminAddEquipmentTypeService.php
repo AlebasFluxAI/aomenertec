@@ -41,14 +41,12 @@ class AdminAddEquipmentTypeService extends Singleton
 
             $this->refreshAdminEquipmentType($component);
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Tipo de equipo agregado"]);
-
         });
     }
 
     private function refreshAdminEquipmentType($component)
     {
         $component->typeRelated = $component->model->adminEquipmentTypes()->get();
-
     }
 
     public function delete(Component $component, $adminEquipmentId)
@@ -56,7 +54,6 @@ class AdminAddEquipmentTypeService extends Singleton
         AdminEquipmentType::whereId($adminEquipmentId)->delete();
         $this->refreshAdminEquipmentType($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Tipo de equipo eliminado"]);
-
     }
 
     public function assignType(Component $component)

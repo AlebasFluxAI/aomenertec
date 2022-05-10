@@ -243,10 +243,12 @@ class Admin extends Model
 
     public function adminEquipmentTypesAsKeyValue()
     {
-        return (array_merge([[
+        return (array_merge(
+            [[
             "key" => "Seleccione el tipo de equipo ...",
             "value" => null
-        ]], ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
+        ]],
+            ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
             return [
                 "key" => $equipmentType->equipmentType->id . "- " . $equipmentType->equipmentType->type,
                 "value" => $equipmentType->equipmentType->id,
@@ -262,10 +264,12 @@ class Admin extends Model
 
     public function adminEquipmentsAsKeyValue()
     {
-        return (array_merge([[
+        return (array_merge(
+            [[
             "key" => "Seleccione el tipo de equipo ...",
             "value" => null
-        ]], ($this->equipments()->with("equipmentType")->get()->map(function ($equipment) {
+        ]],
+            ($this->equipments()->with("equipmentType")->get()->map(function ($equipment) {
             return [
                 "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
                 "value" => $equipment->id,
@@ -281,10 +285,12 @@ class Admin extends Model
 
     public function adminEquipmentToNetworkOperatorsAsKeyValue()
     {
-        return (array_merge([[
+        return (array_merge(
+            [[
             "key" => "Seleccione el tipo de equipo ...",
             "value" => null
-        ]], ($this->equipments()
+        ]],
+            ($this->equipments()
             ->whereNull("network_operator_id")
             ->with("equipmentType")->get()->map(function ($equipment) {
                 return [

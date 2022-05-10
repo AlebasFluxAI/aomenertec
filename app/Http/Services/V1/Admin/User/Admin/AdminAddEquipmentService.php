@@ -53,16 +53,13 @@ class AdminAddEquipmentService extends Singleton
 
             $this->refreshAdminEquipmentType($component);
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo agregado"]);
-
         });
-
     }
 
     private function refreshAdminEquipmentType($component)
     {
         $component->equipmentRelated = $component->model->equipments()->get();
         $component->equipments = $this->getEquipments();
-
     }
 
     public function delete(Component $component, $equipmentId)
@@ -72,7 +69,6 @@ class AdminAddEquipmentService extends Singleton
         ]);
         $this->refreshAdminEquipmentType($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);
-
     }
 
     public function updated(Component $component)

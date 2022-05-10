@@ -56,7 +56,6 @@ class NetworkOperatorAddEquipmentService extends Singleton
     {
         $component->equipmentRelated = $component->model->equipments()->get();
         $component->equipments = $this->getEquipments();
-
     }
 
     public function delete(Component $component, $equipmentId)
@@ -68,7 +67,6 @@ class NetworkOperatorAddEquipmentService extends Singleton
 
         $this->refreshAdminEquipmentType($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Tipo de equipo eliminado"]);
-
     }
 
     public function assignType(Component $component)
