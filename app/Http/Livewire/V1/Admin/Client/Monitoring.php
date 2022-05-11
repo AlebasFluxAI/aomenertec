@@ -44,7 +44,6 @@ class Monitoring extends Component
         $this->data_frame = collect(config('data-frame.data_frame'));
         $this->variables = collect(config('data-frame.variables'));
         $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
-
         $this->cards = [];
         $this->variable_chart_id = 1;
         $this->variables_selected = [];
@@ -71,7 +70,7 @@ class Monitoring extends Component
             array_push($this->variables_selected, $item);
         }
         $this->chart_type = "line";
-        $this->time_id = 1;
+        $this->time_id = 2;
         if ($this->time_id == 1) {
             $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
         } elseif ($this->time_id == 2) {
