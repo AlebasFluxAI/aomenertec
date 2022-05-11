@@ -33,7 +33,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('test', Livewire\V1\Monitoring\Monitoring::class);
+
 
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
