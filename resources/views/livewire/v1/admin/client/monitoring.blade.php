@@ -17,9 +17,15 @@
                                                     "title"=>"Grafica",
 
                                                 ],
-[
+                                                [
                                                     "title"=>"Reactivos",
                                                     "action" => "emit('editAxisReactive')"
+
+                                                ],
+
+                                                [
+                                                    "title"=>"Heat Map",
+                                                    "action" => "emit('editAxisHeatMap')"
 
                                                 ],
 
@@ -45,6 +51,17 @@
 
                                                                         "variables"=>$reactive_variables,
                                                                         "client"=>$client,
+                                                                        "data_chart"=>$data_chart
+
+                                                                     ]
+                                                ],
+                                                [
+                                                    "view_name"=>"partials.v1.chart.heatmap_data",
+                                                    "view_values"=>  [
+
+                                                                        "variables"=>$reactive_variables,
+                                                                        "client"=>$client,
+                                                                        "data_chart"=>$data_chart
 
                                                                      ]
                                                 ],
