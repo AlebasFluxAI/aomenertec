@@ -79,7 +79,6 @@
                 dataLabels: {
                     enabled: false
                 },
-                
                 plotOptions: {
                     heatmap: {
                         colorScale: {
