@@ -5,56 +5,74 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 use App\Models\V1\Client;
 use Livewire\Component;
 
-class LineChart extends Component
+class CardsData extends Component
 {
-    protected $listeners = ['changeVariable', 'changeTime', 'changeDateRange', 'startDateRange'];
-
-    public $x_axis;
-    public $series;
-    public $data_chart;
     public $variables_selected;
-    public $time;
+    public $variables;
+    public $data_frame;
     public $client;
-    public $start;
-    public $end;
-    public $chart_type;
-    public function mount(Client $client, $variables_selected, $time, $chart_type, $data_chart)
+    public $last_data;
+    public $cards;
+
+    protected $rules = [
+
+        'cards.*.color' => 'required',
+        'cards.*.id' => 'required',
+        'cards.*.icon' => 'required',
+        'cards.*.list_model_variable' => 'required',
+        'cards.*.variables_selected' => 'required',
+    ];
+
+    public function mount(Client $client, $variables, $data_frame)
     {
-
-        $this->time = $time;
-        $this->chart_type = $chart_type;
+        $this->variables = $variables;
+        $this->data_frame = $data_frame;
         $this->client =  $client;
-        $this->data_chart = $data_chart;
-        $this->end = $data_chart->last()->microcontrollerData->source_timestamp;
-        $this->start = $data_chart->first()->microcontrollerData->source_timestamp;
-        $this->variables_selected =$variables_selected;
-        $array_aux = $data_chart->reverse();
-        $this->series = [];
-        $data_aux = [];
-        $this->x_axis = [];
-        foreach ($this->variables_selected as $index=>$data) {
-            $data_aux[$index] = [];
-            foreach ($array_aux as $item) {
-                if ($this->time == 3 || $this->time == 4){
-                    $raw_json = json_decode($item->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                } else{
-                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                }
-                if ($index == 0) {
-                    array_push($this->x_axis, $item->microcontrollerData->source_timestamp);
-                }
+        $last_data = $this->client->microcontrollerData()->latest()->first();
+        $this->last_data = collect(json_decode($last_data->raw_json, true));
+        $this->cards = [];
+        $this->variables_selected = [];
+        $initial_variables = $variables->whereIn('id', [1, 9, 13, 17, 18, 19]);
+        foreach ($initial_variables as $variable) {
+            $aux = [];
+            $var_data_frame = $this->data_frame->where('variable_id', $variable['id'])->all();
+            foreach ($var_data_frame as $item) {
+                $item['value'] = round($this->last_data[$item['variable_name']], 2);
+                array_push($aux, $item);
             }
-
-
-            $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data_aux[$index]];
+            array_push($this->cards, [
+                "id" => $variable['id'],
+                "color" => $variable['style'],
+                "icon" => $variable['icon'],
+                "list_model_variable" => $variable['id'],
+                "variables_selected" => $aux,
+            ]);
         }
-
 
     }
 
-    public function startDateRange()
+    public function updated($property_name, $value)
+    {
+        if (strpos($property_name, "cards") !== false) {
+            $variable_select = $this->variables->where('id', $value)->first();
+            $id = filter_var($property_name, FILTER_SANITIZE_NUMBER_INT);
+            $aux = [];
+            $var_data_frame = $this->data_frame->where('variable_id', $value)->all();
+            foreach ($var_data_frame as $item) {
+                $item['value'] = round($this->last_data[$item['variable_name']], 2);
+                array_push($aux, $item);
+            }
+            $this->cards[$id] = [
+                            'id' => $variable_select['id'],
+                            'color' => $variable_select['style'],
+                            'icon' => $variable_select['icon'],
+                            'list_model_variable' => $variable_select['id'],
+                            'variables_selected' => $aux
+                        ];
+        }
+    }
+
+    /*public function startDateRange()
     {
 
         if ($this->time == 1) {
@@ -193,10 +211,10 @@ class LineChart extends Component
             $this->series[$index] = ["name" => $data['variable_name'], "type"=>$this->chart_type, "data"=> $data_aux[$index]];
         }
         $this->emit('changeAxis', ['series' => $this->series,  'x_axis'=>$this->x_axis]);
-    }
+    }*/
 
     public function render()
     {
-        return view('livewire.v1.admin.client.monitoring.charts.line-chart');
+        return view('livewire.v1.admin.client.monitoring.charts.cards-data');
     }
 }

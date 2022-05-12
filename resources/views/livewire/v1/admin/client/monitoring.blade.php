@@ -14,18 +14,19 @@
 
                             "tab_titles"=>[
                                                 [
-                                                    "title"=>"Grafica",
+                                                    "title"=>"Historico",
+                                                    "action" => "emit('selectHistory')"
 
                                                 ],
                                                 [
                                                     "title"=>"Reactivos",
-                                                    "action" => "emit('editAxisReactive')"
+                                                    "action" => "emit('selectReactive')"
 
                                                 ],
 
                                                 [
-                                                    "title"=>"Heat Map",
-                                                    "action" => "emit('editAxisHeatMap')"
+                                                    "title"=>"HeatMap",
+                                                    "action" => "emit('selectHeatMap')"
 
                                                 ],
 
@@ -33,22 +34,19 @@
 
                             "tab_contents"=>[
                                                 [
-                                                    "view_name"=>"partials.v1.chart.monitoring",
+                                                    "view_name"=>"partials.v1.chart.client_monitoring",
                                                     "view_values"=>  [
-                                                                        "cards"=>$cards,
+                                                                        "type" => "history_data",
                                                                         "variables"=>$variables,
                                                                         "client"=>$client,
-                                                                        "variables_selected"=>$variables_selected,
-                                                                        "time_id"=>$time_id,
-                                                                        "chart_type"=>$chart_type,
+                                                                        "data_frame"=>$data_frame,
                                                                         "data_chart" => $data_chart
-
                                                                      ]
                                                 ],
                                                 [
-                                                    "view_name"=>"partials.v1.chart.reactive_data",
+                                                    "view_name"=>"partials.v1.chart.client_monitoring",
                                                     "view_values"=>  [
-
+                                                                        "type" => "reactive_data",
                                                                         "variables"=>$reactive_variables,
                                                                         "client"=>$client,
                                                                         "data_chart"=>$data_chart
@@ -56,9 +54,9 @@
                                                                      ]
                                                 ],
                                                 [
-                                                    "view_name"=>"partials.v1.chart.heatmap_data",
+                                                    "view_name"=>"partials.v1.chart.client_monitoring",
                                                     "view_values"=>  [
-
+                                                                        "type" => "heatmap_data",
                                                                         "variables"=>$reactive_variables,
                                                                         "client"=>$client,
                                                                         "data_chart"=>$data_chart

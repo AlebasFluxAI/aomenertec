@@ -3,11 +3,12 @@
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class ReactiveChart extends Component
 {
-    protected $listeners = ['editAxisReactive', 'dateRangeReactive'];
+    protected $listeners = ['selectReactive', 'dateRangeReactive'];
     public $client;
     public $time_reactive_id;
     public $date_range_reactive;
@@ -31,12 +32,10 @@ class ReactiveChart extends Component
         $this->data_chart_reactive = $data_chart_reactive;
         $this->series_reactive = [];
         $this->x_axis_reactive = [];
-
     }
 
-    public function editAxisReactive(){
-        $this->series_reactive = [];
-        $this->x_axis_reactive = [];
+    public function selectReactive(){
+
         if ($this->time_reactive_id == 1) {
             $data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
         } elseif ($this->time_reactive_id == 2) {
@@ -50,66 +49,11 @@ class ReactiveChart extends Component
         $this->end_reactive = $this->data_chart_reactive->first()->microcontrollerData->source_timestamp;
         $this->start_reactive = $this->data_chart_reactive->last()->microcontrollerData->source_timestamp;
         $this->date_range_reactive = $this->start_reactive." - ".$this->end_reactive;
-        $array_aux = $this->data_chart_reactive->reverse();
-
-        foreach ($this->reactive_variables as $index=>$data) {
-            $data_aux[$index] = [];
-            foreach ($array_aux as $item) {
-                if ($this->time_reactive_id == 3 || $this->time_reactive_id == 4) {
-                    $raw_json = json_decode($item->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                } else {
-                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                }
-                if ($index == 0){
-                    array_push($this->x_axis_reactive, $item->microcontrollerData->source_timestamp);
-                }
-            }
-
-            $this->series_reactive[$index] = ["name" => $data['variable_name'], "data"=> $data_aux[$index]];
-        }
-        $this->emit('changeAxisReactive', ['series_reactive' => $this->series_reactive,  'x_axis_reactive'=>$this->x_axis_reactive]);
+        $this->chartRender(true);
     }
 
     public function updatedTimeReactiveId(){
-        if ($this->time_reactive_id == 1) {
-            $data_chart = $this->client->hourlyMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
-        } elseif ($this->time_reactive_id == 2) {
-            $data_chart = $this->client->dailyMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
-        } elseif ($this->time_reactive_id == 3) {
-            $data_chart = $this->client->monthlyMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
-        } else {
-            $data_chart = $this->client->annualMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
-        }
-
-        $array_aux = $data_chart->reverse();
-        $this->series_reactive = [];
-        $data_aux = [];
-        $this->x_axis_reactive = [];
-        foreach ($this->reactive_variables as $index=>$data) {
-            $data_aux[$index] = [];
-            foreach ($array_aux as $item) {
-                if ($this->time_reactive_id == 3 || $this->time_reactive_id == 4) {
-                    $raw_json = json_decode($item->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                } else {
-                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                }
-                if ($index == 0){
-                    array_push($this->x_axis_reactive, $item->microcontrollerData->source_timestamp);
-                }
-            }
-
-            $this->series_reactive[$index] = ["name" => $data['variable_name'], "data"=> $data_aux[$index]];
-        }
-        $this->data_chart_reactive = $data_chart;
-        $this->emit('changeAxisReactive', ['series_reactive' => $this->series_reactive,  'x_axis_reactive'=>$this->x_axis_reactive]);
+        $this->chartRender(false);
     }
 
     public function dateRangeReactive($start, $end)
@@ -117,18 +61,27 @@ class ReactiveChart extends Component
         $this->date_range_reactive = $start." - ".$end;
         $this->start_reactive = $start;
         $this->end_reactive = $end;
-        if ($this->time_reactive_id == 1) {
-            $data_chart = $this->client->hourlyMicrocontrollerData()
-                ->whereBetween("created_at", [$start, $end])->get();
-        } elseif ($this->time_reactive_id == 2) {
-            $data_chart = $this->client->dailyMicrocontrollerData()
-                ->whereBetween("created_at", [$start, $end])->get();
-        } elseif ($this->time_reactive_id == 3) {
-            $data_chart = $this->client->monthlyMicrocontrollerData()
-                ->whereBetween("created_at", [$start, $end])->get();
+        $this->chartRender(false);
+    }
+
+    private function chartRender($flag){
+        if ($flag){
+            $data_chart = $this->data_chart_reactive;
         } else {
-            $data_chart = $this->client->annualMicrocontrollerData()
-                ->whereBetween("created_at", [$start, $end])->get();
+            if ($this->time_reactive_id == 1) {
+                $data_chart = $this->client->hourlyMicrocontrollerData()
+                    ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
+            } elseif ($this->time_reactive_id == 2) {
+                $data_chart = $this->client->dailyMicrocontrollerData()
+                    ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
+            } elseif ($this->time_reactive_id == 3) {
+                $data_chart = $this->client->monthlyMicrocontrollerData()
+                    ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
+            } else {
+                $data_chart = $this->client->annualMicrocontrollerData()
+                    ->whereBetween("created_at", [$this->start_reactive, $this->end_reactive])->get();
+            }
+            $this->data_chart_reactive = $data_chart;
         }
 
         $array_aux = $data_chart->reverse();
@@ -146,13 +99,22 @@ class ReactiveChart extends Component
                     array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
                 }
                 if ($index == 0){
-                    array_push($this->x_axis_reactive, $item->microcontrollerData->source_timestamp);
+                    if ($this->time_reactive_id == 1){
+                        $x = Carbon::create($item->year,$item->month,$item->day,$item->hour,$item->minute)->format('d F H:i');
+
+                    } elseif ($this->time_reactive_id == 2){
+                        $x = Carbon::create($item->year,$item->month,$item->day,$item->hour)->format('d F H:00');
+                    } elseif ($this->time_reactive_id == 3){
+                        $x = Carbon::create($item->year,$item->month,$item->day)->format('d F Y');
+                    }else{
+                        $x = Carbon::create($item->year,$item->month)->format(' F Y');
+                    }
+                    array_push($this->x_axis_reactive, $x);
                 }
             }
 
-            $this->series_reactive[$index] = ["name" => $data['variable_name'], "data"=> $data_aux[$index]];
+            $this->series_reactive[$index] = ["name" => $data['display_name'], "data"=> $data_aux[$index]];
         }
-        $this->data_chart_reactive = $data_chart;
         $this->emit('changeAxisReactive', ['series_reactive' => $this->series_reactive,  'x_axis_reactive'=>$this->x_axis_reactive]);
     }
 

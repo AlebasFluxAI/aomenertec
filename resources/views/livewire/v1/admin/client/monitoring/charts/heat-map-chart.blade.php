@@ -27,12 +27,15 @@
                         "input_name"=>"datetime_heat_map",
                         "autocomplete"=> "off",
                         "button_name" => "Borrar",
-                        "button_action"=> "editAxisHeatMap"
+                        "button_action"=> "selectHeatMap"
                ])
 
 
         <div  class="col-12 mt-0">
             <div class="box shadow mt-4">
+                <div wire:loading>
+                    Actualizando Grafica...
+                </div>
                 <div id="chart_heat_map">
 
                 </div>
@@ -65,6 +68,19 @@
                     type: 'heatmap',
                     height: '450px',
                     stacked: true,
+                    animations: {
+                        enabled: true,
+                        easing: 'easeinout',
+                        speed: 800,
+                        animateGradually: {
+                            enabled: true,
+                            delay: 150
+                        },
+                        dynamicAnimation: {
+                            enabled: true,
+                            speed: 350
+                        }
+                    }
 
                 },
 
@@ -73,44 +89,26 @@
                     type: 'category',
                     categories: [],
                 },
+                legend:{
+                        show:true,
+                    position: 'bottom',
+                    },
+                title: {
+                    text: 'Activa (kWh)',
+                    align: 'center',
+                    style: {
+                        fontSize: '14px',
+                        fontWeight: 'bold',
+                        fontFamily: 'sans-serif',
+                        color: '#000'
+                    },
+                },
                 noData: {
                     text: 'Loading...'
                 },
                 dataLabels: {
-                    enabled: false
+                    enabled: true
                 },
-                plotOptions: {
-                    heatmap: {
-                        colorScale: {
-                            ranges: [
-                                {
-                                from: 0,
-                                to: 1,
-                                color: '#00A100',
-                                name: 'Bajo',
-                                },
-                                {
-                                    from: 1.1,
-                                    to: 2,
-                                    color: '#128FD9',
-                                    name: 'Medio',
-                                },
-                                {
-                                    from: 2.1,
-                                    to: 3,
-                                    color: '#FFB200',
-                                    name: 'Alto',
-                                },
-                                {
-                                    from: 3.1,
-                                    to: 200,
-                                    color: '#FFB200',
-                                    name: 'Extremo',
-                                }
-                            ]
-                        }
-                    }
-                }
             }
 
             var chart_heat_map = new ApexCharts(document.querySelector("#chart_heat_map"), options_heat_map);
@@ -118,12 +116,14 @@
             chart_heat_map.render();
 
         @this.on('changeAxisHeatMap',(e) =>{
-            console.log(e.max_value)
-
             ApexCharts.exec('heat_map_chart', "updateOptions", {
                 series: e.series_heat_map,
                 xaxis: {
                     categories: ["00h", "01h", "02h", "03h", "04h", "05h", "06h", "07h", "08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h", "22h", "23h"],
+                },
+                title: {
+                    text: e.title,
+
                 },
                 plotOptions: {
                     heatmap: {
@@ -133,25 +133,25 @@
                                     from: 0,
                                     to: (e.max_value)*0.25,
                                     color: '#00A100',
-                                    name: 'Bajo',
+                                    name: 'Bajo(>0)',
                                 },
                                 {
                                     from: ((e.max_value)*0.25),
                                     to: (e.max_value)*0.5,
-                                    color: '#128FD9',
-                                    name: 'Medio',
+                                    color: '#ffcf63',
+                                    name: 'Medio(>'+((e.max_value)*0.25)+')',
                                 },
                                 {
                                     from: ((e.max_value)*0.5),
                                     to: (e.max_value)*0.75,
-                                    color: '#FFB200',
-                                    name: 'Alto',
+                                    color: '#ff9100',
+                                    name: 'Alto(>'+((e.max_value)*0.5)+')',
                                 },
                                 {
                                     from: ((e.max_value)*0.75),
                                     to: e.max_value,
                                     color: '#ff0000',
-                                    name: 'Extremo',
+                                    name: 'Extremo(>'+((e.max_value)*0.75)+')',
                                 }
                             ]
                         }
