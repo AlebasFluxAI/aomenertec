@@ -1,7 +1,7 @@
 <div class="contenedor-grande">
     <div wire:ignore class="row pt-3">
         @include("partials.v1.form.form_list",[
-                                         "col_with"=>2,
+
                                          "mt"=>4,
                                          "mb"=>0,
                                          "input_type"=>"text",
@@ -33,6 +33,9 @@
 
         <div  class="col-12 mt-0">
             <div class="box shadow mt-4">
+                <div wire:loading>
+                    Actualizando Grafica...
+                </div>
                 <div id="chart_reactive">
 
                 </div>
@@ -66,6 +69,30 @@
                     type: 'bar',
                     height: '800px',
                     stacked: true,
+                    animations: {
+                        enabled: true,
+                        easing: 'easeinout',
+                        speed: 800,
+                        animateGradually: {
+                            enabled: true,
+                            delay: 150
+                        },
+                        dynamicAnimation: {
+                            enabled: true,
+                            speed: 350
+                        }
+                    }
+
+                },
+                title:{
+                    text:'ENERGIA ACTIVA-REACTIVA',
+                    align: 'center',
+                    style: {
+                        fontSize:  '14px',
+                        fontWeight:  'bold',
+                        fontFamily:  'sans-serif',
+                        color:  '#000'
+                    },
 
                 },
                 plotOptions: {

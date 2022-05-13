@@ -5,6 +5,7 @@
             @if($index==0)
 
                 <button
+                    @if($tab_title["action"]??"" != "") wire:click="${{$tab_title["action"]}}"@endif
                         class="nav-link active primary-nav-link" id="nav-{{$index}}-tab"
                         data-bs-toggle="tab"
                         data-bs-target="#tab-{{$index}}"
