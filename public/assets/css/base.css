@@ -1950,39 +1950,39 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 }
 
 .voltage {
-    color: #9ccc65;
+    color: #145A32;
 }
 
 .current {
-    color: #00b0ff;
+    color: #154360;
 }
 
 .power {
-    color: #D685B0;
+    color: #4A235A;
 }
 
 .active_energy {
-    color: #d4e157;
+    color: #7D6608;
 }
 
 .reactive_energy {
-    color: #ff6961;
+    color: #641E16 ;
 }
 
 .power_factor {
-    color: #639B00;
+    color: #0B5345;
 }
 
 .phase_angle {
-    color: #00BAAF;
+    color: #1B2631;
 }
 
 .thd {
-    color: #D300E8;
+    color: #6E2C00;
 }
 
 .frecuency {
-    color: #c8ca66;
+    color: #B7950B;
 }
 
 .reactive_capacitive {
@@ -1990,7 +1990,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 }
 
 .reactive_inductive {
-    color: #9b9b9b;
+    color: #424949;
 }
 
 

@@ -1,7 +1,7 @@
 <div class="contenedor-grande">
     <div wire:ignore class="row pt-3">
         @include("partials.v1.form.form_list",[
-                                         "col_with"=>2,
+
                                          "mt"=>4,
                                          "mb"=>0,
                                          "input_type"=>"text",
