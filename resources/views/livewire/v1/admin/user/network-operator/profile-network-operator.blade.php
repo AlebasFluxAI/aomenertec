@@ -76,7 +76,9 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
+                                                                                        "Apellido"=>"last_name",
+                                                                                        "Telefono"=>"phone",
+                                                                                        "Correo electronico"=>"email",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -100,7 +102,9 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
+                                                                                        "Apellido"=>"last_name",
+                                                                                        "Telefono"=>"phone",
+                                                                                        "Correo electronico"=>"email",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -140,7 +144,9 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
+                                                                                        "Apellido"=>"last_name",
+                                                                                        "Telefono"=>"phone",
+                                                                                        "Correo electronico"=>"email",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -181,6 +187,9 @@
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
                                                                                         "Nombre"=>"name",
+                                                                                        "Apellido"=>"last_name",
+                                                                                        "Telefono"=>"phone",
+                                                                                        "Correo electronico"=>"email",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -209,7 +218,16 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-users",
                                                                                                     "tooltip_title"=>"Asociar clientes",
-                                                                                            ]
+                                                                                            ],
+                                                                                            [
+                                                                                               "redirect"=>[
+                                                                                                           "route"=>"administrar.v1.usuarios.tecnicos.agregar_equipos",
+                                                                                                           "binding"=>"technician"
+                                                                                                     ],
+                                                                                                 "icon"=>"fas fa-laptop-medical",
+                                                                                                 "tooltip_title"=>"Asociar equipos",
+                                                                                                 "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getTechnicianEquipmentTypeRoles()
+                                                                                              ],
                                                                                         ]
                                                                                     ],
                                                                       "table_rows"=>$model->technicians
@@ -226,7 +244,7 @@
        ["nav_options"=>[
                   ["button_align"=>"right",
                   "click_action"=>"",
-                  "button_content"=>"Cerrar cesion",
+                  "button_content" => "Cerrar sesión",
                   "button_icon"=>"fa-solid fa-right-from-bracket",
                   "target_route"=>"logout",
                   ],

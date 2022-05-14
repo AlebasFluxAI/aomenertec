@@ -50,7 +50,14 @@
                          "table_actions"=>[
                                             "details"=>"details",
                                             "edit"=>"edit",
-                                            "delete"=>"delete"
+                                            "customs"=>[
+                                                    [
+                                                            "function"=>"deleteEquipment",
+                                                            "conditional"=>"conditionalDelete",
+                                                            "icon"=>"fas fa-trash",
+                                                            "tooltip_title"=>"Eliminar"
+                                                    ],
+                                                ],
                                             ],
 
                                                         /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

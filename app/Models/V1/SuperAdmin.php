@@ -151,4 +151,9 @@ class SuperAdmin extends Model
     {
         return Equipment::query();
     }
+
+    public function admins()
+    {
+        return Admin::get();
+    }
 }

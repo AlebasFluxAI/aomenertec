@@ -13,4 +13,11 @@ class EquipmentObserver
             $equipment->admin_id = $admin->id;
         }
     }
+
+    public function deleting(Equipment $equipment)
+    {
+        if ($equipment->assigned) {
+            abort(422, "Este equipo no puede ser borrado");
+        }
+    }
 }

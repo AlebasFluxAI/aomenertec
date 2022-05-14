@@ -79,9 +79,9 @@
                                                                    "binding"=>"technician"
                                                              ],
                                                          "icon"=>"fas fa-laptop-medical",
-                                                         "tooltip_title"=>"Asociar tipos de equipos",
+                                                         "tooltip_title"=>"Asociar equipos",
                                                          "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getTechnicianEquipmentTypeRoles()
-                                         ],
+                                                      ],
                                                 ],
 
                                     ],

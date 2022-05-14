@@ -28,4 +28,10 @@ class EquipmentTypeIndexService extends Singleton
     {
         $component->redirectRoute("administrar.v1.equipos.tipos.detalle", ["equipmentType" => $id]);
     }
+
+
+    public function conditionalDelete(Component $component, $id)
+    {
+        return Equipment::whereEquipmentTypeId($id)->exists();
+    }
 }

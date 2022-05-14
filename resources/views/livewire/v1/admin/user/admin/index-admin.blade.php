@@ -77,7 +77,7 @@
                                                "icon"=>"fas fa-computer",
                                                "tooltip_title"=>"Asociar tipos de equipos",
                                          ],
-                                            [
+                                         [
                                            "redirect"=>[
                                                        "route"=>"administrar.v1.usuarios.admin.agregar_equipos",
                                                        "binding"=>"admin"
