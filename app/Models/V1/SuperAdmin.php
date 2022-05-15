@@ -156,4 +156,5 @@ class SuperAdmin extends Model
     {
         return Admin::get();
     }
+    
 }

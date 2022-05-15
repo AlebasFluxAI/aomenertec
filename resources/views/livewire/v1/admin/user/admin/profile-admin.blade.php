@@ -163,6 +163,14 @@
                                                                                             ],
                                                                                             [
                                                                                                     "redirect"=>[
+                                                                                                            "route"=>"v1.admin.client.technicians",
+                                                                                                            "binding"=>"client"
+                                                                                                      ],
+                                                                                                    "icon"=>"fa fa-headset",
+                                                                                                    "tooltip_title"=>"Agregar tecnico",
+                                                                                            ],
+                                                                                            [
+                                                                                                    "redirect"=>[
                                                                                                                 "route"=>"v1.admin.client.monitoring",
                                                                                                                 "binding"=>"client"
                                                                                                           ],

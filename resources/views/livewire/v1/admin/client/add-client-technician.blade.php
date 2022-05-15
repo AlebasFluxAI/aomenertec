@@ -1,0 +1,43 @@
+<div>
+    @section("header") {{--extended app.blade--}}
+    @endsection
+
+    @include("partials.v1.title",[
+            "first_title"=>"Editar",
+            "second_title"=>"tecnico de cliente"
+        ])
+    {{--optiones de cabecera de formulario--}}
+
+    @include("partials.v1.table_nav",
+         ["nav_options"=>[
+                    ["button_align"=>"right",
+                    "click_action"=>"",
+                    "button_icon"=>"fas fa-list",
+                    "button_content"=>"Ver listado",
+                    "target_route"=>"v1.admin.client.list.client",
+                    ],
+
+                ]
+        ])
+    {{----------------------------------Formulario--------------------------}}
+    @include("partials.v1.primary-card",[
+            'card_title'=>"Cliente",
+            'card_subtitle'=>$model->id,
+            'card_body'=>[
+                            [
+                                   "name"=>"Nombre",
+                                   "value"=>$model->name
+                            ]   ,
+                             [
+                                   "name"=>"Identificacion",
+                                   "value"=>$model->identificacion
+                            ] ,
+                                     [
+                                   "name"=>"Correo",
+                                   "value"=>$model->email
+                            ] ,
+                         ]
+        ])
+
+
+</div>

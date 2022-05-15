@@ -48,8 +48,9 @@ class Client extends Model
         'stratum_id',
         'network_topology',
         "person_type",
-        "identification_type"
+        "identification_type",
     ];
+
 
     public function clientConfiguration(): HasOne
     {
@@ -135,4 +136,10 @@ class Client extends Model
     {
         return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at', 'desc');
     }
+
+    public function technician()
+    {
+        return $this->hasMany(ClientTechnician::class)->latest();
+    }
+
 }

@@ -91,7 +91,6 @@
                                                                                                     "icon"=>"fas fa-search",
                                                                                                     "tooltip_title"=>"Detalles",
                                                                                             ],
-                                                                                        ]
                                                                                     ],
                                                                       "table_rows"=>$model->clients
 

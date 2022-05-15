@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
@@ -39,7 +40,8 @@ class AddClientService extends Singleton
             'client_types' => ClientType::get(),
             'voltage_levels' => VoltageLevel::get(),
             'subsistence_consumptions' => SubsistenceConsumption::get(), 'contribution' => true,
-            'location_types' => LocationType::get(), 'locations' => [],
+            'location_types' => LocationType::get(),
+            'locations' => [],
             'departments' => Department::get(),
             "identification_types" => [],
             'person_types' => [
@@ -272,7 +274,6 @@ class AddClientService extends Singleton
     public function save(Component $component)
     {
 
-        //$component->validate();
         while (true) {
             $code = $this->clientCode();
             if (!(Client::whereCode($code)->exists())) {
@@ -295,7 +296,7 @@ class AddClientService extends Singleton
             'network_operator_id' => $component->network_operator_id,
             'department_id' => $component->department_id,
             'municipality_id' => $component->municipality_id,
-            'location_id' => $component->location_id,
+            'location_id' => $component->location_id ?? 1,
             'client_type_id' => $component->client_type_id,
             'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,

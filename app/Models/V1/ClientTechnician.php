@@ -16,9 +16,9 @@ class ClientTechnician extends Model
         'technician_id'
     ];
 
-    public function technicians()
+    public function technician()
     {
-        return $this->belongsToMany(Technician::class, 'client_technicians')->withPivot('active');
+        return $this->belongsTo(Technician::class);
     }
 
     public function client()
