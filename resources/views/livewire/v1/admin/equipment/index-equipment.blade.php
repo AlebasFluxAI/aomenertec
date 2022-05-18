@@ -35,6 +35,11 @@
                                    "col_data" =>"name",
                                    "col_filter"=>false
                                ],
+                                 [
+                                   "col_name" =>"Tipo",
+                                   "col_data" =>"equipmentType.type",
+                                   "col_filter"=>false
+                               ],
                                [
                                    "col_name" =>"Descripcion",
                                    "col_data" =>"description",
