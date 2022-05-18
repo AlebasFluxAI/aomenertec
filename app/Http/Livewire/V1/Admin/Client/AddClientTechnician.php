@@ -11,8 +11,10 @@ class AddClientTechnician extends Component
 {
     public $technicians;
     public $model;
-    public $technician_id;
+    public $technicianId;
     public $technician_related;
+    public $technician_picked;
+    public $message_technician;
     private $addClientTechnicianService;
 
 
@@ -22,12 +24,26 @@ class AddClientTechnician extends Component
         $this->addClientTechnicianService = AddClientTechnicianService::getInstance();
     }
 
+    public function pass()
+    {
+    }
 
     public function mount(Client $client)
     {
         $this->addClientTechnicianService->mount($this, $client);
     }
 
+    public function relateTechnician()
+    {
+        $this->addClientTechnicianService->relateTechnician($this);
+
+    }
+
+    public function delete($technicianId)
+    {
+        $this->addClientTechnicianService->delete($this, $technicianId);
+
+    }
 
     public function render()
     {

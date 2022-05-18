@@ -20,6 +20,6 @@ class PermissionUtil
 
     public static function getAddTechnicianToClientRoles()
     {
-        return Admin::getRole();
+        return Admin::getRole() . "|" . NetworkOperator::getRole();
     }
 }

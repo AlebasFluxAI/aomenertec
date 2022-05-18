@@ -20,4 +20,11 @@ class EquipmentObserver
             abort(422, "Este equipo no puede ser borrado");
         }
     }
+
+    public function updating(Equipment $equipment)
+    {
+        if ($equipment->isDirty("client_id") and $equipment->client) {
+            $equipment->assigned = true;
+        }
+    }
 }

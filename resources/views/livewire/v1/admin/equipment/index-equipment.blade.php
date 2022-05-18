@@ -32,7 +32,7 @@
                                ],
                                [
                                    "col_name" =>"Nombre",
-                                   "col_data" =>"equipmentType.type",
+                                   "col_data" =>"name",
                                    "col_filter"=>false
                                ],
                                [

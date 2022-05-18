@@ -30,7 +30,7 @@
                             ]   ,
                              [
                                    "name"=>"Identificacion",
-                                   "value"=>$model->identificacion
+                                   "value"=>$model->identification
                             ] ,
                                      [
                                    "name"=>"Correo",
@@ -39,5 +39,11 @@
                          ]
         ])
 
+
+    @include("partials.v1.clientAssignation.client_technician_assignation",[
+        "technicianRelated"=>$technician_related,
+        "technicians"=>$technicians,
+
+    ])
 
 </div>

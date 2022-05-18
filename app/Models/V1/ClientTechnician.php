@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ClientTechnician extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
         'client_id',

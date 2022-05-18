@@ -49,6 +49,7 @@ class EquipmentAddService extends Singleton
     private function mapper(Component $component)
     {
         return [
+            "name" => $component->name,
             "serial" => $component->equipmentSerial,
             "description" => $component->equipmentDescription,
             "equipment_type_id" => $component->equipmentTypeId,

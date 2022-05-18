@@ -31,7 +31,7 @@
                             ]   ,
                              [
                                    "name"=>"Identificacion",
-                                   "value"=>$model->identificacion
+                                   "value"=>$model->identidentificationificacion
                             ] ,
                                      [
                                    "name"=>"Correo",

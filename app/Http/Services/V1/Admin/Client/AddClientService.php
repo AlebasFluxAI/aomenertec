@@ -36,6 +36,7 @@ class AddClientService extends Singleton
         $component->fill([
             'serials' => collect([]),
             'equipment' => [],
+            'technicians' => [],
             'strata' => Stratum::get(), 'client_type_id' => '',
             'client_types' => ClientType::get(),
             'voltage_levels' => VoltageLevel::get(),
@@ -123,6 +124,7 @@ class AddClientService extends Singleton
         if ($component->client_type_id != "") {
             $component->equipment = [];
             $component->client_type = ClientType::find($component->client_type_id);
+
             $component->equipment_types = $component->client_type->equipmentTypes;
             foreach ($component->equipment_types as $index => $type) {
                 array_push($component->equipment, [
@@ -151,12 +153,34 @@ class AddClientService extends Singleton
         }
     }
 
+    public function updatedTechnician(Component $component)
+    {
+        $component->picked_technician = false;
+        $component->message_technician = "No hay operador de red registrado con esta identificación";
+
+        if ($component->technician != "") {
+            $component->technicians = Technician::where("identification", "like", '%' . $component->technician . "%")
+                ->whereNetworkOperatorId($component->network_operator_id)
+                ->take(3)->get();
+        }
+    }
+
+
     public function assignNetworkOperator(Component $component, $network_operator)
     {
         $obj = json_decode($network_operator);
         $component->network_operator = $obj->identification;
         $component->network_operator_id = $obj->id;
         $component->picked_network_operator = true;
+    }
+
+
+    public function assignTechnician(Component $component, $technician)
+    {
+        $obj = json_decode($technician);
+        $component->technician = $obj->identification;
+        $component->technician_id = $obj->id;
+        $component->picked_technician = true;
     }
 
     public function assignNetworkOperatorFirst(Component $component)
@@ -214,7 +238,8 @@ class AddClientService extends Singleton
                     $component->serials = Equipment::where([
                         ["serial", "like", '%' . $value . "%"],
                         ["equipment_type_id", $type_id],
-                    ])->whereNotIn('assigned', [true])
+                    ])->whereIn("id", Technician::find($component->technician_id)->equipments()->pluck("id"))
+                        ->whereNotIn('assigned', [true])
                         ->whereNotIn("status", [Equipment::STATUS_DISREPAIR, Equipment::STATUS_REPAIR])
                         ->take(3)->get();
                     if (count($component->serials) == 0) {

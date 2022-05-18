@@ -105,6 +105,16 @@
     margin: .5rem
 }
 
+
+#help-icon-form-i {
+    font-size: 25px;
+}
+
+#help-icon-form-p {
+    text-align: right;
+    cursor: help
+}
+
 .notification-nav {
     float: right;
     margin: .5rem;
@@ -1966,7 +1976,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 }
 
 .reactive_energy {
-    color: #641E16 ;
+    color: #641E16;
 }
 
 .power_factor {

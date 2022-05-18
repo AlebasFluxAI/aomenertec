@@ -28,6 +28,7 @@ class Equipment extends Model
         'admin_id',
         'network_operator_id',
         'technician_id',
+        'client_id'
     ];
 
     public static function getModelAsKeyValue()
@@ -40,7 +41,7 @@ class Equipment extends Model
             ->orderBy("serial", "asc")
             ->get()->map(function ($equipment) {
                 return [
-                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                    "key" => $equipment->id . "- " . ($equipment->equipmentType ? $equipment->equipmentType->type : "") . "- " . $equipment->serial,
                     "value" => $equipment->id,
                 ];
             }))->toArray()));
@@ -72,4 +73,10 @@ class Equipment extends Model
     {
         return $this->belongsTo(Technician::class);
     }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
 }

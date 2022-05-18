@@ -69,7 +69,7 @@
                                                [
                                                     "view_name"=>"partials.v1.table.primary-details-table",
                                                     "view_values"=>
-                                                            ["table_info" => $equipment]
+                                                    ["table_info" => $equipments]
 
                                                 ],
                                                   [

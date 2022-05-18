@@ -97,11 +97,6 @@ class Client extends Model
         return $this->belongsTo(Stratum::class);
     }
 
-    public function equipments()
-    {
-        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id');
-    }
-
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);
@@ -140,6 +135,23 @@ class Client extends Model
     public function technician()
     {
         return $this->hasMany(ClientTechnician::class)->latest();
+    }
+
+    public function equipmentsAsKeyValue()
+    {
+        return (($this->equipments()
+            ->get()->map(function ($data) {
+                return [
+                    "key" => $data->id . "- " . $data->name,
+                    "value" => $data->id,
+                ];
+            }))->toArray()
+        );
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
     }
 
 }

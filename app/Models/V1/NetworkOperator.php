@@ -119,10 +119,10 @@ class NetworkOperator extends Model
                 "value" => null
             ]],
             ($this->technicians()
-                ->get()->map(function ($equipment) {
+                ->get()->map(function ($data) {
                     return [
-                        "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                        "value" => $equipment->id,
+                        "key" => $data->id . "- " . $data->name,
+                        "value" => $data->id,
                     ];
                 }))->toArray()
         ));

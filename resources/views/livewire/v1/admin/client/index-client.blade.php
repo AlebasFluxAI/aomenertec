@@ -88,6 +88,7 @@
                                                   ],
                                                 "icon"=>"fa fa-connectdevelop",
                                                 "tooltip_title"=>"Monitoreo",
+
                                         ],
 
                                     ]

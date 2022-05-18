@@ -1,16 +1,16 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
-    @endsection
+	@section("header") {{--extended app.blade--}}
+	@endsection
 
-    @include("partials.v1.title",[
+	@include("partials.v1.title",[
             "first_title"=>"Perfil",
             "second_title"=>"operador de red"
         ])
 
 
 
-    {{----------------------------------Formulario--------------------------}}
-    @include("partials.v1.tab.v1.tab",[
+	{{----------------------------------Formulario--------------------------}}
+	@include("partials.v1.tab.v1.tab",[
 
                            "tab_titles"=>[
                                                [
@@ -56,6 +56,11 @@
 
                                                                             "value"=>$model->last_name
                                                                         ],
+                                                                         [
+                                                                            "key"=>"Identificacion",
+
+                                                                            "value"=>$model->identification
+                                                                        ],
                                                                         [
                                                                             "key"=>"Correo electronico",
 
@@ -95,6 +100,7 @@
                                                                       "table_rows"=>$model->clients
 
                                                                   ]
+                                                        ]
                                                ],
                                                [
                                                   "view_name"=>"partials.v1.table.primary-table",
@@ -232,6 +238,7 @@
                                                                       "table_rows"=>$model->technicians
 
                                                                   ]
+
                                                ]
 
 
@@ -239,7 +246,7 @@
                                 ]
         ])
 
-    @include("partials.v1.table_nav",
+	@include("partials.v1.table_nav",
        ["nav_options"=>[
                   ["button_align"=>"right",
                   "click_action"=>"",
