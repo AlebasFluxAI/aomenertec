@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 use App\Models\V1\Client;
 use Carbon\Carbon;
 use Livewire\Component;
+use PhpMqtt\Client\Facades\MQTT;
 
 class ReactiveChart extends Component
 {
@@ -35,7 +36,10 @@ class ReactiveChart extends Component
     }
 
     public function selectReactive(){
-
+        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
+        MQTT::publish('mc/config', $message);
+        MQTT::disconnect();
         if ($this->time_reactive_id == 1) {
             $data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
         } elseif ($this->time_reactive_id == 2) {

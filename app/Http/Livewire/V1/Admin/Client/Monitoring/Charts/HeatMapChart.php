@@ -6,6 +6,8 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Models\V1\Client;
+use PhpMqtt\Client\Facades\MQTT;
+
 class HeatMapChart extends Component
 {
     protected $listeners = ['selectHeatMap', 'dateRangeHeatMap'];
@@ -64,6 +66,10 @@ class HeatMapChart extends Component
     }
 
     public function selectHeatMap(){
+        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
+        MQTT::publish('mc/config', $message);
+        MQTT::disconnect();
         $this->end_day = new Carbon();
         $this->end_heat_map = $this->end_day->format('Y-m-d');
         $this->start_day = Carbon::now()->subDay(7);

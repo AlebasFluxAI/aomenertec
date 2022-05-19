@@ -3,8 +3,10 @@
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
+use App\Models\V1\EquipmentType;
 use Carbon\Carbon;
 use Livewire\Component;
+use PhpMqtt\Client\Facades\MQTT;
 
 class DataChart extends Component
 {
@@ -22,9 +24,10 @@ class DataChart extends Component
     public $end;
     public $start;
     public $chart_title;
-    protected $listeners = ['changeDateRange', 'selectHistory'=>'restartDateRange'];
+    protected $listeners = ['changeDateRange', 'selectHistory'];
     public function mount(Client $client, $variables, $data_frame, $data_chart){
-        $this->client =$client;
+
+        $this->client = $client;
         $this->variables = $variables;
         $this->data_frame = $data_frame;
         $this->variable_chart_id = 1;
@@ -33,11 +36,11 @@ class DataChart extends Component
         $this->chart_title = $aux['display_name'];
         $this->chart_type = $aux['chart_type'];
         $this->time_id = 2;
+        $this->data_chart = $data_chart;
         $this->end = $data_chart->first()->microcontrollerData->source_timestamp;
         $this->start = $data_chart->last()->microcontrollerData->source_timestamp;
         $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
-
     }
 
     public function restartDateRange()
@@ -55,6 +58,16 @@ class DataChart extends Component
         $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
         $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
+
+    }
+
+    public function selectHistory()
+    {
+        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
+        MQTT::publish('mc/config', $message);
+        MQTT::disconnect();
+        $this->restartDateRange();
 
     }
 
@@ -78,6 +91,8 @@ class DataChart extends Component
         $this->variables_selected = $this->data_frame->where('variable_id', $this->variable_chart_id);
         $this->chartRender(false);
     }
+
+
 
     private function chartRender($flag){
         if ($flag){

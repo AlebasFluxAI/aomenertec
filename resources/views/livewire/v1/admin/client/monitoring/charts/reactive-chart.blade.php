@@ -1,7 +1,7 @@
 <div class="contenedor-grande">
-    <div wire:ignore class="row pt-3">
+    <div class="row pt-3">
         @include("partials.v1.form.form_list",[
-
+                                         "col_with" =>2,
                                          "mt"=>4,
                                          "mb"=>0,
                                          "input_type"=>"text",
@@ -10,6 +10,8 @@
                                          "list_options" => [
                                                             ['id'=>1, 'display_name'=> 'Minuto'],
                                                             ['id'=>2, 'display_name'=> 'Hora'],
+                                                            ['id'=>3, 'display_name'=> 'Dia'],
+                                                            ['id'=>4, 'display_name'=> 'Mes'],
 
 
                                                            ],
@@ -17,6 +19,7 @@
                                          "list_option_view"=>"display_name",
                                          "list_option_title"=>"",
                                 ])
+
         @include("partials.v1.form.form_input_icon_button",[
                         "mt"=>4,
                         "input_model"=>"date_range_reactive",

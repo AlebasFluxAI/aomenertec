@@ -19,6 +19,12 @@
 
                                                 ],
                                                 [
+                                                    "title"=>"Tiempo Real",
+                                                    "action" => "emit('selectRealTime')"
+
+                                                ],
+
+                                                [
                                                     "title"=>"Reactivos",
                                                     "action" => "emit('selectReactive')"
 
@@ -45,9 +51,21 @@
                                                                         "variables"=>$variables,
                                                                         "client"=>$client,
                                                                         "data_frame"=>$data_frame,
-                                                                        "data_chart" => $data_chart
+                                                                        "data_chart" => $data_chart,
+
                                                                      ]
                                                 ],
+                                                [
+                                                    "view_name"=>"partials.v1.chart.client_monitoring",
+                                                    "view_values"=>  [
+                                                                        "type" => "real_time_data",
+                                                                        "variables"=>$variables,
+                                                                        "client"=>$client,
+                                                                        "data_frame"=>$data_frame,
+
+                                                                     ]
+                                                ],
+
                                                 [
                                                     "view_name"=>"partials.v1.chart.client_monitoring",
                                                     "view_values"=>  [
@@ -84,6 +102,16 @@
 
 
          ])
-
+    <script>
+        /*window.onblur = function() {
+            console.log("cambio")
+        }
+        window.onfocus = function() {
+            console.log("vuelve")
+        }*/
+        window.onbeforeunload = function(e) {
+        @this.emit('tabChange')
+        };
+    </script>
 </div>
 

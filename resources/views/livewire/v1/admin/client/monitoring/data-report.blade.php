@@ -1,5 +1,6 @@
 <div class="contenedor-grande">
     <div wire:ignore class="row pt-3">
+
         @foreach($checks as $index => $item)
             @include("partials.v1.form.check_button",[
                                             "mt"=>0,
@@ -10,6 +11,7 @@
                                             "label_name" => $item['label_name'],
                                    ])
         @endforeach
+
             @include("partials.v1.form.form_input_icon",[
                             "mt"=>0,
                             "input_model"=>"date_range_report",
