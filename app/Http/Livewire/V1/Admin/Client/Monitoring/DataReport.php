@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 use App\Models\V1\Client;
+use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Exports\V1\MonitoringDataExport;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -90,9 +92,17 @@ class DataReport extends Component
 
     public function selectReport(){
         $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
-        $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
-        MQTT::publish('mc/config', $message);
-        MQTT::disconnect();
+        RealTimeListener::whereUserId(Auth::user()->id)
+            ->whereEquipmentId(
+                $equipment->id
+            )->delete();
+
+        if (!RealTimeListener::whereEquipmentId(
+            $equipment->id)->exists()) {
+            $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+            MQTT::publish('mc/config', $message);
+            MQTT::disconnect();
+        }
     }
 
     public function render()
