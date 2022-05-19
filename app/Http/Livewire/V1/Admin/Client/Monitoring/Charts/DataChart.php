@@ -4,7 +4,9 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use PhpMqtt\Client\Facades\MQTT;
 
@@ -64,9 +66,17 @@ class DataChart extends Component
     public function selectHistory()
     {
         $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
-        $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
-        MQTT::publish('mc/config', $message);
-        MQTT::disconnect();
+        RealTimeListener::whereUserId(Auth::user()->id)
+            ->whereEquipmentId(
+                $equipment->id
+            )->delete();
+
+        if (!RealTimeListener::whereEquipmentId(
+            $equipment->id)->exists()) {
+            $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+            MQTT::publish('mc/config', $message);
+            MQTT::disconnect();
+        }
         $this->restartDateRange();
 
     }

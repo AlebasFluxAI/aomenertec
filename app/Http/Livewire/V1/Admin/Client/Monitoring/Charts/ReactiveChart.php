@@ -41,7 +41,6 @@ class ReactiveChart extends Component
     public function selectReactive()
     {
         $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
                 $equipment->id

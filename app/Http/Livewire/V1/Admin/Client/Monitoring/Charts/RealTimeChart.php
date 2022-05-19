@@ -118,15 +118,17 @@ class RealTimeChart extends Component
 
     public function selectRealTime()
     {
-
-        $equipment_id = $this->last_data['equipment_id'];
-        
+        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+        RealTimeListener::whereUserId(Auth::user()->id)
+            ->whereEquipmentId(
+                $equipment->id
+            )->delete();
         RealTimeListener::create([
             "user_id" => Auth::user()->id,
-            "equipment_id" => $equipment_id
+            "equipment_id" => $equipment->id
         ]);
 
-        $message = "{'did':" . $equipment_id . ",'realTimeFlag':true}";
+        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
         MQTT::publish('mc/config', $message);
         MQTT::disconnect();
         //MQTT:disconnect();
