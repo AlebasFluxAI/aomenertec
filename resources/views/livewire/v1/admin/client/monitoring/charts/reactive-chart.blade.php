@@ -30,7 +30,7 @@
                         "input_name"=>"datetime_reactive",
                         "autocomplete"=> "off",
                         "button_name" => "Borrar",
-                        "button_action"=> "selectReactive"
+                        "button_action"=> "editAxisReactive"
                ])
 
 
