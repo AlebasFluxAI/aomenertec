@@ -1,0 +1,112 @@
+<div class="contenedor-grande">
+<div class="row pt-3">
+    @foreach($cards_real_time as $index => $item)
+
+        @include('partials.v1.chart.variable-card', [
+                    "icon_class" => $item['icon'],
+                    "color"=>$item['color'],
+                    "list_variable_options" => $variables,
+                    "list_model_variable" => 'cards_real_time.'.$index.'.list_model_variable',
+                    "data" => $item['variables_selected'],
+                    "id"=>$index,
+                    "real_time_flag" => $real_time_flag
+            ])
+
+    @endforeach
+    @include("partials.v1.form.form_list",[
+                         "col_with"=>12,
+                         "mt"=> 4,
+                         "mb"=>0,
+                         "input_type"=>"text",
+                         "list_model" => "variable_chart_id",
+                         "list_default" => "Variable...",
+                         "list_options" => $variables,
+                         "list_option_value"=>"id",
+                         "list_option_view"=>"display_name",
+                         "list_option_title"=>"",
+                ])
+    <div class="col-12 mt-0">
+        <div class="box shadow mt-4">
+            <div wire:ignore id="chart_real_time">
+
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        document.addEventListener('livewire:load', function () {
+            const elements = document.querySelectorAll('.animated-element');
+            @this.on('animatedRealTime', (e)=>{
+                elements.forEach(function(element, index) {
+                    element.classList.add('animate__animated', 'animate__pulse', 'animate__repeat-2');
+                    element.addEventListener('animationend', () => {
+                        element.classList.remove('animate__animated', 'animate__pulse', 'animate__repeat-2');
+                    });
+                });
+
+            })
+            var options_real_time = {
+                series: [],
+                xaxis: {
+                    type: 'text'
+                },
+                chart: {
+                    id: 'real_time_chart',
+                    type: 'line',
+                    height: '450px',
+                    animations: {
+                        enabled: true,
+                        easing: 'linear',
+
+                        dynamicAnimation: {
+                            enabled: true,
+                            speed: 3000
+                        }
+                    },
+                    toolbar: {
+                        show: false
+                    },
+                    zoom: {
+                        enabled: false
+                    }
+
+                },
+
+                dataLabels: {
+                    enabled: false
+                },
+                noData: {
+                    text: 'Loading...'
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                legend:{
+                    show: false
+                }
+            }
+
+            var chart_real_time = new ApexCharts(document.querySelector("#chart_real_time"), options_real_time);
+            chart_real_time.render();
+
+
+        @this.on('addPointRealTime',(e) =>{
+            chart_real_time.updateOptions({
+                    series: e.series,
+                    title:{
+                        text:e.title,
+                    }
+                }, true)
+
+            })
+        })
+    </script>
+</div>
+
+
+
+
+
+
+
+

@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
+
     <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400&display=swap" rel="stylesheet">
-    <script src="{{asset('assets/js/main.js')}}"></script>
+
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -20,7 +21,7 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="https://enerteclatam.com/media/wkvhaio3/favicon.png">
-    <script src="{{asset('js/app.js')}}"></script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/adminlte.css">
@@ -45,13 +46,16 @@
     <!-- Vendor CSS Files -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
 
     <!-- Template Main CSS File -->
     <link href="{{asset(\App\Http\Resources\V1\Style::getStyle())}}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/277123ced7.js" crossorigin="anonymous"></script>
-
     @livewireStyles
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </head>
 
 <body>
@@ -68,6 +72,7 @@
         <section class="top-info bg-light ">
             @livewire('livewire-toast')
             <div class="container  bg-light content-block">
+
                 @yield('content')
             </div>
 
@@ -76,14 +81,14 @@
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+
 
 
 
 <!-- Vendor JS Files -->
-
+@livewireScripts
 <script src="{{asset('assets/vendor/bootstrap/js/bootstrap.bundle.js')}}"></script>
-<script src="{{asset('js/app.js')}}"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 <!-- Template Main JS File -->
 <script>
     var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
@@ -96,7 +101,7 @@
         $('[data-toggle="tooltip"]').tooltip();
     })
 </script>
-@livewireScripts
+
 </body>
 
 </html>

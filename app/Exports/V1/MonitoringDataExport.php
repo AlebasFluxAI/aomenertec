@@ -3,22 +3,23 @@
 namespace App\Exports\V1;
 
 use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 
-class MonitoringDataExport implements FromView
+class MonitoringDataExport implements FromArray, WithStrictNullComparison
 {
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($data)
+    protected $data;
+    public function __construct(array $data)
     {
         $this->data = $data;
     }
-    public function view(): View
+    public function array(): array
     {
-        return view('export.v1.data_monitoring_export', [
-            'data' => $this->data
-        ]);
+        return $this->data;
     }
 }

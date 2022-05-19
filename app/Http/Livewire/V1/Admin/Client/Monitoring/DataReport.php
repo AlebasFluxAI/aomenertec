@@ -5,14 +5,16 @@ use App\Models\V1\Client;
 use Carbon\Carbon;
 use Livewire\Component;
 use App\Exports\V1\MonitoringDataExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpMqtt\Client\Facades\MQTT;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class DataReport extends Component
 {
-    protected $listeners = ['dateRangeReport'];
+    protected $listeners = ['dateRangeReport', 'selectReport'];
     public $client;
     public $variables;
     public $data_frame;
@@ -81,8 +83,16 @@ class DataReport extends Component
                 }
             }
             array_unshift($array, $array_title);
-            return Excel::download(new MonitoringDataExport($array), 'data.csv', \Maatwebsite\Excel\Excel::CSV, ['Content-Type' => 'text/csv']);
+            return Excel::download(new MonitoringDataExport($array), 'data_'.$this->client->identification.'_'.Carbon::now()->format('Y-m-d').'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+            //return Excel::download(new MonitoringDataExport($array), 'data_'.$this->client->identification.'_'.Carbon::now()->format('Y-m-d').'.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
         }
+    }
+
+    public function selectReport(){
+        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
+        MQTT::publish('mc/config', $message);
+        MQTT::disconnect();
     }
 
     public function render()

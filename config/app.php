@@ -167,6 +167,8 @@ return [
          */
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        PhpMqtt\Client\MqttClientServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -235,7 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-
+        'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
     ],
 
 ];
