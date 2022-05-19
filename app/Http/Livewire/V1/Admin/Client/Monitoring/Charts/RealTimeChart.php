@@ -3,8 +3,6 @@
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
-use App\Models\V1\RealTimeListener;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Carbon\Carbon;
 use PhpMqtt\Client\Facades\MQTT;
@@ -23,6 +21,7 @@ class RealTimeChart extends Component
     public $last_data;
     public $cards_real_time;
     public $real_time_flag;
+
     protected $rules = [
 
         'cards_real_time.*.color' => 'required',
@@ -32,8 +31,7 @@ class RealTimeChart extends Component
         'cards_real_time.*.variables_selected' => 'required',
     ];
 
-    public function mount(Client $client, $variables, $data_frame)
-    {
+    public function mount(Client $client, $variables, $data_frame){
         $this->real_time_flag = true;
         $this->client = $client;
         $this->variables = $variables;
@@ -68,8 +66,7 @@ class RealTimeChart extends Component
         }
     }
 
-    public function updatedCardsRealTime($value, $key)
-    {
+    public function updatedCardsRealTime($value, $key){
         $variable_select = $this->variables->where('id', $value)->first();
         $id = filter_var($key, FILTER_SANITIZE_NUMBER_INT);
         $aux = [];
@@ -85,17 +82,16 @@ class RealTimeChart extends Component
     }
 
 
+
     public function getListeners()
     {
-        return [
-            "echo:data-monitoring." . $this->client->id . ",.dataEventRealTime" => 'addPoint',
-            "selectRealTime"
-        ];
+            return [
+                "echo:data-monitoring.".$this->client->id.",.dataEventRealTime" => 'addPoint',
+                "selectRealTime"
+            ];
 
     }
-
-    public function updatedVariableChartId()
-    {
+    public function updatedVariableChartId(){
         $variable = $this->variables->where('id', $this->variable_chart_id)->first();
         $this->chart_type = $variable['chart_type'];
         $this->chart_title = $variable['display_name'];
@@ -108,33 +104,24 @@ class RealTimeChart extends Component
             $data_aux[$index] = [];
             foreach ($this->data_real_time as $item) {
                 $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
-                array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
+                array_push($data_aux[$index], ["x"=>$x,"y"=>round($item[$variable['variable_name']], 2)]);
             }
-            $this->series_real_time[$index] = ["name" => $variable['display_name'], "data" => $data_aux[$index]];
+            $this->series_real_time[$index] = ["name" => $variable['display_name'], "data"=> $data_aux[$index]];
             $index++;
         }
-        $this->emit('addPointRealTime', ['series' => $this->series_real_time, 'title' => $this->chart_title]);
+        $this->emit('addPointRealTime', ['series' => $this->series_real_time, 'title'=>$this->chart_title]);
     }
 
-    public function selectRealTime()
-    {
-
+    public function selectRealTime(){
         $equipment_id = $this->last_data['equipment_id'];
-        
-        RealTimeListener::create([
-            "user_id" => Auth::user()->id,
-            "equipment_id" => $equipment_id
-        ]);
-
-        $message = "{'did':" . $equipment_id . ",'realTimeFlag':true}";
+        $message = "{'did':".$equipment_id.",'realTimeFlag':true}";
         MQTT::publish('mc/config', $message);
         MQTT::disconnect();
         //MQTT:disconnect();
     }
 
-    public function addPoint($data)
-    {
-        if (count($this->data_real_time) == 20) {
+    public function addPoint($data){
+        if (count($this->data_real_time)==20){
             array_shift($this->data_real_time);
         }
         array_push($this->data_real_time, $data['data']);
@@ -146,9 +133,9 @@ class RealTimeChart extends Component
             $data_aux[$index] = [];
             foreach ($this->data_real_time as $item) {
                 $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
-                array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
+                array_push($data_aux[$index], ["x"=>$x,"y"=>round($item[$variable['variable_name']], 2)]);
             }
-            $this->series_real_time[$index] = ["name" => $variable['display_name'], "data" => $data_aux[$index]];
+            $this->series_real_time[$index] = ["name" => $variable['display_name'], "data"=> $data_aux[$index]];
             $index++;
         }
         $this->last_data = $data['data'];
@@ -161,7 +148,7 @@ class RealTimeChart extends Component
             }
             $this->cards_real_time[$index]["variables_selected"] = $aux;
         }
-        $this->emit('addPointRealTime', ['series' => $this->series_real_time, 'title' => $this->chart_title]);
+        $this->emit('addPointRealTime', ['series' => $this->series_real_time, 'title'=>$this->chart_title]);
         $this->emit('animatedRealTime');
     }
 

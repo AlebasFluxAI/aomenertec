@@ -97,7 +97,6 @@
                         text:e.title,
                     }
                 }, true)
-
             })
         })
     </script>
