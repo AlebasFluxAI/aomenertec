@@ -53,6 +53,7 @@ class Equipment extends Model
             ->withPivot('current_assigned');
     }
 
+
     public function equipmentType()
     {
         return $this->belongsTo(EquipmentType::class);
@@ -72,4 +73,5 @@ class Equipment extends Model
     {
         return $this->belongsTo(Technician::class);
     }
+
 }
