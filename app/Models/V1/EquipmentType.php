@@ -23,7 +23,7 @@ class EquipmentType extends Model
             "value" => null
         ]], (parent::get()->map(function ($equipmentType) {
             return [
-                "key" => $equipmentType->id . "- " . $equipmentType->type,
+                "key" => $equipmentType->id . "- " . ucfirst(strtolower($equipmentType->type)),
                 "value" => $equipmentType->id,
             ];
         }))->toArray()));

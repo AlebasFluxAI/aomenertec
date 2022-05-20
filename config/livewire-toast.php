@@ -6,9 +6,9 @@ return [
     'type' => 'success', //default is success
     //You can specify 1 of the following 4 positions:
     //bottom-right, bottom-left, top-right, top-left
-    'position' => 'top-right', //default is bottom-right
+    'position' => 'top-left', //default is bottom-right
     //duration in ms for which the Toast is visible. Specify 0 if you do not want to hide it.
-    'duration' => 1000, //default is 3000
+    'duration' => 1500, //default is 3000
     //Whether to show icon next to message.
     'show_icon' => true, //default is true
     //Whether to hide message on click.
@@ -28,5 +28,5 @@ return [
     'transition' => true,  //default is true
     //Following transitions are supported:
     //appear_from_below, appear_from_above, appear_from_left, appear_from_right, zoom_in, rotate
-    'transition_type' => 'rotate' //appear_from_above is default
+    'transition_type' => 'appear_from_above' //appear_from_above is default
 ];

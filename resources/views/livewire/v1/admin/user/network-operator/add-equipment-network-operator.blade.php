@@ -41,6 +41,7 @@
         ])
 
 
+
     @include("partials.v1.equipmentAssignation.equipment_assignation",[
          "equipmentRelated"=>$equipmentRelated,
          "equipments"=>$equipments,

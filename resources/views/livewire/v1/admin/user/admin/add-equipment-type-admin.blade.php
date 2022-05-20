@@ -17,6 +17,14 @@
                     "button_content"=>"Ver listado",
                     "target_route"=>"administrar.v1.usuarios.admin.listado",
                     ],
+                     ["button_align"=>"right",
+                         "click_action"=>"",
+                         "button_icon"=>"fas fa-computer",
+                         "button_content"=>"Agregar equipos",
+                         "target_route"=>"administrar.v1.usuarios.admin.agregar_equipos",
+                         "target_binding"=>"admin",
+                         "target_binding_value"=>$model->id,
+                    ],
 
                 ]
         ])

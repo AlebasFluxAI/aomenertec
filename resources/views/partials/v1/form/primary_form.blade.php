@@ -94,10 +94,12 @@
 
 
                             @endforeach
-                            @include("partials.v1.form.form_submit_button",[
-                                                     "button_align"=>"right" ,
-                                                     "button_content"=>$form_submit_action_text??"Guardar"
-                                         ])
+                            @if($form_submit_action!="none")
+                                @include("partials.v1.form.form_submit_button",[
+                                                         "button_align"=>"right" ,
+                                                         "button_content"=>$form_submit_action_text??"Guardar"
+                                             ])
+                            @endif
                         </div>
 
                     </form>

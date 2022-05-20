@@ -38,10 +38,11 @@ class Equipment extends Model
             "value" => null
         ]], (parent::whereNull("admin_id")
             ->with("equipmentType")
+            ->where("name", "!=", "")
             ->orderBy("serial", "asc")
             ->get()->map(function ($equipment) {
                 return [
-                    "key" => $equipment->id . "- " . ($equipment->equipmentType ? $equipment->equipmentType->type : "") . "- " . $equipment->serial,
+                    "key" => $equipment->serial . "- " . ($equipment->equipmentType ? ucfirst(strtolower($equipment->name)) : ""),
                     "value" => $equipment->id,
                 ];
             }))->toArray()));
