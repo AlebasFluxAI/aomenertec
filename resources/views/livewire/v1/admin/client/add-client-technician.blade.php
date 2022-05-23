@@ -4,9 +4,8 @@
 
     @include("partials.v1.title",[
             "first_title"=>"Editar",
-            "second_title"=>"equipos de operador de red"
+            "second_title"=>"tecnico de cliente"
         ])
-
     {{--optiones de cabecera de formulario--}}
 
     @include("partials.v1.table_nav",
@@ -15,14 +14,14 @@
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
-                    "target_route"=>"administrar.v1.usuarios.operadores.listado",
+                    "target_route"=>"v1.admin.client.list.client",
                     ],
 
                 ]
         ])
     {{----------------------------------Formulario--------------------------}}
     @include("partials.v1.primary-card",[
-            'card_title'=>"Operador de red",
+            'card_title'=>"Cliente",
             'card_subtitle'=>$model->id,
             'card_body'=>[
                             [
@@ -31,7 +30,7 @@
                             ]   ,
                              [
                                    "name"=>"Identificacion",
-                                   "value"=>$model->identificacion
+                                   "value"=>$model->identification
                             ] ,
                                      [
                                    "name"=>"Correo",
@@ -41,11 +40,10 @@
         ])
 
 
-    @include("partials.v1.equipmentAssignation.equipment_assignation",[
-         "equipmentRelated"=>$equipmentRelated,
-         "equipments"=>$equipments,
+    @include("partials.v1.clientAssignation.client_technician_assignation",[
+        "technicianRelated"=>$technician_related,
+        "technicians"=>$technicians,
 
-     ])
-
+    ])
 
 </div>

@@ -28,8 +28,15 @@
                 ],
                  "table_actions"=>[
                                    "edit"=>"edit",
-                                   "delete"=>"delete",
                                    "details"=>"details",
+                                    "customs"=>[
+                                                    [
+                                                            "function"=>"delete",
+                                                            "conditional"=>"conditionalDelete",
+                                                            "icon"=>"fas fa-trash",
+                                                            "tooltip_title"=>"Eliminar"
+                                                    ],
+                                                ],
                                     ],
 
                "table_rows"=>$data

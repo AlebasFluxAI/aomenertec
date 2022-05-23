@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class EquipmentIndexService extends Singleton
 {
-    public function delete(Component $component, $equipmentId)
+    public function deleteEquipment(Component $component, $equipmentId)
     {
         Equipment::find($equipmentId)->delete();
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
@@ -31,6 +31,11 @@ class EquipmentIndexService extends Singleton
     public function details(Component $component, $equipmentId)
     {
         $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipmentId]);
+    }
+
+    public function conditionalDelete(Component $component, $id)
+    {
+        return Equipment::whereId($id)->whereAssigned(true)->exists();
     }
 
     public function getData(Component $component)

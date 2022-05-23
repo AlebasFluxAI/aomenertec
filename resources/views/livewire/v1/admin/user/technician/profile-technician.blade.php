@@ -93,7 +93,7 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"equipmentType.type",
+                                                                                        "Nombre"=>"name",
                                                                                         "Serial"=>"serial",
                                                                        ],
                                                                       "table_actions"=>[
@@ -122,7 +122,7 @@
        ["nav_options"=>[
                   ["button_align"=>"right",
                   "click_action"=>"",
-                  "button_content"=>"Cerrar cesion",
+                  "button_content" => "Cerrar sesión",
                   "button_icon"=>"fa-solid fa-right-from-bracket",
                   "target_route"=>"logout",
                   ],

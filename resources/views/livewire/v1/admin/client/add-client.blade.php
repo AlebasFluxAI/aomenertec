@@ -314,6 +314,22 @@
                                   "count_bool" => (count($network_operators)>0),
 
                         ])
+
+                        @include("partials.v1.form.form_dropdown_input_searchable",[
+                               "col_with" => 4,
+                               "icon_class" => "fas fa-user",
+                               "dropdown_model" => "technician",
+                               "placeholder" => "Tecnico",
+                               "required" => true,
+                               "picked_variable" => $picked_technician,
+                               "message_variable" => $message_technician,
+                               "dropdown_results" => $technicians,
+                               "selected_value_function" => "assignTechnician",
+                               "dropdown_result_id" => "id",
+                               "dropdown_result_value" => "name",
+                               "count_bool" => (count($technicians)>0),
+
+                     ])
                         {{--<div class="form-group mb-2 col-md-4 col-sm-12">
                             <div class="input-group">
                                 <div  class="input-group-prepend">

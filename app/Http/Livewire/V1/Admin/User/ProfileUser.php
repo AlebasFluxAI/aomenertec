@@ -28,6 +28,11 @@ class ProfileUser extends Component
         return $this->profileUserService->conditionalNetworkOperatorDelete($networkOperatorId);
     }
 
+    public function conditionalAdminDelete($id)
+    {
+        return $this->profileUserService->conditionalAdminDelete($this, $id);
+    }
+
 
     public function mount()
     {

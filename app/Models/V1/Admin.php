@@ -236,24 +236,25 @@ class Admin extends Model
         return Client::whereIn("network_operator_id", $this->networkOperators()->pluck("id"))->get();
     }
 
+
     public function networkOperators()
     {
         return $this->hasMany(NetworkOperator::class);
     }
 
-    public function adminEquipmentTypesAsKeyValue()
+    public function equipmentTypesAsKeyValue()
     {
         return (array_merge(
             [[
-            "key" => "Seleccione el tipo de equipo ...",
-            "value" => null
-        ]],
+                "key" => "Seleccione el tipo de equipo ...",
+                "value" => null
+            ]],
             ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
-            return [
-                "key" => $equipmentType->equipmentType->id . "- " . $equipmentType->equipmentType->type,
-                "value" => $equipmentType->equipmentType->id,
-            ];
-        }))->toArray()
+                return [
+                    "key" => $equipmentType->equipmentType->id . "- " . ucfirst(strtolower($equipmentType->equipmentType->type)),
+                    "value" => $equipmentType->equipmentType->id,
+                ];
+            }))->toArray()
         ));
     }
 
@@ -266,15 +267,15 @@ class Admin extends Model
     {
         return (array_merge(
             [[
-            "key" => "Seleccione el tipo de equipo ...",
-            "value" => null
-        ]],
+                "key" => "Seleccione el tipo de equipo ...",
+                "value" => null
+            ]],
             ($this->equipments()->with("equipmentType")->get()->map(function ($equipment) {
-            return [
-                "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                "value" => $equipment->id,
-            ];
-        }))->toArray()
+                return [
+                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                    "value" => $equipment->id,
+                ];
+            }))->toArray()
         ));
     }
 
@@ -287,17 +288,17 @@ class Admin extends Model
     {
         return (array_merge(
             [[
-            "key" => "Seleccione el tipo de equipo ...",
-            "value" => null
-        ]],
+                "key" => "Seleccione el tipo de equipo ...",
+                "value" => null
+            ]],
             ($this->equipments()
-            ->whereNull("network_operator_id")
-            ->with("equipmentType")->get()->map(function ($equipment) {
-                return [
-                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                    "value" => $equipment->id,
-                ];
-            }))->toArray()
+                ->whereNull("network_operator_id")
+                ->with("equipmentType")->get()->map(function ($equipment) {
+                    return [
+                        "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                        "value" => $equipment->id,
+                    ];
+                }))->toArray()
         ));
     }
 }

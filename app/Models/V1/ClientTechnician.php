@@ -9,16 +9,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ClientTechnician extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
         'client_id',
         'technician_id'
     ];
 
-    public function technicians()
+    public function technician()
     {
-        return $this->belongsToMany(Technician::class, 'client_technicians')->withPivot('active');
+        return $this->belongsTo(Technician::class);
     }
 
     public function client()

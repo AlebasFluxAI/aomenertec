@@ -69,8 +69,11 @@
                                                                      "button_route"=>$custom["redirect"]["route"],
                                                                      "button_binding"=>$custom["redirect"]["binding"],
                                                                      "icon_color"=>"secondary",
-                                                                     "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                        $table_row->{$table_headers[array_keys($table_headers)[0]]},
+                                                                     "model_id"=>
+                                                                     (isset($custom["model_id"])?($table_row->{$custom["model_id"]}):(
+                                                                         (str_contains($table_headers[array_keys($table_headers)[0]],".") and !str_contains($table_headers[array_keys($table_headers)[0]],"*") and $table_row->{explode(".",$table_headers[array_keys($table_headers)[0]])[0]})?
+                                                                           $table_row->{explode(".",$table_headers[array_keys($table_headers)[0]])[0]}->{explode(".",$table_headers[array_keys($table_headers)[0]])[1]}:
+                                                                           $table_row->{$table_headers[array_keys($table_headers)[0]]})),
                                                                      "icon"=>$custom["icon"],
                                                                      "tooltip_title"=>$custom["tooltip_title"] ?? ''
                                                                  ])
@@ -78,8 +81,11 @@
                                                             @include("partials.v1.table.table-action-button",[
                                                                    "button_action"=>$custom["function"],
                                                                    "icon_color"=>"secondary",
-                                                                   "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                      $table_row->{$table_headers[array_keys($table_headers)[0]]},
+                                                                     "model_id"=>
+                                                                     (isset($custom["model_id"])?($table_row->{$custom["model_id"]}):(
+                                                                         (str_contains($table_headers[array_keys($table_headers)[0]],".") and !str_contains($table_headers[array_keys($table_headers)[0]],"*") and $table_row->{explode(".",$table_headers[array_keys($table_headers)[0]])[0]})?
+                                                                           $table_row->{explode(".",$table_headers[array_keys($table_headers)[0]])[0]}->{explode(".",$table_headers[array_keys($table_headers)[0]])[1]}:
+                                                                           $table_row->{$table_headers[array_keys($table_headers)[0]]})),
                                                                    "icon"=>$custom["icon"],
                                                                    "tooltip_title"=>$custom["tooltip_title"] ?? ''
                                                                ])

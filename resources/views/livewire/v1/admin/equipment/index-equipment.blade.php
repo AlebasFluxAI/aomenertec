@@ -32,6 +32,11 @@
                                ],
                                [
                                    "col_name" =>"Nombre",
+                                   "col_data" =>"name",
+                                   "col_filter"=>false
+                               ],
+                                 [
+                                   "col_name" =>"Tipo",
                                    "col_data" =>"equipmentType.type",
                                    "col_filter"=>false
                                ],
@@ -50,7 +55,14 @@
                          "table_actions"=>[
                                             "details"=>"details",
                                             "edit"=>"edit",
-                                            "delete"=>"delete"
+                                            "customs"=>[
+                                                    [
+                                                            "function"=>"deleteEquipment",
+                                                            "conditional"=>"conditionalDelete",
+                                                            "icon"=>"fas fa-trash",
+                                                            "tooltip_title"=>"Eliminar"
+                                                    ],
+                                                ],
                                             ],
 
                                                         /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
