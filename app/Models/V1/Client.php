@@ -25,7 +25,6 @@ class Client extends Model
     public const IDENTIFICATION_TYPE_PP = 'PP';
     public const IDENTIFICATION_TYPE_NIT = 'NIT';
 
-
     protected $fillable = [
         'code',
         'identification',

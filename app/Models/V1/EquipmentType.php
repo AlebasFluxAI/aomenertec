@@ -10,10 +10,8 @@ class EquipmentType extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
-
     protected $fillable = [
-        'id', 'type', 'description'
+        'id',  'type', 'description'
     ];
 
     public static function getModelAsKeyValue()
