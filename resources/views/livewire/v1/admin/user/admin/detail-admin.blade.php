@@ -44,6 +44,10 @@
                                                     "title"=>"Clientes",
 
                                                 ],
+                                                 [
+                                                    "title"=>"Equipos",
+
+                                                ],
 
                                            ],
 
@@ -138,6 +142,8 @@
                                                                       "table_headers"=>["ID"=>"id",
                                                                                         "Nombre"=>"name",
                                                                                         "Serial"=>"serial",
+                                                                                        "Tipo"=>"equipmentType.type",
+                                                                                        "Descripcion"=>"description",
                                                                        ],
                                                                       "table_actions"=>[
                                                                                     "customs"=>[

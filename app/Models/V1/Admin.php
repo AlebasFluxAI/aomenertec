@@ -242,7 +242,7 @@ class Admin extends Model
         return $this->hasMany(NetworkOperator::class);
     }
 
-    public function adminEquipmentTypesAsKeyValue()
+    public function equipmentTypesAsKeyValue()
     {
         return (array_merge(
             [[
@@ -251,7 +251,7 @@ class Admin extends Model
             ]],
             ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
                 return [
-                    "key" => $equipmentType->equipmentType->id . "- " . $equipmentType->equipmentType->type,
+                    "key" => $equipmentType->equipmentType->id . "- " . ucfirst(strtolower($equipmentType->equipmentType->type)),
                     "value" => $equipmentType->equipmentType->id,
                 ];
             }))->toArray()

@@ -34,7 +34,6 @@ class AddClientTechnicianService extends Singleton
 {
     public function mount(Component $component, $model)
     {
-        dd($model->technician->count());
         $component->fill([
             "model" => $model,
             "technicians" => ($model->technician->count() != 0 ? [] : $this->getTechnicians()),

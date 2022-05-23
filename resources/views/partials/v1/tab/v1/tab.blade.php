@@ -5,26 +5,26 @@
             @if($index==0)
 
                 <button
-                    @if($tab_title["action"]??"" != "") wire:click="${{$tab_title["action"]}}"@endif
-                        class="nav-link active primary-nav-link" id="nav-{{$index}}-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#tab-{{$index}}"
-                        type="button"
-                        role="tab" aria-controls="tab-{{$index}}"
-                        aria-selected={{$index==0?"true":"false"}}>{{$tab_title["title"]}}
+                    @if($tab_title["action"]??"" != "") wire:click="${{$tab_title["action"]}}" @endif
+                class="nav-link active primary-nav-link" id="nav-{{$index}}-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#tab-{{$index}}"
+                    type="button"
+                    role="tab" aria-controls="tab-{{$index}}"
+                    aria-selected={{$index==0?"true":"false"}}>{{$tab_title["title"]}}
                 </button>
 
             @else
 
 
                 <button
-                        @if($tab_title["action"]??"" != "") wire:click="${{$tab_title["action"]}}"@endif
-                        class="nav-link primary-nav-link" id="nav-{{$index}}-tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#tab-{{$index}}"
-                        type="button"
-                        role="tab" aria-controls="tab-{{$index}}"
-                        aria-selected="false">{{$tab_title["title"]}}
+                    @if($tab_title["action"]??"" != "") wire:click="${{$tab_title["action"]}}" @endif
+                class="nav-link primary-nav-link" id="nav-{{$index}}-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#tab-{{$index}}"
+                    type="button"
+                    role="tab" aria-controls="tab-{{$index}}"
+                    aria-selected="false">{{$tab_title["title"]}}
                 </button>
 
             @endif
@@ -33,6 +33,7 @@
 
     </div>
 </nav>
+
 <div class="tab-content" id="myTabContent">
 
     @foreach($tab_contents as $index=>$tab_content)

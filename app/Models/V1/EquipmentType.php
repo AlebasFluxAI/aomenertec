@@ -10,10 +10,8 @@ class EquipmentType extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
-
     protected $fillable = [
-        'id', 'type', 'description'
+        'id',  'type', 'description'
     ];
 
     public static function getModelAsKeyValue()
@@ -23,7 +21,7 @@ class EquipmentType extends Model
             "value" => null
         ]], (parent::get()->map(function ($equipmentType) {
             return [
-                "key" => $equipmentType->id . "- " . $equipmentType->type,
+                "key" => $equipmentType->id . "- " . ucfirst(strtolower($equipmentType->type)),
                 "value" => $equipmentType->id,
             ];
         }))->toArray()));
