@@ -11,6 +11,7 @@
                 class="fas fa-circle-question" id="help-icon-form-i"></i>
         </p>
     </div>
+
     @include("partials.v1.form.primary_form",[
           "form_toast"=>false,
           "session_message"=>"message",
@@ -80,16 +81,11 @@
                             "col_name" =>"Asignado",
                             "col_data" =>"assigned",
                             "col_filter"=>false,
-                            "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN
+                            "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
                         ],
                  ],
-
-
-                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
-                                                 _edit_button=>{ruta para redireccionar a edicion}
-                                                 _delete_button => {boton de borrado, siempre tomando como identificador la primera colunma de la tabla - ID}
-                                                   ]*/
                 "table_rows"=>$equipmentBachelors
 
             ])
 </div>
+

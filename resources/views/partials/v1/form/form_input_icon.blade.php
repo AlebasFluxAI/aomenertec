@@ -15,7 +15,8 @@
         @else
             <input wire:model="{{$input_model}}" type="{{$input_type??"text"}}" class="form-control"
                    autocomplete="{{$autocomplete??"on"}}"
-                   name="{{$input_name??""}}" {{!$input_enabled?"disabled":""}} placeholder="{{$placeholder??""}}"
+                   name="{{$input_name??""}}"
+                   {{!( $input_enabled??true)?"disabled":""}} placeholder="{{$placeholder??""}}"
                    required="{{$required??false}}">
         @endif
     </div>

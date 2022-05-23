@@ -242,7 +242,7 @@ class Admin extends Model
         return $this->hasMany(NetworkOperator::class);
     }
 
-    public function adminEquipmentTypesAsKeyValue()
+    public function equipmentTypesAsKeyValue()
     {
         return (array_merge(
             [[

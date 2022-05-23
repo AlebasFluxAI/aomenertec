@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\Admin;
 
 use App\Http\Services\Singleton;
+use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
@@ -11,6 +12,9 @@ use Livewire\Component;
 
 class AdminAddEquipmentService extends Singleton
 {
+
+    use EquipmentAssignationTrait;
+
     public function mount(Component $component, $model)
     {
         $component->model = $model;
@@ -30,31 +34,7 @@ class AdminAddEquipmentService extends Singleton
 
     private function getEquipmentTypes(Component $component)
     {
-        return $component->model->adminEquipmentTypesAsKeyValue();
-    }
-
-    public function removeEquipment(Component $component, $equipmentId)
-    {
-        $this->adminAddEquipmentService->removeEquipment($this, $equipmentId);
-
-
-    }
-
-    public function updatedSelectedAll(Component $component)
-    {
-        if (!$component->selectedAll) {
-            $component->selectedRows = [];
-        } else {
-            $component->selectedRows = is_array($component->equipmentBachelors) ? [] : $component->equipmentBachelors->pluck("id");
-        }
-    }
-
-    public function assignEquipment(Component $component, $equipment)
-    {
-        $obj = json_decode($equipment);
-        $component->equipment = $obj->serial . " - " . $obj->name;
-        $component->equipment_id = $obj->id;
-        $component->equipmentPicked = true;
+        return $component->model->equipmentTypesAsKeyValue();
     }
 
     public function submitForm(Component $component)
@@ -84,61 +64,20 @@ class AdminAddEquipmentService extends Singleton
 
 
             }
-            $this->refreshAdminEquipmentType($component);
+            $this->refreshEquipmentType($component);
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipos agregados"]);
 
         });
     }
 
-    private function refreshAdminEquipmentType($component)
-    {
-        $this->setEquipmentBachelors($component);
-        $component->selectedRows = [];
-    }
-
-    private function setEquipmentBachelors(Component $component)
-    {
-        if (!$component->equipmentTypeId) {
-            return;
-        }
-        $component->equipmentBachelors = Equipment::whereEquipmentTypeId($component->equipmentTypeId)
-            ->where(function ($query) use ($component) {
-                if ($component->equipmentFilter) {
-                    return $query->
-                    where("serial", "like", '%' . $component->equipmentFilter . "%")
-                        ->orWhere("name", "like", '%' . $component->equipmentFilter . "%");
-                }
-            })
-            ->whereNotIn("id", $component->model->refresh()->equipments->pluck("id"))
-            ->orderBy("id", "desc")
-            ->get();
-    }
-
-    public function updatedEquipmentTypeId(Component $component)
-    {
-        $this->setEquipmentBachelors($component);
-    }
-
-    public function delete(Component $component, $equipmentId)
+    public function deleteEquipmentAssigned(Component $component, $equipmentId)
     {
         Equipment::whereId($equipmentId)->update([
             "admin_id" => null
         ]);
-        $this->refreshAdminEquipmentType($component);
+        $this->refreshEquipmentType($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);
     }
 
-    public function updated(Component $component)
-    {
-    }
 
-    public function updatedEquipmentFilter(Component $component)
-    {
-        $this->setEquipmentBachelors($component);
-    }
-
-    private function getEquipments()
-    {
-        return Equipment::getModelAsKeyValue();
-    }
 }

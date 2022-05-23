@@ -47,20 +47,9 @@ class AddEquipmentAdmin extends Component
         $this->adminAddEquipmentService->submitForm($this);
     }
 
-    public function updated()
+    public function deleteEquipmentAssigned($id)
     {
-        $this->adminAddEquipmentService->updated($this);
-    }
-
-    public function assign($client)
-    {
-        $this->adminAddEquipmentService->assign($this, $client);
-    }
-
-
-    public function delete($id)
-    {
-        $this->adminAddEquipmentService->delete($this, $id);
+        $this->adminAddEquipmentService->deleteEquipmentAssigned($this, $id);
     }
 
     public function pass()
@@ -82,12 +71,6 @@ class AddEquipmentAdmin extends Component
     {
         $this->adminAddEquipmentService->updatedSelectedAll($this);
 
-
-    }
-
-    public function updatedEquipment()
-    {
-        $this->adminAddEquipmentService->updatedEquipment($this);
     }
 
     public function render()

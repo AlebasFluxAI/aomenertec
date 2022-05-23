@@ -13,7 +13,9 @@ class EquipmentTypeIndexService extends Singleton
 {
     public function delete(Component $component, $dataId)
     {
-        EquipmentType::find($dataId)->delete();
+        if ($equipmentType = EquipmentType::find($dataId)) {
+            $equipmentType->delete();
+        }
         $component->emitTo('livewire-toast', 'show', "Tipo de equipo {$dataId} eliminado exitosamente");
 
         $component->render();
