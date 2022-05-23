@@ -1,27 +1,45 @@
 <div class="contenedor-grande">
-    <div wire:ignore class="row pt-3">
+    <div  class="row pt-3">
+        @include("partials.v1.form.check_button",[
+                        "mt"=>0,
+                        "mb"=>2,
+                        "col_width"=>3,
+                        "options_list"=>$checks,
+                        "model_select"=>"variables_selected",
+                        "name_select"=>"select_report"
+               ])
+        @include("partials.v1.form.form_list",[
+                                                 "col_with" =>3,
+                                                 "mt"=>0,
+                                                 "mb"=>2,
+                                                 "input_type"=>"text",
+                                                 "list_model" => "time_report_id",
+                                                 "list_default" => "Muestreo...",
+                                                 "list_options" => [
+                                                                    ['id'=>1, 'display_name'=> 'Minuto'],
+                                                                    ['id'=>2, 'display_name'=> 'Hora'],
+                                                                    ['id'=>3, 'display_name'=> 'Dia'],
+                                                                    ['id'=>4, 'display_name'=> 'Mes'],
 
-        @foreach($checks as $index => $item)
-            @include("partials.v1.form.check_button",[
-                                            "mt"=>0,
-                                            "mb"=>0,
-                                            'id' => $index,
-                                            "id_button"=>$item['id_button'],
-                                            "check_model" => 'checks.'.$index.'.check_model',
-                                            "label_name" => $item['label_name'],
-                                   ])
-        @endforeach
 
-            @include("partials.v1.form.form_input_icon",[
-                            "mt"=>0,
-                            "input_model"=>"date_range_report",
-                            "icon_class"=>"fas fa-calendar",
-                            "placeholder"=>"Seleccione rango de fechas",
-                            "col_with"=>6,
-                            "input_type"=>"text",
-                            "input_name"=>"datetime_report",
-                            "autocomplete"=> "off",
-                   ])
+                                                                   ],
+                                                 "list_option_value"=>"id",
+                                                 "list_option_view"=>"display_name",
+                                                 "list_option_title"=>"",
+                                        ])
+
+
+
+        @include("partials.v1.form.form_input_icon",[
+                        "mt"=>0,
+                        "input_model"=>"date_range_report",
+                        "icon_class"=>"fas fa-calendar",
+                        "placeholder"=>"Seleccione rango de fechas",
+                        "col_with"=>6,
+                        "input_type"=>"text",
+                        "input_name"=>"datetime_report",
+                        "autocomplete"=> "off",
+               ])
             <div class="d-flex justify-content-center mt-4">
         @include("partials.v1.primary_button",[
                             "col_with" => 'auto',
@@ -29,7 +47,7 @@
                             "click_action" => 'reportCsv',
                             "class_button" => 'success',
                             "button_icon" => 'fas fa-file-excel',
-                            "button_content" => 'Exportar CSV',
+                            "button_content" => 'Exportar XLSX',
 
                     ])
             @include("partials.v1.primary_button",[
@@ -43,6 +61,7 @@
                     ])
             </div>
     </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script>
 
         document.addEventListener('livewire:load', function () {
@@ -66,6 +85,10 @@
             @this.emit('dateRangeReport', '','')
                 $(this).val('');
             })
+
+
+
+
         })
     </script>
 </div>
