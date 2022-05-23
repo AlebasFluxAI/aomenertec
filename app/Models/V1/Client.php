@@ -141,7 +141,7 @@ class Client extends Model
         return (($this->equipments()
             ->get()->map(function ($data) {
                 return [
-                    "key" => $data->id . "- " . $data->name,
+                    "key" => $data->id . "-" . $data->name,
                     "value" => $data->id,
                 ];
             }))->toArray()
