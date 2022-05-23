@@ -61,7 +61,6 @@ class DataReport extends Component
         } else{
             $this->variables= $this->variables->whereNotIn('id', 29);
         }
-        dd($this->variables->all());
     }
 
 
