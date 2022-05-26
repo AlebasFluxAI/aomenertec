@@ -13,7 +13,6 @@
 
 @if($form_group??true)
     <div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-12">
-        <label for="input-group"> {{$label_text??""}}</label>
         @endif
         <div class="input-group text-center">
             @if($icon_class??"" != "")
@@ -23,6 +22,7 @@
                                         </span>
                 </div>
             @endif
+
             <input wire:model="{{$dropdown_model}}"
                    type="text" class="form-control" autocomplete="off"
                    placeholder="{{$placeholder??""}}" required="{{$required??false}}">

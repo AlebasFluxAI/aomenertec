@@ -2,7 +2,6 @@
 
 namespace App\Models\V1;
 
-use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,20 +9,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ClientTechnician extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'client_id',
         'technician_id'
     ];
 
-    protected static function booted()
+    public function technicians()
     {
-        static::addGlobalScope(new OrderIdScope());
-    }
-
-    public function technician()
-    {
-        return $this->belongsTo(Technician::class);
+        return $this->belongsToMany(Technician::class, 'client_technicians')->withPivot('active');
     }
 
     public function client()

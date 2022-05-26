@@ -26,14 +26,7 @@
             "session_message"=>"message",
             "form_submit_action"=>"submitForm",
             "form_inputs"=>[
-[
-                                        "input_type"=>"text",
-                                        "input_model"=>"name",
-                                        "icon_class"=>"fas fa-barcode",
-                                        "placeholder"=>"Nombre del equipo",
-                                        "col_with"=>12,
-                                        "required"=>true
-                            ],
+
                             [
                                         "input_type"=>"text",
                                         "input_model"=>"equipmentSerial",

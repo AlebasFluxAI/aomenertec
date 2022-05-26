@@ -21,7 +21,7 @@
                 ]
         ])
     {{----------------------------------Formulario--------------------------}}
-
+    
     @include("partials.v1.primary-card",[
             'card_title'=>"Usuario de soporte",
             'card_subtitle'=>$model->id,
@@ -32,7 +32,7 @@
                             ]   ,
                              [
                                    "name"=>"Identificacion",
-                                   "value"=>$model->identification
+                                   "value"=>$model->identificacion
                             ] ,
                                      [
                                    "name"=>"Correo",

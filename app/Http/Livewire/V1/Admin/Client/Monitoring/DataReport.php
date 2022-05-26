@@ -134,7 +134,6 @@ class DataReport extends Component
                 ->limit(24)->get();
             $array_title = ["ANIO", "MES"];
         }
-        $array = [];
         if (count($data_report)>0) {
             foreach ($this->variables_selected as $variable) {
                 if ($variable != 29)
@@ -169,15 +168,15 @@ class DataReport extends Component
                 }
             }
             array_unshift($array, $array_title);
-        }
-        $array_report = [$array];
-        if (in_array(29, $this->variables_selected)){
-            $array_penalizable = $this->arrayCreateReactive();
-            foreach ($array_penalizable as $item){
-                array_push($array_report, $item);
+            $array_report = [$array];
+            if (in_array(29, $this->variables_selected)){
+                $array_penalizable = $this->arrayCreateReactive();
+                foreach ($array_penalizable as $item){
+                    array_push($array_report, $item);
+                }
             }
+            return $array_report;
         }
-        return $array_report;
     }
 
     public function reportCsv(){
@@ -197,7 +196,7 @@ class DataReport extends Component
     }
 
     public function selectReport(){
-        $equipment =$this->client->equipmentsClient()->whereEquipmentTypeId(1)->first();
+        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
                 $equipment->id

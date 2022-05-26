@@ -96,14 +96,15 @@ class MicrocontrollerData extends Model
         $current_time = $date->modify('-' . ($unixTime % 60) . ' seconds');
         $last_data = $client->microcontrollerData()->latest()->first();
 
-        if ($last_data != null) {
-            if ($last_data->source_timestamp == $current_time->format('Y-m-d H:i:s')) {
+        if ($last_data != null){
+            if ($last_data->source_timestamp == $current_time->format('Y-m-d H:i:s')){
                 $this->source_timestamp = $current_time->modify('+60 seconds');
-            } else {
+            } else{
                 $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
             }
             $last_raw_json = json_decode($last_data->raw_json, true);
-        } else {
+        } else{
+
             $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         }
         $timestamp_unix = $current_time->getTimestamp();//delete
@@ -235,7 +236,7 @@ class MicrocontrollerData extends Model
             ]);
         }
         if ($minute == 59) {
-            if ($this->interval_real_consumption == 0) {
+            if ($this->interval_real_consumption == 0){
                 $penalizable_inductive = $this->interval_reactive_inductive_consumption;
             } else {
                 $percent_penalizable_inductive = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;

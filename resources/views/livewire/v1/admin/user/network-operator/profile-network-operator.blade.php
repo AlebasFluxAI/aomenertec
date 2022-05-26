@@ -1,16 +1,16 @@
 <div class="login">
-	@section("header") {{--extended app.blade--}}
-	@endsection
+    @section("header") {{--extended app.blade--}}
+    @endsection
 
-	@include("partials.v1.title",[
+    @include("partials.v1.title",[
             "first_title"=>"Perfil",
             "second_title"=>"operador de red"
         ])
 
 
 
-	{{----------------------------------Formulario--------------------------}}
-	@include("partials.v1.tab.v1.tab",[
+    {{----------------------------------Formulario--------------------------}}
+    @include("partials.v1.tab.v1.tab",[
 
                            "tab_titles"=>[
                                                [
@@ -56,11 +56,6 @@
 
                                                                             "value"=>$model->last_name
                                                                         ],
-                                                                         [
-                                                                            "key"=>"Identificacion",
-
-                                                                            "value"=>$model->identification
-                                                                        ],
                                                                         [
                                                                             "key"=>"Correo electronico",
 
@@ -81,9 +76,7 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Apellido"=>"last_name",
-                                                                                        "Telefono"=>"phone",
-                                                                                        "Correo electronico"=>"email",
+                                                                                        "Nombre"=>"name",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -96,20 +89,18 @@
                                                                                                     "icon"=>"fas fa-search",
                                                                                                     "tooltip_title"=>"Detalles",
                                                                                             ],
+                                                                                        ]
                                                                                     ],
                                                                       "table_rows"=>$model->clients
 
                                                                   ]
-                                                        ]
                                                ],
                                                [
                                                   "view_name"=>"partials.v1.table.primary-table",
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Apellido"=>"last_name",
-                                                                                        "Telefono"=>"phone",
-                                                                                        "Correo electronico"=>"email",
+                                                                                        "Nombre"=>"name",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -149,9 +140,7 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Apellido"=>"last_name",
-                                                                                        "Telefono"=>"phone",
-                                                                                        "Correo electronico"=>"email",
+                                                                                        "Nombre"=>"name",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -192,9 +181,6 @@
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
                                                                                         "Nombre"=>"name",
-                                                                                        "Apellido"=>"last_name",
-                                                                                        "Telefono"=>"phone",
-                                                                                        "Correo electronico"=>"email",
                                                                                         "Identificacion"=>"identification",
                                                                        ],
                                                                       "table_actions"=>[
@@ -223,22 +209,12 @@
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-users",
                                                                                                     "tooltip_title"=>"Asociar clientes",
-                                                                                            ],
-                                                                                            [
-                                                                                               "redirect"=>[
-                                                                                                           "route"=>"administrar.v1.usuarios.tecnicos.agregar_equipos",
-                                                                                                           "binding"=>"technician"
-                                                                                                     ],
-                                                                                                 "icon"=>"fas fa-laptop-medical",
-                                                                                                 "tooltip_title"=>"Asociar equipos",
-                                                                                                 "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getTechnicianEquipmentTypeRoles()
-                                                                                              ],
+                                                                                            ]
                                                                                         ]
                                                                                     ],
                                                                       "table_rows"=>$model->technicians
 
                                                                   ]
-
                                                ]
 
 
@@ -246,11 +222,11 @@
                                 ]
         ])
 
-	@include("partials.v1.table_nav",
+    @include("partials.v1.table_nav",
        ["nav_options"=>[
                   ["button_align"=>"right",
                   "click_action"=>"",
-                  "button_content" => "Cerrar sesión",
+                  "button_content"=>"Cerrar cesion",
                   "button_icon"=>"fa-solid fa-right-from-bracket",
                   "target_route"=>"logout",
                   ],

@@ -12,7 +12,6 @@
 --}}
 
 <div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-{{$col_with??12}}">
-    <label for="input-group"> {{$label_text??""}}</label>
     <div class="input-group">
         <div class="input-group-prepend">
                                     <span class="input-group-text">

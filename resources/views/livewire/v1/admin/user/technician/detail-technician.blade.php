@@ -92,7 +92,7 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
+                                                                                        "Nombre"=>"equipmentType.type",
                                                                                         "Serial"=>"serial",
                                                                        ],
                                                                       "table_actions"=>[

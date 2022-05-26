@@ -34,6 +34,8 @@ Route::get('/', function () {
 });
 
 
+
+
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get("mail/test/user_created", (MailTestController::class) . "@userCreatedNotification");
@@ -117,7 +119,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get('editar/{client}', EditClient::class)->name("v1.admin.client.edit.client");
                     Route::get('monitoreo/{client}', Livewire\V1\Admin\Client\Monitoring::class)->name("v1.admin.client.monitoring");
                     Route::get('configuraciones/{client}', Livewire\V1\Admin\Client\ConfigurationClient::class)->name("v1.admin.client.settings");
-                    Route::get('agregar_tecnicos/{client}', Livewire\V1\Admin\Client\AddClientTechnician::class)->name("v1.admin.client.technicians");
                 });
 
 

@@ -57,10 +57,6 @@ class AddClient extends Component
     public $person_type;
     public $identification_type;
     public $identification_types;
-    public $technician;
-    public $picked_technician;
-    public $message_technician;
-    public $technicians;
 
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
@@ -162,16 +158,6 @@ class AddClient extends Component
     public function importClient()
     {
         $this->addClientService->importClient($this);
-    }
-
-    public function assignTechnician($technician)
-    {
-        $this->addClientService->assignTechnician($this, $technician);
-    }
-
-    public function updatedTechnician()
-    {
-        $this->addClientService->updatedTechnician($this);
     }
 
     public function updatedPersonType()

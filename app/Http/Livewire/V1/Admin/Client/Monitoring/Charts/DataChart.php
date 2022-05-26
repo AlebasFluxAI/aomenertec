@@ -56,18 +56,16 @@ class DataChart extends Component
         } else {
             $this->data_chart = $this->client->annualMicrocontrollerData()->limit(12)->get();
         }
-        if (count($this->data_chart)>0) {
-            $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-            $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
-            $this->date_range = $this->start . " - " . $this->end;
-        }
+        $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+        $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
 
     }
 
     public function selectHistory()
     {
-        $equipment =$this->client->equipmentsClient()->whereEquipmentTypeId(1)->first();
+        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
                 $equipment->id

@@ -72,15 +72,6 @@
                                         "function"=>"settings",
                                         "icon"=>"fas fa-gear"
                                         ],
-                                         [
-                                            "redirect"=>[
-                                                        "route"=>"v1.admin.client.technicians",
-                                                        "binding"=>"client"
-                                                  ],
-                                                "icon"=>"fa fa-headset",
-                                                "tooltip_title"=>"Agregar tecnico",
-                                                "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getAddTechnicianToClientRoles()
-                                        ],
                                         [
                                             "redirect"=>[
                                                         "route"=>"v1.admin.client.monitoring",
@@ -88,9 +79,7 @@
                                                   ],
                                                 "icon"=>"fa fa-connectdevelop",
                                                 "tooltip_title"=>"Monitoreo",
-
                                         ],
-
                                     ]
                                     ],
 
