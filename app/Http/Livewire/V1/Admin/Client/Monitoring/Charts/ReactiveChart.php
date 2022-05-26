@@ -110,8 +110,7 @@ class ReactiveChart extends Component
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id
-        )->exists()) {
+            $equipment->id)->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             MQTT::publish('mc/config', $message);
             MQTT::disconnect();
@@ -173,7 +172,6 @@ class ReactiveChart extends Component
         $this->chartRender($this->penalizable);
     }
 
-<<<<<<< HEAD
     public function applyFilterReactive(){
         if ($this->time_reactive_id != 1) {
             $this->chartRender(false);
@@ -201,29 +199,6 @@ class ReactiveChart extends Component
                         } else {
                             array_push($data_aux[$index], round($item->penalizable_reactive_capacitive_consumption, 2));
                         }
-=======
-        $array_aux = $data_chart->reverse();
-        $this->series_reactive = [];
-        $data_aux = [];
-        $this->x_axis_reactive = [];
-        foreach ($this->reactive_variables as $index => $data) {
-            $data_aux[$index] = [];
-            foreach ($array_aux as $item) {
-                if ($this->time_reactive_id == 3 || $this->time_reactive_id == 4) {
-                    $raw_json = json_decode($item->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                } else {
-                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                    array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                }
-                if ($index == 0) {
-                    if ($this->time_reactive_id == 1) {
-                        $x = Carbon::create($item->year, $item->month, $item->day, $item->hour, $item->minute)->format('d F H:i');
-                    } elseif ($this->time_reactive_id == 2) {
-                        $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
-                    } elseif ($this->time_reactive_id == 3) {
-                        $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
->>>>>>> eb296671295eefb61e7272db2a15bb03d640b42f
                     } else {
                         if ($this->time_reactive_id == 3 || $this->time_reactive_id == 4) {
                             $raw_json = json_decode($item->raw_json, true);
