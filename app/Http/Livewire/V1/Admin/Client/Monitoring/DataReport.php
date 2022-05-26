@@ -17,7 +17,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class DataReport extends Component
 {
-    protected $listeners = ['dateRangeReport', 'selectReport'];
     public $client;
     public $variables;
     public $data_frame;
@@ -27,7 +26,7 @@ class DataReport extends Component
     public $date_range_report;
     public $variables_selected;
     public $time_report_id;
-
+    protected $listeners = ['dateRangeReport', 'selectReport'];
 
     public function mount(Client $client, $variables, $data_frame)
     {
@@ -50,8 +49,7 @@ class DataReport extends Component
                 [
                     'id_button' => $item['id'],
                     'label_name' => $item['display_name']
-                ]
-            );
+                ]);
             $index++;
         }
     }
@@ -65,6 +63,7 @@ class DataReport extends Component
         } else {
             $this->variables = $this->variables->whereNotIn('id', 29);
         }
+        dd($this->variables->all());
     }
 
 
@@ -76,46 +75,42 @@ class DataReport extends Component
         $this->start_report = $start;
         $this->end_report = $end;
     }
-<<<<<<< HEAD
 
     public function reportCsv()
     {
         if ($this->start_report != "") {
-=======
-    private function arrayCreate(){
-        if ($this->time_report_id == 1){
+            $array = $this->arrayCreate();
+            return Excel::download(new MonitoringDataExport($array), 'data_' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        }
+    }
+
+    private function arrayCreate()
+    {
+        if ($this->time_report_id == 1) {
             $data_report = $this->client->hourlyMicrocontrollerData()
                 ->whereBetween("created_at", [$this->start_report, $this->end_report])->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA", "MINUTO"];
-        } elseif ($this->time_report_id == 2){
->>>>>>> d1ee78cfc6a5daf08baeeb77ef94865ea255d3df
+        } elseif ($this->time_report_id == 2) {
             $data_report = $this->client->dailyMicrocontrollerData()
                 ->whereBetween("created_at", [$this->start_report, $this->end_report])->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA"];
-<<<<<<< HEAD
-            foreach ($variables_select as $variable) {
-                $variables_name = $this->data_frame->where('variable_id', $variable);
-                foreach ($variables_name as $name) {
-                    array_push($array_title, $name['display_name']);
-=======
-        } elseif($this->time_report_id == 3){
+        } elseif ($this->time_report_id == 3) {
             $data_report = $this->client->monthlyMicrocontrollerData()
                 ->whereBetween("created_at", [$this->start_report, $this->end_report])->get();
             $array_title = ["ANIO", "MES", "DIA"];
-        } else{
+        } else {
             $data_report = $this->client->annualMicrocontrollerData()
                 ->whereBetween("created_at", [$this->start_report, $this->end_report])->get();
             $array_title = ["ANIO", "MES"];
         }
-        if (count($data_report)>0) {
+        if (count($data_report) > 0) {
             foreach ($this->variables_selected as $variable) {
                 if ($variable != 29)
-                $variables_name = $this->data_frame->where('variable_id', $variable);
+                    $variables_name = $this->data_frame->where('variable_id', $variable);
                 {
                     foreach ($variables_name as $name) {
                         array_push($array_title, $name['display_name']);
                     }
->>>>>>> d1ee78cfc6a5daf08baeeb77ef94865ea255d3df
                 }
             }
             foreach ($data_report as $index => $data) {
@@ -146,33 +141,26 @@ class DataReport extends Component
         }
     }
 
-    public function reportCsv(){
-        if ($this->start_report != ""){
+    public function reportPdf()
+    {
+        if ($this->start_report != "") {
             $array = $this->arrayCreate();
-            return Excel::download(new MonitoringDataExport($array), 'data_' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
-        }
-    }
-
-    public function reportPdf(){
-        if ($this->start_report != ""){
-            $array = $this->arrayCreate();
-            for ($i=0; $i<=1; $i++){
-                return Excel::download(new MonitoringDataExport($array), 'data_'.$i.'-' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d') . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+            for ($i = 0; $i <= 1; $i++) {
+                return Excel::download(new MonitoringDataExport($array), 'data_' . $i . '-' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d') . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
             }
         }
     }
 
     public function selectReport()
     {
-        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
                 $equipment->id
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id
-        )->exists()) {
+            $equipment->id)->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             MQTT::publish('mc/config', $message);
             MQTT::disconnect();
