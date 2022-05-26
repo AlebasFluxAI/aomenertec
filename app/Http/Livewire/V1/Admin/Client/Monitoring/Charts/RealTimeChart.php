@@ -117,7 +117,7 @@ class RealTimeChart extends Component
 
     public function selectRealTime()
     {
-        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $equipment = $this->client->equipmentsClient()->whereEquipmentTypeId(1)->first();
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
                 $equipment->id

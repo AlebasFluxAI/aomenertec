@@ -28,7 +28,7 @@ class Monitoring extends Component
 
     public function tabChange()
     {
-        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $equipment =$this->client->equipmentsClient()->whereEquipmentTypeId(1)->first();
         $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
         MQTT::publish('mc/config', $message);
         MQTT::disconnect();

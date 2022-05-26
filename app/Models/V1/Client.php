@@ -48,7 +48,7 @@ class Client extends Model
         'stratum_id',
         'network_topology',
         "person_type",
-        "identification_type",
+        "identification_type"
     ];
 
     protected static function booted()
@@ -99,6 +99,11 @@ class Client extends Model
     public function stratum()
     {
         return $this->belongsTo(Stratum::class);
+    }
+
+    public function equipmentsClient()
+    {
+        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id');
     }
 
     public function pqrs()
