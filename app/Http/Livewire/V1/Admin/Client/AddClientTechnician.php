@@ -36,13 +36,11 @@ class AddClientTechnician extends Component
     public function relateTechnician()
     {
         $this->addClientTechnicianService->relateTechnician($this);
-
     }
 
     public function delete($technicianId)
     {
         $this->addClientTechnicianService->delete($this, $technicianId);
-
     }
 
     public function render()

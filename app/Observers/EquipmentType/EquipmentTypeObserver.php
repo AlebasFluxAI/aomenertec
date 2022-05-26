@@ -14,10 +14,8 @@ class EquipmentTypeObserver
      */
     public function deleting(EquipmentType $equipmentType)
     {
-
         if ($equipmentType->equipment->count() > 0) {
             abort(422, "No es posible borrar este tipo de equipo ya esta asignado a uno o mas equipos");
         }
     }
-
 }

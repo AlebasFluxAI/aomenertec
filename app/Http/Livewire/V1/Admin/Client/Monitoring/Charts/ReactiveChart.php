@@ -47,7 +47,8 @@ class ReactiveChart extends Component
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id)->exists()) {
+            $equipment->id
+        )->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             MQTT::publish('mc/config', $message);
             MQTT::disconnect();
@@ -107,7 +108,6 @@ class ReactiveChart extends Component
                 if ($index == 0) {
                     if ($this->time_reactive_id == 1) {
                         $x = Carbon::create($item->year, $item->month, $item->day, $item->hour, $item->minute)->format('d F H:i');
-
                     } elseif ($this->time_reactive_id == 2) {
                         $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
                     } elseif ($this->time_reactive_id == 3) {

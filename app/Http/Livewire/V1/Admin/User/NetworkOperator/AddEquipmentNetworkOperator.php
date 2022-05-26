@@ -74,7 +74,6 @@ class AddEquipmentNetworkOperator extends Component implements AssignedEquipment
     public function deleteEquipmentAssigned($id)
     {
         $this->networkOperatorAddEquipmentService->deleteEquipmentAssigned($this, $id);
-
     }
 
     public function updatedEquipmentTypeId()

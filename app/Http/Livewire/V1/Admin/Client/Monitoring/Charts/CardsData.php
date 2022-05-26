@@ -21,7 +21,6 @@ class CardsData extends Component
 
     public function mount(Client $client, $variables, $data_frame)
     {
-
         $this->variables = $variables;
         $this->data_frame = $data_frame;
         $this->client =  $client;
@@ -47,8 +46,8 @@ class CardsData extends Component
         }
     }
 
-    public function updatedCards($value, $key){
-
+    public function updatedCards($value, $key)
+    {
         $variable_select = $this->variables->where('id', $value)->first();
         $id = filter_var($key, FILTER_SANITIZE_NUMBER_INT);
         $aux = [];
@@ -61,7 +60,6 @@ class CardsData extends Component
         $this->cards[$id]['color'] = $variable_select['style'];
         $this->cards[$id]['icon'] = $variable_select['icon'];
         $this->cards[$id]['variables_selected'] = $aux;
-
     }
 
 

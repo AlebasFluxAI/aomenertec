@@ -35,6 +35,5 @@ class DetailClientService extends Singleton
             'model' => $model,
             'equipments' => $model->equipmentsAsKeyValue()
         ]);
-
     }
 }

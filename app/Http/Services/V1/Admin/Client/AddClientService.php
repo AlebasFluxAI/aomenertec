@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
@@ -298,7 +297,6 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
-
         while (true) {
             $code = $this->clientCode();
             if (!(Client::whereCode($code)->exists())) {

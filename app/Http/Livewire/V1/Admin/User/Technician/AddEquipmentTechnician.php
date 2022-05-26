@@ -73,25 +73,21 @@ class AddEquipmentTechnician extends Component implements AssignedEquipmentInter
     public function deleteEquipmentAssigned($id)
     {
         $this->technicianAddEquipmentTypeService->deleteEquipmentAssigned($this, $id);
-
     }
 
     public function updatedEquipmentTypeId()
     {
         $this->technicianAddEquipmentTypeService->updatedEquipmentTypeId($this);
-
     }
 
     public function updatedEquipmentFilter()
     {
         $this->technicianAddEquipmentTypeService->updatedEquipmentFilter($this);
-
     }
 
     public function updatedSelectedAll()
     {
         $this->technicianAddEquipmentTypeService->updatedSelectedAll($this);
-
     }
 
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
+
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
@@ -28,6 +29,7 @@ class DataReport extends Component
     public $time_report_id;
 
 
+
     public function mount(Client $client, $variables, $data_frame){
         $this->time_report_id = 2;
         $this->client = $client;
@@ -43,12 +45,13 @@ class DataReport extends Component
                     ['id'=>29,'display_name'=>'Matriz de reactivos']
             );
         $this->checks = collect();
-        foreach ($this->variables as $item){
+        foreach ($this->variables as $item) {
             $this->checks->push(
                 [
                 'id_button' => $item['id'],
                 'label_name' => $item['display_name']
-            ]);
+            ]
+            );
             $index++;
         }
     }
@@ -72,15 +75,28 @@ class DataReport extends Component
         $this->start_report = $start;
         $this->end_report = $end;
     }
+<<<<<<< HEAD
+
+    public function reportCsv()
+    {
+        if ($this->start_report != "") {
+=======
     private function arrayCreate(){
         if ($this->time_report_id == 1){
             $data_report = $this->client->hourlyMicrocontrollerData()
                 ->whereBetween("created_at", [$this->start_report, $this->end_report])->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA", "MINUTO"];
         } elseif ($this->time_report_id == 2){
+>>>>>>> d1ee78cfc6a5daf08baeeb77ef94865ea255d3df
             $data_report = $this->client->dailyMicrocontrollerData()
                 ->whereBetween("created_at", [$this->start_report, $this->end_report])->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA"];
+<<<<<<< HEAD
+            foreach ($variables_select as $variable) {
+                $variables_name = $this->data_frame->where('variable_id', $variable);
+                foreach ($variables_name as $name) {
+                    array_push($array_title, $name['display_name']);
+=======
         } elseif($this->time_report_id == 3){
             $data_report = $this->client->monthlyMicrocontrollerData()
                 ->whereBetween("created_at", [$this->start_report, $this->end_report])->get();
@@ -98,6 +114,7 @@ class DataReport extends Component
                     foreach ($variables_name as $name) {
                         array_push($array_title, $name['display_name']);
                     }
+>>>>>>> d1ee78cfc6a5daf08baeeb77ef94865ea255d3df
                 }
             }
             foreach ($data_report as $index => $data) {
@@ -144,7 +161,8 @@ class DataReport extends Component
         }
     }
 
-    public function selectReport(){
+    public function selectReport()
+    {
         $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
@@ -152,7 +170,8 @@ class DataReport extends Component
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id)->exists()) {
+            $equipment->id
+        )->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             MQTT::publish('mc/config', $message);
             MQTT::disconnect();
