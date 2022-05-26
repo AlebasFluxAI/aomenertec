@@ -4,6 +4,7 @@ namespace App\Models\V1;
 
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
+use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Jetstream\Role;
@@ -198,6 +199,11 @@ class Admin extends Model
         ];
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -236,7 +242,6 @@ class Admin extends Model
         return Client::whereIn("network_operator_id", $this->networkOperators()->pluck("id"))->get();
     }
 
-
     public function networkOperators()
     {
         return $this->hasMany(NetworkOperator::class);
@@ -251,8 +256,9 @@ class Admin extends Model
             ]],
             ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
                 return [
-                    "key" => $equipmentType->equipmentType->id . "- " . ucfirst(strtolower($equipmentType->equipmentType->type)),
-                    "value" => $equipmentType->equipmentType->id,
+                    "key" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : "") . "- "
+                        . ucfirst(strtolower(($equipmentType->equipmentType ? $equipmentType->equipmentType->type : ""))),
+                    "value" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : ""),
                 ];
             }))->toArray()
         ));

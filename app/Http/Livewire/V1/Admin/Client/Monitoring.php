@@ -26,7 +26,8 @@ class Monitoring extends Component
         $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
     }
 
-    public function tabChange(){
+    public function tabChange()
+    {
         $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
         $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
         MQTT::publish('mc/config', $message);

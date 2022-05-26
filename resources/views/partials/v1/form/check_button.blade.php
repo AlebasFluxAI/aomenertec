@@ -9,11 +9,3 @@
 
 </div>
 
-<script>
-    $(function() {
-
-
-        var a = $('input[name="select_report"]').selectpicker();
-
-    });
-</script>

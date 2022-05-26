@@ -91,7 +91,6 @@ class RealTimeChart extends Component
             "echo:data-monitoring." . $this->client->id . ",.dataEventRealTime" => 'addPoint',
             "selectRealTime"
         ];
-
     }
 
     public function updatedVariableChartId()

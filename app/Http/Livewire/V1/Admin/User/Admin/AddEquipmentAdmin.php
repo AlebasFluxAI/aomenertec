@@ -54,7 +54,6 @@ class AddEquipmentAdmin extends Component
 
     public function pass()
     {
-
     }
 
     public function updatedEquipmentTypeId()
@@ -70,7 +69,6 @@ class AddEquipmentAdmin extends Component
     public function updatedSelectedAll()
     {
         $this->adminAddEquipmentService->updatedSelectedAll($this);
-
     }
 
     public function render()

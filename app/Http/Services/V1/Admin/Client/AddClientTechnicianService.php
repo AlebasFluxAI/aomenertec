@@ -39,7 +39,6 @@ class AddClientTechnicianService extends Singleton
             "technicians" => (($model->technician ? $model->technician->count() : 0) != 0 ? [] : $this->getTechnicians()),
             "technician_related" => $model->technician
         ]);
-
     }
 
     private function getTechnicians()
@@ -76,6 +75,4 @@ class AddClientTechnicianService extends Singleton
             $this->refreshTechnician($component);
         });
     }
-
 }
-

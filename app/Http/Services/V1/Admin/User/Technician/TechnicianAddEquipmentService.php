@@ -35,12 +35,9 @@ class TechnicianAddEquipmentService extends Singleton
                 $equipment->update([
                     "technician_id" => $component->model->id,
                 ]);
-
-
             }
             $this->refreshEquipmentType($component);
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipos agregados"]);
-
         });
     }
 
@@ -60,6 +57,4 @@ class TechnicianAddEquipmentService extends Singleton
         }
         return [];
     }
-
-
 }
