@@ -48,7 +48,7 @@
                                [
                                    "col_name" =>"Asignado",
                                    "col_data" =>"assigned",
-                                   "col_filter"=>true,
+                                   "col_filter"=>false,
                                    "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
                                ],
                         ],
