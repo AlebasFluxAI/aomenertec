@@ -111,56 +111,19 @@ class DataChart extends Component
         } else {
             if ($this->time_id == 1) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereBetween("created_at", [$this->start, $this->end])->get();
             } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereBetween("created_at", [$this->start, $this->end])->get();
             } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereBetween("created_at", [$this->start, $this->end])->get();
             } else {
                 $data_chart = $this->client->annualMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereBetween("created_at", [$this->start, $this->end])->get();
             }
             $this->data_chart = $data_chart;
         }
-<<<<<<< HEAD
-        if (count($data_chart)>0) {
-            $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-            $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
-            $this->date_range = $this->start . " - " . $this->end;
-            $array_aux = $data_chart->reverse();
-            $this->series = [];
-            $data_aux = [];
-            $this->x_axis = [];
-            $index = 0;
-            foreach ($this->variables_selected as $data) {
-                $data_aux[$index] = [];
-                foreach ($array_aux as $item) {
-                    if ($this->time_id == 3 || $this->time_id == 4) {
-                        $raw_json = json_decode($item->raw_json, true);
-                        array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                    } else {
-                        $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                        array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                    }
-                    if ($index == 0) {
-                        if ($this->time_id == 1) {
-                            $x = Carbon::create($item->year, $item->month, $item->day, $item->hour, $item->minute)->format('d F H:i');
-
-                        } elseif ($this->time_id == 2) {
-                            $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
-                        } elseif ($this->time_id == 3) {
-                            $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
-                        } else {
-                            $x = Carbon::create($item->year, $item->month)->format(' F Y');
-                        }
-                        array_push($this->x_axis, $x);
-=======
 
         $array_aux = $data_chart->reverse();
         $this->series = [];
@@ -186,17 +149,14 @@ class DataChart extends Component
                         $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
                     } else {
                         $x = Carbon::create($item->year, $item->month)->format(' F Y');
->>>>>>> eb296671295eefb61e7272db2a15bb03d640b42f
                     }
+                    array_push($this->x_axis, $x);
                 }
-                $this->series[$index] = ["name" => $data['display_name'], "type" => $this->chart_type, "data" => $data_aux[$index]];
-                $index++;
             }
-            $this->emit('changeAxis', ['series' => $this->series, 'x_axis' => $this->x_axis, 'title' => $this->chart_title]);
-        } else{
-            $this->emit('changeAxis', ['series' => [], 'x_axis' => [], 'title' => $this->chart_title]);
-
+            $this->series[$index] = ["name" => $data['display_name'], "type"=>$this->chart_type, "data"=> $data_aux[$index]];
+            $index++;
         }
+        $this->emit('changeAxis', ['series' => $this->series,  'x_axis'=>$this->x_axis, 'title'=>$this->chart_title]);
     }
 
     public function render()
