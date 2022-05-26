@@ -19,5 +19,4 @@ interface AssignedEquipmentInterface
     public function updatedSelectedAll();
 
     public function getCardTitle();
-
 }

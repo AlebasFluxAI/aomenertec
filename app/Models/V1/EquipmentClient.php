@@ -20,4 +20,3 @@ class EquipmentClient extends Model
         'current_assigned'
     ];
 }
-

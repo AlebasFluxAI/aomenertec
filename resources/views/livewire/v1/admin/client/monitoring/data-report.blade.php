@@ -1,13 +1,17 @@
 <div class="contenedor-grande">
     <div  class="row pt-3">
-        @include("partials.v1.form.check_button",[
+
+
+        @include("partials.v1.form.multiselect_dropdown",[
                         "mt"=>0,
                         "mb"=>2,
                         "col_width"=>3,
-                        "options_list"=>$checks,
+                        "options_list"=>$variables,
                         "model_select"=>"variables_selected",
                         "name_select"=>"select_report"
+
                ])
+
         @include("partials.v1.form.form_list",[
                                                  "col_with" =>3,
                                                  "mt"=>0,
@@ -61,7 +65,7 @@
                     ])
             </div>
     </div>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
     <script>
 
         document.addEventListener('livewire:load', function () {
@@ -85,7 +89,6 @@
             @this.emit('dateRangeReport', '','')
                 $(this).val('');
             })
-
 
 
 

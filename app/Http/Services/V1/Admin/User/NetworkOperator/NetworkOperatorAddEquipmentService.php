@@ -33,12 +33,9 @@ class NetworkOperatorAddEquipmentService extends Singleton
                 $equipment->update([
                     "network_operator_id" => $component->model->id,
                 ]);
-
-
             }
             $this->refreshEquipmentType($component);
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipos agregados"]);
-
         });
     }
 
@@ -58,6 +55,4 @@ class NetworkOperatorAddEquipmentService extends Singleton
         }
         return [];
     }
-
-
 }

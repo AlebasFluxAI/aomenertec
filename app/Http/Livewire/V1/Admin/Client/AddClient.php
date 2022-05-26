@@ -167,7 +167,6 @@ class AddClient extends Component
     public function assignTechnician($technician)
     {
         $this->addClientService->assignTechnician($this, $technician);
-
     }
 
     public function updatedTechnician()
