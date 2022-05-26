@@ -110,7 +110,7 @@ class MicrocontrollerData extends Model
         $json['timestamp'] = $timestamp_unix;
 
         if ($json['import_wh'] == 0) {
-            $json['import_VArh'] = $last_raw_json['import_VArh'];
+            $json['import_wh'] = $last_raw_json['import_wh'];
             $json['import_VArh'] = $last_raw_json['import_VArh'];
             $json['ph1_import_kvarh'] = $last_raw_json['ph1_import_kvarh'];
             $json['ph2_import_kvarh'] = $last_raw_json['ph2_import_kvarh'];
