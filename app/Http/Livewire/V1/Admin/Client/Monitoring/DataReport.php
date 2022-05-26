@@ -29,8 +29,8 @@ class DataReport extends Component
     public $time_report_id;
 
 
-
-    public function mount(Client $client, $variables, $data_frame){
+    public function mount(Client $client, $variables, $data_frame)
+    {
         $this->time_report_id = 2;
         $this->client = $client;
         $this->variables = $variables;
@@ -39,30 +39,31 @@ class DataReport extends Component
         $end = Carbon::now();
         $this->start_report = $start->format('Y-m-d 00:00:00');
         $this->end_report = $end->format('Y-m-d 23:59:59');
-        $this->date_range_report = $start->format('Y-m-d')." - ".$end->format('Y-m-d');
+        $this->date_range_report = $start->format('Y-m-d') . " - " . $end->format('Y-m-d');
         $index = 0;
         $this->variables->push(
-                    ['id'=>29,'display_name'=>'Matriz de reactivos']
-            );
+            ['id' => 29, 'display_name' => 'Matriz de reactivos']
+        );
         $this->checks = collect();
         foreach ($this->variables as $item) {
             $this->checks->push(
                 [
-                'id_button' => $item['id'],
-                'label_name' => $item['display_name']
-            ]
+                    'id_button' => $item['id'],
+                    'label_name' => $item['display_name']
+                ]
             );
             $index++;
         }
     }
 
-    public function updatedTimeReportId(){
-        if ($this->time_report_id == 2){
+    public function updatedTimeReportId()
+    {
+        if ($this->time_report_id == 2) {
             $this->variables->push(
-                ['id'=>29,'display_name'=>'Matriz de reactivos']
+                ['id' => 29, 'display_name' => 'Matriz de reactivos']
             );
-        } else{
-            $this->variables= $this->variables->whereNotIn('id', 29);
+        } else {
+            $this->variables = $this->variables->whereNotIn('id', 29);
         }
     }
 
@@ -71,7 +72,7 @@ class DataReport extends Component
     {
         $aux_start = Carbon::create($start);
         $aux_end = Carbon::create($end);
-        $this->date_range_report = $aux_start->format('Y-m-d')." - ".$aux_end->format('Y-m-d');
+        $this->date_range_report = $aux_start->format('Y-m-d') . " - " . $aux_end->format('Y-m-d');
         $this->start_report = $start;
         $this->end_report = $end;
     }
