@@ -50,6 +50,7 @@ trait EquipmentAssignationTrait
                         ->orWhere("name", "like", '%' . $component->equipmentFilter . "%");
                 }
             })
+            ->whereAssigned(false)
             ->whereNotIn("id", $component->model->refresh()->equipments->pluck("id"))
             ->orderBy("id", "desc")
             ->get();

@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -48,13 +49,16 @@ class Equipment extends Model
             }))->toArray()));
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
 
     public function clients()
     {
         return $this->belongsToMany(Client::class, 'equipment_clients')
             ->withPivot('current_assigned');
     }
-
 
     public function equipmentType()
     {
@@ -75,7 +79,6 @@ class Equipment extends Model
     {
         return $this->belongsTo(Technician::class);
     }
-
 
     public function client()
     {
