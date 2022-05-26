@@ -35,6 +35,11 @@
                                    "col_data" =>"name",
                                    "col_filter"=>true
                                ],
+                                    [
+                                   "col_name" =>"Serial",
+                                   "col_data" =>"serial",
+                                   "col_filter"=>true
+                               ],
                                  [
                                    "col_name" =>"Tipo",
                                    "col_data" =>"equipmentType.type",
@@ -48,7 +53,7 @@
                                [
                                    "col_name" =>"Asignado",
                                    "col_data" =>"assigned",
-                                   "col_filter"=>true,
+                                   "col_filter"=>false,
                                    "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
                                ],
                         ],
