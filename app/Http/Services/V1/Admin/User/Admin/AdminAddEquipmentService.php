@@ -12,7 +12,6 @@ use Livewire\Component;
 
 class AdminAddEquipmentService extends Singleton
 {
-
     use EquipmentAssignationTrait;
 
     public function mount(Component $component, $model)
@@ -61,12 +60,9 @@ class AdminAddEquipmentService extends Singleton
                         "equipment_type_id" => $equipment->equipmentType->id,
                     ]);
                 }
-
-
             }
             $this->refreshEquipmentType($component);
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipos agregados"]);
-
         });
     }
 
@@ -78,6 +74,4 @@ class AdminAddEquipmentService extends Singleton
         $this->refreshEquipmentType($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);
     }
-
-
 }

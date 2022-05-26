@@ -89,6 +89,4 @@ class Technician extends Model
     {
         return $this->hasMany(Equipment::class);
     }
-
-
 }

@@ -12,6 +12,4 @@ trait TableRowCheckTrait
 {
     public $selectedRows = [];
     public $selectedAll;
-
-
 }

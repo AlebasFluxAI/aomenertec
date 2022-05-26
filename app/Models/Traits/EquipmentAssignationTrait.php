@@ -83,5 +83,4 @@ trait EquipmentAssignationTrait
         $this->setEquipmentBachelors($component);
         $component->selectedRows = [];
     }
-
 }

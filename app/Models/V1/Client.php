@@ -157,6 +157,4 @@ class Client extends Model
     {
         return $this->hasMany(Equipment::class);
     }
-
-
 }
