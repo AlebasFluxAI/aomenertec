@@ -54,6 +54,9 @@
                             "button_content" => 'Exportar XLSX',
 
                     ])
+                <div wire:loading wire:target="reportCsv">
+                    Creando documento...
+                </div>
             @include("partials.v1.primary_button",[
                             "col_with" => 'auto',
                             "button_align" => 'center',

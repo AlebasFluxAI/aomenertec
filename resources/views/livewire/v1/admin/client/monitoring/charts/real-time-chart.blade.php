@@ -25,8 +25,11 @@
                          "list_option_view"=>"display_name",
                          "list_option_title"=>"",
                 ])
-    <div class="col-12 mt-0">
-        <div class="box shadow mt-4">
+        <div class="col-12 mt-0">
+            <div wire:loading wire:target="variable_chart_id">
+                Actualizando Grafica...
+            </div>
+            <div class="box shadow mt-4">
             <div wire:ignore id="chart_real_time">
 
             </div>
