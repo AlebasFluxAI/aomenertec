@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Mail\User\UserCratedMail;
 use App\Models\V1\User;
+use App\Notifications\Alert\AlertNotification;
 use App\Notifications\User\UserCreatedNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -13,5 +14,12 @@ class MailTestController
     {
         $user = User::whereEmail("herrera_wilder@hotmail.com")->first();
         $user->notify(new UserCreatedNotification());
+    }
+
+    public function whatsappNotification()
+    {
+        $user = User::wherePhone("3209720220")->first();
+        
+        $user->notify(new AlertNotification());
     }
 }

@@ -70,6 +70,7 @@
                                     "customs"=>[
                                        [
                                         "function"=>"settings",
+                                        "tooltip_title"=>"Configuración de equipos",
                                         "icon"=>"fas fa-gear"
                                         ],
                                          [

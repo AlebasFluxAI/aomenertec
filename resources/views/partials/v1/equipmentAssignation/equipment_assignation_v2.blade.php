@@ -34,6 +34,7 @@
                        ]
                ])
 
+
     @include("partials.v1.form.form_input_icon",[
                                    "input_model"=>"equipmentFilter",
                                    "input_field"=>$form_input["input_field"]??"",
@@ -47,45 +48,54 @@
                               ])
     <p>Equipos seleccionados: {{count($selectedRows)}}</p>
     <div class="divider-1 mb-2"></div>
-    @include("partials.v2.table.primary-table",[
-                "table_pageable"=>false,
-                "table_checkable"=>true,
-                "table_empty_text"=>"No existen equipos disponibles de este tipo",
-                "table_headers"=>[
-                        [
-                            "col_name" =>"ID",
-                            "col_data" =>"id",
-                            "col_filter"=>false
-                        ],
-                        [
-                            "col_name" =>"Nombre",
-                            "col_data" =>"name",
-                            "col_filter"=>false
-                        ],
-                           [
-                            "col_name" =>"Serial",
-                            "col_data" =>"serial",
-                            "col_filter"=>false
-                        ],
-                          [
-                            "col_name" =>"Tipo",
-                            "col_data" =>"equipmentType.type",
-                            "col_filter"=>false
-                        ],
-                        [
-                            "col_name" =>"Descripcion",
-                            "col_data" =>"description",
-                            "col_filter"=>false
-                        ],
-                        [
-                            "col_name" =>"Asignado",
-                            "col_data" =>"assigned",
-                            "col_filter"=>false,
-                            "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
-                        ],
-                 ],
-                "table_rows"=>$equipmentBachelors
 
-            ])
+    <div wire:target="equipmentTypeId" wire:loading id="loading_box">
+        <div wire:target="equipmentTypeId" wire:loading.class="loader">
+        </div>
+    </div>
+
+
+    <div wire:target="equipmentTypeId" wire:loading.class="hidden">
+        @include("partials.v2.table.primary-table",[
+                    "table_pageable"=>false,
+                    "table_checkable"=>true,
+                    "table_empty_text"=>"No existen equipos disponibles de este tipo",
+                    "table_headers"=>[
+                            [
+                                "col_name" =>"ID",
+                                "col_data" =>"id",
+                                "col_filter"=>false
+                            ],
+                            [
+                                "col_name" =>"Nombre",
+                                "col_data" =>"name",
+                                "col_filter"=>false
+                            ],
+                              [
+                                "col_name" =>"Serial",
+                                "col_data" =>"serial",
+                                "col_filter"=>false
+                            ],
+                              [
+                                "col_name" =>"Tipo",
+                                "col_data" =>"equipmentType.type",
+                                "col_filter"=>false
+                            ],
+                            [
+                                "col_name" =>"Descripcion",
+                                "col_data" =>"description",
+                                "col_filter"=>false
+                            ],
+                            [
+                                "col_name" =>"Asignado",
+                                "col_data" =>"assigned",
+                                "col_filter"=>false,
+                                "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
+                            ],
+                     ],
+                    "table_rows"=>$equipmentBachelors
+
+                ])
+    </div>
 </div>
 

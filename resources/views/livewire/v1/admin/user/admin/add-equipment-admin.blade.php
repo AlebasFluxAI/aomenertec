@@ -85,7 +85,7 @@
                                                                                                      "tooltip_title"=>"Detalles",
                                                                                             ],
                                                                                               [
-                                                                                             "function"=>"delete",
+                                                                                             "function"=>"deleteEquipmentAssigned",
                                                                                              "icon"=>"fas fa-trash",
                                                                                              "model_id"=>"id"
                                                                                             ],

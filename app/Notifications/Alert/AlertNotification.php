@@ -31,10 +31,10 @@ class AlertNotification extends Notification
 
     public function toWhatsApp($notifiable)
     {
-        $template = 'alert_v1';
+        $template = 'verification';
 
         return (new WhatsAppMessage())
-            ->to($notifiable->cellphone)
+            ->to($notifiable->phone)
             ->template_name($template)
             ->params([$this->code]);
     }

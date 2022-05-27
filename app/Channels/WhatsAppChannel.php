@@ -26,36 +26,40 @@ class WhatsAppChannel
     {
         $toWhatsapp = $notification->toWhatsapp($notifiable);
 
-        $this->checkTemplateExists($toWhatsapp->template_name);
+        if (!$this->checkTemplateExists($toWhatsapp->template_name)) {
+            return;
+        }
 
-        if (!config('whatsapp.api_key') || !$this->checkTemplateExists($toWhatsapp->template_name)) {
+        if (!config('whatsapp.api_key')) {
             return;
         }
         $cellphone = $toWhatsapp->to;
 
         try {
+            $body = [
+                'to' => "57" . $cellphone,
+                'channelId' => config('whatsapp.channel_id'),
+                'type' => 'hsm',
+                'content' => [
+                    'hsm' => [
+                        'namespace' => config('whatsapp.namespace'),
+                        'templateName' => $toWhatsapp->template_name,
+                        'language' => [
+                            'policy' => 'deterministic',
+                            'code' => 'es',
+                        ],
+                        'params' => $this->getParams($toWhatsapp->params),
+                    ],
+                ],
+            ];
+
             $response = $this->httpClient->post(
                 'https://conversations.messagebird.com/v1/conversations/start',
-                [
-                    'to' => $cellphone,
-                    'channelId' => config('whatsapp.channel_id'),
-                    'type' => 'hsm',
-                    'content' => [
-                        'hsm' => [
-                            'namespace' => config('whatsapp.namespace'),
-                            'templateName' => $toWhatsapp->template_name,
-                            'language' => [
-                                'policy' => 'deterministic',
-                                'code' => 'es_ES',
-                            ],
-                            'params' => $this->getParams($toWhatsapp->params),
-                        ],
-                    ],
-                ]
+                $body
             );
-            Log::info('messagebird:');
-            Log::info($response);
+
         } catch (Throwable $e) {
+
         }
     }
 
