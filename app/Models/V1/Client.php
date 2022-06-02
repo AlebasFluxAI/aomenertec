@@ -96,7 +96,7 @@ class Client extends Model
         return $this->belongsTo(Stratum::class);
     }
 
-    public function equipmentsClient()
+    public function equipments()
     {
         return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id');
     }
