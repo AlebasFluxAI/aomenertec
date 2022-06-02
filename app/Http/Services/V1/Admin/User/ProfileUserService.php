@@ -49,9 +49,4 @@ class ProfileUserService extends Singleton
     {
         return Client::whereNetworkOperatorId($networkOperatorId)->exists();
     }
-
-    public function conditionalAdminDelete(Component $component, $modelId)
-    {
-        return NetworkOperator::whereAdminId($modelId)->exists();
-    }
 }

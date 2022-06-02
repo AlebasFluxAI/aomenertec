@@ -33,8 +33,6 @@ class AdminAddEquipmentTypeService extends Singleton
             }
 
             if ($component->model->adminEquipmentTypes()->whereEquipmentTypeId($component->equipmentTypeId)->exists()) {
-                $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "El tipo de equipo ya ha sido asignado"]);
-
                 return;
             }
             $component->model->adminEquipmentTypes()->create([

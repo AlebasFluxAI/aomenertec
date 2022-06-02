@@ -91,6 +91,7 @@ class RealTimeChart extends Component
             "echo:data-monitoring." . $this->client->id . ",.dataEventRealTime" => 'addPoint',
             "selectRealTime"
         ];
+
     }
 
     public function updatedVariableChartId()
@@ -117,7 +118,7 @@ class RealTimeChart extends Component
 
     public function selectRealTime()
     {
-        $equipment = $this->client->equipmentsClient()->whereEquipmentTypeId(1)->first();
+        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
                 $equipment->id

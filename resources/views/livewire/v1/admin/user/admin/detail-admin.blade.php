@@ -44,10 +44,6 @@
                                                     "title"=>"Clientes",
 
                                                 ],
-                                                 [
-                                                    "title"=>"Equipos",
-
-                                                ],
 
                                            ],
 
@@ -140,10 +136,8 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
+                                                                                        "Nombre"=>"equipmentType.type",
                                                                                         "Serial"=>"serial",
-                                                                                        "Tipo"=>"equipmentType.type",
-                                                                                        "Descripcion"=>"description",
                                                                        ],
                                                                       "table_actions"=>[
                                                                                     "customs"=>[

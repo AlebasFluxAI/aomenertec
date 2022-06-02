@@ -2,57 +2,74 @@
 
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
-use App\Http\Livewire\V1\Admin\User\AssignedEquipmentInterface;
 use App\Http\Services\Singleton;
-use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\NetworkOperatorEquipmentType;
 use App\Models\V1\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class NetworkOperatorAddEquipmentService extends Singleton
 {
-    use EquipmentAssignationTrait;
+    public function mount(Component $component, $model)
+    {
+        $component->model = $model;
+        $component->fill([
+            "equipments" => $this->getEquipments(),
+            "equipmentRelated" => $model->equipments
+        ]);
+    }
+
+    private function getEquipments()
+    {
+        if ($admin = User::getUserModel()) {
+            return $admin->adminEquipmentToNetworkOperatorsAsKeyValue();
+        }
+        return [];
+    }
 
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
-            if (count($component->selectedRows) == 0) {
+            if (!$component->equipmentId) {
                 $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Seleccione un tipo de equipo"]);
                 return;
             }
-            foreach ($component->selectedRows as $equipmentId) {
-                if ($component->model->equipments()->whereId($equipmentId)->exists()) {
-                    return;
-                }
+            if ($component->model->equipments()->whereId($component->equipmentId)->exists()) {
+                $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Este tipo ya fue asignado"]);
 
-                $equipment = Equipment::find($equipmentId);
-                $equipment->update([
-                    "network_operator_id" => $component->model->id,
-                ]);
+                return;
             }
-            $this->refreshEquipmentType($component);
-            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipos agregados"]);
+            Equipment::whereId($component->equipmentId)
+                ->update([
+                    "network_operator_id" => $component->model->id
+                ]);
+
+            $this->refreshAdminEquipmentType($component);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Tipo de equipo agregado"]);
         });
     }
 
-    public function deleteEquipmentAssigned(Component $component, $equipmentId)
+    private function refreshAdminEquipmentType($component)
     {
-        Equipment::whereId($equipmentId)->update([
-            "network_operator_id" => null
-        ]);
-        $this->refreshEquipmentType($component);
-        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);
+        $component->equipmentRelated = $component->model->equipments()->get();
+        $component->equipments = $this->getEquipments();
     }
 
-    private function getEquipmentTypes()
+    public function delete(Component $component, $equipmentId)
     {
-        if ($admin = Auth::user()->getAdmin()) {
-            return $admin->equipmentTypesAsKeyValue();
-        }
-        return [];
+        Equipment::whereId($equipmentId)
+            ->update([
+                "network_operator_id" => null
+            ]);
+
+        $this->refreshAdminEquipmentType($component);
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Tipo de equipo eliminado"]);
+    }
+
+    public function assignType(Component $component)
+    {
     }
 }

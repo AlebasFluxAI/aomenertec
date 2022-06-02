@@ -132,9 +132,6 @@ return [
         ['flag_name'=> 'coil8', 'description' => '',            'bit' => 10, 'index' => 53],
         ['flag_name'=> 'coil9', 'description' => '',            'bit' => 11, 'index' => 52],
         ['flag_name'=> 'coil10', 'description' => '',           'bit' => 12, 'index' => 51],
-        ['flag_name'=> 'real_consumption', 'description' => '', 'bit' => 13, 'index' => 50],
-    ['flag_name'=> 'reactive_consumption', 'description' => '', 'bit' => 14, 'index' => 49],
-
         ['flag_name'=> 'flagOpened', 'description' => '',       'bit' => 27, 'index' => 36],
         ['flag_name'=> 'flagAdc1', 'description' => '',         'bit' => 28, 'index' => 35, 'variable_name' => 'adc1'],
         ['flag_name'=> 'flagVolt1', 'description' => '',        'bit' => 29, 'index' => 34, 'variable_name' => 'ph1_volt'],

@@ -26,7 +26,6 @@
                        "table_pageable"=>false,
                                                              "table_headers"=>[
                                                                  "ID"=>"id",
-                                                                 "Nombre"=>"name",
                                                                  "Tipo"=>"equipmentType.type",
                                                                  "Serial"=>"serial",
                                                                  ],

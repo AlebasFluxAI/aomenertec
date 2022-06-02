@@ -4,7 +4,6 @@ namespace App\Models\V1;
 
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
-use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Jetstream\Role;
@@ -199,11 +198,6 @@ class Admin extends Model
         ];
     }
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -247,20 +241,19 @@ class Admin extends Model
         return $this->hasMany(NetworkOperator::class);
     }
 
-    public function equipmentTypesAsKeyValue()
+    public function adminEquipmentTypesAsKeyValue()
     {
         return (array_merge(
             [[
-                "key" => "Seleccione el tipo de equipo ...",
-                "value" => null
-            ]],
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]],
             ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
-                return [
-                    "key" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : "") . "- "
-                        . ucfirst(strtolower(($equipmentType->equipmentType ? $equipmentType->equipmentType->type : ""))),
-                    "value" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : ""),
-                ];
-            }))->toArray()
+            return [
+                "key" => $equipmentType->equipmentType->id . "- " . $equipmentType->equipmentType->type,
+                "value" => $equipmentType->equipmentType->id,
+            ];
+        }))->toArray()
         ));
     }
 
@@ -273,15 +266,15 @@ class Admin extends Model
     {
         return (array_merge(
             [[
-                "key" => "Seleccione el tipo de equipo ...",
-                "value" => null
-            ]],
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]],
             ($this->equipments()->with("equipmentType")->get()->map(function ($equipment) {
-                return [
-                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                    "value" => $equipment->id,
-                ];
-            }))->toArray()
+            return [
+                "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                "value" => $equipment->id,
+            ];
+        }))->toArray()
         ));
     }
 
@@ -294,17 +287,17 @@ class Admin extends Model
     {
         return (array_merge(
             [[
-                "key" => "Seleccione el tipo de equipo ...",
-                "value" => null
-            ]],
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]],
             ($this->equipments()
-                ->whereNull("network_operator_id")
-                ->with("equipmentType")->get()->map(function ($equipment) {
-                    return [
-                        "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                        "value" => $equipment->id,
-                    ];
-                }))->toArray()
+            ->whereNull("network_operator_id")
+            ->with("equipmentType")->get()->map(function ($equipment) {
+                return [
+                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                    "value" => $equipment->id,
+                ];
+            }))->toArray()
         ));
     }
 }

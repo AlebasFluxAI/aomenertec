@@ -10,7 +10,7 @@
           ])
 
 
-        <div>
+        <div class="contenedor-grande">
             @include("partials.v1.table_nav",
                    ["nav_options"=>[
                               ["button_align"=>"right",
@@ -28,41 +28,29 @@
                                [
                                    "col_name" =>"ID",
                                    "col_data" =>"id",
-                                   "col_filter"=>true
+                                   "col_filter"=>false
                                ],
                                [
                                    "col_name" =>"Nombre",
-                                   "col_data" =>"name",
-                                   "col_filter"=>true
-                               ],
-                                 [
-                                   "col_name" =>"Tipo",
                                    "col_data" =>"equipmentType.type",
                                    "col_filter"=>false
                                ],
                                [
                                    "col_name" =>"Descripcion",
                                    "col_data" =>"description",
-                                   "col_filter"=>true
+                                   "col_filter"=>false
                                ],
                                [
                                    "col_name" =>"Asignado",
                                    "col_data" =>"assigned",
-                                   "col_filter"=>true,
-                                   "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
+                                   "col_filter"=>false,
+                                   "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN
                                ],
                         ],
                          "table_actions"=>[
                                             "details"=>"details",
                                             "edit"=>"edit",
-                                            "customs"=>[
-                                                    [
-                                                            "function"=>"deleteEquipment",
-                                                            "conditional"=>"conditionalDelete",
-                                                            "icon"=>"fas fa-trash",
-                                                            "tooltip_title"=>"Eliminar"
-                                                    ],
-                                                ],
+                                            "delete"=>"delete"
                                             ],
 
                                                         /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

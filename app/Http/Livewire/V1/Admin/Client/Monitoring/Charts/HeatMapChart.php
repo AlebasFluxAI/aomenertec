@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
+
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,8 +25,7 @@ class HeatMapChart extends Component
     public $variable_heat_map_id;
     public $heatmap_title;
 
-    public function mount(Client $client, $reactive_variables, $data_chart_heat_map)
-    {
+    public function mount(Client $client, $reactive_variables, $data_chart_heat_map){
         $this->end_day = new Carbon();
         $this->end_heat_map = $this->end_day->format('Y-m-d');
         $this->start_day = Carbon::now()->subDay(7);
@@ -34,7 +34,7 @@ class HeatMapChart extends Component
         $this->client = $client;
         $edit_index = [];
         $i=0;
-        foreach ($reactive_variables as $data) {
+        foreach ($reactive_variables as $data){
             $edit_index[$i] = $data;
             $i++;
         }
@@ -45,8 +45,7 @@ class HeatMapChart extends Component
         $this->series_heat_map = [];
     }
 
-    public function dateRangeHeatMap($start, $end)
-    {
+    public function dateRangeHeatMap($start, $end){
         $this->start_day = Carbon::create($start);
         $this->end_day = Carbon::create($end);
         $this->end_heat_map = $this->end_day->format('Y-m-d');
@@ -55,13 +54,12 @@ class HeatMapChart extends Component
         $this->chartRender();
     }
 
-    public function updatedVariableHeatMapId()
-    {
-        if ($this->variable_heat_map_id == 2) {
+    public function updatedVariableHeatMapId(){
+        if ($this->variable_heat_map_id == 2){
             $this->heatmap_title = "Activa (kWh)";
-        } elseif ($this->variable_heat_map_id == 14) {
+        } elseif ($this->variable_heat_map_id == 14){
             $this->heatmap_title ="Reactiva Inductiva (kVArLh)";
-        } else {
+        } else{
             $this->heatmap_title ="Reactiva Capacitiva (kVArCh)";
         }
         $this->start_day = Carbon::create($this->start_heat_map);
@@ -69,17 +67,15 @@ class HeatMapChart extends Component
         $this->chartRender();
     }
 
-    public function selectHeatMap()
-    {
-        $equipment =$this->client->equipmentsClient()->whereEquipmentTypeId(1)->first();
+    public function selectHeatMap(){
+        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
         RealTimeListener::whereUserId(Auth::user()->id)
             ->whereEquipmentId(
                 $equipment->id
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id
-        )->exists()) {
+            $equipment->id)->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             MQTT::publish('mc/config', $message);
             MQTT::disconnect();
@@ -92,18 +88,17 @@ class HeatMapChart extends Component
         $this->chartRender();
     }
 
-    private function chartRender()
-    {
+    private function chartRender(){
         $max_value = 0;
         $aux=0;
         $aux_day = Carbon::create($this->end_heat_map);
         $days = $aux_day->diffInDays($this->start_day);
         $this->series_heat_map = [];
-        for ($i=0; $i<=$days; $i++) {
-            if ($i == 0) {
+        for ($i=0; $i<=$days; $i++){
+            if ($i == 0){
                 $data_chart = $this->client->dailyMicrocontrollerData()
                     ->whereDate('created_at', $this->end_day->format('Y-m-d'))->get();
-            } else {
+            } else{
                 $data_chart = $this->client->dailyMicrocontrollerData()
                     ->whereDate('created_at', ($this->end_day->subDay(1)->format('Y-m-d')))->get();
             }
@@ -117,7 +112,7 @@ class HeatMapChart extends Component
                             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                             $value = round($raw_json[$data['variable_name']], 2);
                             $data_aux[intval($item->hour)] = $value;
-                            if ($value > $max_value) {
+                            if ($value > $max_value){
                                 $max_value = $value;
                             }
                             if ($index == 0) {

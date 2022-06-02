@@ -21,7 +21,6 @@ class AddEquipment extends Component
     public $equipmentDescription;
     public $equipmentTypeId;
     public $equipmentTypes;
-    public $name;
     public $picked;
 
 

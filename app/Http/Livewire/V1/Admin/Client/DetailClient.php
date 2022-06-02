@@ -9,7 +9,7 @@ use Livewire\Component;
 class DetailClient extends Component
 {
     public $client;
-    public $equipments;
+    public $equipment;
     private $detailClientService;
 
 

@@ -3,7 +3,6 @@
 namespace App\Http\Services\V1\Admin\User\Admin;
 
 use App\Http\Services\Singleton;
-use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
@@ -12,66 +11,67 @@ use Livewire\Component;
 
 class AdminAddEquipmentService extends Singleton
 {
-    use EquipmentAssignationTrait;
-
     public function mount(Component $component, $model)
     {
         $component->model = $model;
         $component->fill([
-            "equipments" => [],
-            "equipmentRelated" => $model->equipments,
-            "equipmentTypes" => $this->getEquipmentTypes($component),
-            "empty_text" => "Utilice los filtros para ver el listado de equipos",
-            "equipmentPicked" => false,
-            "equipmentId" => null,
-            "equipmentBachelors" => [],
-            "selectedRows" => [],
-            "equipmentFilter" => null,
-            "equipmentTypeId" => null
+            "equipments" => $this->getEquipments(),
+            "equipmentRelated" => $model->equipments
         ]);
     }
 
-    private function getEquipmentTypes(Component $component)
+    private function getEquipments()
     {
-        return $component->model->equipmentTypesAsKeyValue();
+        return Equipment::getModelAsKeyValue();
     }
 
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
-            if (count($component->selectedRows) == 0) {
+            if (!$component->equipmentId) {
                 $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Seleccione un tipo de equipo"]);
                 return;
             }
-            foreach ($component->selectedRows as $equipmentId) {
-                if ($component->model->equipments()->whereId($equipmentId)->exists()) {
-                    return;
-                }
 
-                $equipment = Equipment::find($equipmentId);
-                $equipment->update([
-                    "admin_id" => $component->model->id,
-                ]);
-
-                if ($component->model->adminEquipmentTypes()
-                    ->whereEquipmentTypeId($equipment->equipmentType->id)
-                    ->doesntExist()) {
-                    $component->model->adminEquipmentTypes()->create([
-                        "equipment_type_id" => $equipment->equipmentType->id,
-                    ]);
-                }
+            if ($component->model->equipments()->whereId($component->equipmentId)->exists()) {
+                return;
             }
-            $this->refreshEquipmentType($component);
-            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipos agregados"]);
+
+            $equipment = Equipment::find($component->equipmentId);
+            $equipment->update([
+                "admin_id" => $component->model->id,
+            ]);
+
+            if ($component->model->adminEquipmentTypes()
+                ->whereEquipmentTypeId($equipment->equipmentType->id)
+                ->doesntExist()) {
+                $component->model->adminEquipmentTypes()->create([
+                    "equipment_type_id" => $equipment->equipmentType->id,
+                ]);
+            }
+
+
+            $this->refreshAdminEquipmentType($component);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo agregado"]);
         });
     }
 
-    public function deleteEquipmentAssigned(Component $component, $equipmentId)
+    private function refreshAdminEquipmentType($component)
+    {
+        $component->equipmentRelated = $component->model->equipments()->get();
+        $component->equipments = $this->getEquipments();
+    }
+
+    public function delete(Component $component, $equipmentId)
     {
         Equipment::whereId($equipmentId)->update([
             "admin_id" => null
         ]);
-        $this->refreshEquipmentType($component);
+        $this->refreshAdminEquipmentType($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);
+    }
+
+    public function updated(Component $component)
+    {
     }
 }

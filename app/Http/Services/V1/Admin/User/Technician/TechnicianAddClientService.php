@@ -42,6 +42,17 @@ class TechnicianAddClientService extends Singleton
     }
 
 
+    public function updatedClient(Component $component)
+    {
+        $component->client_picked = false;
+        $component->message_client = "No se encontraron clientes para este filtro";
+        if ($component->client != "") {
+            $component->clients = Client::where("identification", "like", '%' . $component->client . "%")
+                ->orWhere("name", "like", '%' . $component->client . "%")
+                ->take(3)->get();
+        }
+    }
+
     public function assignClient(Component $component, $client)
     {
         $obj = json_decode($client);

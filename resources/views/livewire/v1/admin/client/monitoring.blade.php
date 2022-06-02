@@ -40,6 +40,11 @@
                                                     "action" => "emit('selectReport')"
 
                                                 ],
+                                                [
+                                                    "title"=>"ON/OFF",
+                                                    "action" => "emit('selectControl')"
+
+                                                ],
 
                                            ],
 
@@ -90,6 +95,16 @@
                                                     "view_name"=>"partials.v1.chart.client_monitoring",
                                                     "view_values"=>  [
                                                                         "type" => "report_data",
+                                                                        "variables"=>$variables,
+                                                                        "client"=>$client,
+                                                                        "data_frame"=>$data_frame
+
+                                                                     ]
+                                                ],
+                                                [
+                                                    "view_name"=>"partials.v1.chart.client_monitoring",
+                                                    "view_values"=>  [
+                                                                        "type" => "control_data",
                                                                         "variables"=>$variables,
                                                                         "client"=>$client,
                                                                         "data_frame"=>$data_frame
