@@ -107,6 +107,6 @@
 </div>
 
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnwQaw-Tq9Z7BNTOCtGXJTdnnkj32z5jA&callback=myMap&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key={{config("google.apiKey")}}&callback=myMap&libraries=places"></script>
 
 
