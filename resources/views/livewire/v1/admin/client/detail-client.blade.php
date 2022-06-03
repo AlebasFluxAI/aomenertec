@@ -29,7 +29,10 @@
 
                                                 ],
                                                 [
-                                                    "title"=>"Equipos",
+                                                    "title"=>"Direcion",
+                                                ],
+                                                [
+                                                    "title"=>"Tecnico",
                                                 ]
                                            ],
 
@@ -63,10 +66,68 @@
                                                                      ]
                                                             ]
                                                 ],
-                                               [
-                                                    "view_name"=>"partials.v1.table.primary-details-table",
-                                                    "view_values"=>
-                                                            ["table_info" => $equipment]
+                                          [
+                                                   "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                        "table_pageable"=>false,
+                                                                       "table_headers"=>[
+                                                                                         "ID"=>"id",
+                                                                                         "Direccion"=>"address",
+                                                                                         "Pais"=>"country",
+                                                                                         "Departamento"=>"state",
+                                                                                         "Ciudad"=>"city",
+                                                                                         "Latitude"=>"latitude",
+                                                                                         "Longitude"=>"longitude",
+                                                                                         "Codigo postal"=>"postal_code"
+
+                                                                        ],
+                                                                        "table_actions"=>[
+                                                                            "customs"=>[
+                                                                                [
+                                                                                   "popup"=>[
+                                                                                               "modal_title"=>"Ubicación del cliente",
+                                                                                               "view_name"=>"partials.v1.map_pin",
+                                                                                               "view_data"=>[
+                                                                                                   "latitude"=>$client->addresses->first()?$client->addresses->first()->latitude:null,
+                                                                                                   "longitude"=>$client->addresses->first()?$client->addresses->first()->longitude:null,
+                                                                                             ],
+                                                                                   ],
+                                                                                ]
+                                                                            ],
+                                                                         ],
+
+                                                                       "table_rows"=>$client->addresses,
+                                                                   ],
+
+
+                                                ],
+
+                                                  [
+                                                   "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                        "table_pageable"=>false,
+                                                                       "table_headers"=>[
+                                                                                         "ID"=>"technician.id",
+                                                                                         "Nombre"=>"technician.name",
+                                                                                         "Correo"=>"technician.email",
+                                                                                         "Identificacion"=>"technician.identification",
+                                                                        ],
+                                                                        "table_actions"=>[
+                                                                            "customs"=>[
+                                                                                [
+                                                                                   "redirect"=>[
+                                                                                               "route"=>"administrar.v1.usuarios.tecnicos.detalles",
+                                                                                               "binding"=>"technician",
+
+                                                                                         ],
+                                                                                       "icon"=>"fas fa-search",
+                                                                                       "tooltip_title"=>"Detalle de tecnico",
+
+                                                                                 ],
+                                                                               ]
+                                                                            ],
+                                                                       "table_rows"=>$client->technician,
+                                                                   ],
 
                                                 ],
 

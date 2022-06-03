@@ -1,5 +1,5 @@
 <div class="form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_with??12}} col-sm-12">
-
+    <label>{{$input_label??""}}</label>
     <div class="input-group">
 
         <div class="input-group-prepend">
