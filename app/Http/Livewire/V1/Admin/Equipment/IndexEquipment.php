@@ -43,9 +43,14 @@ class IndexEquipment extends Component
         $this->indexEquipmentService->edit($this, $id);
     }
 
-    public function delete($id)
+    public function deleteEquipment($id)
     {
-        $this->indexEquipmentService->delete($this, $id);
+        $this->indexEquipmentService->deleteEquipment($this, $id);
+    }
+
+    public function conditionalDelete($id)
+    {
+        return $this->indexEquipmentService->conditionalDelete($this, $id);
     }
 
     public function render()
