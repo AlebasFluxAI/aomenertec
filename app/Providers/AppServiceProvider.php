@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\V1\Admin;
+use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientConfiguration;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
@@ -16,9 +17,11 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Observers\ClientAddressObserver;
 use App\Observers\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
 use App\Observers\EquipmentType\EquipmentTypeObserver;
+use App\Observers\HereMapObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
@@ -66,5 +69,7 @@ class AppServiceProvider extends ServiceProvider
         ClientConfiguration::observe(ClientConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
         EquipmentType::observe(EquipmentTypeObserver::class);
+        ClientAddress::observe(ClientAddressObserver::class);
+        ClientAddress::observe(HereMapObserver::class);
     }
 }

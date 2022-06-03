@@ -3,6 +3,7 @@
 namespace App\Observers\ClientConfiguration;
 
 use App\Models\V1\ClientConfiguration;
+use App\Notifications\Alert\AlertNotification;
 
 class ClientConfigurationObserver
 {

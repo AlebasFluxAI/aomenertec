@@ -64,6 +64,15 @@
                                                     @if(array_key_exists("conditional",$custom) and $this->{$custom["conditional"]}(isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
                                                                     $table_row->{$table_headers[array_keys($table_headers)[0]]}))
                                                     @else
+                                                        @if(array_key_exists("popup",$custom))
+                                                            @include("partials.v1.table.table-popup-button",[
+                                                                                "icon_color"=>"secondary",
+                                                                                "modal_title"=>$custom["popup"]["modal_title"],
+                                                                                "view_name"=>$custom["popup"]["view_name"],
+                                                                                "view_data"=>$custom["popup"]["view_data"],
+                                                                ])
+                                                            @continue
+                                                        @endif
                                                         @if(array_key_exists("redirect",$custom))
                                                             @include("partials.v1.table.table-redirect-button",[
                                                                      "button_route"=>$custom["redirect"]["route"],

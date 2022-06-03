@@ -28,14 +28,13 @@ class AlertNotification extends Notification
         return [WhatsAppChannel::class];
     }
 
-
     public function toWhatsApp($notifiable)
     {
-        $template = 'verification';
+        $template = 'alert_v1';
 
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
             ->template_name($template)
-            ->params([$this->code]);
+            ->params([]);
     }
 }
