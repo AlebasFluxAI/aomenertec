@@ -107,7 +107,7 @@
                                                    "view_values"=>[
                                                                         "table_pageable"=>false,
                                                                        "table_headers"=>[
-                                                                                         "ID"=>"technician.id",
+                                                                                         "ID"=>"id",
                                                                                          "Nombre"=>"technician.name",
                                                                                          "Correo"=>"technician.email",
                                                                                          "Identificacion"=>"technician.identification",
