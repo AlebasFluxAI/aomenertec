@@ -50,6 +50,10 @@
                                                                              "key"=>"Correo electronico",
                                                                              "value"=>$model->user->email
                                                                          ],
+                                                                          [
+                                                                             "key"=>"Identificacion",
+                                                                             "value"=>$model->identification
+                                                                         ],
                                                                          [
                                                                              "key"=>"Telefono",
                                                                              "value"=>$model->user->phone
