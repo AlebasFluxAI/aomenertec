@@ -37,6 +37,7 @@ class AddClientService extends Singleton
             "latitude" => 4.134750,
             "longitude" => -73.637094,
             "network_topologies" => $this->topologies(),
+            "network_topology" => "monophasic",
             'serials' => collect([]),
             'equipment' => [],
             "stratum_id" => Stratum::first() ? Stratum::first()->id : null,
@@ -384,6 +385,9 @@ class AddClientService extends Singleton
                 "longitude" => $component->longitude,
             ]);
 
+            $client->technician()->create([
+                "technician_id" => $component->technician_id
+            ]);
             foreach ($component->equipment as $item) {
                 EquipmentClient::create([
                     'client_id' => $client->id,

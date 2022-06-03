@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Scope\OrderIdScope;
 use Database\Seeders\ClientsTableSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +47,6 @@ class Supervisor extends Model
         ];
     }
 
-
     public static function getHome()
     {
         return "livewire.v1.admin.user.supervisor.profile-supervisor";
@@ -55,6 +55,11 @@ class Supervisor extends Model
     public static function getRole()
     {
         return "supervisor";
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
     }
 
     public function user()
