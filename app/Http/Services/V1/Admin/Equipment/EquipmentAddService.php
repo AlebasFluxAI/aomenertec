@@ -32,7 +32,7 @@ class EquipmentAddService extends Singleton
         }
 
         $userModel = User::getUserModel();
-        return $userModel->adminEquipmentTypesAsKeyValue();
+        return $userModel->equipmentTypesAsKeyValue();
     }
 
     public function loadEquipmentType(Component $component)
