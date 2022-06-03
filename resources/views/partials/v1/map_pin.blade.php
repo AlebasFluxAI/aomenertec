@@ -27,6 +27,6 @@
 <div wire:ignore id="googleMap" style="width:100%;height:400px;border-color: teal;border-width: 2px"></div>
 
 <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnwQaw-Tq9Z7BNTOCtGXJTdnnkj32z5jA&callback=myMap&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key={{config("google.apiKey")}}A&callback=myMap&libraries=places"></script>
 
 
