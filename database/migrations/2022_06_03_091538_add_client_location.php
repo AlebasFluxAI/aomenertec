@@ -16,7 +16,7 @@ class AddClientLocation extends Migration
     public function up()
     {
         foreach (Client::get() as $client) {
-            if ($client->addresses->count > 0) {
+            if ($client->addresses->count() > 0) {
                 continue;
             }
             if (!$client->latitude or !$client->longitude) {
