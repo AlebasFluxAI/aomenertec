@@ -2,7 +2,6 @@
 
 namespace App\Models\V1;
 
-use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,7 +28,6 @@ class Equipment extends Model
         'admin_id',
         'network_operator_id',
         'technician_id',
-        'client_id'
     ];
 
     public static function getModelAsKeyValue()
@@ -39,20 +37,15 @@ class Equipment extends Model
             "value" => null
         ]], (parent::whereNull("admin_id")
             ->with("equipmentType")
-            ->where("name", "!=", "")
             ->orderBy("serial", "asc")
             ->get()->map(function ($equipment) {
                 return [
-                    "key" => $equipment->serial . "- " . ($equipment->equipmentType ? ucfirst(strtolower($equipment->name)) : ""),
+                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
                     "value" => $equipment->id,
                 ];
             }))->toArray()));
     }
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
-    }
 
     public function clients()
     {
@@ -78,10 +71,5 @@ class Equipment extends Model
     public function technicians()
     {
         return $this->belongsTo(Technician::class);
-    }
-
-    public function client()
-    {
-        return $this->belongsTo(Client::class);
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Models\V1\Client;
+use App\Models\V1\RealTimeListener;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use PhpMqtt\Client\Facades\MQTT;
 
@@ -28,10 +30,18 @@ class Monitoring extends Component
 
     public function tabChange()
     {
-        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
-        $message = "{'did':".$equipment->serial.",'realTimeFlag':false}";
-        MQTT::publish('mc/config', $message);
-        MQTT::disconnect();
+        $equipment =$this->client->equipmentsClient()->whereEquipmentTypeId(1)->first();
+        RealTimeListener::whereUserId(Auth::user()->id)
+            ->whereEquipmentId(
+                $equipment->id
+            )->delete();
+
+        if (!RealTimeListener::whereEquipmentId(
+            $equipment->id)->exists()) {
+            $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+            MQTT::publish('mc/config', $message);
+            MQTT::disconnect();
+        }
     }
 
     public function render()

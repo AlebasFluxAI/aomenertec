@@ -2,7 +2,6 @@
 
 namespace App\Models\V1;
 
-use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +27,7 @@ class Client extends Model
     public const IDENTIFICATION_TYPE_PP = 'PP';
     public const IDENTIFICATION_TYPE_NIT = 'NIT';
 
+
     protected $fillable = [
         'code',
         'identification',
@@ -49,13 +49,8 @@ class Client extends Model
         'stratum_id',
         'network_topology',
         "person_type",
-        "identification_type",
+        "identification_type"
     ];
-
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
-    }
 
     public function clientConfiguration(): HasOne
     {
@@ -102,6 +97,7 @@ class Client extends Model
         return $this->belongsTo(Stratum::class);
     }
 
+
     public function pqrs()
     {
         return $this->hasMany(Pqr::class);
@@ -137,6 +133,7 @@ class Client extends Model
         return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at', 'desc');
     }
 
+
     public function technician()
     {
         return $this->hasMany(ClientTechnician::class)->latest();
@@ -163,4 +160,5 @@ class Client extends Model
     {
         return $this->hasMany(ClientAddress::class);
     }
+
 }

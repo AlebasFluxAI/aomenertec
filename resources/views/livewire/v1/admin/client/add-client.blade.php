@@ -209,6 +209,7 @@
                                   "list_option_title"=>"",
                          ])
                         </div>
+
                         @include("partials.v1.divider_title",[
                           "title"=>"Operador de red / Tecnico"
                           ]

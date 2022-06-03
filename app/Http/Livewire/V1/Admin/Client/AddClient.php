@@ -64,6 +64,7 @@ class AddClient extends Component
     public $network_topologies;
     public $last_name;
 
+
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
         'name' => 'required|min:8',
@@ -164,16 +165,6 @@ class AddClient extends Component
     public function importClient()
     {
         $this->addClientService->importClient($this);
-    }
-
-    public function assignTechnician($technician)
-    {
-        $this->addClientService->assignTechnician($this, $technician);
-    }
-
-    public function updatedTechnician()
-    {
-        $this->addClientService->updatedTechnician($this);
     }
 
     public function updatedPersonType()

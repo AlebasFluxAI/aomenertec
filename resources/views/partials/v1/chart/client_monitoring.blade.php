@@ -11,6 +11,8 @@
     @livewire('v1.admin.client.monitoring.charts.heat-map-chart', ['client'=>$client, 'reactive_variables' => $reactive_variables, 'data_chart_heat_map'=>$data_chart])
 @elseif($type == "report_data")
     @livewire('v1.admin.client.monitoring.data-report', ['client'=>$client, 'variables' => $variables, 'data_frame'=>$data_frame])
+@elseif($type == "control_data")
+    @livewire('v1.admin.client.monitoring.control', ['client'=>$client, 'variables' => $variables, 'data_frame'=>$data_frame])
 @endif
 
 

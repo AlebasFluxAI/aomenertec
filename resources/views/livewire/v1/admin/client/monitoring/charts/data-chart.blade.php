@@ -94,7 +94,7 @@
                     categories: []
                 },
                 noData: {
-                    text: 'Loading...'
+                    text: 'Sin datos'
                 },
                 stroke: {
                     curve: 'smooth'

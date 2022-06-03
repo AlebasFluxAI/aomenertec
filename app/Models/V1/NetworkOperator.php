@@ -101,6 +101,11 @@ class NetworkOperator extends Model
         return $this->hasMany(Seller::class);
     }
 
+    public function technicians()
+    {
+        return $this->hasMany(Technician::class);
+    }
+
     public function supervisors()
     {
         return $this->hasMany(Supervisor::class);
@@ -111,45 +116,24 @@ class NetworkOperator extends Model
         return $this->hasMany(Pqr::class);
     }
 
-    public function networkOperatorTechniciansAsKeyValue()
-    {
-        return (array_merge(
-            [[
-                "key" => "Seleccione un tecnico ...",
-                "value" => null
-            ]],
-            ($this->technicians()
-                ->get()->map(function ($data) {
-                    return [
-                        "key" => $data->id . "- " . $data->name,
-                        "value" => $data->id,
-                    ];
-                }))->toArray()
-        ));
-    }
-
-    public function technicians()
-    {
-        return $this->hasMany(Technician::class);
-    }
-
     public function networkOperatorEquipmentToTechnicianAsKeyValue()
     {
         return (array_merge(
             [[
-                "key" => "Seleccione el tipo de equipo ...",
-                "value" => null
-            ]],
+            "key" => "Seleccione el tipo de equipo ...",
+            "value" => null
+        ]],
             ($this->equipments()
-                ->whereNull("technician_id")
-                ->with("equipmentType")->get()->map(function ($equipment) {
-                    return [
-                        "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                        "value" => $equipment->id,
-                    ];
-                }))->toArray()
+            ->whereNull("technician_id")
+            ->with("equipmentType")->get()->map(function ($equipment) {
+                return [
+                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                    "value" => $equipment->id,
+                ];
+            }))->toArray()
         ));
     }
+
 
     public function equipments()
     {

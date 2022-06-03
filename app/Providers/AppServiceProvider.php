@@ -6,7 +6,6 @@ use App\Models\V1\Admin;
 use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientConfiguration;
 use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
@@ -20,8 +19,11 @@ use App\Models\V1\User;
 use App\Observers\ClientAddressObserver;
 use App\Observers\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
+<<<<<<< HEAD
 use App\Observers\EquipmentType\EquipmentTypeObserver;
 use App\Observers\HereMapObserver;
+=======
+>>>>>>> b97d0cf56426ff097dadceb1812c69ff39cfce70
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
@@ -68,8 +70,11 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         ClientConfiguration::observe(ClientConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
+<<<<<<< HEAD
         EquipmentType::observe(EquipmentTypeObserver::class);
         ClientAddress::observe(ClientAddressObserver::class);
         ClientAddress::observe(HereMapObserver::class);
+=======
+>>>>>>> b97d0cf56426ff097dadceb1812c69ff39cfce70
     }
 }

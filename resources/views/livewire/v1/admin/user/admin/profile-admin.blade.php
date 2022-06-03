@@ -24,10 +24,6 @@
                                                    "title"=>"Clientes de mis operadores",
 
                                                ],
-                                               [
-                                                   "title"=>"Mis equipos",
-
-                                               ],
 
                                           ],
 
@@ -92,9 +88,7 @@
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
                                                                                         "Nombre"=>"name",
-                                                                                        "Apellido"=>"last_name",
-                                                                                        "Correo"=>"email",
-                                                                                        "Identificacion"=>"identification"
+                                                                                        "Correo"=>"email"
                                                                        ],
                                                                       "table_actions"=>[
                                                                                     "customs"=>[
@@ -114,21 +108,12 @@
                                                                                                     "icon"=>"fas fa-pencil",
                                                                                                     "tooltip_title"=>"Editar",
                                                                                             ],
-                                                                                             [
+                                                                                               [
                                                                                                         "function"=>"deleteNetworkOperator",
                                                                                                         "conditional"=>"conditionalNetworkOperatorDelete",
                                                                                                         "icon"=>"fas fa-trash",
                                                                                                         "tooltip_title"=>"Eliminar"
-                                                                                             ],
-                                                                                             [
-                                                                                                   "redirect"=>[
-                                                                                                               "route"=>"administrar.v1.usuarios.operadores.agregar_equipos",
-                                                                                                               "binding"=>"networkOperator"
-                                                                                                         ],
-                                                                                                       "icon"=>"fas fa-laptop-medical",
-                                                                                                       "tooltip_title"=>"Asociar equipos",
-                                                                                                       "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getNetworkOperatorEquipmentTypeRoles()
-                                                                                                ],
+                                                                                                ]
                                                                                         ]
                                                                                     ],
                                                                       "table_rows"=>$model->networkOperators
@@ -163,14 +148,6 @@
                                                                                             ],
                                                                                             [
                                                                                                     "redirect"=>[
-                                                                                                            "route"=>"v1.admin.client.technicians",
-                                                                                                            "binding"=>"client"
-                                                                                                      ],
-                                                                                                    "icon"=>"fa fa-headset",
-                                                                                                    "tooltip_title"=>"Agregar tecnico",
-                                                                                            ],
-                                                                                            [
-                                                                                                    "redirect"=>[
                                                                                                                 "route"=>"v1.admin.client.monitoring",
                                                                                                                 "binding"=>"client"
                                                                                                           ],
@@ -188,7 +165,7 @@
                                                    "view_values"=>[
                                                                        "table_pageable"=>false,
                                                                       "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
+                                                                                        "Nombre"=>"equipmentType.type",
                                                                                         "Serial"=>"serial",
                                                                        ],
                                                                       "table_actions"=>[
@@ -207,13 +184,16 @@
 
                                                                   ]
                                                ],
-                         ]
+
+
+
+                                                                                       ]
         ])
     @include("partials.v1.table_nav",
      ["nav_options"=>[
                 ["button_align"=>"right",
                 "click_action"=>"",
-                "button_content" => "Cerrar sesión",
+                "button_content"=>"Cerrar cesion",
                 "button_icon"=>"fa-solid fa-right-from-bracket",
                 "target_route"=>"logout",
                 ],
