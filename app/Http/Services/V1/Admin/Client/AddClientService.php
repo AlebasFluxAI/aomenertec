@@ -393,9 +393,7 @@ class AddClientService extends Singleton
                 Equipment::find($item['id'])->update(['assigned' => true]);
             }
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $client->id]);
-
         });
-
     }
 
     public function clientCode($input = '0123456789', $strength = 10)

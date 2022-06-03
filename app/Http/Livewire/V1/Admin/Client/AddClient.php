@@ -63,7 +63,7 @@ class AddClient extends Component
     public $technicians;
     public $network_topologies;
     public $last_name;
-    
+
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
         'name' => 'required|min:8',

@@ -49,5 +49,4 @@ class HereMapObserver
         } catch (Throwable $e) {
         }
     }
-
 }

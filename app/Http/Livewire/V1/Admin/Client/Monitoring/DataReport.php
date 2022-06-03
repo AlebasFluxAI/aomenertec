@@ -49,7 +49,8 @@ class DataReport extends Component
                 [
                     'id_button' => $item['id'],
                     'label_name' => $item['display_name']
-                ]);
+                ]
+            );
             $index++;
         }
     }
@@ -105,8 +106,9 @@ class DataReport extends Component
         }
         if (count($data_report) > 0) {
             foreach ($this->variables_selected as $variable) {
-                if ($variable != 29)
+                if ($variable != 29) {
                     $variables_name = $this->data_frame->where('variable_id', $variable);
+                }
                 {
                     foreach ($variables_name as $name) {
                         array_push($array_title, $name['display_name']);
@@ -160,7 +162,8 @@ class DataReport extends Component
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id)->exists()) {
+            $equipment->id
+        )->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             MQTT::publish('mc/config', $message);
             MQTT::disconnect();

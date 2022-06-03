@@ -98,7 +98,7 @@ class Admin extends Model
                                 "route" => "administrar.v1.equipos.listado",
                                 "submenu" => [],
                             ],
-   
+
                         ]
                     ],
                 ]

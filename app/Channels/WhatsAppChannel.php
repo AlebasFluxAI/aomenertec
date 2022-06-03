@@ -58,7 +58,6 @@ class WhatsAppChannel
                 $body
             );
         } catch (Throwable $e) {
-
         }
     }
 

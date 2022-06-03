@@ -37,7 +37,6 @@ class AdminAddService extends Singleton
             ]);
 
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $admin->id]);
-
         });
     }
 

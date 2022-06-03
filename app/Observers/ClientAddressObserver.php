@@ -10,5 +10,4 @@ class ClientAddressObserver
     {
         $clientAddress->setHereMapJson();
     }
-
 }

@@ -19,7 +19,7 @@ class MailTestController
     public function whatsappNotification()
     {
         $user = User::wherePhone("3209720220")->first();
-        
+
         $user->notify(new AlertNotification());
     }
 }

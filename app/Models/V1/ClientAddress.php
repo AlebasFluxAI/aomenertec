@@ -12,8 +12,8 @@ class ClientAddress extends Model
     use HasFactory;
 
 
-    const STATUS_ENABLED = "enabled";
-    const STATUS_DISABLED = "disabled";
+    public const STATUS_ENABLED = "enabled";
+    public const STATUS_DISABLED = "disabled";
 
     protected $fillable = [
         "latitude",
@@ -35,7 +35,6 @@ class ClientAddress extends Model
 
     public function setHereMapJson()
     {
-
         if (!$this->latitude or !$this->longitude) {
             return;
         }
@@ -53,6 +52,5 @@ class ClientAddress extends Model
                 $this->here_maps = json_encode($body);
             }
         }
-
     }
 }
