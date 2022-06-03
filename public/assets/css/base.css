@@ -13,6 +13,39 @@
     --style_header_button: #f5b042;
 }
 
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    margin: auto;
+    border-top: 16px solid var(--style_primary);
+    width: 100px;
+    height: 100px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 1s linear infinite;
+}
+
+#loading_box {
+    padding: 5rem;
+    background-color: #f2f2f2;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
 .dot-success {
     height: 1.5rem;
     width: 1.5rem;
@@ -270,6 +303,37 @@ primary
     font-size: 13px;
 }
 
+.strike {
+    display: block;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.strike > span {
+    position: relative;
+    display: inline-block;
+}
+
+.strike > span:before,
+.strike > span:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 9999px;
+    height: 2px;
+    background: var(--style_primary);
+}
+
+.strike > span:before {
+    right: 100%;
+    margin-right: 15px;
+}
+
+.strike > span:after {
+    left: 100%;
+    margin-left: 15px;
+}
 
 /*-----------TABLA DE DETALLES-----------/*
 --------------------------------------------------------------*/
@@ -2001,9 +2065,10 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
     line-height: 1.42857143;
     color: #333333;
     white-space: nowrap;
-    margin:0;
+    margin: 0;
     transition: background-color .4s ease;
 }
+
 .checkbox-menu li input {
     margin: 0px 5px;
     top: 2px;
@@ -2012,7 +2077,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 
 .checkbox-menu li.active label {
     background-color: #cbcbff;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .checkbox-menu li label:hover,

@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Models\V1\Admin;
+use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientConfiguration;
 use App\Models\V1\Equipment;
+use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
@@ -15,14 +17,15 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Observers\ClientAddressObserver;
 use App\Observers\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
+use App\Observers\HereMapObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
 use App\Observers\User\Admin\UserAdminObserver;
 use App\Observers\User\NetworkOperator\UserNetworkOperatorObserver;
-use App\Observers\User\NetworkOperator\NetworkOperatorUserObserver;
 use App\Observers\User\Seller\UserSellerObserver;
 use App\Observers\User\SuperAdmin\UserSuperAdminObserver;
 use App\Observers\User\Supervisor\UserSupervisorObserver;
@@ -63,5 +66,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         ClientConfiguration::observe(ClientConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
+        ClientAddress::observe(ClientAddressObserver::class);
+        ClientAddress::observe(HereMapObserver::class);
     }
 }

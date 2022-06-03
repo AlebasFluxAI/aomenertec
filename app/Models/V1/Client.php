@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Client extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Notifiable;
 
     public const MONOPHASIC = 'monophasic';
     public const BIPHASIC = 'biphasic';
@@ -30,6 +32,7 @@ class Client extends Model
         'code',
         'identification',
         'name',
+        'last_name',
         'email',
         'phone',
         'direction',
@@ -39,8 +42,6 @@ class Client extends Model
         'public_lighting_tax',
         'active_client',
         'network_operator_id',
-        'department_id',
-        'municipality_id',
         'location_id',
         'client_type_id',
         'subsistence_consumption_id',
@@ -96,10 +97,6 @@ class Client extends Model
         return $this->belongsTo(Stratum::class);
     }
 
-    public function equipmentsClient()
-    {
-        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id');
-    }
 
     public function pqrs()
     {
@@ -135,4 +132,33 @@ class Client extends Model
     {
         return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at', 'desc');
     }
+
+
+    public function technician()
+    {
+        return $this->hasMany(ClientTechnician::class)->latest();
+    }
+
+    public function equipmentsAsKeyValue()
+    {
+        return (($this->equipments()
+            ->get()->map(function ($data) {
+                return [
+                    "key" => $data->id . "-" . $data->name,
+                    "value" => $data->id,
+                ];
+            }))->toArray()
+        );
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(ClientAddress::class);
+    }
+
 }

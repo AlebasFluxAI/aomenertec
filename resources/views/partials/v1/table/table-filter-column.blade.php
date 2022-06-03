@@ -1,5 +1,5 @@
 <div class="btn-group">
-    <button class="dropdown-toggle " data-toggle="dropdown"
+    <button data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
         <span class="fas fa-search"></span>
     </button>

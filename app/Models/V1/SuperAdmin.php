@@ -101,24 +101,6 @@ class SuperAdmin extends Model
                                 "route" => "administrar.v1.equipos.tipos.listado",
                                 "submenu" => []
                             ],
-                            [
-                                "title" => "Alertas",
-                                "route" => "administrar.v1.equipos.alertas.listado",
-                                "submenu" => [
-                                    [
-                                        "title" => "Alertas",
-                                        "route" => "administrar.v1.equipos.alertas.listado",
-                                        "submenu" => []
-                                    ],
-                                    [
-                                        "title" => "Tipos de alerta",
-                                        "route" => "administrar.v1.equipos.alertas.tipos.listado",
-                                        "submenu" => [
-
-                                        ]
-                                    ]
-                                ],
-                            ],
                         ]
                     ],
                 ]

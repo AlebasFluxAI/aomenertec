@@ -39,6 +39,7 @@ Route::get('/', function () {
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get("mail/test/user_created", (MailTestController::class) . "@userCreatedNotification");
+Route::post("mail/test/whatsapp_created", (MailTestController::class) . "@whatsappNotification");
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
