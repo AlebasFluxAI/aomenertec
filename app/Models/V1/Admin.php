@@ -98,7 +98,24 @@ class Admin extends Model
                                 "route" => "administrar.v1.equipos.listado",
                                 "submenu" => [],
                             ],
+                            [
+                                "title" => "Alertas",
+                                "route" => "administrar.v1.equipos.alertas.listado",
+                                "submenu" => [
+                                    [
+                                        "title" => "Alertas",
+                                        "route" => "administrar.v1.equipos.alertas.listado",
+                                        "submenu" => []
+                                    ],
+                                    [
+                                        "title" => "Tipos de alerta",
+                                        "route" => "administrar.v1.equipos.alertas.tipos.listado",
+                                        "submenu" => [
 
+                                        ]
+                                    ]
+                                ],
+                            ],
                         ]
                     ],
                 ]
@@ -230,7 +247,7 @@ class Admin extends Model
         return $this->hasMany(NetworkOperator::class);
     }
 
-    public function adminEquipmentTypesAsKeyValue()
+    public function equipmentTypesAsKeyValue()
     {
         return (array_merge(
             [[
@@ -239,8 +256,9 @@ class Admin extends Model
             ]],
             ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
                 return [
-                    "key" => $equipmentType->equipmentType->id . "- " . $equipmentType->equipmentType->type,
-                    "value" => $equipmentType->equipmentType->id,
+                    "key" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : "") . "- "
+                        . ucfirst(strtolower(($equipmentType->equipmentType ? $equipmentType->equipmentType->type : ""))),
+                    "value" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : ""),
                 ];
             }))->toArray()
         ));

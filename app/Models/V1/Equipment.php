@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,8 +16,6 @@ class Equipment extends Model
     public const STATUS_REPAIRED = 'repaired';
     public const STATUS_REPAIR = 'repair';
     public const STATUS_DISREPAIR = 'disrepair';
-
-
     protected $fillable = [
         'id',
         "name",
@@ -46,6 +45,10 @@ class Equipment extends Model
             }))->toArray()));
     }
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
 
     public function clients()
     {

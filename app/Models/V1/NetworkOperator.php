@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,7 +71,6 @@ class NetworkOperator extends Model
         ];
     }
 
-
     public static function getHome()
     {
         return "livewire.v1.admin.user.network-operator.profile-network-operator";
@@ -79,6 +79,11 @@ class NetworkOperator extends Model
     public static function getRole()
     {
         return User::TYPE_NETWORK_OPERATOR;
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
     }
 
     public function user()
@@ -120,17 +125,17 @@ class NetworkOperator extends Model
     {
         return (array_merge(
             [[
-            "key" => "Seleccione el tipo de equipo ...",
-            "value" => null
-        ]],
+                "key" => "Seleccione el tipo de equipo ...",
+                "value" => null
+            ]],
             ($this->equipments()
-            ->whereNull("technician_id")
-            ->with("equipmentType")->get()->map(function ($equipment) {
-                return [
-                    "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                    "value" => $equipment->id,
-                ];
-            }))->toArray()
+                ->whereNull("technician_id")
+                ->with("equipmentType")->get()->map(function ($equipment) {
+                    return [
+                        "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                        "value" => $equipment->id,
+                    ];
+                }))->toArray()
         ));
     }
 
