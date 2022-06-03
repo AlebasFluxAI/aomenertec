@@ -3,7 +3,18 @@
         <table class="table table-bordered">
             <thead style="position: sticky;top: 0;z-index: 2">
             <tr>
+                @if($table_checkable??false)
+                    <th>
+                        <div class="form-check">
+                            <input wire:model="selectedAll" class="form-check-input" type="checkbox"
+                                {{count($table_rows)==0?"disabled":""}}
+                            >
+                        </div>
+                    </th>
+                @endif
+
                 @foreach($table_headers as $table_header)
+
                     <th>{{$table_header["col_name"]}}
                         @if($table_header["col_filter"])
                             @include("partials.v1.table.table-filter-column",[
@@ -21,8 +32,29 @@
 
 
             @isset($table_rows)
+                @if(count($table_rows)==0)
+                    <tr>
+                        <td colspan="{{count($table_headers)+2}}">
+                            <div class="text-center">
+                                <i class="fa-solid fa-inbox empty-table"></i>
+                                <p class="empty-table-text">{{$table_empty_text??"No existen registros"}}</p>
+                            </div>
+                        </td>
+                    </tr>
+
+                @endif
                 @foreach($table_rows as $index=>$table_row)
                     <tr class="shadow-sm">
+                        @if($table_checkable??false)
+
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" wire:model="selectedRows" type="checkbox"
+                                           value="{{ $table_row->{$table_headers[0]["col_data"]} }}"
+                                           id="flexCheckDefault">
+                                </div>
+                            </td>
+                        @endif
                         @foreach($table_headers as $table_header)
                             <td>
                                 @if(str_contains($table_header["col_data"],".") and !str_contains($table_header["col_data"],"*") and $table_row->{explode(".",$table_header["col_data"])[0]})

@@ -4,32 +4,17 @@
 
     @include("partials.v1.title",[
             "first_title"=>"Editar",
-            "second_title"=>"equipos de administrador"
+            "second_title"=>$this->getPageTitle()
         ])
     {{--optiones de cabecera de formulario--}}
 
     @include("partials.v1.table_nav",
-         ["nav_options"=>[
-                    ["button_align"=>"right",
-                    "click_action"=>"",
-                    "button_icon"=>"fas fa-list",
-                    "button_content"=>"Ver listado",
-                    "target_route"=>"administrar.v1.usuarios.admin.listado",
-                    ],
-                    ["button_align"=>"right",
-                         "click_action"=>"",
-                         "button_icon"=>"fas fa-laptop-medical",
-                         "button_content"=>"Agregar tipos de equipo",
-                         "target_route"=>"administrar.v1.usuarios.admin.agregar_tipos_equipo",
-                         "target_binding"=>"admin",
-                         "target_binding_value"=>$model->id,
-                    ],
+         ["nav_options"=> $this->getNavOptions()
 
-                ]
         ])
 
     @include("partials.v1.primary-card",[
-            'card_title'=>"Administrador",
+            'card_title'=>$this->getCardTitle(),
             'card_subtitle'=>$model->id,
             'card_body'=>[
                             [
@@ -76,14 +61,14 @@
                                                                        ],
                                                                       "table_actions"=>[
                                                                                     "customs"=>[
-                                                                                           [
+                                                                                             [
                                                                                                     "redirect"=>[
                                                                                                             "route"=>"administrar.v1.equipos.detalle",
                                                                                                             "binding"=>"equipment"
                                                                                                       ],
                                                                                                     "icon"=>"fas fa-search",
                                                                                                      "tooltip_title"=>"Detalles",
-                                                                                            ],
+                                                                                               ],
                                                                                               [
                                                                                              "function"=>"deleteEquipmentAssigned",
                                                                                              "icon"=>"fas fa-trash",
