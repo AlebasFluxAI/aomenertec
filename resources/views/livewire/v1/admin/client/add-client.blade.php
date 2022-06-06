@@ -67,7 +67,7 @@
                         </div>
 
                         @include("partials.v1.divider_title",[
-                                "title"=>"Tipo de identificación"
+                                "title"=>"Datos de facturacion"
                         ]
                        )
                         <div class="row pl-5 pr-3">
@@ -104,6 +104,25 @@
                                     "input_type"=>"text",
                                     "required"=>true
                            ])
+                            @include("partials.v1.form.form_input_icon",[
+                                  "input_label"=>"Nombre para generar factura",
+                                  "input_model"=>"identification",
+                                  "icon_class"=>"fas fa-barcode",
+                                  "placeholder"=>"identificación",
+                                  "col_with"=>8,
+                                  "input_type"=>"text",
+                                  "required"=>true
+                            ])
+                            @include("partials.v1.form.form_input_icon",[
+                                "input_label"=>"Direccion de facturacion",
+                                "input_model"=>"identification",
+                                "icon_class"=>"fas fa-barcode",
+                                "placeholder"=>"identificación",
+                                "col_with"=>8,
+                                "input_type"=>"text",
+                                "required"=>true
+                          ])
+
                         </div>
 
                         @include("partials.v1.divider_title",[

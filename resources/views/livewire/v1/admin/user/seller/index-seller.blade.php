@@ -45,6 +45,11 @@
                        "col_filter"=>true
                    ],
                    [
+                       "col_name" =>"Identificacion",
+                       "col_data" =>"identification",
+                       "col_filter"=>true
+                   ],
+                   [
                        "col_name" =>"Telefono",
                        "col_data" =>"phone",
                        "col_filter"=>true

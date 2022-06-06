@@ -72,6 +72,10 @@
 
                                                                              "value"=>$model->email
                                                                          ],
+                                                                          [
+                                                                             "key"=>"Identificacion",
+                                                                             "value"=>$model->identification
+                                                                         ],
                                                                          [
                                                                              "key"=>"Telefono",
 
