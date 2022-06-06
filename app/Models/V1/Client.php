@@ -157,7 +157,7 @@ class Client extends Model
 
     public function equipments()
     {
-        return $this->hasMany(Equipment::class);
+        return $this->belongsToMany(Equipment::class, 'equipment_clients', 'client_id', 'equipment_id');
     }
 
     public function addresses()
