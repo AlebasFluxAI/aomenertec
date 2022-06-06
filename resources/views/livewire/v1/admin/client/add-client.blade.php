@@ -295,7 +295,7 @@
                                               "col_with"=>8,
                                       "dropdown_model" => "equipment.".$index.".serial",
                                       "placeholder" => $item['type'],
-                                      "required" => true,
+                                      "required" => false,
                                       "picked_variable" => $item['picked'],
                                       "message_variable" => $item['post'],
                                       "variable_2" => $index??0,

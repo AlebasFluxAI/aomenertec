@@ -29,7 +29,7 @@
 
                                                 ],
                                                 [
-                                                    "title"=>"Direcion",
+                                                    "title"=>"Dirección",
                                                 ],
                                                 [
                                                     "title"=>"Tecnico",

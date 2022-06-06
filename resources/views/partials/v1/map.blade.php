@@ -98,6 +98,14 @@
 
 <div wire:ignore id="googleMap" style="width:100%;height:400px;border-color: teal;border-width: 2px"></div>
 
+
+<div class="col-md-8 mb-3">
+    <p><b>Direccion:</b></p>
+    <ul>
+        <li>  {{$decodedAddress}}</li>
+
+    </ul>
+</div>
 <div class="col-md-8 mb-3">
     <p><b>Coordenadas:</b></p>
     <ul>

@@ -31,6 +31,7 @@ class AddClient extends Component
     public $longitude;
     public $stratum_id;
     public $strata;
+    public $decodedAddress;
     public $client_type;
     public $client_type_id;
     public $client_types;
@@ -93,6 +94,12 @@ class AddClient extends Component
         if ($this->validateOnly($property_name)) {
             $this->addClientService->updated($this, $property_name, $value);
         }
+    }
+
+    public function updatedLatitude()
+    {
+        
+        $this->addClientService->updatedLatitude($this);
     }
 
     public function assignEquipment($equipment, $aux)

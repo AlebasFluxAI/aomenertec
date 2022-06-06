@@ -25,7 +25,7 @@
 
             <input wire:model="{{$dropdown_model}}"
                    type="text" class="form-control" autocomplete="off"
-                   placeholder="{{$placeholder??""}}" required="{{$required??false}}">
+                   placeholder="{{$placeholder??""}}" {{$required??"required"}}">
             <div class="input-group-append">
                                         <span class="input-group-text">
                                             @if($picked_variable)
