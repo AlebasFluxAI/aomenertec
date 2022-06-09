@@ -98,7 +98,7 @@ class Admin extends Model
                                 "route" => "administrar.v1.equipos.listado",
                                 "submenu" => [],
                             ],
-
+                          
                         ]
                     ],
                 ]
@@ -228,22 +228,6 @@ class Admin extends Model
     public function networkOperators()
     {
         return $this->hasMany(NetworkOperator::class);
-    }
-
-    public function networkOperatorsAsKeyValue()
-    {
-        return (array_merge(
-            [[
-                "key" => "Seleccione el operador de red...",
-                "value" => null
-            ]],
-            ($this->networkOperators()->get()->map(function ($network_operator) {
-                return [
-                    "key" => $network_operator->name,
-                    "value" => $network_operator->id
-                ];
-            }))->toArray()
-        ));
     }
 
     public function equipmentTypesAsKeyValue()
