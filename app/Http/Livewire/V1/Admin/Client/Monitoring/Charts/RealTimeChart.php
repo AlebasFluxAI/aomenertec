@@ -129,7 +129,8 @@ class RealTimeChart extends Component
         ]);
 
         $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
-        MQTT::publish('mc/config', $message);
+        $topic = 'mc/config'.$equipment->serial;
+        MQTT::publish($topic, $message);
         MQTT::disconnect();
         //MQTT:disconnect();
     }

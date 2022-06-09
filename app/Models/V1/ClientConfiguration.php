@@ -109,7 +109,6 @@ class ClientConfiguration extends Model
         $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
         $message = $this->frameConfig($client->networkOperator->identification, $equipment->serial);
         $topic = "mc/config/".$equipment->serial;
-        dd($message);
         MQTT::publish($topic, $message);
         MQTT::disconnect();
     }
