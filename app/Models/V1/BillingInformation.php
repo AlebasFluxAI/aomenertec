@@ -6,24 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ClientSupervisor extends Model
+class BillingInformation extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = "billing_informations";
+
     protected $fillable = [
-        'supervisor_id',
-        'client_id',
-        'active'
+        "client_id",
+        "name",
+        "address",
+        "identification",
+        "phone",
+        "identification_type",
+        "default"
     ];
 
     public function client()
     {
         return $this->belongsTo(Client::class);
-    }
-
-    public function supervisor()
-    {
-        return $this->belongsTo(Supervisorr::class);
     }
 }

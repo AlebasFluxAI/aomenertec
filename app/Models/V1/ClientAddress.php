@@ -25,7 +25,8 @@ class ClientAddress extends Model
         "client_id",
         "here_maps",
         "postal_code",
-        "status"
+        "status",
+        "details"
     ];
 
     public function client()

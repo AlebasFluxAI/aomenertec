@@ -19,10 +19,6 @@ class AddClient extends Component
     public $phone;
     public $location_type_id;
     public $location_types;
-    public $department_id;
-    public $departments;
-    public $municipality_id;
-    public $municipalities;
     public $location_id;
     public $locations;
     public $direction;
@@ -62,8 +58,15 @@ class AddClient extends Component
     public $picked_technician;
     public $message_technician;
     public $technicians;
+    public $create_supervisor;
     public $network_topologies;
     public $last_name;
+    public $has_telemetry;
+    public $billing_name;
+    public $billing_address;
+    public $technician_id;
+    public $technician_select_disabled;
+    public $addressDetails;
 
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
@@ -96,15 +99,24 @@ class AddClient extends Component
         }
     }
 
+    public function updatedNetworkOperatorId()
+    {
+        $this->addClientService->updatedNetworkOperatorId($this);
+    }
+
     public function updatedLatitude()
     {
-        
         $this->addClientService->updatedLatitude($this);
     }
 
     public function assignEquipment($equipment, $aux)
     {
         $this->addClientService->assignEquipment($this, $equipment, $aux);
+    }
+
+    public function updatedClientTypeId()
+    {
+        return $this->addClientService->updatedClientTypeId($this);
     }
 
     public function assignEquipmentFirst($type_id)
@@ -120,11 +132,6 @@ class AddClient extends Component
     public function updatedDepartmentId()
     {
         $this->addClientService->updatedDepartmentId($this);
-    }
-
-    public function updatedClientTypeId()
-    {
-        $this->addClientService->updatedClientTypeId($this);
     }
 
     public function updatedMunicipalityId()

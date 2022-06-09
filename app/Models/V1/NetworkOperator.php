@@ -106,6 +106,22 @@ class NetworkOperator extends Model
         return $this->hasMany(Seller::class);
     }
 
+    public function techniciansAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el tecnico...",
+                "value" => null
+            ]],
+            ($this->technicians()->get()->map(function ($technician) {
+                return [
+                    "key" => $technician->name,
+                    "value" => $technician->id
+                ];
+            }))->toArray()
+        ));
+    }
+
     public function technicians()
     {
         return $this->hasMany(Technician::class);
