@@ -105,9 +105,32 @@ class ClientConfiguration extends Model
 
     public function setRemoteConfiguration()
     {
-        dd($this->toArray());
-        MQTT::publish("ms/config", json_encode(
-            $this->toArray()
-        ));
+        $client = Client::find($this->client_id);
+        $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
+        $message = $this->frameConfig($client->networkOperator->identification, $equipment->serial);
+        $topic = "mc/config/".$equipment->serial;
+        dd($message);
+        MQTT::publish($topic, $message);
+        MQTT::disconnect();
+    }
+
+    private function frameConfig($network_operator, $equipment){
+        $alert_config_frame = config('data-frame.alert_config_frame');
+        $binary_data = [];
+        foreach ($alert_config_frame as $item){
+            if ($item['variable_name'] == 'network_operator_id'){
+                array_push($binary_data, pack($item['type'], $network_operator));
+            } elseif ($item['variable_name'] == 'equipment_id') {
+                array_push($binary_data, pack($item['type'], $equipment));
+            } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                array_push($binary_data, pack($item['type'], $network_operator));
+            } elseif ($item['variable_name'] == 'equipment_new_id') {
+                array_push($binary_data, pack($item['type'], $equipment));
+            } else {
+                array_push($binary_data, pack($item['type'], $this->{$item['variable_name']}));
+            }
+        }
+        $message = base64_encode(implode($binary_data));
+        return $message;
     }
 }
