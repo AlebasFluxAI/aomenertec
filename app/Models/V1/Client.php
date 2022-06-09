@@ -28,7 +28,6 @@ class Client extends Model
     public const IDENTIFICATION_TYPE_PP = 'PP';
     public const IDENTIFICATION_TYPE_NIT = 'NIT';
 
-
     protected $fillable = [
         'code',
         'identification',
@@ -57,6 +56,12 @@ class Client extends Model
     {
         static::addGlobalScope(new OrderIdScope());
     }
+
+    public function billingInformation()
+    {
+        return $this->hasMany(BillingInformation::class);
+    }
+
 
     public function clientConfiguration(): HasOne
     {
@@ -115,7 +120,7 @@ class Client extends Model
 
     public function supervisors()
     {
-        return $this->belongsToMany(Supervisor::class, 'client_supervisors')->withPivot('active');
+        return $this->hasMany(ClientSupervisor::class);
     }
 
     public function hourlyMicrocontrollerData()

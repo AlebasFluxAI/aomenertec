@@ -19,7 +19,7 @@ class Supervisor extends Model
         'last_name',
         'email',
         'user_id',
-        'network_operator_id'
+        'network_operator_id',
     ];
 
     public static function menu()
