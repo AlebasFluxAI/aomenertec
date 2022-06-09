@@ -21,6 +21,7 @@ use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -32,14 +33,21 @@ class IndexClientService extends Singleton
 {
     public function delete(Component $component, $clientId)
     {
-        Client::find($clientId)->delete();
-        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
-        $component->reset();
+        DB::transaction(function () use ($clientId, $component) {
+            Client::find($clientId)->delete();
+            $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
+        });
     }
 
     public function getClients()
     {
         return Client::get()->paginate(15);
+    }
+
+    public function conditionalDelete($client_id)
+    {
+        return Client::find($client_id)->equipments->count() > 0;
+
     }
 
     public function edit(Component $component, $clientId)

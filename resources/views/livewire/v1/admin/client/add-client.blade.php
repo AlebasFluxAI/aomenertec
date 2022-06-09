@@ -105,19 +105,19 @@
                                     "required"=>true
                            ])
                             @include("partials.v1.form.form_input_icon",[
-                                  "input_label"=>"Nombre para generar factura",
-                                  "input_model"=>"identification",
-                                  "icon_class"=>"fas fa-barcode",
-                                  "placeholder"=>"identificación",
+                                  "input_label"=>"Nombre para facturación",
+                                  "input_model"=>"billing_name",
+                                  "icon_class"=>"fas fa-user",
+                                  "placeholder"=>"Razon social para facturación",
                                   "col_with"=>8,
                                   "input_type"=>"text",
                                   "required"=>true
                             ])
                             @include("partials.v1.form.form_input_icon",[
                                 "input_label"=>"Direccion de facturacion",
-                                "input_model"=>"identification",
-                                "icon_class"=>"fas fa-barcode",
-                                "placeholder"=>"identificación",
+                                "input_model"=>"billing_address",
+                                "icon_class"=>"fas fa-map",
+                                "placeholder"=>"Direccion de facturacion",
                                 "col_with"=>8,
                                 "input_type"=>"text",
                                 "required"=>true
@@ -130,22 +130,19 @@
                         ]
                        )
                         <div class="row pl-5 pr-3">
-                            @include("partials.v1.form.form_list",[
-                                     "col_with"=>8,
-                                     "input_type"=>"text",
-                                     "input_label"=>"Tipo de ubicacion",
-                                     "list_model" => "location_type_id",
-                                     "list_default" => "Tipo ubicación...",
-                                     "list_options" => $location_types,
-                                     "list_option_value"=>"id",
-                                     "list_option_view"=>"type",
-                                     "list_option_title"=>"",
-                            ])
 
                             @include("partials.v1.map",[
                                      "input_label"=>"Seleccione la ubicacion del cliente en el mapa o ingrese una direccion"
                                ])
-
+                            @include("partials.v1.form.form_input_icon",[
+                                                           "input_label"=>"Detalles de dirección (Ingrese los detalles que puedan ser relevantes de la direccion)",
+                                                           "input_model"=>"addressDetails",
+                                                           "icon_class"=>"fas fa-map",
+                                                           "placeholder"=>"Vereda, Caserio, Resguardo .. etc",
+                                                           "col_with"=>8,
+                                                           "input_type"=>"text",
+                                                           "required"=>false
+                                                     ])
                         </div>
                         @include("partials.v1.divider_title",[
                             "title"=>"Tipo de red / Contribuciones"
@@ -227,6 +224,13 @@
                                   "list_option_view"=>"key",
                                   "list_option_title"=>"",
                          ])
+
+                            @if($has_telemetry)
+                                @include("partials.v1.form.radio_button",[
+                                   "input_label"=>"¿ Crear supervisor asociado a cliente ?",
+                                   "input_model"=>"create_supervisor"
+                               ])
+                            @endif
                         </div>
 
                         @include("partials.v1.divider_title",[
@@ -234,37 +238,32 @@
                           ]
                          )
                         <div class="row pl-5 pr-3">
-                            @include("partials.v1.form.form_dropdown_input_searchable",[
-                                      "col_with" => 8,
-                                      "icon_class" => "fas fa-user",
-                                      "dropdown_model" => "network_operator",
-                                      "placeholder" => "Operador de red",
-                                      "required" => true,
-                                      "picked_variable" => $picked_network_operator,
-                                      "message_variable" => $message_network_operator,
-                                      "dropdown_results" => $network_operators,
-                                      "selected_value_function" => "assignNetworkOperator",
-                                      "dropdown_result_id" => "id",
-                                      "dropdown_result_value" => "name",
-                                      "count_bool" => (count($network_operators)>0),
+                            @include("partials.v1.form.form_list",[
+                                    "col_with"=>8,
+                                    "input_type"=>"text",
+                                    "input_label"=>"Operador de red",
+                                    "list_model" => "network_operator_id",
+                                    "list_default" => "Operador de red...",
+                                    "list_options" => $network_operators,
+                                    "list_option_value"=>"value",
+                                    "list_option_view"=>"key",
+                                    "list_option_title"=>"",
+                           ])
 
-                            ])
 
-                            @include("partials.v1.form.form_dropdown_input_searchable",[
-                                   "col_with" => 8,
-                                   "icon_class" => "fas fa-user",
-                                   "dropdown_model" => "technician",
-                                   "placeholder" => "Tecnico",
-                                   "required" => true,
-                                   "picked_variable" => $picked_technician,
-                                   "message_variable" => $message_technician,
-                                   "dropdown_results" => $technicians,
-                                   "selected_value_function" => "assignTechnician",
-                                   "dropdown_result_id" => "id",
-                                   "dropdown_result_value" => "name",
-                                   "count_bool" => (count($technicians)>0),
+                            @include("partials.v1.form.form_list",[
+                                      "col_with"=>8,
+                                      "input_type"=>"text",
+                                      "input_label"=>"Tecnico",
+                                      "list_model" => "technician_id",
+                                      "list_default" => "Tecnico...",
+                                      "list_options" => $technicians,
+                                      "list_option_value"=>"value",
+                                      "list_option_view"=>"key",
+                                      "list_option_title"=>"",
+                                      "disabled"=>$technician_select_disabled
+                             ])
 
-                         ])
                         </div>
                         @include("partials.v1.divider_title",[
                         "title"=>"Equipos de clientes"
@@ -292,10 +291,10 @@
                             ])
                                         @include("partials.v1.form.form_dropdown_input_searchable",[
                                       "form_group" => false,
-                                              "col_with"=>8,
+                                       "col_with"=>8,
                                       "dropdown_model" => "equipment.".$index.".serial",
                                       "placeholder" => $item['type'],
-                                      "required" => true,
+                                      "required" => false,
                                       "picked_variable" => $item['picked'],
                                       "message_variable" => $item['post'],
                                       "variable_2" => $index??0,
@@ -335,7 +334,7 @@
 
                             <div class="text-right">
                                 <button id="add" type="submit" class="mb-2 py-2 px-4"
-                                        @if(!$picked_network_operator) disabled="true" @endif>
+                                        @if(!$technician_id) disabled="true" @endif>
                                     <b>
                                         Guardar cliente
                                     </b>
@@ -365,6 +364,9 @@
         });
     </script>
 </div>
+
+
+
 
 
 

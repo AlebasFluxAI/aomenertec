@@ -66,7 +66,6 @@
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
-                                    "delete"=>"delete",
                                     "customs"=>[
                                        [
                                         "function"=>"settings",
@@ -81,6 +80,12 @@
                                                 "icon"=>"fa fa-connectdevelop",
                                                 "tooltip_title"=>"Monitoreo",
                                         ],
+                                         [
+                                                "function"=>"delete",
+                                                "conditional"=>"conditionalDelete",
+                                                "icon"=>"fas fa-trash",
+                                                "tooltip_title"=>"Eliminar"
+                                        ],
                                     ]
                                     ],
 
@@ -89,6 +94,8 @@
                                                 _delete_button => {boton de borrado, siempre tomando como identificador la primera colunma de la tabla - ID}
                                                   ]*/
                "table_rows"=>$data
+
+
 
            ])
 </div>
