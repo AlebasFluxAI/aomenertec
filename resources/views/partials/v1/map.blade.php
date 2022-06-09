@@ -3,8 +3,6 @@
 
 <script>
     let autocomplete;
-    let map;
-    let marker;
     $("#latitude").val('Wilder');
 
     function myMap() {
@@ -16,9 +14,9 @@
             streetViewControl: false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
-        marker = new google.maps.Marker({
+        const marker = new google.maps.Marker({
             position: center,
             map: map,
             mapTypeControl: false,
@@ -75,6 +73,11 @@
 
         }
 
+        function renderAddress(place) {
+            map.setCenter(place.geometry.location);
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+        }
 
         function updateLocation(latitude, longitude) {
         @this.latitude
@@ -85,21 +88,6 @@
 
 
     }
-
-    function renderAddress(place) {
-        map.setCenter(place.geometry.location);
-        marker.setPosition(place.geometry.location);
-        marker.setVisible(true);
-    }
-
-    function latitudeShow() {
-        let latitude = document.getElementById('latitude').value;
-        let longitude = document.getElementById('longitude').value;
-        map.setCenter(new google.maps.LatLng(latitude, longitude));
-        marker.setPosition(new google.maps.LatLng(latitude, longitude));
-        marker.setVisible(true);
-    }
-
 </script>
 
 
@@ -110,41 +98,11 @@
 
 <div wire:ignore id="googleMap" style="width:100%;height:400px;border-color: teal;border-width: 2px"></div>
 
-
-<div class="col-md-8 mb-3">
-    <p><b>Direccion:</b></p>
-    <ul>
-        <li>  {{$decodedAddress}}</li>
-
-    </ul>
-</div>
 <div class="col-md-8 mb-3">
     <p><b>Coordenadas:</b></p>
     <ul>
-        <li>
-            @include("partials.v1.form.form_input_icon",[
-                        "input_label"=>"Latitude",
-                        "input_model"=>"latitude",
-                        "icon_class"=>"fas fa-map",
-                        "placeholder"=>"latitude",
-                        "input_id"=>"latitude",
-                        "input_on_change"=>"latitudeShow",
-                        "col_with"=>8,
-                        "input_type"=>"text",
-                        "required"=>true
-               ])</li>
-        <li>
-            @include("partials.v1.form.form_input_icon",[
-                        "input_label"=>"Longitude",
-                        "input_model"=>"longitude",
-                         "input_id"=>"longitude",
-                        "input_on_change"=>"longitudeShow",
-                        "icon_class"=>"fas fa-map",
-                        "placeholder"=>"longitude",
-                        "col_with"=>8,
-                        "input_type"=>"text",
-                        "required"=>true
-               ])</li>
+        <li> Latitude: {{$latitude}}</li>
+        <li> Longitude: {{$longitude}}</li>
     </ul>
 </div>
 

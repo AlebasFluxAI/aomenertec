@@ -74,7 +74,8 @@ class DataChart extends Component
         if (!RealTimeListener::whereEquipmentId(
             $equipment->id)->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            MQTT::publish('mc/config', $message);
+            $topic = 'mc/config'.$equipment->serial;
+            MQTT::publish($topic, $message);
             MQTT::disconnect();
         }
         $this->restartDateRange();
