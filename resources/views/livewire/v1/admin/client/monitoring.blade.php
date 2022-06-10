@@ -57,6 +57,7 @@
                                                                         "client"=>$client,
                                                                         "data_frame"=>$data_frame,
                                                                         "data_chart" => $data_chart,
+                                                                        "time" => $time
 
                                                                      ]
                                                 ],
@@ -67,7 +68,6 @@
                                                                         "variables"=>$variables,
                                                                         "client"=>$client,
                                                                         "data_frame"=>$data_frame,
-
                                                                      ]
                                                 ],
 
@@ -77,7 +77,8 @@
                                                                         "type" => "reactive_data",
                                                                         "variables"=>$reactive_variables,
                                                                         "client"=>$client,
-                                                                        "data_chart"=>$data_chart
+                                                                        "data_chart"=>$data_chart,
+                                                                        "time" => $time
 
                                                                      ]
                                                 ],
