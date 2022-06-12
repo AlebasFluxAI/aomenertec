@@ -39,6 +39,10 @@
                                                                         "form_submit_action"=>"submitForm",
                                                                         "form_title"=>"Ajuste las configuraciones para el equipo del cliente",
                                                                         "form_inputs"=>[
+                                                                                         [
+                                                                                             "input_type"=>"divider",
+                                                                                             "title"=>"Configuraciones de conexion"
+                                                                                         ],
                                                                                         [
                                                                                                     "input_type"=>"text",
                                                                                                     "input_model"=>"ssid",
@@ -101,6 +105,10 @@
 
                                                                                          ],
                                                                                          [
+                                                                                             "input_type"=>"divider",
+                                                                                             "title"=>"Configuraciones de muestreo"
+                                                                                         ],
+                                                                                         [
                                                                                                     "input_type"=>"checkbox",
                                                                                                     "input_model"=>"real_time_flag",
                                                                                                     "icon_class"=>"fas fa-barcode",
@@ -134,610 +142,334 @@
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_adc_1",
+                                                                                             "input_type"=>"divider",
+                                                                                             "title"=>"Rangos alarmables"
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_adc_1",
+                                                                                                    "input_max_model"=>"max_adc_1",
+                                                                                                    "placeholder"=>"Rango de lectura voltaje dc ADC",
+                                                                                                    "col_with"=>12,
+                                                                                                    "required"=>false,
 
-                                                                                                    "placeholder"=>"Maximo de lectura voltaje dc ADC 1",
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_adc_2",
+                                                                                                    "input_max_model"=>"max_adc_2",
+                                                                                                    "placeholder"=>"Rango de lectura voltaje dc ADC 2",
+                                                                                                    "col_with"=>9,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vol_ph_1",
+                                                                                                    "input_max_model"=>"max_vol_ph_1",
+                                                                                                    "placeholder"=>"Rango de voltaje de la Fase 1 a Neutro",
+                                                                                                    "col_with"=>9,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vol_ph_2",
+                                                                                                    "input_max_model"=>"max_vol_ph_2",
+                                                                                                    "placeholder"=>"Rango de voltaje de la Fase 2 a Neutro",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vol_ph_3",
+                                                                                                    "input_max_model"=>"max_vol_ph_3",
+                                                                                                    "placeholder"=>"Rango de voltaje de la Fase 3 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_adc_1",
-
-                                                                                                    "placeholder"=>"Minimo de lectura voltaje dc ADC 1",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_current_ph_1",
+                                                                                                    "input_max_model"=>"max_current_ph_1",
+                                                                                                     "placeholder"=>"Rango de corriente de la Fase 1 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_adc_2",
-                                                                                                    "placeholder"=>"Maximo de lectura voltaje dc ADC 2",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_current_ph_2",
+                                                                                                    "input_max_model"=>"max_current_ph_2",
+                                                                                                    "placeholder"=>"Rango de corriente de la Fase 2 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_adc_2",
-                                                                                                    "placeholder"=>"Minimo de lectura voltaje dc ADC 2",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_current_ph_3",
+                                                                                                    "input_max_model"=>"max_current_ph_3",
+                                                                                                    "placeholder"=>"Rango de corriente de la Fase 3 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vol_ph_1",
-
-                                                                                                    "placeholder"=>"Maximo de voltaje de la fase 1 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_power_ph_1",
+                                                                                                    "input_max_model"=>"max_power_ph_1",
+                                                                                                    "placeholder"=>"Rango de potencia de la Fase 1 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vol_ph_1",
-
-                                                                                                    "placeholder"=>"Minimo de voltaje de la fase 1 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_power_ph_2",
+                                                                                                    "input_max_model"=>"max_power_ph_2",
+                                                                                                    "placeholder"=>"Rango de potencia de la Fase 2 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vol_ph_2",
-
-                                                                                                    "placeholder"=>"Maximo de voltaje de la fase 2 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_power_ph_3",
+                                                                                                    "input_max_model"=>"max_power_ph_3",
+                                                                                                    "placeholder"=>"Rango de potencia de la Fase 3 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vol_ph_2",
-
-                                                                                                    "placeholder"=>"Minimo de voltaje de la fase 2 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_va_ph_1",
+                                                                                                    "input_max_model"=>"max_va_ph_1",
+                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 1 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vol_ph_3",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_va_ph_2",
+                                                                                                    "input_max_model"=>"max_va_ph_2",
+                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 2 a Neutro",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
 
-                                                                                                    "placeholder"=>"Maximo de voltaje de la fase 3 a neutro ",
+                                                                                         ],
+                                                                                          [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_va_ph_3",
+                                                                                                    "input_max_model"=>"max_va_ph_3",
+                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 3 a Neutro",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vol_ph_3",
-
-                                                                                                    "placeholder"=>"Minimo de voltaje de la fase 3 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_var_ph_1",
+                                                                                                    "input_max_model"=>"max_var_ph_1",
+                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 1 a neutro ",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_current_ph_1",
-
-                                                                                                    "placeholder"=>"Maximo de corriente de la fase 1 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_var_ph_2",
+                                                                                                    "input_max_model"=>"max_var_ph_2",
+                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 2 a neutro ",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_current_ph_1",
-
-                                                                                                    "placeholder"=>"Minimo de corriente de la fase 1 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_var_ph_3",
+                                                                                                    "input_max_model"=>"max_var_ph_3",
+                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 3 a neutro ",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_current_ph_2",
-
-                                                                                                    "placeholder"=>"Maximo de corriente de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_current_ph_2",
-
-                                                                                                    "placeholder"=>"Minimo de corriente de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_current_ph_3",
-
-                                                                                                    "placeholder"=>"Maximo de corriente de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_current_ph_3",
-
-                                                                                                    "placeholder"=>"Minimo de corriente de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_power_ph_1",
-
-                                                                                                    "placeholder"=>"Maximo de potencia de la fase 1 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_power_ph_1",
-
-                                                                                                    "placeholder"=>"Minimo de potencia de la fase 1 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_power_ph_2",
-
-                                                                                                    "placeholder"=>"Maximo de potencia de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ]
-                                                                                         ,
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_power_ph_2",
-
-                                                                                                    "placeholder"=>"Minimo de potencia de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_power_ph_3",
-
-                                                                                                    "placeholder"=>"Maximo de potencia de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_power_ph_3",
-
-                                                                                                    "placeholder"=>"Minimo de potencia de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_va_ph_1",
-
-                                                                                                    "placeholder"=>"Maximo de voltio amperio de la fase 1 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_va_ph_1",
-
-                                                                                                    "placeholder"=>"Minimo de voltio amperio de la fase 1 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_va_ph_2",
-
-                                                                                                    "placeholder"=>"Maximo de voltio amperio de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_va_ph_2",
-
-                                                                                                    "placeholder"=>"Minimo de voltio amperio de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_va_ph_3",
-
-                                                                                                    "placeholder"=>"Maximo de voltio amperio de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_va_ph_3",
-
-                                                                                                    "placeholder"=>"Minimo de voltio amperio de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_var_ph_1",
-
-                                                                                                    "placeholder"=>"Maximo de voltio amperio reactivo de la fase 1 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_var_ph_1",
-
-                                                                                                    "placeholder"=>"Minimo de voltio amperio reactivo de la fase 1 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_var_ph_2",
-
-                                                                                                    "placeholder"=>"Maximo de voltio amperio reactivo de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_var_ph_2",
-
-                                                                                                    "placeholder"=>"Minimo de voltio amperio reactivo de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_var_ph_3",
-
-                                                                                                    "placeholder"=>"Maximo de voltio amperio reactivo de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_var_ph_3",
-
-                                                                                                    "placeholder"=>"Minimo de voltio amperio reactivo de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
+                                                                                                     "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_pfp_ph_1",
+                                                                                                    "input_max_model"=>"max_pfp_ph_1",
                                                                                                     "input_model"=>"max_pfp_ph_1",
-
-                                                                                                    "placeholder"=>"Maximo de factor de potencia de la fase 1 a neutro ",
+                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 1 a neutro ",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_pfp_ph_1",
-
-                                                                                                    "placeholder"=>"Minimo de factor de potencia de la fase 1 a neutro ",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_pfp_ph_2",
+                                                                                                    "input_max_model"=>"max_pfp_ph_2",
+                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 2 a neutro ",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_pfp_ph_2",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_pfp_ph_3",
+                                                                                                    "input_max_model"=>"max_pfp_ph_3",
+                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 3 a neutro ",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
 
-                                                                                                    "placeholder"=>"Maximo de factor de potencia de la fase 2 a neutro ",
+                                                                                         ],
+
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_freq",
+                                                                                                    "input_max_model"=>"max_freq",
+                                                                                                    "placeholder"=>"Rango de Frecuencia",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_pfp_ph_2",
-
-                                                                                                    "placeholder"=>"Minimo de factor de potencia de la fase 2 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_pfp_ph_3",
-
-                                                                                                    "placeholder"=>"Maximo de factor de potencia de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_pfp_ph_3",
-
-                                                                                                    "placeholder"=>"Minimo de factor de potencia de la fase 3 a neutro ",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_freq",
-
-                                                                                                    "placeholder"=>"Frecuencia minima",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_freq",
-                                                                                                    "placeholder"=>"Frecuencia maxima",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"flag_wh_import",
-                                                                                                    "placeholder"=>"Valor alertable de energia consumida",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"flag_wh_export",
-                                                                                                    "placeholder"=>"Valor alertable de energia exportada",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"flag_wh_import_varh",
-                                                                                                    "placeholder"=>"Valor alertable de energia reactiva consumida",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"flag_wh_export_varh",
-                                                                                                    "placeholder"=>"Valor alertable de energia reactiva exportada",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_volt_1_2",
+                                                                                                    "input_max_model"=>"max_volt_1_2",
                                                                                                     "input_model"=>"max_volt_1_2",
-                                                                                                    "placeholder"=>"Maximo voltaje entre fases 1 y 2",
+                                                                                                    "placeholder"=>"Rango de voltaje entre fases 1 y 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_volt_1_2",
-                                                                                                    "placeholder"=>"Minimo voltaje entre fases 1 y 2",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_volt_3_1",
+                                                                                                    "input_max_model"=>"max_volt_3_1",
+                                                                                                    "placeholder"=>"Rango de voltaje entre fases 3 y 1",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_volt_3_1",
-                                                                                                    "placeholder"=>"Maximo voltaje entre fases 3 y 1",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_volt_2_3",
+                                                                                                    "input_max_model"=>"max_volt_2_3",
+                                                                                                    "placeholder"=>"Rango de voltaje entre fases 2 y 3",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_volt_3_1",
-                                                                                                    "placeholder"=>"Minimo voltaje entre fases 3 y 1",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vthd_ph_1",
+                                                                                                    "input_max_model"=>"max_vthd_ph_1",
+                                                                                                    "placeholder"=>"Rango de THD de voltaje en fase 1",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_volt_2_3",
-                                                                                                    "placeholder"=>"Maximo voltaje entre fases 2 y 3",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vthd_ph_2",
+                                                                                                    "input_max_model"=>"max_vthd_ph_2",
+                                                                                                    "placeholder"=>"Rango de THD de voltaje en fase 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_volt_2_3",
-                                                                                                    "placeholder"=>"Minimo voltaje entre fases 2 y 3",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vthd_ph_3",
+                                                                                                    "input_max_model"=>"max_vthd_ph_3",
+                                                                                                    "placeholder"=>"Rango de THD de voltaje en fase 3",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_cthd_ph_1",
+                                                                                                    "input_max_model"=>"max_cthd_ph_1",
+                                                                                                    "placeholder"=>"Rango de THD de corriente en fase 1",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_cthd_ph_2",
+                                                                                                    "input_max_model"=>"max_cthd_ph_2",
+                                                                                                    "placeholder"=>"Rango de THD de corriente en fase 2",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_cthd_ph_3",
+                                                                                                    "input_max_model"=>"max_cthd_ph_3",
+                                                                                                    "placeholder"=>"Rango de THD de corriente en fase 3",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+
+                                                                                         [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vthd_ph_1_2",
+                                                                                                    "input_max_model"=>"max_vthd_ph_1_2",
+                                                                                                    "placeholder"=>"Rango de THD de voltaje entre fase 1 y 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vthd_ph_1",
-                                                                                                    "placeholder"=>"Maximo THD de voltaje en fase 1",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vthd_ph_2_3",
+                                                                                                    "input_max_model"=>"max_vthd_ph_2_3",
+                                                                                                    "placeholder"=>"Rango de THD de voltaje entre fase 2 y 3",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vthd_ph_1",
-                                                                                                    "placeholder"=>"Minimo THD de voltaje en fase 1",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"min_vthd_ph_3_1",
+                                                                                                    "input_max_model"=>"max_vthd_ph_3_1",
+                                                                                                    "placeholder"=>"Rango de THD de voltaje entre fase 3 y 1",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                          [
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"flag_wh_import",
+                                                                                                    "input_max_model"=>"flag_wh_export",
+                                                                                                    "input_min_label"=>"Consumida",
+                                                                                                    "input_max_label"=>"Exportada",
+                                                                                                    "placeholder"=>"Valor alertable de energia",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vthd_ph_2",
-                                                                                                    "placeholder"=>"Maximo THD de voltaje en fase 2",
+                                                                                                    "input_type"=>"input_min_max",
+                                                                                                    "input_min_model"=>"flag_wh_import_varh",
+                                                                                                    "input_max_model"=>"flag_wh_export_varh",
+                                                                                                    "input_min_label"=>"Consumida",
+                                                                                                    "input_max_label"=>"Exportada",
+                                                                                                    "placeholder"=>"Valor alertable de energia reactiva",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
                                                                                          ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vthd_ph_2",
-                                                                                                    "placeholder"=>"Minimo THD de voltaje en fase 2",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vthd_ph_3",
-                                                                                                    "placeholder"=>"Maximo THD de voltaje en fase 3",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vthd_ph_3",
-                                                                                                    "placeholder"=>"Minimo THD de voltaje en fase 3",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_cthd_ph_1",
-                                                                                                    "placeholder"=>"Maximo THD de corriente en fase 1",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_cthd_ph_1",
-                                                                                                    "placeholder"=>"Minimo THD de corriente en fase 1",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_cthd_ph_2",
-                                                                                                    "placeholder"=>"Maximo THD de corriente en fase 2",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_cthd_ph_2",
-                                                                                                    "placeholder"=>"Minimo THD de corriente en fase 2",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_cthd_ph_3",
-                                                                                                    "placeholder"=>"Maximo THD de corriente en fase 3",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_cthd_ph_3",
-                                                                                                    "placeholder"=>"Minimo THD de corriente en fase 3",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vthd_ph_1_2",
-                                                                                                    "placeholder"=>"Maximo THD de voltaje entre fase 1 y 2",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vthd_ph_1_2",
-                                                                                                    "placeholder"=>"Minimo THD de voltaje entre fase 1 y 2",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vthd_ph_2_3",
-                                                                                                    "placeholder"=>"Maximo THD de voltaje entre fase 2 y 3",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vthd_ph_2_3",
-                                                                                                    "placeholder"=>"Minimo THD de voltaje entre fase 2 y 3",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"max_vthd_ph_3_1",
-                                                                                                    "placeholder"=>"Maximo THD de voltaje entre fase 3 y 1",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"number",
-                                                                                                    "input_model"=>"min_vthd_ph_3_1",
-                                                                                                    "placeholder"=>"Minimo THD de voltaje entre fase 3 y 1",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-
-
-
-
-
                                                                                      ]
                                                             ]
                                                 ],
