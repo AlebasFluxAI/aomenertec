@@ -473,6 +473,7 @@ class AddClientService extends Singleton
         if (!$component->create_supervisor) {
             return;
         }
+            
         $supervisor = Supervisor::create(
             [
                 "name" => $client->name,
