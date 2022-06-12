@@ -27,7 +27,7 @@ class DataChart extends Component
     public $start;
     public $chart_title;
     protected $listeners = ['changeDateRange', 'selectHistory'];
-    public function mount(Client $client, $variables, $data_frame, $data_chart){
+    public function mount(Client $client, $variables, $data_frame, $data_chart, $time){
 
         $this->client = $client;
         $this->variables = $variables;
@@ -37,7 +37,7 @@ class DataChart extends Component
         $aux = $variables->where('id', $this->variable_chart_id)->first();
         $this->chart_title = $aux['display_name'];
         $this->chart_type = $aux['chart_type'];
-        $this->time_id = 2;
+        $this->time_id = $time;
         $this->data_chart = $data_chart;
         $this->end = $data_chart->first()->microcontrollerData->source_timestamp;
         $this->start = $data_chart->last()->microcontrollerData->source_timestamp;
@@ -74,7 +74,8 @@ class DataChart extends Component
         if (!RealTimeListener::whereEquipmentId(
             $equipment->id)->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            MQTT::publish('mc/config', $message);
+            $topic = 'mc/config/'.$equipment->serial;
+            MQTT::publish($topic, $message);
             MQTT::disconnect();
         }
         $this->restartDateRange();

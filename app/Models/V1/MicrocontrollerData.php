@@ -90,7 +90,6 @@ class MicrocontrollerData extends Model
         $timestamp_unix = $timestamp_unix - ($timestamp_unix % 60);
         $current_time = new DateTime("@$timestamp_unix");*/
 
-
         $date = new DateTime();
         $unixTime = $date->getTimestamp();
         $current_time = $date->modify('-' . ($unixTime % 60) . ' seconds');

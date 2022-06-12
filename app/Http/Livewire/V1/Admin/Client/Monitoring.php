@@ -17,6 +17,7 @@ class Monitoring extends Component
     public $client;
     public $reactive_variables;
     public $real_time_variables;
+    public $time;
 
     public function mount(Client $client)
     {
@@ -25,7 +26,12 @@ class Monitoring extends Component
         $this->variables = collect(config('data-frame.variables'));
         $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
         $this->real_time_variables = $this->variables->where('real_time', true);
+        $this->time = 2;
         $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
+        if (count($this->data_chart)==0){
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
+            $this->time = 1;
+        }
     }
 
     public function tabChange()
@@ -39,7 +45,8 @@ class Monitoring extends Component
         if (!RealTimeListener::whereEquipmentId(
             $equipment->id)->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            MQTT::publish('mc/config', $message);
+            $topic = 'mc/config/'.$equipment->serial;
+            MQTT::publish($topic, $message);
             MQTT::disconnect();
         }
     }

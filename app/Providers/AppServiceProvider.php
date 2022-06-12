@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\V1\Admin;
-use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientConfiguration;
 use App\Models\V1\Equipment;
@@ -18,7 +17,6 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
-use App\Observers\BillingInformationObserver;
 use App\Observers\ClientAddressObserver;
 use App\Observers\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
@@ -70,6 +68,5 @@ class AppServiceProvider extends ServiceProvider
         Equipment::observe(EquipmentObserver::class);
         ClientAddress::observe(ClientAddressObserver::class);
         ClientAddress::observe(HereMapObserver::class);
-        BillingInformation::observe(BillingInformationObserver::class);
     }
 }

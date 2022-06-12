@@ -25,7 +25,7 @@ class ReactiveChart extends Component
     public $capacitive_filter;
     protected $listeners = ['selectReactive', 'dateRangeReactive'];
 
-    public function mount(Client $client, $reactive_variables, $data_chart_reactive)
+    public function mount(Client $client, $reactive_variables, $data_chart_reactive, $time)
     {
         $this->client = $client;
         $edit_index = [];
@@ -36,7 +36,7 @@ class ReactiveChart extends Component
         }
         $this->penalizable = false;
         $this->reactive_variables = $edit_index;
-        $this->time_reactive_id = 2;
+        $this->time_reactive_id = $time;
         $this->data_chart_reactive = $data_chart_reactive;
         $this->series_reactive = [];
         $this->x_axis_reactive = [];
@@ -112,7 +112,8 @@ class ReactiveChart extends Component
         if (!RealTimeListener::whereEquipmentId(
             $equipment->id)->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            MQTT::publish('mc/config', $message);
+            $topic = 'mc/config/'.$equipment->serial;
+            MQTT::publish($topic, $message);
             MQTT::disconnect();
         }
         if ($this->time_reactive_id == 1) {

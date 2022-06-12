@@ -28,11 +28,8 @@
                                                     "title"=>"Detalles",
 
                                                 ],
-                                                 [
-                                                    "title"=>"Datos de facturacion",
-                                                ],
                                                 [
-                                                    "title"=>"Dirección",
+                                                    "title"=>"Direcion",
                                                 ],
                                                 [
                                                     "title"=>"Tecnico",
@@ -70,53 +67,6 @@
                                                             ]
                                                 ],
                                           [
-                                                   "view_name"=>"partials.v2.table.primary-table",
-                                                   "view_values"=>[
-                                                                        "table_pageable"=>false,
-                                                                       "table_headers"=>[
-                                                                           [
-                                                                               "col_name" =>"ID",
-                                                                               "col_data" =>"id",
-                                                                               "col_filter"=>false
-                                                                           ],
-                                                                           [
-                                                                               "col_name" =>"Razon social",
-                                                                               "col_data" =>"name",
-                                                                               "col_filter"=>false
-                                                                           ],
-                                                                           [
-                                                                               "col_name" =>"Tipo de documento",
-                                                                               "col_data" =>"identification_type",
-                                                                               "col_filter"=>false
-                                                                           ],
-                                                                           [
-                                                                               "col_name" =>"Numero de documento",
-                                                                               "col_data" =>"identification",
-                                                                               "col_filter"=>false
-                                                                           ],
-                                                                           [
-                                                                               "col_name" =>"Direccion de facturacion",
-                                                                               "col_data" =>"address",
-                                                                               "col_filter"=>false
-                                                                           ],
-                                                                            [
-                                                                               "col_name" =>"Telefono",
-                                                                               "col_data" =>"phone",
-                                                                               "col_filter"=>false
-                                                                           ],[
-                                                                               "col_name" =>"Por Defecto",
-                                                                               "col_data" =>"default",
-                                                                               "col_filter"=>false,
-                                                                               "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN
-                                                                           ],
-
-                                                                                                                    ],
-
-                                                                       "table_rows"=>$client->billingInformation,
-                                                                   ],
-
-                                                ],
-                                          [
                                                    "view_name"=>"partials.v1.table.primary-table",
                                                    "view_values"=>[
                                                                         "table_pageable"=>false,
@@ -128,8 +78,7 @@
                                                                                          "Ciudad"=>"city",
                                                                                          "Latitude"=>"latitude",
                                                                                          "Longitude"=>"longitude",
-                                                                                         "Codigo postal"=>"postal_code",
-                                                                                         "Detalles"=>"details"
+                                                                                         "Codigo postal"=>"postal_code"
 
                                                                         ],
                                                                         "table_actions"=>[
@@ -152,6 +101,7 @@
 
 
                                                 ],
+
                                                   [
                                                    "view_name"=>"partials.v1.table.primary-table",
                                                    "view_values"=>[

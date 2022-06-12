@@ -66,6 +66,7 @@
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
+                                    "delete"=>"delete",
                                     "customs"=>[
                                        [
                                         "function"=>"settings",
@@ -79,12 +80,6 @@
                                                   ],
                                                 "icon"=>"fa fa-connectdevelop",
                                                 "tooltip_title"=>"Monitoreo",
-                                        ],
-                                         [
-                                                "function"=>"delete",
-                                                "conditional"=>"conditionalDelete",
-                                                "icon"=>"fas fa-trash",
-                                                "tooltip_title"=>"Eliminar"
                                         ],
                                     ]
                                     ],
