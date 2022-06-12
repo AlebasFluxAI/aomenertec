@@ -12,6 +12,11 @@
                 <form wire:submit.prevent="{{$form_submit_action}}" class="needs-validation" role="form">
                     <div class="row ">
                         @foreach($form_inputs as $form_input)
+                            @if($form_input["input_type"]=="divider")
+                                @include("partials.v1.divider_title",[
+                                     "title"=>$form_input["title"]
+                                  ])
+                            @endif
                             @if($form_input["input_type"]=="text"
                                 || $form_input["input_type"]=="checkbox"
                                 || $form_input["input_type"]=="number"
@@ -27,7 +32,20 @@
                                           "required"=>$form_input["required"],
                                           "input_rows"=>$form_input["input_rows"]??0,
                                      ])
-
+                            @elseif($form_input["input_type"]=="input_min_max")
+                                @include("partials.v2.form.form_input_max_min",[
+                                        "input_min_label"=>$form_input["input_min_label"]??"Minimo",
+                                        "input_max_label"=>$form_input["input_max_label"]??"Maximo",
+                                        "input_min_model"=>$form_input["input_min_model"],
+                                        "input_max_model"=>$form_input["input_max_model"],
+                                        "input_field"=>$form_input["input_field"]??"",
+                                        "input_type"=>$form_input["input_type"],
+                                        "icon_class"=>$form_input["icon_class"]??null,
+                                        "placeholder"=>$form_input["placeholder"],
+                                        "col_with"=>$form_input["col_with"],
+                                        "required"=>$form_input["required"],
+                                        "input_rows"=>$form_input["input_rows"]??0,
+                                   ])
                             @elseif($form_input["input_type"]=="dropdown-search")
 
                                 @include("partials.v1.form.form_dropdown_input_searchable",[

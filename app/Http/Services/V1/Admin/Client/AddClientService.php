@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
+use App\Models\V1\BillingInformation;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
 use App\Models\V1\Department;
@@ -17,11 +18,13 @@ use App\Models\V1\Seller;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\Client;
+use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -40,10 +43,13 @@ class AddClientService extends Singleton
             "network_topology" => "monophasic",
             'serials' => collect([]),
             'equipment' => [],
+            "create_supervisor" => false,
+            "technician_select_disabled" => true,
             "stratum_id" => Stratum::first() ? Stratum::first()->id : null,
             'technicians' => [],
             'strata' => Stratum::get(),
             'client_types' => ClientType::get(),
+            "technician_id" => null,
             'client_type_id' => ClientType::first() ? ClientType::first()->id : null,
             'voltage_levels' => VoltageLevel::get(),
             'subsistence_consumptions' => SubsistenceConsumption::get(), 'contribution' => true,
@@ -51,7 +57,6 @@ class AddClientService extends Singleton
             'locations' => [],
             "identification_type" => Client::IDENTIFICATION_TYPE_CC,
             "person_type" => Client::PERSON_TYPE_NATURAL,
-            'departments' => Department::get(),
             "identification_types" => $this->identificationTypes(),
             'person_types' => [
                 ["key" => "Persona natural", "value" => Client::PERSON_TYPE_NATURAL,],
@@ -61,8 +66,10 @@ class AddClientService extends Singleton
             'municipalities' => [],
             'equipment_types' => [],
             'network_operator_id' => Auth::user()->networkOperator ? Auth::user()->networkOperator->id : null,
-            'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red', 'network_operators' => [],
-            'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red', 'aux_network_operators' => [],
+            'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red',
+            'network_operators' => $this->getNetworkOperators(),
+            'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red',
+            'aux_network_operators' => [],
         ]);
     }
 
@@ -110,6 +117,16 @@ class AddClientService extends Singleton
         ];
     }
 
+    private function getNetworkOperators()
+    {
+        if (Auth::user()->networkOperator) {
+            return [];
+        }
+        $admin = User::getUserModel();
+
+        return $admin->networkOperatorsAsKeyValue();
+    }
+
     public function updatedLocationTypeId(Component $component)
     {
         $component->location_id = "";
@@ -121,6 +138,7 @@ class AddClientService extends Singleton
             $component->locations = [];
         }
     }
+
 
     public function updatedPersonType(Component $component)
     {
@@ -191,18 +209,21 @@ class AddClientService extends Singleton
                 ]);
                 $component->serials = collect([]);
             }
+            $component->has_telemetry = $this->hasTelemetry($component);
         }
     }
 
-    public function updatedNetworkOperator(Component $component)
+    public function hasTelemetry(Component $component)
     {
-        $component->picked_network_operator = false;
-        $component->message_network_operator = "No hay operador de red registrado con esta identificación";
+        return false;
+        strpos(strtolower(ClientType::find($component->client_type_id) ? ClientType::find($component->client_type_id)->type : null), "telemetria");
+    }
 
-        if ($component->network_operator != "") {
-            $component->network_operators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
-                ->take(3)->get();
-        }
+    public function updatedNetworkOperatorId(Component $component)
+    {
+        $component->technician_select_disabled = false;
+        $component->technicians = NetworkOperator::find($component->network_operator_id)->techniciansAsKeyValue();
+        $component->technician_id = null;
     }
 
     public function updatedTechnician(Component $component)
@@ -218,35 +239,43 @@ class AddClientService extends Singleton
     }
 
 
-    public function assignNetworkOperator(Component $component, $network_operator)
+    public function updatedLatitude(Component $component)
     {
-        $obj = json_decode($network_operator);
-        $component->network_operator = $obj->identification;
-        $component->network_operator_id = $obj->id;
-        $component->picked_network_operator = true;
-    }
+        $latlng = "{$component->latitude},{$component->longitude}";
+        $heremap = null;
+        $response = Http::get('https://revgeocode.search.hereapi.com/v1/revgeocode', [
+            'at' => $latlng,
+            'apiKey' => config("here.apiKey"),
+        ]);
 
+        if (200 == $response->status()) {
+            $body = $response->json();
 
-    public function assignTechnician(Component $component, $technician)
-    {
-        $obj = json_decode($technician);
-        $component->technician = $obj->identification;
-        $component->technician_id = $obj->id;
-        $component->picked_technician = true;
-    }
-
-    public function assignNetworkOperatorFirst(Component $component)
-    {
-        if (!empty($component->network_operator)) {
-            $usuario = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
-                ->first();
-            if ($usuario) {
-                $component->network_operator = $usuario->identification;
-                $component->network_operator_id = $usuario->id;
-            } else {
-                $component->network_operator = "...";
+            if (array_key_exists('items', $body)) {
+                $heremap = json_encode($body);
             }
-            $component->picked_network_operator = true;
+        }
+
+
+        $map = json_decode($heremap ?? '{}');
+
+
+        try {
+            $map = $map->items[0];
+            $hereAddress = $map->address;
+
+
+            $hereMap = json_decode($heremap, true);
+
+            if (array_key_exists('items', $hereMap)) {
+                if (count($hereMap['items']) > 0) {
+                    if (array_key_exists('address', $hereMap['items'][0])) {
+                        $component->decodedAddress = array_key_exists('label', $hereMap['items'][0]['address']) ? $hereMap['items'][0]['address']['label'] : "";
+
+                    }
+                }
+            }
+        } catch (Throwable $e) {
         }
     }
 
@@ -350,55 +379,48 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
+        DB::transaction(function () use ($component) {
+            $client = $this->createClient($component);
+            $this->linkAddress($component, $client);
+            $this->linkTechnician($component, $client);
+            $this->linkEquipments($component, $client);
+            $this->createSupervisor($component, $client);
+            $this->createBillingInformation($component, $client);
+            $component->redirectRoute("v1.admin.client.detail.client", ["client" => $client->id]);
+        });
+
+    }
+
+    private function createClient($component)
+    {
         while (true) {
             $code = $this->clientCode();
             if (!(Client::whereCode($code)->exists())) {
                 break;
             }
         }
-        DB::transaction(function () use ($component, $code) {
-            $client = Client::create([
-                'name' => $component->name,
-                'last_name' => $component->last_name,
-                'email' => $component->email,
-                'code' => $code,
-                'phone' => $component->phone,
-                'identification' => $component->identification,
-                'latitude' => $component->latitude,
-                'longitude' => $component->longitude,
-                'direction' => $component->direction,
-                'network_topology' => $component->network_topology,
-                'active' => $component->active,
-                'contribution' => $component->contribution,
-                'public_lighting_tax' => $component->public_lighting_tax ?? true,
-                'network_operator_id' => $component->network_operator_id,
-                'client_type_id' => $component->client_type_id,
-                'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
-                'voltage_level_id' => $component->voltage_level_id,
-                'stratum_id' => $component->stratum_id,
-                'identification_type' => $component->identification_type,
-                'person_type' => $component->person_type,
-            ]);
-
-            $client->addresses()->create([
-                "latitude" => $component->latitude,
-                "longitude" => $component->longitude,
-            ]);
-
-            $client->technician()->create([
-                "technician_id" => $component->technician_id
-            ]);
-            foreach ($component->equipment as $item) {
-                EquipmentClient::create([
-                    'client_id' => $client->id,
-                    'equipment_id' => $item['id'],
-                    'current_assigned' => true,
-                ]);
-                Equipment::find($item['id'])->update(['assigned' => true]);
-            }
-            $component->redirectRoute("v1.admin.client.detail.client", ["client" => $client->id]);
-
-        });
+        return Client::create([
+            'name' => $component->name,
+            'last_name' => $component->last_name,
+            'email' => $component->email,
+            'code' => $code,
+            'phone' => $component->phone,
+            'identification' => $component->identification,
+            'latitude' => $component->latitude,
+            'longitude' => $component->longitude,
+            'direction' => $component->direction,
+            'network_topology' => $component->network_topology,
+            'active' => $component->active,
+            'contribution' => $component->contribution,
+            'public_lighting_tax' => $component->public_lighting_tax ?? true,
+            'network_operator_id' => $component->network_operator_id,
+            'client_type_id' => $component->client_type_id,
+            'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
+            'voltage_level_id' => $component->voltage_level_id,
+            'stratum_id' => $component->stratum_id,
+            'identification_type' => $component->identification_type,
+            'person_type' => $component->person_type,
+        ]);
 
     }
 
@@ -412,4 +434,73 @@ class AddClientService extends Singleton
         }
         return $random_codigo;
     }
+
+    private function linkAddress(Component $component, Client $client)
+    {
+        $client->addresses()->create([
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
+            "details" => $component->addressDetails,
+        ]);
+
+    }
+
+    private function linkTechnician(Component $component, Client $client)
+    {
+        $client->technician()->create([
+            "technician_id" => $component->technician_id
+        ]);
+
+    }
+
+    private function linkEquipments(Component $component, Client $client)
+    {
+        foreach ($component->equipment as $item) {
+            if (!$item["id"]) {
+                continue;
+            }
+            EquipmentClient::create([
+                'client_id' => $client->id,
+                'equipment_id' => $item['id'],
+                'current_assigned' => true,
+            ]);
+            Equipment::find($item['id'])->update(['assigned' => true]);
+        }
+    }
+
+    private function createSupervisor(Component $component, Client $client)
+    {
+        if (!$component->create_supervisor) {
+            return;
+        }
+
+        $supervisor = Supervisor::create(
+            [
+                "name" => $client->name,
+                "last_name" => $client->last_name,
+                "email" => $client->email,
+                "phone" => $client->phone,
+                "network_operator_id" => $client->network_operator_id,
+                "identification" => $client->identification
+            ]
+        );
+
+        $client->supervisors()->create([
+            "supervisor_id" => $supervisor,
+            "active" => true
+        ]);
+    }
+
+    private function createBillingInformation(Component $component, Client $client)
+    {
+        $client->billingInformation()->create([
+            "address" => $component->billing_address,
+            "phone" => $client->phone,
+            "identification" => $client->identification,
+            "identification_type" => $client->identification_type,
+            "name" => $component->billing_name,
+            "default" => true
+        ]);
+    }
+
 }
