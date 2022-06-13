@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\V1\Equipment;
 
 use Illuminate\Support\Facades\Config;
+use PhpMqtt\Client\Facades\MQTT;
 use PhpOption\None;
 
 class MicrocontrollerData extends Model
@@ -71,56 +72,49 @@ class MicrocontrollerData extends Model
             }
         }
         $this->jsonEdit($json);
-        //$this->alert();
+        //$this->alert($json);
     }
 
     private function jsonEdit($json)
     {
-        $decode = bin2hex(base64_decode($this->raw_json));
-        $split = substr($decode, 16, 16);
-        $bin = hex2bin($split);
-        $equipment_serial = unpack('Q', $bin)[1];
-        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-            ->first();
-        $client = $equipment->clients()->first();
-        $this->client_id = $client->id;
-        /*$split = substr($decode, 64, 8);
-        $bin = hex2bin($split);
-        $timestamp_unix = unpack('l', $bin)[1];   /////// timesatmp correct
-        $timestamp_unix = $timestamp_unix - ($timestamp_unix % 60);
-        $current_time = new DateTime("@$timestamp_unix");*/
-
         $date = new DateTime();
-        $unixTime = $date->getTimestamp();
-        $current_time = $date->modify('-' . ($unixTime % 60) . ' seconds');
+        $timestamp_unix = $json['timestamp'];   /////// timesatmp correct
+        $current_time = $date->setTimestamp($timestamp_unix);
+        $equipment_serial = $json['equipment_id'];
+        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                                    ->first();
+        if ($equipment == null){
+            $this->delete();
+            return;
+        }
+        $client = $equipment->clients()->first();
+        if ($client == null){
+            $this->delete();
+            return;
+        }
+
         $last_data = $client->microcontrollerData()->latest()->first();
 
         if ($last_data != null){
-            if ($last_data->source_timestamp == $current_time->format('Y-m-d H:i:s')){
-                $this->source_timestamp = $current_time->modify('+60 seconds');
-            } else{
-                $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
-            }
             $last_raw_json = json_decode($last_data->raw_json, true);
-        } else{
-
-            $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
-        }
-        $timestamp_unix = $current_time->getTimestamp();//delete
-        $json['timestamp'] = $timestamp_unix;
-
-        if ($json['import_wh'] == 0) {
-            $json['import_wh'] = $last_raw_json['import_wh'];
-            $json['import_VArh'] = $last_raw_json['import_VArh'];
-            $json['ph1_import_kvarh'] = $last_raw_json['ph1_import_kvarh'];
-            $json['ph2_import_kvarh'] = $last_raw_json['ph2_import_kvarh'];
-            $json['ph3_import_kvarh'] = $last_raw_json['ph3_import_kvarh'];
-            $json['ph1_import_kwh'] = $last_raw_json['ph1_import_kwh'];
-            $json['ph2_import_kwh'] = $last_raw_json['ph2_import_kwh'];
-            $json['ph3_import_kwh'] = $last_raw_json['ph3_import_kwh'];
+            if ($json['import_wh'] == 0) {
+                $json['import_wh'] = $last_raw_json['import_wh'];
+                $json['import_VArh'] = $last_raw_json['import_VArh'];
+                $json['ph1_import_kvarh'] = $last_raw_json['ph1_import_kvarh'];
+                $json['ph2_import_kvarh'] = $last_raw_json['ph2_import_kvarh'];
+                $json['ph3_import_kvarh'] = $last_raw_json['ph3_import_kvarh'];
+                $json['ph1_import_kwh'] = $last_raw_json['ph1_import_kwh'];
+                $json['ph2_import_kwh'] = $last_raw_json['ph2_import_kwh'];
+                $json['ph3_import_kwh'] = $last_raw_json['ph3_import_kwh'];
+            }
         }
 
-        if (count($client->microcontrollerData()->get()) == 0) {
+        if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()){
+            $this->delete();
+            return;
+        }
+
+        if (!$client->microcontrollerData()->exists()) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
             $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
@@ -142,10 +136,8 @@ class MicrocontrollerData extends Model
         } else {
             $reference_hour = new DateTime();
             $reference_hour->setTimestamp($timestamp_unix - ($timestamp_unix % 3600));
-
             $reference_data = $client->microcontrollerData()->whereBetween("source_timestamp", [$reference_hour->format('Y-m-d H:i:s'), $current_time->format('Y-m-d H:i:s')])
                 ->get()->last();
-
 
             if (empty($reference_data)) {
                 $json['kwh_interval'] = 0;
@@ -200,6 +192,8 @@ class MicrocontrollerData extends Model
                 $json['varLh_interval'] = $json['varLh_acumm'] - $reference_data_json['varLh_acumm'];
             }
         }
+        $this->client_id = $client->id;
+        $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         $this->accumulated_real_consumption = $json['import_wh'];
         $this->interval_real_consumption = $json['kwh_interval'];
         $this->accumulated_reactive_consumption = $json['import_VArh'];
@@ -210,6 +204,7 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
         $this->update();
+
     }
 
     public function intervalMiningData()
@@ -223,17 +218,16 @@ class MicrocontrollerData extends Model
         $hour = $current_time->format('H');
         $minute = $current_time->format('i');
         $last_day_month = $current_time->format('t');
-        if ($unix_time % 60 == 0) {
-            HourlyMicrocontrollerData::create([
-                'year' => $year,
-                'month' => $month,
-                'day' => $day,
-                'hour' => $hour,
-                'minute' => $minute,
-                'client_id' => $this->client_id,
-                'microcontroller_data_id' => $this->id,
-            ]);
-        }
+
+        HourlyMicrocontrollerData::create([
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
+            'hour' => $hour,
+            'minute' => $minute,
+            'client_id' => $this->client_id,
+            'microcontroller_data_id' => $this->id,
+        ]);
         if ($minute == 59) {
             if ($this->interval_real_consumption == 0){
                 $penalizable_inductive = $this->interval_reactive_inductive_consumption;
@@ -337,13 +331,24 @@ class MicrocontrollerData extends Model
                 }
             }
         }
+
+
     }
 
-    private function alert()
+    private function alert($json)
     {
         $flags_frame = config('data-frame.flags_frame');
-        $binary_flags = sprintf('%064b', $this->raw_json['flags']);
-        $split = substr($binary_flags, (61), (3));
+        $binary_flags = sprintf('%064b', $json['flags']);
+        $aux = [];
+        foreach ($flags_frame as $item){
+            $split = substr($binary_flags, $item['index'], 1);
+            $aux[$item['flag_name']] = $split;
+        }
+        $aux['data']= $binary_flags;
+        $topic = 'alarmas';
+        MQTT::publish($topic, json_encode($aux));
+        MQTT::disconnect();
+        return;
         if ($split == "100") {
             foreach ($flags_frame as $flag) {
                 $split = substr($binary_flags, ($flag['index']), (1));
