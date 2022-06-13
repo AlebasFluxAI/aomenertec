@@ -98,7 +98,7 @@ class Admin extends Model
                                 "route" => "administrar.v1.equipos.listado",
                                 "submenu" => [],
                             ],
-                          
+
                         ]
                     ],
                 ]
@@ -230,6 +230,29 @@ class Admin extends Model
         return $this->hasMany(NetworkOperator::class);
     }
 
+    public function adminEquipmentToNetworkOperatorsAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el tipo de equipo ...",
+                "value" => null
+            ]],
+            ($this->equipments()
+                ->whereNull("network_operator_id")
+                ->with("equipmentType")->get()->map(function ($equipment) {
+                    return [
+                        "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
+                        "value" => $equipment->id,
+                    ];
+                }))->toArray()
+        ));
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
+
     public function equipmentTypesAsKeyValue()
     {
         return (array_merge(
@@ -252,6 +275,23 @@ class Admin extends Model
         return $this->hasMany(AdminEquipmentType::class);
     }
 
+
+    public function networkOperatorsAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el operador de red ...",
+                "value" => null
+            ]],
+            ($this->networkOperators()->get()->map(function ($neworkOperador) {
+                return [
+                    "key" => $neworkOperador->id . "-" . $neworkOperador->identification,
+                    "value" => $neworkOperador->id,
+                ];
+            }))->toArray()
+        ));
+    }
+
     public function adminEquipmentsAsKeyValue()
     {
         return (array_merge(
@@ -268,26 +308,4 @@ class Admin extends Model
         ));
     }
 
-    public function equipments()
-    {
-        return $this->hasMany(Equipment::class);
-    }
-
-    public function adminEquipmentToNetworkOperatorsAsKeyValue()
-    {
-        return (array_merge(
-            [[
-                "key" => "Seleccione el tipo de equipo ...",
-                "value" => null
-            ]],
-            ($this->equipments()
-                ->whereNull("network_operator_id")
-                ->with("equipmentType")->get()->map(function ($equipment) {
-                    return [
-                        "key" => $equipment->id . "- " . $equipment->equipmentType->type . "- " . $equipment->serial,
-                        "value" => $equipment->id,
-                    ];
-                }))->toArray()
-        ));
-    }
 }
