@@ -43,6 +43,7 @@ class AddClientService extends Singleton
             "network_topology" => "monophasic",
             'serials' => collect([]),
             'equipment' => [],
+            "has_telemetry" => false,
             "create_supervisor" => false,
             "technician_select_disabled" => true,
             "stratum_id" => Stratum::first() ? Stratum::first()->id : null,
@@ -215,8 +216,7 @@ class AddClientService extends Singleton
 
     public function hasTelemetry(Component $component)
     {
-        return false;
-        strpos(strtolower(ClientType::find($component->client_type_id) ? ClientType::find($component->client_type_id)->type : null), "telemetria");
+        return strpos(strtolower(ClientType::find($component->client_type_id) ? ClientType::find($component->client_type_id)->type : null), "telemetria");
     }
 
     public function updatedNetworkOperatorId(Component $component)
