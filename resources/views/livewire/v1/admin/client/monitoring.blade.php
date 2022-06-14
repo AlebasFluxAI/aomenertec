@@ -45,6 +45,10 @@
                                                     "action" => "emit('selectControl')"
 
                                                 ],
+                                                [
+                                                    "title"=>"Alertas",
+                                                    "action" => "emit('selectAlert')"
+                                                ],
 
                                            ],
 
@@ -106,9 +110,21 @@
                                                     "view_name"=>"partials.v1.chart.client_monitoring",
                                                     "view_values"=>  [
                                                                         "type" => "control_data",
-                                                                        "variables"=>$variables,
                                                                         "client"=>$client,
-                                                                        "data_frame"=>$data_frame
+                                                                     ]
+                                                ],
+                                                [
+                                                    "view_name"=>"partials.v1.table.primary-table",
+                                                    "view_values"=>  [
+                                                                        "table_pageable"=>false,
+                                                                        "table_headers"=>[
+                                                                                            "ID"=>'id',
+                                                                                            "Variable"=>'flag_index',
+                                                                                            "Valor"=>'value',
+                                                                                            "Fecha"=>'created_at'
+
+                                                                                        ],
+                                                                        "table_rows"=>$client->alerts
 
                                                                      ]
                                                 ],

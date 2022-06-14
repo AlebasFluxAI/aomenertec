@@ -164,4 +164,14 @@ class Client extends Model
     {
         return $this->hasMany(ClientAddress::class);
     }
+    public function coils()
+    {
+        return $this->hasMany(ClientDigitalOutput::class)->orderBy('number');
+    }
+    public function alerts()
+    {
+        return $this->hasMany(AlertHistory::class);
+    }
+
+
 }

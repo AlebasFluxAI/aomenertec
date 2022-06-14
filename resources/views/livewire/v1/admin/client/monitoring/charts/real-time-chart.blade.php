@@ -5,11 +5,11 @@
         @include('partials.v1.chart.variable-card', [
                     "icon_class" => $item['icon'],
                     "color"=>$item['color'],
-                    "list_variable_options" => $variables,
+                    "list_variable_options" => $variables_rt,
                     "list_model_variable" => 'cards_real_time.'.$index.'.list_model_variable',
                     "data" => $item['variables_selected'],
                     "id"=>$index,
-                    "real_time_flag" => $real_time_flag
+                    "real_time_flag" => true
             ])
 
     @endforeach
@@ -20,7 +20,7 @@
                          "input_type"=>"text",
                          "list_model" => "variable_chart_id",
                          "list_default" => "Variable...",
-                         "list_options" => $variables,
+                         "list_options" => $variables_rt,
                          "list_option_value"=>"id",
                          "list_option_view"=>"display_name",
                          "list_option_title"=>"",

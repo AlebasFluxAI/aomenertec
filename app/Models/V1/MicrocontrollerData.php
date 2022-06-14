@@ -57,7 +57,11 @@ class MicrocontrollerData extends Model
                 if ($data['start'] >= 440) {
                     $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                 } else {
-                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                    if ($data['variable_name'] == "flags") {
+                        $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                    } else {
+                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                    }
                 }
 
                 if (is_nan($json[$data['variable_name']])) {
@@ -72,7 +76,6 @@ class MicrocontrollerData extends Model
             }
         }
         $this->jsonEdit($json);
-        //$this->alert($json);
     }
 
     private function jsonEdit($json)
@@ -204,7 +207,6 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
         $this->update();
-
     }
 
     public function intervalMiningData()
@@ -331,8 +333,7 @@ class MicrocontrollerData extends Model
                 }
             }
         }
-
-
+        $this->alert($json);
     }
 
     private function alert($json)

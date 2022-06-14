@@ -12,7 +12,7 @@
 @elseif($type == "report_data")
     @livewire('v1.admin.client.monitoring.data-report', ['client'=>$client, 'variables' => $variables, 'data_frame'=>$data_frame])
 @elseif($type == "control_data")
-    @livewire('v1.admin.client.monitoring.control', ['client'=>$client, 'variables' => $variables, 'data_frame'=>$data_frame])
+    @livewire('v1.admin.client.monitoring.control', ['client'=>$client])
 @endif
 
 

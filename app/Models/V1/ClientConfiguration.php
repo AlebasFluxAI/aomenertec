@@ -130,6 +130,7 @@ class ClientConfiguration extends Model
             }
         }
         $message = base64_encode(implode($binary_data));
+
         return $message;
     }
 }
