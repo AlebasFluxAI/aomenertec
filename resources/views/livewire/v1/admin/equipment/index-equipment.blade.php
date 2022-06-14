@@ -36,6 +36,11 @@
                                    "col_filter"=>true
                                ],
                                  [
+                                   "col_name" =>"Serial",
+                                   "col_data" =>"serial",
+                                   "col_filter"=>true
+                               ],
+                                 [
                                    "col_name" =>"Tipo",
                                    "col_data" =>"equipmentType.type",
                                    "col_filter"=>false

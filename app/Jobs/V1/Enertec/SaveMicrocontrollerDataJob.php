@@ -23,7 +23,6 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
      * @return void
      */
     public $raw_json;
-    public $data;
 
     public function __construct($raw_json)
     {
