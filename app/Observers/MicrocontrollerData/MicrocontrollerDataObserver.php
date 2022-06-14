@@ -20,6 +20,6 @@ class MicrocontrollerDataObserver
     public function updated(MicrocontrollerData $microcontrollerData)
     {
         $microcontrollerData->IntervalMiningData();
-        event(new NewPointDataMonitoringEvent());
+        //event(new NewPointDataMonitoringEvent());
     }
 }
