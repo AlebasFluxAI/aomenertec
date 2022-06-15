@@ -43,8 +43,7 @@ class RealTimeChart extends Component
         $aux = $variables->where('id', $this->variable_chart_id)->first();
         $this->chart_title = $aux['display_name'];
         $this->chart_type = $aux['chart_type'];
-        $last_data = $this->client->microcontrollerData()->latest()->first();
-        $this->last_data = collect(json_decode($last_data->raw_json, true));
+        $this->last_data = [];
         $this->cards_real_time = [];
         $initial_variables = $variables->take(6);
         foreach ($initial_variables as $variable) {
@@ -66,7 +65,7 @@ class RealTimeChart extends Component
 
     public function updatedCardsRealTime($value, $key)
     {
-        $variable_select = $this->variables->where('id', $value)->first();
+        $variable_select = $this->variables_rt->where('id', $value)->first();
         $id = filter_var($key, FILTER_SANITIZE_NUMBER_INT);
         $aux = [];
         $var_data_frame = $this->data_frame_rt->where('variable_id', $value)->all();
@@ -88,7 +87,7 @@ class RealTimeChart extends Component
     public function getListeners()
     {
         return [
-            "echo:data-monitoring_" . $this->client->id . ",.dataEventRealTime" => 'addPoint',
+            "echo:data-monitoring." . $this->client->id . ",.dataEventRealTime" => 'addPoint',
             "selectRealTime"
         ];
 
@@ -96,7 +95,7 @@ class RealTimeChart extends Component
 
     public function updatedVariableChartId()
     {
-        $variable = $this->variables->where('id', $this->variable_chart_id)->first();
+        $variable = $this->variables_rt->where('id', $this->variable_chart_id)->first();
         $this->chart_type = $variable['chart_type'];
         $this->chart_title = $variable['display_name'];
         $this->variables_selected_real_time = $this->data_frame_rt->where('variable_id', $this->variable_chart_id);

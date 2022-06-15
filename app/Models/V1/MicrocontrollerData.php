@@ -9,10 +9,10 @@ use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PhpMqtt\Client\Facades\MQTT;
 use App\Models\V1\Equipment;
 
 use Illuminate\Support\Facades\Config;
-use PhpMqtt\Client\Facades\MQTT;
 use PhpOption\None;
 
 class MicrocontrollerData extends Model
@@ -333,13 +333,15 @@ class MicrocontrollerData extends Model
                 }
             }
         }
-        $this->alert($json);
+        $this->alert($this->raw_json);
+
     }
 
-    private function alert($json)
+    public function alert($json)
     {
+
         $flags_frame = config('data-frame.flags_frame');
-        $binary_flags = sprintf('%064b', $json['flags']);
+        $binary_flags = sprintf('%064b', doubleval($json['flags']));
         $aux = [];
         foreach ($flags_frame as $item){
             $split = substr($binary_flags, $item['index'], 1);
@@ -349,8 +351,7 @@ class MicrocontrollerData extends Model
         $topic = 'alarmas';
         MQTT::publish($topic, json_encode($aux));
         MQTT::disconnect();
-        return;
-        if ($split == "100") {
+        /*if ($split == "100") {
             foreach ($flags_frame as $flag) {
                 $split = substr($binary_flags, ($flag['index']), (1));
                 if ($split == "1") {
@@ -383,6 +384,6 @@ class MicrocontrollerData extends Model
                     'value' => $this->interval_real_consumption - 1200,
                 ]);
             }////// notificar alertas
-        }
+        }*/
     }
 }
