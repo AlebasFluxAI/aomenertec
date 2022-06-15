@@ -48,7 +48,6 @@ class Control extends Component
             $coil->name = $value;
             $coil->save();
             $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Nombre actualizado"]);
-
         }
     }
 
