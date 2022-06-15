@@ -39,10 +39,17 @@ class Control extends Component
 
         MQTT::publish($topic, $message);
         MQTT::disconnect();
-        $this->coils = $this->client->coils;
-        $this->emit('toggle', ['index' => $this->coils[$index]['id']]);
+        //$this->coils = $this->client->coils;
+    }
+    public function updatedCoils($value, $key){
+        $variable = explode(".", $key);
+        if($variable[1] == "name"){
+            $coil = ClientDigitalOutput::find($this->coils[$variable[0]]['id']);
+            $coil->name = $value;
+            $coil->save();
+            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Nombre actualizado"]);
 
-
+        }
     }
 
     public function render()

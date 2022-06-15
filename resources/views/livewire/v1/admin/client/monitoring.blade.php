@@ -124,7 +124,7 @@
                                                                                             "Fecha"=>'created_at'
 
                                                                                         ],
-                                                                        "table_rows"=>$client->alerts
+                                                                        "table_rows"=>[]
 
                                                                      ]
                                                 ],
