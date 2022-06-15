@@ -21,6 +21,8 @@ trait AddUserFormTrait
     public $phone;
     public $email;
     public $form_title;
+    public $password;
+    public $addressDetails;
 
     public function updatedLatitude()
     {

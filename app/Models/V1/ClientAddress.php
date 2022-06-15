@@ -33,24 +33,4 @@ class ClientAddress extends Model
         return $this->belongsTo(Client::class);
     }
 
-    public function setHereMapJson()
-    {
-        if (!$this->latitude or !$this->longitude) {
-            return;
-        }
-
-        $latlng = "{$this->latitude},{$this->longitude}";
-        $response = Http::get('https://revgeocode.search.hereapi.com/v1/revgeocode', [
-            'at' => $latlng,
-            'apiKey' => config("here.apiKey"),
-        ]);
-
-        if (200 == $response->status()) {
-            $body = $response->json();
-
-            if (array_key_exists('items', $body)) {
-                $this->here_maps = json_encode($body);
-            }
-        }
-    }
 }

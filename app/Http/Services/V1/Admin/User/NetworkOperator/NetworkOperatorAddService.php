@@ -77,7 +77,9 @@ class NetworkOperatorAddService extends Singleton
             "email" => $component->email,
             "phone" => $component->phone,
             "admin_id" => $component->admin_id,
-            "identification" => $component->identification
+            "identification" => $component->identification,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
         ];
     }
 }
