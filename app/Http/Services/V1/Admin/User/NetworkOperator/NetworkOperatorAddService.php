@@ -16,6 +16,7 @@ class NetworkOperatorAddService extends Singleton
 {
     public function mount(Component $component)
     {
+        $component->form_title = "Datos del operador de red";
         $component->fill($this->getMountData());
     }
 

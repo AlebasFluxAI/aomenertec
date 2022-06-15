@@ -1,4 +1,4 @@
-<hr>
+<br>
 <div class="text-{{$button_align}}">
     <button id="add" type="submit" class="mb-2 py-2 px-4">
         <b>

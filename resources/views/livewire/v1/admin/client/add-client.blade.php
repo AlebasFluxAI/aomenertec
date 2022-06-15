@@ -129,21 +129,8 @@
                                 "title"=>"Ubicación del cliente"
                         ]
                        )
-                        <div class="row pl-5 pr-3">
+                        @include("partials.v1.addUserTemplate.user-add-location-form")
 
-                            @include("partials.v1.map",[
-                                     "input_label"=>"Seleccione la ubicacion del cliente en el mapa o ingrese una direccion"
-                               ])
-                            @include("partials.v1.form.form_input_icon",[
-                                                           "input_label"=>"Detalles de dirección (Ingrese los detalles que puedan ser relevantes de la direccion)",
-                                                           "input_model"=>"addressDetails",
-                                                           "icon_class"=>"fas fa-map",
-                                                           "placeholder"=>"Vereda, Caserio, Resguardo .. etc",
-                                                           "col_with"=>8,
-                                                           "input_type"=>"text",
-                                                           "required"=>false
-                                                     ])
-                        </div>
                         @include("partials.v1.divider_title",[
                             "title"=>"Tipo de red / Contribuciones"
                             ]
@@ -290,20 +277,20 @@
                                      "list_option_title"=>""
                             ])
                                         @include("partials.v1.form.form_dropdown_input_searchable",[
-                                      "form_group" => false,
-                                       "col_with"=>8,
-                                      "dropdown_model" => "equipment.".$index.".serial",
-                                      "placeholder" => $item['type'],
-                                      "required" => false,
-                                      "picked_variable" => $item['picked'],
-                                      "message_variable" => $item['post'],
-                                      "variable_2" => $index??0,
-                                      "dropdown_results" => $serials,
-                                      "count_bool" => $serials->contains('equipment_type_id', $item['type_id']),
-                                      "selected_value_function" => "assignEquipment",
-                                      "dropdown_result_id" => "id",
-                                      "dropdown_result_value" => "serial",
-                            ])
+                                                  "form_group" => false,
+                                                   "col_with"=>8,
+                                                  "dropdown_model" => "equipment.".$index.".serial",
+                                                  "placeholder" => $item['type'],
+                                                  "required" => false,
+                                                  "picked_variable" => $item['picked'],
+                                                  "message_variable" => $item['post'],
+                                                  "variable_2" => $index??0,
+                                                  "dropdown_results" => $serials,
+                                                  "count_bool" => $serials->contains('equipment_type_id', $item['type_id']),
+                                                  "selected_value_function" => "assignEquipment",
+                                                  "dropdown_result_id" => "id",
+                                                  "dropdown_result_value" => "serial",
+                                        ])
                                     </div>
                                 @endforeach
 

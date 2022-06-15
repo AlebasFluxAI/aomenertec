@@ -1,5 +1,5 @@
 <div class="float-end">
-    <nav class=" navbar navbar-expand-sm table-nav">
+    <nav class=" navbar ">
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
                 <li>
@@ -16,3 +16,4 @@
         </ul>
     </nav>
 </div>
+
