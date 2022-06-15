@@ -114,7 +114,11 @@ class AddClientService extends Singleton
             [
                 "key" => Client::IDENTIFICATION_TYPE_PP,
                 "value" => Client::IDENTIFICATION_TYPE_PP,
-            ]
+            ],
+            [
+                "key" => Client::IDENTIFICATION_TYPE_NIT,
+                "value" => Client::IDENTIFICATION_TYPE_NIT,
+            ],
         ];
     }
 
