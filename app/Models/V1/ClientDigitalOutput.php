@@ -14,6 +14,9 @@ class ClientDigitalOutput extends Model
     public const AUTOMATIC = 'automatic';
     public const MANUAL = 'manual';
 
+    public const NC = 'nc';
+    public const NO = 'no';
+
 
     protected $fillable = [
         'client_id',

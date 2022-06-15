@@ -344,7 +344,7 @@ class MicrocontrollerData extends Model
         $binary_flags = sprintf('%064b', doubleval($json['flags']));
         $aux = [];
         foreach ($flags_frame as $item){
-            $split = substr($binary_flags, $item['index'], 1);
+            $split = substr($binary_flags, $item['bit'], 1);
             $aux[$item['flag_name']] = $split;
         }
         $aux['data']= $binary_flags;
