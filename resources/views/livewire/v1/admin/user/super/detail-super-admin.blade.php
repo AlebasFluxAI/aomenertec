@@ -58,6 +58,22 @@
                                                                              "key"=>"Telefono",
                                                                              "value"=>$model->user->phone
                                                                          ],
+                                                                         [
+                                                                             "key"=>"Pais",
+                                                                             "value"=>$model->country
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Departamento",
+                                                                             "value"=>$model->state
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Ciudad",
+                                                                             "value"=>$model->city
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Direccion",
+                                                                             "value"=>$model->address
+                                                                         ],
                                                                      ]
                                                             ]
                                                 ],

@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -12,13 +13,8 @@ use Livewire\Component;
 class AddNetworkOperator extends Component
 {
     use ValidateUserFormTrait;
+    use AddUserFormTrait;
 
-    public $password;
-    public $identification;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $email;
     public $message;
     public $picked;
     public $admins;

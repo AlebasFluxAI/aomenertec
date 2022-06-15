@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\User\Support;
 
 use App\Http\Services\V1\Admin\User\Support\SupportAddService;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -10,13 +11,8 @@ use Livewire\WithFileUploads;
 class AddSupport extends Component
 {
     use ValidateUserFormTrait;
+    use AddUserFormTrait;
 
-    public $password;
-    public $identification;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $email;
     public $message;
     public $picked;
     public $network_operators;

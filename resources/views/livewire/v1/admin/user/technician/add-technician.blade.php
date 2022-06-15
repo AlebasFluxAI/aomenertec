@@ -1,4 +1,4 @@
-<div>
+<div class="login">
     @section("header") {{--extended app.blade--}}
     @endsection
 
@@ -21,127 +21,41 @@
         ])
     {{----------------------------------Formulario--------------------------}}
     @role("network_operator")
-    @include("partials.v1.form.primary_form",[
-       "form_toast"=>false,
-       "session_message"=>"message",
-       "form_submit_action"=>"submitForm",
-       "form_inputs"=>[
-                       [
-                                   "input_type"=>"text",
-                                   "input_model"=>"name",
-                                   "icon_class"=>"fas fa-user",
-                                   "placeholder"=>"Nombre ",
-                                   "col_with"=>6,
-                                   "required"=>true
-                       ],
-                       [
-                                   "input_type"=>"text",
-                                   "input_model"=>"last_name",
-                                   "icon_class"=>"fas fa-user",
-                                   "placeholder"=>"Apellido",
-                                   "col_with"=>6,
-                                   "required"=>true
-                       ],
-                       [
-                                   "input_type"=>"text",
-                                   "input_model"=>"phone",
-                                   "icon_class"=>"fas fa-file",
-                                    "placeholder"=>"Telefono",
-                                   "col_with"=>6,
-
-                                   "required"=>false,
-
-                        ],
-                        [
-                                   "input_type"=>"text",
-                                   "input_model"=>"identification",
-                                   "icon_class"=>"fas fa-file",
-                                    "placeholder"=>"Identificacion",
-                                   "col_with"=>6,
-
-                                   "required"=>false,
-
-                        ],
-
-                                       [
-                                   "input_type"=>"email",
-                                   "input_model"=>"email",
-                                   "icon_class"=>"fas fa-envelope",
-                                   "placeholder"=>"Correo electronico ",
-                                   "col_with"=>6,
-                                   "required"=>true
-                       ],
-                    ]
-            ])
+    <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
+        @include("partials.v1.addUserTemplate.user-add-form")
+    </form>
     @else
-        @include("partials.v1.form.primary_form",[
-                "form_toast"=>false,
-                "session_message"=>"message",
-                "form_submit_action"=>"submitForm",
-                "form_inputs"=>[
-                                [
-                                            "input_type"=>"text",
-                                            "input_model"=>"name",
-                                            "icon_class"=>"fas fa-user",
-                                            "placeholder"=>"Nombre ",
-                                            "col_with"=>6,
-                                            "required"=>true
-                                ],
-                                [
-                                            "input_type"=>"text",
-                                            "input_model"=>"last_name",
-                                            "icon_class"=>"fas fa-user",
-                                            "placeholder"=>"Apellido",
-                                            "col_with"=>6,
-                                            "required"=>true
-                                ],
-                                [
-                                            "input_type"=>"text",
-                                            "input_model"=>"phone",
-                                            "icon_class"=>"fas fa-file",
-                                             "placeholder"=>"Telefono",
-                                            "col_with"=>6,
+        <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
 
-                                            "required"=>false,
+            @include("partials.v1.addUserTemplate.user-add-form",[
+                          "custom_input"=>[
+                               [
+                               "view_name"=>"partials.v1.divider_title",
+                               "view_values" =>[
+                                              "title"=>"Operador de red"
+                                              ]
 
-                                 ],
-                                 [
-                                            "input_type"=>"text",
-                                            "input_model"=>"identification",
-                                            "icon_class"=>"fas fa-file",
-                                             "placeholder"=>"Identificacion",
-                                            "col_with"=>6,
-
-                                            "required"=>false,
-
-                                 ],
-
-                                                [
-                                            "input_type"=>"email",
-                                            "input_model"=>"email",
-                                            "icon_class"=>"fas fa-envelope",
-                                            "placeholder"=>"Correo electronico ",
-                                            "col_with"=>6,
-                                            "required"=>true
-                                ],
-                                               [
-                                            "input_type"=>"dropdown-search",
-                                            "icon_class"=>"fas fa-desktop",
-                                            "placeholder"=>"Seleccione el operador de red",
-                                            "col_with"=>6,
-                                            "dropdown_model"=>"network_operator",
-                                            "picked_variable"=>$picked,
-                                            "dropdown_results"=>$network_operators,
-                                            "dropdown_enter_function"=>"assignNetworkOperator",
-                                            "selected_value_function" => "assignNetworkOperator",
-                                            "dropdown_result_id"=>"id",
-                                            "dropdown_result_value"=>"name",
-                                            "count_bool" => (count($network_operators)>0),
-
-                                ]
-
-                             ]
-                     ])
+                               ],
+                              [
+                               "view_name"=>"partials.v1.form.form_dropdown_input_searchable",
+                               "view_values" =>[
+                                                  "input_type"=>"dropdown-search",
+                                                    "icon_class"=>"fas fa-desktop",
+                                                    "placeholder"=>"Seleccione el operador de red",
+                                                    "col_with"=>10,
+                                                    "dropdown_model"=>"network_operator",
+                                                    "picked_variable"=>$picked,
+                                                    "dropdown_results"=>$network_operators,
+                                                    "dropdown_enter_function"=>"assignNetworkOperator",
+                                                    "selected_value_function" => "assignNetworkOperator",
+                                                    "dropdown_result_id"=>"id",
+                                                    "dropdown_result_value"=>"name",
+                                                    "count_bool" => (count($network_operators)>0),
+                                              ]
+                                      ]
+                               ]
+              ])
+        </form>
         @endrole
 
 </div>

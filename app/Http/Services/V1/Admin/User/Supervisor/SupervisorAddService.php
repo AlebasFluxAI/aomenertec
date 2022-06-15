@@ -65,6 +65,8 @@ class SupervisorAddService extends Singleton
             "phone" => $component->phone,
             "identification" => $component->identification,
             "network_operator_id" => $component->network_operator_id,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
 
         ];
     }

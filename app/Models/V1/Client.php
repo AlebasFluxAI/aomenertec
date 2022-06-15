@@ -98,6 +98,12 @@ class Client extends Model
         return $this->belongsTo(VoltageLevel::class);
     }
 
+    public function billingInformation()
+    {
+        return $this->hasMany(BillingInformation::class);
+    }
+
+
     public function stratum()
     {
         return $this->belongsTo(Stratum::class);

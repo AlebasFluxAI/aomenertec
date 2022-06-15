@@ -91,7 +91,9 @@ class TechnicianAddService extends Singleton
             "email" => $component->email,
             "phone" => $component->phone,
             "network_operator_id" => $component->network_operator_id,
-            "identification" => $component->identification
+            "identification" => $component->identification,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
         ];
     }
 }
