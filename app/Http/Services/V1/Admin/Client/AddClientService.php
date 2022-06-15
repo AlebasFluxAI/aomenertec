@@ -479,12 +479,12 @@ class AddClientService extends Singleton
         }
         $supervisor = Supervisor::create(
             [
-                "name" => $client->name,
-                "last_name" => $client->last_name,
-                "email" => $client->email,
-                "phone" => $client->phone,
-                "network_operator_id" => $client->network_operator_id,
-                "identification" => $client->identification
+                "name" => $component->name,
+                "last_name" => $component->last_name,
+                "email" => $component->email,
+                "phone" => $component->phone,
+                "network_operator_id" => $component->network_operator_id,
+                "identification" => $component->identification
             ]
         );
 
