@@ -16,6 +16,7 @@ class SellerAddService extends Singleton
 {
     public function mount(Component $component)
     {
+        $component->form_title = "Informacion del vendedor";
         $component->fill($this->getMountData());
     }
 
@@ -41,10 +42,11 @@ class SellerAddService extends Singleton
 
     public function updatedNetworkOperator(Component $component)
     {
+
         $component->picked_network_operator = false;
         $component->message_network_operator = "No hay operador de red registrado con esta identificación";
         if ($component->network_operator != "") {
-            $component->network_operators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
+            $component->networkOperators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
                 ->orWhere("name", "like", '%' . $component->network_operator . "%")
                 ->take(3)->get();
         }
@@ -53,7 +55,7 @@ class SellerAddService extends Singleton
     public function assignNetworkOperator(Component $component, $network_operator)
     {
         $obj = json_decode($network_operator);
-        $component->network_operator = $obj->identification . " - " . $obj->name;
+        $component->network_operator = $obj->id . "-" . $obj->name . "-" . $obj->identification;
         $component->network_operator_id = $obj->id;
         $component->picked = true;
     }
@@ -63,6 +65,8 @@ class SellerAddService extends Singleton
         $component->picked = true;
         $admin = json_decode($admin);
         $component->network_operator_id = $admin->id;
+        $networkOperator = NetworkOperator::find($component->network_operator_id);
+        $component->network_operator = $networkOperator->id . "-" . $networkOperator->name . "-" . $networkOperator->identification;
     }
 
     public function submitForm(Component $component)
@@ -91,7 +95,9 @@ class SellerAddService extends Singleton
             "email" => $component->email,
             "phone" => $component->phone,
             "network_operator_id" => $component->network_operator_id,
-            "identification" => $component->identification
+            "identification" => $component->identification,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
         ];
     }
 }

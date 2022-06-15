@@ -19,7 +19,16 @@ class Seller extends Model
         'last_name',
         'email',
         'user_id',
-        'network_operator_id'
+        'network_operator_id',
+        "address",
+        "latitude",
+        "longitude",
+        "address_details",
+        "postal_code",
+        "here_maps",
+        "country",
+        "city",
+        "state",
     ];
 
     public static function getRole()

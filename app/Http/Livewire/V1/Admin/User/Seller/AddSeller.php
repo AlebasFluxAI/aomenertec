@@ -3,22 +3,19 @@
 namespace App\Http\Livewire\V1\Admin\User\Seller;
 
 use App\Http\Services\V1\Admin\User\Seller\SellerAddService;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 
 class AddSeller extends Component
 {
     use ValidateUserFormTrait;
+    use AddUserFormTrait;
 
-    public $password;
-    public $identification;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $email;
     public $message;
     public $picked;
     public $networkOperators;
+    public $network_operator;
     public $network_operator_id;
 
 
@@ -40,9 +37,9 @@ class AddSeller extends Component
         $this->sellerAddService->submitForm($this);
     }
 
-    public function updatedNetworkOperatorId()
+    public function updatedNetworkOperator()
     {
-        $this->sellerAddService->updatedNetworkOperatorId($this);
+        $this->sellerAddService->updatedNetworkOperator($this);
     }
 
 

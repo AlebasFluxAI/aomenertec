@@ -18,7 +18,16 @@ class Support extends Model
         'name',
         'last_name',
         'email',
-        'user_id'
+        'user_id',
+        "address",
+        "latitude",
+        "longitude",
+        "address_details",
+        "postal_code",
+        "here_maps",
+        "country",
+        "city",
+        "state",
     ];
 
     public static function menu()

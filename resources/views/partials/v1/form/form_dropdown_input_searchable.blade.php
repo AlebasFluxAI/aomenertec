@@ -13,7 +13,9 @@
 
 @if($form_group??true)
     <div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-12">
+
         @endif
+        <label>{{$input_label??""}}</label>
         <div class="input-group text-center">
             @if($icon_class??"" != "")
                 <div class="input-group-prepend">
@@ -65,7 +67,7 @@
                                         - {{ $dropdown_result->{$dropdown_result_value} }}
                                     </a>
                                 @else
-                                    <a wire:click="{{$selected_value_function}}({{ $dropdown_result->{$dropdown_result_id} }}, {{ $variable_2 }})"
+                                    <a wire:click="{{$selected_value_function}}({{ $dropdown_result->{$dropdown_result_id} }}, {{ $variable_2??"" }})"
                                        type="button">
                                         {{ $dropdown_result->{$dropdown_result_id} }}
                                         - {{ $dropdown_result->{$dropdown_result_value} }}

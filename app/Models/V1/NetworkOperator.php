@@ -19,7 +19,16 @@ class NetworkOperator extends Model
         'name',
         'last_name',
         'email',
-        'admin_id'
+        'admin_id',
+        "address",
+        "latitude",
+        "longitude",
+        "address_details",
+        "postal_code",
+        "here_maps",
+        "country",
+        "city",
+        "state",
     ];
 
     public static function menu()
@@ -86,6 +95,27 @@ class NetworkOperator extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function techniciansAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el tecnico...",
+                "value" => null
+            ]],
+            ($this->technicians()->get()->map(function ($technician) {
+                return [
+                    "key" => $technician->name,
+                    "value" => $technician->id
+                ];
+            }))->toArray()
+        ));
+    }
+
+    public function technicians()
+    {
+        return $this->hasMany(Technician::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -104,11 +134,6 @@ class NetworkOperator extends Model
     public function sellers()
     {
         return $this->hasMany(Seller::class);
-    }
-
-    public function technicians()
-    {
-        return $this->hasMany(Technician::class);
     }
 
     public function supervisors()

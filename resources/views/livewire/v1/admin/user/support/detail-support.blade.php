@@ -60,6 +60,22 @@
                                                                              "value"=>$model->phone
                                                                          ],
                                                                          [
+                                                                             "key"=>"Pais",
+                                                                             "value"=>$model->country
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Departamento",
+                                                                             "value"=>$model->state
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Ciudad",
+                                                                             "value"=>$model->city
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Direccion",
+                                                                             "value"=>$model->address
+                                                                         ],
+                                                                         [
                                                                              "key"=>"Operador de red",
                                                                              "value"=>($model->networkOperator?$model->networkOperator->id:null). "- ". ($model->networkOperator?$model->networkOperator->name:null)
                                                                          ],
