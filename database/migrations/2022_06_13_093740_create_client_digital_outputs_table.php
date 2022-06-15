@@ -23,6 +23,11 @@ class CreateClientDigitalOutputsTable extends Migration
                 \App\Models\V1\ClientDigitalOutput::AUTOMATIC,
                 \App\Models\V1\ClientDigitalOutput::MANUAL
             ])->default(\App\Models\V1\ClientDigitalOutput::MANUAL);
+            $table->enum("output_type", [
+                \App\Models\V1\ClientDigitalOutput::NC,
+                \App\Models\V1\ClientDigitalOutput::NO
+            ])->default(\App\Models\V1\ClientDigitalOutput::NO);
+
             $table->softDeletes();
             $table->timestamps();
         });
