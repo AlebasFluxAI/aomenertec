@@ -62,7 +62,7 @@
                                           "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]},
                                           "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:""
                                       ])
-                                    @elseas
+                                @else
                                     @include("partials.v2.table.primary-table-column",[
                                     "col_data"=>$table_row->{$table_header["col_data"]},
                                     "col_array_data"=>$table_header["col_array_data"]??"",
