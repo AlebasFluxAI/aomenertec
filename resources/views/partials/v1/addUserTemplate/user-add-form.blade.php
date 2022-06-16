@@ -9,7 +9,7 @@
 
                 @include("partials.v1.form.form_input_icon",[
                       "input_model"=>"name",
-                      "input_label"=>"Nombre del cliente",
+                      "input_label"=>"Nombre",
                       "icon_class"=>"fas fa-user",
                       "placeholder"=>"Nombre",
                       "col_with"=>8,
@@ -18,7 +18,7 @@
              ])
 
                 @include("partials.v1.form.form_input_icon",[
-                       "input_label"=>"Apellido del cliente",
+                       "input_label"=>"Apellido",
                        "input_model"=>"last_name",
                        "icon_class"=>"fas fa-user",
                        "placeholder"=>"Apellido",
@@ -28,7 +28,7 @@
                                     ])
 
                 @include("partials.v1.form.form_input_icon",[
-                        "input_label"=>"Telefono del cliente (Sin indicativo)",
+                        "input_label"=>"Telefono (Sin indicativo)",
                         "input_model"=>"phone",
                         "icon_class"=>"fas fa-barcode",
                         "placeholder"=>"Telefono",

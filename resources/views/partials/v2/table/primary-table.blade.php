@@ -56,7 +56,7 @@
                             </td>
                         @endif
                         @foreach($table_headers as $table_header)
-                            <td>
+                            <td style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}">
                                 @if(str_contains($table_header["col_data"],".") and !str_contains($table_header["col_data"],"*") and $table_row->{explode(".",$table_header["col_data"])[0]})
                                     @include("partials.v2.table.primary-table-column",[
                                           "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]},
@@ -64,15 +64,17 @@
                                       ])
                                 @else
                                     @include("partials.v2.table.primary-table-column",[
-                                   "col_data"=>$table_row->{$table_header["col_data"]},
-                                   "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:""
-                               ])
+                                    "col_data"=>$table_row->{$table_header["col_data"]},
+                                    "col_array_data"=>$table_header["col_array_data"]??"",
+                                    "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:""
+                                ])
 
                                 @endif
                             </td>
                         @endforeach
                         @isset($table_actions)
-                            <td id="table-action-cell">
+                            <td id="table-action-cell"
+                                style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}">
                                 <div class="container-fluid">
                                     <div class="row">
                                         @foreach($table_actions as $action_type=>$action_value)
@@ -113,6 +115,9 @@
                                                                         $table_row->{$table_headers[0]["col_data"]}))
                                                         @continue
                                                     @endif
+                                                    @if(array_key_exists("conditionalModel",$custom) and $this->{$custom["conditionalModel"]}($table_row))
+                                                        @continue
+                                                    @endif
 
                                                     @if(array_key_exists("redirect",$custom))
                                                         @include("partials.v1.table.table-redirect-button",[
@@ -125,7 +130,7 @@
                                                                  "tooltip_title"=>$custom["tooltip_title"] ?? ''
                                                              ])
                                                     @else
-                                                        @include("partials.v1.table.table-action-button  ",[
+                                                        @include("partials.v1.table.table-action-button",[
                                                                "button_action"=>$custom["function"],
                                                                "icon_color"=>"secondary",
                                                                "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
