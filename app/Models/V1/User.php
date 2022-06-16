@@ -168,4 +168,5 @@ class User extends Authenticatable
         }
         return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
     }
+
 }
