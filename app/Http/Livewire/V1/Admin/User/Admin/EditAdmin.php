@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\AdminEditService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
@@ -13,6 +14,7 @@ use Livewire\WithFileUploads;
 class EditAdmin extends Component
 {
     use WithFileUploads;
+    use AddUserFormTrait;
 
     public $model;
     public $name;
