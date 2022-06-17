@@ -54,6 +54,7 @@ class AdminAddService extends Singleton
             "css_style" => $component->style,
             "latitude" => $component->latitude,
             "longitude" => $component->longitude,
+            "address_details" => $component->addressDetails,
 
         ];
     }

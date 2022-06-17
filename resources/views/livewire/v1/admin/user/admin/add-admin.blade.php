@@ -25,6 +25,25 @@
         @include("partials.v1.addUserTemplate.user-add-form",
                     [
                       "custom_input"=>[
+                            [
+                           "view_name"=>"partials.v1.divider_title",
+                           "view_values" =>[
+                                          "title"=>"NIT"
+                                          ]
+
+                           ],
+                             [
+                           "view_name"=>"partials.v1.form.form_input_icon",
+                           "view_values" =>[
+                                                   "input_type"=>"text",
+                                                    "input_label"=>"Ingrese el nit del administrador",
+                                                    "input_model"=>"nit",
+                                                    "icon_class"=>"fas fa-barcode",
+                                                    "placeholder"=>"NIT ",
+                                                    "col_with"=>12,
+                                                    "required"=>true
+                                          ]
+                           ],
                            [
                            "view_name"=>"partials.v1.divider_title",
                            "view_values" =>[
@@ -54,7 +73,7 @@
                                                 "input_model"=>"icon",
                                                 "icon_class"=>"fas fa-file",
                                                 "placeholder"=>"Logo del administrador",
-                                                "col_with"=>6,
+                                                "col_with"=>12,
                                                 "required"=>false,
                                           ]
                            ]
