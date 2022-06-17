@@ -14,7 +14,6 @@ class AddLocationToAdmins extends Migration
     public function up()
     {
         Schema::table('admins', function (Blueprint $table) {
-            $table->string("address")->nullable();
             $table->double("latitude")->nullable();
             $table->json("here_maps")->nullable();
             $table->double("longitude")->nullable();
@@ -34,7 +33,6 @@ class AddLocationToAdmins extends Migration
     public function down()
     {
         Schema::table('admins', function (Blueprint $table) {
-            $table->dropColumn("address");
             $table->dropColumn("latitude");
             $table->dropColumn("here_maps");
             $table->dropColumn("longitude");
