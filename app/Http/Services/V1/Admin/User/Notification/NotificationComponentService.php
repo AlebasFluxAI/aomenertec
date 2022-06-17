@@ -39,7 +39,7 @@ class NotificationComponentService extends Singleton
     public function markAsRead(Component $component, $model)
     {
         $component->user->notifications()->find($model)->markAsRead();
-        event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_READ, $component->user->id));
+        $component->emit(NotificationTypes::NOTIFICATION_READ, ["notifiable" => $component->user->id]);
         $component->mount();
     }
 
@@ -48,7 +48,7 @@ class NotificationComponentService extends Singleton
         $component->user->notifications()->find($model)->update([
             "deleted_at" => now()
         ]);
-        event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_DELETED, $component->user->id));
+        $component->emit(NotificationTypes::NOTIFICATION_DELETED, ["notifiable" => $component->user->id]);
         $component->mount();
 
     }
