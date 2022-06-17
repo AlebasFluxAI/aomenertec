@@ -5,11 +5,13 @@
     let autocomplete;
     let map;
     let marker;
-    $("#latitude").val('Wilder');
+
 
     function myMap() {
-
-        var center = {lat: 4.134750, lng: -73.637094};
+        var center = {
+            lat: Number(@js($latitude)),
+            lng: Number(@js($longitude))
+        };
         var mapProp = {
             center: center,
             zoom: 14,

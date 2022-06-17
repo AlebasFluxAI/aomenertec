@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 use App\Http\Services\Singleton;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\SuperAdmin;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class NetworkOperatorEditService extends Singleton
@@ -18,15 +19,21 @@ class NetworkOperatorEditService extends Singleton
             'phone' => $model->phone,
             'email' => $model->email,
             'identification' => $model->identification,
+            'latitude' => $model->latitude,
+            'longitude' => $model->longitude,
+            "addressDetails" => $model->address_details,
+            "decodedAddress" => $model->address,
         ]);
     }
 
 
     public function submitForm(Component $component)
     {
-        $component->model->fill($this->mapper($component));
-        $component->model->update();
-        $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $component->model->id]);
+        DB::transaction(function () use ($component) {
+            $component->model->fill($this->mapper($component));
+            $component->model->update();
+            $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $component->model->id]);
+        });
     }
 
     private function mapper(Component $component)
@@ -36,7 +43,10 @@ class NetworkOperatorEditService extends Singleton
             "last_name" => $component->last_name,
             "email" => $component->email,
             "phone" => $component->phone,
-            "identification" => $component->identification
+            "identification" => $component->identification,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
+            "address_details" => $component->addressDetails,
         ];
     }
 }

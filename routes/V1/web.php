@@ -34,8 +34,6 @@ Route::get('/', function () {
 });
 
 
-
-
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get("mail/test/user_created", (MailTestController::class) . "@userCreatedNotification");
@@ -45,6 +43,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::prefix("v1")->group(function () {
         Route::get('/inicio', Livewire\V1\Admin\User\ProfileUser::class)->name("administrar.v1.perfil");
+        Route::get('/notificaciones', Livewire\V1\Admin\User\Notification\NotificationComponent::class)->name("administrar.v1.notificaciones");
         Route::prefix("administrar")->group(function () {
             Route::middleware([])->group(function () {
                 Route::prefix("usuarios")->group(function () {

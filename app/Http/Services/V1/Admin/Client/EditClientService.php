@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\User\EditUser;
 use App\Http\Services\Singleton;
+use App\Models\Traits\ClientServiceTrait;
 use App\Models\V1\Client;
 use App\Models\V1\ClientType;
 use App\Models\V1\Consumer;
@@ -19,6 +20,8 @@ use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 use function auth;
@@ -26,12 +29,18 @@ use function session;
 
 class EditClientService extends Singleton
 {
+    use ClientServiceTrait;
+
     public function mount(Component $component, Client $client)
     {
+
+        $billingInformation = $this->getBillingInformation($client);
+        $clientAddress = $this->getClientAddress($client);
         $component->fill([
             'client' => $client,
             'identification' => $client->identification,
             'name' => $client->name,
+            'last_name' => $client->last_name,
             'email' => $client->email,
             'phone' => $client->phone,
             'direction' => $client->direction,
@@ -42,41 +51,46 @@ class EditClientService extends Singleton
             'active_client' => $client->active_client,
             'network_operator_id' => $client->networkOperator->id,
             'network_operator' => $client->networkOperator->user->identification,
-            'network_operators' => [],
-            'picked_network_operator' => true,
-            'message_network_operator' => "Ingrese identificacion de operador de red",
-            'departments' => [], //Department::get(),
-            'department_id' => $client->department_id,
-            'municipalities' => [],//$client->department->municipalities,
-            'municipality_id' => $client->municipality_id,
-            'location_types' => [],//LocationType::get(),
-            'location_id' => $client->location_id,
-            'location_type_id' => "",//$client->location->location_type_id,
-            'locations' => [],//Location::whereMunicipalityId($client->municipality_id)
-                //->whereLocationTypeId($client->location->location_type_id)
-                //->get(),
-            'subsistence_consumptions' => SubsistenceConsumption::get(),
-            'subsistence_consumption_id' => $client->subsistence_consumption_id,
-            'voltage_levels' => VoltageLevel::get(),
-            'voltage_level_id' => $client->voltage_level_id,
+
+
+            "network_topologies" => $this->topologies(),
+            "network_topology" => "monophasic",
+            'serials' => collect([]),
+            'equipment' => [],
+            "has_telemetry" => false,
+            "create_supervisor" => false,
+            "technician_select_disabled" => true,
+            "stratum_id" => Stratum::first() ? Stratum::first()->id : null,
+            'technicians' => [],
             'strata' => Stratum::get(),
-            'stratum_id' => $client->stratum_id,
-            'network_topology' => $client->network_topology,
+            'client_types' => ClientType::get(),
+            "technician_id" => null,
+            'client_type_id' => ClientType::first() ? ClientType::first()->id : null,
+            'voltage_levels' => VoltageLevel::get(),
+            'subsistence_consumptions' => SubsistenceConsumption::get(),
+            'location_types' => LocationType::get(),
+            'locations' => [],
+            "identification_type" => Client::IDENTIFICATION_TYPE_CC,
+            "person_type" => Client::PERSON_TYPE_NATURAL,
+            "identification_types" => $this->identificationTypes(),
+            'person_types' => [
+                ["key" => "Persona natural", "value" => Client::PERSON_TYPE_NATURAL,],
+                ["key" => "Persona juridica", "value" => Client::PERSON_TYPE_JURIDICAL,]
+
+            ],
+
+            'subsistence_consumption_id' => $client->subsistence_consumption_id,
+            'voltage_level_id' => $client->voltage_level_id,
+
+            "billing_name" => $billingInformation ? $billingInformation->name : "",
+            "billing_address" => $billingInformation ? $billingInformation->address : "",
+            "addressDetails" => $clientAddress ? $clientAddress->details : "",
+            "decodedAddress" => $clientAddress ? $clientAddress->address : "",
         ]);
-        $component->topologies = [];
-        array_push($component->topologies, [
-            "id" => Client::MONOPHASIC,
-            "value" => "MONOFASICO",
-        ]);
-        array_push($component->topologies, [
-            "id" => Client::BIPHASIC,
-            "value" => "BIFASICO",
-        ]);
-        array_push($component->topologies, [
-            "id" => Client::TRIPHASIC,
-            "value" => "TRIFASICO",
-        ]);
+
     }
+
+
     public function updatedLocationTypeId(Component $component)
     {
         $component->location_id = "";
@@ -117,19 +131,25 @@ class EditClientService extends Singleton
                 ->take(3)->get();
         }
     }
+
     public function assignNetworkOperator(Component $component, $network_operator)
     {
         $obj = json_decode($network_operator);
         $component->network_operator = $obj->identification;
         $component->network_operator_id = User::find($obj->id)->networkOperator->id;
-        $component->picked_network_operator= true;
+        $component->picked_network_operator = true;
     }
 
     public function submitForm(Component $component)
     {
-        $component->client->fill($this->mapper($component));
-        $component->client->update();
-        $component->emitTo('livewire-toast', 'show', "Cliente {$component->client->name} actualizado exitosamente");
+        DB::transaction(function () use ($component) {
+            $component->client->fill($this->mapper($component));
+            $component->client->update();
+            $this->linkAddress($component, $component->client);
+            $this->linkBillingInformation($component, $component->client);
+            $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
+
+        });
     }
 
     private function mapper(Component $component)
@@ -145,14 +165,55 @@ class EditClientService extends Singleton
             'network_topology' => $component->network_topology,
             'active_client' => $component->active_client,
             'contribution' => $component->contribution,
-            'public_lighting_tax' => $component->public_lighting_tax??true,
-            'network_operator_id' =>$component->network_operator_id,
-            'department_id' => $component->department_id,
-            'municipality_id' => $component->municipality_id,
-            'location_id' => $component->location_id,
-            'subsistence_consumption_id' => $component->subsistence_consumption_id??1,
+            'public_lighting_tax' => $component->public_lighting_tax ?? true,
+            'network_operator_id' => $component->network_operator_id,
+            'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,
             'stratum_id' => $component->stratum_id,
+
         ];
+    }
+
+    private function linkAddress(Component $component, Client $client)
+    {
+        if ($address = $client->addresses()->first()) {
+
+            $address->update([
+                "latitude" => $component->latitude,
+                "longitude" => $component->longitude,
+                "details" => $component->addressDetails,
+            ]);
+            return;
+        }
+        $client->addresses()->create([
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
+            "details" => $component->addressDetails,
+        ]);
+
+    }
+
+    private function linkBillingInformation(Component $component, Client $client)
+    {
+        if ($billingInformation = $client->billingInformation()->first()) {
+            $billingInformation->update([
+                "address" => $component->billing_address,
+                "phone" => $client->phone,
+                "identification" => $client->identification,
+                "identification_type" => $client->identification_type,
+                "name" => $component->billing_name,
+                "default" => true
+            ]);
+            return;
+        }
+        $client->billingInformation()->create([
+            "address" => $component->billing_address,
+            "phone" => $client->phone,
+            "identification" => $client->identification,
+            "identification_type" => $client->identification_type,
+            "name" => $component->billing_name,
+            "default" => true
+        ]);
+
     }
 }

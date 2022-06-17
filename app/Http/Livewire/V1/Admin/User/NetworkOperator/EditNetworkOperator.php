@@ -3,17 +3,14 @@
 namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\NetworkOperator;
 use Livewire\Component;
 
 class EditNetworkOperator extends Component
 {
-    public $model;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $email;
-    public $identification;
+    use AddUserFormTrait;
+
     private $editNetworkOperatorService;
 
     public function __construct($id = null)

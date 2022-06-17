@@ -11,6 +11,7 @@ use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
+use App\Models\V1\Notification;
 use App\Models\V1\PqrMessage;
 use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
@@ -24,6 +25,7 @@ use App\Observers\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
 use App\Observers\HereMapObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
+use App\Observers\NotificationObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
 use App\Observers\User\Admin\UserAdminObserver;
@@ -74,14 +76,17 @@ class AppServiceProvider extends ServiceProvider
         Seller::observe(AddressObserver::class);
         NetworkOperator::observe(AddressObserver::class);
         Support::observe(AddressObserver::class);
+        Admin::observe(AddressObserver::class);
 
         ClientAddress::observe(HereMapObserver::class);
         Technician::observe(HereMapObserver::class);
         Seller::observe(HereMapObserver::class);
         NetworkOperator::observe(HereMapObserver::class);
         Support::observe(HereMapObserver::class);
+        Admin::observe(HereMapObserver::class);
 
         BillingInformation::observe(BillingInformationObserver::class);
+
     }
 }
 

@@ -22,6 +22,7 @@ trait AddUserFormTrait
     public $email;
     public $form_title;
     public $password;
+    public $model;
     public $addressDetails;
 
     public function updatedLatitude()
@@ -41,7 +42,9 @@ trait AddUserFormTrait
             }
         }
 
-
+        if (!$heremap) {
+            return;
+        }
         $map = json_decode($heremap ?? '{}');
 
 

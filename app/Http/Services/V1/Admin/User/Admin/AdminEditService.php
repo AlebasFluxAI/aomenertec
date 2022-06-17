@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\User\Admin;
 
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Livewire\Component;
 
@@ -22,6 +23,10 @@ class AdminEditService extends Singleton
             'password' => $model->password,
             'identification' => $model->identification,
             'style' => $model->css_file,
+            "addressDetails" => $model->address_details,
+            "latitude" => $model->latitude,
+            "longitude" => $model->longitude,
+            "decodedAddress" => $model->address,
             'styles' => [
                 [
                     "key" => $model->css_file_name,
@@ -35,19 +40,22 @@ class AdminEditService extends Singleton
 
     public function submitForm(Component $component)
     {
-        if ($component->icon) {
-            $image = $component->icon;
-            if (!$component->model->icon) {
-                $component->model->buildOneImageFromFile("icon", $image);
-            } else {
-                $component->model->icon->setDataImage($image);
-                $component->model->icon->name = $image->getClientOriginalName();
-                $component->model->icon->update();
+        DB::transaction(function () use ($component) {
+            if ($component->icon) {
+                $image = $component->icon;
+                if (!$component->model->icon) {
+                    $component->model->buildOneImageFromFile("icon", $image);
+                } else {
+                    $component->model->icon->setDataImage($image);
+                    $component->model->icon->name = $image->getClientOriginalName();
+                    $component->model->icon->update();
+                }
             }
-        }
-        $component->model->fill($this->mapper($component));
-        $component->model->update();
-        $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
+            $component->model->fill($this->mapper($component));
+            $component->model->update();
+            $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
+        });
+
     }
 
     private function mapper(Component $component)
@@ -60,7 +68,10 @@ class AdminEditService extends Singleton
             "address" => $component->address,
             "nit" => $component->nit,
             "identification" => $component->identification,
-            "css_file" => $component->style
+            "css_file" => $component->style,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
+            "address_details" => $component->addressDetails,
         ];
     }
 

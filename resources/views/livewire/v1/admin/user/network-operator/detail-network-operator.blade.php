@@ -74,6 +74,26 @@
                                                                              "key"=>"Identificacion",
                                                                              "value"=>$model->identification
                                                                          ],
+                                                                         [
+                                                                             "key"=>"Pais",
+                                                                             "value"=>$model->country
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Departamento",
+                                                                             "value"=>$model->state
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Ciudad",
+                                                                             "value"=>$model->city
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Direccion",
+                                                                             "value"=>$model->address
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Detalles de direccion",
+                                                                             "value"=>$model->address_details
+                                                                         ],
                                                                      ]
                                                             ]
                                                 ],
