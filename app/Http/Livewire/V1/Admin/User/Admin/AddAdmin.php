@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -10,6 +11,7 @@ use Livewire\WithFileUploads;
 class AddAdmin extends Component
 {
     use WithFileUploads;
+    use AddUserFormTrait;
     use ValidateUserFormTrait;
 
     public $password;

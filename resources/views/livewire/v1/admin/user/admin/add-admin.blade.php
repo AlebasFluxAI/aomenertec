@@ -21,97 +21,46 @@
                 ]
         ])
     {{----------------------------------Formulario--------------------------}}
-    @include("partials.v1.form.primary_form",[
-            "form_toast"=>false,
-            "session_message"=>"message",
-            "form_submit_action"=>"submitForm",
-            "form_inputs"=>[
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"name",
-                                        "icon_class"=>"fas fa-user",
-                                        "placeholder"=>"Nombre ",
-                                        "col_with"=>6,
-                                        "required"=>true
-                            ],
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"last_name",
-                                        "icon_class"=>"fas fa-user",
-                                        "placeholder"=>"Apellido",
-                                        "col_with"=>6,
-                                        "required"=>true
-                            ],
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"phone",
-                                        "icon_class"=>"fas fa-phone",
-                                         "placeholder"=>"Telefono",
-                                        "col_with"=>6,
-
-                                        "required"=>false,
-
-                             ],
-                             [
-                                        "input_type"=>"text",
-                                        "input_model"=>"identification",
-                                        "icon_class"=>"fas fa-barcode",
-                                         "placeholder"=>"Identificacion",
-                                        "col_with"=>6,
-
-                                        "required"=>false,
-
-                             ],
-
-                            [
-                                        "input_type"=>"email",
-                                        "input_model"=>"email",
-                                        "icon_class"=>"fas fa-envelope",
-                                        "placeholder"=>"Correo electronico ",
-                                        "col_with"=>6,
-                                        "required"=>true
-                            ],
+    <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
+        @include("partials.v1.addUserTemplate.user-add-form",
+                    [
+                      "custom_input"=>[
                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"address",
-                                        "icon_class"=>"fas fa-location-pin",
-                                        "placeholder"=>"Direccion ",
-                                        "col_with"=>6,
-                                        "required"=>true
-                            ],
-                             [
-                                        "input_type"=>"text",
-                                        "input_model"=>"nit",
-                                        "icon_class"=>"fas fa-barcode",
-                                        "placeholder"=>"NIT ",
-                                        "col_with"=>6,
-                                        "required"=>true
-                            ],
-                              [
-                                        "input_type"=>"dropdown",
-                                        "input_model"=>"style",
-                                        "icon_class"=>"fas fa-pencil",
-                                        "placeholder"=>"Archivo de estilos",
-                                        "col_with"=>12,
-                                        "dropdown_editing"=>false,
-                                        "dropdown_refresh"=>"setStyle",
-                                        "dropdown_model"=>"style",
-                                        "dropdown_values"=>$styles,
-                                        "required"=>false,
+                           "view_name"=>"partials.v1.divider_title",
+                           "view_values" =>[
+                                          "title"=>"Personalización"
+                                          ]
 
-                             ],
-                                   [
-                                        "input_type"=>"file",
-                                        "input_model"=>"icon",
-                                        "icon_class"=>"fas fa-file",
-                                         "placeholder"=>"Logo del administrador",
-                                        "col_with"=>6,
-                                        "required"=>false,
+                           ],
+                            [
+                           "view_name"=>"partials.v1.form.form_dropdown",
+                           "view_values" =>[
+                                                 "input_type"=>"dropdown",
+                                                 "input_model"=>"style",
+                                                 "icon_class"=>"fas fa-pencil",
+                                                 "placeholder"=>"Archivo de estilos",
+                                                 "col_with"=>12,
+                                                 "dropdown_editing"=>false,
+                                                 "dropdown_refresh"=>"setStyle",
+                                                 "dropdown_model"=>"style",
+                                                 "dropdown_values"=>$styles,
+                                                 "required"=>false,
+                                          ]
+                           ],
+                           [
+                               "view_name"=>"partials.v1.form.form_input_file",
+                                "view_values" =>[
+                                                "input_type"=>"file",
+                                                "input_model"=>"icon",
+                                                "icon_class"=>"fas fa-file",
+                                                "placeholder"=>"Logo del administrador",
+                                                "col_with"=>6,
+                                                "required"=>false,
+                                          ]
+                           ]
+                        ]
 
-                             ],
-
-
-                         ]
-                 ])
+          ])
+    </form>
 
 </div>
