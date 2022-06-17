@@ -49,4 +49,9 @@ class HereMapObserver
         } catch (Throwable $e) {
         }
     }
+
+    public function updating($model)
+    {
+        $this->setInformation($model);
+    }
 }
