@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Technician;
 
 use App\Http\Services\V1\Admin\User\Technician\TechnicianEditService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Technician;
 use App\Models\V1\NetworkOperator;
 use Livewire\Component;
@@ -11,6 +12,9 @@ use Livewire\WithFileUploads;
 
 class EditTechnician extends Component
 {
+
+    use AddUserFormTrait;
+
     public $model;
     public $name;
     public $last_name;

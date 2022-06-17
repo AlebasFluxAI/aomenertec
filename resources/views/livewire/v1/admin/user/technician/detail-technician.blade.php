@@ -84,6 +84,10 @@
                                                                              "value"=>$model->address
                                                                          ],
                                                                          [
+                                                                             "key"=>"Detalles de direccion",
+                                                                             "value"=>$model->address_details
+                                                                         ],
+                                                                         [
                                                                              "key"=>"Operador de red",
                                                                              "value"=>($model->networkOperator?$model->networkOperator->id:null). "- ". ($model->networkOperator?$model->networkOperator->name:null)
                                                                          ],

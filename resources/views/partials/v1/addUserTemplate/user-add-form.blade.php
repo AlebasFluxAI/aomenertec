@@ -2,7 +2,7 @@
     <div class="row content p-5">
         <div class="row ">
             @include("partials.v1.divider_title",[
-                           "title"=>$form_title
+                           "title"=>$form_title??""
                 ]
                 )
             <div class="row pl-5 pr-3">

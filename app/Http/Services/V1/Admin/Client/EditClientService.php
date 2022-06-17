@@ -84,7 +84,8 @@ class EditClientService extends Singleton
 
             "billing_name" => $billingInformation ? $billingInformation->name : "",
             "billing_address" => $billingInformation ? $billingInformation->address : "",
-            "addressDetails" => $clientAddress ? $clientAddress->details : ""
+            "addressDetails" => $clientAddress ? $clientAddress->details : "",
+            "decodedAddress" => $clientAddress ? $clientAddress->address : "",
         ]);
 
     }
@@ -176,7 +177,7 @@ class EditClientService extends Singleton
     private function linkAddress(Component $component, Client $client)
     {
         if ($address = $client->addresses()->first()) {
-            
+
             $address->update([
                 "latitude" => $component->latitude,
                 "longitude" => $component->longitude,
