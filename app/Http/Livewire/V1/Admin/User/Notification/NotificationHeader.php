@@ -20,8 +20,8 @@ class NotificationHeader extends Component
     protected $listeners =
         [
             "echo:notifications,.notification_created" => 'notifyInputNotification',
-            "echo:notifications,.notification_deleted" => 'notifyDeleteNotification',
-            "echo:notifications,.notification_read" => 'notifyReadNotification'];
+            "notification_deleted" => 'notifyDeleteNotification',
+            "notification_read" => 'notifyReadNotification'];
 
     private $notificationHeaderService;
 
@@ -34,6 +34,7 @@ class NotificationHeader extends Component
 
     public function notifyDeleteNotification($notification)
     {
+
         if ($notification["notifiable"] != $this->user_id) {
             return;
         }
