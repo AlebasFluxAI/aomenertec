@@ -51,7 +51,9 @@ class AdminAddService extends Singleton
             "nit" => $component->nit,
             "identification" => $component->identification,
             "type" => User::TYPE_ADMIN,
-            "css_style" => $component->style
+            "css_style" => $component->style,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
 
         ];
     }

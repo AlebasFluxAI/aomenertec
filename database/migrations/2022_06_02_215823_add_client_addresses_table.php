@@ -20,6 +20,7 @@ class AddClientAddressesTable extends Migration
             $table->double("longitude")->default(0.0);
             $table->string("address")->nullable();
             $table->string("country")->nullable();
+            $table->string("details")->nullable();
             $table->string("city")->nullable();
             $table->enum("status", [ClientAddress::STATUS_DISABLED, ClientAddress::STATUS_ENABLED])->default(ClientAddress::STATUS_ENABLED);
             $table->foreignId("client_id")->constrained();

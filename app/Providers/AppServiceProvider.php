@@ -76,12 +76,14 @@ class AppServiceProvider extends ServiceProvider
         Seller::observe(AddressObserver::class);
         NetworkOperator::observe(AddressObserver::class);
         Support::observe(AddressObserver::class);
+        Admin::observe(AddressObserver::class);
 
         ClientAddress::observe(HereMapObserver::class);
         Technician::observe(HereMapObserver::class);
         Seller::observe(HereMapObserver::class);
         NetworkOperator::observe(HereMapObserver::class);
         Support::observe(HereMapObserver::class);
+        Admin::observe(HereMapObserver::class);
 
         BillingInformation::observe(BillingInformationObserver::class);
 

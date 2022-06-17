@@ -13,7 +13,6 @@ class AddressObserver
         $this->setHereMapJson($model);
     }
 
-
     public function setHereMapJson($model)
     {
         if (!$model->latitude or !$model->longitude) {
@@ -33,5 +32,10 @@ class AddressObserver
                 $model->here_maps = json_encode($body);
             }
         }
+    }
+
+    public function updating(Model $model)
+    {
+        $this->setHereMapJson($model);
     }
 }
