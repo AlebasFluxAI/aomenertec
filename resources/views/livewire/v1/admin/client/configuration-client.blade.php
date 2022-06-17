@@ -109,15 +109,6 @@
                                                                                              "title"=>"Configuraciones de muestreo"
                                                                                          ],
                                                                                          [
-                                                                                                    "input_type"=>"checkbox",
-                                                                                                    "input_model"=>"real_time_flag",
-                                                                                                    "icon_class"=>"fas fa-barcode",
-                                                                                                    "placeholder"=>"Bandera de tiempo real",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
-                                                                                              [
                                                                                                     "input_type"=>"number",
                                                                                                     "input_model"=>"real_time_latency",
                                                                                                     "placeholder"=>"Tiempo de muestreo en tiempo real",
@@ -134,9 +125,70 @@
 
                                                                                          ],
                                                                                          [
+                                                                                             "input_type"=>"divider",
+                                                                                             "title"=>"Limites Energia electrica mensual"
+                                                                                         ],
+                                                                                         [
                                                                                                     "input_type"=>"number",
-                                                                                                    "input_model"=>"reading_latency",
-                                                                                                    "placeholder"=>"Tiempo de muestreo de lecturas   para promedios",
+                                                                                                    "input_model"=>"",
+                                                                                                    "placeholder"=>"kWh/Mes",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"number",
+                                                                                                    "input_model"=>"",
+                                                                                                    "placeholder"=>"kVARLh/Mes",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"number",
+                                                                                                    "input_model"=>"",
+                                                                                                    "placeholder"=>"kVARCh/Mes",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+
+                                                                                         [
+                                                                                             "input_type"=>"divider",
+                                                                                             "title"=>"Limites Energia electrica horaria"
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"number",
+                                                                                                    "input_model"=>"",
+                                                                                                    "placeholder"=>"kWh/hora",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"number",
+                                                                                                    "input_model"=>"",
+                                                                                                    "placeholder"=>"kVARLh/hora",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"number",
+                                                                                                    "input_model"=>"",
+                                                                                                    "placeholder"=>"kVARCh/hora",
+                                                                                                    "col_with"=>8,
+                                                                                                    "required"=>false,
+
+                                                                                         ],
+                                                                                         [
+                                                                                             "input_type"=>"divider",
+                                                                                             "title"=>"Inductiva penalizable horaria"
+                                                                                         ],
+                                                                                         [
+                                                                                                    "input_type"=>"number",
+                                                                                                    "input_model"=>"",
+                                                                                                    "placeholder"=>"Porcentaje de reactiva inductiva",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -145,24 +197,7 @@
                                                                                              "input_type"=>"divider",
                                                                                              "title"=>"Rangos alarmables"
                                                                                          ],
-                                                                                         [
-                                                                                                    "input_type"=>"input_min_max",
-                                                                                                    "input_min_model"=>"min_adc_1",
-                                                                                                    "input_max_model"=>"max_adc_1",
-                                                                                                    "placeholder"=>"Rango de lectura voltaje dc ADC",
-                                                                                                    "col_with"=>12,
-                                                                                                    "required"=>false,
 
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"input_min_max",
-                                                                                                    "input_min_model"=>"min_adc_2",
-                                                                                                    "input_max_model"=>"max_adc_2",
-                                                                                                    "placeholder"=>"Rango de lectura voltaje dc ADC 2",
-                                                                                                    "col_with"=>9,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
                                                                                          [
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_vol_ph_1",
@@ -193,7 +228,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_current_ph_1",
                                                                                                     "input_max_model"=>"max_current_ph_1",
-                                                                                                     "placeholder"=>"Rango de corriente de la Fase 1 a Neutro",
+                                                                                                     "placeholder"=>"Rango de corriente de la Fase 1",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -202,7 +237,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_current_ph_2",
                                                                                                     "input_max_model"=>"max_current_ph_2",
-                                                                                                    "placeholder"=>"Rango de corriente de la Fase 2 a Neutro",
+                                                                                                    "placeholder"=>"Rango de corriente de la Fase 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -211,7 +246,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_current_ph_3",
                                                                                                     "input_max_model"=>"max_current_ph_3",
-                                                                                                    "placeholder"=>"Rango de corriente de la Fase 3 a Neutro",
+                                                                                                    "placeholder"=>"Rango de corriente de la Fase 3",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -220,7 +255,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_power_ph_1",
                                                                                                     "input_max_model"=>"max_power_ph_1",
-                                                                                                    "placeholder"=>"Rango de potencia de la Fase 1 a Neutro",
+                                                                                                    "placeholder"=>"Rango de potencia de la Fase 1",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -229,7 +264,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_power_ph_2",
                                                                                                     "input_max_model"=>"max_power_ph_2",
-                                                                                                    "placeholder"=>"Rango de potencia de la Fase 2 a Neutro",
+                                                                                                    "placeholder"=>"Rango de potencia de la Fase 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -238,7 +273,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_power_ph_3",
                                                                                                     "input_max_model"=>"max_power_ph_3",
-                                                                                                    "placeholder"=>"Rango de potencia de la Fase 3 a Neutro",
+                                                                                                    "placeholder"=>"Rango de potencia de la Fase 3",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -247,7 +282,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_va_ph_1",
                                                                                                     "input_max_model"=>"max_va_ph_1",
-                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 1 a Neutro",
+                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 1",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -256,7 +291,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_va_ph_2",
                                                                                                     "input_max_model"=>"max_va_ph_2",
-                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 2 a Neutro",
+                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -265,7 +300,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_va_ph_3",
                                                                                                     "input_max_model"=>"max_va_ph_3",
-                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 3 a Neutro",
+                                                                                                    "placeholder"=>"Rango de voltio amperio de la Fase 3",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -274,7 +309,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_var_ph_1",
                                                                                                     "input_max_model"=>"max_var_ph_1",
-                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 1 a neutro ",
+                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 1",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -283,7 +318,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_var_ph_2",
                                                                                                     "input_max_model"=>"max_var_ph_2",
-                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 2 a neutro ",
+                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -292,7 +327,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_var_ph_3",
                                                                                                     "input_max_model"=>"max_var_ph_3",
-                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 3 a neutro ",
+                                                                                                    "placeholder"=>"Rango de voltio amperio reactivo de la fase 3",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -302,7 +337,7 @@
                                                                                                     "input_min_model"=>"min_pfp_ph_1",
                                                                                                     "input_max_model"=>"max_pfp_ph_1",
                                                                                                     "input_model"=>"max_pfp_ph_1",
-                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 1 a neutro ",
+                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 1",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -311,7 +346,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_pfp_ph_2",
                                                                                                     "input_max_model"=>"max_pfp_ph_2",
-                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 2 a neutro ",
+                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 2",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -320,7 +355,7 @@
                                                                                                     "input_type"=>"input_min_max",
                                                                                                     "input_min_model"=>"min_pfp_ph_3",
                                                                                                     "input_max_model"=>"max_pfp_ph_3",
-                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 3 a neutro ",
+                                                                                                    "placeholder"=>"Rango de factor de potencia de la fase 3",
                                                                                                     "col_with"=>8,
                                                                                                     "required"=>false,
 
@@ -448,28 +483,7 @@
                                                                                                     "required"=>false,
 
                                                                                          ],
-                                                                                          [
-                                                                                                    "input_type"=>"input_min_max",
-                                                                                                    "input_min_model"=>"flag_wh_import",
-                                                                                                    "input_max_model"=>"flag_wh_export",
-                                                                                                    "input_min_label"=>"Consumida",
-                                                                                                    "input_max_label"=>"Exportada",
-                                                                                                    "placeholder"=>"Valor alertable de energia",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
 
-                                                                                         ],
-                                                                                         [
-                                                                                                    "input_type"=>"input_min_max",
-                                                                                                    "input_min_model"=>"flag_wh_import_varh",
-                                                                                                    "input_max_model"=>"flag_wh_export_varh",
-                                                                                                    "input_min_label"=>"Consumida",
-                                                                                                    "input_max_label"=>"Exportada",
-                                                                                                    "placeholder"=>"Valor alertable de energia reactiva",
-                                                                                                    "col_with"=>8,
-                                                                                                    "required"=>false,
-
-                                                                                         ],
                                                                                      ]
                                                             ]
                                                 ],

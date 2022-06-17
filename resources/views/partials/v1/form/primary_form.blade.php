@@ -1,6 +1,6 @@
 <div class="mb-3">
     <div class="detail-table">
-        <div class="contenedor-grande">
+        <div class="{{ $class_container??'contenedor-grande' }}">
             @if ($form_toast??false and session()->has($session_message))
                 <div class="alert alert-success">
                     {{ session($session_message) }}

@@ -1,4 +1,4 @@
-<div>
+<div class="login">
     @section("header") {{--extended app.blade--}}
     @endsection
 

@@ -142,7 +142,8 @@
             console.log("vuelve")
         }*/
         window.onbeforeunload = function(e) {
-        @this.emit('tabChange')
+            console.log("exit");
+            @this.emit('tabChange')
         };
     </script>
 </div>

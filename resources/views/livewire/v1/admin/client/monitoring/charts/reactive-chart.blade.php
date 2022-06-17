@@ -1,4 +1,4 @@
-<div class="contenedor-grande">
+<div>
     <div class="row pt-3">
         @include("partials.v1.form.form_label_double_input_button", [
                                 "mt"=>3,

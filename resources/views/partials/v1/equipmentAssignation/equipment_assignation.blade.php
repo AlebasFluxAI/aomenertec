@@ -1,4 +1,4 @@
-<div class="login">
+<div>
 
     @include("partials.v1.form.primary_form",[
            "form_toast"=>false,

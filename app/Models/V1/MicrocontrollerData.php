@@ -334,23 +334,24 @@ class MicrocontrollerData extends Model
             }
         }
         $this->alert($this->raw_json);
-
     }
 
     public function alert($json)
     {
-
         $flags_frame = config('data-frame.flags_frame');
-        $binary_flags = sprintf('%064b', doubleval($json['flags']));
+        $binary_flags = sprintf("%064b", ($json['flags']));
         $aux = [];
         foreach ($flags_frame as $item){
             $split = substr($binary_flags, $item['bit'], 1);
             $aux[$item['flag_name']] = $split;
         }
         $aux['data']= $binary_flags;
+        $aux['flag']= $json['flags'];
         $topic = 'alarmas';
         MQTT::publish($topic, json_encode($aux));
         MQTT::disconnect();
+        //dd($aux);
+
         /*if ($split == "100") {
             foreach ($flags_frame as $flag) {
                 $split = substr($binary_flags, ($flag['index']), (1));

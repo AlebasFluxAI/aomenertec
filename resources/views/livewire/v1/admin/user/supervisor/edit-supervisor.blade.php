@@ -36,7 +36,7 @@
                                         [
                                             "view_name"=>"partials.v1.form.primary_form",
                                             "view_values"=>  [
-
+                                                                    "class_container"=>"",
                                                                     "form_toast"=>false,
                                                                     "session_message"=>"message",
                                                                     "form_submit_action"=>"submitForm",

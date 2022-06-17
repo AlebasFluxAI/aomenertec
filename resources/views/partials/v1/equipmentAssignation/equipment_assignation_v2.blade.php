@@ -1,7 +1,7 @@
 <div class="divider-2 mb-4"></div>
 
 
-<div class="row contenedor-grande">
+<div class="row">
     <div class="col-md-12">
         <p id="help-icon-form-p">
             <i
@@ -13,6 +13,7 @@
     </div>
 
     @include("partials.v1.form.primary_form",[
+            "class_container"=> "",
           "form_toast"=>false,
           "session_message"=>"message",
           "form_submit_action"=>"submitForm",
@@ -57,6 +58,7 @@
 
     <div wire:target="equipmentTypeId" wire:loading.class="hidden">
         @include("partials.v2.table.primary-table",[
+                    "class_container"=> "",
                     "table_pageable"=>false,
                     "table_checkable"=>true,
                     "table_empty_text"=>"No existen equipos disponibles de este tipo",
