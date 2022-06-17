@@ -7,7 +7,17 @@
         ])
 
     {{--optiones de cabecera de formulario--}}
+    @include("partials.v1.table_nav",
+            [ "nav_options"=>[
+                       ["button_align"=>"right",
+                       "click_action"=>"",
+                       "button_icon"=>"fas fa-list",
+                       "button_content"=>"Listado de clientes",
+                       "target_route"=>"v1.admin.client.list.client",
+                       ],
 
+                   ]
+           ])
 
 
     @include("partials.v1.tab.v1.tab",[
@@ -142,7 +152,8 @@
             console.log("vuelve")
         }*/
         window.onbeforeunload = function(e) {
-        @this.emit('tabChange')
+            console.log("exit");
+            @this.emit('tabChange')
         };
     </script>
 </div>

@@ -38,12 +38,12 @@
     @foreach($tab_contents as $index=>$tab_content)
         @if($index==0)
 
-            <div class="tab-pane fade show active" id="tab-{{$index}}" role="tabpanel"
+            <div class="tab-pane contenedor-grande fade show active" id="tab-{{$index}}" role="tabpanel"
                  aria-labelledby="nav-{{$index}}-tab">
                 @include($tab_content["view_name"],$tab_content["view_values"])
             </div>
         @else
-            <div class="tab-pane fade" id="tab-{{$index}}" role="tabpanel" aria-labelledby="nav-{{$index}}-tab">
+            <div class="contenedor-grande tab-pane fade" id="tab-{{$index}}" role="tabpanel" aria-labelledby="nav-{{$index}}-tab">
                 @include($tab_content["view_name"],$tab_content["view_values"])
             </div>
         @endif

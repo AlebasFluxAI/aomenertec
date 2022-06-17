@@ -1,4 +1,4 @@
-<div class="contenedor-grande">
+<div>
     <div wire:ignore class="row pt-3">
         @include("partials.v1.form.form_list",[
                                          "col_with"=>4,

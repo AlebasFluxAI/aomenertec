@@ -1,6 +1,5 @@
 <div class="mb-3">
     <div class="detail-table">
-        <div class="contenedor-grande">
             <h5>{{$form_title??''}} </h5>
 
             @if ($form_toast??false and session()->has($session_message))
@@ -116,5 +115,5 @@
 
             </div>
         </div>
-    </div>
+
 </div>

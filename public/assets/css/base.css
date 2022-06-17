@@ -183,10 +183,7 @@
 /*___________ TAB DE CONTENIDO _________*/
 #custom-tab button {
     color: black;
-
     font-weight: 300;
-
-
 }
 
 #custom-tab button:hover {
@@ -379,6 +376,12 @@ primary
 --------------------------------------------------------------*/
 .login .contenedor-grande {
     width: 100%;
+    min-height: 300px;
+    height: auto;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
     border-top: 3px solid var(--style_primary);
     border-bottom: 3px solid var(--style_primary);
     padding: 30px;

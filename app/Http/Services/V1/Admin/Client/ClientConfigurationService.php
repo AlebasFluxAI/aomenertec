@@ -42,11 +42,6 @@ class ClientConfigurationService extends Singleton
                 "mqtt_port" => $clientConfiguration->mqtt_port,
                 "mqtt_user" => $clientConfiguration->mqtt_user,
                 "mqtt_password" => $clientConfiguration->mqtt_password,
-                "real_time_flag" => $clientConfiguration->real_time_flag,
-                "max_adc_1" => $clientConfiguration->max_adc_1,
-                "min_adc_1" => $clientConfiguration->min_adc_1,
-                "max_adc_2" => $clientConfiguration->max_adc_2,
-                "min_adc_2" => $clientConfiguration->min_adc_2,
                 "max_vol_ph_1" => $clientConfiguration->max_vol_ph_1,
                 "min_vol_ph_1" => $clientConfiguration->min_vol_ph_1,
                 "max_vol_ph_2" => $clientConfiguration->max_vol_ph_2,
@@ -85,10 +80,6 @@ class ClientConfigurationService extends Singleton
                 "min_pfp_ph_3" => $clientConfiguration->min_pfp_ph_3,
                 "max_freq" => $clientConfiguration->max_freq,
                 "min_freq" => $clientConfiguration->min_freq,
-                "flag_wh_import" => $clientConfiguration->flag_wh_import,
-                "flag_wh_export" => $clientConfiguration->flag_wh_export,
-                "flag_wh_import_varh" => $clientConfiguration->flag_wh_import_varh,
-                "flag_wh_export_varh" => $clientConfiguration->flag_wh_export_varh,
                 "max_volt_1_2" => $clientConfiguration->max_volt_1_2,
                 "min_volt_1_2" => $clientConfiguration->min_volt_1_2,
                 "max_volt_3_1" => $clientConfiguration->max_volt_3_1,
@@ -115,7 +106,6 @@ class ClientConfigurationService extends Singleton
                 "min_vthd_ph_3_1" => $clientConfiguration->min_vthd_ph_3_1,
                 "real_time_latency" => $clientConfiguration->real_time_latency,
                 "storage_latency" => $clientConfiguration->storage_latency,
-                "reading_latency" => $clientConfiguration->reading_latency,
 
             ]);
         } else {
@@ -127,11 +117,6 @@ class ClientConfigurationService extends Singleton
                 "mqtt_port" => "Sin asignar",
                 "mqtt_user" => "Sin asignar",
                 "mqtt_password" => "Sin asignar",
-                "real_time_flag" => 0.0,
-                "max_adc_1" => 0.0,
-                "min_adc_1" => 0.0,
-                "max_adc_2" => 0.0,
-                "min_adc_2" => 0.0,
                 "max_vol_ph_1" => 0.0,
                 "min_vol_ph_1" => 0.0,
                 "max_vol_ph_2" => 0.0,
@@ -170,10 +155,6 @@ class ClientConfigurationService extends Singleton
                 "min_pfp_ph_3" => 0.0,
                 "max_freq" => 0.0,
                 "min_freq" => 0.0,
-                "flag_wh_import" => 0.0,
-                "flag_wh_export" => 0.0,
-                "flag_wh_import_varh" => 0.0,
-                "flag_wh_export_varh" => 0.0,
                 "max_volt_1_2" => 0.0,
                 "min_volt_1_2" => 0.0,
                 "max_volt_3_1" => 0.0,
@@ -200,7 +181,6 @@ class ClientConfigurationService extends Singleton
                 "min_vthd_ph_3_1" => 0.0,
                 "real_time_latency" => 0.0,
                 "storage_latency" => 0.0,
-                "reading_latency" => 0.0,
 
             ]);
         }
@@ -252,11 +232,6 @@ class ClientConfigurationService extends Singleton
             "mqtt_port" => $component->mqtt_port,
             "mqtt_user" => $component->mqtt_user,
             "mqtt_password" => $component->mqtt_password,
-            "real_time_flag" => $component->real_time_flag,
-            "max_adc_1" => $component->max_adc_1,
-            "min_adc_1" => $component->min_adc_1,
-            "max_adc_2" => $component->max_adc_2,
-            "min_adc_2" => $component->min_adc_2,
             "max_vol_ph_1" => $component->max_vol_ph_1,
             "min_vol_ph_1" => $component->min_vol_ph_1,
             "max_vol_ph_2" => $component->max_vol_ph_2,
@@ -295,10 +270,6 @@ class ClientConfigurationService extends Singleton
             "min_pfp_ph_3" => $component->min_pfp_ph_3,
             "max_freq" => $component->max_freq,
             "min_freq" => $component->min_freq,
-            "flag_wh_import" => $component->flag_wh_import,
-            "flag_wh_export" => $component->flag_wh_export,
-            "flag_wh_import_varh" => $component->flag_wh_import_varh,
-            "flag_wh_export_varh" => $component->flag_wh_export_varh,
             "max_volt_1_2" => $component->max_volt_1_2,
             "min_volt_1_2" => $component->min_volt_1_2,
             "max_volt_3_1" => $component->max_volt_3_1,
@@ -325,7 +296,6 @@ class ClientConfigurationService extends Singleton
             "min_vthd_ph_3_1" => $component->min_vthd_ph_3_1,
             "real_time_latency" => $component->real_time_latency,
             "storage_latency" => $component->storage_latency,
-            "reading_latency" => $component->reading_latency,
 
         ];
     }

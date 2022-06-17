@@ -12,6 +12,18 @@
                 "second_title"=>"Clientes"
             ])
 
+            @include("partials.v1.table_nav",
+         ["mt"=>2, "nav_options"=>[
+                    ["button_align"=>"right",
+                    "click_action"=>"",
+                    "button_icon"=>"fas fa-list",
+                    "button_content"=>"Ver listado",
+                    "target_route"=>"v1.admin.client.list.client",
+                    ],
+
+                ]
+        ])
+
 
         <div class="contenedor-grande">
             <div class="row content p-5">

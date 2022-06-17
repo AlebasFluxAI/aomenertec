@@ -1,4 +1,4 @@
-<div class="contenedor-grande">
+<div>
 <div class="row pt-3">
     @foreach($cards_real_time as $index => $item)
 

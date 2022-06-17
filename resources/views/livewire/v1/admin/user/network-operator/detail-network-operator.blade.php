@@ -9,7 +9,8 @@
     {{--optiones de cabecera de formulario--}}
 
     @include("partials.v1.table_nav",
-         ["nav_options"=>[
+         [
+             "nav_options"=>[
                     ["button_align"=>"right",
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
