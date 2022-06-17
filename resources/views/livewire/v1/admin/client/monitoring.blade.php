@@ -12,7 +12,7 @@
                        ["button_align"=>"right",
                        "click_action"=>"",
                        "button_icon"=>"fas fa-list",
-                       "button_content"=>"Ver listado",
+                       "button_content"=>"Listado de clientes",
                        "target_route"=>"v1.admin.client.list.client",
                        ],
 

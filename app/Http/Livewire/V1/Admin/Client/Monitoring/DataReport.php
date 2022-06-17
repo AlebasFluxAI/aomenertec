@@ -32,6 +32,7 @@ class DataReport extends Component
     public function mount(Client $client, $variables, $data_frame)
     {
         $this->time_report_id = 2;
+        $this->variables_selected = [];
         $this->client = $client;
         $this->variables = $variables;
         $this->data_frame = $data_frame;
@@ -59,8 +60,10 @@ class DataReport extends Component
     public function reportCsv()
     {
         if ($this->start_report != "") {
-            $array = $this->arrayCreate();
-            return Excel::download(new MultipleSheetsMonitoringData($array), 'data_' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d H:i:s') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+            if (count($this->variables_selected)>0) {
+                $array = $this->arrayCreate();
+                return Excel::download(new MultipleSheetsMonitoringData($array), 'data_' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d H:i:s') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+            }
         }
     }
 

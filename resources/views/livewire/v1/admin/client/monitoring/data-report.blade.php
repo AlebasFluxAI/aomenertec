@@ -63,6 +63,13 @@
                             "button_content" => 'Exportar PDF',
 
                     ])
+                <div wire:loading wire:target="reportCsv" >
+                    <label>Generando archivo excel...</label>
+                </div>
+                <div wire:loading wire:target="reportPdf" >
+                    <label>Generando archivo PDF...</label>
+                </div>
+
             </div>
     </div>
 
