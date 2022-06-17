@@ -1,7 +1,7 @@
 <div class="login">
-
-
+    <div class="contenedor-grande">
     @include("partials.v1.form.primary_form",[
+                 "class_container"=>"",
                  "form_toast"=>false,
                  "session_message"=>"message",
                  "form_submit_action"=>"addClient",
@@ -50,4 +50,5 @@
                                                                  "table_rows"=>$clientsRelated,
 
              ])
+    </div>
 </div>
