@@ -51,21 +51,6 @@
                                         "required"=>false,
 
                              ],
-                             [
-                                        "input_type"=>"dropdown-search",
-                                        "icon_class"=>"fas fa-desktop",
-                                        "placeholder"=>"Seleccione el tipo de equipo",
-                                        "col_with"=>12,
-                                        "dropdown_model"=>"equipmentTypeId",
-                                        "dropdown_enter_function"=>"updatedEquipmentTypeId",
-                                        "picked_variable"=>$picked,
-                                        "dropdown_results"=>$equipmentTypes,
-                                        "selected_value_function"=>"setEquipmentType",
-                                        "dropdown_result_id"=>"id",
-                                        "dropdown_result_value"=>"type",
-                                        "count_bool" => (count($equipmentTypes)>0)
-
-                            ]
 
                          ]
                  ])
