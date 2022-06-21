@@ -6,6 +6,7 @@ use App\Http\Livewire\V1\Admin\Equipment\AddEquipment;
 use App\Http\Services\Singleton;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class EquipmentEditService extends Singleton
@@ -17,7 +18,7 @@ class EquipmentEditService extends Singleton
             'equipmentName' => $equipment->name,
             'equipmentDescription' => $equipment->description,
             'equipmentSerial' => $equipment->serial,
-            'equipmentTypeId' => $equipment->equipmentType->type,
+            'equipmentTypeId' => $equipment->equipmentType->id,
             'equipmentTypes' => [],
             'picked' => false,
         ]);
@@ -30,11 +31,11 @@ class EquipmentEditService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $component->validate();
-
-        $component->equipment->fill($this->mapper($component));
-        $component->equipment->update();
-        $component->emitTo('livewire-toast', 'show', "Equipo {$component->equipment->name} creado exitosamente");
+        DB::transaction(function () use ($component) {
+            $component->equipment->fill($this->mapper($component));
+            $component->equipment->update();
+            $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $component->equipment->id]);
+        });
     }
 
     private function mapper(Component $component)

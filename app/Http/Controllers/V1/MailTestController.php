@@ -15,9 +15,9 @@ class MailTestController
 {
     public function userCreatedNotification(Request $request)
     {
-  
+
         $user = User::find($request->input("user_id"));
-        $user->notifyNow(new AlertNotification());
+        $user->notify(new AlertNotification());
         event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->id));
 
     }
