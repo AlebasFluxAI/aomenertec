@@ -72,4 +72,13 @@ trait ClientFormTrait
     public $technician_id;
     public $technician_select_disabled;
     public $addressDetails;
+    public $inputs;
+    public $kwh_month;
+    public $kvarlh_month;
+    public $kvarch_month;
+    public $kwh_hour;
+    public $kvarlh_hour;
+    public $kvarch_hour;
+    public $kvarlh_penalizable;
+    public $alerts;
 }

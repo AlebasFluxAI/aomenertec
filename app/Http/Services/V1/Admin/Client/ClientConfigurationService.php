@@ -33,6 +33,109 @@ class ClientConfigurationService extends Singleton
     {
         $clientConfiguration = $client->clientConfiguration;
         $component->client = $client;
+        $flags_frame = collect(config('data-frame.flags_frame'));
+        $alert_config_frame = collect(config('data-frame.alert_config_frame'));
+        $component->alerts = $flags_frame->where('id', '>=', 16)->all();
+        $component->inputs = [ [
+            "input_type"=>"divider",
+            "title"=>"Configuraciones de conexion"
+        ], [
+                "input_type"=>"text",
+                "input_model"=>"ssid",
+                "icon_class"=>"fas fa-barcode",
+                "placeholder"=>"Red Wifi",
+                "col_with"=>6,
+                "required"=>true
+            ], [
+                "input_type"=>"text",
+                "input_model"=>"wifi_password",
+                "icon_class"=>"fas fa-barcode",
+                "placeholder"=>"Contraseña WiFi",
+                "col_with"=>6,
+                "required"=>true
+            ], [
+                "input_type"=>"text",
+                "input_model"=>"mqtt_host",
+                "icon_class"=>"fas fa-barcode",
+                "placeholder"=>"Servidor MQTT",
+                "col_with"=>6,
+                "required"=>false,
+
+            ], [
+                "input_type"=>"text",
+                "input_model"=>"mqtt_port",
+                "icon_class"=>"fas fa-barcode",
+                "placeholder"=>"Puerto MQTT",
+                "col_with"=>6,
+                "required"=>false,
+
+            ], [
+                "input_type"=>"text",
+                "input_model"=>"mqtt_password",
+                "icon_class"=>"fas fa-barcode",
+                "placeholder"=>"Contraseña MQTT",
+                "col_with"=>6,
+                "required"=>false,
+
+            ], [
+                "input_type"=>"text",
+                "input_model"=>"mqtt_user",
+                "icon_class"=>"fas fa-barcode",
+                "placeholder"=>"Usuario MQTT",
+                "col_with"=>6,
+                "required"=>false,
+
+            ], [
+                "input_type"=>"divider",
+                "title"=>"Configuraciones de muestreo"
+            ], [
+                "input_type"=>"number",
+                "input_model"=>"real_time_latency",
+                "placeholder"=>"Tiempo de muestreo en tiempo real",
+                "col_with"=>6,
+                "required"=>false,
+
+            ], [
+                "input_type"=>"number",
+                "input_model"=>"storage_latency",
+                "placeholder"=>"Tiempo de muestreo monitoreo normal",
+                "col_with"=>6,
+                "required"=>false,
+
+            ], [
+                "input_type"=>"divider",
+                "title"=>"Rangos alarmables"
+            ]];
+        foreach ($component->alerts as $item){
+            if ($item['id'] < 47){
+                $values = $alert_config_frame->where('flag_id', $item['id'])->pluck('variable_name')->last();
+                array_push($component->inputs, [
+                    "input_type"=>"input_min_max",
+                    "input_min_model"=>$alert_config_frame->where('flag_id', $item['id'])->pluck('variable_name')->last(),
+                    "input_max_model"=>$alert_config_frame->where('flag_id', $item['id'])->pluck('variable_name')->first(),
+                    "placeholder"=>$item['placeholder'],
+                    "col_with"=>9,
+                    "required"=>false,
+                    "placeholder_clickable"=>true,
+                    "data_target"=>"modal_".$item['id'],
+
+                ]);
+            } else{
+                array_push($component->inputs, [
+                    "input_type"=>"number",
+                    "offset"=>2,
+                    "input_model"=>$item['flag_name'],
+                    "placeholder"=>$item['placeholder'],
+                    "col_with"=>8,
+                    "required"=>false,
+                    "placeholder_clickable"=>true,
+                    "data_target"=>"modal_".$item['id'],
+
+                ]);
+            }
+        }
+
+
         if ($clientConfiguration) {
             $component->fill([
                 "ssid" => $clientConfiguration->ssid,
