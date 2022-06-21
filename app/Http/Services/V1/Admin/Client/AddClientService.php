@@ -343,6 +343,7 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
+        $component->validate();
         DB::transaction(function () use ($component) {
             $client = $this->createClient($component);
             $this->linkAddress($component, $client);
