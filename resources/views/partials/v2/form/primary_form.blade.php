@@ -29,6 +29,9 @@
                                           "placeholder"=>$form_input["placeholder"],
                                           "col_with"=>$form_input["col_with"],
                                           "required"=>$form_input["required"],
+                                          "offset"=>$form_input["offset"]??'',
+                                          "data_target"=>$form_input["data_target"]??'',
+                                          "placeholder_clickable"=>$form_input["placeholder_clickable"]??false,
                                           "input_rows"=>$form_input["input_rows"]??0,
                                      ])
                             @elseif($form_input["input_type"]=="input_min_max")
@@ -41,6 +44,8 @@
                                         "input_type"=>$form_input["input_type"],
                                         "icon_class"=>$form_input["icon_class"]??null,
                                         "placeholder"=>$form_input["placeholder"],
+                                        "placeholder_clickable"=>$form_input["placeholder_clickable"]??false,
+                                        "data_target"=>$form_input["data_target"]??'',
                                         "col_with"=>$form_input["col_with"],
                                         "required"=>$form_input["required"],
                                         "input_rows"=>$form_input["input_rows"]??0,

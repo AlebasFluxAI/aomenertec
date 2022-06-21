@@ -2,7 +2,11 @@
 
     <div class="col-md-6">
         <div class="col-md-12">
-            <li>{{$placeholder}}</li>
+            @if(!$placeholder_clickable??false)
+                <li>{{$placeholder}}</li>
+            @else
+                <li><a type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</a></li>
+            @endif
         </div>
     </div>
     <div class="col-md-6" style=" border-left-color: teal;border-left-width: 2px">

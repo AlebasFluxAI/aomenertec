@@ -15,7 +15,7 @@
     <label>{{$input_label??""}}</label>
     <select wire:model.lazy="{{$list_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
             required="{{$required??false}}" @if($disabled??false)disabled @endif>
-        <option disabled value="0"> {{$list_default}} </option>
+        <option disabled value="0"> {{$list_default??""}} </option>
         @foreach($list_options as $option)
             @if($option[$list_option_view] != "EXPANSION URBANA" || $option[$list_option_view]!= "SIN DEFINIR" )
                 <option @if($list_option_title != "")title="{{ $option[$list_option_title] }}"

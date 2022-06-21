@@ -1,9 +1,13 @@
-<div class="form-group mb-2 col-md-{{$col_with??12}} offset-2 form-v2-input p-2">
+<div class="form-group mb-2 col-md-{{$col_with??12}} offset-{{$offset??'0'}} form-v2-input p-2">
 
-    <div class="col-md-9">
-        <li>{{$placeholder}}</li>
+    <div class="col-md-8" style=" border-left-color: teal;border-left-width: 2px">
+        @if(!$placeholder_clickable??false)
+            <li>{{$placeholder}}</li>
+        @else
+            <li><a type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</a></li>
+        @endif
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         @if($input_rows??1>1)
             <textarea wire:model="{{$input_model}}" rows="{{$input_rows}}" type="{{$input_type??"text"}}"
                       class="form-control" autocomplete="on" placeholder="{{$placeholder??""}}"
