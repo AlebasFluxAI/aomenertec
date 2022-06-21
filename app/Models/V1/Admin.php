@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdScope;
@@ -281,6 +282,10 @@ class Admin extends Model
     public function adminEquipmentTypes()
     {
         return $this->hasMany(AdminEquipmentType::class);
+    }
+    public function priceAdmin()
+    {
+        return $this->hasMany(PriceAdmin::class);
     }
 
 

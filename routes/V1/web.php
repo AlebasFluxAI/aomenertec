@@ -64,6 +64,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('detalle/{admin}', Livewire\V1\Admin\User\Admin\DetailsAdmin::class)->name("administrar.v1.usuarios.admin.detalles");
                         Route::get('agregar_tipos_equipos/{admin}', Livewire\V1\Admin\User\Admin\AddEquipmentTypeAdmin::class)->name("administrar.v1.usuarios.admin.agregar_tipos_equipo");
                         Route::get('agregar_equipos/{admin}', Livewire\V1\Admin\User\Admin\AddEquipmentAdmin::class)->name("administrar.v1.usuarios.admin.agregar_equipos");
+                        Route::get('precio_administracion/{admin}', Livewire\V1\Admin\User\Admin\PriceAdmin::class)->name("administrar.v1.usuarios.admin.editar_precios");
                     });
 
 
