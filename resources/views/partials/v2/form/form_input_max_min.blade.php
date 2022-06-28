@@ -5,7 +5,7 @@
             @if(!$placeholder_clickable??false)
                 <li>{{$placeholder}}</li>
             @else
-                <li><a type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</a></li>
+                <li><a wire:click="{{ $click_action }}" type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</a></li>
             @endif
         </div>
     </div>
@@ -13,7 +13,15 @@
         <div class="row float-right">
             <div class="col-md-4">
                 <label><i class="fa-solid fa-arrow-turn-down"></i> {{$input_min_label??"Minimo"}}</label>
-                <input wire:model="{{$input_min_model}}" type="number" class="form-control"
+                <input  @if($updated_input=="lazy")
+                            wire:model.lazy="{{ $input_min_model }}"
+                        @elseif($updated_input=="defer")
+                            wire:model.defer="{{ $input_min_model }}"
+                        @else
+                            wire:model="{{ $input_min_model }}"
+                        @endif
+
+                        type="number" class="form-control"
                        autocomplete="on"
                        placeholder="{{$default??""}}" required="{{$required??false}}">
 
@@ -25,7 +33,14 @@
             </div>
             <div class="col-md-4">
                 <label><i class="fa-solid fa-turn-up"></i> {{$input_max_label??"Maximo"}}</label>
-                <input wire:model="{{$input_max_model}}" type="number" class="form-control"
+                <input  @if($updated_input=="lazy")
+                            wire:model.lazy="{{ $input_max_model }}"
+                        @elseif($updated_input=="defer")
+                            wire:model.defer="{{ $input_max_model }}"
+                        @else
+                            wire:model="{{ $input_max_model }}"
+                        @endif
+                       type="number" class="form-control"
                        autocomplete="on"
                        placeholder="{{$default??""}}" required="{{$required??false}}">
 

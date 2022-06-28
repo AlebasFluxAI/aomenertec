@@ -47,6 +47,6 @@ class UserObserver
                 $user->assignRole(Admin::getRole());
         }
 
-        $user->notify(new UserCreatedNotification());
+        //$user->notify(new UserCreatedNotification());
     }
 }

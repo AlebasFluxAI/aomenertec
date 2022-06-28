@@ -2,18 +2,14 @@
 
 namespace App\Observers\ClientConfiguration;
 
-use App\Models\V1\ClientConfiguration;
+use App\Models\V1\ClientAlertConfiguration;
 use App\Notifications\Alert\AlertNotification;
 
-class ClientConfigurationObserver
+class ClientAlertConfigurationObserver
 {
-    public function created(ClientConfiguration $clientConfiguration)
+    public function updated(ClientAlertConfiguration $clientAlertConfiguration)
     {
-        $clientConfiguration->setRemoteConfiguration();
-    }
 
-    public function updated(ClientConfiguration $clientConfiguration)
-    {
-        $clientConfiguration->setRemoteConfiguration();
+        //$clientAlertConfiguration->setRemoteConfiguration();
     }
 }

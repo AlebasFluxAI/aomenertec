@@ -4,8 +4,14 @@ namespace App\Models\V1;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CLientDigitalOutputAlertConfiguration extends Model
+class ClientDigitalOutputAlertConfiguration extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'client_alert_configuration_id',
+        'client_digital_output_id'
+    ];
 }

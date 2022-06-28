@@ -5,6 +5,7 @@ namespace App\Models\V1;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use PhpMqtt\Client\Facades\MQTT;
 
 class ClientAlertConfiguration extends Model
 {
@@ -20,4 +21,9 @@ class ClientAlertConfiguration extends Model
         'max_control',
         'active_control'
     ];
+
+    public function outputs()
+    {
+        return $this->belongsToMany(ClientDigitalOutput::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id');
+    }
 }

@@ -10,6 +10,7 @@ use function view;
 class ProfileUser extends Component
 {
     public $model;
+    public $admins;
     private $profileUserService;
 
     public function __construct()

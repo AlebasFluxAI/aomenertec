@@ -11,6 +11,13 @@ class AdminPrice extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public const COP = 'cop';
-    public const USD = 'usd';
+
+    protected $fillable = [
+        'admin_id',
+        'client_type_id',
+        'value',
+        ];
+    public function clientType(){
+        return $this->belongsTo(ClientType::class);
+    }
 }

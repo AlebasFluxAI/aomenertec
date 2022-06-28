@@ -9,8 +9,10 @@ class EquipmentObserver
 {
     public function creating(Equipment $equipment)
     {
-        if ($admin = Auth::user()->admin) {
-            $equipment->admin_id = $admin->id;
+        if (Auth::check()) {
+            if ($admin = Auth::user()->admin) {
+                $equipment->admin_id = $admin->id;
+            }
         }
     }
 }

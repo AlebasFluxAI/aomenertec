@@ -19,10 +19,6 @@ class CreateAdminPricesTable extends Migration
             $table->foreignId('admin_id')->constrained();
             $table->foreignId('client_type_id')->constrained();
             $table->integer('value');
-            $table->enum("coin", [
-                AdminPrice::COP,
-                AdminPrice::USD,
-            ])->default(AdminPrice::COP);
             $table->softDeletes();
             $table->timestamps();
         });

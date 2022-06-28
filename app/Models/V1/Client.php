@@ -62,26 +62,16 @@ class Client extends Model
     {
         return $this->hasOne(ClientConfiguration::class);
     }
+    public function clientAlertConfiguration()
+    {
+        return $this->hasMany(ClientAlertConfiguration::class)->orderBy('flag_id');
+    }
 
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
     }
 
-    public function department()
-    {
-        return $this->belongsTo(Department::class);
-    }
-
-    public function municipality()
-    {
-        return $this->belongsTo(Municipality::class);
-    }
-
-    public function location()
-    {
-        return $this->belongsTo(Location::class);
-    }
 
     public function clientType()
     {
@@ -170,9 +160,13 @@ class Client extends Model
     {
         return $this->hasMany(ClientAddress::class);
     }
-    public function coils()
+    public function digitalOutputs()
     {
         return $this->hasMany(ClientDigitalOutput::class)->orderBy('number');
+    }
+    public function alertConfigurationDigitalOutputs()
+    {
+        return $this->hasMany(ClientDigitalOutputAlertConfiguration::class);
     }
     public function alerts()
     {
