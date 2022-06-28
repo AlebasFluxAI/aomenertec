@@ -104,7 +104,7 @@ class NetworkOperator extends Model
             ]],
             ($this->technicians()->get()->map(function ($technician) {
                 return [
-                    "key" => $technician->name,
+                    "key" => $technician->id . " - " . $technician->name . " - " . $technician->identification,
                     "value" => $technician->id
                 ];
             }))->toArray()

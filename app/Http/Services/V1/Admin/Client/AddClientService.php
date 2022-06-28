@@ -48,9 +48,9 @@ class AddClientService extends Singleton
             'equipment' => [],
             "has_telemetry" => false,
             "create_supervisor" => false,
-            "technician_select_disabled" => true,
             "stratum_id" => Stratum::first() ? Stratum::first()->id : null,
-            'technicians' => [],
+            'network_operators' => $this->getNetworkOperators($component),
+            'technicians' => $this->getTechnicians($component),
             'strata' => Stratum::get(),
             'client_types' => ClientType::get(),
             "technician_id" => null,
@@ -71,21 +71,38 @@ class AddClientService extends Singleton
             'equipment_types' => [],
             'network_operator_id' => Auth::user()->networkOperator ? Auth::user()->networkOperator->id : null,
             'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red',
-            'network_operators' => $this->getNetworkOperators(),
             'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red',
             'aux_network_operators' => [],
         ]);
     }
 
-
-    private function getNetworkOperators()
+    private function getNetworkOperators($component)
     {
         if (Auth::user()->networkOperator) {
+            $component->network_operator_id = Auth::user()->networkOperator->id;
             return [];
         }
         $admin = User::getUserModel();
 
         return $admin->networkOperatorsAsKeyValue();
+    }
+
+    public function getTechnicians($component)
+    {
+
+        if (Auth::user()->networkOperator) {
+            $component->technician_select_disabled = false;
+            return Technician::whereNetworkOperatorId($component->network_operator_id)
+                ->get()->map(function ($technician) {
+                    return [
+                        "key" => $technician->id . " - " . $technician->name . " - " . $technician->identification,
+                        "value" => $technician->id
+                    ];
+                })->toArray();
+
+        }
+        $component->technician_select_disabled = true;
+        return [];
     }
 
     public function updatedLocationTypeId(Component $component)
@@ -198,7 +215,7 @@ class AddClientService extends Singleton
         if ($component->technician != "") {
             $component->technicians = Technician::where("identification", "like", '%' . $component->technician . "%")
                 ->whereNetworkOperatorId($component->network_operator_id)
-                ->take(3)->get();
+                ->get();
         }
     }
 

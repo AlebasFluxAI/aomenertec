@@ -15,6 +15,7 @@ class EditAdmin extends Component
 {
     use WithFileUploads;
     use AddUserFormTrait;
+    use ValidateUserFormTrait;
 
     public $model;
     public $name;
