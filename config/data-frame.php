@@ -185,8 +185,7 @@ return [
         ['flag_id' => 45,'limit' => 'min_alert', 'variable_name' => 'min_vthd_ph_2_3', 'start' => 536,   'lenght' => 8,'type' => 'f'],
         ['flag_id' => 46,'limit' => 'max_alert', 'variable_name' => 'max_vthd_ph_3_1', 'start' => 544,   'lenght' => 8,'type' => 'f'],
         ['flag_id' => 46,'limit' => 'min_alert', 'variable_name' => 'min_vthd_ph_3_1', 'start' => 552,   'lenght' => 8,'type' => 'f'],
-        ['variable_name' => 'real_time_latency', 'start' => 560,   'lenght' => 8,'type' => 'f'],
-        ['variable_name' => 'storage_latency', 'start' => 568,   'lenght' => 8,'type' => 'f'],
+       
     ],
 
     'flags_aux' => [
