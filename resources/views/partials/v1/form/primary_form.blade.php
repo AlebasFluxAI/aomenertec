@@ -15,6 +15,7 @@
                                 $form_input["input_type"]=="number" || $form_input["input_type"]=="email" || $form_input["input_type"]=="password")
                                 @include("partials.v1.form.form_input_icon",[
                                           "input_label"=>$form_input["input_label"]??"",
+                                          "updated_input"=>$form_input["updated_input"]??"",
                                           "input_model"=>$form_input["input_model"],
                                           "input_field"=>$form_input["input_field"]??"",
                                           "input_type"=>$form_input["input_type"],
