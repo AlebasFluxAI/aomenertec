@@ -82,102 +82,7 @@ class ClientConfigurationService extends Singleton
         }
         $alert_config_frame = collect(config('data-frame.alert_config_frame'));
         $component->inputs = [
-            [
-            "input_type"=>"divider",
-            "title"=>"Configuraciones de conexion"
-        ], [
-                "input_type"=>"text",
-                "input_model"=>"client_config.ssid",
-                "icon_class"=>"fas fa-barcode",
-                "placeholder"=>"Red Wifi",
-                "col_with"=>6,
-                "click_action"=>"",
-                "updated_input" => "defer",
-                "required"=>true
-            ], [
-                "input_type"=>"text",
-                "input_model"=>"client_config.wifi_password",
-                "icon_class"=>"fas fa-barcode",
-                "placeholder"=>"Contraseña WiFi",
-                "col_with"=>6,
-                "click_action"=>"",
-                "updated_input" => "defer",
-                "required"=>true
-            ], [
-                "input_type"=>"text",
-                "input_model"=>"client_config.mqtt_host",
-                "icon_class"=>"fas fa-barcode",
-                "placeholder"=>"Servidor MQTT",
-                "updated_input"=>"defer",
-                "col_with"=>6,
-                "click_action"=>"",
-                "required"=>false,
-
-            ], [
-                "input_type"=>"text",
-                "input_model"=>"client_config.mqtt_port",
-                "icon_class"=>"fas fa-barcode",
-                "placeholder"=>"Puerto MQTT",
-                "updated_input" => "defer",
-                "col_with"=>6,
-                "click_action"=>"",
-                "required"=>false,
-
-            ], [
-                "input_type"=>"text",
-                "input_model"=>"client_config.mqtt_password",
-                "icon_class"=>"fas fa-barcode",
-                "placeholder"=>"Contraseña MQTT",
-                "updated_input"=>"defer",
-                "col_with"=>6,
-                "click_action"=>"",
-                "required"=>false,
-
-            ], [
-                "input_type"=>"text",
-                "input_model"=>"client_config.mqtt_user",
-                "icon_class"=>"fas fa-barcode",
-                "placeholder"=>"Usuario MQTT",
-                "updated_input"=>"defer",
-                "col_with"=>6,
-                "click_action"=>"",
-                "required"=>false,
-
-            ],
-            [
-                "input_type"=>"number",
-                "input_model"=>"client_config.digital_outputs",
-                "icon_class"=>"fas fa-barcode",
-                "placeholder"=>"Salidas disponibles",
-                "offset"=>2,
-                "updated_input"=>"lazy",
-                "col_with"=>6,
-                "click_action"=>"",
-                "required"=>false,
-
-            ], [
-                "input_type"=>"divider",
-                "title"=>"Configuraciones de muestreo"
-            ], [
-                "input_type"=>"number",
-                "input_model"=>"client_config.real_time_latency",
-                "placeholder"=>"Tiempo de muestreo en tiempo real",
-                "updated_input"=>"defer",
-                "col_with"=>6,
-                "click_action"=>"",
-                "required"=>false,
-
-            ],
-            [
-                "input_type"=>"number",
-                "input_model"=>"client_config.storage_latency",
-                "placeholder"=>"Tiempo de muestreo monitoreo normal",
-                "col_with"=>6,
-                "click_action"=>"",
-                "updated_input" => "defer",
-                "required"=>false,
-
-            ], [
+             [
                 "input_type"=>"divider",
                 "title"=>"Rangos alarmables"
             ]
@@ -289,22 +194,28 @@ class ClientConfigurationService extends Singleton
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada"]);
     }
 
-    public function submitForm(Component $component)
+    public function submitFormConection(Component $component)
     {
         $component->validate();
-        $flag_save = false;
-        foreach ($component->client_config_alert as $item) {
-           $flag_save = $item->save();
-        }
-
     if ($component->client_config->save()){
-        if ($component->client_config->wasChanged(['real_time_latency', 'storage_latency']) || $flag_save){
-            $this->setRemoteConfigurationFrame($component);
-        }
         $this->setRemoteConfiguration($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
         }
 
+    }
+
+    public function submitFormAlert(Component $component)
+    {
+        $component->validate();
+        $flag_save = false;
+        foreach ($component->client_config_alert as $item) {
+            $item->save();
+            $flag_save = $item->wasChanged();
+        }
+        if ($flag_save){
+            $this->setRemoteConfigurationFrame($component);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+        }
     }
 
     private function setRemoteConfiguration(Component $component){
@@ -328,6 +239,12 @@ class ClientConfigurationService extends Singleton
         if($component->client_config->wasChanged('mqtt_password')){
             $message['passMqtt'] =  $component->client_config->mqtt_password;
         }
+        if($component->client_config->wasChanged('storage_latency')){
+            $message['passMqtt'] =  $component->client_config->storage_latency;
+        }
+        if($component->client_config->wasChanged('real_time_latency')){
+            $message['passMqtt'] =  $component->client_config->real_time_latency;
+        }
         $topic = "mc/config/".$equipment->serial;
         MQTT::publish($topic, json_encode($message));
         MQTT::disconnect();
@@ -339,7 +256,6 @@ class ClientConfigurationService extends Singleton
         $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/".$equipment->serial;
         $binary_data = [];
-        $aux = [];
         foreach ($alert_config_frame as $item){
             if ($item['variable_name'] == 'network_operator_id'){
                 $data = $component->client->networkOperator->identification;
@@ -349,20 +265,13 @@ class ClientConfigurationService extends Singleton
                 $data = $component->client->networkOperator->identification;
             } elseif ($item['variable_name'] == 'equipment_new_id') {
                 $data = $equipment->serial;
-            } elseif ($item['variable_name'] == 'real_time_latency') {
-                $data = $component->client_config->real_time_latency;
-            } elseif ($item['variable_name'] == 'storage_latency') {
-                $data = $component->client_config->storage_latency;
             } else {
                 $aux_variable = $component->client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
                 $data = $aux_variable->{$item['limit']};
             }
             array_push($binary_data, pack($item['type'], $data));
-            $aux[$item['variable_name']] = $data;
         }
-        dd($aux);
         $message = base64_encode(implode($binary_data));
-
         MQTT::publish($topic, $message);
         MQTT::disconnect();
     }

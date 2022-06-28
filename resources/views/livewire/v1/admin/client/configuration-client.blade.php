@@ -24,7 +24,11 @@
 
                             "tab_titles"=>[
                                                 [
-                                                    "title"=>"Configuraciones",
+                                                    "title"=>"Conexión",
+
+                                                ],
+                                                [
+                                                    "title"=>"Alertas",
 
                                                 ],
 
@@ -36,8 +40,115 @@
                                                     "view_values"=>  [
                                                                         "form_toast"=>true,
                                                                         "session_message"=>"message",
-                                                                        "form_submit_action"=>"submitForm",
-                                                                        "form_title"=>"Ajuste las configuraciones para el equipo del cliente",
+                                                                        "form_submit_action"=>"submitFormConection",
+                                                                        "form_title"=>"",
+                                                                        "form_inputs"=> [
+                                                                                            [
+                                                                                            "input_type"=>"divider",
+                                                                                            "title"=>"Configuraciones de conexion"
+                                                                                        ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.ssid",
+                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "placeholder"=>"Red Wifi",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "defer",
+                                                                                                "required"=>true
+                                                                                            ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.wifi_password",
+                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "placeholder"=>"Contraseña WiFi",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "defer",
+                                                                                                "required"=>true
+                                                                                            ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.mqtt_host",
+                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "placeholder"=>"Servidor MQTT",
+                                                                                                "updated_input"=>"defer",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>false,
+
+                                                                                            ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.mqtt_port",
+                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "placeholder"=>"Puerto MQTT",
+                                                                                                "updated_input" => "defer",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>false,
+
+                                                                                            ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.mqtt_password",
+                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "placeholder"=>"Contraseña MQTT",
+                                                                                                "updated_input"=>"defer",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>false,
+
+                                                                                            ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.mqtt_user",
+                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "placeholder"=>"Usuario MQTT",
+                                                                                                "updated_input"=>"defer",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>false,
+
+                                                                                            ],
+                                                                                            [
+                                                                                                "input_type"=>"number",
+                                                                                                "input_model"=>"client_config.digital_outputs",
+                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "placeholder"=>"Salidas disponibles",
+                                                                                                "offset"=>2,
+                                                                                                "updated_input"=>"lazy",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>false,
+
+                                                                                            ], [
+                                                                                                "input_type"=>"divider",
+                                                                                                "title"=>"Configuraciones de muestreo"
+                                                                                            ], [
+                                                                                                "input_type"=>"number",
+                                                                                                "input_model"=>"client_config.real_time_latency",
+                                                                                                "placeholder"=>"Tiempo de muestreo en tiempo real",
+                                                                                                "updated_input"=>"defer",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>false,
+
+                                                                                            ],
+                                                                                            [
+                                                                                                "input_type"=>"number",
+                                                                                                "input_model"=>"client_config.storage_latency",
+                                                                                                "placeholder"=>"Tiempo de muestreo monitoreo normal",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "defer",
+                                                                                                "required"=>false,
+
+                                                                                            ],
+                                                                                ]
+                                                            ]
+                                                ],
+                                                [
+                                                    "view_name"=>"partials.v2.form.primary_form",
+                                                    "view_values"=>  [
+                                                                        "form_toast"=>true,
+                                                                        "session_message"=>"message",
+                                                                        "form_submit_action"=>"submitFormAlert",
+                                                                        "form_title"=>"",
                                                                         "form_inputs"=> $inputs
 
                                                             ]
