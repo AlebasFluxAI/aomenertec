@@ -26,7 +26,6 @@ class PriceAdminService extends Singleton
                 ]);
             }
         }
-
         if (!$model->configAdmin()->exists()) {
             AdminConfiguration::create([
                 "admin_id" => $model->id,

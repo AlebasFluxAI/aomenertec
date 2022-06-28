@@ -29,7 +29,6 @@
                                 "col_with"=>12,
                                 "dropdown_model"=>"equipmentTypeId",
                                 "dropdown_values"=>$equipmentTypes,
-
                           ]
 
                        ]
@@ -40,6 +39,7 @@
                                    "input_model"=>"equipmentFilter",
                                    "input_field"=>$form_input["input_field"]??"",
                                    "input_type"=>"text",
+                                  "updated_input"=>"",
                                    "icon_class"=>"fas fa-desktop",
                                    "placeholder"=>"Ingrese nombre o serial del equipo",
                                    "col_with"=>12,

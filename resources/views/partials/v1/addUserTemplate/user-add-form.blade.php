@@ -10,6 +10,7 @@
                 @include("partials.v1.form.form_input_icon",[
                       "input_model"=>"name",
                       "input_label"=>"Nombre",
+                       "updated_input"=>"defer",
                       "icon_class"=>"fas fa-user",
                       "placeholder"=>"Nombre",
                       "col_with"=>8,
@@ -20,6 +21,7 @@
                 @include("partials.v1.form.form_input_icon",[
                        "input_label"=>"Apellido",
                        "input_model"=>"last_name",
+                       "updated_input"=>"defer",
                        "icon_class"=>"fas fa-user",
                        "placeholder"=>"Apellido",
                        "col_with"=>8,
@@ -30,6 +32,7 @@
                 @include("partials.v1.form.form_input_icon",[
                         "input_label"=>"Telefono (Sin indicativo)",
                         "input_model"=>"phone",
+                        "updated_input"=>"defer",
                         "icon_class"=>"fas fa-barcode",
                         "placeholder"=>"Telefono",
                         "col_with"=>8,
@@ -40,6 +43,7 @@
                 @include("partials.v1.form.form_input_icon",[
                         "input_label"=>"Correo electronico de cliente",
                         "input_model"=>"email",
+                        "updated_input"=>"lazy",
                         "icon_class"=>"fas fa-envelope",
                         "placeholder"=>"E-mail",
                         "col_with"=>8,
@@ -49,6 +53,7 @@
                 @include("partials.v1.form.form_input_icon",[
                                "input_label"=>"Numero de identificación",
                                "input_model"=>"identification",
+                               "updated_input"=>"lazy",
                                "icon_class"=>"fas fa-barcode",
                                "placeholder"=>"identificación",
                                "col_with"=>8,

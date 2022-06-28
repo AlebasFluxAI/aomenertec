@@ -40,6 +40,7 @@
 
                             @include("partials.v1.form.form_input_icon",[
                                   "input_model"=>"name",
+                                  "updated_input"=> "defer",
                                   "input_label"=>"Nombre del cliente",
                                   "icon_class"=>"fas fa-user",
                                   "placeholder"=>"Nombre",
@@ -51,6 +52,7 @@
                             @include("partials.v1.form.form_input_icon",[
                                    "input_label"=>"Apellido del cliente",
                                    "input_model"=>"last_name",
+                                   "updated_input"=>"defer",
                                    "icon_class"=>"fas fa-user",
                                    "placeholder"=>"Apellido",
                                    "col_with"=>8,
@@ -61,6 +63,7 @@
                             @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Telefono del cliente (Sin indicativo)",
                                     "input_model"=>"phone",
+                                   "updated_input"=>"defer",
                                     "icon_class"=>"fas fa-barcode",
                                     "placeholder"=>"Telefono",
                                     "col_with"=>8,
@@ -71,6 +74,7 @@
                             @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Correo electronico de cliente",
                                     "input_model"=>"email",
+                                   "updated_input"=>"lazy",
                                     "icon_class"=>"fas fa-envelope",
                                     "placeholder"=>"E-mail",
                                     "col_with"=>8,
@@ -110,6 +114,7 @@
                             @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Numero de identificación de cliente",
                                     "input_model"=>"identification",
+                                   "updated_input"=>"lazy",
                                     "icon_class"=>"fas fa-barcode",
                                     "placeholder"=>"identificación",
                                     "col_with"=>8,
@@ -119,6 +124,7 @@
                             @include("partials.v1.form.form_input_icon",[
                                   "input_label"=>"Nombre para facturación",
                                   "input_model"=>"billing_name",
+                                  "updated_input"=>"lazy",
                                   "icon_class"=>"fas fa-user",
                                   "placeholder"=>"Razon social para facturación",
                                   "col_with"=>8,
@@ -128,6 +134,7 @@
                             @include("partials.v1.form.form_input_icon",[
                                 "input_label"=>"Direccion de facturacion",
                                 "input_model"=>"billing_address",
+                                "updated_input"=>"lazy",
                                 "icon_class"=>"fas fa-map",
                                 "placeholder"=>"Direccion de facturacion",
                                 "col_with"=>8,

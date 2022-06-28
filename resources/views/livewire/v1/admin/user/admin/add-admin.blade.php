@@ -38,6 +38,7 @@
                                                    "input_type"=>"text",
                                                     "input_label"=>"Ingrese el nit del administrador",
                                                     "input_model"=>"nit",
+                                                    "updated_input"=>"defer",
                                                     "icon_class"=>"fas fa-barcode",
                                                     "placeholder"=>"NIT ",
                                                     "col_with"=>12,

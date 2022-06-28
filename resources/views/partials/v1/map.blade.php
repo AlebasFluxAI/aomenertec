@@ -127,6 +127,7 @@
             @include("partials.v1.form.form_input_icon",[
                         "input_label"=>"Latitude",
                         "input_model"=>"latitude",
+                        "updated_input"=>"",
                         "icon_class"=>"fas fa-map",
                         "placeholder"=>"latitude",
                         "input_id"=>"latitude",
@@ -139,6 +140,7 @@
             @include("partials.v1.form.form_input_icon",[
                         "input_label"=>"Longitude",
                         "input_model"=>"longitude",
+                       "updated_input"=>"",
                          "input_id"=>"longitude",
                         "input_on_change"=>"longitudeShow",
                         "icon_class"=>"fas fa-map",
