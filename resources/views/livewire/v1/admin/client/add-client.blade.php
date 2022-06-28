@@ -237,6 +237,7 @@
                           ]
                          )
                         <div class="row pl-5 pr-3">
+                            @role("admin")
                             @include("partials.v1.form.form_list",[
                                     "col_with"=>8,
                                     "input_type"=>"text",
@@ -249,7 +250,7 @@
                                     "list_option_title"=>"",
                            ])
 
-
+                            @endif
                             @include("partials.v1.form.form_list",[
                                       "col_with"=>8,
                                       "input_type"=>"text",
