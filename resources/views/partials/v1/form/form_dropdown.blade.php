@@ -12,6 +12,7 @@
 --}}
 
 <div class="form-group mb-2 col-md-{{$col_with??12}} col-sm-{{$col_with??12}}">
+    <label>{{$input_label??""}}</label>
     <div class="input-group">
         <div class="input-group-prepend">
                                     <span class="input-group-text">

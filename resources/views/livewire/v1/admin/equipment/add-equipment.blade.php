@@ -28,6 +28,7 @@
             "form_inputs"=>[
 
                             [
+                                        "input_label"=>"Serial del equipo",
                                         "input_type"=>"text",
                                         "input_model"=>"equipmentSerial",
                                         "icon_class"=>"fas fa-barcode",
@@ -36,6 +37,7 @@
                                         "required"=>true
                             ],
                             [
+                                        "input_label"=>"Descripcion",
                                         "input_type"=>"text",
                                         "input_model"=>"equipmentDescription",
                                         "icon_class"=>"fas fa-file",
@@ -46,6 +48,7 @@
 
                              ],
                              [
+                                        "input_label"=>"Seleccione el tipo de equipo",
                                         "input_type"=>"dropdown",
                                         "icon_class"=>"fas fa-desktop",
                                         "placeholder"=>"Seleccione el tipo de equipo",

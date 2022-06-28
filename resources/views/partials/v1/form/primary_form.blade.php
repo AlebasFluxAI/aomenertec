@@ -14,6 +14,7 @@
                                 $form_input["input_type"]=="checkbox"||
                                 $form_input["input_type"]=="number" || $form_input["input_type"]=="email" || $form_input["input_type"]=="password")
                                 @include("partials.v1.form.form_input_icon",[
+                                          "input_label"=>$form_input["input_label"]??"",
                                           "input_model"=>$form_input["input_model"],
                                           "input_field"=>$form_input["input_field"]??"",
                                           "input_type"=>$form_input["input_type"],
@@ -45,6 +46,7 @@
                             @elseif($form_input["input_type"]=="dropdown")
 
                                 @include("partials.v1.form.form_dropdown",[
+                                              "input_label"=>$form_input["input_label"]??null,
                                               "icon_class"=>$form_input["icon_class"]??null,
                                               "dropdown_editing"=>$form_input["dropdown_editing"],
                                               "dropdown_refresh"=>$form_input["dropdown_refresh"]??null,

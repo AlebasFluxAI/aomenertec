@@ -26,13 +26,20 @@ use Illuminate\Support\Facades\Auth;
 */
 Route::post('', [testFile::class, 'upload']);
 
+
+Route::domain('{coenergias}.domain.com')->group(function () {
+    Route::get('/', function () {
+        return view('auth.coenergia_login');
+    });
+});
+
+
 Route::get('/', function () {
     if (Auth::user()) {
         return redirect()->route("administrar.v1.perfil");
     }
     return view('auth.login');
 });
-
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
