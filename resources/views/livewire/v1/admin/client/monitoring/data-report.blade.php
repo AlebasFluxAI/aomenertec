@@ -41,6 +41,7 @@
                         "mt"=>0,
                         "input_model"=>"date_range_report",
                         "icon_class"=>"fas fa-calendar",
+                       "updated_input"=>"defer",
                         "placeholder"=>"Seleccione rango de fechas",
                         "col_with"=>6,
                         "input_type"=>"text",

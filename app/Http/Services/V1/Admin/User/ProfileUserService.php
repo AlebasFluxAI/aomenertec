@@ -8,6 +8,7 @@ use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\Client;
 use App\Models\V1\Consumer;
+use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
@@ -53,5 +54,10 @@ class ProfileUserService extends Singleton
     public function conditionalNetworkOperatorDelete($networkOperatorId)
     {
         return Client::whereNetworkOperatorId($networkOperatorId)->exists();
+    }
+
+    public function conditionalMonitoring($clientId)
+    {
+        return !MicrocontrollerData::whereClientId($clientId)->exists();
     }
 }

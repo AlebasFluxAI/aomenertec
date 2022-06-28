@@ -78,7 +78,17 @@
                                                                                                      "tooltip_title"=>"Detalles",
 
                                                                                             ]
-                                                                                        ]
+                                                                                        ],
+                                                                                        [
+                                                                                                    "redirect"=>[
+                                                                                                                "route"=>"v1.admin.client.monitoring",
+                                                                                                                "binding"=>"client"
+                                                                                                          ],
+                                                                                                        "icon"=>"fa fa-connectdevelop",
+                                                                                                        "tooltip_title"=>"Monitoreo",
+                                                                                                        "conditional" => "conditionalMonitoring",
+
+                                                                                                ],
                                                                                     ],
                                                                       "table_rows"=>$model->clients
 

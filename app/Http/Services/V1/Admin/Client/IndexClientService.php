@@ -11,6 +11,7 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Location;
 use App\Models\V1\LocationType;
+use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\Municipality;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
@@ -46,6 +47,12 @@ class IndexClientService extends Singleton
     {
         $component->redirectRoute("v1.admin.client.edit.client", ["client" => $clientId]);
     }
+
+    public function conditionalMonitoring(Component $component, $modelId)
+    {
+        return !MicrocontrollerData::whereClientId($modelId)->exists();
+    }
+
 
     public function details(Component $component, $clientId)
     {

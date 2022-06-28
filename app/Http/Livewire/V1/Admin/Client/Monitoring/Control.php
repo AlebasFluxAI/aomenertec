@@ -21,7 +21,7 @@ class Control extends Component
     ];
     public function mount(Client $client){
         $this->client = $client;
-        $this->coils = $this->client->coils;
+        $this->coils = $this->client->digitalOutputs;
     }
 
     public function confirmAction($index){
