@@ -21,6 +21,8 @@
                         "mt"=>4,
                         "input_model"=>"date_range_heat_map",
                         "icon_class"=>"fas fa-calendar",
+
+                       "updated_input"=>"",
                         "placeholder"=>"Seleccione rango de fechas",
                         "col_with"=>6,
                         "input_type"=>"text",
