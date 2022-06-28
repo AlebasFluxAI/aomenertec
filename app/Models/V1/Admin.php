@@ -293,7 +293,7 @@ class Admin extends Model
             ]],
             ($this->networkOperators()->get()->map(function ($neworkOperador) {
                 return [
-                    "key" => $neworkOperador->id . "-" . $neworkOperador->identification,
+                    "key" => $neworkOperador->id . " - " . $neworkOperador->name . " - " . $neworkOperador->identification,
                     "value" => $neworkOperador->id,
                 ];
             }))->toArray()

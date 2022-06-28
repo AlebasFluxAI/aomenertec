@@ -25,6 +25,9 @@ trait ImageableTrait
         $this->{$image_name}()->save($image);
 
         $image = $imageInput;
+        if (!$this->{$image_name}) {
+            return;
+        }
         $this->{$image_name}->setDataImage($image);
         $this->{$image_name}->name = $image->getClientOriginalName();
         $this->{$image_name}->update();

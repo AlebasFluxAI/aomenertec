@@ -40,6 +40,7 @@ class AdminEditService extends Singleton
 
     public function submitForm(Component $component)
     {
+
         DB::transaction(function () use ($component) {
             if ($component->icon) {
                 $image = $component->icon;
