@@ -4,6 +4,12 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
+use App\Models\V1\AdminConfiguration;
+use App\Models\V1\AdminPrice;
+use App\Models\V1\ClientAlertConfiguration;
+use App\Models\V1\ClientConfiguration;
+use App\Models\V1\ClientDigitalOutput;
+use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
 use App\Models\V1\Department;
@@ -22,6 +28,7 @@ use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use PhpMqtt\Client\Facades\MQTT;
 use Spatie\Permission\Models\Role;
 use function auth;
 use function bcrypt;
@@ -29,60 +36,123 @@ use function session;
 
 class ClientConfigurationService extends Singleton
 {
-    public function mount(Component $component, $client)
+    public function mount(Component $component, Client $client)
     {
-        $clientConfiguration = $client->clientConfiguration;
-        $component->client = $client;
         $flags_frame = collect(config('data-frame.flags_frame'));
+        $alerts = $flags_frame->where('id', '>=', 16)->all();
+        $component->placeholders = [];
+        foreach ($alerts as $item) {
+            array_push($component->placeholders, $item['placeholder']);
+        }
+        if (!$client->clientAlertConfiguration()->exists()) {
+            foreach ($alerts as $item) {
+                ClientAlertConfiguration::create([
+                    "client_id" => $client->id,
+                    "flag_id" => $item['id'],
+                    "min_alert" => 0,
+                    "max_alert" => 0,
+                    "min_control" => 0,
+                    "max_control" => 0,
+                    "active_control" => false,
+                ]);
+            }
+        }
+        if (!$client->clientConfiguration()->exists()) {
+            ClientConfiguration::create([
+                "client_id" => $client->id,
+                "ssid" => "",
+                "wifi_password" => "",
+                "mqtt_host" => "3.12.98.178",
+                "mqtt_port" => "1883",
+                "mqtt_user" => "enertec",
+                "mqtt_password" => "enertec2020**",
+                "real_time_latency" => 60,
+                "storage_latency" => 30,
+                "digital_outputs" => 0,
+            ]);
+        }
+        $component->fill([
+            "client" => $client,
+            "client_config"=> $client->clientConfiguration,
+            "client_config_alert"=> $client->clientAlertConfiguration,
+            "digital_outputs" => $client->digitalOutputs,
+        ]);
+        foreach ($component->digital_outputs as $index => $output) {
+            $component->checks[$index] = ["id" => $output->id, "output" => false];
+        }
         $alert_config_frame = collect(config('data-frame.alert_config_frame'));
-        $component->alerts = $flags_frame->where('id', '>=', 16)->all();
-        $component->inputs = [ [
+        $component->inputs = [
+            [
             "input_type"=>"divider",
             "title"=>"Configuraciones de conexion"
         ], [
                 "input_type"=>"text",
-                "input_model"=>"ssid",
+                "input_model"=>"client_config.ssid",
                 "icon_class"=>"fas fa-barcode",
                 "placeholder"=>"Red Wifi",
                 "col_with"=>6,
+                "click_action"=>"",
+                "updated_input" => "defer",
                 "required"=>true
             ], [
                 "input_type"=>"text",
-                "input_model"=>"wifi_password",
+                "input_model"=>"client_config.wifi_password",
                 "icon_class"=>"fas fa-barcode",
                 "placeholder"=>"Contraseña WiFi",
                 "col_with"=>6,
+                "click_action"=>"",
+                "updated_input" => "defer",
                 "required"=>true
             ], [
                 "input_type"=>"text",
-                "input_model"=>"mqtt_host",
+                "input_model"=>"client_config.mqtt_host",
                 "icon_class"=>"fas fa-barcode",
                 "placeholder"=>"Servidor MQTT",
+                "updated_input"=>"defer",
                 "col_with"=>6,
+                "click_action"=>"",
                 "required"=>false,
 
             ], [
                 "input_type"=>"text",
-                "input_model"=>"mqtt_port",
+                "input_model"=>"client_config.mqtt_port",
                 "icon_class"=>"fas fa-barcode",
                 "placeholder"=>"Puerto MQTT",
+                "updated_input" => "defer",
                 "col_with"=>6,
+                "click_action"=>"",
                 "required"=>false,
 
             ], [
                 "input_type"=>"text",
-                "input_model"=>"mqtt_password",
+                "input_model"=>"client_config.mqtt_password",
                 "icon_class"=>"fas fa-barcode",
                 "placeholder"=>"Contraseña MQTT",
+                "updated_input"=>"defer",
                 "col_with"=>6,
+                "click_action"=>"",
                 "required"=>false,
 
             ], [
                 "input_type"=>"text",
-                "input_model"=>"mqtt_user",
+                "input_model"=>"client_config.mqtt_user",
                 "icon_class"=>"fas fa-barcode",
                 "placeholder"=>"Usuario MQTT",
+                "updated_input"=>"defer",
                 "col_with"=>6,
+                "click_action"=>"",
+                "required"=>false,
+
+            ],
+            [
+                "input_type"=>"number",
+                "input_model"=>"client_config.digital_outputs",
+                "icon_class"=>"fas fa-barcode",
+                "placeholder"=>"Salidas disponibles",
+                "offset"=>2,
+                "updated_input"=>"lazy",
+                "col_with"=>6,
+                "click_action"=>"",
                 "required"=>false,
 
             ], [
@@ -90,316 +160,209 @@ class ClientConfigurationService extends Singleton
                 "title"=>"Configuraciones de muestreo"
             ], [
                 "input_type"=>"number",
-                "input_model"=>"real_time_latency",
+                "input_model"=>"client_config.real_time_latency",
                 "placeholder"=>"Tiempo de muestreo en tiempo real",
+                "updated_input"=>"defer",
                 "col_with"=>6,
+                "click_action"=>"",
                 "required"=>false,
 
-            ], [
+            ],
+            [
                 "input_type"=>"number",
-                "input_model"=>"storage_latency",
+                "input_model"=>"client_config.storage_latency",
                 "placeholder"=>"Tiempo de muestreo monitoreo normal",
                 "col_with"=>6,
+                "click_action"=>"",
+                "updated_input" => "defer",
                 "required"=>false,
 
             ], [
                 "input_type"=>"divider",
                 "title"=>"Rangos alarmables"
-            ]];
-        foreach ($component->alerts as $item){
-            if ($item['id'] < 47){
-                $values = $alert_config_frame->where('flag_id', $item['id'])->pluck('variable_name')->last();
+            ]
+        ];
+        foreach ($component->client_config_alert as $index => $item){
+            if ($item->flag_id < 47){
                 array_push($component->inputs, [
                     "input_type"=>"input_min_max",
-                    "input_min_model"=>$alert_config_frame->where('flag_id', $item['id'])->pluck('variable_name')->last(),
-                    "input_max_model"=>$alert_config_frame->where('flag_id', $item['id'])->pluck('variable_name')->first(),
-                    "placeholder"=>$item['placeholder'],
+                    "input_min_model"=> "client_config_alert.".$index.".min_alert",
+                    "input_max_model"=>"client_config_alert.".$index.".max_alert",
+                    "placeholder"=>$component->placeholders[$index],
                     "col_with"=>9,
                     "required"=>false,
+                    "updated_input" => "defer",
                     "placeholder_clickable"=>true,
                     "data_target"=>"modal_".$item['id'],
-
+                    "click_action"=>"outputRelation('".$item->id."')"
                 ]);
             } else{
                 array_push($component->inputs, [
                     "input_type"=>"number",
                     "offset"=>2,
-                    "input_model"=>$item['flag_name'],
-                    "placeholder"=>$item['placeholder'],
+                    "input_model"=>"client_config_alert.".$index.".max_alert",
+                    "placeholder"=>$component->placeholders[$index],
                     "col_with"=>8,
+                    "updated_input" => "defer",
                     "required"=>false,
                     "placeholder_clickable"=>true,
                     "data_target"=>"modal_".$item['id'],
+                    "click_action"=>"outputRelation('".$item->id."')"
 
                 ]);
             }
         }
+    }
 
+    public function updatedClientConfig(Component $component, $value, $key){
+        if ($key == "digital_outputs"){
+            if ($value >= 0){
+                $component->digital_outputs = $component->client->digitalOutputs()->get();
+                if ($component->digital_outputs){
+                    $i=count($component->digital_outputs);
+                } else{
+                    $i=0;
+                }
+                if ($i < $value){
+                    for ($i=$i+1; $i<=$value; $i++) {
+                        ClientDigitalOutput::create([
+                            'client_id' => $component->client->id,
+                            'number' => $i,
+                            'name' => 'Salida ' . $i,
+                            'status' => true,
+                        ]);
+                    }
+                } else{
+                    for ($i; $i>$value; $i--) {
+                        $delete = $component->client->digitalOutputs()->where('number', $i)->first();
+                        $delete->delete();
+                    }
+                }
 
-        if ($clientConfiguration) {
-            $component->fill([
-                "ssid" => $clientConfiguration->ssid,
-                "wifi_password" => $clientConfiguration->wifi_password,
-                "measure_type" => $clientConfiguration->measure_type,
-                "mqtt_host" => $clientConfiguration->mqtt_host,
-                "mqtt_port" => $clientConfiguration->mqtt_port,
-                "mqtt_user" => $clientConfiguration->mqtt_user,
-                "mqtt_password" => $clientConfiguration->mqtt_password,
-                "max_vol_ph_1" => $clientConfiguration->max_vol_ph_1,
-                "min_vol_ph_1" => $clientConfiguration->min_vol_ph_1,
-                "max_vol_ph_2" => $clientConfiguration->max_vol_ph_2,
-                "min_vol_ph_2" => $clientConfiguration->min_vol_ph_2,
-                "max_vol_ph_3" => $clientConfiguration->max_vol_ph_3,
-                "min_vol_ph_3" => $clientConfiguration->min_vol_ph_3,
-                "max_current_ph_1" => $clientConfiguration->max_current_ph_1,
-                "min_current_ph_1" => $clientConfiguration->min_current_ph_1,
-                "max_current_ph_2" => $clientConfiguration->max_current_ph_2,
-                "min_current_ph_2" => $clientConfiguration->min_current_ph_2,
-                "max_current_ph_3" => $clientConfiguration->max_current_ph_3,
-                "min_current_ph_3" => $clientConfiguration->min_current_ph_3,
-                "max_power_ph_1" => $clientConfiguration->max_power_ph_1,
-                "min_power_ph_1" => $clientConfiguration->min_power_ph_1,
-                "max_power_ph_2" => $clientConfiguration->max_power_ph_2,
-                "min_power_ph_2" => $clientConfiguration->min_power_ph_2,
-                "max_power_ph_3" => $clientConfiguration->max_power_ph_3,
-                "min_power_ph_3" => $clientConfiguration->min_power_ph_3,
-                "max_va_ph_1" => $clientConfiguration->max_va_ph_1,
-                "min_va_ph_1" => $clientConfiguration->min_va_ph_1,
-                "max_va_ph_2" => $clientConfiguration->max_va_ph_2,
-                "min_va_ph_2" => $clientConfiguration->min_va_ph_2,
-                "max_va_ph_3" => $clientConfiguration->max_va_ph_3,
-                "min_va_ph_3" => $clientConfiguration->min_va_ph_3,
-                "max_var_ph_1" => $clientConfiguration->max_var_ph_1,
-                "min_var_ph_1" => $clientConfiguration->min_var_ph_1,
-                "max_var_ph_2" => $clientConfiguration->max_var_ph_2,
-                "min_var_ph_2" => $clientConfiguration->min_var_ph_2,
-                "max_var_ph_3" => $clientConfiguration->max_var_ph_3,
-                "min_var_ph_3" => $clientConfiguration->min_var_ph_3,
-                "max_pfp_ph_1" => $clientConfiguration->max_pfp_ph_1,
-                "min_pfp_ph_1" => $clientConfiguration->min_pfp_ph_1,
-                "max_pfp_ph_2" => $clientConfiguration->max_pfp_ph_2,
-                "min_pfp_ph_2" => $clientConfiguration->min_pfp_ph_2,
-                "max_pfp_ph_3" => $clientConfiguration->max_pfp_ph_3,
-                "min_pfp_ph_3" => $clientConfiguration->min_pfp_ph_3,
-                "max_freq" => $clientConfiguration->max_freq,
-                "min_freq" => $clientConfiguration->min_freq,
-                "max_volt_1_2" => $clientConfiguration->max_volt_1_2,
-                "min_volt_1_2" => $clientConfiguration->min_volt_1_2,
-                "max_volt_3_1" => $clientConfiguration->max_volt_3_1,
-                "min_volt_3_1" => $clientConfiguration->min_volt_3_1,
-                "max_volt_2_3" => $clientConfiguration->max_volt_2_3,
-                "min_volt_2_3" => $clientConfiguration->min_volt_2_3,
-                "max_vthd_ph_1" => $clientConfiguration->max_vthd_ph_1,
-                "min_vthd_ph_1" => $clientConfiguration->min_vthd_ph_1,
-                "max_vthd_ph_2" => $clientConfiguration->max_vthd_ph_2,
-                "min_vthd_ph_2" => $clientConfiguration->min_vthd_ph_2,
-                "max_vthd_ph_3" => $clientConfiguration->max_vthd_ph_3,
-                "min_vthd_ph_3" => $clientConfiguration->min_vthd_ph_3,
-                "max_cthd_ph_1" => $clientConfiguration->max_cthd_ph_1,
-                "min_cthd_ph_1" => $clientConfiguration->min_cthd_ph_1,
-                "max_cthd_ph_2" => $clientConfiguration->max_cthd_ph_2,
-                "min_cthd_ph_2" => $clientConfiguration->min_cthd_ph_2,
-                "max_cthd_ph_3" => $clientConfiguration->max_cthd_ph_3,
-                "min_cthd_ph_3" => $clientConfiguration->min_cthd_ph_3,
-                "max_vthd_ph_1_2" => $clientConfiguration->max_vthd_ph_1_2,
-                "min_vthd_ph_1_2" => $clientConfiguration->min_vthd_ph_1_2,
-                "max_vthd_ph_2_3" => $clientConfiguration->max_vthd_ph_2_3,
-                "min_vthd_ph_2_3" => $clientConfiguration->min_vthd_ph_2_3,
-                "max_vthd_ph_3_1" => $clientConfiguration->max_vthd_ph_3_1,
-                "min_vthd_ph_3_1" => $clientConfiguration->min_vthd_ph_3_1,
-                "real_time_latency" => $clientConfiguration->real_time_latency,
-                "storage_latency" => $clientConfiguration->storage_latency,
-
-            ]);
-        } else {
-            $component->fill([
-                "ssid" => "Sin asignar",
-                "wifi_password" => "Sin asignar",
-                "measure_type" => "Sin asignar",
-                "mqtt_host" => "Sin asignar",
-                "mqtt_port" => "Sin asignar",
-                "mqtt_user" => "Sin asignar",
-                "mqtt_password" => "Sin asignar",
-                "max_vol_ph_1" => 0.0,
-                "min_vol_ph_1" => 0.0,
-                "max_vol_ph_2" => 0.0,
-                "min_vol_ph_2" => 0.0,
-                "max_vol_ph_3" => 0.0,
-                "min_vol_ph_3" => 0.0,
-                "max_current_ph_1" => 0.0,
-                "min_current_ph_1" => 0.0,
-                "max_current_ph_2" => 0.0,
-                "min_current_ph_2" => 0.0,
-                "max_current_ph_3" => 0.0,
-                "min_current_ph_3" => 0.0,
-                "max_power_ph_1" => 0.0,
-                "min_power_ph_1" => 0.0,
-                "max_power_ph_2" => 0.0,
-                "min_power_ph_2" => 0.0,
-                "max_power_ph_3" => 0.0,
-                "min_power_ph_3" => 0.0,
-                "max_va_ph_1" => 0.0,
-                "min_va_ph_1" => 0.0,
-                "max_va_ph_2" => 0.0,
-                "min_va_ph_2" => 0.0,
-                "max_va_ph_3" => 0.0,
-                "min_va_ph_3" => 0.0,
-                "max_var_ph_1" => 0.0,
-                "min_var_ph_1" => 0.0,
-                "max_var_ph_2" => 0.0,
-                "min_var_ph_2" => 0.0,
-                "max_var_ph_3" => 0.0,
-                "min_var_ph_3" => 0.0,
-                "max_pfp_ph_1" => 0.0,
-                "min_pfp_ph_1" => 0.0,
-                "max_pfp_ph_2" => 0.0,
-                "min_pfp_ph_2" => 0.0,
-                "max_pfp_ph_3" => 0.0,
-                "min_pfp_ph_3" => 0.0,
-                "max_freq" => 0.0,
-                "min_freq" => 0.0,
-                "max_volt_1_2" => 0.0,
-                "min_volt_1_2" => 0.0,
-                "max_volt_3_1" => 0.0,
-                "min_volt_3_1" => 0.0,
-                "max_volt_2_3" => 0.0,
-                "min_volt_2_3" => 0.0,
-                "max_vthd_ph_1" => 0.0,
-                "min_vthd_ph_1" => 0.0,
-                "max_vthd_ph_2" => 0.0,
-                "min_vthd_ph_2" => 0.0,
-                "max_vthd_ph_3" => 0.0,
-                "min_vthd_ph_3" => 0.0,
-                "max_cthd_ph_1" => 0.0,
-                "min_cthd_ph_1" => 0.0,
-                "max_cthd_ph_2" => 0.0,
-                "min_cthd_ph_2" => 0.0,
-                "max_cthd_ph_3" => 0.0,
-                "min_cthd_ph_3" => 0.0,
-                "max_vthd_ph_1_2" => 0.0,
-                "min_vthd_ph_1_2" => 0.0,
-                "max_vthd_ph_2_3" => 0.0,
-                "min_vthd_ph_2_3" => 0.0,
-                "max_vthd_ph_3_1" => 0.0,
-                "min_vthd_ph_3_1" => 0.0,
-                "real_time_latency" => 0.0,
-                "storage_latency" => 0.0,
-
-            ]);
+            }
+            $component->client_config->digital_outputs = $value;
+            $component->client_config->save();
+            $component->digital_outputs = $component->client->digitalOutputs()->get();
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Salidas configuradas"]);
+            return redirect()->route("v1.admin.client.settings", ['client' => $component->client->id]);
         }
     }
 
-    public function delete(Component $component, $clientId)
-    {
-        Client::find($clientId)->delete();
-        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
-        $component->reset();
+    public function outputRelation(Component $component, $id){
+        $component->digital_outputs = $component->client->digitalOutputs()->get();
+        $alert_ouputs = ClientAlertConfiguration::find($id)->outputs()->get();
+        if(ClientAlertConfiguration::find($id)->outputs()->exists()){
+            foreach ($alert_ouputs as $index => $output){
+                foreach ($component->checks as $i => $check){
+                    if ($check['id'] == $output->id){
+                        $component->checks[$i]['output'] = true;
+                        break;
+                    }
+                }
+            }
+        } else{
+            foreach ($component->checks as $i => $check){
+                $component->checks[$i]['output'] = false;
+            }
+        }
     }
-
-    public function getClients()
-    {
-        return Client::get()->paginate(15);
+    public function assignmentOutput(Component $component, $id){
+        foreach ($component->checks as $check){
+            $relation = ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->first();
+            if ($check['output']){
+                if (!ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()){
+                    ClientDigitalOutputAlertConfiguration::create([
+                        'client_alert_configuration_id'=>$id,
+                        'client_digital_output_id'=>$check['id']
+                    ]);
+                }
+            } else{
+                if (ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()){
+                    $relation->delete();
+                }
+            }
+        }
+        foreach ($component->checks as $i => $check){
+            $component->checks[$i]['output'] = false;
+        }
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada"]);
     }
-
-    public function edit(Component $component, $clientId)
-    {
-        $component->redirectRoute("v1.admin.client.edit.client", ["client" => $clientId]);
-    }
-
-    public function details(Component $component, $clientId)
-    {
-        $component->redirectRoute("v1.admin.client.detail.client", ["client" => $clientId]);
-    }
-
-    public function settings(Component $component, $clientId)
-    {
-        $component->redirectRoute("v1.admin.client.settings", ["client" => $clientId]);
-    }
-
     public function submitForm(Component $component)
     {
-        if ($component->client->clientConfiguration) {
-            $component->client->clientConfiguration->update($this->getConfigurations($component));
-            return;
+        $component->validate();
+        $flag_save = false;
+        foreach ($component->client_config_alert as $item) {
+           $flag_save = $item->save();
         }
-        $component->client->clientConfiguration()->create($this->getConfigurations($component));
+        if ($component->client_config->wasChanged(['real_time_latency', 'storage_latency']) || $flag_save){
+            $this->setRemoteConfigurationFrame($component);
+        }
+        if ($component->client_config->save() || $flag_save){
+            $this->setRemoteConfiguration($component);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+        }
     }
 
-    private function getConfigurations(Component $component)
-    {
-        return [
-            "ssid" => $component->ssid,
-            "wifi_password" => $component->wifi_password,
-            "measure_type" => $component->measure_type,
-            "mqtt_host" => $component->mqtt_host,
-            "mqtt_port" => $component->mqtt_port,
-            "mqtt_user" => $component->mqtt_user,
-            "mqtt_password" => $component->mqtt_password,
-            "max_vol_ph_1" => $component->max_vol_ph_1,
-            "min_vol_ph_1" => $component->min_vol_ph_1,
-            "max_vol_ph_2" => $component->max_vol_ph_2,
-            "min_vol_ph_2" => $component->min_vol_ph_2,
-            "max_vol_ph_3" => $component->max_vol_ph_3,
-            "min_vol_ph_3" => $component->min_vol_ph_3,
-            "max_current_ph_1" => $component->max_current_ph_1,
-            "min_current_ph_1" => $component->min_current_ph_1,
-            "max_current_ph_2" => $component->max_current_ph_2,
-            "min_current_ph_2" => $component->min_current_ph_2,
-            "max_current_ph_3" => $component->max_current_ph_3,
-            "min_current_ph_3" => $component->min_current_ph_3,
-            "max_power_ph_1" => $component->max_power_ph_1,
-            "min_power_ph_1" => $component->min_power_ph_1,
-            "max_power_ph_2" => $component->max_power_ph_2,
-            "min_power_ph_2" => $component->min_power_ph_2,
-            "max_power_ph_3" => $component->max_power_ph_3,
-            "min_power_ph_3" => $component->min_power_ph_3,
-            "max_va_ph_1" => $component->max_va_ph_1,
-            "min_va_ph_1" => $component->min_va_ph_1,
-            "max_va_ph_2" => $component->max_va_ph_2,
-            "min_va_ph_2" => $component->min_va_ph_2,
-            "max_va_ph_3" => $component->max_va_ph_3,
-            "min_va_ph_3" => $component->min_va_ph_3,
-            "max_var_ph_1" => $component->max_var_ph_1,
-            "min_var_ph_1" => $component->min_var_ph_1,
-            "max_var_ph_2" => $component->max_var_ph_2,
-            "min_var_ph_2" => $component->min_var_ph_2,
-            "max_var_ph_3" => $component->max_var_ph_3,
-            "min_var_ph_3" => $component->min_var_ph_3,
-            "max_pfp_ph_1" => $component->max_pfp_ph_1,
-            "min_pfp_ph_1" => $component->min_pfp_ph_1,
-            "max_pfp_ph_2" => $component->max_pfp_ph_2,
-            "min_pfp_ph_2" => $component->min_pfp_ph_2,
-            "max_pfp_ph_3" => $component->max_pfp_ph_3,
-            "min_pfp_ph_3" => $component->min_pfp_ph_3,
-            "max_freq" => $component->max_freq,
-            "min_freq" => $component->min_freq,
-            "max_volt_1_2" => $component->max_volt_1_2,
-            "min_volt_1_2" => $component->min_volt_1_2,
-            "max_volt_3_1" => $component->max_volt_3_1,
-            "min_volt_3_1" => $component->min_volt_3_1,
-            "max_volt_2_3" => $component->max_volt_2_3,
-            "min_volt_2_3" => $component->min_volt_2_3,
-            "max_vthd_ph_1" => $component->max_vthd_ph_1,
-            "min_vthd_ph_1" => $component->min_vthd_ph_1,
-            "max_vthd_ph_2" => $component->max_vthd_ph_2,
-            "min_vthd_ph_2" => $component->min_vthd_ph_2,
-            "max_vthd_ph_3" => $component->max_vthd_ph_3,
-            "min_vthd_ph_3" => $component->min_vthd_ph_3,
-            "max_cthd_ph_1" => $component->max_cthd_ph_1,
-            "min_cthd_ph_1" => $component->min_cthd_ph_1,
-            "max_cthd_ph_2" => $component->max_cthd_ph_2,
-            "min_cthd_ph_2" => $component->min_cthd_ph_2,
-            "max_cthd_ph_3" => $component->max_cthd_ph_3,
-            "min_cthd_ph_3" => $component->min_cthd_ph_3,
-            "max_vthd_ph_1_2" => $component->max_vthd_ph_1_2,
-            "min_vthd_ph_1_2" => $component->min_vthd_ph_1_2,
-            "max_vthd_ph_2_3" => $component->max_vthd_ph_2_3,
-            "min_vthd_ph_2_3" => $component->min_vthd_ph_2_3,
-            "max_vthd_ph_3_1" => $component->max_vthd_ph_3_1,
-            "min_vthd_ph_3_1" => $component->min_vthd_ph_3_1,
-            "real_time_latency" => $component->real_time_latency,
-            "storage_latency" => $component->storage_latency,
+    private function setRemoteConfiguration(Component $component){
+        $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
+        $message['did'] = $equipment->serial;
+        if($component->client_config->wasChanged('ssid')){
+            $message['ssid'] =  $component->client_config->ssid;
+        }
+        if($component->client_config->wasChanged('wifi_password')){
+            $message['pass'] =  $component->client_config->wifi_password;
+        }
+        if($component->client_config->wasChanged('mqtt_host')){
+            $message['brokerMqtt'] =  $component->client_config->mqtt_host;
+        }
+        if($component->client_config->wasChanged('mqtt_port')){
+            $message['portMqtt'] =  $component->client_config->mqtt_port;
+        }
+        if($component->client_config->wasChanged('mqtt_user')){
+            $message['userMqtt'] =  $component->client_config->mqtt_user;
+        }
+        if($component->client_config->wasChanged('mqtt_password')){
+            $message['passMqtt'] =  $component->client_config->mqtt_password;
+        }
+        $topic = "mc/config/".$equipment->serial;
+        MQTT::publish($topic, json_encode($message));
+        MQTT::disconnect();
+    }
 
-        ];
+    private function setRemoteConfigurationFrame(Component $component)
+    {
+        $message = $this->frameConfig($component);
+        MQTT::publish($message->topic, $message->message);
+        MQTT::disconnect();
+    }
+
+    private function frameConfig(Component $component){
+        $alert_config_frame = config('data-frame.alert_config_frame');
+        $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
+        $topic = "mc/config/".$equipment->serial;
+        $binary_data = [];
+        $aux = [];
+        foreach ($alert_config_frame as $item){
+            if ($item['variable_name'] == 'network_operator_id'){
+                $data = $component->client->networkOperator->identification;
+            } elseif ($item['variable_name'] == 'equipment_id') {
+                $data = $equipment->serial;
+            } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                $data = $component->client->networkOperator->identification;
+            } elseif ($item['variable_name'] == 'equipment_new_id') {
+                $data = $equipment->serial;
+            } elseif ($item['variable_name'] == 'real_time_latency') {
+                $data = $component->client->clientConfiguration->real_time_latency;
+            } elseif ($item['variable_name'] == 'storage_latency') {
+                $data = $component->client->clientConfiguration->storage_latency;
+            } else {
+                $aux_variable = $component->client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
+                $data = $aux_variable->{$item['limit']};
+            }
+            array_push($binary_data, pack($item['type'], $data));
+        }
+        $message = base64_encode(implode($binary_data));
+
+        return ["message"=>$message, "topic"=>$topic];
     }
 }

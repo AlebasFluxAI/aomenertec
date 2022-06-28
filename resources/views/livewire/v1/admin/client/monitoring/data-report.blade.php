@@ -8,7 +8,10 @@
                         "col_width"=>3,
                         "options_list"=>$variables,
                         "model_select"=>"variables_selected",
-                        "name_select"=>"select_report"
+                        "name_select"=>"select_report",
+                        "option_value"=>"id",
+                        "option_view"=>"display_name",
+                        "optgroup"=>true,
 
                ])
 

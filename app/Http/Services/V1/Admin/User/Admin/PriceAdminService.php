@@ -2,8 +2,12 @@
 
 namespace App\Http\Services\V1\Admin\User\Admin;
 
+use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
+use App\Models\V1\AdminConfiguration;
+use App\Models\V1\AdminPrice;
+use App\Models\V1\ClientType;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Livewire\Component;
@@ -12,52 +16,48 @@ class PriceAdminService extends Singleton
 {
     public function mount(Component $component, Admin $model)
     {
-        $component->prices = $model->prices();
+
+        if (!$model->priceAdmin()->exists()) {
+            foreach (ClientType::all() as $type) {
+                AdminPrice::create([
+                    "admin_id" => $model->id,
+                    "client_type_id" => $type->id,
+                    "value" => 0,
+                ]);
+            }
+        }
+
+        if (!$model->configAdmin()->exists()) {
+            AdminConfiguration::create([
+                "admin_id" => $model->id,
+                "min_value" => 0,
+                "min_clients" => 10,
+            ]);
+        }
+        $component->fill([
+            "client_types" => ClientType::all(),
+            "model" => $model,
+            "prices"=> $model->priceAdmin,
+            "config"=> $model->configAdmin,
+            "coins" => [
+                        ["key" => "Peso Colombiano", "value" => AdminConfiguration::COP],
+                        ["key" => "Dolar", "value" => AdminConfiguration::USD]
+                       ],
+        ]);
+
     }
 
     public function submitForm(Component $component)
     {
-        DB::transaction(function () use ($component) {
-            if ($component->icon) {
-                $image = $component->icon;
-                if (!$component->model->icon) {
-                    $component->model->buildOneImageFromFile("icon", $image);
-                } else {
-                    $component->model->icon->setDataImage($image);
-                    $component->model->icon->name = $image->getClientOriginalName();
-                    $component->model->icon->update();
-                }
-            }
-            $component->model->fill($this->mapper($component));
-            $component->model->update();
-            $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
-        });
+        $component->validate();
+        foreach ($component->prices as $price) {
+            $price->save();
+        }
+        $component->config->save();
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
 
     }
 
-    private function mapper(Component $component)
-    {
-        return [
-            "name" => $component->name,
-            "last_name" => $component->last_name,
-            "email" => $component->email,
-            "phone" => $component->phone,
-            "address" => $component->address,
-            "nit" => $component->nit,
-            "identification" => $component->identification,
-            "css_file" => $component->style,
-            "latitude" => $component->latitude,
-            "longitude" => $component->longitude,
-            "address_details" => $component->addressDetails,
-        ];
-    }
 
-    public function setStyle(Component $component)
-    {
-        $component->style = "";
-        $component->styles = array_merge([[
-            "key" => "",
-            "value" => ""
-        ]], Admin::styles());
-    }
+
 }

@@ -34,7 +34,6 @@ class DatabaseSeeder extends Seeder
             StrataTableSeeder::class,
             SubsistenceConsumptionsTableSeeder::class,
             VoltageLevelsTableSeeder::class,
-            LocationTypesTableSeeder::class,
             RoleHasPermissionsTableSeeder::class,
             ClientsTableSeeder::class,
         ]);

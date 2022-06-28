@@ -4,19 +4,25 @@ namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\PriceAdminService;
 use App\Models\V1\Admin;
+use App\Models\V1\AdminConfiguration;
 use Livewire\Component;
 
 class PriceAdmin extends Component
 {
     public $prices;
+    public $config;
+    public $client_types;
+    public $coins;
+    public $model;
 
     private $priceAdminService;
 
     protected $rules = [
-        'prices.*.client_type_id' => 'required',
-        'prices.*.admin_id' => 'required',
+
         'prices.*.value' => 'required',
-        'prices.*.coin' => 'required',
+        'config.min_clients' => 'required',
+        'config.min_value' => 'required',
+        'config.coin' => 'required',
     ];
 
     public function __construct($id = null)

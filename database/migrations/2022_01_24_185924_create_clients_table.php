@@ -39,9 +39,6 @@ class CreateClientsTable extends Migration
             $table->boolean("public_lighting_tax")->default(false);
             $table->boolean("active_client")->default(true);
             $table->foreignId("network_operator_id")->constrained();
-            $table->foreignId("department_id")->nullable()->constrained();
-            $table->foreignId("municipality_id")->nullable()->constrained();
-            $table->foreignId("location_id")->nullable()->constrained();
             $table->foreignId("client_type_id")->nullable()->constrained();
             $table->foreignId("subsistence_consumption_id")->nullable()->default(1)->constrained();
             $table->foreignId("voltage_level_id")->nullable()->default(1)->constrained();

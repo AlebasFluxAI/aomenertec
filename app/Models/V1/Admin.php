@@ -285,7 +285,12 @@ class Admin extends Model
     }
     public function priceAdmin()
     {
-        return $this->hasMany(PriceAdmin::class);
+        return $this->hasMany(AdminPrice::class)->orderBy('client_type_id');
+    }
+
+    public function configAdmin()
+    {
+        return $this->hasOne(AdminConfiguration::class);
     }
 
 

@@ -5,7 +5,7 @@ namespace App\Providers;
 use App\Models\V1\Admin;
 use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientAddress;
-use App\Models\V1\ClientConfiguration;
+use App\Models\V1\ClientAlertConfiguration;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
@@ -21,7 +21,7 @@ use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
-use App\Observers\ClientConfiguration\ClientConfigurationObserver;
+use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
 use App\Observers\HereMapObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
         Technician::observe(UserTechnicianObserver::class);
         Support::observe(UserSupportObserver::class);
         User::observe(UserObserver::class);
-        ClientConfiguration::observe(ClientConfigurationObserver::class);
+        //ClientAlertConfiguration::observe(ClientAlertConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
 
         ClientAddress::observe(AddressObserver::class);

@@ -20,7 +20,8 @@
                                 || $form_input["input_type"]=="checkbox"
                                 || $form_input["input_type"]=="number"
                                 || $form_input["input_type"]=="email"
-                                || $form_input["input_type"]=="password")
+                                || $form_input["input_type"]=="password"
+                                || $form_input["input_type"]=="select")
                                 @include("partials.v2.form.form_input_icon",[
                                           "input_model"=>$form_input["input_model"],
                                           "input_field"=>$form_input["input_field"]??"",
@@ -33,6 +34,8 @@
                                           "data_target"=>$form_input["data_target"]??'',
                                           "placeholder_clickable"=>$form_input["placeholder_clickable"]??false,
                                           "input_rows"=>$form_input["input_rows"]??0,
+                                          "updated_input"=>$form_input['updated_input']??"",
+                                          "click_action" => $form_input['click_action']??""
                                      ])
                             @elseif($form_input["input_type"]=="input_min_max")
                                 @include("partials.v2.form.form_input_max_min",[
@@ -49,6 +52,8 @@
                                         "col_with"=>$form_input["col_with"],
                                         "required"=>$form_input["required"],
                                         "input_rows"=>$form_input["input_rows"]??0,
+                                        "updated_input"=>$form_input['updated_input']??"",
+                                        "click_action" => $form_input['click_action']??""
                                    ])
                             @elseif($form_input["input_type"]=="dropdown-search")
 

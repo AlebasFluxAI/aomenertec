@@ -9,11 +9,25 @@
         </div>
 
         @if($input_rows??1>1)
-            <textarea wire:model="{{$input_model}}" rows="{{$input_rows}}" type="{{$input_type??"text"}}"
+            <textarea @if($updated_input=="lazy")
+                      wire:model.lazy="{{ $input_model }}"
+                      @elseif($updated_input=="defer")
+                      wire:model.defer="{{ $input_model }}"
+                      @else
+                      wire:model="{{ $input_model }}"
+                      @endif
+                      rows="{{$input_rows}}" type="{{$input_type??"text"}}"
                       class="form-control" autocomplete="on" placeholder="{{$placeholder??""}}"
                       required="{{$required??false}}"></textarea>
         @else
-            <input wire:model="{{$input_model}}" id="{{$input_id??""}}" type="{{$input_type??"text"}}"
+            <input @if($updated_input=="lazy")
+                   wire:model.lazy="{{ $input_model }}"
+                   @elseif($updated_input=="defer")
+                   wire:model.defer="{{ $input_model }}"
+                   @else
+                   wire:model="{{ $input_model }}"
+                   @endif
+                   id="{{$input_id??""}}" type="{{$input_type??"text"}}"
                    class="form-control" autocomplete="{{$autocomplete??"on"}}"
                    name="{{$input_name??""}}" onchange="{{$input_on_change??""}}()" placeholder="{{$placeholder??""}}"
                    required="{{$required??false}}">

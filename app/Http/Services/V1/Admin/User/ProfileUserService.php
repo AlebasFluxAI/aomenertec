@@ -26,6 +26,11 @@ class ProfileUserService extends Singleton
     public function mount(Component $component)
     {
         $component->model = $this->getModelByUser();
+        if(Auth::user()->hasRole(User::TYPE_SUPER_ADMIN));
+        {
+            $component->admins = Admin::all();
+        }
+
     }
 
     private function getModelByUser()

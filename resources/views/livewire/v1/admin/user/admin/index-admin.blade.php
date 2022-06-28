@@ -64,11 +64,13 @@
                                     "edit"=>"edit",
                                     "customs"=>[
                                         [
-                                                "function"=>"delete",
-                                                "conditional"=>"conditionalDelete",
-                                                "icon"=>"fas fa-trash",
-                                                "tooltip_title"=>"Eliminar"
-                                        ],
+                                            "redirect"=>[
+                                                    "route"=>"administrar.v1.usuarios.admin.editar_precios",
+                                                    "binding"=>""
+                                              ],
+                                            "icon"=>"fa-solid fa-money-bill-wave",
+                                            "tooltip_title"=>"Precios",
+                                                                                            ],
                                         [
                                            "redirect"=>[
                                                        "route"=>"administrar.v1.usuarios.admin.agregar_tipos_equipo",
@@ -85,6 +87,13 @@
                                                "icon"=>"fas fa-laptop-medical",
                                                "tooltip_title"=>"Asociar equipos",
                                          ],
+                                        [
+                                                "function"=>"delete",
+                                                "conditional"=>"conditionalDelete",
+                                                "icon"=>"fas fa-trash",
+                                                "tooltip_title"=>"Eliminar"
+                                        ],
+
                                        ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

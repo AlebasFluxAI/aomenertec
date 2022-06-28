@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlertType extends Migration
+class CreateClientDigitalOutputAlertConfigurationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateAlertType extends Migration
      */
     public function up()
     {
-        Schema::create('alert_types', function (Blueprint $table) {
+        Schema::create('client_digital_output_alert_configurations', function (Blueprint $table) {
             $table->id();
-            $table->string("name");
+            $table->foreignId('client_alert_configuration_id')->constrained();
+            $table->foreignId('client_digital_output_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +29,6 @@ class CreateAlertType extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alert_type');
+        Schema::dropIfExists('client_digital_output_alert_configurations');
     }
 }
