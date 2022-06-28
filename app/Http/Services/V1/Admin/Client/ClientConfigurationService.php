@@ -205,16 +205,11 @@ class ClientConfigurationService extends Singleton
 
     public function submitFormAlert(Component $component)
     {
-        $component->validate();
-        $flag_save = false;
         foreach ($component->client_config_alert as $item) {
             $item->save();
-            $flag_save = $item->wasChanged();
         }
-        if ($flag_save){
-            $this->setRemoteConfigurationFrame($component);
-            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-        }
+        $this->setRemoteConfigurationFrame($component);
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
     }
 
     private function setRemoteConfiguration(Component $component){
@@ -266,6 +261,7 @@ class ClientConfigurationService extends Singleton
         $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/".$equipment->serial;
         $binary_data = [];
+        $data = "";
         foreach ($alert_config_frame as $item){
             if ($item['variable_name'] == 'network_operator_id'){
                 $data = $component->client->networkOperator->identification;
