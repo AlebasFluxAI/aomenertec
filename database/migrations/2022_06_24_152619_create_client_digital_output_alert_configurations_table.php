@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMunicipalitiesTable extends Migration
+class CreateCLientDigitalOutputAlertConfigurationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateMunicipalitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('municipalities', function (Blueprint $table) {
+        Schema::create('c_lient_digital_output_alert_configurations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('latitude');
-            $table->string('longitude');
-            $table->foreignId('department_id')->constrained();
-            $table->softDeletes();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +26,6 @@ class CreateMunicipalitiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('municipalities');
+        Schema::dropIfExists('c_lient_digital_output_alert_configurations');
     }
 }
