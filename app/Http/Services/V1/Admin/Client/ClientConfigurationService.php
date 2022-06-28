@@ -294,43 +294,52 @@ class ClientConfigurationService extends Singleton
         $component->validate();
         $flag_save = false;
         foreach ($component->client_config_alert as $item) {
-           $flag_save = $item->save();
+           $item->save();
         }
 
-    if ($component->client_config->save()){
-        if ($component->client_config->wasChanged(['real_time_latency', 'storage_latency']) || $flag_save){
-            $this->setRemoteConfigurationFrame($component);
-        }
-        $this->setRemoteConfiguration($component);
+
+    if ($component->client_config->save() || $flag_save){
+        $this->setRemoteConfigurationFrame($component);
+        //$this->setRemoteConfiguration($component);
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
         }
 
     }
 
     private function setRemoteConfiguration(Component $component){
-        $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
-        $message['did'] = $equipment->serial;
+        $flag = false;
         if($component->client_config->wasChanged('ssid')){
             $message['ssid'] =  $component->client_config->ssid;
+            $flag = true;
         }
         if($component->client_config->wasChanged('wifi_password')){
             $message['pass'] =  $component->client_config->wifi_password;
+            $flag = true;
         }
         if($component->client_config->wasChanged('mqtt_host')){
             $message['brokerMqtt'] =  $component->client_config->mqtt_host;
+            $flag = true;
         }
         if($component->client_config->wasChanged('mqtt_port')){
             $message['portMqtt'] =  $component->client_config->mqtt_port;
+            $flag = true;
         }
         if($component->client_config->wasChanged('mqtt_user')){
             $message['userMqtt'] =  $component->client_config->mqtt_user;
+            $flag = true;
         }
         if($component->client_config->wasChanged('mqtt_password')){
             $message['passMqtt'] =  $component->client_config->mqtt_password;
+            $flag = true;
         }
-        $topic = "mc/config/".$equipment->serial;
-        MQTT::publish($topic, json_encode($message));
-        MQTT::disconnect();
+        if ($flag){
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
+            $message['did'] = $equipment->serial;
+            $topic = "mc/config/".$equipment->serial;
+            MQTT::publish($topic, json_encode($message));
+            MQTT::disconnect();
+        }
+
     }
 
     private function setRemoteConfigurationFrame(Component $component)
@@ -349,10 +358,6 @@ class ClientConfigurationService extends Singleton
                 $data = $component->client->networkOperator->identification;
             } elseif ($item['variable_name'] == 'equipment_new_id') {
                 $data = $equipment->serial;
-            } elseif ($item['variable_name'] == 'real_time_latency') {
-                $data = $component->client_config->real_time_latency;
-            } elseif ($item['variable_name'] == 'storage_latency') {
-                $data = $component->client_config->storage_latency;
             } else {
                 $aux_variable = $component->client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
                 $data = $aux_variable->{$item['limit']};
@@ -360,9 +365,7 @@ class ClientConfigurationService extends Singleton
             array_push($binary_data, pack($item['type'], $data));
             $aux[$item['variable_name']] = $data;
         }
-        dd($aux);
         $message = base64_encode(implode($binary_data));
-
         MQTT::publish($topic, $message);
         MQTT::disconnect();
     }
