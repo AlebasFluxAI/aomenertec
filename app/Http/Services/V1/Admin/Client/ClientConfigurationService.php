@@ -266,6 +266,7 @@ class ClientConfigurationService extends Singleton
             }
         }
     }
+
     public function assignmentOutput(Component $component, $id){
         foreach ($component->checks as $check){
             $relation = ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->first();
@@ -287,6 +288,7 @@ class ClientConfigurationService extends Singleton
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada"]);
     }
+
     public function submitForm(Component $component)
     {
         $component->validate();
@@ -294,13 +296,15 @@ class ClientConfigurationService extends Singleton
         foreach ($component->client_config_alert as $item) {
            $flag_save = $item->save();
         }
+
+    if ($component->client_config->save()){
         if ($component->client_config->wasChanged(['real_time_latency', 'storage_latency']) || $flag_save){
             $this->setRemoteConfigurationFrame($component);
         }
-        if ($component->client_config->save() || $flag_save){
-            $this->setRemoteConfiguration($component);
-            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+        $this->setRemoteConfiguration($component);
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
         }
+
     }
 
     private function setRemoteConfiguration(Component $component){
@@ -331,12 +335,6 @@ class ClientConfigurationService extends Singleton
 
     private function setRemoteConfigurationFrame(Component $component)
     {
-        $message = $this->frameConfig($component);
-        MQTT::publish($message->topic, $message->message);
-        MQTT::disconnect();
-    }
-
-    private function frameConfig(Component $component){
         $alert_config_frame = config('data-frame.alert_config_frame');
         $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/".$equipment->serial;
@@ -352,17 +350,20 @@ class ClientConfigurationService extends Singleton
             } elseif ($item['variable_name'] == 'equipment_new_id') {
                 $data = $equipment->serial;
             } elseif ($item['variable_name'] == 'real_time_latency') {
-                $data = $component->client->clientConfiguration->real_time_latency;
+                $data = $component->client_config->real_time_latency;
             } elseif ($item['variable_name'] == 'storage_latency') {
-                $data = $component->client->clientConfiguration->storage_latency;
+                $data = $component->client_config->storage_latency;
             } else {
                 $aux_variable = $component->client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
                 $data = $aux_variable->{$item['limit']};
             }
             array_push($binary_data, pack($item['type'], $data));
+            $aux[$item['variable_name']] = $data;
         }
+        dd($aux);
         $message = base64_encode(implode($binary_data));
 
-        return ["message"=>$message, "topic"=>$topic];
+        MQTT::publish($topic, $message);
+        MQTT::disconnect();
     }
 }

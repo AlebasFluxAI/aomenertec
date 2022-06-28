@@ -1,0 +1,18 @@
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
+@import url("base.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+    --style_primary: #D92567;
+    --style_secondary: #6BA641;
+    --style_header_color: #ffffff;
+    --style_orange: #6BA641;
+    --style_orange_light: #6BA641;
+    --style_header_button: #ffffff;
+}
+
+

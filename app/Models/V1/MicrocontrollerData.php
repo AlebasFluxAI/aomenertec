@@ -333,7 +333,7 @@ class MicrocontrollerData extends Model
                 }
             }
         }
-        $this->alert($this->raw_json);
+        //$this->alert($this->raw_json);
     }
 
     public function alert($json)
