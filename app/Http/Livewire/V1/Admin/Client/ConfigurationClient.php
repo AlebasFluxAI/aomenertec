@@ -66,9 +66,13 @@ class ConfigurationClient extends Component
         $this->configurationClientService->updatedClientConfig($this, $value, $key);
     }
 
-    public function submitForm()
+    public function submitFormConection()
     {
-        $this->configurationClientService->submitForm($this);
+        $this->configurationClientService->submitFormConection($this);
+    }
+    public function submitFormAlert()
+    {
+        $this->configurationClientService->submitFormAlert($this);
     }
 
     public function render()

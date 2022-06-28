@@ -1,5 +1,5 @@
 <nav>
-    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <div wire:ignore class="nav nav-tabs" id="nav-tab" role="tablist">
         @foreach($tab_titles as $index=>$tab_title)
 
             @if($index==0)
@@ -33,7 +33,7 @@
 
     </div>
 </nav>
-<div class="tab-content" id="myTabContent">
+<div wire:ignore class="tab-content" id="myTabContent">
 
     @foreach($tab_contents as $index=>$tab_content)
         @if($index==0)
