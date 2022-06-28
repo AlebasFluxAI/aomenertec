@@ -244,11 +244,11 @@ class ClientConfigurationService extends Singleton
             $flag = true;
         }
         if($component->client_config->wasChanged('storage_latency')){
-            $message['passMqtt'] =  $component->client_config->storage_latency;
+            $message['storage_latency'] =  $component->client_config->storage_latency;
             $flag = true;
         }
         if($component->client_config->wasChanged('real_time_latency')){
-            $message['passMqtt'] =  $component->client_config->real_time_latency;
+            $message['real_time_latency'] =  $component->client_config->real_time_latency;
             $flag = true;
         }
         if ($flag){
