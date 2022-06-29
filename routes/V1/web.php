@@ -24,14 +24,12 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::post('', [testFile::class, 'upload']);
-
-
-Route::domain('{coenergias}.domain.com')->group(function () {
-    Route::get('/', function () {
-        return view('auth.coenergia_login');
-    });
+Route::domain(env("SUBDOMAIN_COENERGIA", "{subdomain}.enerteclatam.com"))->group(function () {
+    Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 });
+
+
+Route::post('', [testFile::class, 'upload']);
 
 
 Route::get('/', function () {
