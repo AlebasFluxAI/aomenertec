@@ -93,34 +93,79 @@ class ClientConfigurationService extends Singleton
                     "input_type"=>"input_min_max",
                     "input_min_model"=> "client_config_alert.".$index.".min_alert",
                     "input_max_model"=>"client_config_alert.".$index.".max_alert",
+                    "input_min_number_min"=> 0,
+                    "input_min_number_max"=> "",
+                    "input_min_number_step"=> 0.1,
+                    "input_max_number_min"=> "",
+                    "input_max_number_max"=> "",
+                    "input_max_number_step"=> 0.1,
                     "placeholder"=>$component->placeholders[$index],
                     "col_with"=>9,
                     "required"=>false,
-                    "updated_input" => "defer",
-                    "placeholder_clickable"=>true,
+                    "updated_input" => "lazy",
+                    "placeholder_clickable"=>($component->client_config->digital_outputs>0)?true:false,
                     "data_target"=>"modal_".$item['id'],
                     "click_action"=>"outputRelation('".$item->id."')"
                 ]);
             } else{
                 array_push($component->inputs, [
                     "input_type"=>"number",
+                    "number_min"=> 0,
+                    "number_max"=> "",
+                    "number_step"=> 0.01,
                     "offset"=>2,
                     "input_model"=>"client_config_alert.".$index.".max_alert",
                     "placeholder"=>$component->placeholders[$index],
                     "col_with"=>8,
-                    "updated_input" => "defer",
+                    "updated_input" => "lazy",
                     "required"=>false,
-                    "placeholder_clickable"=>true,
+                    "placeholder_clickable"=>($component->client_config->digital_outputs>0)?true:false,
                     "data_target"=>"modal_".$item['id'],
                     "click_action"=>"outputRelation('".$item->id."')"
-
                 ]);
             }
         }
     }
+    public function rules ()  {
+
+        return [
+            'client_config.ssid'=>'required',
+            'client_config.wifi_password'=>'required',
+            'client_config.mqtt_host'=>'required',
+            'client_config.mqtt_port'=>'required',
+            'client_config.mqtt_user'=>'required',
+            'client_config.mqtt_password'=>'required',
+            'client_config.real_time_latency'=>'numeric|required|min:10',
+            'client_config.storage_latency'=>'numeric|required|min:60',
+            'client_config.digital_outputs'=>'numeric|required|min:0|max:10',
+            'client_config_alert.*.min_alert'=>['required', 'numeric'],
+            'client_config_alert.*.max_alert'=>['required', 'numeric'],
+            'client_config_alert.*.min_control'=>'required',
+            'client_config_alert.*.max_control'=>'required',
+            'checks.*.output' => 'required'
+        ];
+    }
+    public function updated(Component $component, $propertyName, $value)
+    {
+
+        $property = explode(".", $propertyName);
+        if ($property[0] == "client_config_alert") {
+            $component->validate( [
+                'client_config_alert.' . $property[1] . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$property[1]]->max_alert],
+                'client_config_alert.' . $property[1] . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$property[1]]->min_alert],
+                'client_config_alert.' . $property[1] . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$property[1]]->max_control],
+                'client_config_alert.' . $property[1] . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$property[1]]->min_control],
+            ]);
+
+        } else{
+            $component->validateOnly($propertyName);
+        }
+
+    }
 
     public function updatedClientConfig(Component $component, $value, $key){
         if ($key == "digital_outputs"){
+            $component->validateOnly("client_config.".$key);
             if ($value >= 0){
                 $component->digital_outputs = $component->client->digitalOutputs()->get();
                 if ($component->digital_outputs){
@@ -172,7 +217,13 @@ class ClientConfigurationService extends Singleton
         }
     }
 
-    public function assignmentOutput(Component $component, $id){
+    public function assignmentOutput(Component $component, $id, $index){
+        $alert = ClientAlertConfiguration::find($id);
+        $flag = false;
+        $component->validate( [
+            'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
+            'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
+        ]);
         foreach ($component->checks as $check){
             $relation = ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->first();
             if ($check['output']){
@@ -182,16 +233,25 @@ class ClientConfigurationService extends Singleton
                         'client_digital_output_id'=>$check['id']
                     ]);
                 }
+                $flag = true;
             } else{
                 if (ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()){
                     $relation->delete();
                 }
             }
         }
+        if ($flag){
+            $alert->active_control = true;
+        } else{
+            $alert->active_control = false;
+        }
+        $alert->save();
         foreach ($component->checks as $i => $check){
             $component->checks[$i]['output'] = false;
         }
-        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada"]);
+        $component->emit('closeModal', ["id" => $id]);
+
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada, Recuerde guardar cambios"]);
     }
 
     public function submitFormConection(Component $component)
@@ -205,7 +265,15 @@ class ClientConfigurationService extends Singleton
 
     public function submitFormAlert(Component $component)
     {
-        foreach ($component->client_config_alert as $item) {
+
+        $component->validate();
+        foreach ($component->client_config_alert as $index => $item) {
+            $component->validate( [
+                'client_config_alert.' . $index . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_alert],
+                'client_config_alert.' . $index . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_alert],
+                'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
+                'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
+            ]);
             $item->save();
         }
         $this->setRemoteConfigurationFrame($component);

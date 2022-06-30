@@ -36,6 +36,8 @@ use App\Observers\User\Supervisor\UserSupervisorObserver;
 use App\Observers\User\Support\UserSupportObserver;
 use App\Observers\User\Technician\UserTechnicianObserver;
 use App\Observers\User\UserObserver;
+use App\Observers\ClientAlert\ClientAlertObserver;
+use App\Models\V1\ClientAlert;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -70,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         //ClientAlertConfiguration::observe(ClientAlertConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
+        ClientAlert::observe(ClientAlertObserver::class);
 
         ClientAddress::observe(AddressObserver::class);
         Technician::observe(AddressObserver::class);

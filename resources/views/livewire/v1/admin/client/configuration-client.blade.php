@@ -123,7 +123,7 @@
                                                                                                 "input_type"=>"number",
                                                                                                 "input_model"=>"client_config.real_time_latency",
                                                                                                 "placeholder"=>"Tiempo de muestreo en tiempo real",
-                                                                                                "updated_input"=>"defer",
+                                                                                                "updated_input"=>"lazy",
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
                                                                                                 "required"=>false,
@@ -135,7 +135,7 @@
                                                                                                 "placeholder"=>"Tiempo de muestreo monitoreo normal",
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
-                                                                                                "updated_input" => "defer",
+                                                                                                "updated_input" => "lazy",
                                                                                                 "required"=>false,
 
                                                                                             ],
@@ -157,7 +157,7 @@
                                           ]
          ])
 @foreach($client_config_alert as $index => $item)
-    <div wire:ignore class="modal fade" id="modal_{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel_{{ $item->id }}" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="modal_{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel_{{ $item->id }}" aria-hidden="true">
         <div  class="modal-dialog modal-xl" role="document">
             <div  class="modal-content">
                 <div class="modal-header">
@@ -175,7 +175,7 @@
                                         "placeholder"=>$placeholders[$index],
                                         "col_with"=>12,
                                         "required"=>false,
-                                        "updated_input" => "defer",
+                                        "updated_input" => "lazy",
                                         "placeholder_clickable"=>false,
                                         "data_target"=>"",
                                         "click_action" => "",
@@ -184,10 +184,10 @@
                         @include('partials.v2.form.form_input_icon',[
                                         "input_type"=>"number",
                                         "offset"=>2,
-                                        "input_model"=>"client_config_alert.".$index.".max_alert",
+                                        "input_model"=>"client_config_alert.".$index.".max_control",
                                         "placeholder"=>$placeholders[$index],
                                         "col_with"=>8,
-                                        "updated_input" => "defer",
+                                        "updated_input" => "lazy",
                                         "required"=>false,
                                         "placeholder_clickable"=>true,
                                         "data_target"=>"modal_".$item['id'],
@@ -209,10 +209,22 @@
                 </div>
                 <div class="modal-footer">
                     <button><a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a></button>
-                    <button><a wire:click="assignmentOutput('{{ $item->id }}')" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</a></button>
+                    <button><a wire:click="assignmentOutput('{{ $item->id }}','{{ $index }}')" type="button" class="btn btn-primary">Save changes</a></button>
                 </div>
             </div>
         </div>
     </div>
     @endforeach
+    <script>
+        document.addEventListener('livewire:load', function () {
+            @this.on('closeModal', (e) => {
+
+                $('#modal_'+e.id).hide()
+                if ($('.modal-backdrop').is(':visible')) {
+                    $('body').removeClass('modal-open');
+                    $('.modal-backdrop').remove();
+                }
+            })
+        })
+    </script>
 </div>

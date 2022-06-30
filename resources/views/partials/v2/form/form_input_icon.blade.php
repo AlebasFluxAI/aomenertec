@@ -4,7 +4,7 @@
         @if(!$placeholder_clickable??false)
             <li>{{$placeholder}}</li>
         @else
-            <li><a wire:click="{{ $click_action }}" type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</a></li>
+            <li><a><button wire:click="{{ $click_action }}" type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</button></a></li>
         @endif
     </div>
     <div class="col-md-4">
@@ -47,16 +47,19 @@
                     @endif
 
                    type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
-                   placeholder="{{$default??""}}" required="{{$required??false}}">
+                   placeholder="{{$default??""}}" required="{{$required??false}}"
+                    @if($input_type??"text" == "number")
+                        min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
+                    @endif>
 
 
 
         @endif
 
         @error($input_model)
-        <div class="error-container">
-            <small class="form-text text-danger">{{$message}}</small>
-        </div>
+            <div class="error-container">
+                <small class="form-text text-danger">{{$message}}</small>
+            </div>
         @enderror
     </div>
 
