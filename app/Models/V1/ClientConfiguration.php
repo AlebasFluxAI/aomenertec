@@ -13,6 +13,9 @@ class ClientConfiguration extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const CONECTION_TYPE_GPRS = "gprs";
+    public const CONECTION_TYPE_OTHERS = "others";
+
     protected $fillable = [
         'client_id',
         "ssid",

@@ -30,6 +30,9 @@
                    id="{{$input_id??""}}" type="{{$input_type??"text"}}"
                    class="form-control" autocomplete="{{$autocomplete??"on"}}"
                    name="{{$input_name??""}}" onchange="{{$input_on_change??""}}()" placeholder="{{$placeholder??""}}"
+                   @if($input_type??"text" == "number")
+                        min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
+                   @endif
                    required="{{$required??false}}">
         @endif
     </div>

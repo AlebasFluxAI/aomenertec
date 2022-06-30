@@ -5,7 +5,7 @@
             @if(!$placeholder_clickable??false)
                 <li>{{$placeholder}}</li>
             @else
-                <li><a wire:click="{{ $click_action }}" type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</a></li>
+                <li><a><button wire:click="{{ $click_action }}" type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</button></a></li>
             @endif
         </div>
     </div>
@@ -23,7 +23,9 @@
 
                         type="number" class="form-control"
                        autocomplete="on"
-                       placeholder="{{$default??""}}" required="{{$required??false}}">
+                       placeholder="{{$default??""}}" required="{{$required??false}}"
+                        min="{{ $input_min_number_min??''}}" max="{{ $input_min_number_max??''}}" step="{{ $input_min_number_step??''}}"
+                >
 
                 @error($input_min_model)
                 <div class="error-container">
@@ -42,12 +44,14 @@
                         @endif
                        type="number" class="form-control"
                        autocomplete="on"
-                       placeholder="{{$default??""}}" required="{{$required??false}}">
+                       placeholder="{{$default??""}}" required="{{$required??false}}"
+                        min="{{ $input_max_number_min??''}}" max="{{ $input_max_number_max??''}}" step="{{ $input_max_number_step??''}}"
+                >
 
                 @error($input_max_model)
-                <div class="error-container">
-                    <small class="form-text text-danger">{{$message}}</small>
-                </div>
+                    <div class="error-container">
+                        <small class="form-text text-danger">{{$message}}</small>
+                    </div>
                 @enderror
             </div>
         </div>

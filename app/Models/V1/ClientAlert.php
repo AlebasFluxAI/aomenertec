@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models\V1;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class ClientAlert extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    public const ALERT = "alert";
+    public const CONTROL = "control";
+
+    protected $fillable = [
+        'client_id',
+        'microcontroller_data_id',
+        'client_alert_configuration_id',
+        'value',
+        'type'
+                        ];
+    public function microcontrollerData()
+    {
+        return $this->belongsTo(MicrocontrollerData::class);
+    }
+}

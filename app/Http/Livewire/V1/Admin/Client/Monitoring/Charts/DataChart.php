@@ -8,6 +8,7 @@ use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Matrix\Builder;
 use PhpMqtt\Client\Facades\MQTT;
 
 class DataChart extends Component
@@ -111,20 +112,24 @@ class DataChart extends Component
         } else {
             if ($this->time_id == 1) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                    })->limit(120)->get();
             } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                    })->limit(120)->get();
             } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                    })->limit(120)->get();
             } else {
                 $data_chart = $this->client->annualMicrocontrollerData()
-                    ->whereBetween("created_at", [$this->start, $this->end])
-                    ->limit(120)->get();
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                    })->limit(120)->get();
             }
             $this->data_chart = $data_chart;
         }
