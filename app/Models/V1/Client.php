@@ -104,34 +104,34 @@ class Client extends Model
         return $this->hasMany(Pqr::class);
     }
 
-    public function microcontrollerData()
-    {
-        return $this->hasMany(MicrocontrollerData::class)->orderBy('source_timestamp', 'desc');
-    }
-
     public function supervisors()
     {
         return $this->belongsToMany(Supervisor::class, 'client_supervisors')->withPivot('active');
     }
 
+    public function microcontrollerData()
+    {
+        return $this->hasMany(MicrocontrollerData::class);
+    }
+
     public function hourlyMicrocontrollerData()
     {
-        return $this->hasMany(HourlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(HourlyMicrocontrollerData::class)->orderBy('id', 'desc');
     }
 
     public function dailyMicrocontrollerData()
     {
-        return $this->hasMany(DailyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(DailyMicrocontrollerData::class)->orderBy('id', 'desc');
     }
 
     public function monthlyMicrocontrollerData()
     {
-        return $this->hasMany(MonthlyMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(MonthlyMicrocontrollerData::class)->orderBy('id', 'desc');
     }
 
     public function annualMicrocontrollerData()
     {
-        return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('created_at', 'desc');
+        return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('id', 'desc');
     }
 
     public function technician()
@@ -168,9 +168,9 @@ class Client extends Model
     {
         return $this->hasMany(ClientDigitalOutputAlertConfiguration::class);
     }
-    public function alerts()
+    public function clientAlerts()
     {
-        return $this->hasMany(AlertHistory::class);
+        return $this->hasMany(ClientAlert::class);
     }
 
 

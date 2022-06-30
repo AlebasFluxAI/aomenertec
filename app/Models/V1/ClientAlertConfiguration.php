@@ -26,4 +26,8 @@ class ClientAlertConfiguration extends Model
     {
         return $this->belongsToMany(ClientDigitalOutput::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id');
     }
+    public function clientAlerts()
+    {
+        return $this->hasMany(ClientAlert::class);
+    }
 }

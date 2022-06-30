@@ -27,6 +27,7 @@ class DataReport extends Component
     public $date_range_report;
     public $variables_selected;
     public $time_report_id;
+    public $end_day;
     protected $listeners = ['dateRangeReport', 'selectReport'];
 
     public function mount(Client $client, $variables, $data_frame)
@@ -40,6 +41,7 @@ class DataReport extends Component
         $end = Carbon::now();
         $this->start_report = $start->format('Y-m-d 00:00:00');
         $this->end_report = $end->format('Y-m-d 23:59:59');
+        $this->end_day = Carbon::create($this->end_report);
         $this->date_range_report = $start->format('Y-m-d') . " - " . $end->format('Y-m-d');
         $index = 0;
         $this->variables->push(
@@ -71,23 +73,27 @@ class DataReport extends Component
     {
         if ($this->time_report_id == 1) {
             $data_report = $this->client->hourlyMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_report, $this->end_report])
-                ->limit(1440)->get();
+                ->whereHas('microcontrollerData',function ($query){
+                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
+                })->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA", "MINUTO"];
         } elseif ($this->time_report_id == 2) {
             $data_report = $this->client->dailyMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_report, $this->end_report])
-                ->limit(1440)->get();
+                ->whereHas('microcontrollerData',function ($query){
+                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
+                })->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA"];
         } elseif ($this->time_report_id == 3) {
             $data_report = $this->client->monthlyMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_report, $this->end_report])
-                ->limit(720)->get();
+                ->whereHas('microcontrollerData',function ($query){
+                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
+                })->limit(720)->get();
             $array_title = ["ANIO", "MES", "DIA"];
         } else {
             $data_report = $this->client->annualMicrocontrollerData()
-                ->whereBetween("created_at", [$this->start_report, $this->end_report])
-                ->limit(24)->get();
+                ->whereHas('microcontrollerData',function ($query){
+                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
+                })->limit(24)->get();
             $array_title = ["ANIO", "MES"];
         }
         if (count($data_report) > 0) {
@@ -138,9 +144,9 @@ class DataReport extends Component
     {
 
         $title = ["DIA/HORA", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
-        $end_day = Carbon::create($this->end_report);
+        $this->end_day = Carbon::create($this->end_report);
         $start_day = Carbon::create($this->start_report);
-        $aux_day = Carbon::create($end_day);
+        $aux_day = Carbon::create($this->end_day);
         $active = [];
         $inductive = [];
         $capacitive = [];
@@ -150,10 +156,14 @@ class DataReport extends Component
         for ($i = 0; $i <= $days; $i++) {
             if ($i == 0) {
                 $data_report = $this->client->dailyMicrocontrollerData()
-                    ->whereDate('created_at', $end_day->format('Y-m-d'))->get();
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereDate('source_timestamp', $this->end_day->format('Y-m-d'));
+                    })->get();
             } else {
                 $data_report = $this->client->dailyMicrocontrollerData()
-                    ->whereDate('created_at', ($end_day->subDay(1)->format('Y-m-d')))->get();
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereDate('source_timestamp', $this->end_day->subDay(1)->format('Y-m-d'));
+                    })->get();
             }
             if (count($data_report) > 0) {
                 $aux_active = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];

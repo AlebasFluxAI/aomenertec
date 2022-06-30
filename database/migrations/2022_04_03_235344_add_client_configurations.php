@@ -26,7 +26,10 @@ class AddClientConfigurations extends Migration
             $table->double("real_time_latency")->nullable();//Tiempo de muestreo en tiempo real
             $table->double("storage_latency")->nullable();//Tiempo de muestreo para monitorear normalmente
             $table->double("digital_outputs")->nullable();//Tiempo de muestreo para monitorear normalmente
-
+            $table->enum("conection_type", [
+                \App\Models\V1\ClientConfiguration::CONECTION_TYPE_GPRS,
+                \App\Models\V1\ClientConfiguration::CONECTION_TYPE_OTHERS
+            ])->default(\App\Models\V1\ClientConfiguration::CONECTION_TYPE_OTHERS);
             $table->timestamps();
             $table->softDeletes();
         });

@@ -35,7 +35,10 @@
                                           "placeholder_clickable"=>$form_input["placeholder_clickable"]??false,
                                           "input_rows"=>$form_input["input_rows"]??0,
                                           "updated_input"=>$form_input['updated_input']??"",
-                                          "click_action" => $form_input['click_action']??""
+                                          "click_action" => $form_input['click_action']??"",
+                                          "number_min"=>$form_input["number_min"]??"",
+                                          "number_max"=>$form_input["number_max"]??"",
+                                          "number_step"=>$form_input["number_step"]??"",
                                      ])
                             @elseif($form_input["input_type"]=="input_min_max")
                                 @include("partials.v2.form.form_input_max_min",[
@@ -53,7 +56,13 @@
                                         "required"=>$form_input["required"],
                                         "input_rows"=>$form_input["input_rows"]??0,
                                         "updated_input"=>$form_input['updated_input']??"",
-                                        "click_action" => $form_input['click_action']??""
+                                        "click_action" => $form_input['click_action']??"",
+                                        "input_min_number_min"=>$form_input["input_min_number_min"]??"",
+                                          "input_min_number_max"=>$form_input["input_min_number_max"]??"",
+                                          "input_min_number_step"=>$form_input["input_min_number_step"]??"",
+                                        "input_max_number_min"=>$form_input["input_max_number_min"]??"",
+                                          "input_max_number_max"=>$form_input["input_max_number_max"]??"",
+                                          "input_max_number_step"=>$form_input["input_max_number_step"]??"",
                                    ])
                             @elseif($form_input["input_type"]=="dropdown-search")
 

@@ -14,7 +14,11 @@
                       required="{{$required??false}}"></textarea>
         @else
             <input wire:model="{{$input_model}}" type="{{$input_type??"text"}}" class="form-control" autocomplete="{{$autocomplete??"on"}}"
-                   name="{{$input_name??""}}" placeholder="{{$placeholder??""}}" required="{{$required??false}}">
+                   name="{{$input_name??""}}" placeholder="{{$placeholder??""}}" required="{{$required??false}}"
+                   @if($input_type??"text" == "number")
+                    min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
+                   @endif
+            >
         @endif
         <div class="input-group-append">
             <a wire:click="{{$button_action}}" class="btn btn-outline-secondary" type="button">{{$button_name}}</a>

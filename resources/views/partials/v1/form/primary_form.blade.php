@@ -24,6 +24,9 @@
                                           "col_with"=>$form_input["col_with"],
                                           "required"=>$form_input["required"],
                                           "input_rows"=>$form_input["input_rows"]??0,
+                                          "number_min"=>$form_input["number_min"]??"",
+                                          "number_max"=>$form_input["number_max"]??"",
+                                          "number_step"=>$form_input["number_step"]??"",
                                      ])
 
                             @elseif($form_input["input_type"]=="dropdown-search")

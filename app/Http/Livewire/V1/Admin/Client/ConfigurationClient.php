@@ -24,23 +24,7 @@ class ConfigurationClient extends Component
 
     private $configurationClientService;
 
-    protected $rules = [
-        'client_config.ssid'=>'required',
-        'client_config.wifi_password'=>'required',
-        'client_config.mqtt_host'=>'required',
-        'client_config.mqtt_port'=>'required',
-        'client_config.mqtt_user'=>'required',
-        'client_config.mqtt_password'=>'required',
-        'client_config.real_time_latency'=>'required',
-        'client_config.storage_latency'=>'required',
-        'client_config.digital_outputs'=>'required',
-        'client_config_alert.*.min_alert'=>'required',
-        'client_config_alert.*.max_alert'=>'required',
-        'client_config_alert.*.min_control'=>'required',
-        'client_config_alert.*.max_control'=>'required',
-        'client_config_alert.*.active_control'=>'required',
-        'checks.*.output' => 'required'
-    ];
+
 
     public function __construct($id = null)
     {
@@ -52,19 +36,28 @@ class ConfigurationClient extends Component
     {
         $this->configurationClientService->mount($this, $client);
     }
+    protected function rules ()  {
+
+        return $this->configurationClientService->rules($this);
+    }
     public function outputRelation($id)
     {
         $this->configurationClientService->outputRelation($this, $id);
     }
-    public function assignmentOutput($id)
+    public function assignmentOutput($id, $index)
         {
-            $this->configurationClientService->assignmentOutput($this, $id);
+            $this->configurationClientService->assignmentOutput($this, $id, $index);
         }
 
+    public function updated($key, $value){
+
+        $this->configurationClientService->updated($this, $key, $value);
+    }
     public function updatedClientConfig($value, $key){
 
         $this->configurationClientService->updatedClientConfig($this, $value, $key);
     }
+
 
     public function submitFormConection()
     {

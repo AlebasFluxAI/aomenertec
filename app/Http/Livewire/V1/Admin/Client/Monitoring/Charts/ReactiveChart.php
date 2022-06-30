@@ -47,18 +47,23 @@ class ReactiveChart extends Component
     public function queryData(){
         if ($this->time_reactive_id == 1) {
             $data_chart = $this->client->hourlyMicrocontrollerData()
-                ->whereBetween('created_at', [$this->start_reactive, $this->end_reactive])
-                ->limit(60)->get();
+                ->whereHas('microcontrollerData',function ($query){
+                    $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
+                })->limit(60)->get();
         } elseif ($this->time_reactive_id == 2) {
             if ($this->penalizable) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
-                    ->whereBetween('created_at', [$this->start_reactive, $this->end_reactive])
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
+                    })
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
             } else{
                 $data_chart = $this->client->dailyMicrocontrollerData()
-                    ->whereBetween('created_at', [$this->start_reactive, $this->end_reactive])
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
+                    })
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
@@ -66,13 +71,17 @@ class ReactiveChart extends Component
         } elseif ($this->time_reactive_id == 3) {
             if ($this->penalizable) {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereBetween('created_at', [$this->start_reactive, $this->end_reactive])
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
+                    })
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
             } else{
                 $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereBetween('created_at', [$this->start_reactive, $this->end_reactive])
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
+                    })
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
@@ -80,13 +89,17 @@ class ReactiveChart extends Component
         } else {
             if ($this->penalizable) {
                 $data_chart = $this->client->annualMicrocontrollerData()
-                    ->whereBetween('created_at', [$this->start_reactive, $this->end_reactive])
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
+                    })
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
             } else{
                 $data_chart = $this->client->annualMicrocontrollerData()
-                    ->whereBetween('created_at', [$this->start_reactive, $this->end_reactive])
+                    ->whereHas('microcontrollerData',function ($query){
+                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
+                    })
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
