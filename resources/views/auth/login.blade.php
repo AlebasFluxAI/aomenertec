@@ -163,7 +163,9 @@
                                 <button type="submit">Ingresar</button>
                             </div>
                             @if (Route::has('password.request'))
-                                <div class="text-center"><a href="{{ route('password.request') }}">¿Olvidaste la
+                                <div class="text-center"><a
+                                        href="{{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"enertec"]) }}">¿Olvidaste
+                                        la
                                         contraseña?</a></div>
                             @endif
 

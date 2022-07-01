@@ -6,7 +6,7 @@
             <div class="container">
                 <div class="contenedor-grande">
                     <div class="col-12">
-                        <nav class="navbar navbar-expand-lg navbar-light">
+                        <nav class="navbar navbar-expand-lg">
                             <div class="container-fluid">
                                 <a class="navbar-brand" href="/"><img class="imagen-logo"
                                                                       src="https://enertedevops.s3.us-east-2.amazonaws.com/images/16517642985208516/1651764298_Coenergia_login.png"
@@ -17,6 +17,7 @@
                 </div>
             </div>
         </section>
+        <hr>
         <section class="login">
             <div class="container pb-2" data-aos="fade-up">
                 <div class="row d-flex justify-content-center">
@@ -35,8 +36,7 @@
                 @endif
                 <form action="{{ route('login') }}" method="post" role="form" class="contenedor-grande">
                     @csrf
-                    <h2 class="text-center p3"><b><span class="naranja">Iniciar</span> <span
-                                style="color:#093f96">Sesión</span></b></h2>
+
                     <hr>
 
                     <div class="form-group">
@@ -63,7 +63,10 @@
                         <button type="submit">Ingresar</button>
                     </div>
                     @if (Route::has('password.request'))
-                        <div class="text-center"><a href="{{ route('password.request') }}">¿Olvidaste la
+                        <div class="text-center"><a
+                                href="
+{{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"coenergia"]) }}">¿Olvidaste
+                                la
                                 contraseña?</a></div>
                     @endif
 

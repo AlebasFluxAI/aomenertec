@@ -13,6 +13,9 @@ use App\Http\Livewire\V1\Admin\Client\IndexClient;
 use App\Http\Livewire\V1\Admin\Client\DetailClient;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
+use Laravel\Fortify\Http\Controllers\NewPasswordController;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +27,36 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::domain(env("SUBDOMAIN_COENERGIA", "{subdomain}.enerteclatam.com"))->group(function () {
+Route::domain("{subdomain}.enerteclatam.com")->group(function () {
+
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
+
+    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->middleware(['guest:' . config('fortify.guard')])
+        ->name('password.request');
+
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->middleware(['guest:' . config('fortify.guard')]);
+
+
+    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->middleware(['guest:' . config('fortify.guard')])
+        ->name('password.reset');
+
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
+        ->middleware(['guest:' . config('fortify.guard')])
+        ->name('password.update');
+
 });
+
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware(['guest:' . config('fortify.guard')]);
+
+
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+    ->middleware(['guest:' . config('fortify.guard')])
+    ->name('login');
 
 
 Route::post('', [testFile::class, 'upload']);
