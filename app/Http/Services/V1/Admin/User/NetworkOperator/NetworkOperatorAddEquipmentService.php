@@ -51,6 +51,9 @@ class NetworkOperatorAddEquipmentService extends Singleton
     private function getEquipmentTypes()
     {
         if ($admin = Auth::user()->getAdmin()) {
+            if ($admin->getTable() == "super_admins") {
+                return $admin->equipmentTypesAsKeyValue();
+            }
             return $admin->equipmentTypesAsKeyValue();
         }
         return [];

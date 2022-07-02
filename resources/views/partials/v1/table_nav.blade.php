@@ -2,6 +2,9 @@
     <nav class=" navbar ">
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
+                @if(isset($option["permission"]) and !array_intersect($option["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
+                    @continue
+                @endif
                 <li>
                     @include("partials.v1.primary_navigator",[
                                           "button_align"=>$option["button_align"],

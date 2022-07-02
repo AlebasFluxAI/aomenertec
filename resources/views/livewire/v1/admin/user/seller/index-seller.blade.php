@@ -14,6 +14,7 @@
            ["mt"=>2,
            "nav_options"=>[
                       ["button_align"=>"right",
+                       "permission"=>[\App\Http\Resources\V1\Permissions::SELLER_CREATE],
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
                       "icon"=>"fa-solid fa-plus",
@@ -64,14 +65,27 @@
 
                 ],
                  "table_actions"=>[
-                                    "details"=>"details",
-                                    "edit"=>"edit",
+
                                       "customs"=>[
-                                               [
-                                                "function"=>"addClients",
-                                                "icon"=>"fas fa-users",
-                                                   "tooltip_title"=>"Ver clientes"
-                                                ]
+                                                   [
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SELLER_SHOW],
+                                                            "function"=>"detail",
+                                                            "icon"=>"fas fa-search",
+                                                            "tooltip_title"=>"Detalles"
+                                                    ],
+                                                    [
+
+                                                             "permission"=>[\App\Http\Resources\V1\Permissions::SELLER_EDIT],
+                                                             "function"=>"edit",
+                                                            "icon"=>"fas fa-pencil",
+                                                            "tooltip_title"=>"Editar"
+                                                    ],
+                                                   [
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SELLER_LINK_CLIENT],
+                                                            "function"=>"addClients",
+                                                            "icon"=>"fas fa-users",
+                                                            "tooltip_title"=>"Ver clientes"
+                                                    ]
                                             ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

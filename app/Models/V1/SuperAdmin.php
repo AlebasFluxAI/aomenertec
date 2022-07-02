@@ -2,15 +2,18 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\PermissionTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
 class SuperAdmin extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use PermissionTrait;
 
     protected $fillable = ['identification',
         'phone',
@@ -138,4 +141,27 @@ class SuperAdmin extends Model
     {
         return Equipment::query();
     }
+
+    public function equipmentTypesAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el tipo de equipo ...",
+                "value" => null
+            ]],
+            ($this->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
+                return [
+                    "key" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : "") . "- "
+                        . ucfirst(strtolower(($equipmentType->equipmentType ? $equipmentType->equipmentType->type : ""))),
+                    "value" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : ""),
+                ];
+            }))->toArray()
+        ));
+    }
+
+    public function adminEquipmentTypes()
+    {
+        return AdminEquipmentType::query();
+    }
+
 }

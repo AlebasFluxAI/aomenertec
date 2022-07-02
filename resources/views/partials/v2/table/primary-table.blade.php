@@ -82,7 +82,7 @@
                                                 @include("partials.v1.table.table-action-button",[
                                                             "button_action"=>$action_value,
                                                             "icon_color"=>"secondary",
-                                                         "model_id"=>$table_row->{$table_headers[0]["col_data"]},
+                                                            "model_id"=>$table_row->{$table_headers[0]["col_data"]},
                                                             "icon"=>"fas fa-pencil",
                                                             "tooltip_title"=>"Editar"
 
@@ -106,11 +106,17 @@
                                                      ])
                                             @elseif($action_type=="customs")
                                                 @foreach($action_value  as $custom)
+
+
                                                     @if(array_key_exists("limit_roles",$custom))
                                                         @unlessrole($custom["limit_roles"])
                                                         @continue
                                                         @endunlessrole
                                                     @endif
+                                                    @if(isset($custom["permission"]) and !array_intersect($custom["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
+                                                        @continue
+                                                    @endif
+
                                                     @if(array_key_exists("conditional",$custom) and $this->{$custom["conditional"]}(isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
                                                                         $table_row->{$table_headers[0]["col_data"]}))
                                                         @continue
