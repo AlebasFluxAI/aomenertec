@@ -88,10 +88,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get('editar', EditUser::class)->name("administrar.v1.usuarios.editar");
 
                     Route::prefix("super_administrador")->group(function () {
-                        Route::get('listado', Livewire\V1\Admin\User\SuperAdmin\IndexSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.listado");
-                        Route::get('agregar', Livewire\V1\Admin\User\SuperAdmin\AddSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.agregar");
-                        Route::get('detalle/{superAdmin}', Livewire\V1\Admin\User\SuperAdmin\DetailsSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.detalles");
-                        Route::get('editar/{superAdmin}', Livewire\V1\Admin\User\SuperAdmin\EditSuperAdmin::class)->name("administrar.v1.usuarios.superadmin.editar");
+                        Route::get('listado', Livewire\V1\Admin\User\SuperAdmin\IndexSuperAdmin::class)
+                            ->name("administrar.v1.usuarios.superadmin.listado")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_SHOW));
+                        Route::get('agregar', Livewire\V1\Admin\User\SuperAdmin\AddSuperAdmin::class)
+                            ->name("administrar.v1.usuarios.superadmin.agregar")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_CREATE));
+                        Route::get('detalle/{superAdmin}', Livewire\V1\Admin\User\SuperAdmin\DetailsSuperAdmin::class)
+                            ->name("administrar.v1.usuarios.superadmin.detalles")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_SHOW));
+                        Route::get('editar/{superAdmin}', Livewire\V1\Admin\User\SuperAdmin\EditSuperAdmin::class)
+                            ->name("administrar.v1.usuarios.superadmin.editar")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_EDIT));
                     });
 
                     Route::prefix("administrador")->group(function () {

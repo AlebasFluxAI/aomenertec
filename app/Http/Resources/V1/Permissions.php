@@ -7,10 +7,16 @@ use ArrayAccess;
 
 class Permissions
 {
+    public const SUPER_ADMIN_CREATE = "super_admin.create";
+    public const SUPER_ADMIN_EDIT = "super_admin.edit";
+    public const SUPER_ADMIN_DELETE = "super_admin.delete";
+    public const SUPER_ADMIN_SHOW = "super_admin.show";
+
     public const ADMIN_CREATE = "admin.create";
     public const ADMIN_EDIT = "admin.edit";
     public const ADMIN_DELETE = "admin.delete";
     public const ADMIN_SHOW = "admin.show";
+
     public const ADMIN_LINK_EQUIPMENT_TYPE = "admin.link_equipment_type";
     public const ADMIN_LINK_EQUIPMENT = "admin.link_equipment";
     public const ADMIN_REMOVE_EQUIPMENT = "admin.remove_equipment";

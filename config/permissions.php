@@ -113,6 +113,12 @@ return [
         Permissions::SUPPORT_DELETE,
         Permissions::SUPPORT_SHOW,
         Permissions::SUPPORT_LINK_CLIENT,
+
+        Permissions::SUPER_ADMIN_CREATE,
+        Permissions::SUPER_ADMIN_EDIT,
+        Permissions::SUPER_ADMIN_DELETE,
+        Permissions::SUPER_ADMIN_SHOW,
+
     ],
     // Operador de red
     NetworkOperator::class => [
