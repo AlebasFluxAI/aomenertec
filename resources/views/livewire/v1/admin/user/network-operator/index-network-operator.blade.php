@@ -58,10 +58,25 @@
 
                 ],
                  "table_actions"=>[
-                                    "details"=>"details",
-                                    "edit"=>"edit",
+
                                     "customs"=>[
+                                                [
+
+                                                         "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_SHOW],
+                                                     "function"=>"detail",
+                                                        "icon"=>"fas fa-search",
+                                                        "tooltip_title"=>"Detalles"
+                                                ],
+                                                [
+
+                                                         "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_EDIT],
+                                                         "function"=>"edit",
+                                                        "icon"=>"fas fa-pencil",
+                                                        "tooltip_title"=>"Editar"
+                                                ],
+
                                         [
+                                            "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_DELETE],
                                                 "function"=>"deleteNetworkOperator",
                                                 "conditional"=>"conditionalDelete",
                                                 "icon"=>"fas fa-trash",
@@ -74,7 +89,7 @@
                                                  ],
                                                "icon"=>"fas fa-laptop-medical",
                                                "tooltip_title"=>"Asociar equipos",
-                                               "limit_roles"=>\App\Http\Resources\V1\PermissionUtil::getNetworkOperatorEquipmentTypeRoles()
+                                               "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT],
                                          ],
                                        ]
                                     ],

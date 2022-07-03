@@ -9,7 +9,9 @@
 
     @include("partials.v1.table_nav",
            ["nav_options"=>[
-                      ["button_align"=>"right",
+                      [
+                      "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_TYPE_CREATE],
+                      "button_align"=>"right",
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
                       "icon"=>"fa-solid fa-plus",
@@ -18,18 +20,52 @@
 
                   ]
           ])
-    @include("partials.v1.table.primary-table",[
-               "table_headers"=>["ID"=>"id",
-                                 "Nombre"=>"type",
-                                 "Descripción"=>"description",
+    @include("partials.v2.table.primary-table",[
+               "table_headers"=>[
+                     [
+                               "col_name" =>"ID",
+                               "col_data" =>"id",
+                               "col_filter"=>false
+                           ],
+                              [
+                               "col_name" =>"Nombre",
+                               "col_data" =>"type",
+                               "col_filter"=>false
+                           ],
+                              [
+                               "col_name" =>"Descripcion",
+                               "col_data" =>"description",
+                               "col_filter"=>false
+                           ],
 
 
 
                 ],
                  "table_actions"=>[
-                                   "edit"=>"edit",
-                                   "delete"=>"delete",
-                                   "details"=>"details",
+
+                                        "customs"=>[
+                                                 [
+
+                                                         "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_TYPE_SHOW],
+                                                     "function"=>"detail",
+                                                        "icon"=>"fas fa-search",
+                                                        "tooltip_title"=>"Detalles"
+                                                ],
+                                                [
+
+                                                         "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_TYPE_EDIT],
+                                                         "function"=>"edit",
+                                                        "icon"=>"fas fa-pencil",
+                                                        "tooltip_title"=>"Editar"
+                                                ],
+                                                [
+                                                     "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_TYPE_DELETE],
+                                                        "function"=>"deleteEquipment",
+                                                        "conditional"=>"conditionalDelete",
+                                                        "icon"=>"fas fa-trash",
+                                                        "tooltip_title"=>"Eliminar"
+                                                ],
+                                            ],
                                     ],
 
                "table_rows"=>$data

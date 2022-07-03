@@ -18,14 +18,13 @@ class MailTestController
 
         $user = User::find($request->input("user_id"));
         $user->notify(new AlertNotification());
-        event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->id));
 
     }
 
     public function whatsappNotification()
     {
-        $user = User::wherePhone("3209720220")->first();
+        $user = User::find(15);
+        $user->notifyNow(new AlertNotification());
 
-        $user->notify(new AlertNotification());
     }
 }

@@ -45,6 +45,11 @@ class IndexEquipmentType extends Component
         $this->indexEquipmentService->details($this, $id);
     }
 
+    public function conditionalDelete($id)
+    {
+        return $this->indexEquipmentService->conditionalDelete($this, $id);
+    }
+
     public function render()
     {
         return view(

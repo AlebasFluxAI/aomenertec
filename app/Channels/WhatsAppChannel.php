@@ -20,13 +20,16 @@ class WhatsAppChannel
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ]);
+        
     }
 
     public function send($notifiable, Notification $notification)
     {
+
         $toWhatsapp = $notification->toWhatsapp($notifiable);
 
         if (!$this->checkTemplateExists($toWhatsapp->template_name)) {
+
             return;
         }
 
@@ -64,6 +67,7 @@ class WhatsAppChannel
     public function checkTemplateExists($template)
     {
         try {
+
             $response = $this->httpClient->get(
                 'https://integrations.messagebird.com/v1/public/whatsapp/templates'
             );
