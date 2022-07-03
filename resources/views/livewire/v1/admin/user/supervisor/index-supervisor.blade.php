@@ -14,11 +14,12 @@
            ["mt"=>2,
            "nav_options"=>[
                       [
+                          "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_CREATE],
                           "button_align"=>"right",
-                      "click_action"=>"",
-                      "button_content"=>"Crear nuevo",
-                      "button_icon"=>"fa-solid fa-plus",
-                      "target_route"=>"administrar.v1.usuarios.supervisores.agregar",
+                          "click_action"=>"",
+                          "button_content"=>"Crear nuevo",
+                          "button_icon"=>"fa-solid fa-plus",
+                          "target_route"=>"administrar.v1.usuarios.supervisores.agregar",
                       ],
 
                   ]
@@ -64,9 +65,19 @@
                    ],
                 ],
                  "table_actions"=>[
-                                    "details"=>"details",
-                                    "edit"=>"edit",
                                              "customs"=>[
+                                                   [
+                                                "function"=>"details",
+                                                "icon"=>"fas fa-search",
+                                                "tooltip_title"=>"Detalles",
+                                                "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_SHOW],
+                                                ],
+                                                [
+                                                        "function"=>"edit",
+                                                        "icon"=>"fas fa-pencil",
+                                                        "tooltip_title"=>"Editar",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_EDIT],
+                                                ],
                                                [
                                                 "function"=>"addClients",
                                                 "icon"=>"fas fa-users",

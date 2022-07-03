@@ -3,6 +3,9 @@
 namespace App\Models\V1;
 
 use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
+use App\Http\Resources\V1\PermissionInterface;
+use App\Http\Resources\V1\Permissions;
+use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdScope;
@@ -17,6 +20,7 @@ class Admin extends Model
     use HasFactory;
     use ImageableTrait;
     use HasPermissions;
+    use PermissionTrait;
 
 
     protected $fillable = [
@@ -283,6 +287,7 @@ class Admin extends Model
     {
         return $this->hasMany(AdminEquipmentType::class);
     }
+
     public function priceAdmin()
     {
         return $this->hasMany(AdminPrice::class)->orderBy('client_type_id');
@@ -325,5 +330,6 @@ class Admin extends Model
             }))->toArray()
         ));
     }
+
 
 }

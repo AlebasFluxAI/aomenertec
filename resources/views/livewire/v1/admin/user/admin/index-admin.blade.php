@@ -8,17 +8,17 @@
           "first_title"=>"Listado"
       ])
 
-
-
-
-
     @include("partials.v1.table_nav",
-           ["mt"=>2,"nav_options"=>[
-                      ["button_align"=>"right",
-                      "click_action"=>"",
-                      "button_content"=>"Crear nuevo",
-                      "button_icon"=>"fa-solid fa-plus",
-                    "target_route"=>"administrar.v1.usuarios.admin.agregar",
+           [
+                "mt"=>2,
+                "nav_options"=>[
+                      [
+                          "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_CREATE],
+                          "button_align"=>"right",
+                          "click_action"=>"",
+                          "button_content"=>"Crear nuevo",
+                          "button_icon"=>"fa-solid fa-plus",
+                          "target_route"=>"administrar.v1.usuarios.admin.agregar",
                       ],
 
                   ]
@@ -59,11 +59,23 @@
 
 
                 ],
+
                  "table_actions"=>[
-                                    "details"=>"details",
-                                    "edit"=>"edit",
                                     "customs"=>[
                                         [
+                                                "function"=>"details",
+                                                "icon"=>"fas fa-search",
+                                                "tooltip_title"=>"Detalles",
+                                                "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_SHOW],
+                                        ],
+                                        [
+                                                "function"=>"edit",
+                                                "icon"=>"fas fa-pencil",
+                                                "tooltip_title"=>"Editar",
+                                                "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_EDIT],
+                                        ],
+                                        [
+
                                             "redirect"=>[
                                                     "route"=>"administrar.v1.usuarios.admin.editar_precios",
                                                     "binding"=>""
@@ -78,6 +90,7 @@
                                                  ],
                                                "icon"=>"fas fa-computer",
                                                "tooltip_title"=>"Asociar tipos de equipos",
+                                               "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_LINK_EQUIPMENT_TYPE],
                                          ],
                                             [
                                            "redirect"=>[
@@ -86,12 +99,14 @@
                                                  ],
                                                "icon"=>"fas fa-laptop-medical",
                                                "tooltip_title"=>"Asociar equipos",
+                                               "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_LINK_EQUIPMENT],
                                          ],
                                         [
                                                 "function"=>"delete",
                                                 "conditional"=>"conditionalDelete",
                                                 "icon"=>"fas fa-trash",
-                                                "tooltip_title"=>"Eliminar"
+                                                "tooltip_title"=>"Eliminar",
+                                                "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_DELETE],
                                         ],
 
                                        ]

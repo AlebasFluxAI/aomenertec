@@ -91,7 +91,7 @@ class User extends Authenticatable
             User::TYPE_TECHNICIAN => $user->technician,
             default => [],
         };
-
+        
         return $model;
     }
 
