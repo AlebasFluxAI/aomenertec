@@ -1,9 +1,17 @@
 <?php
 
 use App\Http\Resources\V1\Permissions;
+use App\Models\V1\Admin;
+use App\Models\V1\SuperAdmin;
+use App\Models\V1\Seller;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\Supervisor;
+use App\Models\V1\Support;
+use App\Models\V1\Technician;
 
 return [
-    "admins" => [
+    // Amdin
+    Admin::class => [
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
         Permissions::EQUIPMENT_DELETE,
@@ -38,15 +46,27 @@ return [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_SHOW_MONITORING,
+
+        Permissions::SUPPORT_CREATE,
+        Permissions::SUPPORT_EDIT,
+        Permissions::SUPPORT_DELETE,
+        Permissions::SUPPORT_SHOW,
+
+        Permissions::SUPPORT_CREATE,
+        Permissions::SUPPORT_EDIT,
+        Permissions::SUPPORT_DELETE,
+        Permissions::SUPPORT_SHOW,
+        Permissions::SUPPORT_LINK_CLIENT,
     ],
-    "super_admins" => [
+
+    // Super admin
+    SuperAdmin::class => [
         Permissions::ADMIN_CREATE,
         Permissions::ADMIN_LINK_EQUIPMENT,
         Permissions::ADMIN_LINK_EQUIPMENT_TYPE,
         Permissions::ADMIN_EDIT,
         Permissions::ADMIN_DELETE,
         Permissions::ADMIN_SHOW,
-
 
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
@@ -76,14 +96,26 @@ return [
         Permissions::SELLER_SHOW,
         Permissions::SELLER_LINK_CLIENT,
 
-        Permissions::CLIENT_CREATE,
         Permissions::CLIENT_EDIT,
         Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
-        Permissions::CLIENT_SETTINGS
+        Permissions::CLIENT_SETTINGS,
+
+        Permissions::SUPERVISOR_CREATE,
+        Permissions::SUPERVISOR_EDIT,
+        Permissions::SUPERVISOR_DELETE,
+        Permissions::SUPERVISOR_SHOW,
+        Permissions::SUPERVISOR_LINK_CLIENT,
+
+        Permissions::SUPPORT_CREATE,
+        Permissions::SUPPORT_EDIT,
+        Permissions::SUPPORT_DELETE,
+        Permissions::SUPPORT_SHOW,
+        Permissions::SUPPORT_LINK_CLIENT,
     ],
-    "network_operators" => [
+    // Operador de red
+    NetworkOperator::class => [
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
         Permissions::TECHNICIAN_DELETE,
@@ -101,17 +133,36 @@ return [
         Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
-        Permissions::CLIENT_SETTINGS
+        Permissions::CLIENT_SETTINGS,
+
+        Permissions::SUPPORT_CREATE,
+        Permissions::SUPPORT_EDIT,
+        Permissions::SUPPORT_DELETE,
+        Permissions::SUPPORT_SHOW,
+
+        Permissions::SUPERVISOR_CREATE,
+        Permissions::SUPERVISOR_EDIT,
+        Permissions::SUPERVISOR_DELETE,
+        Permissions::SUPERVISOR_SHOW,
+        Permissions::SUPERVISOR_LINK_CLIENT,
     ],
-    "technicians" => [
+    // Tecnico
+    Technician::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
     ],
-    "sellers" => [
+    // Soporte
+    Support::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
     ],
-    "supervisors" => [
+    // Vendedor
+    Seller::class => [
+        Permissions::CLIENT_SHOW,
+        Permissions::CLIENT_SHOW_MONITORING,
+    ],
+    // Supervisor
+    Supervisor::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
     ]

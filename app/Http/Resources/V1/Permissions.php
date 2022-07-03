@@ -44,6 +44,18 @@ class Permissions
     public const TECHNICIAN_LINK_CLIENT = "technician.link_client";
     public const TECHNICIAN_LINK_EQUIPMENT = "technician.link_equipment";
 
+    public const SUPPORT_CREATE = "support.create";
+    public const SUPPORT_EDIT = "support.edit";
+    public const SUPPORT_DELETE = "support.delete";
+    public const SUPPORT_SHOW = "support.show";
+    public const SUPPORT_LINK_CLIENT = "support.link_client";
+
+    public const SUPERVISOR_CREATE = "supervisor.create";
+    public const SUPERVISOR_EDIT = "supervisor.edit";
+    public const SUPERVISOR_DELETE = "supervisor.delete";
+    public const SUPERVISOR_SHOW = "supervisor.show";
+    public const SUPERVISOR_LINK_CLIENT = "supervisor.link_client";
+
     public const SELLER_CREATE = "seller.create";
     public const SELLER_EDIT = "seller.edit";
     public const SELLER_DELETE = "seller.delete";

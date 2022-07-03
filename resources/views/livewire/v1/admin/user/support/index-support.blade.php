@@ -12,7 +12,9 @@
 
     @include("partials.v1.table_nav",
            ["nav_options"=>[
-                      ["button_align"=>"right",
+                      [
+                      "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_CREATE],
+                      "button_align"=>"right",
                       "click_action"=>"",
                       "button_content"=>"Crear nuevo",
                       "button_icon"=>"fa-solid fa-plus",
@@ -62,13 +64,24 @@
 
                 ],
                  "table_actions"=>[
-                                    "details"=>"details",
-                                    "edit"=>"edit",
                                     "customs"=>[
-                                                   [
-                                                    "function"=>"addClients",
-                                                    "icon"=>"fas fa-users",
-                                                    "tooltip_title"=>"Ver clientes"
+                                                     [
+                                                            "function"=>"details",
+                                                            "icon"=>"fas fa-search",
+                                                            "tooltip_title"=>"Detalles",
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_SHOW],
+                                                    ],
+                                                    [
+                                                            "function"=>"edit",
+                                                            "icon"=>"fas fa-pencil",
+                                                            "tooltip_title"=>"Editar",
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_EDIT],
+                                                    ],
+                                                    [
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_LINK_CLIENT],
+                                                            "function"=>"addClients",
+                                                            "icon"=> "fas fa-users",
+                                                            "tooltip_title"=>"Ver clientes"
                                                     ]
                                                 ]
                                     ],

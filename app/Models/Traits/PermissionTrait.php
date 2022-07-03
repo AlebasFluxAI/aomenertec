@@ -12,6 +12,6 @@ trait PermissionTrait
 {
     public function getPermissions(): array
     {
-        return config("permissions." . $this->getTable());
+        return config("permissions." . self::class);
     }
 }

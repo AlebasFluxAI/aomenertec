@@ -8,26 +8,21 @@
           "second_title"=>"de clientes",
           "first_title"=>"Listado"
       ])
+    @include("partials.v1.table_nav",
+           [
+               "mt"=>2,
+               "nav_options"=>[
+                      [
+                      "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_CREATE],
+                      "button_align"=>"right",
+                      "click_action"=>"",
+                      "button_content"=>"Crear nuevo",
+                      "button_icon"=>"fa-solid fa-plus",
+                      "target_route"=>"v1.admin.client.add.client",
+                      ],
 
-    @if(\Illuminate\Support\Facades\Auth::user()->admin || \Illuminate\Support\Facades\Auth::user()->networkOperator)
-
-        @include("partials.v1.table_nav",
-               [
-                   "mt"=>2,
-                   "nav_options"=>[
-                          [
-                          "permission"=>\App\Http\Resources\V1\Permissions::CLIENT_CREATE,
-                          "button_align"=>"right",
-                          "click_action"=>"",
-                          "button_content"=>"Crear nuevo",
-                          "button_icon"=>"fa-solid fa-plus",
-                          "target_route"=>"v1.admin.client.add.client",
-                          ],
-
-                      ]
-              ])
-    @endif
-
+                  ]
+          ])
 
     @include("partials.v2.table.primary-table",[
            "table_headers"=>[
@@ -92,13 +87,13 @@
                                                         "tooltip_title"=>"Eliminar"
                                                 ],
                                                 [
-                                                    "permission"=>\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS,
+                                                    "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
                                                     "function"=>"settings",
                                                     "tooltip_title"=>"Configuración de equipos",
                                                     "icon"=>"fas fa-gear"
                                                 ],
                                                 [
-                                                    "permission"=>\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING,
+                                                    "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
                                                     "redirect"=>[
                                                                 "route"=>"v1.admin.client.monitoring",
                                                                 "binding"=>"client"

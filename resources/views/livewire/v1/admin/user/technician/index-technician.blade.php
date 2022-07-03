@@ -16,10 +16,10 @@
                       [
                           "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_CREATE],
                           "button_align"=>"right",
-                      "click_action"=>"",
-                      "button_content"=>"Crear nuevo",
-                      "button_icon"=>"fas fa-plus",
-                     "target_route"=>"administrar.v1.usuarios.tecnicos.agregar",
+                          "click_action"=>"",
+                          "button_content"=>"Crear nuevo",
+                          "button_icon"=>"fas fa-plus",
+                          "target_route"=>"administrar.v1.usuarios.tecnicos.agregar",
                       ],
 
                   ]
