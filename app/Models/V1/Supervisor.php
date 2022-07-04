@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\PermissionTrait;
 use App\Scope\OrderIdScope;
 use Database\Seeders\ClientsTableSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +13,7 @@ class Supervisor extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use PermissionTrait;
 
     protected $fillable = ['identification',
         'phone',
