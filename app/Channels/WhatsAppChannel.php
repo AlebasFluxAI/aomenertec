@@ -20,14 +20,12 @@ class WhatsAppChannel
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ]);
-        
+
     }
 
     public function send($notifiable, Notification $notification)
     {
-
         $toWhatsapp = $notification->toWhatsapp($notifiable);
-
         if (!$this->checkTemplateExists($toWhatsapp->template_name)) {
 
             return;

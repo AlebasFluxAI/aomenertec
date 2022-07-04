@@ -3,6 +3,10 @@
 namespace App\Observers\ClientAlert;
 
 use App\Models\V1\ClientAlert;
+use App\Models\V1\User;
+use App\Notifications\Alert\AlertNotification;
+use App\Events\UserNotificationEvent;
+use App\Http\Resources\V1\NotificationTypes;
 
 class ClientAlertObserver
 {
@@ -14,7 +18,9 @@ class ClientAlertObserver
      */
     public function created(ClientAlert $clientAlert)
     {
-        //
+        $aux = User::find(2);
+        event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $aux->id));
+        $aux->notify(new AlertNotification());
     }
 
     /**
