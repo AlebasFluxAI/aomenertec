@@ -147,6 +147,7 @@
                                                                                                     "tooltip_title"=>"Editar",
                                                                                             ],
                                                                                             [
+                                                                                                    "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
                                                                                                     "redirect"=>[
                                                                                                                 "route"=>"v1.admin.client.monitoring",
                                                                                                                 "binding"=>"client"

@@ -130,11 +130,15 @@
                                                                         "table_headers"=>[
                                                                                             "ID"=>'id',
                                                                                             "Variable"=>'flag_index',
-                                                                                            "Valor"=>'value',
+                                                                                            "Limite min" => "clientAlertConfiguration.min_alert",
+                                                                                            "Limite max" => "clientAlertConfiguration.max_alert",
+                                                                                            "Valor alerta"=>'value',
+                                                                                            "Tipo" => "type",
+                                                                                            "Actualizacion limites"=>'clientAlertConfiguration.updated_at',
                                                                                             "Fecha"=>'created_at'
 
                                                                                         ],
-                                                                        "table_rows"=>[]
+                                                                        "table_rows"=> $clientAlerts
 
                                                                      ]
                                                 ],

@@ -18,10 +18,12 @@ class Monitoring extends Component
     public $reactive_variables;
     public $real_time_variables;
     public $time;
+    public $clientAlerts;
 
     public function mount(Client $client)
     {
         $this->client = $client;
+        $this->clientAlerts = $this->client->clientAlerts()->get();
         $this->data_frame = collect(config('data-frame.data_frame'));
         $this->variables = collect(config('data-frame.variables'));
         $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
