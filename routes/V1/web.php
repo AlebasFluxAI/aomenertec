@@ -49,6 +49,11 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
         ->middleware(['guest:' . config('fortify.guard')])
         ->name('password.update');
 
+    Route::prefix("clientes/invitados/pqr")->group(function () {
+        Route::get('/crear', Livewire\V1\Admin\Pqr\AddPqrGuestClientComponent::class);
+    });
+
+
 });
 
 
