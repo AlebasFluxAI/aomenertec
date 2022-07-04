@@ -277,7 +277,10 @@ class AddClientService extends Singleton
 
     public function deleteInputEquipment(Component $component)
     {
-        $necessary_equipment = count($component->client_type->equipmentTypes);
+        $necessary_equipment = 0;
+        if ($component->client_type) {
+            $necessary_equipment = count($component->client_type->equipmentTypes);
+        }
         $current_equipment = count($component->equipment);
         if ($current_equipment > $necessary_equipment) {
             array_pop($component->equipment);
@@ -360,8 +363,10 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
+
         $component->validate();
         DB::transaction(function () use ($component) {
+
             $client = $this->createClient($component);
             $this->linkAddress($component, $client);
             $this->linkTechnician($component, $client);
