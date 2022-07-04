@@ -24,8 +24,9 @@ class WhatsAppChannel
 
     public function send($notifiable, Notification $notification)
     {
-        $toWhatsapp = $notification->toWhatsapp($notifiable);
 
+
+        $toWhatsapp = $notification->toWhatsapp($notifiable);
         if (!$this->checkTemplateExists($toWhatsapp->template_name)) {
             return;
         }

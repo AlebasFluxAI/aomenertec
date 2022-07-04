@@ -154,7 +154,7 @@ class DataChart extends Component
                     }
                     if ($index == 0) {
                         if ($this->time_id == 1) {
-                            $x = Carbon::create($item->year, $item->month, $item->day, $item->hour, $item->minute)->format('d F H:i');
+                            $x = Carbon::create($item->microcontrollerData->source_timestamp)->format('d F H:i:s');
 
                         } elseif ($this->time_id == 2) {
                             $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
