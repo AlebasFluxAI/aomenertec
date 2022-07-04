@@ -12,17 +12,17 @@
                 "second_title"=>"Clientes"
             ])
 
-            @include("partials.v1.table_nav",
-         ["mt"=>2, "nav_options"=>[
-                    ["button_align"=>"right",
-                    "click_action"=>"",
-                    "button_icon"=>"fas fa-list",
-                    "button_content"=>"Ver listado",
-                    "target_route"=>"v1.admin.client.list.client",
-                    ],
+        @include("partials.v1.table_nav",
+     ["mt"=>2, "nav_options"=>[
+                ["button_align"=>"right",
+                "click_action"=>"",
+                "button_icon"=>"fas fa-list",
+                "button_content"=>"Ver listado",
+                "target_route"=>"v1.admin.client.list.client",
+                ],
 
-                ]
-        ])
+            ]
+    ])
 
 
         <div class="contenedor-grande">
@@ -244,18 +244,18 @@
                           ]
                          )
                         <div class="row pl-5 pr-3">
-                            @role("admin")
-                            @include("partials.v1.form.form_list",[
-                                    "col_with"=>8,
-                                    "input_type"=>"text",
-                                    "input_label"=>"Operador de red",
-                                    "list_model" => "network_operator_id",
-                                    "list_default" => "Operador de red...",
-                                    "list_options" => $network_operators,
-                                    "list_option_value"=>"value",
-                                    "list_option_view"=>"key",
-                                    "list_option_title"=>"",
-                           ])
+                            @if(\App\Http\Resources\V1\Menu::getUserModel()::class==\App\Models\V1\Admin::class)
+                                @include("partials.v1.form.form_list",[
+                                        "col_with"=>8,
+                                        "input_type"=>"text",
+                                        "input_label"=>"Operador de red",
+                                        "list_model" => "network_operator_id",
+                                        "list_default" => "Operador de red...",
+                                        "list_options" => $network_operators,
+                                        "list_option_value"=>"value",
+                                        "list_option_view"=>"key",
+                                        "list_option_title"=>"",
+                               ])
 
                             @endif
                             @include("partials.v1.form.form_list",[
