@@ -24,12 +24,12 @@ class AlertNotification extends Notification
 
     public function via($notifiable)
     {
-        return ["database"];
+        return ["database", WhatsAppChannel::class];
     }
 
     public function toDatabase()
     {
-        return new UserNotificationPayload("Alerta de consumo de cliente", "v1.admin.client.monitoring", "interna", 23);
+        return new UserNotificationPayload("Alerta de consumo de cliente", "v1.admin.client.monitoring", "interna", 1);
     }
 
     public function toWhatsApp($notifiable)
