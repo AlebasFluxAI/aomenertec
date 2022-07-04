@@ -86,7 +86,7 @@
     </section>
     <section class="top-info">
         @livewire('livewire-toast')
-        <div class="container">
+        <div class="container mt-3">
             @yield('content')
         </div>
     </section>

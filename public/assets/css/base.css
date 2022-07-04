@@ -108,6 +108,13 @@
 
 }
 
+.navbar-custom-coenergia {
+    background-color: white;
+    border-bottom-color: green;
+    border-bottom-width: .2rem;
+
+}
+
 .btn-redirect {
     transition: 500ms;
 }
