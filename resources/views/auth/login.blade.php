@@ -8,7 +8,7 @@
                     <div class="col-12">
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <div class="container-fluid">
-                                <a class="navbar-brand" href="/"><img class="imagen-logo"
+                                <a class="navbar-brand" href="/"><img class="img-fluid imagen-logo"
                                                                       src="https://aom.enerteclatam.com/images/logo-horizontal.svg"
                                                                       alt=""></a>
                             </div>
