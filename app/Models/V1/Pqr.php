@@ -11,6 +11,10 @@ class Pqr extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const STATUS_CREATED = 'created';
+    public const STATUS_PROCESSING = 'processing';
+    public const STATUS_RESOLVED = 'resolved';
+    public const STATUS_CLOSED = 'closed';
     protected $fillable = [
         'detail',
         'equipment_id',
@@ -19,40 +23,49 @@ class Pqr extends Model
         'user_id',
         'client_id',
         'support_id',
-        'status'
+        'status',
+
+        'subject',
+        'description',
+        'level',
+        'type',
+        'sub_type',
+        'severity'
     ];
 
-    public const STATUS_CREATED = 'created';
-    public const STATUS_PROCESSING = 'processing';
-    public const STATUS_RESOLVED = 'resolved';
-    public const STATUS_CLOSED = 'closed';
 
-    public function pqrState()
-    {
-        return $this->belongsTo(PqrState::class);
-    }
-    public function pqrType()
-    {
-        return $this->belongsTo(PqrType::class);
-    }
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     public function client()
     {
         return $this->belongsTo(Client::class);
     }
+
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
     }
+
     public function support()
     {
         return $this->belongsTo(Support::class);
     }
-    public function pqrPosts()
+
+    public function messages()
     {
         return $this->hasMany(PqrMessage::class);
+    }
+
+    public function pqrLogs()
+    {
+        return $this->hasMany(PqrLog::class);
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, "imageable");
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\PermissionTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Support extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use PermissionTrait;
 
     protected $fillable = [
         'identification',

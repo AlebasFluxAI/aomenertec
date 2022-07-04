@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models\V1;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class PqrLog extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    public const ACTIVITY_TYPE_CHANGE_LEVEL = "change_level";
+    public const ACTIVITY_TYPE_CLOSE_TICKET = "close_ticket";
+    public const ACTIVITY_TYPE_OPEN_TICKET = "open_ticket";
+    public const ACTIVITY_TYPE_REOPEN_TICKET = "reopen_ticket";
+    public const ACTIVITY_TYPE_CHANGE_STATUS = "change_status";
+
+    protected $fillable = [
+        "pqr_id",
+        "activity_type",
+        "before",
+        "after"
+    ];
+
+    public function pqr()
+    {
+        return $this->belongsTo(Pqr::class);
+    }
+}
