@@ -33,6 +33,7 @@ return [
         Permissions::TECHNICIAN_DELETE,
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
+        Permissions::TECHNICIAN_LINK_EQUIPMENT,
 
         Permissions::SELLER_CREATE,
         Permissions::SELLER_EDIT,
@@ -127,6 +128,7 @@ return [
         Permissions::TECHNICIAN_DELETE,
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
+        Permissions::TECHNICIAN_LINK_EQUIPMENT,
 
         Permissions::SELLER_CREATE,
         Permissions::SELLER_EDIT,
