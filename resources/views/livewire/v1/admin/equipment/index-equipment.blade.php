@@ -14,12 +14,12 @@
         @include("partials.v1.table_nav",
                ["mt"=>2,"nav_options"=>[
                           [
-                              "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_CREATE],
-                              "button_align"=>"right",
-                          "click_action"=>"",
-                          "button_content"=>"Crear nuevo",
-                          "icon"=>"fa-solid fa-plus",
-                          "target_route"=>"administrar.v1.equipos.agregar",
+                               "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_CREATE],
+                               "button_align"=>"right",
+                               "click_action"=>"",
+                               "button_content"=>"Crear nuevo",
+                               "icon"=>"fa-solid fa-plus",
+                               "target_route"=>"administrar.v1.equipos.agregar",
                           ],
 
                       ]
@@ -65,19 +65,19 @@
                                                  [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_SHOW],
-                                                     "function"=>"detail",
+                                                        "function"=>"detail",
                                                         "icon"=>"fas fa-search",
                                                         "tooltip_title"=>"Detalles"
                                                 ],
                                                 [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_EDIT],
-                                                    "function"=>"edit",
+                                                        "function"=>"edit",
                                                         "icon"=>"fas fa-pencil",
                                                         "tooltip_title"=>"Editar"
                                                 ],
                                                 [
-                                                    "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_DELETE],
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_DELETE],
                                                         "function"=>"deleteEquipment",
                                                         "conditional"=>"conditionalDelete",
                                                         "icon"=>"fas fa-trash",
