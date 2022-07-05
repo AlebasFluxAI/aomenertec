@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Technician;
 
+use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\V1\Technician;
 use App\Models\V1\NetworkOperator;
@@ -28,25 +29,15 @@ class TechnicianAddService extends Singleton
                 'picked' => false
             ];
         }
-
+        $model = Menu::getUserModel();
         return [
             'network_operator_id' => null,
             'admins' => [],
-            "network_operators" => [],
+            "network_operators" => $model->networkOperatorsAsKeyValue(),
             'picked' => false
         ];
     }
 
-    public function updatedNetworkOperator(Component $component)
-    {
-        $component->picked_network_operator = false;
-        $component->message_network_operator = "No hay operador de red registrado con esta identificación";
-        if ($component->network_operator != "") {
-            $component->network_operators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
-                ->orWhere("name", "like", '%' . $component->network_operator . "%")
-                ->take(3)->get();
-        }
-    }
 
     public function assignNetworkOperator(Component $component, $network_operator)
     {

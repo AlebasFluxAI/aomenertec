@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Seller;
 
+use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
@@ -31,11 +32,12 @@ class SellerAddService extends Singleton
                 'picked' => false
             ];
         }
+        $model = Menu::getUserModel();
 
         return [
             'network_operator_id' => null,
             'admins' => [],
-            "networkOperators" => [],
+            "network_operators" => $model->networkOperatorsAsKeyValue(),
             'picked' => false
         ];
     }
