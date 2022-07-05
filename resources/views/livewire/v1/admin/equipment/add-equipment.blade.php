@@ -41,6 +41,15 @@
 
                             ],
                             [
+                                        "input_label"=>"Nombre del equipo",
+                                        "input_type"=>"text",
+                                        "input_model"=>"name",
+                                        "icon_class"=>"fas fa-barcode",
+                                        "placeholder"=>"Nombre del equipo",
+                                        "col_with"=>12,
+                                        "required"=>true
+                            ],
+                            [
                                         "input_label"=>"Serial del equipo",
                                         "input_type"=>"text",
                                         "input_model"=>"equipmentSerial",

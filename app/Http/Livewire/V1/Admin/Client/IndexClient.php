@@ -38,6 +38,7 @@ class IndexClient extends Component
     {
         $this->indexClientService->edit($this, $id);
     }
+
     public function conditionalMonitoring($id)
     {
         return $this->indexClientService->conditionalMonitoring($this, $id);
