@@ -137,11 +137,6 @@ class SuperAdmin extends Model
         return $this->hasMany(EquipmentType::class);
     }
 
-    public function equipments()
-    {
-        return Equipment::query();
-    }
-
     public function equipmentTypesAsKeyValue()
     {
         return (array_merge(
@@ -164,4 +159,24 @@ class SuperAdmin extends Model
         return AdminEquipmentType::query();
     }
 
+    public function networkOperatorsAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el operador de red ...",
+                "value" => null
+            ]],
+            (NetworkOperator::get()->map(function ($neworkOperador) {
+                return [
+                    "key" => $neworkOperador->id . " - " . $neworkOperador->name . " - " . $neworkOperador->identification,
+                    "value" => $neworkOperador->id,
+                ];
+            }))->toArray()
+        ));
+    }
+
+    public function equipments()
+    {
+        return Equipment::query();
+    }
 }

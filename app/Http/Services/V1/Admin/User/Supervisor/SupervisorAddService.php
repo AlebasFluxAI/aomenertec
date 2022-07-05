@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Supervisor;
 
+use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Supervisor;
@@ -29,11 +30,12 @@ class SupervisorAddService extends Singleton
                 'picked' => false
             ];
         }
+        $model = Menu::getUserModel();
 
         return [
             'network_operator_id' => null,
             'admins' => [],
-            "network_operators" => [],
+            "network_operators" => $model->networkOperatorsAsKeyValue(),
             'picked' => false
         ];
     }

@@ -20,7 +20,7 @@
                                     </span>
         </div>
 
-        <select wire:model="{{$dropdown_model}}" wire:click="{{$dropdown_refresh??""}}()" class="form-select"
+        <select wire:model="{{$dropdown_model}}" wire:click="{{$dropdown_refresh??"pass"}}()" class="form-select"
                 aria-label="Default select example"
                 placeholder="{{$placeholder??""}}">
             @if($dropdown_editing??true)

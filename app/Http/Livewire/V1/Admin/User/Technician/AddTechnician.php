@@ -28,14 +28,13 @@ class AddTechnician extends Component
         $this->superTechnicianAddService = TechnicianAddService::getInstance();
     }
 
+    public function pass()
+    {
+    }
+
     public function assignNetworkOperator($network_operator)
     {
         $this->superTechnicianAddService->assignNetworkOperator($this, $network_operator);
-    }
-
-    public function updatedNetworkOperator()
-    {
-        $this->superTechnicianAddService->updatedNetworkOperator($this);
     }
 
     public function mount()
