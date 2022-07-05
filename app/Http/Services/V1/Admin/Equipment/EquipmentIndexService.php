@@ -29,7 +29,7 @@ class EquipmentIndexService extends Singleton
         $component->redirectRoute("administrar.v1.equipos.editar", ["equipment" => $equipmentId]);
     }
 
-    public function details(Component $component, $equipmentId)
+    public function detail(Component $component, $equipmentId)
     {
         $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipmentId]);
     }
