@@ -29,9 +29,9 @@ class IndexClient extends Component
         return $this->indexClientService->getClient();
     }
 
-    public function detail($id)
+    public function details($id)
     {
-        $this->indexClientService->detail($this, $id);
+        $this->indexClientService->details($this, $id);
     }
 
     public function edit($id)
