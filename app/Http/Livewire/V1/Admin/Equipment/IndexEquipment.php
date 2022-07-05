@@ -33,9 +33,9 @@ class IndexEquipment extends Component
         return $this->indexEquipmentService->getEquipments();
     }
 
-    public function detail($id)
+    public function details($id)
     {
-        $this->indexEquipmentService->detail($this, $id);
+        $this->indexEquipmentService->details($this, $id);
     }
 
     public function edit($id)

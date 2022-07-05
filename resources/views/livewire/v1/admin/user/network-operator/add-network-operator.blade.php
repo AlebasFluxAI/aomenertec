@@ -23,11 +23,11 @@
         ])
     {{----------------------------------Formulario--------------------------}}
     @if(\Illuminate\Support\Facades\Auth::user()->admin)
-        <form wire:submit.prevent="save" id="formulario" class="needs-validation" role="form">
+        <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
             @include("partials.v1.addUserTemplate.user-add-form")
         </form>
     @else
-        <form wire:submit.prevent="save" id="formulario" class="needs-validation" role="form">
+        <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
             @include("partials.v1.addUserTemplate.user-add-form",[
                         "custom_input"=>[
                              [

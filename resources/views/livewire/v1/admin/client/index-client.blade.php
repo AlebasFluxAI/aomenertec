@@ -69,7 +69,7 @@
                                                 [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
-                                                        "function"=>"detail",
+                                                        "function"=>"details",
                                                         "icon"=>"fas fa-search",
                                                         "tooltip_title"=>"Detalles"
                                                 ],
