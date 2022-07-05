@@ -22,7 +22,7 @@
         ])
     {{----------------------------------Formulario--------------------------}}
     @role("network_operator")
-    <form wire:submit.prevent="save" id="formulario" class="needs-validation" role="form">
+    <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
         @include("partials.v1.addUserTemplate.user-add-form")
     </form>
     @else

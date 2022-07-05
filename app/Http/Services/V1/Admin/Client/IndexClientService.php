@@ -54,7 +54,7 @@ class IndexClientService extends Singleton
     }
 
 
-    public function detail(Component $component, $clientId)
+    public function details(Component $component, $clientId)
     {
         $component->redirectRoute("v1.admin.client.detail.client", ["client" => $clientId]);
     }

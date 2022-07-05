@@ -72,7 +72,7 @@
                                     "customs"=>[
                                                    [
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_SHOW],
-                                                        "function"=>"detail",
+                                                        "function"=>"details",
                                                         "icon"=>"fas fa-search",
                                                         "tooltip_title"=>"Detalles"
                                                     ],

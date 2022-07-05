@@ -69,7 +69,7 @@
                                       "customs"=>[
                                                    [
                                                             "permission"=>[\App\Http\Resources\V1\Permissions::SELLER_SHOW],
-                                                            "function"=>"detail",
+                                                            "function"=>"details",
                                                             "icon"=>"fas fa-search",
                                                             "tooltip_title"=>"Detalles"
                                                     ],
