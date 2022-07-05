@@ -50,6 +50,7 @@ class EquipmentAddService extends Singleton
     {
         return [
             "serial" => $component->equipmentSerial,
+            "name" => $component->name,
             "description" => $component->equipmentDescription,
             "equipment_type_id" => $component->equipmentTypeId,
         ];

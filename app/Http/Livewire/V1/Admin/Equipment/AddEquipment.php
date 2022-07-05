@@ -22,6 +22,7 @@ class AddEquipment extends Component
     public $equipmentTypeId;
     public $equipmentTypes;
     public $picked;
+    public $name;
 
 
     protected $rules = [
