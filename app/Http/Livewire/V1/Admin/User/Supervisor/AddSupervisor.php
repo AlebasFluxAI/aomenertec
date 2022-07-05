@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 use App\Http\Services\V1\Admin\User\SuperAdmin\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
 use App\Models\Traits\AddUserFormTrait;
+use App\Models\Traits\PassTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 
@@ -12,6 +13,8 @@ class AddSupervisor extends Component
 {
     use ValidateUserFormTrait;
     use AddUserFormTrait;
+    use PassTrait;
+
 
     public $message;
     public $picked;

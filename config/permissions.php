@@ -58,6 +58,12 @@ return [
         Permissions::SUPPORT_DELETE,
         Permissions::SUPPORT_SHOW,
         Permissions::SUPPORT_LINK_CLIENT,
+
+        Permissions::SUPERVISOR_CREATE,
+        Permissions::SUPERVISOR_EDIT,
+        Permissions::SUPERVISOR_DELETE,
+        Permissions::SUPERVISOR_SHOW,
+        Permissions::SUPERVISOR_LINK_CLIENT,
     ],
 
     // Super admin
