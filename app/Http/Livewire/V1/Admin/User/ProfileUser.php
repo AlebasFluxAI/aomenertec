@@ -34,6 +34,10 @@ class ProfileUser extends Component
         return $this->profileUserService->conditionalMonitoring($clientId);
     }
 
+    public function deleteAdminConditional($adminId)
+    {
+        return $this->profileUserService->deleteAdminConditional($this, $adminId);
+    }
 
     public function mount()
     {

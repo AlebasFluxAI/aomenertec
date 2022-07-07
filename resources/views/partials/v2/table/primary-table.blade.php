@@ -159,7 +159,9 @@
         </table>
     </div>
     @if($table_pageable??true)
-        {{$table_rows->links("partials.v1.table.pagination-links")}}
+        @if(method_exists($table_rows,"links"))
+            {{$table_rows->links("partials.v1.table.pagination-links")}}
+        @endif
     @endif
     <br><br>
 </div>

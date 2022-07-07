@@ -27,9 +27,9 @@ class ProfileUserService extends Singleton
     public function mount(Component $component)
     {
         $component->model = $this->getModelByUser();
-        if(Auth::user()->hasRole(User::TYPE_SUPER_ADMIN));
+        if (Auth::user()->hasRole(User::TYPE_SUPER_ADMIN)) ;
         {
-            $component->admins = Admin::all();
+            $component->admins = Admin::get();
         }
 
     }
@@ -42,6 +42,12 @@ class ProfileUserService extends Singleton
     public function getViewName()
     {
         return Menu::getHome();
+    }
+
+    public function deleteAdminConditional(Component $component, $adminId)
+    {
+        return NetworkOperator::whereAdminId($adminId)->exists();
+
     }
 
     public function deleteNetworkOperator(Component $component, $networkOperatorId)

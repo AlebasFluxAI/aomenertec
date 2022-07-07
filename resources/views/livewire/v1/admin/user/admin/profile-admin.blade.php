@@ -83,41 +83,13 @@
 
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.user.network-operator.index-network-operator",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Correo"=>"email"
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.operadores.detalles",
-                                                                                                            "binding"=>"networkOperator"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search",
-                                                                                                    "tooltip_title"=>"Detalles",
-                                                                                            ],
-                                                                                            [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.operadores.editar",
-                                                                                                            "binding"=>"networkOperator"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil",
-                                                                                                    "tooltip_title"=>"Editar",
-                                                                                            ],
-                                                                                               [
-                                                                                                        "function"=>"deleteNetworkOperator",
-                                                                                                        "conditional"=>"conditionalNetworkOperatorDelete",
-                                                                                                        "icon"=>"fas fa-trash",
-                                                                                                        "tooltip_title"=>"Eliminar"
-                                                                                                ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$model->networkOperators
-
+                                                                       "data"=>$model->networkOperators,
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalNetworkOperatorDelete",
                                                                   ]
                                                ],
                                                 [
