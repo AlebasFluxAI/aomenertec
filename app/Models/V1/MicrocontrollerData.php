@@ -62,6 +62,12 @@ class MicrocontrollerData extends Model
                         $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                     } else {
                         $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                        if ($data['variable_name'] == "timestamp"){
+                            $date = new Carbon();
+                            $date->setTimestamp($json['timestamp']);
+                            $this->source_timestamp = $date->format("Y-m-d H:i:s");
+                            $this->saveQuietly();
+                        }
                     }
                 }
 

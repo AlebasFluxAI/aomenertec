@@ -27,7 +27,6 @@ class WhatsAppChannel
     {
         $toWhatsapp = $notification->toWhatsapp($notifiable);
         if (!$this->checkTemplateExists($toWhatsapp->template_name)) {
-
             return;
         }
 
@@ -65,14 +64,12 @@ class WhatsAppChannel
     public function checkTemplateExists($template)
     {
         try {
-
             $response = $this->httpClient->get(
                 'https://integrations.messagebird.com/v1/public/whatsapp/templates'
             );
         } catch (Throwable $e) {
             return false;
         }
-
         return in_array($template, collect($response->object())->where('status', 'APPROVED')->pluck('name')->toArray());
     }
 
