@@ -61,66 +61,15 @@
 
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
-                                                   "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Correo"=>"email"
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.admin.detalles",
-                                                                                                            "binding"=>""
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search",
-                                                                                                    "tooltip_title"=>"Detalles",
-                                                                                            ],
-                                                                                            [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.admin.editar",
-                                                                                                            "binding"=>""
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil",
-                                                                                                    "tooltip_title"=>"Editar",
-                                                                                            ],
-                                                                                               [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.admin.editar_precios",
-                                                                                                            "binding"=>""
-                                                                                                      ],
-                                                                                                    "icon"=>"fa-solid fa-money-bill-wave",
-                                                                                                    "tooltip_title"=>"Precios",
-                                                                                            ],
-                                                                                               [
-                                                                                                       "redirect"=>[
-                                                                                                                   "route"=>"administrar.v1.usuarios.admin.agregar_tipos_equipo",
-                                                                                                                   "binding"=>"admin"
-                                                                                                             ],
-                                                                                                           "icon"=>"fas fa-computer",
-                                                                                                           "tooltip_title"=>"Asociar tipos de equipos",
-                                                                                                     ],
-                                                                                                        [
-                                                                                                       "redirect"=>[
-                                                                                                                   "route"=>"administrar.v1.usuarios.admin.agregar_equipos",
-                                                                                                                   "binding"=>"admin"
-                                                                                                             ],
-                                                                                                           "icon"=>"fas fa-laptop-medical",
-                                                                                                           "tooltip_title"=>"Asociar equipos",
-                                                                                                     ],
-                                                                                               [
-                                                                                                        "function"=>"deleteNetworkOperator",
-                                                                                                        "conditional"=>"conditionalNetworkOperatorDelete",
-                                                                                                        "icon"=>"fas fa-trash",
-                                                                                                        "tooltip_title"=>"Eliminar"
-                                                                                                ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$admins
-
-                                                                  ]
+                                                  "view_name"=>"livewire.v1.admin.user.admin.index-admin",
+                                                  "view_values"=>[
+                                                      "data"=>$admins,
+                                                      "table_pageable"=>false,
+                                                      "admin_conditional_delete"=>"deleteAdminConditional",
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
                                                ],
                                    ]
         ])
