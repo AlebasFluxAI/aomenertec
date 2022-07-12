@@ -7,7 +7,14 @@
             <li><a><button wire:click="{{ $click_action }}" type="button" data-toggle="modal" data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</button></a></li>
         @endif
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 input-group">
+        @if($icon_class)
+        <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                     <i class="{{$icon_class}}"></i>
+                                    </span>
+        </div>
+        @endif
         @if($input_rows??1>1)
             <textarea @if($updated_input=="lazy")
                       wire:model.lazy="{{ $input_model }}"
@@ -23,6 +30,7 @@
             <div class="form-check form-switch">
                 <input
                         wire:model.lazy="{{$input_model}}"
+
                        class="form-check-input" type="checkbox"
                        id="flexSwitchCheckChecked">
             </div>
@@ -47,7 +55,7 @@
                     @endif
 
                    type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
-                   placeholder="{{$default??""}}" required="{{$required??false}}"
+                    placeholder="{{ $placeholder_input }}" required="{{$required??false}}"
                     @if($input_type??"text" == "number")
                         min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
                     @endif>

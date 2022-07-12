@@ -1,13 +1,13 @@
 <div class="form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_with??12}} col-sm-12">
     <label>{{$input_label??""}}</label>
     <div class="input-group">
-
-        <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                     <i class="{{$icon_class}}"></i>
-                                    </span>
-        </div>
-
+        @if($icon_class)
+            <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                         <i class="{{$icon_class}}"></i>
+                                        </span>
+            </div>
+        @endif
         @if($input_rows??1>1)
             <textarea @if($updated_input=="lazy")
                       wire:model.lazy="{{ $input_model }}"
@@ -19,6 +19,24 @@
                       rows="{{$input_rows}}" type="{{$input_type??"text"}}"
                       class="form-control" autocomplete="on" placeholder="{{$placeholder??""}}"
                       required="{{$required??false}}"></textarea>
+            @elseif($input_type=="checkbox")
+                <div class="form-check form-switch">
+                    <input
+                        wire:model.lazy="{{$input_model}}"
+
+                        class="form-check-input" type="checkbox"
+                        id="flexSwitchCheckChecked">
+                </div>
+            @elseif($input_type=="select")
+                <select wire:model.lazy="{{$input_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
+                        required="{{$required??false}}" @if($disabled??false)disabled @endif>
+                    <option disabled value="0"> {{$select_default??""}} </option>
+                    @foreach($select_options??[] as $option)
+                        <option @if($select_option_title??"" != "")title="{{ $option[$select_option_title] }}"
+                                @endif value="{{ $option[$select_option_value] }}">{{ $option[$select_option_view] }}</option>
+
+                    @endforeach
+                </select>
         @else
             <input @if($updated_input=="lazy")
                    wire:model.lazy="{{ $input_model }}"

@@ -17,10 +17,9 @@
             required="{{$required??false}}" @if($disabled??false)disabled @endif>
         <option disabled value="0"> {{$list_default??""}} </option>
         @foreach($list_options as $option)
-            @if($option[$list_option_view] != "EXPANSION URBANA" || $option[$list_option_view]!= "SIN DEFINIR" )
-                <option @if($list_option_title != "")title="{{ $option[$list_option_title] }}"
+            <option @if($list_option_title != "")title="{{ $option[$list_option_title] }}"
                         @endif value="{{ $option[$list_option_value] }}">{{ $option[$list_option_view] }}</option>
-            @endif
+
         @endforeach
     </select>
 </div>
