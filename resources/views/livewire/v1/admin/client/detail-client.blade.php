@@ -61,6 +61,14 @@
                                                                              "value"=>$client->email
                                                                          ],
                                                                          [
+                                                                             "key"=>"Telefono",
+                                                                             "value"=>$client->phone
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Identificación",
+                                                                             "value"=>$client->identification
+                                                                         ],
+                                                                         [
                                                                              "key"=>"Operador de red",
                                                                              "value"=>$client->networkOperator->id. "- ". $client->networkOperator->name
                                                                          ],
@@ -72,8 +80,9 @@
                                           [
                                                    "view_name"=>"partials.v2.table.primary-table",
                                                    "view_values"=>[
+                                                                        "class_container"=>"",
                                                                         "table_pageable"=>false,
-                                                                       "table_headers"=>[
+                                                                        "table_headers"=>[
                                                                            [
                                                                                "col_name" =>"ID",
                                                                                "col_data" =>"id",

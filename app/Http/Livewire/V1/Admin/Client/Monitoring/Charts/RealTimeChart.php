@@ -90,7 +90,6 @@ class RealTimeChart extends Component
             "echo:data-monitoring." . $this->client->id . ",.dataEventRealTime" => 'addPoint',
             "selectRealTime"
         ];
-
     }
 
     public function updatedVariableChartId()
@@ -131,7 +130,6 @@ class RealTimeChart extends Component
         $topic = 'mc/config/'.$equipment->serial;
         MQTT::publish($topic, $message);
         MQTT::disconnect();
-
     }
 
     public function addPoint($data)

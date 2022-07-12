@@ -25,5 +25,4 @@ class ClientDigitalOutput extends Model
         'status',
         'control_type',
     ];
-
 }

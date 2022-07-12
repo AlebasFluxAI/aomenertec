@@ -23,8 +23,5 @@ class NotificationHeaderService extends Singleton
     public function refreshNotificationCounter(Component $component)
     {
         $component->notificationCounter = $component->user->unreadNotifications->whereNull("deleted_at")->count();
-
     }
-
-
 }

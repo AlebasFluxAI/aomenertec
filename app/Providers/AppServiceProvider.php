@@ -12,13 +12,17 @@ use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Notification;
+use App\Models\V1\Pqr;
+use App\Models\V1\PqrLog;
 use App\Models\V1\PqrMessage;
+use App\Models\V1\PqrUser;
 use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Observers\ActionBy\ActionByObserve;
 use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
 use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
@@ -28,6 +32,7 @@ use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
 use App\Observers\NotificationObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
+use App\Observers\Pqr\PqrObserver;
 use App\Observers\User\Admin\UserAdminObserver;
 use App\Observers\User\NetworkOperator\UserNetworkOperatorObserver;
 use App\Observers\User\Seller\UserSellerObserver;
@@ -38,6 +43,8 @@ use App\Observers\User\Technician\UserTechnicianObserver;
 use App\Observers\User\UserObserver;
 use App\Observers\ClientAlert\ClientAlertObserver;
 use App\Models\V1\ClientAlert;
+use App\Observers\V1\Pqr\PqrLogObserver;
+use App\Observers\V1\PqrUser\PqrUserObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -80,6 +87,8 @@ class AppServiceProvider extends ServiceProvider
         NetworkOperator::observe(AddressObserver::class);
         Support::observe(AddressObserver::class);
         Admin::observe(AddressObserver::class);
+        Supervisor::observe(AddressObserver::class);
+
 
         ClientAddress::observe(HereMapObserver::class);
         Technician::observe(HereMapObserver::class);
@@ -87,9 +96,15 @@ class AppServiceProvider extends ServiceProvider
         NetworkOperator::observe(HereMapObserver::class);
         Support::observe(HereMapObserver::class);
         Admin::observe(HereMapObserver::class);
+        Supervisor::observe(HereMapObserver::class);
+
 
         BillingInformation::observe(BillingInformationObserver::class);
+        Pqr::observe(PqrObserver::class);
+        Pqr::observe(PqrLogObserver::class);
+        PqrLog::observe(ActionByObserve::class);
+
+        PqrUser::observe(PqrUserObserver::class);
 
     }
 }
-

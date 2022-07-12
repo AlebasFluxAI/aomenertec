@@ -34,7 +34,7 @@ class Monitoring extends Component
         $this->real_time_variables = $this->variables->where('real_time', true);
         $this->time = 2;
         $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
-        if (count($this->data_chart)==0){
+        if (count($this->data_chart)==0) {
             $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
             $this->time = 1;
         }
@@ -49,7 +49,8 @@ class Monitoring extends Component
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id)->exists()) {
+            $equipment->id
+        )->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             $topic = 'mc/config/'.$equipment->serial;
             MQTT::publish($topic, $message);

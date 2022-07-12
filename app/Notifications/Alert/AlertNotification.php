@@ -2,7 +2,6 @@
 
 namespace App\Notifications\Alert;
 
-
 use App\Channels\WhatsAppChannel;
 use App\Http\Resources\V1\UserNotificationPayload;
 use App\Notifications\WhatsAppMessage;
@@ -29,7 +28,11 @@ class AlertNotification extends Notification
 
     public function toDatabase()
     {
-        return new UserNotificationPayload("Alerta de consumo de cliente", "v1.admin.client.monitoring", "interna", 1);
+        return new UserNotificationPayload("Alerta de consumo de cliente",
+            "v1.admin.client.monitoring",
+            "interna",
+            1,
+            "client");
     }
 
     public function toWhatsApp($notifiable)

@@ -12,7 +12,6 @@ use Livewire\WithFileUploads;
 
 class EditTechnician extends Component
 {
-
     use AddUserFormTrait;
 
     public $model;

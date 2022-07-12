@@ -159,16 +159,32 @@ return [
         Permissions::SUPERVISOR_DELETE,
         Permissions::SUPERVISOR_SHOW,
         Permissions::SUPERVISOR_LINK_CLIENT,
+
+        Permissions::PQR_SHOW,
+        Permissions::PQR_REPLY,
+        Permissions::PQR_CREATE_NETWORK_OPERATOR,
+        Permissions::PQR_CLOSE,
     ],
     // Tecnico
     Technician::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+
+        Permissions::PQR_SHOW,
+        Permissions::PQR_CHANGE_LEVEL,
+        Permissions::PQR_REPLY,
+        Permissions::PQR_REQUEST_CLOSE,
     ],
     // Soporte
     Support::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+
+        Permissions::PQR_SHOW,
+        Permissions::PQR_CHANGE_LEVEL,
+        Permissions::PQR_REPLY,
+        Permissions::PQR_REQUEST_CLOSE,
+
     ],
     // Vendedor
     Seller::class => [
@@ -179,5 +195,8 @@ return [
     Supervisor::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::PQR_CREATE,
+        Permissions::PQR_SHOW,
+        Permissions::PQR_REPLY,
     ]
 ];

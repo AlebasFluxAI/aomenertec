@@ -85,6 +85,7 @@ class AddClientService extends Singleton
 
         return $admin->networkOperatorsAsKeyValue();
     }
+
     private function getClientTypes($component)
     {
         if (Auth::user()->networkOperator) {
@@ -99,7 +100,6 @@ class AddClientService extends Singleton
 
     public function getTechnicians($component)
     {
-
         if (Auth::user()->networkOperator) {
             $component->technician_select_disabled = false;
             return Technician::whereNetworkOperatorId($component->network_operator_id)
@@ -109,7 +109,6 @@ class AddClientService extends Singleton
                         "value" => $technician->id
                     ];
                 })->toArray();
-
         }
         $component->technician_select_disabled = true;
         return [];
@@ -262,7 +261,6 @@ class AddClientService extends Singleton
                 if (count($hereMap['items']) > 0) {
                     if (array_key_exists('address', $hereMap['items'][0])) {
                         $component->decodedAddress = array_key_exists('label', $hereMap['items'][0]['address']) ? $hereMap['items'][0]['address']['label'] : "";
-
                     }
                 }
             }
@@ -373,9 +371,9 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
-        //$component->validate();
-        DB::transaction(function () use ($component) {
 
+        $component->validate();
+        DB::transaction(function () use ($component) {
             $client = $this->createClient($component);
             $this->linkAddress($component, $client);
             $this->linkTechnician($component, $client);
@@ -384,7 +382,6 @@ class AddClientService extends Singleton
             $this->createBillingInformation($component, $client);
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $client->id]);
         });
-
     }
 
     private function createClient($component)
@@ -417,7 +414,6 @@ class AddClientService extends Singleton
             'identification_type' => $component->identification_type,
             'person_type' => $component->person_type,
         ]);
-
     }
 
     public function clientCode($input = '0123456789', $strength = 10)
@@ -438,7 +434,6 @@ class AddClientService extends Singleton
             "longitude" => $component->longitude,
             "details" => $component->addressDetails,
         ]);
-
     }
 
     private function linkTechnician(Component $component, Client $client)
@@ -446,7 +441,6 @@ class AddClientService extends Singleton
         $client->technician()->create([
             "technician_id" => $component->technician_id
         ]);
-
     }
 
     private function linkEquipments(Component $component, Client $client)
@@ -497,5 +491,4 @@ class AddClientService extends Singleton
             "default" => true
         ]);
     }
-
 }

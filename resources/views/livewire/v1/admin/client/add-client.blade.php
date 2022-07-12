@@ -49,16 +49,7 @@
                                   "required"=>true
                          ])
 
-                            @include("partials.v1.form.form_input_icon",[
-                                   "input_label"=>"Apellido del cliente",
-                                   "input_model"=>"last_name",
-                                   "updated_input"=>"defer",
-                                   "icon_class"=>"fas fa-user",
-                                   "placeholder"=>"Apellido",
-                                   "col_with"=>8,
-                                   "input_type"=>"text",
-                                   "required"=>true
-                                                ])
+                            }
 
                             @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Telefono del cliente (Sin indicativo)",

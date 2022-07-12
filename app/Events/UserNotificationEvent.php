@@ -54,5 +54,4 @@ class UserNotificationEvent implements ShouldBroadcast
             "notifiable" => $this->user_id,
         ];
     }
-
 }

@@ -17,7 +17,8 @@ class AdminPrice extends Model
         'client_type_id',
         'value',
         ];
-    public function clientType(){
+    public function clientType()
+    {
         return $this->belongsTo(ClientType::class);
     }
 }

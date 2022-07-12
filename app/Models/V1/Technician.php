@@ -13,7 +13,7 @@ class Technician extends Model
     use HasFactory;
     use SoftDeletes;
     use PermissionTrait;
-    
+
 
     protected $fillable = ['identification',
         'phone',
@@ -47,6 +47,20 @@ class Technician extends Model
                             [
                                 "title" => "Clientes",
                                 "route" => "v1.admin.client.list.client",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ]
+
+                    ],
+                    [
+                        "title" => "Pqr's",
+                        "route" => "administrar.v1.peticiones.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Pqr's",
+                                "route" => "administrar.v1.peticiones.listado",
                                 "submenu" => [
 
                                 ]

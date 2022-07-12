@@ -1,8 +1,6 @@
 @extends("layouts.v1.app")
 @include("layouts.menu.v1.header_menu_password")
 @section("content")
-
-
     <br>
 
     <div class="col-md-12 mt-8">

@@ -33,7 +33,6 @@ class EditClientService extends Singleton
 
     public function mount(Component $component, Client $client)
     {
-
         $billingInformation = $this->getBillingInformation($client);
         $clientAddress = $this->getClientAddress($client);
         $component->fill([
@@ -85,7 +84,6 @@ class EditClientService extends Singleton
             "addressDetails" => $clientAddress ? $clientAddress->details : "",
             "decodedAddress" => $clientAddress ? $clientAddress->address : "",
         ]);
-
     }
 
 
@@ -146,7 +144,6 @@ class EditClientService extends Singleton
             $this->linkAddress($component, $component->client);
             $this->linkBillingInformation($component, $component->client);
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
-
         });
     }
 
@@ -175,7 +172,6 @@ class EditClientService extends Singleton
     private function linkAddress(Component $component, Client $client)
     {
         if ($address = $client->addresses()->first()) {
-
             $address->update([
                 "latitude" => $component->latitude,
                 "longitude" => $component->longitude,
@@ -188,7 +184,6 @@ class EditClientService extends Singleton
             "longitude" => $component->longitude,
             "details" => $component->addressDetails,
         ]);
-
     }
 
     private function linkBillingInformation(Component $component, Client $client)
@@ -212,6 +207,5 @@ class EditClientService extends Singleton
             "name" => $component->billing_name,
             "default" => true
         ]);
-
     }
 }
