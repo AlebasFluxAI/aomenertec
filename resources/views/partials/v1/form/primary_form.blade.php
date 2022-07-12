@@ -12,7 +12,11 @@
                         @foreach($form_inputs as $form_input)
                             @if($form_input["input_type"]=="text" ||
                                 $form_input["input_type"]=="checkbox"||
-                                $form_input["input_type"]=="number" || $form_input["input_type"]=="email" || $form_input["input_type"]=="password")
+                                $form_input["input_type"]=="number" ||
+                                $form_input["input_type"]=="email" ||
+                                $form_input["input_type"]=="password" ||
+                                $form_input["input_type"]=="select"
+                                )
                                 @include("partials.v1.form.form_input_icon",[
                                           "input_label"=>$form_input["input_label"]??"",
                                           "updated_input"=>$form_input["updated_input"]??"",
@@ -27,6 +31,9 @@
                                           "number_min"=>$form_input["number_min"]??"",
                                           "number_max"=>$form_input["number_max"]??"",
                                           "number_step"=>$form_input["number_step"]??"",
+                                          "select_options"=>$form_input["select_options"]??[],
+                                              "select_option_value"=>$form_input["select_option_value"]??"",
+                                              "select_option_view"=>$form_input["select_option_view"]??"",
                                      ])
 
                             @elseif($form_input["input_type"]=="dropdown-search")
@@ -85,6 +92,20 @@
                                               "col_with"=>$form_input["col_with"],
 
                                     ])
+                            @elseif($form_input["input_type"] == "multiselect")
+                                @include("partials.v1.form.multiselect_dropdown",[
+                                            "mt"=>$form_input["mt"]??0,
+                                            "mb"=>$form_input["mb"],
+                                            "col_width"=>$form_input["col_width"],
+                                            "options_list"=>$form_input["options_list"],
+                                            "model_select"=>$form_input["model_select"],
+                                            "name_select"=>$form_input["name_select"]??"",
+                                            "option_value"=>$form_input["option_value"],
+                                            "option_view"=>$form_input["option_view"],
+                                            "optgroup"=>$form_input["optgroup"]??false,
+                                            "input_label"=> $form_input["input_label"]??""
+
+                                   ])
                             @endif
 
 

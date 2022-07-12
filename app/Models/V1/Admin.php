@@ -288,6 +288,23 @@ class Admin extends Model
         return $this->hasMany(AdminEquipmentType::class);
     }
 
+    public function clientTypesAsKeyValue()
+    {
+        return
+            ($this->adminClientTypes()->with("clientType")->get()->map(function ($clientType) {
+                return [
+                    "key" => ($clientType->clientType ? $clientType->clientType->id : "") . "- "
+                        . ucfirst(strtolower(($clientType->clientType ? $clientType->clientType->type : ""))),
+                    "value" => ($clientType->clientType ? $clientType->clientType->id : ""),
+                ];
+            }))->toArray();
+    }
+
+    public function adminClientTypes()
+    {
+        return $this->hasMany(AdminClientType::class);
+    }
+
     public function priceAdmin()
     {
         return $this->hasMany(AdminPrice::class)->orderBy('client_type_id');

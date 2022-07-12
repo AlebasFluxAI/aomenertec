@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\User\Admin;
 use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
+use App\Models\V1\AdminClientType;
 use App\Models\V1\AdminConfiguration;
 use App\Models\V1\AdminPrice;
 use App\Models\V1\ClientType;
@@ -18,12 +19,14 @@ class PriceAdminService extends Singleton
     {
 
         if (!$model->priceAdmin()->exists()) {
-            foreach (ClientType::all() as $type) {
-                AdminPrice::create([
-                    "admin_id" => $model->id,
-                    "client_type_id" => $type->id,
-                    "value" => 0,
-                ]);
+            if ($model->adminClientTypes()->exists()) {
+                foreach ($model->adminClientTypes as $type) {
+                    AdminPrice::create([
+                        "admin_id" => $model->id,
+                        "client_type_id" => $type->client_type_id,
+                        "value" => 0,
+                    ]);
+                }
             }
         }
         if (!$model->configAdmin()->exists()) {
@@ -38,21 +41,59 @@ class PriceAdminService extends Singleton
             "model" => $model,
             "prices"=> $model->priceAdmin,
             "config"=> $model->configAdmin,
+            "frame_types" => [
+                        ["key" => "Consumo activo", "value" => AdminConfiguration::FRAME_TYPE_ACTIVE_ENERGY],
+                        ["key" => "Consumo activo + reactivo", "value" => AdminConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY],
+                        ["key" => "Consumo activo + reactivo + variables de red", "value" => AdminConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES]
+                       ],
+            "frame_type" => $model->configAdmin->frame_type,
             "coins" => [
                         ["key" => "Peso Colombiano", "value" => AdminConfiguration::COP],
                         ["key" => "Dolar", "value" => AdminConfiguration::USD]
                        ],
+            "admin_client_types" => $model->adminClientTypes->pluck('client_type_id')->toArray()
         ]);
 
     }
 
-    public function submitForm(Component $component)
+    public function submitFormPrice(Component $component)
     {
         $component->validate();
         foreach ($component->prices as $price) {
             $price->save();
         }
         $component->config->save();
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+
+    }
+
+    public function submitFormConfiguration(Component $component)
+    {
+        $client_types = $component->model->adminClientTypes;
+        foreach ($client_types as $item){
+            if (!in_array($item->client_type_id, $component->admin_client_types)){
+                $component->model->priceAdmin()->whereClientTypeId($item->client_type_id)->first()
+                                ->delete();
+                $item->delete();
+            }
+        }
+        foreach ($component->admin_client_types as $type) {
+            if(!$component->model->adminClientTypes()->whereClientTypeId($type)->exists())
+            {
+                AdminClientType::create(
+                    ['admin_id' => $component->model->id,
+                        'client_type_id' => $type]
+                );
+                AdminPrice::create([
+                    "admin_id" => $component->model->id,
+                    "client_type_id" => $type,
+                    "value" => 0,
+                ]);
+            }
+        }
+        $component->config->frame_type = $component->frame_type;
+        $component->config->save();
+        $component->prices = $component->model->priceAdmin()->get();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
 
     }

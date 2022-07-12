@@ -172,9 +172,9 @@
                                      "list_model" => "client_type_id",
                                      "list_default" => "Conexión...",
                                      "list_options" => $client_types,
-                                     "list_option_value"=>"id",
-                                     "list_option_view"=>"type",
-                                     "list_option_title"=>"description",
+                                     "list_option_value"=>"value",
+                                     "list_option_view"=>"key",
+                                     "list_option_title"=>"",
                             ])
 
 

@@ -52,13 +52,12 @@ class AddClientService extends Singleton
             'network_operators' => $this->getNetworkOperators($component),
             'technicians' => $this->getTechnicians($component),
             'strata' => Stratum::get(),
-            'client_types' => ClientType::get(),
+            'client_types' => $this->getClientTypes($component),
             "technician_id" => null,
-            'client_type_id' => ClientType::first() ? ClientType::first()->id : null,
+            'client_type_id' => 0,
             'voltage_levels' => VoltageLevel::get(),
             'subsistence_consumptions' => SubsistenceConsumption::get(), 'contribution' => true,
-            'location_types' => LocationType::get(),
-            'locations' => [],
+
             "identification_type" => Client::IDENTIFICATION_TYPE_CC,
             "person_type" => Client::PERSON_TYPE_NATURAL,
             "identification_types" => $this->identificationTypes(),
@@ -85,6 +84,17 @@ class AddClientService extends Singleton
         $admin = User::getUserModel();
 
         return $admin->networkOperatorsAsKeyValue();
+    }
+    private function getClientTypes($component)
+    {
+        if (Auth::user()->networkOperator) {
+            $admin = Auth::user()->networkOperator->admin;
+            return $admin->clientTypesAsKeyValue();
+        }
+
+        $admin = User::getUserModel();
+
+        return $admin->clientTypesAsKeyValue();
     }
 
     public function getTechnicians($component)

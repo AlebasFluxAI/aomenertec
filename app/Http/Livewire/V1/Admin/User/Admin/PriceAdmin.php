@@ -13,7 +13,10 @@ class PriceAdmin extends Component
     public $config;
     public $client_types;
     public $coins;
+    public $admin_client_types;
     public $model;
+    public $frame_types;
+    public $frame_type;
 
     private $priceAdminService;
 
@@ -36,9 +39,14 @@ class PriceAdmin extends Component
         $this->priceAdminService->mount($this, $admin);
     }
 
-    public function submitForm()
+    public function submitFormPrice()
     {
-        $this->priceAdminService->submitForm($this);
+        $this->priceAdminService->submitFormPrice($this);
+    }
+
+    public function submitFormConfiguration()
+    {
+        $this->priceAdminService->submitFormConfiguration($this);
     }
 
     public function render()

@@ -6,10 +6,13 @@ use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 use PhpMqtt\Client\Facades\MQTT;
 
 class Monitoring extends Component
 {
+
+    use WithPagination;
     protected $listeners = ['tabChange'];
     public $data_chart;
     public $data_frame;
@@ -19,6 +22,7 @@ class Monitoring extends Component
     public $real_time_variables;
     public $time;
     public $clientAlerts;
+
 
     public function mount(Client $client)
     {
