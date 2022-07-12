@@ -1,0 +1,154 @@
+<div class="login">
+    @section("header") {{--extended app.blade--}}
+
+    @endsection
+
+
+    @include("partials.v1.title",[
+          "second_title"=>"",
+          "first_title"=>"PQR's"
+      ])
+    @include("partials.v1.table_nav",
+            [
+                "mt"=>2,
+                "nav_options"=>[
+                       [
+                       "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CREATE],
+                       "button_align"=>"right",
+                       "click_action"=>"",
+                       "button_content"=>"Crear PQR",
+                       "button_icon"=>"fa-solid fa-plus",
+                       "target_route"=>"administrar.v1.peticiones.supervisor.crear",
+                       ],
+                       [
+                       "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CREATE_NETWORK_OPERATOR],
+                       "button_align"=>"right",
+                       "click_action"=>"",
+                       "button_content"=>"Crear PQR",
+                       "button_icon"=>"fa-solid fa-plus",
+                       "target_route"=>"administrar.v1.peticiones.operador.crear",
+                       ],
+
+                   ]
+           ])
+
+    @include("partials.v2.table.primary-table",[
+           "table_headers"=>[
+            [
+               "col_name" =>"ID",
+               "col_data" =>"id",
+               "col_filter"=>false
+           ],
+            [
+               "col_name" =>"Codigo",
+               "col_data" =>"code",
+               "col_filter"=>false
+           ],
+           [
+               "col_name" =>"Asunto",
+               "col_data" =>"subject",
+               "col_filter"=>false
+           ],
+             [
+               "col_name" =>"Tipo",
+               "col_data" =>"type",
+               "col_filter"=>false,
+               "col_translate"=>"pqr"
+           ],
+           [
+                   "col_name" =>"Categoria",
+               "col_data" =>"sub_type",
+               "col_filter"=>false,
+               "col_translate"=>"pqr"
+           ],
+            [
+                "col_name" =>"Cliente",
+               "col_data" =>"client.name",
+               "col_filter"=>false,
+
+           ],
+           [
+                "col_name" =>"Severidad",
+               "col_data" =>"severity",
+               "col_filter"=>false,
+               "col_translate"=>"pqr"
+
+           ],
+           [
+                "col_name" =>"Estado",
+               "col_data" =>"status",
+               "col_filter"=>false,
+               "col_translate"=>"pqr"
+
+           ],
+
+           [
+                "col_name" =>"Nivel",
+               "col_data" =>"level",
+               "col_filter"=>false,
+               "col_translate"=>"pqr"
+
+           ],
+
+            ],
+             "table_actions"=>[
+
+                                "customs"=>[
+                                                 [
+                                                         "function"=>"details",
+                                                         "icon"=>"fas fa-search",
+                                                         "tooltip_title"=>"Detalles",
+                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_SHOW],
+                                                 ],
+                                                 [
+
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CHANGE_LEVEL],
+                                                        "function"=>"changeLevel",
+                                                        "icon"=>"fas fa-arrow-turn-up",
+                                                        "tooltip_title"=>"Escalar ticket",
+                                                        "conditional"=>"openTicked"
+                                                ],
+                                                [
+
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::PQR_REPLY],
+                                                        "redirect"=>[
+                                                                "route"=>"administrar.v1.peticiones.respuesta",
+                                                                "binding"=>"pqr"
+                                                          ],
+                                                        "icon"=>"fa fa-comment-dots",
+                                                        "tooltip_title"=>"Responder ticket",
+                                                        "conditional"=>"openTicked"
+                                                ],
+                                                  [
+
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::PQR_REPLY],
+                                                        "redirect"=>[
+                                                                "route"=>"administrar.v1.peticiones.historial-mensajes",
+                                                                "binding"=>"pqr"
+                                                          ],
+                                                        "icon"=>"fa fa-list",
+                                                        "tooltip_title"=>"Historial de mensajes",
+                                                        "conditional"=>"closedTicked"
+                                                ],
+                                                [
+
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CLOSE],
+                                                        "function"=>"closePqr",
+                                                        "icon"=>"fas fa-check",
+                                                        "tooltip_title"=>"Cerrar ticket"
+                                                ],
+
+                                    ]
+                                ],
+
+                                            /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
+                                            _edit_button=>{ruta para redireccionar a edicion}
+                                            _delete_button => {boton de borrado, siempre tomando como identificador la primera colunma de la tabla - ID}
+                                              ]*/
+           "table_rows"=>$data
+
+
+
+       ])
+
+</div>

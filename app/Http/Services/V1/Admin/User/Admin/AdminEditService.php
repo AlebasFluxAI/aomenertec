@@ -40,7 +40,6 @@ class AdminEditService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         DB::transaction(function () use ($component) {
             if ($component->icon) {
                 $image = $component->icon;
@@ -56,7 +55,6 @@ class AdminEditService extends Singleton
             $component->model->update();
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
         });
-
     }
 
     private function mapper(Component $component)

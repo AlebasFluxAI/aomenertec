@@ -99,6 +99,7 @@
 {{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"coenergia"]) }}">¿Olvidaste
                                     la
                                     contraseña?</a></div>
+                            @include("auth.support_button")
                         @endif
 
                     </form>

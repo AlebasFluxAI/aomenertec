@@ -56,23 +56,30 @@
                             </td>
                         @endif
                         @foreach($table_headers as $table_header)
-                            <td style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}">
+
+                            <td style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}"
+                            >
+
+
                                 @if(str_contains($table_header["col_data"],".") and !str_contains($table_header["col_data"],"*") and $table_row->{explode(".",$table_header["col_data"])[0]})
                                     @include("partials.v2.table.primary-table-column",[
                                           "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]},
-                                          "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:""
+                                          "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:"",
+                                          "col_translate"=>$table_header["col_translate"]??null,
                                       ])
                                 @else
                                     @include("partials.v2.table.primary-table-column",[
                                     "col_data"=>$table_row->{$table_header["col_data"]},
                                     "col_array_data"=>$table_header["col_array_data"]??"",
-                                    "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:""
+                                    "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
+                                    "col_translate"=>$table_header["col_translate"]??null,
                                 ])
 
                                 @endif
                             </td>
                         @endforeach
                         @isset($table_actions)
+
                             <td id="table-action-cell"
                                 style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}">
                                 <div class="container-fluid">
@@ -113,7 +120,7 @@
                                                         @continue
                                                         @endunlessrole
                                                     @endif
-                                                    @if(isset($custom["permission"]) and !array_intersect($custom["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
+                                                    @if(isset($custom["permission"]) and \Illuminate\Support\Facades\Auth::hasUser() and !array_intersect($custom["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
                                                         @continue
                                                     @endif
 
@@ -133,7 +140,8 @@
                                                                  "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
                                                                     $table_row->{$table_headers[0]["col_data"]},
                                                                  "icon"=>$custom["icon"],
-                                                                 "tooltip_title"=>$custom["tooltip_title"] ?? ''
+                                                                 "tooltip_title"=>$custom["tooltip_title"] ?? '',
+                                                                 "button_subdomain"=>$custom["button_subdomain"]??null
                                                              ])
                                                     @else
                                                         @include("partials.v1.table.table-action-button",[

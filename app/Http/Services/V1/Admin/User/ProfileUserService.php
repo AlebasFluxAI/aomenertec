@@ -31,7 +31,6 @@ class ProfileUserService extends Singleton
         {
             $component->admins = Admin::get();
         }
-
     }
 
     private function getModelByUser()
@@ -47,7 +46,6 @@ class ProfileUserService extends Singleton
     public function deleteAdminConditional(Component $component, $adminId)
     {
         return NetworkOperator::whereAdminId($adminId)->exists();
-
     }
 
     public function deleteNetworkOperator(Component $component, $networkOperatorId)
@@ -66,4 +64,11 @@ class ProfileUserService extends Singleton
     {
         return !MicrocontrollerData::whereClientId($clientId)->exists();
     }
+
+    public function blinkSupportPqrAvailability($supportId)
+    {
+
+        return Support::find($supportId)->blinkPqrAvailability();
+    }
+
 }

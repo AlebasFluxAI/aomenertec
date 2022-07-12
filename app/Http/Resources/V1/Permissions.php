@@ -75,5 +75,11 @@ class Permissions
     public const CLIENT_SHOW_MONITORING = "client.show_monitoring";
     public const CLIENT_SETTINGS = "client.settings";
 
-
+    public const PQR_SHOW = "pqr_show";
+    public const PQR_CHANGE_LEVEL = "pqr_change_level";
+    public const PQR_REQUEST_CLOSE = "pqr_request_close";
+    public const PQR_REPLY = "pqr_reply";
+    public const PQR_CREATE = "pqr_create";
+    public const PQR_CREATE_NETWORK_OPERATOR = "pqr_create_network_operator";
+    public const PQR_CLOSE = "pqr_close";
 }

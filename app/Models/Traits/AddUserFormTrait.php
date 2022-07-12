@@ -59,7 +59,6 @@ trait AddUserFormTrait
                 if (count($hereMap['items']) > 0) {
                     if (array_key_exists('address', $hereMap['items'][0])) {
                         $this->decodedAddress = array_key_exists('label', $hereMap['items'][0]['address']) ? $hereMap['items'][0]['address']['label'] : "";
-
                     }
                 }
             }

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Request;
 
 trait ClientServiceTrait
 {
-
     public function topologies()
     {
         return [
@@ -60,12 +59,12 @@ trait ClientServiceTrait
         ];
     }
 
-    function getBillingInformation(Client $client)
+    public function getBillingInformation(Client $client)
     {
         return $client->billingInformation()->first();
     }
 
-    function getClientAddress(Client $client)
+    public function getClientAddress(Client $client)
     {
         return $client->addresses()->first();
     }

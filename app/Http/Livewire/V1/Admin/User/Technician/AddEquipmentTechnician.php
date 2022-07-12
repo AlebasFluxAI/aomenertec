@@ -54,7 +54,7 @@ class AddEquipmentTechnician extends Component implements AssignedEquipmentInter
 
     public function getPageTitle()
     {
-        return "Equipos de tecnico";
+        return "Equipos de técnico";
     }
 
     public function getNavOptions()
@@ -93,6 +93,6 @@ class AddEquipmentTechnician extends Component implements AssignedEquipmentInter
 
     public function getCardTitle()
     {
-        return "Tecnico";
+        return "Técnico";
     }
 }

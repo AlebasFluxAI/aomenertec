@@ -8,6 +8,5 @@ class PqrMessageObserver
 {
     public function created(PqrMessage $pqrMessage)
     {
-        $pqrMessage->buildOneImage(["image"]);
     }
 }

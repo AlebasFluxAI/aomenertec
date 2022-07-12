@@ -11,25 +11,28 @@ class UserNotificationPayload
     private $message;
     private $target;
     private $type;
+    private $binding;
 
-    public function __construct($message, $target, $type, $client_id = null)
+    public function __construct($message, $target, $type, $binding_id = null, $binding = null)
     {
         $this->message = $message;
         $this->target = $target;
         $this->type = $type;
-        $this->client_id = $client_id;
+        $this->binding_id = $binding_id;
+        $this->binding = $binding;
         $this->data = $this->getData();
+
     }
 
     public function getData(): array
     {
+
         return [
             "message" => $this->message,
             "target" => $this->target,
             "type" => $this->type,
-            "client_id" => $this->client_id
+            "binding_id" => $this->binding_id,
+            "binding" => $this->binding
         ];
     }
-
-
 }

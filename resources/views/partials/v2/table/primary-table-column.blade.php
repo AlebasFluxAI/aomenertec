@@ -9,10 +9,12 @@
 @elseif(($col_type?:"")== \App\Http\Resources\V1\ColTypeEnum::COL_TYPE_ARRAY_CLIENT_NOTIFICATION)
     <div class="text-left">
         <a style="color: teal"
-           href="{{route('v1.admin.client.monitoring',["client"=>$col_data["client_id"]])}}">
-            {{array_key_exists($col_array_data,$col_data)?$col_data[$col_array_data]:""}} -
-            Cliente {{$col_data["client_id"]}}</a>
+           href="{{route($col_data["target"],[$col_data["binding"]=>$col_data["binding_id"]])}}">
+            {{array_key_exists($col_array_data,$col_data)?$col_data[$col_array_data]:""}} </a>
     </div>
+
+@elseif($col_translate)
+    {{__($col_translate.".".$col_data)}}
 @else
     {{$col_data}}
 

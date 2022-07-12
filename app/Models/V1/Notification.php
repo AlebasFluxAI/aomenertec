@@ -20,5 +20,4 @@ class Notification extends Model
         'target',
         'read_at',
     ];
-
 }

@@ -12,12 +12,11 @@ class IndexController extends Controller
 {
     public function index()
     {
-
         if (Auth::user()) {
             return redirect()->route("administrar.v1.perfil");
         }
         $subdomain = Route::input("subdomain");
-        
+
         return match ($subdomain) {
             Subdomain::SUBDOMAIN_AOM => Subdomain::SUBDOMAIN_AOM > view('auth.login'),
             Subdomain::SUBDOMAIN_COENERGIA => view("auth.coenergia_login"),
@@ -28,6 +27,5 @@ class IndexController extends Controller
     public function forgotPassword()
     {
         return view('auth.passwords.email');
-
     }
 }

@@ -62,6 +62,7 @@ class Client extends Model
     {
         return $this->hasOne(ClientConfiguration::class);
     }
+
     public function clientAlertConfiguration()
     {
         return $this->hasMany(ClientAlertConfiguration::class)->orderBy('flag_id');
@@ -160,18 +161,20 @@ class Client extends Model
     {
         return $this->hasMany(ClientAddress::class);
     }
+
     public function digitalOutputs()
     {
         return $this->hasMany(ClientDigitalOutput::class)->orderBy('number');
     }
+
     public function alertConfigurationDigitalOutputs()
     {
         return $this->hasMany(ClientDigitalOutputAlertConfiguration::class);
     }
+
     public function clientAlerts()
     {
         return $this->hasMany(ClientAlert::class);
     }
-
 
 }

@@ -19,18 +19,20 @@ class Control extends Component
         'coils.*.status' => 'required',
         'coils.*.control_type' => 'required',
     ];
-    public function mount(Client $client){
+    public function mount(Client $client)
+    {
         $this->client = $client;
         $this->coils = $this->client->digitalOutputs;
     }
 
-    public function confirmAction($index){
+    public function confirmAction($index)
+    {
         $this->coils[$index]['status']=!$this->coils[$index]['status'];
         $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/".$equipment->serial;
         if ($this->coils[$index]['status']) {
             $message = "{'did':" . $equipment->serial . ",'coil" . $this->coils[$index]['number'] . "':false}";
-        } else{
+        } else {
             $message = "{'did':" . $equipment->serial . ",'coil" . $this->coils[$index]['number'] . "':true}";
         }
         $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
@@ -41,9 +43,10 @@ class Control extends Component
         MQTT::disconnect();
         //$this->coils = $this->client->coils;
     }
-    public function updatedCoils($value, $key){
+    public function updatedCoils($value, $key)
+    {
         $variable = explode(".", $key);
-        if($variable[1] == "name"){
+        if ($variable[1] == "name") {
             $coil = ClientDigitalOutput::find($this->coils[$variable[0]]['id']);
             $coil->name = $value;
             $coil->save();

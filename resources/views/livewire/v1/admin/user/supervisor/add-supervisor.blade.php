@@ -27,7 +27,9 @@
         @include("partials.v1.addUserTemplate.user-add-form")
     </form>
     @else
-        @include("partials.v1.addUserTemplate.user-add-form",[
+        <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
+
+            @include("partials.v1.addUserTemplate.user-add-form",[
                           "custom_input"=>[
                                [
                                "view_name"=>"partials.v1.divider_title",
@@ -53,6 +55,7 @@
                                ]
                                ]
               ])
+        </form>
 
         @endrole
 

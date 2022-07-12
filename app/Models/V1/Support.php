@@ -30,6 +30,7 @@ class Support extends Model
         "country",
         "city",
         "state",
+        "pqr_available"
     ];
 
     public static function menu()
@@ -46,6 +47,21 @@ class Support extends Model
                             [
                                 "title" => "Clientes",
                                 "route" => "v1.admin.client.list.client",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ],
+
+
+                    ],
+                    [
+                        "title" => "Pqr's",
+                        "route" => "administrar.v1.peticiones.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Pqr's",
+                                "route" => "administrar.v1.peticiones.listado",
                                 "submenu" => [
 
                                 ]
@@ -87,4 +103,13 @@ class Support extends Model
     {
         return $this->hasMany(ClientSupport::class);
     }
+
+    public function blinkPqrAvailability()
+    {
+        $this->update([
+            "pqr_available" => $this->pqr_available ? false : true,
+        ]);
+    }
 }
+
+

@@ -24,5 +24,4 @@ class AdminConfiguration extends Model
 
     public const COP = 'cop';
     public const USD = 'usd';
-
 }

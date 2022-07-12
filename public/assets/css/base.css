@@ -13,6 +13,44 @@
     --style_header_button: #f5b042;
 }
 
+.click-zoom input[type=checkbox] {
+    display: none
+}
+
+.click-zoom img {
+
+    transition: transform 0.25s ease;
+    cursor: zoom-in
+}
+
+#message-box-right {
+    padding: 1rem;
+    margin: 1rem;
+    border-color: #00aabb;
+    background: #f2f2f2;
+    border-width: 2px;
+    border-radius: 5px;
+    width: 50%;
+    margin-left: 50%;
+}
+
+#message-box-left {
+    padding: 1rem;
+    margin: 1rem;
+    border-color: teal;
+    background-color: #f2f2f2;
+    border-width: 2px;
+    border-radius: 5px;
+    width: 50%;
+
+
+}
+
+.click-zoom input[type=checkbox]:checked ~ img {
+    transform: scale(2);
+    cursor: zoom-out
+}
+
 .loader {
     border: 16px solid #f3f3f3;
     border-radius: 50%;
@@ -454,6 +492,21 @@ dialog {
 
 .contenedor-grande textarea {
     padding: 10px 12px;
+}
+
+.link {
+    color: var(--style_primary);
+}
+
+#add {
+    background-color: white;
+    border: solid var(--style_primary) 1px;
+    padding: 4px 10px;
+    margin: 3px;
+    color: var(--style_primary);
+    transition: 0.4s;
+    border-radius: 13px;
+    font-size: 0.9rem;
 }
 
 .contenedor-grande button {

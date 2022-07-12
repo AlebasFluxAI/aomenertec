@@ -34,15 +34,17 @@ class NotificationHeader extends Component
 
     public function notifyDeleteNotification($notification)
     {
-
         if ($notification["notifiable"] != $this->user_id) {
             return;
         }
-        $this->emitTo('livewire-toast', 'show',
+        $this->emitTo(
+            'livewire-toast',
+            'show',
             ['type' => 'info', 'message' => 'Notificación archivada',
                 "position" => "top-left",
                 "duration" => "3000",
-                'transition_type' => 'zoom_in']);
+                'transition_type' => 'zoom_in']
+        );
 
         $this->notificationHeaderService->refreshNotificationCounter($this);
     }
@@ -52,14 +54,16 @@ class NotificationHeader extends Component
         if ($notification["notifiable"] != $this->user_id) {
             return;
         }
-        $this->emitTo('livewire-toast', 'show',
+        $this->emitTo(
+            'livewire-toast',
+            'show',
             ['type' => 'info', 'message' => 'Notificación marcada como leida',
                 "position" => "top-left",
                 "duration" => "3000",
-                'transition_type' => 'zoom_in']);
+                'transition_type' => 'zoom_in']
+        );
 
         $this->notificationHeaderService->refreshNotificationCounter($this);
-
     }
 
     public function notifyInputNotification($notification)
@@ -68,12 +72,14 @@ class NotificationHeader extends Component
             return;
         }
         $this->notificationHeaderService->refreshNotificationCounter($this);
-        $this->emitTo('livewire-toast', 'show',
+        $this->emitTo(
+            'livewire-toast',
+            'show',
             ['type' => 'info', 'message' => 'Tienes una nueva notificación',
                 "position" => "top-right",
                 "duration" => "3000",
-                'transition_type' => 'zoom_in']);
-
+                'transition_type' => 'zoom_in']
+        );
     }
 
 

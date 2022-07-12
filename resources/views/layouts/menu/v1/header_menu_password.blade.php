@@ -1,4 +1,4 @@
-<section class="top-info">
+<section class="top-info" wire:ignore>
     <div class="contenedor-grande">
         <nav class="navbar navbar-expand-lg "
              style="justify-content: space-between;padding: 5px;{{\App\Http\Resources\V1\Subdomain::getHeaderColor()}}">
