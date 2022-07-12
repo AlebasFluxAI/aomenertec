@@ -49,7 +49,7 @@
                                                                                         ], [
                                                                                                 "input_type"=>"text",
                                                                                                 "input_model"=>"client_config.ssid",
-                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "icon_class"=>null,
                                                                                                 "placeholder"=>"Red Wifi",
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
@@ -58,7 +58,7 @@
                                                                                             ], [
                                                                                                 "input_type"=>"text",
                                                                                                 "input_model"=>"client_config.wifi_password",
-                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "icon_class"=>null,
                                                                                                 "placeholder"=>"Contraseña WiFi",
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
@@ -67,7 +67,7 @@
                                                                                             ], [
                                                                                                 "input_type"=>"text",
                                                                                                 "input_model"=>"client_config.mqtt_host",
-                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "icon_class"=>null,
                                                                                                 "placeholder"=>"Servidor MQTT",
                                                                                                 "updated_input"=>"defer",
                                                                                                 "col_with"=>6,
@@ -77,7 +77,7 @@
                                                                                             ], [
                                                                                                 "input_type"=>"text",
                                                                                                 "input_model"=>"client_config.mqtt_port",
-                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "icon_class"=>null,
                                                                                                 "placeholder"=>"Puerto MQTT",
                                                                                                 "updated_input" => "defer",
                                                                                                 "col_with"=>6,
@@ -87,7 +87,7 @@
                                                                                             ], [
                                                                                                 "input_type"=>"text",
                                                                                                 "input_model"=>"client_config.mqtt_password",
-                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "icon_class"=>null,
                                                                                                 "placeholder"=>"Contraseña MQTT",
                                                                                                 "updated_input"=>"defer",
                                                                                                 "col_with"=>6,
@@ -97,7 +97,7 @@
                                                                                             ], [
                                                                                                 "input_type"=>"text",
                                                                                                 "input_model"=>"client_config.mqtt_user",
-                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "icon_class"=>null,
                                                                                                 "placeholder"=>"Usuario MQTT",
                                                                                                 "updated_input"=>"defer",
                                                                                                 "col_with"=>6,
@@ -108,7 +108,7 @@
                                                                                             [
                                                                                                 "input_type"=>"number",
                                                                                                 "input_model"=>"client_config.digital_outputs",
-                                                                                                "icon_class"=>"fas fa-barcode",
+                                                                                                "icon_class"=>null,
                                                                                                 "placeholder"=>"Salidas disponibles",
                                                                                                 "offset"=>2,
                                                                                                 "updated_input"=>"lazy",
@@ -119,10 +119,38 @@
                                                                                             ], [
                                                                                                 "input_type"=>"divider",
                                                                                                 "title"=>"Configuraciones de muestreo"
-                                                                                            ], [
+                                                                                            ],
+                                                                                            [
+                                                                                                "input_type"=>"select",
+                                                                                                "input_model"=>"client_config.type_storage_latency",
+                                                                                                "placeholder"=>"Tipo de latencia de almacenamiento",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "lazy",
+                                                                                                "required"=>false,
+                                                                                                "select_options"=>[
+                                                                                                                    ["value"=> "h", "key"=>"Datos por hora"],
+                                                                                                                    ["value"=> "d", "key"=>"Datos por dia"],
+                                                                                                                    ["value"=> "m", "key"=>"Dia del mes"],
+                                                                                                                  ],
+                                                                                                "select_option_value"=>"value",
+                                                                                                "select_option_view"=>"key",
+
+                                                                                            ],
+                                                                                            [
                                                                                                 "input_type"=>"number",
-                                                                                                "input_model"=>"client_config.real_time_latency",
-                                                                                                "placeholder"=>"Tiempo de muestreo en tiempo real",
+                                                                                                "input_model"=>"client_config.storage_latency",
+                                                                                                "placeholder"=>"Tasa ó dia de muestreo",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "lazy",
+                                                                                                "required"=>false,
+
+                                                                                            ],
+                                                                                            [
+                                                                                                "input_type"=>"checkbox",
+                                                                                                "input_model"=>"client_config.real_time",
+                                                                                                "placeholder"=>"Habilitar tiempo real",
                                                                                                 "updated_input"=>"lazy",
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
@@ -131,14 +159,15 @@
                                                                                             ],
                                                                                             [
                                                                                                 "input_type"=>"number",
-                                                                                                "input_model"=>"client_config.storage_latency",
-                                                                                                "placeholder"=>"Tiempo de muestreo monitoreo normal",
+                                                                                                "input_model"=>"client_config.real_time_latency",
+                                                                                                "placeholder"=>"Tiempo de muestreo en tiempo real (segundos)",
+                                                                                                "updated_input"=>"lazy",
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
-                                                                                                "updated_input" => "lazy",
                                                                                                 "required"=>false,
 
                                                                                             ],
+
                                                                                 ]
                                                             ]
                                                 ],

@@ -8,7 +8,7 @@
         @endif
     </div>
     <div class="col-md-4 input-group">
-        @if($icon_class)
+        @if($icon_class??null)
         <div class="input-group-prepend">
                                     <span class="input-group-text">
                                      <i class="{{$icon_class}}"></i>
@@ -55,7 +55,7 @@
                     @endif
 
                    type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
-                    placeholder="{{ $placeholder_input }}" required="{{$required??false}}"
+                    placeholder="{{ $placeholder_input??"" }}" required="{{$required??false}}"
                     @if($input_type??"text" == "number")
                         min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
                     @endif>
