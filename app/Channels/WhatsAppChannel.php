@@ -20,7 +20,6 @@ class WhatsAppChannel
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ]);
-
     }
 
     public function send($notifiable, Notification $notification)

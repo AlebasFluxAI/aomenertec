@@ -321,5 +321,7 @@ return [
     'user_role_empty' => 'No has enviado ningun role para registrar',
     'user_role_is_super_admin' => 'El usuario no es super administrador de logistico',
     'forgot password' => "Olvidaste tu contraseña te ayudamos a recuperarla",
-    'forgot password button' => "Enviar enlace de recuperacion a correo"
+    'forgot password button' => "Enviar enlace de recuperacion a correo",
+    "contact_phone" => "Telefono de contacto",
+    "contact_email" => "Email de contacto",
 ];

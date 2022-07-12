@@ -33,7 +33,7 @@ class NotificationComponentService extends Singleton
 
     public function getData(Component $component)
     {
-        return $component->user->notifications()->whereNull("deleted_at")->paginate(15);
+        return $component->user->notifications()->whereNull("deleted_at")->paginate(10);
     }
 
     public function markAsRead(Component $component, $model)
@@ -50,7 +50,5 @@ class NotificationComponentService extends Singleton
         ]);
         $component->emit(NotificationTypes::NOTIFICATION_DELETED, ["notifiable" => $component->user->id]);
         $component->mount();
-
     }
-
 }

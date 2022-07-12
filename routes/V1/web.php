@@ -30,7 +30,6 @@ use App\Http\Resources\V1\PermissionsRouteWard;
 |
 */
 Route::domain("{subdomain}.enerteclatam.com")->group(function () {
-
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
@@ -49,10 +48,13 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
         ->middleware(['guest:' . config('fortify.guard')])
         ->name('password.update');
 
-    Route::prefix("clientes/invitados/pqr")->group(function () {
-        Route::get('/crear', Livewire\V1\Admin\Pqr\AddPqrGuestClientComponent::class);
-    });
 
+    Route::prefix("clientes/invitados/pqr")->group(function () {
+        Route::get('/crear', Livewire\V1\Admin\Pqr\AddPqrGuestClientComponent::class)->name("guest.add-pqr");
+        Route::get('/administrar', Livewire\V1\Admin\Pqr\AdminPqrGuestClientComponent::class)->name("guest.admin-pqr");
+        Route::get('/administrar/{pqr}', Livewire\V1\Admin\Pqr\DetailsPqrGuestClientComponent::class)->name("guest.details-pqr");
+        Route::get('/historial/{pqr}', Livewire\V1\Admin\Pqr\HistoricalPqrGuestClientComponent::class)->name("historical.details-pqr");
+    });
 
 });
 
@@ -157,7 +159,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_equipos/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\AddEquipmentNetworkOperator::class)
                             ->name("administrar.v1.usuarios.operadores.agregar_equipos")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT));
-
                     });
 
 
@@ -181,7 +182,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_clientes/{seller}', Livewire\V1\Admin\User\Seller\AddClientSeller::class)
                             ->name("administrar.v1.usuarios.vendedores.agregar_clientes")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SELLER_LINK_CLIENT));
-
                     });
 
 
@@ -205,7 +205,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_clientes/{supervisor}', Livewire\V1\Admin\User\Supervisor\AddClientSupervisor::class)
                             ->name("administrar.v1.usuarios.supervisores.agregar_clientes")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPERVISOR_LINK_CLIENT));
-
                     });
 
 
@@ -233,7 +232,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_equipos/{technician}', Livewire\V1\Admin\User\Technician\AddEquipmentTechnician::class)
                             ->name("administrar.v1.usuarios.tecnicos.agregar_equipos")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::TECHNICIAN_LINK_EQUIPMENT));
-
                     });
 
 
@@ -257,7 +255,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_clientes/{support}', Livewire\V1\Admin\User\Support\AddClientSupport::class)
                             ->name("administrar.v1.usuarios.soporte.agregar_clientes")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPPORT_LINK_CLIENT));
-
                     });
                 });
                 Route::prefix("clientes")->group(function () {
@@ -284,12 +281,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get('configuraciones/{client}', Livewire\V1\Admin\Client\ConfigurationClient::class)
                         ->name("v1.admin.client.settings")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SETTINGS));
-
                 });
 
 
                 Route::prefix("equipos")->group(function () {
-
                     Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class)
                         ->name("administrar.v1.equipos.agregar")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::EQUIPMENT_CREATE));
@@ -307,7 +302,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::EQUIPMENT_EDIT));
 
                     Route::prefix("tipos")->group(function () {
-
                         Route::get('agregar', Livewire\V1\Admin\EquipmentType\AddEquipmentType::class)
                             ->name("administrar.v1.equipos.tipos.agregar")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::EQUIPMENT_CREATE));
@@ -336,6 +330,32 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                             Route::get('detalle/{alertType}', Livewire\V1\Admin\AlertType\DetailAlertType::class)->name("administrar.v1.equipos.alertas.tipos.detalle");
                         });
                     });
+                });
+
+                Route::prefix("peticiones")->group(function () {
+                    Route::get("listado", Livewire\V1\Admin\Pqr\PqrIndexComponent::class)
+                        ->name("administrar.v1.peticiones.listado")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_SHOW));
+
+                    Route::get("detalles/{pqr}", Livewire\V1\Admin\Pqr\PqrDetailsComponent::class)
+                        ->name("administrar.v1.peticiones.detalles")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_SHOW));
+
+                    Route::get("respuesta/{pqr}", Livewire\V1\Admin\Pqr\PqrReplyComponent::class)
+                        ->name("administrar.v1.peticiones.respuesta")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_REPLY));
+
+                    Route::get("historial/{pqr}", Livewire\V1\Admin\Pqr\PqrReplyComponent::class)
+                        ->name("administrar.v1.peticiones.historial-mensajes")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_REPLY));
+
+                    Route::get("supervisor/crear", Livewire\V1\Admin\Pqr\AddPqrSupervisorComponent::class)
+                        ->name("administrar.v1.peticiones.supervisor.crear")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_CREATE));
+
+                    Route::get("operador/crear", Livewire\V1\Admin\Pqr\AddPqrNetworkOperatorComponent::class)
+                        ->name("administrar.v1.peticiones.operador.crear")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_CREATE_NETWORK_OPERATOR));
                 });
             });
         });

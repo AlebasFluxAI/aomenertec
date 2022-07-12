@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,8 +22,15 @@ class PqrLog extends Model
         "pqr_id",
         "activity_type",
         "before",
-        "after"
+        "after",
+        "created_by",
+        "updated_by"
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
 
     public function pqr()
     {

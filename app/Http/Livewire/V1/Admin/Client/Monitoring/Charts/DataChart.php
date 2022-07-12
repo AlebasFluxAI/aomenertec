@@ -28,8 +28,8 @@ class DataChart extends Component
     public $start;
     public $chart_title;
     protected $listeners = ['changeDateRange', 'selectHistory'];
-    public function mount(Client $client, $variables, $data_frame, $data_chart, $time){
-
+    public function mount(Client $client, $variables, $data_frame, $data_chart, $time)
+    {
         $this->client = $client;
         $this->variables = $variables;
         $this->data_frame = $data_frame;
@@ -61,7 +61,6 @@ class DataChart extends Component
         $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
         $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
-
     }
 
     public function selectHistory()
@@ -73,14 +72,14 @@ class DataChart extends Component
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id)->exists()) {
+            $equipment->id
+        )->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             $topic = 'mc/config/'.$equipment->serial;
             MQTT::publish($topic, $message);
             MQTT::disconnect();
         }
         $this->restartDateRange();
-
     }
 
     public function changeDateRange($start, $end)
@@ -89,14 +88,15 @@ class DataChart extends Component
         $this->end = $end;
         $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(false);
-
     }
 
-    public function updatedTimeId(){
+    public function updatedTimeId()
+    {
         $this->chartRender(false);
     }
 
-    public function updatedVariableChartId(){
+    public function updatedVariableChartId()
+    {
         $variable = $this->variables->where('id', $this->variable_chart_id)->first();
         $this->chart_type = $variable['chart_type'];
         $this->chart_title = $variable['display_name'];
@@ -106,28 +106,29 @@ class DataChart extends Component
 
 
 
-    private function chartRender($flag){
-        if ($flag){
+    private function chartRender($flag)
+    {
+        if ($flag) {
             $data_chart = $this->data_chart;
         } else {
             if ($this->time_id == 1) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })->limit(120)->get();
             } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })->limit(120)->get();
             } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })->limit(120)->get();
             } else {
                 $data_chart = $this->client->annualMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })->limit(120)->get();
             }
@@ -155,7 +156,6 @@ class DataChart extends Component
                     if ($index == 0) {
                         if ($this->time_id == 1) {
                             $x = Carbon::create($item->microcontrollerData->source_timestamp)->format('d F H:i:s');
-
                         } elseif ($this->time_id == 2) {
                             $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
                         } elseif ($this->time_id == 3) {
@@ -170,9 +170,8 @@ class DataChart extends Component
                 $index++;
             }
             $this->emit('changeAxis', ['series' => $this->series, 'x_axis' => $this->x_axis, 'title' => $this->chart_title]);
-        } else{
+        } else {
             $this->emit('changeAxis', ['series' => [], 'x_axis' => [], 'title' => $this->chart_title]);
-
         }
     }
 

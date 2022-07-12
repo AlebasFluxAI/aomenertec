@@ -20,7 +20,16 @@
                         @endif
 
                     @else
-                        <td>{{$info["value"]}}</td>
+                        @if(isset($info["translate"]))
+                            <td>{{__($info["translate"].".".$info["value"])}}</td>
+                        @elseif(isset($info["redirect_route"]) and $info["redirect_value"])
+                            <td class="link">
+                                <a href="{{route($info["redirect_route"],[$info["redirect_binding"]=>$info["redirect_value"]])}}">
+                                    {{$info["value"]}}</a>
+                            </td>
+                        @else
+                            <td>{{$info["value"]}}</td>
+                        @endif
                     @endisset
                 </tr>
             @endforeach

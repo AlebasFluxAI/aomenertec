@@ -19,7 +19,7 @@ class CreateClientAlertsTable extends Migration
             $table->unsignedBigInteger("microcontroller_data_id");
             $table->foreignId('client_alert_configuration_id')->constrained();
             $table->double('value');
-            $table->enum('type',[
+            $table->enum('type', [
                 \App\Models\V1\ClientAlert::ALERT,
                 \App\Models\V1\ClientAlert::CONTROL,
             ])->default(\App\Models\V1\ClientAlert::ALERT);

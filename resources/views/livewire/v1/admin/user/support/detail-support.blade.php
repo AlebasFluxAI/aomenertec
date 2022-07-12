@@ -55,10 +55,15 @@
                                                                              "key"=>"Correo electronico",
                                                                              "value"=>$model->email
                                                                          ],
+                                                                          [
+                                                                             "key"=>"Identificación",
+                                                                             "value"=>$model->identification
+                                                                         ],
                                                                          [
                                                                              "key"=>"Telefono",
                                                                              "value"=>$model->phone
                                                                          ],
+
                                                                          [
                                                                              "key"=>"Pais",
                                                                              "value"=>$model->country
@@ -75,10 +80,7 @@
                                                                              "key"=>"Direccion",
                                                                              "value"=>$model->address
                                                                          ],
-                                                                         [
-                                                                             "key"=>"Operador de red",
-                                                                             "value"=>($model->networkOperator?$model->networkOperator->id:null). "- ". ($model->networkOperator?$model->networkOperator->name:null)
-                                                                         ],
+
                                                                      ]
                                                             ],
 

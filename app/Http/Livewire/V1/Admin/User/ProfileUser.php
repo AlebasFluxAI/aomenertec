@@ -39,6 +39,12 @@ class ProfileUser extends Component
         return $this->profileUserService->deleteAdminConditional($this, $adminId);
     }
 
+    public function blinkSupportPqrAvailability($supportId)
+    {
+
+        return $this->profileUserService->blinkSupportPqrAvailability($this, $supportId);
+    }
+
     public function mount()
     {
         $this->profileUserService->mount($this);

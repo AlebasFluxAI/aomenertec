@@ -67,7 +67,6 @@ class AddLocationToUserTypes extends Migration
      */
     public function down()
     {
-
         Schema::table('technicians', function (Blueprint $table) {
             $table->dropColumn("address");
             $table->dropColumn("latitude");

@@ -67,10 +67,10 @@
                  "table_actions"=>[
                                              "customs"=>[
                                                    [
-                                                "function"=>"details",
-                                                "icon"=>"fas fa-search",
-                                                "tooltip_title"=>"Detalles",
-                                                "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_SHOW],
+                                                        "function"=>"details",
+                                                        "icon"=>"fas fa-search",
+                                                        "tooltip_title"=>"Detalles",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_SHOW],
                                                 ],
                                                 [
                                                         "function"=>"edit",

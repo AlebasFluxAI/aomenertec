@@ -87,8 +87,8 @@ class ClientConfigurationService extends Singleton
                 "title"=>"Rangos alarmables"
             ]
         ];
-        foreach ($component->client_config_alert as $index => $item){
-            if ($item->flag_id < 47){
+        foreach ($component->client_config_alert as $index => $item) {
+            if ($item->flag_id < 47) {
                 array_push($component->inputs, [
                     "input_type"=>"input_min_max",
                     "input_min_model"=> "client_config_alert.".$index.".min_alert",
@@ -103,11 +103,11 @@ class ClientConfigurationService extends Singleton
                     "col_with"=>9,
                     "required"=>false,
                     "updated_input" => "lazy",
-                    "placeholder_clickable"=>($component->client_config->digital_outputs>0)?true:false,
+                    "placeholder_clickable"=>($component->client_config->digital_outputs>0) ? true : false,
                     "data_target"=>"modal_".$item['id'],
                     "click_action"=>"outputRelation('".$item->id."')"
                 ]);
-            } else{
+            } else {
                 array_push($component->inputs, [
                     "input_type"=>"number",
                     "number_min"=> 0,
@@ -119,15 +119,15 @@ class ClientConfigurationService extends Singleton
                     "col_with"=>8,
                     "updated_input" => "lazy",
                     "required"=>false,
-                    "placeholder_clickable"=>($component->client_config->digital_outputs>0)?true:false,
+                    "placeholder_clickable"=>($component->client_config->digital_outputs>0) ? true : false,
                     "data_target"=>"modal_".$item['id'],
                     "click_action"=>"outputRelation('".$item->id."')"
                 ]);
             }
         }
     }
-    public function rules ()  {
-
+    public function rules()
+    {
         return [
             'client_config.ssid'=>'required',
             'client_config.wifi_password'=>'required',
@@ -147,33 +147,31 @@ class ClientConfigurationService extends Singleton
     }
     public function updated(Component $component, $propertyName, $value)
     {
-
         $property = explode(".", $propertyName);
         if ($property[0] == "client_config_alert") {
-            $component->validate( [
+            $component->validate([
                 'client_config_alert.' . $property[1] . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$property[1]]->max_alert],
                 'client_config_alert.' . $property[1] . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$property[1]]->min_alert],
                 'client_config_alert.' . $property[1] . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$property[1]]->max_control],
                 'client_config_alert.' . $property[1] . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$property[1]]->min_control],
             ]);
-
-        } else{
+        } else {
             $component->validateOnly($propertyName);
         }
-
     }
 
-    public function updatedClientConfig(Component $component, $value, $key){
-        if ($key == "digital_outputs"){
+    public function updatedClientConfig(Component $component, $value, $key)
+    {
+        if ($key == "digital_outputs") {
             $component->validateOnly("client_config.".$key);
-            if ($value >= 0){
+            if ($value >= 0) {
                 $component->digital_outputs = $component->client->digitalOutputs()->get();
-                if ($component->digital_outputs){
+                if ($component->digital_outputs) {
                     $i=count($component->digital_outputs);
-                } else{
+                } else {
                     $i=0;
                 }
-                if ($i < $value){
+                if ($i < $value) {
                     for ($i=$i+1; $i<=$value; $i++) {
                         ClientDigitalOutput::create([
                             'client_id' => $component->client->id,
@@ -182,13 +180,12 @@ class ClientConfigurationService extends Singleton
                             'status' => true,
                         ]);
                     }
-                } else{
+                } else {
                     for ($i; $i>$value; $i--) {
                         $delete = $component->client->digitalOutputs()->where('number', $i)->first();
                         $delete->delete();
                     }
                 }
-
             }
             $component->client_config->digital_outputs = $value;
             $component->client_config->save();
@@ -198,55 +195,57 @@ class ClientConfigurationService extends Singleton
         }
     }
 
-    public function outputRelation(Component $component, $id){
+    public function outputRelation(Component $component, $id)
+    {
         $component->digital_outputs = $component->client->digitalOutputs()->get();
         $alert_ouputs = ClientAlertConfiguration::find($id)->outputs()->get();
-        if(ClientAlertConfiguration::find($id)->outputs()->exists()){
-            foreach ($alert_ouputs as $index => $output){
-                foreach ($component->checks as $i => $check){
-                    if ($check['id'] == $output->id){
+        if (ClientAlertConfiguration::find($id)->outputs()->exists()) {
+            foreach ($alert_ouputs as $index => $output) {
+                foreach ($component->checks as $i => $check) {
+                    if ($check['id'] == $output->id) {
                         $component->checks[$i]['output'] = true;
                         break;
                     }
                 }
             }
-        } else{
-            foreach ($component->checks as $i => $check){
+        } else {
+            foreach ($component->checks as $i => $check) {
                 $component->checks[$i]['output'] = false;
             }
         }
     }
 
-    public function assignmentOutput(Component $component, $id, $index){
+    public function assignmentOutput(Component $component, $id, $index)
+    {
         $alert = ClientAlertConfiguration::find($id);
         $flag = false;
-        $component->validate( [
+        $component->validate([
             'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
             'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
         ]);
-        foreach ($component->checks as $check){
+        foreach ($component->checks as $check) {
             $relation = ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->first();
-            if ($check['output']){
-                if (!ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()){
+            if ($check['output']) {
+                if (!ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()) {
                     ClientDigitalOutputAlertConfiguration::create([
                         'client_alert_configuration_id'=>$id,
                         'client_digital_output_id'=>$check['id']
                     ]);
                 }
                 $flag = true;
-            } else{
-                if (ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()){
+            } else {
+                if (ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()) {
                     $relation->delete();
                 }
             }
         }
-        if ($flag){
+        if ($flag) {
             $alert->active_control = true;
-        } else{
+        } else {
             $alert->active_control = false;
         }
         $alert->save();
-        foreach ($component->checks as $i => $check){
+        foreach ($component->checks as $i => $check) {
             $component->checks[$i]['output'] = false;
         }
         $component->emit('closeModal', ["id" => $id]);
@@ -257,18 +256,17 @@ class ClientConfigurationService extends Singleton
     public function submitFormConection(Component $component)
     {
         $component->validate();
-    if ($component->client_config->save()){
-        $this->setRemoteConfiguration($component);
-        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+        if ($component->client_config->save()) {
+            $this->setRemoteConfiguration($component);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
         }
     }
 
     public function submitFormAlert(Component $component)
     {
-
         $component->validate();
         foreach ($component->client_config_alert as $index => $item) {
-            $component->validate( [
+            $component->validate([
                 'client_config_alert.' . $index . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_alert],
                 'client_config_alert.' . $index . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_alert],
                 'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
@@ -280,41 +278,42 @@ class ClientConfigurationService extends Singleton
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
     }
 
-    private function setRemoteConfiguration(Component $component){
+    private function setRemoteConfiguration(Component $component)
+    {
         $flag = false;
-        if($component->client_config->wasChanged('ssid')){
+        if ($component->client_config->wasChanged('ssid')) {
             $message['ssid'] =  $component->client_config->ssid;
             $flag = true;
         }
-        if($component->client_config->wasChanged('wifi_password')){
+        if ($component->client_config->wasChanged('wifi_password')) {
             $message['pass'] =  $component->client_config->wifi_password;
             $flag = true;
         }
-        if($component->client_config->wasChanged('mqtt_host')){
+        if ($component->client_config->wasChanged('mqtt_host')) {
             $message['brokerMqtt'] =  $component->client_config->mqtt_host;
             $flag = true;
         }
-        if($component->client_config->wasChanged('mqtt_port')){
+        if ($component->client_config->wasChanged('mqtt_port')) {
             $message['portMqtt'] =  $component->client_config->mqtt_port;
             $flag = true;
         }
-        if($component->client_config->wasChanged('mqtt_user')){
+        if ($component->client_config->wasChanged('mqtt_user')) {
             $message['userMqtt'] =  $component->client_config->mqtt_user;
             $flag = true;
         }
-        if($component->client_config->wasChanged('mqtt_password')){
+        if ($component->client_config->wasChanged('mqtt_password')) {
             $message['passMqtt'] =  $component->client_config->mqtt_password;
             $flag = true;
         }
-        if($component->client_config->wasChanged('storage_latency')){
+        if ($component->client_config->wasChanged('storage_latency')) {
             $message['storage_latency'] =  $component->client_config->storage_latency;
             $flag = true;
         }
-        if($component->client_config->wasChanged('real_time_latency')){
+        if ($component->client_config->wasChanged('real_time_latency')) {
             $message['real_time_latency'] =  $component->client_config->real_time_latency;
             $flag = true;
         }
-        if ($flag){
+        if ($flag) {
             $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
             $message['did'] = $equipment->serial;
             $topic = "mc/config/".$equipment->serial;
@@ -330,8 +329,8 @@ class ClientConfigurationService extends Singleton
         $topic = "mc/config/".$equipment->serial;
         $binary_data = [];
         $data = "";
-        foreach ($alert_config_frame as $item){
-            if ($item['variable_name'] == 'network_operator_id'){
+        foreach ($alert_config_frame as $item) {
+            if ($item['variable_name'] == 'network_operator_id') {
                 $data = $component->client->networkOperator->identification;
             } elseif ($item['variable_name'] == 'equipment_id') {
                 $data = $equipment->serial;

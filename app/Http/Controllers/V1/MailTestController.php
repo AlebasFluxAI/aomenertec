@@ -15,10 +15,8 @@ class MailTestController
 {
     public function userCreatedNotification(Request $request)
     {
-
         $user = User::find(2);
         $user->notify(new AlertNotification());
-
     }
 
     public function whatsappNotification()

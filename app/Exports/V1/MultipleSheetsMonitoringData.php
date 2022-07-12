@@ -5,7 +5,6 @@ namespace App\Exports\V1;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-
 class MultipleSheetsMonitoringData implements WithMultipleSheets
 {
     use Exportable;
@@ -28,5 +27,4 @@ class MultipleSheetsMonitoringData implements WithMultipleSheets
 
         return $sheets;
     }
-
 }

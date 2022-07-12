@@ -52,11 +52,11 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
             try {
                 $split = substr($decode, ($data['start']), ($data['lenght']));
                 $bin = hex2bin($split);
-                if ($data['variable_name'] == 'flags'){
+                if ($data['variable_name'] == 'flags') {
                     $json[$data['variable_name']] = 0;
-                } elseif ($data['variable_name'] == 'timestamp' || $data['variable_name'] == 'network_operator_id' || $data['variable_name'] == 'equipment_id'){
+                } elseif ($data['variable_name'] == 'timestamp' || $data['variable_name'] == 'network_operator_id' || $data['variable_name'] == 'equipment_id') {
                     $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                } else{
+                } else {
                     $json[$data['variable_name']] = round(unpack($data['type'], $bin)[1], 3);
                 }
                 if ($data['start'] >= 432) {

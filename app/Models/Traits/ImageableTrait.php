@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\V1\Image;
+use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Request;
 
 trait ImageableTrait
 {
+ 
     public function buildOneImageFromFile($image_name, $imageInput)
     {
         $image = new Image();

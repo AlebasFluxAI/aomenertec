@@ -91,7 +91,7 @@ class User extends Authenticatable
             User::TYPE_TECHNICIAN => $user->technician,
             default => [],
         };
-        
+
         return $model;
     }
 
@@ -169,4 +169,8 @@ class User extends Authenticatable
         return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
     }
 
+    public function pqrUsers()
+    {
+        return $this->hasMany(PqrUser::class);
+    }
 }

@@ -53,10 +53,12 @@ class NotificationComponent extends Component
 
     public function render()
     {
-        return view('livewire.v1.admin.notification.notifications',
+        return view(
+            'livewire.v1.admin.notification.notifications',
             [
                 "data" => $this->getData(),
-            ])
+            ]
+        )
             ->extends('layouts.v1.app');
     }
 

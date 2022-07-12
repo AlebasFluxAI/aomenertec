@@ -13,6 +13,7 @@
         "ascsoftw/livewire-toast": "^1.0",
         "barryvdh/laravel-dompdf": "^1.0",
         "beyondcode/laravel-prose-linter": "dev-review",
+        "doctrine/dbal": "^3.3",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "intervention/image": "^2.7",

@@ -36,8 +36,8 @@ class ConfigurationClient extends Component
     {
         $this->configurationClientService->mount($this, $client);
     }
-    protected function rules ()  {
-
+    protected function rules()
+    {
         return $this->configurationClientService->rules($this);
     }
     public function outputRelation($id)
@@ -45,16 +45,16 @@ class ConfigurationClient extends Component
         $this->configurationClientService->outputRelation($this, $id);
     }
     public function assignmentOutput($id, $index)
-        {
-            $this->configurationClientService->assignmentOutput($this, $id, $index);
-        }
+    {
+        $this->configurationClientService->assignmentOutput($this, $id, $index);
+    }
 
-    public function updated($key, $value){
-
+    public function updated($key, $value)
+    {
         $this->configurationClientService->updated($this, $key, $value);
     }
-    public function updatedClientConfig($value, $key){
-
+    public function updatedClientConfig($value, $key)
+    {
         $this->configurationClientService->updatedClientConfig($this, $value, $key);
     }
 

@@ -44,24 +44,25 @@ class ReactiveChart extends Component
         $this->inductive_filter = 0;
     }
 
-    public function queryData(){
+    public function queryData()
+    {
         if ($this->time_reactive_id == 1) {
             $data_chart = $this->client->hourlyMicrocontrollerData()
-                ->whereHas('microcontrollerData',function ($query){
+                ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
                 })->limit(60)->get();
         } elseif ($this->time_reactive_id == 2) {
             if ($this->penalizable) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
                     })
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
-            } else{
+            } else {
                 $data_chart = $this->client->dailyMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
                     })
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
@@ -71,15 +72,15 @@ class ReactiveChart extends Component
         } elseif ($this->time_reactive_id == 3) {
             if ($this->penalizable) {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
                     })
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
-            } else{
+            } else {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
                     })
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
@@ -89,15 +90,15 @@ class ReactiveChart extends Component
         } else {
             if ($this->penalizable) {
                 $data_chart = $this->client->annualMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
                     })
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(60)->get();
-            } else{
+            } else {
                 $data_chart = $this->client->annualMicrocontrollerData()
-                    ->whereHas('microcontrollerData',function ($query){
+                    ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
                     })
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
@@ -123,7 +124,8 @@ class ReactiveChart extends Component
             )->delete();
 
         if (!RealTimeListener::whereEquipmentId(
-            $equipment->id)->exists()) {
+            $equipment->id
+        )->exists()) {
             $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
             $topic = 'mc/config/'.$equipment->serial;
             MQTT::publish($topic, $message);
@@ -137,7 +139,7 @@ class ReactiveChart extends Component
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(24)->get();
-            } else{
+            } else {
                 $data_chart = $this->client->dailyMicrocontrollerData()
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
@@ -149,7 +151,7 @@ class ReactiveChart extends Component
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(31)->get();
-            } else{
+            } else {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
@@ -161,7 +163,7 @@ class ReactiveChart extends Component
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
                     ->limit(12)->get();
-            } else{
+            } else {
                 $data_chart = $this->client->annualMicrocontrollerData()
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
@@ -176,8 +178,9 @@ class ReactiveChart extends Component
         $this->chartRender(true);
     }
 
-    public function updatedPenalizable(){
-        if ($this->penalizable){
+    public function updatedPenalizable()
+    {
+        if ($this->penalizable) {
             if ($this->time_reactive_id == 1) {
                 $this->time_reactive_id = 2;
             }
@@ -186,7 +189,8 @@ class ReactiveChart extends Component
         $this->chartRender($this->penalizable);
     }
 
-    public function applyFilterReactive(){
+    public function applyFilterReactive()
+    {
         if ($this->time_reactive_id != 1) {
             $this->chartRender(false);
         }
@@ -225,7 +229,6 @@ class ReactiveChart extends Component
                     if ($index == 0) {
                         if ($this->time_reactive_id == 1) {
                             $x = Carbon::create($item->year, $item->month, $item->day, $item->hour, $item->minute)->format('d F H:i');
-
                         } elseif ($this->time_reactive_id == 2) {
                             $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
                         } elseif ($this->time_reactive_id == 3) {
@@ -239,15 +242,14 @@ class ReactiveChart extends Component
                 $this->series_reactive[$index] = ["name" => $data['display_name'], "data" => $data_aux[$index]];
             }
             $this->emit('changeAxisReactive', ['series_reactive' => $this->series_reactive, 'x_axis_reactive' => $this->x_axis_reactive]);
-        } else{
+        } else {
             $this->emit('changeAxisReactive', ['series_reactive' => [], 'x_axis_reactive' => []]);
         }
     }
 
     public function updatedTimeReactiveId()
     {
-
-        if ($this->time_reactive_id == 1){
+        if ($this->time_reactive_id == 1) {
             $this->penalizable = false;
             $this->inductive_filter = 0;
             $this->capacitive_filter = 0;

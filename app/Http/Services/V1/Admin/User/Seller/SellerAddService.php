@@ -44,7 +44,6 @@ class SellerAddService extends Singleton
 
     public function updatedNetworkOperator(Component $component)
     {
-
         $component->picked_network_operator = false;
         $component->message_network_operator = "No hay operador de red registrado con esta identificación";
         if ($component->network_operator != "") {

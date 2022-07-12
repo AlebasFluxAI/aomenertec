@@ -347,6 +347,4 @@ class Admin extends Model
             }))->toArray()
         ));
     }
-
-
 }

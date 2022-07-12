@@ -57,7 +57,7 @@ class NetworkOperator extends Model
                                 "submenu" => []
                             ],
                             [
-                                "title" => "Tecnicos",
+                                "title" => "Técnicos",
                                 "route" => "administrar.v1.usuarios.tecnicos.listado",
                                 "submenu" => []
                             ]
@@ -71,6 +71,20 @@ class NetworkOperator extends Model
                             [
                                 "title" => "Clientes",
                                 "route" => "v1.admin.client.list.client",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ]
+
+                    ],
+                    [
+                        "title" => "Pqr's",
+                        "route" => "administrar.v1.peticiones.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Pqr's",
+                                "route" => "administrar.v1.peticiones.listado",
                                 "submenu" => [
 
                                 ]
@@ -101,7 +115,7 @@ class NetworkOperator extends Model
     {
         return (array_merge(
             [[
-                "key" => "Seleccione el tecnico...",
+                "key" => "Seleccione el técnico...",
                 "value" => null
             ]],
             ($this->technicians()->get()->map(function ($technician) {

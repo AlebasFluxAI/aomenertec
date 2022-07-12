@@ -168,9 +168,11 @@
                                         la
                                         contraseña?</a></div>
                             @endif
-
+                            @include("auth.support_button")
                         </form>
+
                     </div>
+
                 </div>
             </div>
         </section>
