@@ -26,7 +26,7 @@ class AddPqrGuestClientComponent extends Component
 
     public $invoice_radio_button;
     public $platform_radio_button;
-    public $tech_radio_button;
+    public $subdomain;
     public $pqr_types;
     public $pqr_type;
     public $pqr_category;

@@ -106,6 +106,21 @@ class SuperAdmin extends Model
                             ],
                         ]
                     ],
+                    [
+                        "title" => "Pqr's",
+                        "route" => "administrar.v1.peticiones.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Pqr's",
+                                "route" => "administrar.v1.peticiones.listado",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ]
+
+                    ],
+
                 ]
         ];
     }

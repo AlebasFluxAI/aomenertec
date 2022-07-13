@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
 
     @endsection
 
@@ -49,11 +50,16 @@
                "col_data" =>"subject",
                "col_filter"=>false
            ],
-             [
+           [
                "col_name" =>"Tipo",
                "col_data" =>"type",
                "col_filter"=>false,
                "col_translate"=>"pqr"
+           ],
+           [
+               "col_name" =>"Tecnico asignado",
+               "col_data" =>"technician.name",
+               "col_filter"=>false,
            ],
            [
                    "col_name" =>"Categoria",
@@ -81,7 +87,6 @@
                "col_translate"=>"pqr"
 
            ],
-
            [
                 "col_name" =>"Nivel",
                "col_data" =>"level",

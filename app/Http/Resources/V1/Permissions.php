@@ -55,6 +55,7 @@ class Permissions
     public const SUPPORT_DELETE = "support.delete";
     public const SUPPORT_SHOW = "support.show";
     public const SUPPORT_LINK_CLIENT = "support.link_client";
+    public const SUPPORT_ENABLE_PQR = "support.enable_pqr";
 
     public const SUPERVISOR_CREATE = "supervisor.create";
     public const SUPERVISOR_EDIT = "supervisor.edit";

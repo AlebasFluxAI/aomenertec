@@ -24,9 +24,9 @@ class PqrObserver
         if (!$client = $this->getClient($pqr)) {
             return;
         }
-        if ($pqr->client_id) {
+        if ($client) {
             $pqr->client_id = $client->id;
-            $pqr->technician_id = $client->technician_id;
+            $pqr->technician_id = $client->technician->first()->technician->id;
         }
     }
 
@@ -38,11 +38,22 @@ class PqrObserver
         return Client::whereIdentification($pqr->identification)->first();
     }
 
+    public function updating(Pqr $pqr)
+    {
+
+        if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
+            $pqr->support_id = $this->getSupport();
+        }
+
+    }
+
     public function updated(Pqr $pqr)
     {
+
         if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
             $this->createPqrUser($pqr, $this->getSupportUser());
         }
+
     }
 
     private function createPqrUser($pqr, $user_id)
@@ -60,6 +71,16 @@ class PqrObserver
                 "status" => PqrUser::STATUS_ENABLED
             ]);
         }
+    }
+
+    private function getSupport()
+    {
+        if (!$support = Support::wherePqrAvailable(true)->inRandomOrder()->first()) {
+
+            return null;
+        }
+
+        return $support->id;
     }
 
     private function getSupportUser()
