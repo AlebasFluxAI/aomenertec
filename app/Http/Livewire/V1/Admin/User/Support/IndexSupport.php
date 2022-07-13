@@ -56,6 +56,28 @@ class IndexSupport extends Component
         )->extends('layouts.v1.app');
     }
 
+    public function supportPqrDisabled($support)
+    {
+        return $this->indexEquipmentService->supportPqrDisabled($this, $support);
+    }
+
+    public function supportPqrEnabled($support)
+    {
+        return !($this->indexEquipmentService->supportPqrDisabled($this, $support));
+    }
+
+    public function enablePqrSupport($support)
+    {
+        return $this->indexEquipmentService->enablePqrSupport($this, $support);
+
+    }
+
+    public function disablePqrSupport($support)
+    {
+        return $this->indexEquipmentService->enablePqrSupport($this, $support);
+
+    }
+
     public function getData()
     {
         return $this->indexEquipmentService->getData($this);

@@ -52,6 +52,7 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::prefix("clientes/invitados/pqr")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Pqr\AddPqrGuestClientComponent::class)->name("guest.add-pqr");
         Route::get('/administrar', Livewire\V1\Admin\Pqr\AdminPqrGuestClientComponent::class)->name("guest.admin-pqr");
+        Route::get('/creado/{pqr}', Livewire\V1\Admin\Pqr\CreatedPqrGuestClientComponent::class)->name("guest.created-pqr");
         Route::get('/administrar/{pqr}', Livewire\V1\Admin\Pqr\DetailsPqrGuestClientComponent::class)->name("guest.details-pqr");
         Route::get('/historial/{pqr}', Livewire\V1\Admin\Pqr\HistoricalPqrGuestClientComponent::class)->name("historical.details-pqr");
     });

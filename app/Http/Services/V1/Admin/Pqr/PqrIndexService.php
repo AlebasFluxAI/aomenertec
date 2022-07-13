@@ -2,14 +2,18 @@
 
 namespace App\Http\Services\V1\Admin\Pqr;
 
+use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\Traits\PqrStatusTrait;
+use App\Models\V1\Admin;
 use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrUser;
+use App\Models\V1\SuperAdmin;
+use App\Models\V1\Technician;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -25,8 +29,16 @@ class PqrIndexService extends Singleton
 
     public function getData(Component $component)
     {
+        $model = Menu::getUserModel();
+        if ($model::class == SuperAdmin::class) {
+            return Pqr::paginate();
+        }
+        if ($model::class == Admin::class) {
+            $techniciansUserId = Technician::whereIn("network_operator_id", $model->networkOperators()->pluck("id"))
+                ->pluck("user_id");
+            return Pqr::whereIn("id", $techniciansUserId)->paginate();
+        }
         $user = Auth::user();
-
         return Pqr::whereIn("id", $user->pqrUsers()->pluck("pqr_id"))->paginate();
     }
 

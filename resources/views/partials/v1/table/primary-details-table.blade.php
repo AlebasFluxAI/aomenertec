@@ -13,7 +13,6 @@
                         @elseif($info["type"]=="image")
 
                             <td>
-
                                 <img src='{{$info["value"]}}' class="rounded img-fluid" alt="Logo" width="150px"
                                      height="150px">
                             </td>
@@ -24,6 +23,7 @@
                             <td>{{__($info["translate"].".".$info["value"])}}</td>
                         @elseif(isset($info["redirect_route"]) and $info["redirect_value"])
                             <td class="link">
+
                                 <a href="{{route($info["redirect_route"],[$info["redirect_binding"]=>$info["redirect_value"]])}}">
                                     {{$info["value"]}}</a>
                             </td>

@@ -11,8 +11,9 @@
         @endif
     </div>
     <div class="col-md-4 input-group">
-        @if($icon_class??false)
-            <div class="input-group-prepend">
+
+        @if($icon_class??null)
+        <div class="input-group-prepend">
                                     <span class="input-group-text">
                                      <i class="{{$icon_class}}"></i>
                                     </span>
@@ -58,10 +59,19 @@
                    @endif
 
                    type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
+<<<<<<< HEAD
                    placeholder="{{ $placeholder_input }}" required="{{$required??false}}"
                    @if($input_type??"text" == "number")
                        min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
                 @endif>
+=======
+                    placeholder="{{ $placeholder_input??"" }}" required="{{$required??false}}"
+                    @if($input_type??"text" == "number")
+                        min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
+                    @endif>
+
+
+>>>>>>> ALERTAS_CONTROL
 
         @endif
 

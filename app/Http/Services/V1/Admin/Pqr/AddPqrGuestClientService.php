@@ -10,6 +10,7 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Pqr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 
 class AddPqrGuestClientService extends Singleton
@@ -22,19 +23,18 @@ class AddPqrGuestClientService extends Singleton
         if (!$component->client_code) {
             $component->validate();
         }
-
-        $component->validate([
-            'attach' => 'image|max:10240', // 1MB Max
-        ]);
+        if ($component->attach) {
+            $component->validate([
+                'attach' => 'image|max:10240', // 1MB Max
+            ]);
+        }
         DB::transaction(function () use ($component) {
             $pqr = Pqr::create($this->mapper($component));
-            $pqr->buildOneImageFromFile("attach", $component->attach);
+            if ($component->attach) {
+                $pqr->buildOneImageFromFile("attach", $component->attach);
+            }
+            $component->redirectRoute("guest.created-pqr", ["pqr" => $pqr->id, "subdomain" => $component->subdomain]);
         });
-        $component->emitTo('livewire-toast', 'show',
-            ['type' => 'success',
-                'message' => "Se registro la peticion exitosamente"]);
-        $this->mount($component);
-
     }
 
     public function mapper(Component $component)
@@ -48,6 +48,7 @@ class AddPqrGuestClientService extends Singleton
             'type' => $component->pqr_type,
             'sub_type' => $component->pqr_category,
             'severity' => $component->severity,
+            'level' => Pqr::PQR_LEVEL_1,
             'contact_name' => $component->contact_name,
             'contact_email' => $component->contact_email,
             'contact_phone' => $component->contact_phone,
@@ -57,6 +58,7 @@ class AddPqrGuestClientService extends Singleton
 
     public function mount(Component $component)
     {
+        $component->subdomain = Route::input("subdomain");
         $component->fill([
             "pqr_type" => Pqr::PQR_TYPE_TECHNICIAN,
             "pqr_types" => $this->getPqrTypes(),
