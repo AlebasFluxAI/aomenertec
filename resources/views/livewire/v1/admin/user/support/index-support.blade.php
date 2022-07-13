@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
 
     @endsection
 
@@ -60,8 +61,12 @@
                        "col_data" =>"networkOperator.name",
                        "col_filter"=>false
                    ],
-
-
+                   [
+                       "col_name" =>"Activo para Gestionar Pqr",
+                       "col_data" =>"pqr_available",
+                       "col_filter"=>false,
+                       "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN
+                   ],
                 ],
                  "table_actions"=>[
                                     "customs"=>[
@@ -82,13 +87,23 @@
                                                             "function"=>"addClients",
                                                             "icon"=> "fas fa-users",
                                                             "tooltip_title"=>"Ver clientes"
-                                                    ]
+                                                    ],
+                                                    [
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_ENABLE_PQR],
+                                                            "function"=>"enablePqrSupport",
+                                                            "icon"=> "fas fa-bell",
+                                                            "tooltip_title"=>"Activar usuario para Pqr",
+                                                            "conditional"=>"supportPqrDisabled"
+                                                    ],
+                                                    [
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_ENABLE_PQR],
+                                                            "function"=>"disablePqrSupport",
+                                                            "icon"=> "fas fa-bell-slash",
+                                                            "tooltip_title"=>"Activar usuario para Pqr",
+                                                            "conditional"=>"supportPqrEnabled"
+                                                    ],
                                                 ]
                                     ],
-                                                /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
-                                                _edit_button=>{ruta para redireccionar a edicion}
-                                                _delete_button => {boton de borrado, siempre tomando como identificador la primera colunma de la tabla - ID}
-                                                  ]*/
                "table_rows"=>$data
 
            ])

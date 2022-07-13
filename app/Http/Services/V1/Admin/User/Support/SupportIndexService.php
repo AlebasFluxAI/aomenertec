@@ -39,4 +39,15 @@ class SupportIndexService extends Singleton
         }
         return Support::paginate(15);
     }
+
+    public function supportPqrDisabled(Component $component, $support)
+    {
+        return Support::whereId($support)->wherePqrAvailable(true)->exists();
+    }
+
+    public function enablePqrSupport(Component $component, $support)
+    {
+        Support::find($support)->blinkPqrAvailability();
+    }
+
 }

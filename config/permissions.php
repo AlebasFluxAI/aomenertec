@@ -64,6 +64,11 @@ return [
         Permissions::SUPERVISOR_DELETE,
         Permissions::SUPERVISOR_SHOW,
         Permissions::SUPERVISOR_LINK_CLIENT,
+
+        Permissions::PQR_SHOW,
+        Permissions::PQR_CHANGE_LEVEL,
+        Permissions::PQR_REPLY,
+        Permissions::PQR_REQUEST_CLOSE,
     ],
 
     // Super admin
@@ -120,11 +125,17 @@ return [
         Permissions::SUPPORT_DELETE,
         Permissions::SUPPORT_SHOW,
         Permissions::SUPPORT_LINK_CLIENT,
+        Permissions::SUPPORT_ENABLE_PQR,
 
         Permissions::SUPER_ADMIN_CREATE,
         Permissions::SUPER_ADMIN_EDIT,
         Permissions::SUPER_ADMIN_DELETE,
         Permissions::SUPER_ADMIN_SHOW,
+
+        Permissions::PQR_SHOW,
+        Permissions::PQR_CHANGE_LEVEL,
+        Permissions::PQR_REPLY,
+        Permissions::PQR_REQUEST_CLOSE,
 
     ],
     // Operador de red

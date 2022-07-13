@@ -25,7 +25,12 @@ class PqrNotification extends Notification
 
     public function via($notifiable)
     {
-        return ["database"];
+        if ($this->pqr->networkOperator or
+            $this->pqr->supervisor or
+            $this->pqr->client) {
+            return ["database"];
+        }
+        return [];
     }
 
     public function toDatabase()
@@ -44,12 +49,14 @@ class PqrNotification extends Notification
                 $this->pqr->id,
                 "pqr");
         }
-
-        return new UserNotificationPayload("Cliente " . $this->pqr->client->name . " " . $this->pqr->client->last_name . " a levantado un nuevo PQR",
-            "administrar.v1.peticiones.detalles",
-            "interna",
-            $this->pqr->id,
-            "pqr");
+        if ($this->pqr->client) {
+            return new UserNotificationPayload("Cliente " . $this->pqr->client->name . " " . $this->pqr->client->last_name . " a levantado un nuevo PQR",
+                "administrar.v1.peticiones.detalles",
+                "interna",
+                $this->pqr->id,
+                "pqr");
+        }
+        return [];
     }
 
     public function toWhatsApp($notifiable)

@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -67,7 +68,22 @@
                                                                              "value"=>$model->client?($model->client->name." ". $model->client->last_name."-". $model->client->identification):"Sin cliente relacionado",
                                                                              "redirect_route"=>"v1.admin.client.detail.client",
                                                                              "redirect_binding"=>"client",
-                                                                             "redirect_value"=>$model->client?$model->client->id:null,
+                                                                             "redirect_value"=>$model->client_id,
+
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Tecnico asignado",
+                                                                             "value"=>$model->technician?$model->technician->name." ".$model->technician->last_name."-".$model->technician->identification:"",
+                                                                             "redirect_route"=>"administrar.v1.usuarios.tecnicos.detalles",
+                                                                             "redirect_binding"=>"technician",
+                                                                             "redirect_value"=>$model->technician_id
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Usuario de soporte asignado",
+                                                                             "value"=>$model->support?$model->support->name." ".$model->support->last_name."-".$model->support->identification:"",
+                                                                             "redirect_route"=>"administrar.v1.usuarios.soporte.detalles",
+                                                                             "redirect_binding"=>"support",
+                                                                             "redirect_value"=>$model->support_id
 
                                                                          ],
                                                                          [
