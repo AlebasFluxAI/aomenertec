@@ -59,19 +59,13 @@
                    @endif
 
                    type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
-<<<<<<< HEAD
-                   placeholder="{{ $placeholder_input }}" required="{{$required??false}}"
-                   @if($input_type??"text" == "number")
-                       min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
-                @endif>
-=======
-                    placeholder="{{ $placeholder_input??"" }}" required="{{$required??false}}"
+
+                     required="{{$required??false}}"
                     @if($input_type??"text" == "number")
                         min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
                     @endif>
 
 
->>>>>>> ALERTAS_CONTROL
 
         @endif
 
