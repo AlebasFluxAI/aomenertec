@@ -65,6 +65,7 @@ class AddPqrGuestClientService extends Singleton
             "pqr_categories" => $this->getTechnicianCategories($component),
             "severities" => $this->getSeverity($component),
             "has_client_code" => false,
+            "request_equipment" => false
         ]);
     }
 

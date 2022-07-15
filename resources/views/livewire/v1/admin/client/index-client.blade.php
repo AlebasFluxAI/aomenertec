@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
 
     @endsection
 
@@ -82,7 +83,7 @@
                                                 ],
                                                 [
                                                          "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_DELETE],
-                                                        "function"=>"deleteEquipment",
+                                                        "function"=>"delete",
                                                         "icon"=>"fas fa-trash",
                                                         "tooltip_title"=>"Eliminar"
                                                 ],

@@ -35,7 +35,6 @@ class PqrDetailsComponent extends Component
 
     public function mount(Pqr $pqr)
     {
-        
         $this->pqrIndexService->mount($this, $pqr);
     }
 

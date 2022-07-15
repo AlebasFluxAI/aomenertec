@@ -44,6 +44,7 @@ class AddPqrGuestClientComponent extends Component
     public $contact_email;
     public $has_client_code;
     public $client_code;
+    public $request_equipment;
 
     protected $rules = [
         'contact_identification' => 'required',
@@ -61,6 +62,12 @@ class AddPqrGuestClientComponent extends Component
     public function closePqr($pqr)
     {
         $this->addPqrGuestClientService->closePqr($this, $pqr);
+    }
+
+
+    public function solvePqr($pqr)
+    {
+        $this->addPqrGuestClientService->solvePqr($this, $pqr);
     }
 
     public function updatedPqrType()

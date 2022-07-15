@@ -26,4 +26,31 @@ trait PqrStatusTrait
 
     }
 
+    public function closePqr(Component $component, $id)
+    {
+        Pqr::find($id)->update(
+            ["status" => Pqr::STATUS_CLOSED]);
+    }
+
+    public function solvePqr(Component $component, $id)
+    {
+        Pqr::find($id)->update(
+            ["status" => Pqr::STATUS_RESOLVED]);
+    }
+
+    public function requestEquipment(Component $component, $id)
+    {
+        Pqr::find($id)->update(
+            ["change_equipment" => true]);
+    }
+
+
+    public function equipmentNotRequest(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        return $pqr->change_equipment;
+
+    }
+
+
 }
