@@ -49,8 +49,6 @@
                                   "required"=>true
                          ])
 
-                            }
-
                             @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Telefono del cliente (Sin indicativo)",
                                     "input_model"=>"phone",
