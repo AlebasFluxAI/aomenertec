@@ -83,4 +83,5 @@ class Permissions
     public const PQR_CREATE = "pqr_create";
     public const PQR_CREATE_NETWORK_OPERATOR = "pqr_create_network_operator";
     public const PQR_CLOSE = "pqr_close";
+    public const PQR_EQUIPMENT_CHANGE = "pqr_equipment_change";
 }

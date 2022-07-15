@@ -137,11 +137,30 @@
                                                 ],
                                                 [
 
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE],
+                                                        "function"=>"requestEquipment",
+                                                        "icon"=>"fas fa-computer",
+                                                        "tooltip_title"=>"Solicitar cambio de equipo",
+                                                        "conditional"=>"equipmentNotRequest"
+                                                ],
+
+                                                [
+
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_REQUEST_CLOSE],
+                                                        "function"=>"closePqr",
+                                                        "icon"=>"fas fa-file-circle-question",
+                                                        "tooltip_title"=>"Solicitar cierre de ticket",
+                                                        "conditional"=>"openTicked"
+                                                ],
+                                                [
+
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CLOSE],
                                                         "function"=>"closePqr",
                                                         "icon"=>"fas fa-check",
-                                                        "tooltip_title"=>"Cerrar ticket"
+                                                        "tooltip_title"=>"Resolver ticket",
+                                                        "conditional"=>"openTicked"
                                                 ],
+
 
                                     ]
                                 ],

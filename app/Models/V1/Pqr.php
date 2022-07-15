@@ -61,7 +61,8 @@ class Pqr extends Model
         'contact_identification',
         'client_code',
         "code",
-        "supervisor_id"
+        "supervisor_id",
+        "change_equipment"
     ];
 
     protected static function booted()
@@ -138,6 +139,10 @@ class Pqr extends Model
 
     public function sender()
     {
+
+        if ($this->support) {
+            return $this->support;
+        }
         if ($this->networkOperator) {
             return $this->networkOperator;
         }

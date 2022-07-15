@@ -69,6 +69,7 @@ return [
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
+        Permissions::PQR_EQUIPMENT_CHANGE,
     ],
 
     // Super admin
@@ -136,6 +137,8 @@ return [
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
+        Permissions::PQR_CLOSE,
+        Permissions::PQR_EQUIPMENT_CHANGE,
 
     ],
     // Operador de red
@@ -185,6 +188,7 @@ return [
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
+        Permissions::PQR_EQUIPMENT_CHANGE,
     ],
     // Soporte
     Support::class => [
