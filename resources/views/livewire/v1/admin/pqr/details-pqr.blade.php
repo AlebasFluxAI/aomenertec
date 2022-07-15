@@ -45,7 +45,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Solicitante",
-                                                                             "value"=>$model->sender()->identification ." - ".$model->sender()->name,
+                                                                             "value"=>($model->sender()?$model->sender()->identification:"" )." - ".($model->sender()?$model->sender()->name:""),
 
                                                                          ],
                                                                          [
@@ -55,12 +55,12 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Telefono de contacto",
-                                                                             "value"=>$model->sender()->phone ,
+                                                                             "value"=>$model->sender()?$model->sender()->phone:"" ,
 
                                                                          ],
                                                                          [
                                                                              "key"=>"Correo de contacto",
-                                                                             "value"=>$model->sender()->email,
+                                                                             "value"=>$model->sender()?$model->sender()->email:"",
 
                                                                          ],
                                                                          [

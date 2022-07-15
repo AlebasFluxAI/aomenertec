@@ -42,6 +42,25 @@ class PqrIndexComponent extends Component
         $this->pqrIndexService->details($this, $id);
     }
 
+    public function equipmentNotRequest($id)
+    {
+        return $this->pqrIndexService->equipmentNotRequest($this, $id);
+
+    }
+
+
+    public function closePqr($id)
+    {
+        return $this->pqrIndexService->closePqr($this, $id);
+
+    }
+
+    public function requestEquipment($id)
+    {
+        $this->pqrIndexService->requestEquipment($this, $id);
+
+    }
+
     public function openTicked($id)
     {
         return $this->pqrIndexService->openTicked($this, $id);
