@@ -67,15 +67,25 @@ class ClientConfigurationService extends Singleton
                 "mqtt_user" => "enertec",
                 "mqtt_password" => "enertec2020**",
                 "real_time_latency" => 60,
+                "active_real_time" => false,
                 "storage_latency" => 30,
+                "storage_type_latency" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY,
                 "digital_outputs" => 0,
+
             ]);
         }
+
         $component->fill([
             "client" => $client,
             "client_config"=> $client->clientConfiguration,
             "client_config_alert"=> $client->clientAlertConfiguration,
             "digital_outputs" => $client->digitalOutputs,
+            'storage_latency_types' => [
+                ["key" => "# Lecturas por hora", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY,],
+                ["key" => "# Lecturas por dia", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_DAILY,],
+                ["key" => "Día de lectura", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_MONTHLY]
+            ],
+            'storage_latency_options' => ClientConfiguration::STORAGE_LATENCY_OPTIONS[$client->clientConfiguration->storage_type_latency],
         ]);
         foreach ($component->digital_outputs as $index => $output) {
             $component->checks[$index] = ["id" => $output->id, "output" => false];
@@ -135,8 +145,10 @@ class ClientConfigurationService extends Singleton
             'client_config.mqtt_port'=>'required',
             'client_config.mqtt_user'=>'required',
             'client_config.mqtt_password'=>'required',
+            'client_config.active_real_time'=>'required',
             'client_config.real_time_latency'=>'numeric|required|min:10',
-            'client_config.storage_latency'=>'numeric|required|min:60',
+            'client_config.storage_latency'=>'numeric|required',
+            'client_config.storage_type_latency'=>'required',
             'client_config.digital_outputs'=>'numeric|required|min:0|max:10',
             'client_config_alert.*.min_alert'=>['required', 'numeric'],
             'client_config_alert.*.max_alert'=>['required', 'numeric'],
@@ -192,6 +204,9 @@ class ClientConfigurationService extends Singleton
             $component->digital_outputs = $component->client->digitalOutputs()->get();
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Salidas configuradas"]);
             return redirect()->route("v1.admin.client.settings", ['client' => $component->client->id]);
+        } elseif($key == "storage_type_latency"){
+            $component->storage_latency_options = ClientConfiguration::STORAGE_LATENCY_OPTIONS[$value];
+
         }
     }
 

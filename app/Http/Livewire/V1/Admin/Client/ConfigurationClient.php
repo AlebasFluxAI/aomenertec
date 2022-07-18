@@ -19,6 +19,8 @@ class ConfigurationClient extends Component
     public $client_config_alert;
     public $digital_outputs;
     public $placeholders;
+    public $storage_latency_options;
+    public $storage_latency_types;
     public $outputs_selected;
 
 

@@ -58,11 +58,15 @@
                        wire:model="{{ $input_model }}"
                    @endif
 
-                   type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
+                    type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
 
                      required="{{$required??false}}"
+
                     @if($input_type??"text" == "number")
                         min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
+                    @endif
+                   @if($disabled??false)
+                   disabled
                     @endif>
 
 
