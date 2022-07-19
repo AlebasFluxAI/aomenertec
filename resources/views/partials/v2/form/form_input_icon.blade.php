@@ -40,16 +40,29 @@
             </div>
 
         @elseif($input_type=="select")
-            <select wire:model.lazy="{{$input_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
+            <select wire:model="{{$input_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
                     required="{{$required??false}}" @if($disabled??false)disabled @endif>
-                <option disabled value="0"> {{$select_default??""}} </option>
+                <option disabled value="0"> {{$select_default??"Seleccione..."}} </option>
                 @foreach($select_options??[] as $option)
                     <option @if($select_option_title??"" != "")title="{{ $option[$select_option_title] }}"
                             @endif value="{{ $option[$select_option_value] }}">{{ $option[$select_option_view] }}</option>
 
                 @endforeach
             </select>
-        @else
+        @elseif($input_type == "multiselect")
+
+                <div wire:ignore class="dropdown form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_width??6}} col-sm-12" id="for-picker_{{$name_select}}">
+                    
+                    <select  wire:model.defer="{{$model_select}}" class="selectpicker" name="{{$name_select}}" data-container="#for-picker_{{$name_select}}" multiple>
+                            @foreach($options_list as $index => $option)
+                                <option value="{{ $option[$option_value] }}">{{ $option[$option_view] }}</option>
+                            @endforeach
+
+                    </select>
+
+                </div>
+
+            @else
             <input @if($updated_input=="lazy")
                        wire:model.lazy="{{ $input_model }}"
                    @elseif($updated_input=="defer")

@@ -24,7 +24,11 @@ class AddColumnsToClientConfigurations extends Migration
                 \App\Models\V1\ClientConfiguration::CONECTION_TYPE_OTHERS,
             ])->default(\App\Models\V1\ClientConfiguration::CONECTION_TYPE_OTHERS);
             $table->boolean("active_real_time")->default(false);
-
+            $table->enum('frame_type', [
+                \App\Models\V1\ClientConfiguration::FRAME_TYPE_ACTIVE_ENERGY,
+                \App\Models\V1\ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY,
+                \App\Models\V1\ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES,
+            ])->default(\App\Models\V1\ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES);
         });
     }
 
@@ -36,7 +40,10 @@ class AddColumnsToClientConfigurations extends Migration
     public function down()
     {
         Schema::table('client_configurations', function (Blueprint $table) {
-            //
+            $table->dropColumn("storage_type_latency");
+            $table->dropColumn("connection_type");
+            $table->dropColumn("active_real_time");
+            $table->dropColumn("frame_type");
         });
     }
 }

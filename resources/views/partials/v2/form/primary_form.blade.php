@@ -140,15 +140,17 @@
                                     || $form_input["input_type"]=="number"
                                     || $form_input["input_type"]=="email"
                                     || $form_input["input_type"]=="password"
-                                    || $form_input["input_type"]=="select")
+                                    || $form_input["input_type"]=="select"
+                                    || $form_input["input_type"]=="multiselect"
+                                    )
                                     @include("partials.v2.form.form_input_icon",[
-                                              "input_model"=>$form_input["input_model"],
+                                              "input_model"=>$form_input["input_model"]??"",
                                               "input_field"=>$form_input["input_field"]??"",
                                               "input_type"=>$form_input["input_type"],
                                               "icon_class"=>$form_input["icon_class"]??null,
                                               "placeholder"=>$form_input["placeholder"],
                                               "placeholder_input"=>$form_input["placeholder_input"]??"",
-                                              "col_with"=>$form_input["col_with"],
+                                              "col_with"=>$form_input["col_with"]??"",
                                               "required"=>$form_input["required"],
                                               "offset"=>$form_input["offset"]??'',
                                               "data_target"=>$form_input["data_target"]??'',
@@ -162,6 +164,11 @@
                                               "select_options"=>$form_input["select_options"]??[],
                                               "select_option_value"=>$form_input["select_option_value"]??"",
                                               "select_option_view"=>$form_input["select_option_view"]??"",
+                                              "options_list"=>$form_input["options_list"]??[],
+                                                "model_select"=>$form_input["model_select"]??"",
+                                                "name_select"=>$form_input["name_select"]??"",
+                                                "option_value"=>$form_input["option_value"]??"",
+                                                "option_view"=>$form_input["option_view"]??"",
                                          ])
                                 @elseif($form_input["input_type"]=="input_min_max")
                                     @include("partials.v2.form.form_input_max_min",[
@@ -242,7 +249,7 @@
                                                   "col_with"=>$form_input["col_with"],
 
                                         ])
-                                @elseif($form_input["input_type"] == "multiselect")
+                                @elseif($form_input["input_type"] == "multioselect")
                                     @include("partials.v1.form.multiselect_dropdown",[
                                                 "mt"=>$form_input["mt"]??0,
                                                 "mb"=>$form_input["mb"],

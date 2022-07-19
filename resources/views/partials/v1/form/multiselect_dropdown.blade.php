@@ -1,7 +1,7 @@
 
-<div wire:ignore class="dropdown form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_width??6}} col-sm-12" id="for-picker">
+<div wire:ignore class="dropdown form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_width??6}} col-sm-12" id="for-picker_{{$name_select}}">
     <label>{{$input_label??""}}</label>
-    <select  wire:model.defer="{{$model_select}}" class="selectpicker" name="{{$name_select}}" data-container="#for-picker" multiple>
+    <select  wire:model.defer="{{$model_select}}" class="selectpicker" name="{{$name_select}}" data-container="#for-picker_{{$name_select}}" multiple>
         @if($optgroup)
             @foreach($options_list as $index => $option)
                 @if($option[$option_value] === 29)
