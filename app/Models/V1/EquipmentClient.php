@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class EquipmentClient extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     public $incrementing = true;
 
@@ -19,4 +18,6 @@ class EquipmentClient extends Model
         'equipment_id',
         'current_assigned'
     ];
+
+
 }

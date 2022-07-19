@@ -357,6 +357,16 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get("operador/crear", Livewire\V1\Admin\Pqr\AddPqrNetworkOperatorComponent::class)
                         ->name("administrar.v1.peticiones.operador.crear")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_CREATE_NETWORK_OPERATOR));
+
+                    Route::get("cambio_de_equipo/{pqr}", Livewire\V1\Admin\Pqr\PqrChangeEquipmentManageComponent::class)
+                        ->name("administrar.v1.peticiones.cambio-equipo")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_EQUIPMENT_CHANGE_MANAGE));
+
+                    Route::get("historico_cambio_de_equipo/{pqr}", Livewire\V1\Admin\Pqr\PqrChangeEquipmentHistoryComponent::class)
+                        ->name("administrar.v1.peticiones.cambio-equipo-historico")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_EQUIPMENT_CHANGE_MANAGE));
+
+
                 });
             });
         });

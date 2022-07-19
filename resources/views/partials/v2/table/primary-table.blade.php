@@ -3,14 +3,20 @@
         <table class="table table-bordered">
             <thead style="position: sticky;top: 0;z-index: 2">
             <tr>
-                @if($table_checkable??false)
-                    <th>
-                        <div class="form-check">
-                            <input wire:model="selectedAll" class="form-check-input" type="checkbox"
-                                {{count($table_rows)==0?"disabled":""}}
-                            >
-                        </div>
-                    </th>
+                @if(($table_checkable??false))
+                    @if($table_checkable_blank??false)
+                        <th>
+
+                        </th>
+                    @else
+                        <th>
+                            <div class="form-check">
+                                <input wire:model="selectedAll" class="form-check-input" type="checkbox"
+                                    {{count($table_rows)==0?"disabled":""}}
+                                >
+                            </div>
+                        </th>
+                    @endif
                 @endif
 
                 @foreach($table_headers as $table_header)
@@ -62,20 +68,37 @@
 
 
                                 @if(str_contains($table_header["col_data"],".") and !str_contains($table_header["col_data"],"*") and $table_row->{explode(".",$table_header["col_data"])[0]})
-                                    @include("partials.v2.table.primary-table-column",[
-                                          "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]},
-                                          "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:"",
-                                          "col_translate"=>$table_header["col_translate"]??null,
-                                      ])
+                                    @if(isset($table_header["col_data_function"]))
+                                        @include("partials.v2.table.primary-table-column",[
+                                               "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]}(),
+                                               "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:"",
+                                               "col_translate"=>$table_header["col_translate"]??null,
+                                           ])
+                                    @else
+                                        @include("partials.v2.table.primary-table-column",[
+                                                  "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]},
+                                                  "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:"",
+                                                  "col_translate"=>$table_header["col_translate"]??null,
+                                              ])
+                                    @endif
                                 @else
-                                    @include("partials.v2.table.primary-table-column",[
-                                    "col_data"=>$table_row->{$table_header["col_data"]},
-                                    "col_array_data"=>$table_header["col_array_data"]??"",
-                                    "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
-                                    "col_translate"=>$table_header["col_translate"]??null,
-                                ])
-
+                                    @if(isset($table_header["col_data_function"]))
+                                        @include("partials.v2.table.primary-table-column",[
+                                      "col_data"=>$table_row->{$table_header["col_data"]}(),
+                                      "col_array_data"=>$table_header["col_array_data"]??"",
+                                      "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
+                                      "col_translate"=>$table_header["col_translate"]??null,
+                                  ])
+                                    @else
+                                        @include("partials.v2.table.primary-table-column",[
+                                        "col_data"=>$table_row->{$table_header["col_data"]},
+                                        "col_array_data"=>$table_header["col_array_data"]??"",
+                                        "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
+                                        "col_translate"=>$table_header["col_translate"]??null,
+                                    ])
+                                    @endif
                                 @endif
+
                             </td>
                         @endforeach
                         @isset($table_actions)
@@ -113,7 +136,6 @@
                                                      ])
                                             @elseif($action_type=="customs")
                                                 @foreach($action_value  as $custom)
-
 
                                                     @if(array_key_exists("limit_roles",$custom))
                                                         @unlessrole($custom["limit_roles"])

@@ -12,10 +12,12 @@ class Equipment extends Model
     use HasFactory;
     use SoftDeletes;
 
+    // Agregasr estato pendiente de reparacion
     public const STATUS_NEW = 'new';
-    public const STATUS_REPAIRED = 'repaired';
-    public const STATUS_REPAIR = 'repair';
-    public const STATUS_DISREPAIR = 'disrepair';
+    public const STATUS_REPAIRED = 'repaired'; //  Reparado.
+    public const STATUS_REPAIR = 'repair'; // En reparacion.
+    public const STATUS_DISREPAIR = 'disrepair'; // Para dar de baja.
+    public const STATUS_REPAIR_PENDING = 'repair_pending'; // Para dar de baja.
     protected $fillable = [
         'id',
         "name",
@@ -53,7 +55,8 @@ class Equipment extends Model
     public function clients()
     {
         return $this->belongsToMany(Client::class, 'equipment_clients')
-            ->withPivot('current_assigned');
+            ->withPivot('current_assigned')
+            ->whereNull("equipment_clients.deleted_at");
     }
 
     public function equipmentType()
@@ -74,5 +77,10 @@ class Equipment extends Model
     public function technicians()
     {
         return $this->belongsTo(Technician::class);
+    }
+
+    public function getNameSerial()
+    {
+        return $this->serial . " - " . $this->namess;
     }
 }
