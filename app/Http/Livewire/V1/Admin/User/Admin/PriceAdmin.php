@@ -12,11 +12,11 @@ class PriceAdmin extends Component
     public $prices;
     public $config;
     public $client_types;
+    public $notification_types;
     public $coins;
     public $admin_client_types;
+    public $admin_notification_types;
     public $model;
-    public $frame_types;
-    public $frame_type;
 
     private $priceAdminService;
 

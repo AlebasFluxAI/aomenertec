@@ -11,9 +11,6 @@ class AdminConfiguration extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public const FRAME_TYPE_ACTIVE_ENERGY = "active_energy";
-    public const FRAME_TYPE_ACTIVE_REACTIVE_ENERGY = "active_reactive_energy";
-    public const FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES = "active_reactive_energy_variales";
 
     protected $fillable = [
         'admin_id',

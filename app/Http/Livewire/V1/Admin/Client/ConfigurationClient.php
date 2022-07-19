@@ -21,6 +21,9 @@ class ConfigurationClient extends Component
     public $placeholders;
     public $storage_latency_options;
     public $storage_latency_types;
+    public $frame_types;
+    public $notification_types;
+    public $client_notification_type;
     public $outputs_selected;
 
 

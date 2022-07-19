@@ -16,6 +16,11 @@ class ClientConfiguration extends Model
     public const CONECTION_TYPE_4G = "4g";
     public const CONECTION_TYPE_OTHERS = "others";
 
+    public const FRAME_TYPE_ACTIVE_ENERGY = "active_energy";
+    public const FRAME_TYPE_ACTIVE_REACTIVE_ENERGY = "active_reactive_energy";
+    public const FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES = "active_reactive_energy_variales";
+
+
     public const STORAGE_LATENCY_TYPE_HOURLY = "hourly";
     public const STORAGE_LATENCY_TYPE_DAILY = "daily";
     public const STORAGE_LATENCY_TYPE_MONTHLY = "monthly";
@@ -83,7 +88,10 @@ class ClientConfiguration extends Model
         "real_time_flag",
         "real_time_latency",
         "storage_latency",
-        "digital_outputs"
+        "storage_type_latency",
+        "digital_outputs",
+        "active_real_time",
+        "connection_type"
     ];
 
     public function client()

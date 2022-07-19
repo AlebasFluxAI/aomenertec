@@ -66,10 +66,11 @@ class ClientConfigurationService extends Singleton
                 "mqtt_port" => "1883",
                 "mqtt_user" => "enertec",
                 "mqtt_password" => "enertec2020**",
-                "real_time_latency" => 60,
+                "real_time_latency" => 30,
                 "active_real_time" => false,
-                "storage_latency" => 30,
+                "storage_latency" => 1,
                 "storage_type_latency" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY,
+                "frame_type" => ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES,
                 "digital_outputs" => 0,
 
             ]);
@@ -80,10 +81,20 @@ class ClientConfigurationService extends Singleton
             "client_config"=> $client->clientConfiguration,
             "client_config_alert"=> $client->clientAlertConfiguration,
             "digital_outputs" => $client->digitalOutputs,
+            "frame_types" => [
+                ["key" => "Consumo activo", "value" => ClientConfiguration::FRAME_TYPE_ACTIVE_ENERGY],
+                ["key" => "Consumo activo + reactivo", "value" => ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY],
+                ["key" => "Consumo activo + reactivo + variables de red", "value" => ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES]
+            ],
             'storage_latency_types' => [
-                ["key" => "# Lecturas por hora", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY,],
-                ["key" => "# Lecturas por dia", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_DAILY,],
+                ["key" => "# Lecturas por hora", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY],
+                ["key" => "# Lecturas por dia", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_DAILY],
                 ["key" => "Día de lectura", "value" => ClientConfiguration::STORAGE_LATENCY_TYPE_MONTHLY]
+            ],
+            "notification_types" => [
+                ["key" => "Mensaje de texto", "value" => 1],
+                ["key" => "WhatsApp", "value" => 2],
+                ["key" => "Email", "value" => 3]
             ],
             'storage_latency_options' => ClientConfiguration::STORAGE_LATENCY_OPTIONS[$client->clientConfiguration->storage_type_latency],
         ]);
@@ -147,8 +158,9 @@ class ClientConfigurationService extends Singleton
             'client_config.mqtt_password'=>'required',
             'client_config.active_real_time'=>'required',
             'client_config.real_time_latency'=>'numeric|required|min:10',
-            'client_config.storage_latency'=>'numeric|required',
+            'client_config.storage_latency'=>'required',
             'client_config.storage_type_latency'=>'required',
+            'client_config.frame_type'=>'required',
             'client_config.digital_outputs'=>'numeric|required|min:0|max:10',
             'client_config_alert.*.min_alert'=>['required', 'numeric'],
             'client_config_alert.*.max_alert'=>['required', 'numeric'],
@@ -159,6 +171,7 @@ class ClientConfigurationService extends Singleton
     }
     public function updated(Component $component, $propertyName, $value)
     {
+
         $property = explode(".", $propertyName);
         if ($property[0] == "client_config_alert") {
             $component->validate([
@@ -206,8 +219,8 @@ class ClientConfigurationService extends Singleton
             return redirect()->route("v1.admin.client.settings", ['client' => $component->client->id]);
         } elseif($key == "storage_type_latency"){
             $component->storage_latency_options = ClientConfiguration::STORAGE_LATENCY_OPTIONS[$value];
-
         }
+
     }
 
     public function outputRelation(Component $component, $id)
@@ -322,6 +335,10 @@ class ClientConfigurationService extends Singleton
         }
         if ($component->client_config->wasChanged('storage_latency')) {
             $message['storage_latency'] =  $component->client_config->storage_latency;
+            $flag = true;
+        }
+        if ($component->client_config->wasChanged('storage_type_latency')) {
+            $message['storage_latency_type'] =  substr($component->client_config->storage_type_latency, 0, 1);
             $flag = true;
         }
         if ($component->client_config->wasChanged('real_time_latency')) {

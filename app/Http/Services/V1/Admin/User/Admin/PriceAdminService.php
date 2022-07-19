@@ -40,15 +40,15 @@ class PriceAdminService extends Singleton
             "model" => $model,
             "prices" => $model->priceAdmin,
             "config" => $model->configAdmin,
-            "frame_types" => [
-                ["key" => "Consumo activo", "value" => AdminConfiguration::FRAME_TYPE_ACTIVE_ENERGY],
-                ["key" => "Consumo activo + reactivo", "value" => AdminConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY],
-                ["key" => "Consumo activo + reactivo + variables de red", "value" => AdminConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES]
-            ],
-            "frame_type" => $model->configAdmin->frame_type,
+
             "coins" => [
                 ["key" => "Peso Colombiano", "value" => AdminConfiguration::COP],
                 ["key" => "Dolar", "value" => AdminConfiguration::USD]
+            ],
+            "notification_types" => [
+                ["key" => "Mensaje de texto", "value" => 1],
+                ["key" => "WhatsApp", "value" => 2],
+                ["key" => "Email", "value" => 3]
             ],
             "admin_client_types" => $model->adminClientTypes->pluck('client_type_id')->toArray()
         ]);
