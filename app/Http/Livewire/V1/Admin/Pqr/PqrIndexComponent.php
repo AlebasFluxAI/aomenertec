@@ -48,6 +48,12 @@ class PqrIndexComponent extends Component
 
     }
 
+    public function equipmentRequest($id)
+    {
+        return !($this->pqrIndexService->equipmentNotRequest($this, $id));
+
+    }
+
 
     public function closePqr($id)
     {

@@ -7,7 +7,7 @@
 
     @include("partials.v1.title",[
           "second_title"=>"",
-          "first_title"=>"PQR's"
+          "first_title"=>"PQRS"
       ])
     @include("partials.v1.table_nav",
             [
@@ -57,11 +57,6 @@
                "col_translate"=>"pqr"
            ],
            [
-               "col_name" =>"Tecnico asignado",
-               "col_data" =>"technician.name",
-               "col_filter"=>false,
-           ],
-           [
                    "col_name" =>"Categoria",
                "col_data" =>"sub_type",
                "col_filter"=>false,
@@ -73,13 +68,7 @@
                "col_filter"=>false,
 
            ],
-           [
-                "col_name" =>"Severidad",
-               "col_data" =>"severity",
-               "col_filter"=>false,
-               "col_translate"=>"pqr"
 
-           ],
            [
                 "col_name" =>"Estado",
                "col_data" =>"status",
@@ -142,6 +131,18 @@
                                                         "icon"=>"fas fa-computer",
                                                         "tooltip_title"=>"Solicitar cambio de equipo",
                                                         "conditional"=>"equipmentNotRequest"
+                                                ],
+                                                [
+
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE_MANAGE],
+                                                        "function"=>"requestEquipment",
+                                                        "icon"=>"fas fa-rotate",
+                                                        "tooltip_title"=>"Gestionar cambio de equipo",
+                                                        "conditional"=>"equipmentRequest",
+                                                        "redirect"=>[
+                                                                "route"=>"administrar.v1.peticiones.cambio-equipo",
+                                                                "binding"=>"pqr"
+                                                          ],
                                                 ],
 
                                                 [

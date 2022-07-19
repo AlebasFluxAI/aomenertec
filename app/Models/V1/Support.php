@@ -56,11 +56,11 @@ class Support extends Model
 
                     ],
                     [
-                        "title" => "Pqr's",
+                        "title" => "PQRS",
                         "route" => "administrar.v1.peticiones.listado",
                         "submenu" => [
                             [
-                                "title" => "Pqr's",
+                                "title" => "PQRS",
                                 "route" => "administrar.v1.peticiones.listado",
                                 "submenu" => [
 

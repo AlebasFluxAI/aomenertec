@@ -7,7 +7,9 @@ use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientAlertConfiguration;
 use App\Models\V1\Equipment;
+use App\Models\V1\EquipmentClient;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\HistoricalClientEquipment;
 use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
@@ -27,7 +29,9 @@ use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
 use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
+use App\Observers\EquipmentClient\EquipmentClientObserver;
 use App\Observers\HereMapObserver;
+use App\Observers\HistoricalClientEquipment\HistoricalClientEquipmentObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
 use App\Observers\NotificationObserver;
 use App\Observers\Pqr\PqrMessageObserver;
@@ -103,8 +107,10 @@ class AppServiceProvider extends ServiceProvider
         Pqr::observe(PqrObserver::class);
         Pqr::observe(PqrLogObserver::class);
         PqrLog::observe(ActionByObserve::class);
+        HistoricalClientEquipment::observe(ActionByObserve::class);
 
         PqrUser::observe(PqrUserObserver::class);
+        
 
     }
 }
