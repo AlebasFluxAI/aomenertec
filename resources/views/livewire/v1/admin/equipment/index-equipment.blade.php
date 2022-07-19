@@ -1,6 +1,7 @@
 <div class="login">
 
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
 
     @endsection
 
@@ -57,6 +58,12 @@
                                "col_data" =>"assigned",
                                "col_filter"=>true,
                                "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
+                           ],
+                           [
+                               "col_name" =>"Estado del equipo",
+                               "col_data" =>"status",
+                               "col_filter"=>false,
+                               "col_translate"=>"equipment"
                            ],
                     ],
                      "table_actions"=>[

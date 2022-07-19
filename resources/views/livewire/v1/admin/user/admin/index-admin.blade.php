@@ -83,8 +83,8 @@
                                                         "route"=>"administrar.v1.usuarios.admin.editar_precios",
                                                         "binding"=>""
                                                   ],
-                                                "icon"=>"fa-solid fa-money-bill-wave",
-                                                "tooltip_title"=>"Precios",
+                                                "icon"=>"fas fa-gear",
+                                                "tooltip_title"=>"Configuración",
                                                                                                 ],
                                             [
                                                "redirect"=>[

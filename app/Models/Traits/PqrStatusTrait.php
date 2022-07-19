@@ -48,7 +48,9 @@ trait PqrStatusTrait
     public function equipmentNotRequest(Component $component, $id)
     {
         $pqr = Pqr::find($id);
-        return $pqr->change_equipment;
+
+        return ($pqr->change_equipment);
+
 
     }
 

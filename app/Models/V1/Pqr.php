@@ -62,7 +62,8 @@ class Pqr extends Model
         'client_code',
         "code",
         "supervisor_id",
-        "change_equipment"
+        "change_equipment",
+        "has_equipment_changed"
     ];
 
     protected static function booted()
@@ -116,6 +117,13 @@ class Pqr extends Model
         return $this->morphOne(Image::class, "imageable");
     }
 
+    public function setEquipmentChanged()
+    {
+        $this->update([
+            "has_equipment_changed" => true,
+            "change_equipment" => false]);
+    }
+
     public function pqrUsers()
     {
         return $this->hasMany(PqrUser::class);
@@ -136,6 +144,12 @@ class Pqr extends Model
         }
         return "Cliente";
     }
+
+    public function equipmentChangeHistorical()
+    {
+        return $this->hasMany(HistoricalClientEquipment::class);
+    }
+
 
     public function sender()
     {

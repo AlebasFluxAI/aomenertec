@@ -44,6 +44,7 @@ class PqrObserver
         if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
             $pqr->support_id = $this->getSupport();
         }
+    
 
     }
 
