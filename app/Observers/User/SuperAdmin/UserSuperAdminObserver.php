@@ -37,4 +37,8 @@ class UserSuperAdminObserver
             "identification" => $superAdmin->identification,
         ]);
     }
+    public function deleted(SuperAdmin $superAdmin)
+    {
+
+    }
 }

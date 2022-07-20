@@ -2,10 +2,10 @@
     @section("header") {{--extended app.blade--}}
     @endsection
 
-    @include("partials.v1.title",[
-            "first_title"=>"Perfil",
-            "second_title"=>"Super Administrador"
-        ])
+        @include("partials.v1.title",[
+                "first_title"=>"Super administrador",
+                "second_title"=>$model->user->name
+            ])
 
 
     {{----------------------------------Formulario--------------------------}}

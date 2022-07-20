@@ -26,7 +26,7 @@ class EquipmentTypeEditService extends Singleton
     {
         $component->model->fill($this->mapper($component));
         $component->model->update();
-        $component->emitTo('livewire-toast', 'show', 'Tipo de equipo ' . $component->type . ' eidtada con exito.');
+        $component->emitTo('livewire-toast', 'show', 'Tipo de equipo ' . $component->type . ' editado con exito.');
         $component->redirectRoute("administrar.v1.equipos.tipos.detalle", ["equipmentType" => $component->model->id]);
     }
 

@@ -83,8 +83,8 @@ class User extends Authenticatable
         $userRole = $user->roles->first()->name;
         $model = match ($userRole) {
             User::TYPE_NETWORK_OPERATOR => $user->networkOperator,
-            User::TYPE_ADMIN => $user->admin,
             User::TYPE_SUPER_ADMIN => $user->superAdmin,
+            User::TYPE_ADMIN => $user->admin,
             User::TYPE_SELLER => $user->seller,
             User::TYPE_SUPERVISOR => $user->supervisor,
             User::TYPE_SUPPORT => $user->support,
@@ -145,9 +145,14 @@ class User extends Authenticatable
         return $this->roles->first()->name;
     }
 
+    public function getUserRole()
+    {
+        return $this->roles->first()->display_name;
+    }
+
     public function getAdmin()
     {
-        if ($superAdmin = $this->superAdmin) {
+        if ($superAdmin = $this) {
             return $superAdmin;
         }
         if ($admin = $this->admin) {

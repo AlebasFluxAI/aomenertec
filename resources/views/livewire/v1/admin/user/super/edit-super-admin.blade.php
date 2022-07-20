@@ -2,15 +2,15 @@
     @section("header") {{--extended app.blade--}}
     @endsection
 
-    @include("partials.v1.title",[
-            "first_title"=>"Editar",
-            "second_title"=>"Super usuario"
-        ])
+        @include("partials.v1.title",[
+                "first_title"=>"Editar Super administrador",
+                "second_title"=>$model->user->name
+            ])
 
     {{--optiones de cabecera de formulario--}}
 
     @include("partials.v1.table_nav",
-         ["nav_options"=>[
+         ["mt"=>2,"nav_options"=>[
                     ["button_align"=>"right",
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
@@ -28,7 +28,7 @@
             "form_inputs"=>[
                             [
                                         "input_type"=>"text",
-                                        "input_model"=>"name",
+                                        "input_model"=>"model.name",
                                         "icon_class"=>"fas fa-user",
                                         "placeholder"=>"Nombre ",
                                         "col_with"=>6,
@@ -36,7 +36,7 @@
                             ],
                             [
                                         "input_type"=>"text",
-                                        "input_model"=>"last_name",
+                                        "input_model"=>"model.last_name",
                                         "icon_class"=>"fas fa-user",
                                         "placeholder"=>"Apellido",
                                         "col_with"=>6,
@@ -44,7 +44,7 @@
                             ],
                             [
                                         "input_type"=>"email",
-                                        "input_model"=>"email",
+                                        "input_model"=>"model.email",
                                         "icon_class"=>"fas fa-envelope",
                                         "placeholder"=>"Correo electronico ",
                                         "col_with"=>6,
@@ -52,7 +52,7 @@
                             ],
                             [
                                         "input_type"=>"text",
-                                        "input_model"=>"phone",
+                                        "input_model"=>"model.phone",
                                         "icon_class"=>"fas fa-file",
                                          "placeholder"=>"Telefono",
                                         "col_with"=>6,
@@ -62,7 +62,7 @@
                              ],
                              [
                                         "input_type"=>"text",
-                                        "input_model"=>"identification",
+                                        "input_model"=>"model.identification",
                                         "icon_class"=>"fas fa-file",
                                          "placeholder"=>"Identificacion",
                                         "col_with"=>6,
@@ -70,16 +70,7 @@
                                         "required"=>false,
 
                              ],
-                             [
-                                        "input_type"=>"password",
-                                        "input_model"=>"password",
-                                        "icon_class"=>"fas fa-file",
-                                         "placeholder"=>"Contrasena",
-                                        "col_with"=>6,
 
-                                        "required"=>false,
-
-                             ],
 
                          ]
                  ])

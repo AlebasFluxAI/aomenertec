@@ -18,8 +18,8 @@ class CreateEquipmentClientsTable extends Migration
             $table->foreignId("client_id")->constrained();
             $table->foreignId('equipment_id')->constrained();
             $table->boolean("current_assigned");
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

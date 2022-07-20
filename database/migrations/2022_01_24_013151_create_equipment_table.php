@@ -18,11 +18,15 @@ class CreateEquipmentTable extends Migration
             $table->id();
             $table->foreignId('equipment_type_id')->constrained();
             $table->string('serial');
+            $table->string('name');
             $table->string('description');
-            $table->enum('status', [Equipment::STATUS_NEW, Equipment::STATUS_REPAIRED, Equipment::STATUS_DISREPAIR, Equipment::STATUS_REPAIR])->default(Equipment::STATUS_NEW);
+            $table->enum('status', [Equipment::STATUS_NEW, Equipment::STATUS_REPAIRED, Equipment::STATUS_DISREPAIR, Equipment::STATUS_REPAIR, Equipment::STATUS_REPAIR_PENDING])->default(Equipment::STATUS_NEW);
             $table->boolean('assigned')->default(false);
-            $table->timestamps();
+            $table->foreignId("admin_id")->nullable()->constrained();
+            $table->foreignId("network_operator_id")->nullable()->constrained();
+            $table->foreignId("technician_id")->nullable()->constrained();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

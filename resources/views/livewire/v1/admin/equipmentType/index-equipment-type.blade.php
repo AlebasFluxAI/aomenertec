@@ -1,4 +1,4 @@
-<div>
+<div class="login">
     @section("header") {{--extended app.blade--}}
     @endsection
     @include("partials.v1.title",[
@@ -8,7 +8,7 @@
 
 
     @include("partials.v1.table_nav",
-           ["nav_options"=>[
+           ["mt"=>2,"nav_options"=>[
                       [
                       "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_TYPE_CREATE],
                       "button_align"=>"right",
@@ -60,7 +60,7 @@
                                                 ],
                                                 [
                                                      "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_TYPE_DELETE],
-                                                        "function"=>"deleteEquipment",
+                                                        "function"=>"delete",
                                                         "conditional"=>"conditionalDelete",
                                                         "icon"=>"fas fa-trash",
                                                         "tooltip_title"=>"Eliminar"

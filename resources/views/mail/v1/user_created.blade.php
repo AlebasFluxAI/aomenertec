@@ -254,8 +254,14 @@
                                                 style="font-size:0px;padding:30px 30px;word-break:break-word;">
                                                 <div
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#063b66;">
-                                                    <strong>Has sido registrado como "{{$data->getUserType()}}" en la
-                                                        plataforma de {{$data->getAdmin()->name}} </strong></div>
+                                                    @if($data->getUserType() == "super_administrator")
+                                                    <strong>Has sido registrado como "{{$data->getUserRole()}}" en la
+                                                        plataforma de ENERTEC AO&M </strong>
+                                                    @else
+                                                        <strong>Has sido registrado como "{{$data->getUserType()}}" en la
+                                                            plataforma de {{$data->getAdmin()->name}} </strong>
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>

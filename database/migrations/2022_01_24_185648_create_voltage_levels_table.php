@@ -17,8 +17,8 @@ class CreateVoltageLevelsTable extends Migration
             $table->id();
             $table->string("level");
             $table->string("description");
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

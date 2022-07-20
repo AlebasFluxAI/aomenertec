@@ -17,8 +17,8 @@ class CreateClientTypesTable extends Migration
             $table->id();
             $table->string('type');
             $table->string('description');
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

@@ -17,8 +17,8 @@ class CreateSubsistenceConsumptionsTable extends Migration
             $table->id();
             $table->integer("value");
             $table->string("description");
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

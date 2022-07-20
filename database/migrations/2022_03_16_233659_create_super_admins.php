@@ -17,7 +17,7 @@ class CreateSuperAdmins extends Migration
             $table->id();
             $table->string('name');
             $table->string('last_name');
-            $table->string('enabled')->default(true);
+            $table->boolean('enabled')->default(true);
             $table->string('identification')->unique();
             $table->string('phone')->unique();
             $table->string('email')->unique();

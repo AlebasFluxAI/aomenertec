@@ -11,31 +11,22 @@ use Livewire\Component;
 
 class SuperAdminAddService extends Singleton
 {
+
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
             $component->validate();
-            $superAdmin = SuperAdmin::create($this->mapper($component));
-            $user = User::create(array_merge($this->mapper($component), [
-                "password" => bcrypt($component->password),
+            $super_admin = new SuperAdmin($component->model);
+            $super_admin->save();
+            $user = User::create(array_merge($component->model, [
                 "type" => User::TYPE_SUPER_ADMIN
             ]));
-            $superAdmin->update([
+            $super_admin->update([
                 "user_id" => $user->id
             ]);
 
-            $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $superAdmin->id]);
+            $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $super_admin->id]);
         });
     }
 
-    private function mapper($component)
-    {
-        return [
-            "name" => $component->name,
-            "last_name" => $component->last_name,
-            "email" => $component->email,
-            "phone" => $component->phone,
-            "identification" => $component->identification
-        ];
-    }
 }

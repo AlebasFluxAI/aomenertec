@@ -17,8 +17,8 @@ class CreateClientTypeEquipmentTypesTable extends Migration
             $table->id();
             $table->foreignId('equipment_type_id')->constrained();
             $table->foreignId('client_type_id')->constrained();
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

@@ -30,11 +30,9 @@ class CreateClientsTable extends Migration
                 Client::IDENTIFICATION_TYPE_NIT,
             ])->default(Client::IDENTIFICATION_TYPE_CC);
             $table->string("name");
+            $table->string("last_name")->nullable();
             $table->string("email")->nullable()->unique();
             $table->string("phone")->nullable();
-            $table->string("direction")->nullable();
-            $table->string("latitude")->nullable();
-            $table->string("longitude")->nullable();
             $table->boolean("contribution")->default(false);
             $table->boolean("public_lighting_tax")->default(false);
             $table->boolean("active_client")->default(true);
@@ -44,8 +42,8 @@ class CreateClientsTable extends Migration
             $table->foreignId("voltage_level_id")->nullable()->default(1)->constrained();
             $table->foreignId("stratum_id")->nullable()->constrained();
             $table->enum("network_topology", [Client::MONOPHASIC, Client::BIPHASIC, Client::TRIPHASIC])->default(Client::MONOPHASIC);
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

@@ -27,8 +27,8 @@ class CreateImageTable extends Migration
             $table->string('type')->default('image');
             $table->integer('order')->default(0);
             $table->morphs('imageable');
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 
