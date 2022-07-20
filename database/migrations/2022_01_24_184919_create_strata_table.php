@@ -17,8 +17,8 @@ class CreateStrataTable extends Migration
             $table->id();
             $table->string("acronym");
             $table->string("name");
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

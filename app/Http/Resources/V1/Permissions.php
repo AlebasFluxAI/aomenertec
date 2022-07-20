@@ -11,6 +11,7 @@ class Permissions
     public const SUPER_ADMIN_EDIT = "super_admin.edit";
     public const SUPER_ADMIN_DELETE = "super_admin.delete";
     public const SUPER_ADMIN_SHOW = "super_admin.show";
+    public const SUPER_ADMIN_ENABLED = "super_admin.enabled";
 
     public const ADMIN_CREATE = "admin.create";
     public const ADMIN_EDIT = "admin.edit";
@@ -85,4 +86,5 @@ class Permissions
     public const PQR_CLOSE = "pqr_close";
     public const PQR_EQUIPMENT_CHANGE = "pqr_equipment_change";
     public const PQR_EQUIPMENT_CHANGE_MANAGE = "pqr_equipment_change_manage";
+
 }

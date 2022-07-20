@@ -86,36 +86,19 @@ class EditClientService extends Singleton
         ]);
     }
 
-
-    public function updatedLocationTypeId(Component $component)
+    private function getClientTypes($component)
     {
-        $component->location_id = "";
-        if ($component->municipality_id != "") {
-            $component->locations = Location::whereMunicipalityId($component->municipality_id)
-                ->whereLocationTypeId($component->location_type_id)
-                ->get();
-        } else {
-            $component->locations = [];
+        if (Auth::user()->networkOperator) {
+            $admin = Auth::user()->networkOperator->admin;
+            return $admin->clientTypesAsKeyValue();
         }
+
+        $admin = User::getUserModel();
+
+        return $admin->clientTypesAsKeyValue();
     }
 
-    public function updatedDepartmentId(Component $component)
-    {
-        $component->municipality_id = "";
-        $component->municipalities = Department::find($component->department_id)->municipalities;
-    }
 
-    public function updatedMunicipalityId(Component $component)
-    {
-        $component->location_id = "";
-        if ($component->location_type_id != "") {
-            $component->locations = Location::whereMunicipalityId($component->municipality_id)
-                ->whereLocationTypeId($component->location_type_id)
-                ->get();
-        } else {
-            $component->locations = [];
-        }
-    }
 
     public function updatedNetworkOperator(Component $component)
     {

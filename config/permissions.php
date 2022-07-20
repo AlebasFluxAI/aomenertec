@@ -109,7 +109,7 @@ return [
         Permissions::SELLER_SHOW,
         Permissions::SELLER_LINK_CLIENT,
 
-        Permissions::CLIENT_EDIT,
+        //Permissions::CLIENT_EDIT,
         Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
@@ -132,6 +132,7 @@ return [
         Permissions::SUPER_ADMIN_EDIT,
         Permissions::SUPER_ADMIN_DELETE,
         Permissions::SUPER_ADMIN_SHOW,
+        Permissions::SUPER_ADMIN_ENABLED,
 
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,

@@ -3,18 +3,15 @@
 namespace App\Http\Livewire\V1\Admin\User\SuperAdmin;
 
 use App\Http\Services\V1\Admin\User\SuperAdmin\SuperAdminEditService;
+use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Equipment;
 use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 
 class EditSuperAdmin extends Component
 {
+    use ValidateUserFormTrait;
     public $model;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $email;
-    public $identification;
     private $superAdminEditService;
 
     public function __construct($id = null)

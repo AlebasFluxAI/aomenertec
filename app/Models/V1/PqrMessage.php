@@ -19,6 +19,7 @@ class PqrMessage extends Model
     public const SENDER_TYPE_NETWORK_OPERATOR = "network_operator";
     public const SENDER_TYPE_SUPERVISOR = "supervisor";
     public const SENDER_TYPE_CLIENT = "cient";
+
     protected $fillable = [
         "message",
         "sender_type",

@@ -2,8 +2,8 @@
 @endsection
 <div class="login">
     @include("partials.v1.title",[
-            "first_title"=>"Detalles de",
-            "second_title"=>"super usuario"
+            "first_title"=>"Super administrador",
+            "second_title"=>$model->user->name
         ])
 
     {{--optiones de cabecera de formulario--}}
@@ -58,22 +58,7 @@
                                                                              "key"=>"Telefono",
                                                                              "value"=>$model->user->phone
                                                                          ],
-                                                                         [
-                                                                             "key"=>"Pais",
-                                                                             "value"=>$model->country
-                                                                         ],
-                                                                          [
-                                                                             "key"=>"Departamento",
-                                                                             "value"=>$model->state
-                                                                         ],
-                                                                          [
-                                                                             "key"=>"Ciudad",
-                                                                             "value"=>$model->city
-                                                                         ],
-                                                                         [
-                                                                             "key"=>"Direccion",
-                                                                             "value"=>$model->address
-                                                                         ],
+
                                                                      ]
                                                             ]
                                                 ],

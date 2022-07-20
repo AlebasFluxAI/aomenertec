@@ -16,10 +16,8 @@ class RoleHasPermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        $super_admin = User::find(1);
         $role = Role::findByName("super_administrator");
         $permissions = Permission::all();
         $role->syncPermissions($permissions);
-        $super_admin->assignRole('administrator');
     }
 }

@@ -24,7 +24,6 @@ class CreatePriceConventionals extends Migration
             $table->double("optional_rate")->default(0.0);
             $table->double("total")->default(0.0);
             $table->boolean("use_optional")->default(false);
-
             $table->softDeletes();
             $table->timestamps();
         });

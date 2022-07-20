@@ -26,9 +26,7 @@
                                                     "title"=>"Detalles",
 
                                                 ],
-                                                [
-                                                    "title"=>"Alarmas",
-                                                ]
+
                                            ],
 
                             "tab_contents"=>[
@@ -56,25 +54,12 @@
                                                                              "key"=>"Tipo de equipo",
                                                                              "value"=>$equipment->equipmentType->type
                                                                          ],
+
+
                                                                      ]
                                                             ]
                                                 ],
-                                                [
-                                                   "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>[
-                                                                        "table_pageable"=>false,
-                                                                       "table_headers"=>["ID"=>"id",
-                                                                                         "Tipo de alarma"=>"alertType.name",
-                                                                                         "Valor a alarmar"=>"value",
 
-
-
-                                                                        ],
-
-                                                                       "table_rows"=>$equipment->alerts
-
-                                                                   ]
-                                                ]
                                           ]
          ])
 

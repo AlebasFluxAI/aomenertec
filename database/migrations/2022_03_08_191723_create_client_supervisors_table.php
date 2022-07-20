@@ -18,8 +18,8 @@ class CreateClientSupervisorsTable extends Migration
             $table->foreignId('supervisor_id')->constrained();
             $table->foreignId('client_id')->constrained();
             $table->boolean('active')->default(true);
-            $table->timestamps();
             $table->softDeletes();
+            $table->timestamps();
         });
     }
 

@@ -12,9 +12,10 @@ use Livewire\Component;
 trait ValidateUserFormTrait
 {
     protected $rules = [
-        'identification' => 'required|min:6|unique:users,identification',
-        'name' => 'required|min:6',
-        'phone' => 'min:7|unique:users,phone',
-        'email' => 'required|email|unique:users,email',
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
     ];
 }

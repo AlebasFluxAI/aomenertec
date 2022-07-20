@@ -15,6 +15,8 @@ class IndexSuperAdmin extends Component
     use WithPagination;
     use FilterTrait;
 
+    public $model;
+
 
     private $indexSuperAdminService;
 
@@ -38,6 +40,21 @@ class IndexSuperAdmin extends Component
     public function details($id)
     {
         $this->indexSuperAdminService->details($this, $id);
+    }
+
+    public function disable($id)
+    {
+        $this->indexSuperAdminService->disable($this, $id);
+    }
+
+    public function getEnabled($id)
+    {
+        return $this->indexSuperAdminService->getEnabled($this, $id);
+    }
+
+    public function getEnabledAux($id)
+    {
+        return $this->indexSuperAdminService->getEnabledAux($this, $id);
     }
 
     public function render()
