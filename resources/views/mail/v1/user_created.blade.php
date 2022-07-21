@@ -255,10 +255,12 @@
                                                 <div
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#063b66;">
                                                     @if($data->getUserType() == "super_administrator")
-                                                    <strong>Has sido registrado como "{{$data->getUserRole()}}" en la
-                                                        plataforma de ENERTEC AO&M </strong>
+                                                        <strong>Has sido registrado como "{{$data->getUserRole()}}" en
+                                                            la
+                                                            plataforma de ENERTEC AO&M </strong>
                                                     @else
-                                                        <strong>Has sido registrado como "{{$data->getUserType()}}" en la
+                                                        <strong>Has sido registrado como "{{$data->getUserType()}}" en
+                                                            la
                                                             plataforma de {{$data->getAdmin()->name}} </strong>
                                                     @endif
                                                 </div>
@@ -344,7 +346,7 @@
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;text-align:center;color:#063b66;">
                                                     Para cambiar tu contraseña por defecto ingresa al siguiente enlace:
                                                     <br><br><a
-                                                        href="http://3.12.98.178/forgot-password">http://3.12.98.178/forgot-password</a>
+                                                        href="http://enertec.enerteclatam.com/forgot-password">http://enertec.enerteclatam.com/forgot-password</a>
                                                 </div>
                                             </td>
                                         </tr>
