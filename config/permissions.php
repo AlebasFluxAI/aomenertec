@@ -35,6 +35,7 @@ return [
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
         Permissions::TECHNICIAN_LINK_EQUIPMENT,
+        Permissions::TECHNICIAN_ENABLED,
 
         Permissions::SELLER_CREATE,
         Permissions::SELLER_EDIT,
@@ -65,6 +66,7 @@ return [
         Permissions::SUPERVISOR_DELETE,
         Permissions::SUPERVISOR_SHOW,
         Permissions::SUPERVISOR_LINK_CLIENT,
+        Permissions::SUPERVISOR_ENABLED,
 
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
@@ -106,6 +108,7 @@ return [
         Permissions::TECHNICIAN_DELETE,
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
+        Permissions::TECHNICIAN_ENABLED,
 
         Permissions::SELLER_CREATE,
         Permissions::SELLER_EDIT,
@@ -124,6 +127,7 @@ return [
         Permissions::SUPERVISOR_DELETE,
         Permissions::SUPERVISOR_SHOW,
         Permissions::SUPERVISOR_LINK_CLIENT,
+        Permissions::SUPERVISOR_ENABLED,
 
         Permissions::SUPPORT_CREATE,
         Permissions::SUPPORT_EDIT,
@@ -155,6 +159,7 @@ return [
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
         Permissions::TECHNICIAN_LINK_EQUIPMENT,
+        Permissions::TECHNICIAN_ENABLED,
 
         Permissions::SELLER_CREATE,
         Permissions::SELLER_EDIT,
@@ -179,6 +184,7 @@ return [
         Permissions::SUPERVISOR_DELETE,
         Permissions::SUPERVISOR_SHOW,
         Permissions::SUPERVISOR_LINK_CLIENT,
+        Permissions::SUPERVISOR_ENABLED,
 
         Permissions::PQR_SHOW,
         Permissions::PQR_REPLY,

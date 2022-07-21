@@ -189,6 +189,22 @@ class SuperAdmin extends Model
         ));
     }
 
+    public function adminsAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione admin ...",
+                "value" => null
+            ]],
+            (Admin::get()->map(function ($admin) {
+                return [
+                    "key" => $admin->id . " - " . $admin->name . " - " . $admin->identification,
+                    "value" => $admin->id,
+                ];
+            }))->toArray()
+        ));
+    }
+
     public function equipments()
     {
         return Equipment::query();

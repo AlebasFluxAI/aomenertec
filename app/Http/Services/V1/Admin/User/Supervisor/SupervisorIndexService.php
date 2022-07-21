@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\User\Supervisor;
 use App\Http\Services\Singleton;
 use App\Models\V1\Seller;
 use App\Models\V1\Supervisor;
+use App\Models\V1\Technician;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -16,23 +17,6 @@ class SupervisorIndexService extends Singleton
             'model' => $model,
         ]);
     }
-
-
-    public function edit(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.supervisores.editar", ["supervisor" => $modelId]);
-    }
-
-    public function details(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $modelId]);
-    }
-
-    public function addClients(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.supervisores.agregar_clientes", ["supervisor" => $modelId]);
-    }
-
 
     public function getData(Component $component)
     {
@@ -57,5 +41,49 @@ class SupervisorIndexService extends Singleton
             return Supervisor::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
         }
         return Supervisor::paginate(15);
+    }
+
+    public function deleteSupervisor(Component $component, $supervisorId)
+    {
+        $supervisor = Supervisor::find($supervisorId);
+        $supervisor->user->enabled = false;
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$supervisor->name} eliminado"]);
+        $supervisor->delete();
+    }
+
+    public function disableSupervisor(Component $component, $modelId)
+    {
+        $supervisor = Supervisor::find($modelId);
+        $supervisor->enabled = !$supervisor->enabled;
+        $supervisor->user->enabled = !$supervisor->user->enabled;
+        $supervisor->push();
+        if (!$supervisor->enabled) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
+        } else{
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
+        }
+    }
+
+    public function getEnabledSupervisor(Component $component, $modelId)
+    {
+        return !Supervisor::find($modelId)->enabled;
+    }
+
+    public function getEnabledAuxSupervisor(Component $component, $modelId)
+    {
+        if (!Supervisor::find($modelId)->enabled){
+            return false;
+        }
+        return true;
+    }
+
+    public function conditionalDeleteSupervisor(Component $component, $modelId)
+    {
+        return Supervisor::find($modelId)->clientSupervisors()->exists();
+    }
+
+    public function conditionalLinkClientsSupervisor(Component $component, $modelId)
+    {
+        return !Supervisor::find($modelId)->networkOperator->clients()->exists();
     }
 }

@@ -12,9 +12,6 @@ use Livewire\Component;
 
 class AddNetworkOperator extends Component
 {
-
-
-
     public $decodedAddress;
     public $latitude;
     public $longitude;
@@ -83,12 +80,6 @@ class AddNetworkOperator extends Component
     public function updatedAdminId()
     {
         $this->networkOperatorAddService->updatedAdminId($this);
-    }
-
-
-    public function setAdminId($admin)
-    {
-        $this->networkOperatorAddService->setAdminId($this, $admin);
     }
 
     public function render()

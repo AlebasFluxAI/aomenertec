@@ -11,19 +11,39 @@ use Livewire\Component;
 
 class AddSupervisor extends Component
 {
-    use ValidateUserFormTrait;
-    use AddUserFormTrait;
     use PassTrait;
 
 
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
+    public $model;
     public $message;
-    public $picked;
+    public $person_types;
+    public $identification_types;
+    public $admins;
+    public $admin_id;
     public $network_operators;
-    public $network_operator_id;
-    public $network_operator;
 
 
     private $supervisorAddService;
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+        'model.network_operator_id' => 'required',
+    ];
 
     public function __construct($id = null)
     {
@@ -31,20 +51,34 @@ class AddSupervisor extends Component
         $this->supervisorAddService = SupervisorAddService::getInstance();
     }
 
-
-    public function assignNetworkOperator($network_operator)
-    {
-        $this->supervisorAddService->assignNetworkOperator($this, $network_operator);
-    }
-
-    public function updatedNetworkOperator()
-    {
-        $this->supervisorAddService->updatedNetworkOperator($this);
-    }
-
     public function mount()
     {
         $this->supervisorAddService->mount($this);
+    }
+
+    public function updatedModel($value, $key)
+    {
+        $this->supervisorAddService->updatedModel($this, $value, $key);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->supervisorAddService->updated($this, $propertyName);
+    }
+
+    public function updatedLatitude()
+    {
+        $this->supervisorAddService->updatedLatitude($this);
+    }
+
+    public function updatedLongitude()
+    {
+        $this->supervisorAddService->updatedLongitude($this);
+    }
+
+    public function updatedAdminId()
+    {
+        $this->supervisorAddService->updatedAdminId($this);
     }
 
     public function submitForm()

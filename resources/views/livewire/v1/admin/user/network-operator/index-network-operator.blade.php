@@ -128,6 +128,6 @@
                    "table_rows"=>$data
 
                ])
-        @if($view_header??true)
+@if($view_header??true)
     </div>
 @endif

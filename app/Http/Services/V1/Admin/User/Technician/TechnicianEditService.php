@@ -3,28 +3,29 @@
 namespace App\Http\Services\V1\Admin\User\Technician;
 
 use App\Http\Services\Singleton;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Client;
 use App\Models\V1\Technician;
+use App\Models\V1\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class TechnicianEditService extends Singleton
 {
+    use AddUserFormTrait;
+
     public function mount(Component $component, Technician $model)
     {
         $component->fill([
-            'model' => $model,
-            'name' => $model->name,
-            'last_name' => $model->last_name,
-            'phone' => $model->phone,
-            'email' => $model->email,
-            'identification' => $model->identification,
-            "clients" => [],
-            "client_picked" => false,
+            "decodedAddress" => $model->address,
+            "identification_types" => $this->identificationTypes($model->person_type),
+            'person_types' => [
+                ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
+                ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
+            ],
+            "model" => $model,
             "latitude" => $model->latitude,
             "longitude" => $model->longitude,
-            "addressDetails" => $model->address_details,
-            "decodedAddress" => $model->address,
         ]);
     }
 
@@ -32,23 +33,26 @@ class TechnicianEditService extends Singleton
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
-            $component->model->fill($this->mapper($component));
+            $component->model->latitude = $component->latitude;
+            $component->model->longitude = $component->longitude;
+            $component->validate([
+                'model.identification' => 'required|min:6',
+                'model.name' => 'required|min:6',
+                'model.last_name' => 'required|min:6',
+                'model.phone' => 'min:7',
+                'model.email' => 'required|email',
+                'model.address_details' => 'required',
+                'model.latitude' => 'required',
+                'model.longitude' => 'required',
+                'model.billing_name' => 'required',
+                'model.billing_address' => 'required',
+                'model.person_type' => 'required',
+                'model.identification_type' => 'required',
+            ]);
             $component->model->update();
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$component->model->name} actualizado"]);
             $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $component->model->id]);
         });
     }
 
-    private function mapper(Component $component)
-    {
-        return [
-            "name" => $component->name,
-            "last_name" => $component->last_name,
-            "email" => $component->email,
-            "phone" => $component->phone,
-            "identification" => $component->identification,
-            "latitude" => $component->latitude,
-            "longitude" => $component->longitude,
-            "address_details" => $component->addressDetails,
-        ];
-    }
 }

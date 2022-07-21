@@ -51,6 +51,7 @@ class NetworkOperatorAddService extends Singleton
             $operator->update([
                 "user_id" => $user->id
             ]);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operator->name} creado"]);
 
             $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $operator->id]);
         });

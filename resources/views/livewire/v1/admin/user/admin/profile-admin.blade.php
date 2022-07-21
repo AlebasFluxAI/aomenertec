@@ -100,7 +100,7 @@
                                                [
                                                   "view_name"=>"livewire.v1.admin.user.network-operator.index-network-operator",
                                                    "view_values"=>[
-                                                                       "data"=>$model->networkOperators,
+                                                                       "data"=>$model->networkOperators()->get(),
                                                                        "table_class_container"=>"",
                                                                        "view_header"=>false,
                                                                        "col_filter"=>false,

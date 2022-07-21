@@ -3,6 +3,8 @@
 namespace App\Http\Services\V1\Admin\User\Technician;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Client;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use Illuminate\Support\Facades\Auth;
@@ -15,22 +17,6 @@ class TechnicianIndexService extends Singleton
         $component->fill([
             'model' => $model,
         ]);
-    }
-
-
-    public function edit(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.tecnicos.editar", ["technician" => $modelId]);
-    }
-
-    public function details(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $modelId]);
-    }
-
-    public function addClients(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.tecnicos.agregar_clientes", ["technician" => $modelId]);
     }
 
     public function getData(Component $component)
@@ -57,5 +43,59 @@ class TechnicianIndexService extends Singleton
             return Technician::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
         }
         return Technician::paginate(15);
+    }
+
+    public function deleteTechnician(Component $component, $technicianId)
+    {
+        $technician = Technician::find($technicianId);
+        $technician->user->enabled = false;
+        foreach ($technician->equipments()->get() as $type){
+            $type->technician_id = "";
+            $type->save();
+        }
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$technician->name} eliminado"]);
+        $technician->delete();
+    }
+
+    public function disableTechnician(Component $component, $modelId)
+    {
+        $technician = Technician::find($modelId);
+        $technician->enabled = !$technician->enabled;
+        $technician->user->enabled = !$technician->user->enabled;
+        $technician->push();
+        if (!$technician->enabled) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
+        } else{
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
+
+        }
+    }
+
+    public function getEnabledTechnician(Component $component, $modelId)
+    {
+        return !Technician::find($modelId)->enabled;
+    }
+
+    public function getEnabledAuxTechnician(Component $component, $modelId)
+    {
+        if (!Technician::find($modelId)->enabled){
+            return false;
+        }
+        return true;
+    }
+
+    public function conditionalDeleteTechnician(Component $component, $modelId)
+    {
+        return Technician::find($modelId)->clientTechnicians()->exists();
+    }
+
+    public function conditionalLinkEquipmentTechnician(Component $component, $modelId)
+    {
+        return !Technician::find($modelId)->networkOperator->equipments()->exists();
+    }
+
+    public function conditionalLinkClientsTechnician(Component $component, $modelId)
+    {
+        return !Technician::find($modelId)->networkOperator->clients()->exists();
     }
 }

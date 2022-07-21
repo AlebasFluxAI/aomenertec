@@ -29,10 +29,7 @@ class IndexNetworkOperator extends Component
 
 
 
-    public function deleteNetworkOperator($id)
-    {
-        $this->indexNetworkOperatorService->deleteNetworkOperator($this, $id);
-    }
+
 
 
     public function render()
@@ -48,6 +45,11 @@ class IndexNetworkOperator extends Component
     public function getData()
     {
         return $this->indexNetworkOperatorService->getData($this);
+    }
+
+    public function deleteNetworkOperator($id)
+    {
+        $this->indexNetworkOperatorService->deleteNetworkOperator($this, $id);
     }
 
     public function disableNetworkOperator($id)

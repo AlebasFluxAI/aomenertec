@@ -61,6 +61,8 @@ class AdminEditService extends Singleton
                 'model.css_file' => 'required',
             ]);
             $component->model->update();
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$component->model->name} actualizado"]);
+
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
         });
     }

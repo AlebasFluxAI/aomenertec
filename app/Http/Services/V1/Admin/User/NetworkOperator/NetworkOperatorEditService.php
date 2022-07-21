@@ -50,6 +50,7 @@ class NetworkOperatorEditService extends Singleton
                 'model.identification_type' => 'required',
             ]);
             $component->model->update();
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$component->model->name} actualizado"]);
             $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $component->model->id]);
         });
     }

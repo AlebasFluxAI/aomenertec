@@ -85,6 +85,71 @@ class ProfileUser extends Component
         return $this->profileUserService->conditionalLinkEquipmentNetworkOperator($this, $networkOperatorId);
     }
 
+    public function deleteTechnician($id)
+    {
+        $this->profileUserService->deleteTechnician($this, $id);
+    }
+
+    public function disableTechnician($id)
+    {
+        $this->profileUserService->disableTechnician($this, $id);
+    }
+
+    public function getEnabledTechnician($id)
+    {
+        return $this->profileUserService->getEnabledTechnician($this, $id);
+    }
+
+    public function getEnabledAuxTechnician($id)
+    {
+        return $this->profileUserService->getEnabledAuxTechnician($this, $id);
+    }
+
+    public function conditionalDeleteTechnician($id)
+    {
+        return $this->profileUserService->conditionalDeleteTechnician($this, $id);
+    }
+
+    public function conditionalLinkEquipmentTechnician($id)
+    {
+        return $this->profileUserService->conditionalLinkEquipmentTechnician($this, $id);
+    }
+
+    public function conditionalLinkClientsTechnician($id)
+    {
+        return $this->profileUserService->conditionalLinkClientsTechnician($this, $id);
+    }
+
+    public function deleteSupervisor($id)
+    {
+        $this->profileUserService->deleteSupervisor($this, $id);
+    }
+
+    public function disableSupervisor($id)
+    {
+        $this->profileUserService->disableSupervisor($this, $id);
+    }
+
+    public function getEnabledSupervisor($id)
+    {
+        return $this->profileUserService->getEnabledSupervisor($this, $id);
+    }
+
+    public function getEnabledAuxSupervisor($id)
+    {
+        return $this->profileUserService->getEnabledAuxSupervisor($this, $id);
+    }
+
+    public function conditionalDeleteSupervisor($id)
+    {
+        return $this->profileUserService->conditionalDeleteSupervisor($this, $id);
+    }
+
+    public function conditionalLinkClientsSupervisor($id)
+    {
+        return $this->profileUserService->conditionalLinkClientsSupervisor($this, $id);
+    }
+
     public function mount()
     {
         $this->profileUserService->mount($this);

@@ -52,6 +52,8 @@ class AdminAddService extends Singleton
             $admin->update([
                 "user_id" => $user->id
             ]);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} creado"]);
+
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $admin->id]);
         });
     }

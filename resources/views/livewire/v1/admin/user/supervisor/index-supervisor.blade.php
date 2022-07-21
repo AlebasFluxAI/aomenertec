@@ -1,13 +1,14 @@
-<div class="login">
-    @section("header") {{--extended app.blade--}}
+@if($view_header??true)
+    <div class="login">
+        @section("header") {{--extended app.blade--}}
 
-    @endsection
+        @endsection
 
-    @include("partials.v1.title",[
-          "second_title"=>"de supervisores",
-          "first_title"=>"Listado"
-      ])
-
+        @include("partials.v1.title",[
+              "second_title"=>"de supervisores",
+              "first_title"=>"Listado"
+          ])
+@endif
 
 
     @include("partials.v1.table_nav",
@@ -26,6 +27,8 @@
           ])
 
     @include("partials.v2.table.primary-table",[
+    "class_container"=>$table_class_container??null,
+                   "table_pageable"=>$table_pageable??true,
                "table_headers"=>[
                    [
                        "col_name" =>"ID",
@@ -65,25 +68,61 @@
                    ],
                 ],
                  "table_actions"=>[
-                                             "customs"=>[
-                                                   [
-                                                        "function"=>"details",
-                                                        "icon"=>"fas fa-search",
-                                                        "tooltip_title"=>"Detalles",
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_SHOW],
+                     "customs"=>[
+                                        [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.supervisores.detalles",
+                                                                   "binding"=>"supervisor"
+                                                             ],
+                                                           "icon"=>"fas fa-search",
+                                                           "tooltip_title"=>"Detalles",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_SHOW],
+                                                     ],
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.supervisores.editar",
+                                                                   "binding"=>"supervisor"
+                                                             ],
+                                                           "icon"=>"fas fa-pencil",
+                                                           "tooltip_title"=>"Editar",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_EDIT],
+                                                     ],
+
+
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.supervisores.agregar_clientes",
+                                                                   "binding"=>"supervisor"
+                                                             ],
+                                                           "icon"=>"fas fa-users",
+                                                           "tooltip_title"=>"Asociar clientes",
+                                                           "conditional" => "conditionalLinkClientsSupervisor",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_LINK_CLIENT],
+                                                     ],
+
+                                                     [
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::SUPERVISOR_ENABLED],
+                                                        "conditional" => "getEnabledSupervisor",
+                                                        "function"=>"disableSupervisor",
+                                                        "icon"=>"fa-solid fa-user-xmark",
+                                                        "tooltip_title"=>"Desactivar"
+                                                    ],
+                                                    [
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::SUPERVISOR_ENABLED],
+                                                        "conditional" => "getEnabledAuxSupervisor",
+                                                        "function"=>"disableSupervisor",
+                                                        "icon"=>"fa-solid fa-user-check",
+                                                        "tooltip_title"=>"Activar"
+                                                    ],
+                                            [
+                                                "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_DELETE],
+                                                    "function"=>"deleteSupervisor",
+                                                    "conditional"=>"conditionalDeleteSupervisor",
+                                                    "icon"=>"fas fa-trash",
+                                                    "tooltip_title"=>"Eliminar"
+                                            ],
+
                                                 ],
-                                                [
-                                                        "function"=>"edit",
-                                                        "icon"=>"fas fa-pencil",
-                                                        "tooltip_title"=>"Editar",
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::SUPERVISOR_EDIT],
-                                                ],
-                                               [
-                                                "function"=>"addClients",
-                                                "icon"=>"fas fa-users",
-                                                "tooltip_title"=>"Ver clientes"
-                                                ]
-                                            ]
                                     ],
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
                                                 _edit_button=>{ruta para redireccionar a edicion}
@@ -92,5 +131,7 @@
                "table_rows"=>$data
 
            ])
-</div>
+@if($view_header??true)
+    </div>
+@endif
 

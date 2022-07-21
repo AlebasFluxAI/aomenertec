@@ -57,6 +57,7 @@ class ProfileUserService extends Singleton
     {
         $admin = Admin::find($modelId);
         $admin->user->enabled = false;
+        $admin->push();
         foreach ($admin->adminClientTypes()->get() as $type){
             $type->delete();
         }
@@ -81,6 +82,7 @@ class ProfileUserService extends Singleton
     {
         $operator = NetworkOperator::find($networkOperatorId);
         $operator->user->enabled = false;
+        $operator->push();
         foreach ($operator->equipments()->get() as $type){
             $type->network_operator_id = "";
             $type->save();
@@ -158,6 +160,105 @@ class ProfileUserService extends Singleton
             return false;
         }
         return true;
+    }
+
+    public function deleteTechnician(Component $component, $technicianId)
+    {
+        $technician = Technician::find($technicianId);
+        $technician->user->enabled = false;
+        $technician->push();
+        foreach ($technician->equipments()->get() as $type){
+            $type->technician_id = "";
+            $type->save();
+        }
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$technician->name} eliminado"]);
+        $technician->delete();
+    }
+
+    public function disableTechnician(Component $component, $modelId)
+    {
+        $technician = Technician::find($modelId);
+        $technician->enabled = !$technician->enabled;
+        $technician->user->enabled = !$technician->user->enabled;
+        $technician->push();
+        if (!$technician->enabled) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
+        } else{
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
+
+        }
+    }
+
+    public function getEnabledTechnician(Component $component, $modelId)
+    {
+        return !Technician::find($modelId)->enabled;
+    }
+
+    public function getEnabledAuxTechnician(Component $component, $modelId)
+    {
+        if (!Technician::find($modelId)->enabled){
+            return false;
+        }
+        return true;
+    }
+
+    public function conditionalDeleteTechnician(Component $component, $modelId)
+    {
+        return Technician::find($modelId)->clientTechnicians()->exists();
+    }
+
+    public function conditionalLinkEquipmentTechnician(Component $component, $modelId)
+    {
+        return !Technician::find($modelId)->networkOperator->equipments()->exists();
+    }
+
+    public function conditionalLinkClientsTechnician(Component $component, $modelId)
+    {
+        return !Technician::find($modelId)->networkOperator->clients()->exists();
+    }
+
+    public function deleteSupervisor(Component $component, $supervisorId)
+    {
+        $supervisor = Supervisor::find($supervisorId);
+        $supervisor->user->enabled = false;
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$supervisor->name} eliminado"]);
+        $supervisor->delete();
+    }
+
+    public function disableSupervisor(Component $component, $modelId)
+    {
+        $supervisor = Supervisor::find($modelId);
+        $supervisor->enabled = !$supervisor->enabled;
+        $supervisor->user->enabled = !$supervisor->user->enabled;
+        $supervisor->push();
+        if (!$supervisor->enabled) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
+        } else{
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
+        }
+    }
+
+    public function getEnabledSupervisor(Component $component, $modelId)
+    {
+        return !Supervisor::find($modelId)->enabled;
+    }
+
+    public function getEnabledAuxSupervisor(Component $component, $modelId)
+    {
+        if (!Supervisor::find($modelId)->enabled){
+            return false;
+        }
+        return true;
+    }
+
+    public function conditionalDeleteSupervisor(Component $component, $modelId)
+    {
+        return Supervisor::find($modelId)->clientSupervisors()->exists();
+    }
+
+    public function conditionalLinkClientsSupervisor(Component $component, $modelId)
+    {
+        return !Supervisor::find($modelId)->networkOperator->clients()->exists();
     }
 
 }
