@@ -146,86 +146,25 @@
                                                                   ]
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.user.supervisor.index-supervisor",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.detalles",
-                                                                                                            "binding"=>"supervisor"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search",
-                                                                                                    "tooltip_title"=>"Detalles",
-                                                                                            ],
-                                                                                            [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.editar",
-                                                                                                            "binding"=>"supervisor"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil",
-                                                                                                    "tooltip_title"=>"Editar",
-                                                                                            ],
-                                                                                            [
-                                                                                                "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.agregar_clientes",
-                                                                                                            "binding"=>"supervisor"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-users",
-                                                                                                    "tooltip_title"=>"Asociar clientes",
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$model->supervisors
-
+                                                                       "data"=>$model->supervisors()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteSupervisor",
                                                                   ]
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.user.technician.index-technician",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.detalles",
-                                                                                                            "binding"=>"technician"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search",
-                                                                                                    "tooltip_title"=>"Detalles",
-
-                                                                                            ],
-                                                                                            [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.editar",
-                                                                                                            "binding"=>"technician"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil",
-                                                                                                    "tooltip_title"=>"Editar",
-                                                                                            ],
-                                                                                              [
-                                                                                                "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.agregar_clientes",
-                                                                                                            "binding"=>"technician"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-users",
-                                                                                                    "tooltip_title"=>"Asociar clientes",
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$model->technicians
-
+                                                                       "data"=>$model->technicians()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
                                                                   ]
-                                               ]
+                                               ],
 
 
 

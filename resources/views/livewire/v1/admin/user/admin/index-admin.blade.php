@@ -8,7 +8,7 @@
               "second_title"=>"de administradores",
               "first_title"=>"Listado"
           ])
-        @endif
+@endif
         @include("partials.v1.table_nav",
                [
                     "mt"=>2,
@@ -66,17 +66,24 @@
                      "table_actions"=>[
                                         "customs"=>[
                                             [
-                                                    "function"=>"details",
-                                                    "icon"=>"fas fa-search",
-                                                    "tooltip_title"=>"Detalles",
-                                                    "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_SHOW],
-                                            ],
+                                               "redirect"=>[
+                                                           "route"=>"administrar.v1.usuarios.admin.detalles",
+                                                           "binding"=>"admin"
+                                                     ],
+                                                   "icon"=>"fas fa-search",
+                                                   "tooltip_title"=>"Detalles",
+                                                   "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_SHOW],
+                                             ],
                                             [
-                                                    "function"=>"edit",
-                                                    "icon"=>"fas fa-pencil",
-                                                    "tooltip_title"=>"Editar",
-                                                    "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_EDIT],
-                                            ],
+                                               "redirect"=>[
+                                                           "route"=>"administrar.v1.usuarios.admin.editar",
+                                                           "binding"=>"admin"
+                                                     ],
+                                                   "icon"=>"fas fa-pencil",
+                                                   "tooltip_title"=>"Editar",
+                                                   "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_EDIT],
+                                             ],
+
                                             [
 
                                                 "redirect"=>[
@@ -104,9 +111,23 @@
                                                    "tooltip_title"=>"Asociar equipos",
                                                    "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_LINK_EQUIPMENT],
                                              ],
+                                             [
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::ADMIN_ENABLED],
+                                                        "conditional" => "getEnabledAdmin",
+                                                        "function"=>"disableAdmin",
+                                                        "icon"=>"fa-solid fa-user-xmark",
+                                                        "tooltip_title"=>"Desactivar"
+                                                    ],
+                                                    [
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::ADMIN_ENABLED],
+                                                        "conditional" => "getEnabledAuxAdmin",
+                                                        "function"=>"disableAdmin",
+                                                        "icon"=>"fa-solid fa-user-check",
+                                                        "tooltip_title"=>"Activar"
+                                                    ],
                                             [
-                                                    "function"=>"delete",
-                                                    "conditional"=>$admin_conditional_delete??"conditionalDelete",
+                                                    "function"=>"deleteAdmin",
+                                                    "conditional"=>"conditionalDeleteAdmin",
                                                     "icon"=>"fas fa-trash",
                                                     "tooltip_title"=>"Eliminar",
                                                     "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_DELETE],
@@ -121,6 +142,6 @@
                    "table_rows"=>$data
 
                ])
-        @if($view_header??true)
+@if($view_header??true)
     </div>
 @endif

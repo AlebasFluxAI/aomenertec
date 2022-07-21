@@ -19,14 +19,44 @@ class ProfileUser extends Component
         $this->profileUserService = ProfileUserService::getInstance();
     }
 
+    public function disableAdmin($id)
+    {
+        $this->profileUserService->disableAdmin($this, $id);
+    }
+
+    public function getEnabledAdmin($id)
+    {
+        return $this->profileUserService->getEnabledAdmin($this, $id);
+    }
+
+    public function getEnabledAuxAdmin($id)
+    {
+        return $this->profileUserService->getEnabledAuxAdmin($this, $id);
+    }
+
     public function deleteNetworkOperator($networkOperatorId)
     {
         $this->profileUserService->deleteNetworkOperator($this, $networkOperatorId);
     }
 
-    public function conditionalNetworkOperatorDelete($networkOperatorId)
+    public function conditionalDeleteNetworkOperator($adminId)
     {
-        return $this->profileUserService->conditionalNetworkOperatorDelete($networkOperatorId);
+        return $this->profileUserService->conditionalDeleteNetworkOperator($this, $adminId);
+    }
+
+    public function disableNetworkOperator($id)
+    {
+        $this->profileUserService->disableNetworkOperator($this, $id);
+    }
+
+    public function getEnabledNetworkOperator($id)
+    {
+        return $this->profileUserService->getEnabledNetworkOperator($this, $id);
+    }
+
+    public function getEnabledAuxNetworkOperator($id)
+    {
+        return $this->profileUserService->getEnabledAuxNetworkOperator($this, $id);
     }
 
     public function conditionalMonitoring($clientId)
@@ -34,15 +64,90 @@ class ProfileUser extends Component
         return $this->profileUserService->conditionalMonitoring($clientId);
     }
 
-    public function deleteAdminConditional($adminId)
+    public function conditionalDeleteAdmin($adminId)
     {
-        return $this->profileUserService->deleteAdminConditional($this, $adminId);
+        return $this->profileUserService->conditionalDeleteAdmin($this, $adminId);
+    }
+
+    public function deleteAdmin($adminId)
+    {
+        return $this->profileUserService->deleteAdmin($this, $adminId);
     }
 
     public function blinkSupportPqrAvailability($supportId)
     {
 
         return $this->profileUserService->blinkSupportPqrAvailability($this, $supportId);
+    }
+
+    public function conditionalLinkEquipmentNetworkOperator($networkOperatorId)
+    {
+        return $this->profileUserService->conditionalLinkEquipmentNetworkOperator($this, $networkOperatorId);
+    }
+
+    public function deleteTechnician($id)
+    {
+        $this->profileUserService->deleteTechnician($this, $id);
+    }
+
+    public function disableTechnician($id)
+    {
+        $this->profileUserService->disableTechnician($this, $id);
+    }
+
+    public function getEnabledTechnician($id)
+    {
+        return $this->profileUserService->getEnabledTechnician($this, $id);
+    }
+
+    public function getEnabledAuxTechnician($id)
+    {
+        return $this->profileUserService->getEnabledAuxTechnician($this, $id);
+    }
+
+    public function conditionalDeleteTechnician($id)
+    {
+        return $this->profileUserService->conditionalDeleteTechnician($this, $id);
+    }
+
+    public function conditionalLinkEquipmentTechnician($id)
+    {
+        return $this->profileUserService->conditionalLinkEquipmentTechnician($this, $id);
+    }
+
+    public function conditionalLinkClientsTechnician($id)
+    {
+        return $this->profileUserService->conditionalLinkClientsTechnician($this, $id);
+    }
+
+    public function deleteSupervisor($id)
+    {
+        $this->profileUserService->deleteSupervisor($this, $id);
+    }
+
+    public function disableSupervisor($id)
+    {
+        $this->profileUserService->disableSupervisor($this, $id);
+    }
+
+    public function getEnabledSupervisor($id)
+    {
+        return $this->profileUserService->getEnabledSupervisor($this, $id);
+    }
+
+    public function getEnabledAuxSupervisor($id)
+    {
+        return $this->profileUserService->getEnabledAuxSupervisor($this, $id);
+    }
+
+    public function conditionalDeleteSupervisor($id)
+    {
+        return $this->profileUserService->conditionalDeleteSupervisor($this, $id);
+    }
+
+    public function conditionalLinkClientsSupervisor($id)
+    {
+        return $this->profileUserService->conditionalLinkClientsSupervisor($this, $id);
     }
 
     public function mount()

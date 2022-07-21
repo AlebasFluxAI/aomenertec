@@ -14,22 +14,35 @@ use Livewire\WithFileUploads;
 class EditAdmin extends Component
 {
     use WithFileUploads;
-    use AddUserFormTrait;
-    use ValidateUserFormTrait;
 
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
     public $model;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $address;
-    public $nit;
+    public $message;
     public $icon;
-    public $password;
-    public $email;
-    public $identification;
-    public $style;
     public $styles;
+    public $person_types;
+    public $identification_types;
+
     private $editAdminService;
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+        'model.css_file' => 'required',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+    ];
 
     public function __construct($id = null)
     {
@@ -40,6 +53,26 @@ class EditAdmin extends Component
     public function mount(Admin $admin)
     {
         $this->editAdminService->mount($this, $admin);
+    }
+
+    public function updatedModel($value, $key)
+    {
+        $this->editAdminService->updatedModel($this, $value, $key);
+    }
+
+    public function updatedLatitude()
+    {
+        $this->editAdminService->updatedLatitude($this);
+    }
+
+    public function updatedLongitude()
+    {
+        $this->editAdminService->updatedLongitude($this);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->editAdminService->updated($this, $propertyName);
     }
 
     public function submitForm()

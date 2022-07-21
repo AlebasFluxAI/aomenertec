@@ -65,15 +65,15 @@
                                     "customs" => [
                                                     [
                                                         "permission" => [\App\Http\Resources\V1\Permissions::SUPER_ADMIN_ENABLED],
-                                                        "conditional" => "getEnabled",
-                                                        "function"=>"disable",
+                                                        "conditional" => "getEnabledSuperAdmin",
+                                                        "function"=>"disableSuperAdmin",
                                                         "icon"=>"fa-solid fa-user-xmark",
                                                         "tooltip_title"=>"Desactivar"
                                                     ],
                                                     [
                                                         "permission" => [\App\Http\Resources\V1\Permissions::SUPER_ADMIN_ENABLED],
-                                                        "conditional" => "getEnabledAux",
-                                                        "function"=>"disable",
+                                                        "conditional" => "getEnabledAuxSuperAdmin",
+                                                        "function"=>"disableSuperAdmin",
                                                         "icon"=>"fa-solid fa-user-check",
                                                         "tooltip_title"=>"Activar"
                                                     ],

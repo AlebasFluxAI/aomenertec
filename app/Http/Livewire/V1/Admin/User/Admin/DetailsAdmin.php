@@ -8,19 +8,19 @@ use Livewire\Component;
 
 class DetailsAdmin extends Component
 {
-    public $model;
-    private $detailsNetworkOperatorService;
+    public $admin;
+    private $adminDetailService;
 
 
-    public function __construct($id = null)
+    public function __construct()
     {
-        $this->detailsNetworkOperatorService = AdminDetailsService::getInstance();
-        parent::__construct($id);
+        parent::__construct();
+        $this->adminDetailService = AdminDetailsService::getInstance();
     }
 
     public function mount(Admin $admin)
     {
-        $this->detailsNetworkOperatorService->mount($this, $admin);
+        $this->adminDetailService->mount($this, $admin);
     }
 
 

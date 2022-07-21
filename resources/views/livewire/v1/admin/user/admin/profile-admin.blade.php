@@ -58,15 +58,30 @@
                                                                             "value"=>$model->phone
                                                                         ],
                                                                                      [
-                                                                            "key"=>"Nit",
+                                                                            "key"=>"Identificacion",
 
-                                                                            "value"=>$model->nit
+                                                                            "value"=>$model->identification
                                                                         ],
-                                                                                               [
-                                                                            "key"=>"Direccion",
-
-                                                                            "value"=>$model->address
-                                                                        ],
+                                                                           [
+                                                                             "key"=>"Pais",
+                                                                             "value"=>$model->country
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Departamento",
+                                                                             "value"=>$model->state
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Ciudad",
+                                                                             "value"=>$model->city
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Direccion",
+                                                                             "value"=>$model->address
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Detalles de direccion",
+                                                                             "value"=>$model->address_details
+                                                                         ],
                                                                                  [
                                                                             "key"=>"Archivo de estilos",
 
@@ -85,11 +100,11 @@
                                                [
                                                   "view_name"=>"livewire.v1.admin.user.network-operator.index-network-operator",
                                                    "view_values"=>[
-                                                                       "data"=>$model->networkOperators,
+                                                                       "data"=>$model->networkOperators()->get(),
                                                                        "table_class_container"=>"",
                                                                        "view_header"=>false,
                                                                        "col_filter"=>false,
-                                                                       "network_operator_conditional_delete"=>"conditionalNetworkOperatorDelete",
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteNetworkOperator",
                                                                   ]
                                                ],
                                                 [

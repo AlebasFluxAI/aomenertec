@@ -12,19 +12,31 @@ use Livewire\WithFileUploads;
 
 class EditTechnician extends Component
 {
-    use AddUserFormTrait;
 
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
     public $model;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $email;
-    public $identification;
-    public $clients;
-    public $client;
-    public $client_picked;
-    public $message_client;
+    public $message;
+    public $person_types;
+    public $identification_types;
     private $editTechnicianService;
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+    ];
 
     public function __construct($id = null)
     {
@@ -37,20 +49,31 @@ class EditTechnician extends Component
         $this->editTechnicianService->mount($this, $technician);
     }
 
+    public function updatedModel($value, $key)
+    {
+        $this->editTechnicianService->updatedModel($this, $value, $key);
+    }
+
+    public function updatedLatitude()
+    {
+        $this->editTechnicianService->updatedLatitude($this);
+    }
+
+    public function updatedLongitude()
+    {
+        $this->editTechnicianService->updatedLongitude($this);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->editTechnicianService->updated($this, $propertyName);
+    }
+
     public function submitForm()
     {
         $this->editTechnicianService->submitForm($this);
     }
 
-    public function updatedClient()
-    {
-        $this->editTechnicianService->updatedClient($this);
-    }
-
-    public function assignClient($client)
-    {
-        $this->editTechnicianService->assignClient($this, $client);
-    }
 
     public function render()
     {

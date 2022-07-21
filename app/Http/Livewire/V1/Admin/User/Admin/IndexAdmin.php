@@ -26,24 +26,32 @@ class IndexAdmin extends Component
     }
 
 
-    public function edit($id)
+
+    public function deleteAdmin($id)
     {
-        $this->indexAdminService->edit($this, $id);
+        $this->indexAdminService->deleteAdmin($this, $id);
     }
 
-    public function delete($id)
+
+
+    public function conditionalDeleteAdmin($id)
     {
-        $this->indexAdminService->delete($this, $id);
+        return $this->indexAdminService->conditionalDeleteAdmin($this, $id);
     }
 
-    public function details($id)
+    public function disableAdmin($id)
     {
-        $this->indexAdminService->details($this, $id);
+        $this->indexAdminService->disableAdmin($this, $id);
     }
 
-    public function conditionalDelete($id)
+    public function getEnabledAdmin($id)
     {
-        return $this->indexAdminService->conditionalDelete($this, $id);
+        return $this->indexAdminService->getEnabledAdmin($this, $id);
+    }
+
+    public function getEnabledAuxAdmin($id)
+    {
+        return $this->indexAdminService->getEnabledAuxAdmin($this, $id);
     }
 
     public function render()

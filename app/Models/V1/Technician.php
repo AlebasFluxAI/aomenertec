@@ -23,6 +23,10 @@ class Technician extends Model
         'network_operator_id',
         'user_id',
         "address",
+        'billing_address',
+        'billing_name',
+        'person_type',
+        'identification_type',
         "latitude",
         "longitude",
         "address_details",
@@ -32,6 +36,7 @@ class Technician extends Model
         "city",
         "state",
     ];
+
 
     public static function menu()
     {

@@ -22,7 +22,9 @@
 
         <select wire:model="{{$dropdown_model}}" wire:click="{{$dropdown_refresh??"pass"}}()" class="form-select"
                 aria-label="Default select example"
-                placeholder="{{$placeholder??""}}">
+                placeholder="{{$placeholder??""}}" @if($disabled??false)
+            disabled
+        @endif>
             @if($dropdown_editing??true)
                 <option value=""></option>
             @endif
@@ -32,4 +34,9 @@
             @endforeach
         </select>
     </div>
+    @error($dropdown_model)
+    <div class="error-container">
+        <small class="form-text text-danger">{{$message}}</small>
+    </div>
+    @enderror
 </div>

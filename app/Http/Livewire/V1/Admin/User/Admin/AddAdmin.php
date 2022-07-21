@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
-use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -11,44 +10,78 @@ use Livewire\WithFileUploads;
 class AddAdmin extends Component
 {
     use WithFileUploads;
-    use AddUserFormTrait;
-    use ValidateUserFormTrait;
 
-    public $password;
-    public $identification;
-    public $name;
-    public $address;
-    public $nit;
-    public $last_name;
-    public $phone;
-    public $email;
+
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
+    public $model;
     public $message;
     public $icon;
     public $styles;
-    public $style;
+    public $person_types;
+    public $identification_types;
 
 
-    private $superAdminAddService;
+
+    private $adminAddService;
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+        'model.css_file' => 'required',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+    ];
 
     public function __construct($id = null)
     {
         parent::__construct($id);
-        $this->superAdminAddService = AdminAddService::getInstance();
+        $this->adminAddService = AdminAddService::getInstance();
     }
 
     public function mount()
     {
-        $this->superAdminAddService->mount($this);
+        $this->adminAddService->mount($this);
+    }
+
+    public function updatedModel($value, $key)
+    {
+        $this->adminAddService->updatedModel($this, $value, $key);
+    }
+
+    public function updatedLatitude()
+    {
+        $this->adminAddService->updatedLatitude($this);
+    }
+
+    public function updatedLongitude()
+    {
+        $this->adminAddService->updatedLongitude($this);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->adminAddService->updated($this, $propertyName);
     }
 
     public function submitForm()
     {
-        $this->superAdminAddService->submitForm($this);
+        $this->adminAddService->submitForm($this);
     }
 
     public function setStyle()
     {
-        $this->superAdminAddService->setStyle($this);
+        $this->adminAddService->setStyle($this);
     }
 
     public function render()

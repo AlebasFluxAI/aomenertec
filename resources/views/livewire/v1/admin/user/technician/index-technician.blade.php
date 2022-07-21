@@ -1,14 +1,15 @@
-<div class="login">
-    @section("header") {{--extended app.blade--}}
+@if($view_header??true)
+    <div class="login">
+        @section("header") {{--extended app.blade--}}
 
-    @endsection
+        @endsection
 
-    @include("partials.v1.title",[
-          "second_title"=>"de tecnicos",
-          "first_title"=>"Listado"
-      ])
+        @include("partials.v1.title",[
+              "second_title"=>"de tecnicos",
+              "first_title"=>"Listado"
+          ])
 
-
+@endif
 
     @include("partials.v1.table_nav",
            ["mt"=>2,
@@ -26,6 +27,8 @@
           ])
 
     @include("partials.v2.table.primary-table",[
+    "class_container"=>$table_class_container??null,
+                   "table_pageable"=>$table_pageable??true,
                "table_headers"=>[
                     [
                        "col_name" =>"ID",
@@ -70,35 +73,68 @@
                  "table_actions"=>[
 
                                     "customs"=>[
-                                                   [
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_SHOW],
-                                                        "function"=>"details",
-                                                        "icon"=>"fas fa-search",
-                                                        "tooltip_title"=>"Detalles"
-                                                    ],
-                                                    [
-
-                                                            "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_EDIT],
-                                                            "function"=>"edit",
-                                                            "icon"=>"fas fa-pencil",
-                                                            "tooltip_title"=>"Editar"
-                                                    ],
-                                                    [
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_LINK_CLIENT],
-                                                        "function"=>"addClients",
-                                                        "icon"=>"fas fa-users",
-                                                        "tooltip_title"=>"Ver clientes"
-                                                    ],
-                                                    [
-                                                       "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_LINK_EQUIPMENT],
+                                        [
                                                        "redirect"=>[
-                                                                   "route"=>"administrar.v1.usuarios.tecnicos.agregar_equipos",
+                                                                   "route"=>"administrar.v1.usuarios.tecnicos.detalles",
                                                                    "binding"=>"technician"
                                                              ],
-                                                         "icon"=>"fas fa-laptop-medical",
-                                                         "tooltip_title"=>"Asociar tipos de equipos",
+                                                           "icon"=>"fas fa-search",
+                                                           "tooltip_title"=>"Detalles",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_SHOW],
+                                                     ],
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.tecnicos.editar",
+                                                                   "binding"=>"technician"
+                                                             ],
+                                                           "icon"=>"fas fa-pencil",
+                                                           "tooltip_title"=>"Editar",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_EDIT],
+                                                     ],
 
-                                                  ],
+
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.tecnicos.agregar_clientes",
+                                                                   "binding"=>"technician"
+                                                             ],
+                                                           "icon"=>"fas fa-users",
+                                                           "tooltip_title"=>"Asociar clientes",
+                                                           "conditional" => "conditionalLinkClientsTechnician",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_LINK_CLIENT],
+                                                     ],
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.technician.agregar_equipos",
+                                                                   "binding"=>"technician"
+                                                             ],
+                                                           "icon"=>"fas fa-laptop-medical",
+                                                           "tooltip_title"=>"Asociar equipos",
+                                                           "conditional" => "conditionalLinkEquipmentTechnician",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_LINK_EQUIPMENT],
+                                                     ],
+                                                     [
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::TECHNICIAN_ENABLED],
+                                                        "conditional" => "getEnabledTechnician",
+                                                        "function"=>"disableTechnician",
+                                                        "icon"=>"fa-solid fa-user-xmark",
+                                                        "tooltip_title"=>"Desactivar"
+                                                    ],
+                                                    [
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::TECHNICIAN_ENABLED],
+                                                        "conditional" => "getEnabledAuxTechnician",
+                                                        "function"=>"disableTechnician",
+                                                        "icon"=>"fa-solid fa-user-check",
+                                                        "tooltip_title"=>"Activar"
+                                                    ],
+                                            [
+                                                "permission"=>[\App\Http\Resources\V1\Permissions::TECHNICIAN_DELETE],
+                                                    "function"=>"deleteTechnician",
+                                                    "conditional"=>"conditionalDeleteTechnician",
+                                                    "icon"=>"fas fa-trash",
+                                                    "tooltip_title"=>"Eliminar"
+                                            ],
+
                                                 ],
 
                                     ],
@@ -109,5 +145,7 @@
                "table_rows"=>$data
 
            ])
-</div>
+@if($view_header??true)
+    </div>
+@endif
 

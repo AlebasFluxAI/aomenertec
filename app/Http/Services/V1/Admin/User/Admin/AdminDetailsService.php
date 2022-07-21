@@ -7,20 +7,12 @@ use Livewire\Component;
 
 class AdminDetailsService extends Singleton
 {
-    public function mount(Component $component, $model)
+    public function mount(Component $component, $admin)
     {
+
         $component->fill([
-            'model' => $model,
+            'admin' => $admin,
         ]);
     }
 
-    public function edit(Component $component)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.admin.editar", ["admin" => $component->model->id]);
-    }
-
-    public function details(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $modelId]);
-    }
 }

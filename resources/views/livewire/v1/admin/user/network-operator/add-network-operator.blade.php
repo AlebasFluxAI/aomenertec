@@ -33,25 +33,22 @@
                              [
                              "view_name"=>"partials.v1.divider_title",
                              "view_values" =>[
-                                            "title"=>"Operador de red"
+                                            "title"=>"Seleccione Administrador"
                                             ]
 
                              ],
                             [
-                             "view_name"=>"partials.v1.form.form_dropdown_input_searchable",
+                             "view_name"=>"partials.v1.form.form_list",
                              "view_values" =>[
-                                            "form_group" => true,
                                             "col_with"=>8,
-                                            "dropdown_model" => "admin_id",
-                                            "placeholder"=>"Seleccione el administrador",
-                                            "input_label"=>"Seleccione el operador de red",
-                                            "required" => false,
-                                            "picked_variable"=>$picked,
-                                            "dropdown_results"=>$admins,
-                                            "count_bool"=>true,
-                                            "selected_value_function"=>"setAdminId",
-                                            "dropdown_result_id"=>"id",
-                                            "dropdown_result_value"=>"name",
+                                            "input_type"=>"text",
+                                            "input_label"=>"Administrador",
+                                            "list_model" => "model.admin_id",
+                                            "list_default" => "administrador...",
+                                            "list_options" => $admins,
+                                            "list_option_value"=>"id",
+                                            "list_option_view"=>"name",
+                                            "list_option_title"=>"",
                                             ]
                                     ]
                              ]

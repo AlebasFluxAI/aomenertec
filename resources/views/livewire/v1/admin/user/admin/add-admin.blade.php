@@ -25,26 +25,7 @@
         @include("partials.v1.addUserTemplate.user-add-form",
                     [
                       "custom_input"=>[
-                            [
-                           "view_name"=>"partials.v1.divider_title",
-                           "view_values" =>[
-                                          "title"=>"NIT"
-                                          ]
 
-                           ],
-                             [
-                           "view_name"=>"partials.v1.form.form_input_icon",
-                           "view_values" =>[
-                                                   "input_type"=>"text",
-                                                    "input_label"=>"Ingrese el nit del administrador",
-                                                    "input_model"=>"nit",
-                                                    "updated_input"=>"defer",
-                                                    "icon_class"=>"fas fa-barcode",
-                                                    "placeholder"=>"NIT ",
-                                                    "col_with"=>12,
-                                                    "required"=>true
-                                          ]
-                           ],
                            [
                            "view_name"=>"partials.v1.divider_title",
                            "view_values" =>[
@@ -56,13 +37,13 @@
                            "view_name"=>"partials.v1.form.form_dropdown",
                            "view_values" =>[
                                                  "input_type"=>"dropdown",
-                                                 "input_model"=>"style",
+                                                 "input_model"=>"model.css_file",
                                                  "icon_class"=>"fas fa-pencil",
                                                  "placeholder"=>"Archivo de estilos",
                                                  "col_with"=>12,
                                                  "dropdown_editing"=>false,
                                                  "dropdown_refresh"=>"setStyle",
-                                                 "dropdown_model"=>"style",
+                                                 "dropdown_model"=>"model.css_file",
                                                  "dropdown_values"=>$styles,
                                                  "required"=>false,
                                           ]

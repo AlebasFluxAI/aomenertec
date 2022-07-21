@@ -5,7 +5,7 @@
        ])
     @include("partials.v1.form.form_input_icon",[
                                    "input_label"=>"Detalles de dirección (Ingrese los detalles que puedan ser relevantes de la direccion)",
-                                   "input_model"=>"addressDetails",
+                                   "input_model"=>"model.address_details",
                                    "updated_input"=>"defer",
                                    "icon_class"=>"fas fa-map",
                                    "placeholder"=>"Vereda, Caserio, Resguardo .. etc",

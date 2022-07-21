@@ -42,19 +42,19 @@ class IndexSuperAdmin extends Component
         $this->indexSuperAdminService->details($this, $id);
     }
 
-    public function disable($id)
+    public function disableSuperAdmin($id)
     {
-        $this->indexSuperAdminService->disable($this, $id);
+        $this->indexSuperAdminService->disableSuperAdmin($this, $id);
     }
 
-    public function getEnabled($id)
+    public function getEnabledSuperAdmin($id)
     {
-        return $this->indexSuperAdminService->getEnabled($this, $id);
+        return $this->indexSuperAdminService->getEnabledSuperAdmin($this, $id);
     }
 
-    public function getEnabledAux($id)
+    public function getEnabledAuxSuperAdmin($id)
     {
-        return $this->indexSuperAdminService->getEnabledAux($this, $id);
+        return $this->indexSuperAdminService->getEnabledAuxSuperAdmin($this, $id);
     }
 
     public function render()

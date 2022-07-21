@@ -25,26 +25,6 @@ class IndexSupervisor extends Component
         parent::__construct($id);
     }
 
-    public function details($id)
-    {
-        $this->indexSupervisorService->details($this, $id);
-    }
-
-    public function edit($id)
-    {
-        $this->indexSupervisorService->edit($this, $id);
-    }
-
-    public function delete($id)
-    {
-        $this->indexSupervisorService->delete($this, $id);
-    }
-
-    public function addClients($id)
-    {
-        $this->indexSupervisorService->addClients($this, $id);
-    }
-
     public function render()
     {
         return view('livewire.v1.admin.user.supervisor.index-supervisor', [
@@ -56,4 +36,35 @@ class IndexSupervisor extends Component
     {
         return $this->indexSupervisorService->getData($this);
     }
+
+    public function deleteSupervisor($id)
+    {
+        $this->indexSupervisorService->deleteSupervisor($this, $id);
+    }
+
+    public function disableSupervisor($id)
+    {
+        $this->indexSupervisorService->disableSupervisor($this, $id);
+    }
+
+    public function getEnabledSupervisor($id)
+    {
+        return $this->indexSupervisorService->getEnabledSupervisor($this, $id);
+    }
+
+    public function getEnabledAuxSupervisor($id)
+    {
+        return $this->indexSupervisorService->getEnabledAuxSupervisor($this, $id);
+    }
+
+    public function conditionalDeleteSupervisor($id)
+    {
+        return $this->indexSupervisorService->conditionalDeleteSupervisor($this, $id);
+    }
+
+    public function conditionalLinkClientsSupervisor($id)
+    {
+        return $this->indexSupervisorService->conditionalLinkClientsSupervisor($this, $id);
+    }
+
 }

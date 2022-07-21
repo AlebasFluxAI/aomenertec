@@ -17,6 +17,7 @@ class Permissions
     public const ADMIN_EDIT = "admin.edit";
     public const ADMIN_DELETE = "admin.delete";
     public const ADMIN_SHOW = "admin.show";
+    public const ADMIN_ENABLED = "admin.enabled";
 
     public const ADMIN_LINK_EQUIPMENT_TYPE = "admin.link_equipment_type";
     public const ADMIN_LINK_EQUIPMENT = "admin.link_equipment";
@@ -43,6 +44,7 @@ class Permissions
     public const NETWORK_OPERATOR_DELETE = "network_operator.delete";
     public const NETWORK_OPERATOR_SHOW = "network_operator.show";
     public const NETWORK_OPERATOR_LINK_EQUIPMENT = "network_operator.link_equipment";
+    public const NETWORK_OPERATOR_ENABLED = "admin.enabled";
 
     public const TECHNICIAN_CREATE = "technician.create";
     public const TECHNICIAN_EDIT = "technician.edit";
@@ -50,6 +52,7 @@ class Permissions
     public const TECHNICIAN_SHOW = "technician.show";
     public const TECHNICIAN_LINK_CLIENT = "technician.link_client";
     public const TECHNICIAN_LINK_EQUIPMENT = "technician.link_equipment";
+    public const TECHNICIAN_ENABLED = "technician.enabled";
 
     public const SUPPORT_CREATE = "support.create";
     public const SUPPORT_EDIT = "support.edit";
@@ -57,18 +60,21 @@ class Permissions
     public const SUPPORT_SHOW = "support.show";
     public const SUPPORT_LINK_CLIENT = "support.link_client";
     public const SUPPORT_ENABLE_PQR = "support.enable_pqr";
+    public const SUPPORT_ENABLED = "support.enabled";
 
     public const SUPERVISOR_CREATE = "supervisor.create";
     public const SUPERVISOR_EDIT = "supervisor.edit";
     public const SUPERVISOR_DELETE = "supervisor.delete";
     public const SUPERVISOR_SHOW = "supervisor.show";
     public const SUPERVISOR_LINK_CLIENT = "supervisor.link_client";
+    public const SUPERVISOR_ENABLED = "supervisor.enabled";
 
     public const SELLER_CREATE = "seller.create";
     public const SELLER_EDIT = "seller.edit";
     public const SELLER_DELETE = "seller.delete";
     public const SELLER_SHOW = "seller.show";
     public const SELLER_LINK_CLIENT = "seller.link_client";
+    public const SELLER_ENABLED = "seller.enabled";
 
     public const CLIENT_CREATE = "client.create";
     public const CLIENT_EDIT = "client.edit";
@@ -76,6 +82,8 @@ class Permissions
     public const CLIENT_SHOW = "client.show";
     public const CLIENT_SHOW_MONITORING = "client.show_monitoring";
     public const CLIENT_SETTINGS = "client.settings";
+    public const CLIENT_ENABLED = "client.enabled";
+
 
     public const PQR_SHOW = "pqr_show";
     public const PQR_CHANGE_LEVEL = "pqr_change_level";

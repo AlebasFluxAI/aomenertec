@@ -27,26 +27,6 @@ class IndexTechnician extends Component
     }
 
 
-    public function edit($id)
-    {
-        $this->indexTechnicianService->edit($this, $id);
-    }
-
-    public function delete($id)
-    {
-        $this->indexTechnicianService->delete($this, $id);
-    }
-
-    public function details($id)
-    {
-        $this->indexTechnicianService->details($this, $id);
-    }
-
-    public function addClients($id)
-    {
-        $this->indexTechnicianService->addClients($this, $id);
-    }
-
     public function render()
     {
         return view(
@@ -60,5 +40,40 @@ class IndexTechnician extends Component
     public function getData()
     {
         return $this->indexTechnicianService->getData($this);
+    }
+
+    public function deleteTechnician($id)
+    {
+        $this->indexTechnicianService->deleteTechnician($this, $id);
+    }
+
+    public function disableTechnician($id)
+    {
+        $this->indexTechnicianService->disableTechnician($this, $id);
+    }
+
+    public function getEnabledTechnician($id)
+    {
+        return $this->indexTechnicianService->getEnabledTechnician($this, $id);
+    }
+
+    public function getEnabledAuxTechnician($id)
+    {
+        return $this->indexTechnicianService->getEnabledAuxTechnician($this, $id);
+    }
+
+    public function conditionalDeleteTechnician($id)
+    {
+        return $this->indexTechnicianService->conditionalDeleteTechnician($this, $id);
+    }
+
+    public function conditionalLinkEquipmentTechnician($id)
+    {
+        return $this->indexTechnicianService->conditionalLinkEquipmentTechnician($this, $id);
+    }
+
+    public function conditionalLinkClientsTechnician($id)
+    {
+        return $this->indexTechnicianService->conditionalLinkClientsTechnician($this, $id);
     }
 }

@@ -16,13 +16,28 @@ class Supervisor extends Model
     use PermissionTrait;
 
     protected $fillable = ['identification',
+        'identification',
         'phone',
         'name',
         'last_name',
         'email',
         'user_id',
-        'network_operator_id'
+        'network_operator_id',
+        "address",
+        'billing_address',
+        'billing_name',
+        'person_type',
+        'identification_type',
+        "latitude",
+        "longitude",
+        "address_details",
+        "postal_code",
+        "here_maps",
+        "country",
+        "city",
+        "state",
     ];
+
 
     public static function menu()
     {

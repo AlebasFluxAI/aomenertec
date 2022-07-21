@@ -12,16 +12,34 @@ use Livewire\Component;
 
 class AddNetworkOperator extends Component
 {
-    use ValidateUserFormTrait;
-    use AddUserFormTrait;
-
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
+    public $model;
     public $message;
-    public $picked;
+    public $person_types;
+    public $identification_types;
     public $admins;
-    public $admin_id;
 
 
     private $networkOperatorAddService;
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+        'model.admin_id' => 'required',
+    ];
 
     public function __construct($id = null)
     {
@@ -34,6 +52,26 @@ class AddNetworkOperator extends Component
         $this->networkOperatorAddService->mount($this);
     }
 
+    public function updatedModel($value, $key)
+    {
+        $this->networkOperatorAddService->updatedModel($this, $value, $key);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->networkOperatorAddService->updated($this, $propertyName);
+    }
+
+    public function updatedLatitude()
+    {
+        $this->networkOperatorAddService->updatedLatitude($this);
+    }
+
+    public function updatedLongitude()
+    {
+        $this->networkOperatorAddService->updatedLongitude($this);
+    }
+
     public function submitForm()
     {
         $this->networkOperatorAddService->submitForm($this);
@@ -42,12 +80,6 @@ class AddNetworkOperator extends Component
     public function updatedAdminId()
     {
         $this->networkOperatorAddService->updatedAdminId($this);
-    }
-
-
-    public function setAdminId($admin)
-    {
-        $this->networkOperatorAddService->setAdminId($this, $admin);
     }
 
     public function render()

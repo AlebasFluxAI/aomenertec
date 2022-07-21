@@ -36,7 +36,7 @@ class SuperAdminIndexService extends Singleton
 
     }
 
-    public function disable(Component $component, $modelId)
+    public function disableSuperAdmin(Component $component, $modelId)
     {
         $super_admin = SuperAdmin::find($modelId);
         $super_admin->enabled = !$super_admin->enabled;
@@ -50,12 +50,12 @@ class SuperAdminIndexService extends Singleton
         }
     }
 
-    public function getEnabled(Component $component, $modelId)
+    public function getEnabledSuperAdmin(Component $component, $modelId)
     {
         return !SuperAdmin::find($modelId)->enabled;
     }
 
-    public function getEnabledAux(Component $component, $modelId)
+    public function getEnabledAuxSuperAdmin(Component $component, $modelId)
     {
         if (!SuperAdmin::find($modelId)->enabled){
             return false;

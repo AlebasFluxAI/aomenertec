@@ -24,7 +24,7 @@ class SuperAdminAddService extends Singleton
             $super_admin->update([
                 "user_id" => $user->id
             ]);
-
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$super_admin->name} creado"]);
             $component->redirectRoute("administrar.v1.usuarios.superadmin.detalles", ["superAdmin" => $super_admin->id]);
         });
     }

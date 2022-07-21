@@ -21,6 +21,10 @@ class Seller extends Model
         'user_id',
         'network_operator_id',
         "address",
+        'billing_address',
+        'billing_name',
+        'person_type',
+        'identification_type',
         "latitude",
         "longitude",
         "address_details",
@@ -30,6 +34,8 @@ class Seller extends Model
         "city",
         "state",
     ];
+
+
 
     public static function getRole()
     {
