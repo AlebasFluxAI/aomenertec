@@ -163,7 +163,7 @@ class User extends Authenticatable
 
     public function getAdmin()
     {
-        if ($superAdmin = $this) {
+        if ($superAdmin = $this->superAdmin) {
             return $superAdmin;
         }
         if ($admin = $this->admin) {
