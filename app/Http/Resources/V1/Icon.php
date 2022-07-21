@@ -16,11 +16,9 @@ class Icon extends Singleton
 {
     public static function getIcon()
     {
-        try {
-            return self::getUserIcon();
-        } catch (Throwable $exception) {
-            return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
-        }
+
+        return self::getUserIcon();
+
     }
 
     private static function getUserIcon()
