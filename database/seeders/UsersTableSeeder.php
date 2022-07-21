@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         // DB::table('users')->truncate();
-       /* User::create([
+        User::create([
             'name' => "Super Administrador",
             "last_name" => "Prueba",
             'identification' => '111111111',
@@ -26,9 +26,9 @@ class UsersTableSeeder extends Seeder
             'password' => bcrypt('12345678'),
             'remember_token' => Str::random(60),
             'type' => User::TYPE_SUPER_ADMIN
-        ]);*/
+        ]);
 
-        $users = [
+        /*$users = [
             [
                 'name' => "Super Administrador",
                 "last_name" => "Prueba",
@@ -162,6 +162,6 @@ class UsersTableSeeder extends Seeder
         ];
         foreach ($users as $user) {
             $create = User::create($user);
-        }
+        }*/
     }
 }

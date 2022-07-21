@@ -20,20 +20,20 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             PermissionsTableSeeder::class,
             SuperAdminsTableSeeder::class,
-            AdminsTableSeeder::class,
+           /* AdminsTableSeeder::class,
             NetworkOperatorsTableSeeder::class,
             SellersTableSeeder::class,
             TechniciansTableSeeder::class,
-            SupportsTableSeeder::class,
+            SupportsTableSeeder::class,*/
             ClientTypesTableSeeder::class,
             EquipmentTypesTableSeeder::class,
             ClientTypeEquipmentTypesTableSeeder::class,
-            EquipmentsTableSeeder::class,
+            //EquipmentsTableSeeder::class,
             StrataTableSeeder::class,
             SubsistenceConsumptionsTableSeeder::class,
             VoltageLevelsTableSeeder::class,
             RoleHasPermissionsTableSeeder::class,
-            ClientsTableSeeder::class,
+            //ClientsTableSeeder::class,
         ]);
     }
 
