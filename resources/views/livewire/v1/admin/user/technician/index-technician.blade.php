@@ -105,7 +105,7 @@
                                                      ],
                                                     [
                                                        "redirect"=>[
-                                                                   "route"=>"administrar.v1.usuarios.technician.agregar_equipos",
+                                                                   "route"=>"administrar.v1.usuarios.tecnicos.agregar_equipos",
                                                                    "binding"=>"technician"
                                                              ],
                                                            "icon"=>"fas fa-laptop-medical",
