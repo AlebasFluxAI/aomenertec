@@ -31,6 +31,17 @@ class User extends Authenticatable
     public const TYPE_SELLER = "seller";
     public const TYPE_TECHNICIAN = "technician";
     public const TYPE_SUPERVISOR = "supervisor";
+
+
+    public const PERSON_TYPE_NATURAL = "natural";
+    public const PERSON_TYPE_JURIDICAL = "juridical";
+
+    public const IDENTIFICATION_TYPE_CC = 'CC';
+    public const IDENTIFICATION_TYPE_CE = 'CE';
+    public const IDENTIFICATION_TYPE_PEP = 'PEP';
+    public const IDENTIFICATION_TYPE_PP = 'PP';
+    public const IDENTIFICATION_TYPE_NIT = 'NIT';
+    public const IDENTIFICATION_TYPE_OTHER = 'OTHER';
     /**
      * The attributes that are mass assignable.
      *

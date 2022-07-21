@@ -24,7 +24,7 @@
 
                                     {{ $table_row->{explode(".",$table_header)[0]}->{explode(".",$table_header)[1]} }}  {{--Se usa para traer datos de una relacion user.client.name--}}
                                 @else
-                                    {{$table_row->{$table_header} }}
+                                    {{ $table_row->{$table_header} }}
                                 @endif
                             </td>
                         @endforeach

@@ -17,6 +17,7 @@ class Permissions
     public const ADMIN_EDIT = "admin.edit";
     public const ADMIN_DELETE = "admin.delete";
     public const ADMIN_SHOW = "admin.show";
+    public const ADMIN_ENABLED = "admin.enabled";
 
     public const ADMIN_LINK_EQUIPMENT_TYPE = "admin.link_equipment_type";
     public const ADMIN_LINK_EQUIPMENT = "admin.link_equipment";
@@ -43,6 +44,7 @@ class Permissions
     public const NETWORK_OPERATOR_DELETE = "network_operator.delete";
     public const NETWORK_OPERATOR_SHOW = "network_operator.show";
     public const NETWORK_OPERATOR_LINK_EQUIPMENT = "network_operator.link_equipment";
+    public const NETWORK_OPERATOR_ENABLED = "admin.enabled";
 
     public const TECHNICIAN_CREATE = "technician.create";
     public const TECHNICIAN_EDIT = "technician.edit";

@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\Admin;
 
 use App\Http\Services\Singleton;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
@@ -11,31 +12,46 @@ use Livewire\Component;
 
 class AdminAddService extends Singleton
 {
+    use AddUserFormTrait;
+
     public function mount(Component $component)
     {
         $component->fill([
-            "styles" => Admin::styles()
+            "styles" => Admin::styles(),
+            "decodedAddress" => "",
+            "identification_types" => $this->identificationTypes(User::PERSON_TYPE_NATURAL),
+            'person_types' => [
+                                    ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
+                                    ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
+                              ],
+            'model.person_type' => User::PERSON_TYPE_NATURAL,
+            "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
+            "latitude" => 4.134750,
+            "longitude" => -73.637094,
+            "model.billing_name" => "",
+            "model.last_name" => "",
+            "model.name" => "",
         ]);
     }
 
+
+
     public function submitForm(Component $component)
     {
+
         DB::transaction(function () use ($component) {
             $component->validate([
                 'icon' => 'image|max:10240', // 1MB Max
             ]);
+            $component->model['latitude'] = $component->latitude;
+            $component->model['longitude'] = $component->longitude;
             $component->validate();
-            $admin = Admin::create($this->mapper($component));
+            $admin = Admin::create($component->model);
             $admin->buildOneImageFromFile("icon", $component->icon);
-            $user = User::create(array_merge($this->mapper($component), [
-                "password" => bcrypt($component->password),
-                "type" => User::TYPE_ADMIN
-            ]));
-
+            $user = User::create($this->mapper($component));
             $admin->update([
                 "user_id" => $user->id
             ]);
-
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $admin->id]);
         });
     }
@@ -43,19 +59,12 @@ class AdminAddService extends Singleton
     private function mapper($component)
     {
         return [
-            "name" => $component->name,
-            "last_name" => $component->last_name,
-            "email" => $component->email,
-            "phone" => $component->phone,
-            "address" => $component->address,
-            "nit" => $component->nit,
-            "identification" => $component->identification,
-            "type" => User::TYPE_ADMIN,
-            "css_style" => $component->style,
-            "latitude" => $component->latitude,
-            "longitude" => $component->longitude,
-            "address_details" => $component->addressDetails,
-
+            "name" => $component->model['name'],
+            "last_name" => $component->model['last_name'],
+            "email" => $component->model['email'],
+            "phone" => $component->model['phone'],
+            "identification" => $component->model['identification'],
+            "type" => User::TYPE_ADMIN
         ];
     }
 

@@ -1,14 +1,20 @@
 <div class="contenedor-grande">
     <div class="row content p-5">
         <div class="row ">
-            @include("partials.v1.divider_title",[
-                           "title"=>$form_title??""
-                ]
-                )
+            @if($form_title??null)
+                @include("partials.v1.divider_title",[
+                               "title"=>$form_title??""
+                    ]
+                    )
+            @endif
             <div class="row pl-5 pr-3">
+                @include("partials.v1.divider_title",[
+                                       "title"=>"Información de usuario"
+                            ]
+                            )
 
                 @include("partials.v1.form.form_input_icon",[
-                      "input_model"=>"name",
+                      "input_model"=>"model.name",
                       "input_label"=>"Nombre",
                        "updated_input"=>"defer",
                       "icon_class"=>"fas fa-user",
@@ -20,7 +26,7 @@
 
                 @include("partials.v1.form.form_input_icon",[
                        "input_label"=>"Apellido",
-                       "input_model"=>"last_name",
+                       "input_model"=>"model.last_name",
                        "updated_input"=>"defer",
                        "icon_class"=>"fas fa-user",
                        "placeholder"=>"Apellido",
@@ -31,7 +37,7 @@
 
                 @include("partials.v1.form.form_input_icon",[
                         "input_label"=>"Telefono (Sin indicativo)",
-                        "input_model"=>"phone",
+                        "input_model"=>"model.phone",
                         "updated_input"=>"defer",
                         "icon_class"=>"fas fa-barcode",
                         "placeholder"=>"Telefono",
@@ -41,18 +47,46 @@
 
 
                 @include("partials.v1.form.form_input_icon",[
-                        "input_label"=>"Correo electronico de cliente",
-                        "input_model"=>"email",
+                        "input_label"=>"Correo electronico de usuario",
+                        "input_model"=>"model.email",
                         "updated_input"=>"lazy",
                         "icon_class"=>"fas fa-envelope",
                         "placeholder"=>"E-mail",
                         "col_with"=>8,
                         "input_type"=>"email",
                ])
+                @include("partials.v1.divider_title",[
+                                "title"=>"Datos de facturacion"
+                        ]
+                       )
+
+                @include("partials.v1.form.form_list",[
+                                  "col_with"=>8,
+                                  "input_label"=>"Seleccione el tipo de persona",
+                                  "input_type"=>"text",
+                                  "list_model" => "model.person_type",
+                                  "list_default" => "Tipo de persona ...",
+                                  "list_options" => $person_types,
+                                  "list_option_value"=>"value",
+                                  "list_option_view"=>"key",
+                                  "list_option_title"=>"",
+                         ])
+
+                @include("partials.v1.form.form_list",[
+                                    "col_with"=>8,
+                                    "input_type"=>"text",
+                                    "input_label"=>"Seleccione el tipo de indentificación",
+                                    "list_model" => "model.identification_type",
+                                    "list_default" => "Tipo de identificación",
+                                    "list_options" => $identification_types,
+                                    "list_option_value"=>"value",
+                                    "list_option_view"=>"key",
+                                    "list_option_title"=>"",
+                           ])
 
                 @include("partials.v1.form.form_input_icon",[
                                "input_label"=>"Numero de identificación",
-                               "input_model"=>"identification",
+                               "input_model"=>"model.identification",
                                "updated_input"=>"lazy",
                                "icon_class"=>"fas fa-barcode",
                                "placeholder"=>"identificación",
@@ -60,6 +94,28 @@
                                "input_type"=>"text",
                                "required"=>true
                       ])
+
+                @include("partials.v1.form.form_input_icon",[
+                                  "input_label"=>"Nombre para facturación",
+                                  "input_model"=>"model.billing_name",
+                                  "updated_input"=>"lazy",
+                                  "icon_class"=>"fas fa-user",
+                                  "placeholder"=>"Razon social para facturación",
+                                  "col_with"=>8,
+                                  "input_type"=>"text",
+                                  "required"=>true
+                            ])
+
+                @include("partials.v1.form.form_input_icon",[
+                                "input_label"=>"Direccion de facturacion",
+                                "input_model"=>"model.billing_address",
+                                "updated_input"=>"lazy",
+                                "icon_class"=>"fas fa-map",
+                                "placeholder"=>"Direccion de facturacion",
+                                "col_with"=>8,
+                                "input_type"=>"text",
+                                "required"=>true
+                          ])
 
                 @include("partials.v1.divider_title",[
                           "title"=>"Ubicacion"

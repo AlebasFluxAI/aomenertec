@@ -28,20 +28,12 @@ class IndexNetworkOperator extends Component
     }
 
 
-    public function edit($id)
+
+    public function deleteNetworkOperator($id)
     {
-        $this->indexNetworkOperatorService->edit($this, $id);
+        $this->indexNetworkOperatorService->deleteNetworkOperator($this, $id);
     }
 
-    public function delete($id)
-    {
-        $this->indexNetworkOperatorService->delete($this, $id);
-    }
-
-    public function details($id)
-    {
-        $this->indexNetworkOperatorService->details($this, $id);
-    }
 
     public function render()
     {
@@ -58,15 +50,30 @@ class IndexNetworkOperator extends Component
         return $this->indexNetworkOperatorService->getData($this);
     }
 
-    public function deleteNetworkOperator($networkOperatorId)
+    public function disableNetworkOperator($id)
     {
-        $operatorName = NetworkOperator::find($networkOperatorId)->name;
-        $this->indexNetworkOperatorService->deleteNetworkOperator($networkOperatorId);
-        $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operatorName} eliminado"]);
+        $this->indexNetworkOperatorService->disableNetworkOperator($this, $id);
     }
 
-    public function conditionalDelete($networkOperatorId)
+    public function getEnabledNetworkOperator($id)
     {
-        return $this->indexNetworkOperatorService->conditionalDelete($networkOperatorId);
+        return $this->indexNetworkOperatorService->getEnabledNetworkOperator($this, $id);
+    }
+
+    public function getEnabledAuxNetworkOperator($id)
+    {
+        return $this->indexNetworkOperatorService->getEnabledAuxNetworkOperator($this, $id);
+    }
+
+
+
+    public function conditionalDeleteNetworkOperator($networkOperatorId)
+    {
+        return $this->indexNetworkOperatorService->conditionalDeleteNetworkOperator($this, $networkOperatorId);
+    }
+
+    public function conditionalLinkEquipmentNetworkOperator($networkOperatorId)
+    {
+        return $this->indexNetworkOperatorService->conditionalLinkEquipmentNetworkOperator($this, $networkOperatorId);
     }
 }

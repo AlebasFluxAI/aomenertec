@@ -27,11 +27,51 @@ class AdminIndexService extends Singleton
         $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $modelId]);
     }
 
-    public function delete(Component $component, $modelId)
+    public function deleteAdmin(Component $component, $modelId)
     {
         $admin = Admin::find($modelId);
+        $admin->user->enabled = false;
+        foreach ($admin->adminClientTypes()->get() as $type){
+            $type->delete();
+        }
+        foreach ($admin->adminClientTypes()->get() as $type){
+            $type->delete();
+        }
+        foreach ($admin->adminEquipmentTypes()->get() as $type){
+            $type->delete();
+        }
+        if ($admin->configAdmin()->exists()){
+            $admin->configAdmin()->delete();
+        }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} eliminado"]);
         $admin->delete();
+    }
+
+    public function disableAdmin(Component $component, $modelId)
+    {
+        $admin = Admin::find($modelId);
+        $admin->enabled = !$admin->enabled;
+        $admin->user->enabled = !$admin->user->enabled;
+        $admin->push();
+        if (!$admin->enabled) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
+        } else{
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
+
+        }
+    }
+
+    public function getEnabledAdmin(Component $component, $modelId)
+    {
+        return !Admin::find($modelId)->enabled;
+    }
+
+    public function getEnabledAuxAdmin(Component $component, $modelId)
+    {
+        if (!Admin::find($modelId)->enabled){
+            return false;
+        }
+        return true;
     }
 
     public function getData(Component $component)
@@ -42,7 +82,7 @@ class AdminIndexService extends Singleton
         return Admin::paginate(15);
     }
 
-    public function conditionalDelete(Component $component, $modelId)
+    public function conditionalDeleteAdmin(Component $component, $modelId)
     {
         return NetworkOperator::whereAdminId($modelId)->exists();
     }

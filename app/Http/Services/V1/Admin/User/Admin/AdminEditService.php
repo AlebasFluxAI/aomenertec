@@ -3,38 +3,30 @@
 namespace App\Http\Services\V1\Admin\User\Admin;
 
 use App\Http\Services\Singleton;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Admin;
+use App\Models\V1\User;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Livewire\Component;
 
 class AdminEditService extends Singleton
 {
+    use AddUserFormTrait;
+
     public function mount(Component $component, Admin $model)
     {
         $component->fill([
-            'model' => $model,
-            'name' => $model->name,
-            'last_name' => $model->last_name,
-            'phone' => $model->phone,
-            'email' => $model->email,
-            'address' => $model->address,
-            'nit' => $model->nit,
-            'password' => $model->password,
-            'identification' => $model->identification,
-            'style' => $model->css_file,
-            "addressDetails" => $model->address_details,
+            "styles" => Admin::styles(),
+            "decodedAddress" => $model->address,
+            "identification_types" => $this->identificationTypes($model->person_type),
+            'person_types' => [
+                ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
+                ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
+            ],
+            "model" => $model,
             "latitude" => $model->latitude,
             "longitude" => $model->longitude,
-            "decodedAddress" => $model->address,
-            'styles' => [
-                [
-                    "key" => $model->css_file_name,
-                    "value" => $model->css_file
-                ],
-
-            ]
-
         ]);
     }
 
@@ -51,27 +43,26 @@ class AdminEditService extends Singleton
                     $component->model->icon->update();
                 }
             }
-            $component->model->fill($this->mapper($component));
+            $component->model->latitude = $component->latitude;
+            $component->model->longitude = $component->longitude;
+            $component->validate([
+                'model.identification' => 'required|min:6',
+                'model.name' => 'required|min:6',
+                'model.last_name' => 'required|min:6',
+                'model.phone' => 'min:7',
+                'model.email' => 'required|email',
+                'model.address_details' => 'required',
+                'model.latitude' => 'required',
+                'model.longitude' => 'required',
+                'model.billing_name' => 'required',
+                'model.billing_address' => 'required',
+                'model.person_type' => 'required',
+                'model.identification_type' => 'required',
+                'model.css_file' => 'required',
+            ]);
             $component->model->update();
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $component->model->id]);
         });
-    }
-
-    private function mapper(Component $component)
-    {
-        return [
-            "name" => $component->name,
-            "last_name" => $component->last_name,
-            "email" => $component->email,
-            "phone" => $component->phone,
-            "address" => $component->address,
-            "nit" => $component->nit,
-            "identification" => $component->identification,
-            "css_file" => $component->style,
-            "latitude" => $component->latitude,
-            "longitude" => $component->longitude,
-            "address_details" => $component->addressDetails,
-        ];
     }
 
     public function setStyle(Component $component)

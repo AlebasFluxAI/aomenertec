@@ -17,18 +17,16 @@ use Spatie\Permission\Traits\HasPermissions;
 
 class Admin extends Model
 {
-    use HasFactory;
-    use ImageableTrait;
-    use HasPermissions;
-    use PermissionTrait;
-
-
     protected $fillable = [
         "user_id",
         'identification',
         'phone',
         'nit',
         'address',
+        'billing_address',
+        'billing_name',
+        'person_type',
+        'identification_type',
         'name',
         'last_name',
         'email',
@@ -42,6 +40,15 @@ class Admin extends Model
         "city",
         "state",
     ];
+    use HasFactory;
+    use ImageableTrait;
+    use HasPermissions;
+    use SoftDeletes;
+
+
+    use PermissionTrait;
+
+
 
     public static function getRole()
     {

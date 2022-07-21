@@ -21,7 +21,6 @@ class AdminsTableSeeder extends Seeder
                 "name" => $user->name,
                 "last_name" => $user->last_name,
                 "identification" => $user->identification,
-                "nit" => $user->nit ?? $user->identification,
                 "phone" => $user->phone,
                 "email" => $user->email,
             ]);

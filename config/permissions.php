@@ -27,6 +27,7 @@ return [
         Permissions::NETWORK_OPERATOR_DELETE,
         Permissions::NETWORK_OPERATOR_SHOW,
         Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT,
+        Permissions::NETWORK_OPERATOR_ENABLED,
 
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
@@ -80,6 +81,8 @@ return [
         Permissions::ADMIN_EDIT,
         Permissions::ADMIN_DELETE,
         Permissions::ADMIN_SHOW,
+        Permissions::ADMIN_ENABLED,
+
 
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
@@ -96,6 +99,7 @@ return [
         Permissions::NETWORK_OPERATOR_DELETE,
         Permissions::NETWORK_OPERATOR_SHOW,
         Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT,
+        Permissions::NETWORK_OPERATOR_ENABLED,
 
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,

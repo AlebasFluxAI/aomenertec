@@ -19,16 +19,6 @@ class NetworkOperatorIndexService extends Singleton
     }
 
 
-    public function edit(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.operadores.editar", ["networkOperator" => $modelId]);
-    }
-
-    public function details(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $modelId]);
-    }
-
     public function getData(Component $component)
     {
         $user = Auth::user();
@@ -45,14 +35,52 @@ class NetworkOperatorIndexService extends Singleton
         return NetworkOperator::paginate(15);
     }
 
-
-    public function deleteNetworkOperator($networkOperatorId)
+    public function deleteNetworkOperator(Component $component, $networkOperatorId)
     {
-        NetworkOperator::whereId($networkOperatorId)->delete();
+        $operator = NetworkOperator::find($networkOperatorId);
+        $operator->user->enabled = false;
+        foreach ($operator->equipments()->get() as $type){
+            $type->network_operator_id = "";
+            $type->save();
+        }
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operator->name} eliminado"]);
+        $operator->delete();
     }
 
-    public function conditionalDelete($networkOperatorId)
+    public function disableNetworkOperator(Component $component, $modelId)
     {
-        return Client::whereNetworkOperatorId($networkOperatorId)->exists();
+        $operator = NetworkOperator::find($modelId);
+        $operator->enabled = !$operator->enabled;
+        $operator->user->enabled = !$operator->user->enabled;
+        $operator->push();
+        if (!$operator->enabled) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
+        } else{
+            $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
+
+        }
+    }
+
+    public function getEnabledNetworkOperator(Component $component, $modelId)
+    {
+        return !NetworkOperator::find($modelId)->enabled;
+    }
+
+    public function getEnabledAuxNetworkOperator(Component $component, $modelId)
+    {
+        if (!NetworkOperator::find($modelId)->enabled){
+            return false;
+        }
+        return true;
+    }
+
+    public function conditionalDeleteNetworkOperator(Component $component, $modelId)
+    {
+        return Client::whereNetworkOperatorId($modelId)->exists();
+    }
+
+    public function conditionalLinkEquipmentNetworkOperator(Component $component, $modelId)
+    {
+        return !NetworkOperator::find($modelId)->admin->equipments()->exists();
     }
 }

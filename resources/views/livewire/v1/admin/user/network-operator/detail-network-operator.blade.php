@@ -74,6 +74,10 @@
                                                                              "key"=>"Identificacion",
                                                                              "value"=>$model->identification
                                                                          ],
+                                                                          [
+                                                                             "key"=>"admin",
+                                                                             "value"=>$model->admin->name
+                                                                         ],
                                                                          [
                                                                              "key"=>"Pais",
                                                                              "value"=>$model->country

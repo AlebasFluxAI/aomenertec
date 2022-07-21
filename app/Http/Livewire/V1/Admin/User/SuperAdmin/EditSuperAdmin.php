@@ -10,9 +10,17 @@ use Livewire\Component;
 
 class EditSuperAdmin extends Component
 {
-    use ValidateUserFormTrait;
+
     public $model;
     private $superAdminEditService;
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+    ];
 
     public function __construct($id = null)
     {
@@ -23,6 +31,11 @@ class EditSuperAdmin extends Component
     public function mount(SuperAdmin $superAdmin)
     {
         $this->superAdminEditService->mount($this, $superAdmin);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->superAdminEditService->updated($this, $propertyName);
     }
 
     public function submitForm()

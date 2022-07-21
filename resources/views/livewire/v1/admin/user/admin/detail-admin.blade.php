@@ -17,7 +17,7 @@
                         "button_content"=>"Editar",
                         "target_route"=>"administrar.v1.usuarios.admin.editar",
                         "target_binding"=>"admin",
-                        "target_binding_value"=>$model->id
+                        "target_binding_value"=>$admin->id
                     ],
                     [
                         "button_align"=>"right",
@@ -35,6 +35,9 @@
                                                 [
                                                     "title"=>"Detalles",
 
+                                                ],
+                                                  [
+                                                    "title"=>"Dirección",
                                                 ],
                                                   [
                                                     "title"=>"Operadores de red",
@@ -55,54 +58,85 @@
                                                                          [
                                                                              "key"=>"Id",
 
-                                                                             "value"=>$model->id
+                                                                             "value"=>$admin->id
                                                                          ],
                                                                          [
                                                                              "key"=>"Nombre",
 
-                                                                             "value"=>$model->name
+                                                                             "value"=>$admin->name
                                                                          ],
                                                                          [
                                                                              "key"=>"Apellido",
 
-                                                                             "value"=>$model->last_name
+                                                                             "value"=>$admin->last_name
                                                                          ],
                                                                          [
                                                                              "key"=>"Correo electronico",
 
-                                                                             "value"=>$model->email
+                                                                             "value"=>$admin->email
                                                                          ],
                                                                           [
                                                                              "key"=>"Identificacion",
-                                                                             "value"=>$model->identification
+                                                                             "value"=>$admin->identification
                                                                          ],
                                                                          [
                                                                              "key"=>"Telefono",
 
-                                                                             "value"=>$model->phone
+                                                                             "value"=>$admin->phone
                                                                          ],
-                                                                                      [
-                                                                             "key"=>"Nit",
-
-                                                                             "value"=>$model->nit
-                                                                         ],
-                                                                                                [
+                                                                          [
                                                                              "key"=>"Direccion",
 
-                                                                             "value"=>$model->address
+                                                                             "value"=>$admin->address
                                                                          ],
                                                                                   [
                                                                              "key"=>"Archivo de estilos",
 
-                                                                             "value"=>$model->css_file_name
+                                                                             "value"=>$admin->css_file_name
                                                                          ],
                                                                            [
                                                                              "key"=>"Logo",
                                                                              "type"=>"image",
-                                                                             "value"=>$model->icon?$model->icon->url:"https://aom.enerteclatam.com/images/logo-horizontal.svg"
+                                                                             "value"=>$admin->icon?$admin->icon->url:"https://aom.enerteclatam.com/images/logo-horizontal.svg"
                                                                          ],
                                                                      ]
                                                             ],
+
+
+                                                ],
+                                                [
+                                                   "view_name"=>"partials.v1.table.primary-table",
+                                                   "view_values"=>[
+                                                                        "table_pageable"=>false,
+                                                                       "table_headers"=>[
+                                                                                         "ID"=>"id",
+                                                                                         "Direccion"=>"address",
+                                                                                         "Pais"=>"country",
+                                                                                         "Departamento"=>"state",
+                                                                                         "Ciudad"=>"city",
+                                                                                         "Latitude"=>"latitude",
+                                                                                         "Longitude"=>"longitude",
+                                                                                         "Codigo postal"=>"postal_code",
+                                                                                         "Detalles"=>"address_details"
+
+                                                                        ],
+                                                                        "table_actions"=>[
+                                                                            "customs"=>[
+                                                                                [
+                                                                                   "popup"=>[
+                                                                                               "modal_title"=>"Ubicación del usuario",
+                                                                                               "view_name"=>"partials.v1.map_pin",
+                                                                                               "view_data"=>[
+                                                                                                   "latitude"=>$admin->latitude,
+                                                                                                   "longitude"=>$admin->longitude,
+                                                                                             ],
+                                                                                   ],
+                                                                                ],
+                                                                            ],
+                                                                         ],
+
+                                                                       "table_rows"=>[$admin],
+                                                                   ],
 
 
                                                 ],
@@ -116,7 +150,7 @@
                                                                                          "Identificacion"=>"identification",
 
                                                                         ],
-                                                                       "table_rows"=>$model->networkOperators
+                                                                       "table_rows"=>$admin->networkOperators
 
                                                                    ]
                                                 ],
@@ -131,7 +165,7 @@
                                                                                          "Identificacion"=>"identification",
                                                                         ],
 
-                                                                       "table_rows"=>$model->clients
+                                                                       "table_rows"=>$admin->clients
 
                                                                    ]
                                                 ],
@@ -155,7 +189,7 @@
                                                                                             ]
                                                                                         ]
                                                                                     ],
-                                                                      "table_rows"=>$model->equipments
+                                                                      "table_rows"=>$admin->equipments
 
                                                                   ]
                                                ],

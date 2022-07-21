@@ -10,7 +10,7 @@
           ])
 
 
-        @endif
+@endif
         @include("partials.v1.table_nav",
                ["mt"=>2,
                 "nav_options"=>[
@@ -58,42 +58,67 @@
                            "col_data" =>"identification",
                            "col_filter"=>$col_filter??true
                        ],
+                       [
+                           "col_name" =>"admin",
+                           "col_data" =>"admin.name",
+                           "col_filter"=>$col_filter??true
+                       ],
 
                     ],
                      "table_actions"=>[
 
                                         "customs"=>[
                                                     [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.operadores.detalles",
+                                                                   "binding"=>"networkOperator"
+                                                             ],
+                                                           "icon"=>"fas fa-search",
+                                                           "tooltip_title"=>"Detalles",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_SHOW],
+                                                     ],
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.operadores.editar",
+                                                                   "binding"=>"networkOperator"
+                                                             ],
+                                                           "icon"=>"fas fa-pencil",
+                                                           "tooltip_title"=>"Editar",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_EDIT],
+                                                     ],
 
-                                                             "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_SHOW],
-                                                            "function"=>"details",
-                                                            "icon"=>"fas fa-search",
-                                                            "tooltip_title"=>"Detalles"
+
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.operadores.agregar_equipos",
+                                                                   "binding"=>"networkOperator"
+                                                             ],
+                                                           "icon"=>"fas fa-laptop-medical",
+                                                           "tooltip_title"=>"Asociar equipos",
+                                                           "conditional" => "conditionalLinkEquipmentNetworkOperator",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT],
+                                                     ],
+                                                     [
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_ENABLED],
+                                                        "conditional" => "getEnabledNetworkOperator",
+                                                        "function"=>"disableNetworkOperator",
+                                                        "icon"=>"fa-solid fa-user-xmark",
+                                                        "tooltip_title"=>"Desactivar"
                                                     ],
                                                     [
-
-                                                             "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_EDIT],
-                                                             "function"=>"edit",
-                                                            "icon"=>"fas fa-pencil",
-                                                            "tooltip_title"=>"Editar"
+                                                        "permission" => [\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_ENABLED],
+                                                        "conditional" => "getEnabledAuxNetworkOperator",
+                                                        "function"=>"disableNetworkOperator",
+                                                        "icon"=>"fa-solid fa-user-check",
+                                                        "tooltip_title"=>"Activar"
                                                     ],
-
                                             [
                                                 "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_DELETE],
                                                     "function"=>"deleteNetworkOperator",
-                                                    "conditional"=>$network_operator_conditional_delete??"conditionalDelete",
+                                                    "conditional"=>"conditionalDeleteNetworkOperator",
                                                     "icon"=>"fas fa-trash",
                                                     "tooltip_title"=>"Eliminar"
                                             ],
-                                            [
-                                               "redirect"=>[
-                                                           "route"=>"administrar.v1.usuarios.operadores.agregar_equipos",
-                                                           "binding"=>"networkOperator"
-                                                     ],
-                                                   "icon"=>"fas fa-laptop-medical",
-                                                   "tooltip_title"=>"Asociar equipos",
-                                                   "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT],
-                                             ],
                                            ]
                                         ],
                                                     /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

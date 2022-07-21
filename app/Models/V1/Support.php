@@ -22,6 +22,10 @@ class Support extends Model
         'email',
         'user_id',
         "address",
+        'billing_address',
+        'billing_name',
+        'person_type',
+        'identification_type',
         "latitude",
         "longitude",
         "address_details",
@@ -32,6 +36,7 @@ class Support extends Model
         "state",
         "pqr_available"
     ];
+
 
     public static function menu()
     {

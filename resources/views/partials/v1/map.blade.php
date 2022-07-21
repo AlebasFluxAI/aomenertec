@@ -102,6 +102,14 @@
         marker.setVisible(true);
     }
 
+    function longitudeShow() {
+        let latitude = document.getElementById('latitude').value;
+        let longitude = document.getElementById('longitude').value;
+        map.setCenter(new google.maps.LatLng(latitude, longitude));
+        marker.setPosition(new google.maps.LatLng(latitude, longitude));
+        marker.setVisible(true);
+    }
+
 </script>
 
 
@@ -116,7 +124,7 @@
 <div class="col-md-8 mb-3">
     <p><b>Direccion:</b></p>
     <ul>
-        <li>  {{$decodedAddress}}</li>
+        <li>  {{ $decodedAddress }}</li>
 
     </ul>
 </div>
@@ -127,7 +135,7 @@
             @include("partials.v1.form.form_input_icon",[
                         "input_label"=>"Latitude",
                         "input_model"=>"latitude",
-                        "updated_input"=>"",
+                        "updated_input"=>"lazy",
                         "icon_class"=>"fas fa-map",
                         "placeholder"=>"latitude",
                         "input_id"=>"latitude",
@@ -140,7 +148,7 @@
             @include("partials.v1.form.form_input_icon",[
                         "input_label"=>"Longitude",
                         "input_model"=>"longitude",
-                       "updated_input"=>"",
+                       "updated_input"=>"lazy",
                          "input_id"=>"longitude",
                         "input_on_change"=>"longitudeShow",
                         "icon_class"=>"fas fa-map",

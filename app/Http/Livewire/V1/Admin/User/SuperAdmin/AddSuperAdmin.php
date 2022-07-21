@@ -10,12 +10,20 @@ use Livewire\Component;
 
 class AddSuperAdmin extends Component
 {
-    use ValidateUserFormTrait;
+
 
     public $model;
     public $message;
 
     private $superAdminAddService;
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+    ];
 
     public function __construct($id = null)
     {
@@ -23,6 +31,10 @@ class AddSuperAdmin extends Component
         $this->superAdminAddService = SuperAdminAddService::getInstance();
     }
 
+    public function updated($propertyName)
+    {
+        $this->superAdminAddService->updated($this, $propertyName);
+    }
 
     public function submitForm()
     {
