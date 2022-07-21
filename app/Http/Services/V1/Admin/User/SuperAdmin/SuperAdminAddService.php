@@ -29,4 +29,9 @@ class SuperAdminAddService extends Singleton
         });
     }
 
+    public function updated(Component $component, $propertyName)
+    {
+        $component->validateOnly($propertyName);
+    }
+
 }

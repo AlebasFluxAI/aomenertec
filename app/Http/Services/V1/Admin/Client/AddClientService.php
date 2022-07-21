@@ -53,7 +53,7 @@ class AddClientService extends Singleton
             'technicians' => $this->getTechnicians($component),
             'strata' => Stratum::get(),
             'client_types' => $this->getClientTypes($component),
-            "technician_id" => null,
+            "technician_id" => 1,
             'client_type_id' => 0,
             'voltage_levels' => VoltageLevel::get(),
             'subsistence_consumptions' => SubsistenceConsumption::get(), 'contribution' => true,
@@ -399,9 +399,6 @@ class AddClientService extends Singleton
             'code' => $code,
             'phone' => $component->phone,
             'identification' => $component->identification,
-            'latitude' => $component->latitude,
-            'longitude' => $component->longitude,
-            'direction' => $component->direction,
             'network_topology' => $component->network_topology,
             'active' => $component->active,
             'contribution' => $component->contribution,
@@ -470,7 +467,14 @@ class AddClientService extends Singleton
                 "email" => $component->email,
                 "phone" => $component->phone,
                 "network_operator_id" => $component->network_operator_id,
-                "identification" => $component->identification
+                "identification" => $component->identification,
+                'address_details' => $component->addressDetails,
+                'latitude' => $component->latitude,
+                'longitude' => $component->longitude,
+                'billing_name' => $component->billing_name,
+                'billing_address' => $component->billing_address,
+                'person_type' => $component->person_type,
+                'identification_type' => $component->identification_type,
             ]
         );
 
