@@ -44,7 +44,7 @@ class PqrObserver
         if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
             $pqr->support_id = $this->getSupport();
         }
-    
+
 
     }
 
@@ -71,6 +71,14 @@ class PqrObserver
                 "user_id" => $user->id,
                 "status" => PqrUser::STATUS_ENABLED
             ]);
+        }
+        if ($pqr->client && $supervisors = $pqr->client->supervisors) {
+            foreach ($supervisors as $supervisor) {
+                $pqr->pqrUsers()->create([
+                    "user_id" => $supervisor->user_id,
+                    "status" => PqrUser::STATUS_ENABLED
+                ]);
+            }
         }
     }
 

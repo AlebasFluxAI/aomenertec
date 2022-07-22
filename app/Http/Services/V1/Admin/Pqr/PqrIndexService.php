@@ -14,6 +14,7 @@ use App\Models\V1\NetworkOperator;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrUser;
 use App\Models\V1\SuperAdmin;
+use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,6 +45,7 @@ class PqrIndexService extends Singleton
                 ->pluck("id");
             return Pqr::whereIn("technician_id", $techniciansUserId)->paginate();
         }
+
         $user = Auth::user();
         return Pqr::whereIn("id", $user->pqrUsers()->pluck("pqr_id"))->paginate();
     }
