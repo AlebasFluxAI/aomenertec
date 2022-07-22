@@ -85,22 +85,32 @@
                                                                       "table_actions"=>[
                                                                                         "customs"=>[
                                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"v1.admin.client.detail.client",
-                                                                                                            "binding"=>"client"
-                                                                                                      ],
-                                                                                                                "icon"=>"fas fa-search",
-                                                                                                                "tooltip_title"=>"Detalles",
-                                                                                                        ],
-                                                                                                        [
-                                                                                                                "redirect"=>[
-                                                                                                                        "route"=>"v1.admin.client.edit.client",
-                                                                                                                        "binding"=>"client"
-                                                                                                                  ],
-                                                                                                                "icon"=>"fas fa-pencil",
-                                                                                                                "tooltip_title"=>"Editar",
-                                                                                                        ],
-                                                                                                        [
+                                                                                                            "redirect"=>[
+                                                                                                                    "route"=>"v1.admin.client.detail.client",
+                                                                                                                    "binding"=>"client"
+                                                                                                              ],
+                                                                                                                        "icon"=>"fas fa-search",
+                                                                                                                        "tooltip_title"=>"Detalles",
+                                                                                                                ],
+                                                                                                                [
+                                                                                                                        "redirect"=>[
+                                                                                                                                "route"=>"v1.admin.client.edit.client",
+                                                                                                                                "binding"=>"client"
+                                                                                                                          ],
+                                                                                                                        "icon"=>"fas fa-pencil",
+                                                                                                                        "tooltip_title"=>"Editar",
+                                                                                                                ],
+                                                                                                                 [
+                                                                                                                    "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
+                                                                                                                        "function"=>"settings",
+                                                                                                                        "tooltip_title"=>"Configuración de equipos",
+                                                                                                                        "icon"=>"fas fa-gear",
+                                                                                                                        "redirect"=>[
+                                                                                                                                "route"=>"v1.admin.client.settings",
+                                                                                                                                "binding"=>"client"
+                                                                                                                          ],
+                                                                                                                   ],
+                                                                                                             [
                                                                                                             "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
                                                                                                             "redirect"=>[
                                                                                                                         "route"=>"v1.admin.client.monitoring",
