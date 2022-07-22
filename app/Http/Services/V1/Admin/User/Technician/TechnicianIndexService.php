@@ -49,7 +49,7 @@ class TechnicianIndexService extends Singleton
     {
         $technician = Technician::find($technicianId);
         $technician->user->enabled = false;
-        foreach ($technician->equipments()->get() as $type){
+        foreach ($technician->equipments()->get() as $type) {
             $type->technician_id = "";
             $type->save();
         }
@@ -65,7 +65,7 @@ class TechnicianIndexService extends Singleton
         $technician->push();
         if (!$technician->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
 
         }
@@ -78,7 +78,7 @@ class TechnicianIndexService extends Singleton
 
     public function getEnabledAuxTechnician(Component $component, $modelId)
     {
-        if (!Technician::find($modelId)->enabled){
+        if (!Technician::find($modelId)->enabled) {
             return false;
         }
         return true;
@@ -96,6 +96,11 @@ class TechnicianIndexService extends Singleton
 
     public function conditionalLinkClientsTechnician(Component $component, $modelId)
     {
-        return !Technician::find($modelId)->networkOperator->clients()->exists();
+        try {
+            return !Technician::find($modelId)->networkOperator->clients()->exists();
+        } catch (\Throwable) {
+            return true;
+        }
+
     }
 }

@@ -34,7 +34,7 @@ class AddPqrNetworkOperatorService extends Singleton
             'contact_email' => $component->model->email,
             'contact_phone' => $component->model->phone,
             'contact_identification' => $component->model->identification,
-            "supervisor_id" => $component->model->id,
+            "network_operator_id" => $component->model->id,
         ];
     }
 

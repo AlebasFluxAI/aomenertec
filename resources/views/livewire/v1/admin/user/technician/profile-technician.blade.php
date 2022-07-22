@@ -77,31 +77,22 @@
                                                                        ],
                                                                       "table_actions"=>[
                                                                                     "customs"=>[
-                                                                                                        [
-
-                                                                                                                "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
-                                                                                                                "function"=>"details",
+    [
+                                                                                                    "redirect"=>[
+                                                                                                            "route"=>"v1.admin.client.detail.client",
+                                                                                                            "binding"=>"client"
+                                                                                                      ],
                                                                                                                 "icon"=>"fas fa-search",
-                                                                                                                "tooltip_title"=>"Detalles"
+                                                                                                                "tooltip_title"=>"Detalles",
                                                                                                         ],
                                                                                                         [
-
-                                                                                                                "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_EDIT],
-                                                                                                                 "function"=>"edit",
+                                                                                                                "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_EDIT],
+                                                                                                                "redirect"=>[
+                                                                                                                        "route"=>"v1.admin.client.edit.client",
+                                                                                                                        "binding"=>"client"
+                                                                                                                  ],
                                                                                                                 "icon"=>"fas fa-pencil",
-                                                                                                                "tooltip_title"=>"Editar"
-                                                                                                        ],
-                                                                                                        [
-                                                                                                                 "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_DELETE],
-                                                                                                                "function"=>"delete",
-                                                                                                                "icon"=>"fas fa-trash",
-                                                                                                                "tooltip_title"=>"Eliminar"
-                                                                                                        ],
-                                                                                                        [
-                                                                                                            "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
-                                                                                                            "function"=>"settings",
-                                                                                                            "tooltip_title"=>"Configuración de equipos",
-                                                                                                            "icon"=>"fas fa-gear"
+                                                                                                                "tooltip_title"=>"Editar",
                                                                                                         ],
                                                                                                         [
                                                                                                             "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
