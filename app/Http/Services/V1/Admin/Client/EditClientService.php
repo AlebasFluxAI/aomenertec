@@ -69,7 +69,7 @@ class EditClientService extends Singleton
             'subsistence_consumptions' => SubsistenceConsumption::get(),
             "identification_type" => Client::IDENTIFICATION_TYPE_CC,
             "person_type" => Client::PERSON_TYPE_NATURAL,
-            "identification_types" => $this->identificationTypes($c),
+            "identification_types" => $this->identificationTypes(),
             'person_types' => [
                 ["key" => "Persona natural", "value" => Client::PERSON_TYPE_NATURAL,],
                 ["key" => "Persona juridica", "value" => Client::PERSON_TYPE_JURIDICAL,]
@@ -97,7 +97,6 @@ class EditClientService extends Singleton
 
         return $admin->clientTypesAsKeyValue();
     }
-
 
 
     public function updatedNetworkOperator(Component $component)
