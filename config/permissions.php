@@ -153,6 +153,11 @@ return [
     ],
     // Operador de red
     NetworkOperator::class => [
+        Permissions::EQUIPMENT_CREATE,
+        Permissions::EQUIPMENT_EDIT,
+        Permissions::EQUIPMENT_DELETE,
+        Permissions::EQUIPMENT_SHOW,
+        
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
         Permissions::TECHNICIAN_DELETE,

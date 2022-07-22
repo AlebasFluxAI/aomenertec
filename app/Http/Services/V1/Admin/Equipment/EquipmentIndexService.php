@@ -41,8 +41,20 @@ class EquipmentIndexService extends Singleton
 
     public function getData(Component $component)
     {
+        $model = User::getUserModel();
         if ($component->filter) {
+
+            if ($model::class == NetworkOperator::class) {
+                return Equipment::whereNetworkOperatorId($model->id)
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
+                    ->paginate(15);
+            }
             return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+        }
+
+        if ($model::class == NetworkOperator::class) {
+            return Equipment::whereNetworkOperatorId($model->id)
+                ->paginate(15);
         }
         return Equipment::paginate(15);
     }
