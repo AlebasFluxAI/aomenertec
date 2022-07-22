@@ -10,6 +10,7 @@ use App\Models\V1\Admin;
 use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrUser;
 use App\Models\V1\SuperAdmin;
@@ -32,6 +33,11 @@ class PqrIndexService extends Singleton
         $model = Menu::getUserModel();
         if ($model::class == SuperAdmin::class) {
             return Pqr::paginate();
+        }
+        if ($model::class == NetworkOperator::class) {
+            $techniciansUserId = Technician::whereNetworkOperatorId($model->id)
+                ->pluck("id");
+            return Pqr::whereIn("technician_id", $techniciansUserId)->paginate();
         }
         if ($model::class == Admin::class) {
             $techniciansUserId = Technician::whereIn("network_operator_id", $model->networkOperators()->pluck("id"))
