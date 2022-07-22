@@ -33,7 +33,7 @@ class AddPqrSupervisorService extends Singleton
             'contact_email' => $component->model->email,
             'contact_phone' => $component->model->phone,
             'contact_identification' => $component->model->identification,
-            "network_operator_id" => $component->model->id,
+            "supervisor_id" => $component->model->id,
             "level" => Pqr::PQR_LEVEL_2,
         ];
     }

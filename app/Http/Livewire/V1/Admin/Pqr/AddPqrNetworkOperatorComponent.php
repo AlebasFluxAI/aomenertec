@@ -8,6 +8,7 @@ use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertIndexService;
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrGuestClientService;
+use App\Http\Services\V1\Admin\Pqr\AddPqrNetworkOperatorService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrSupervisorService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrSupportService;
 use App\Models\Traits\PassTrait;
@@ -49,7 +50,7 @@ class AddPqrNetworkOperatorComponent extends Component
 
     public function __construct($id = null)
     {
-        $this->addPqrSupportService = AddPqrSupervisorService::getInstance();
+        $this->addPqrSupportService = AddPqrNetworkOperatorService::getInstance();
         parent::__construct($id);
     }
 
