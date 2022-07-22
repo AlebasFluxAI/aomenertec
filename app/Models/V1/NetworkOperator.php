@@ -83,6 +83,18 @@ class NetworkOperator extends Model
 
                     ],
                     [
+                        "title" => "Equipos",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Equipos",
+                                "route" => "administrar.v1.equipos.listado",
+                                "submenu" => [],
+                            ],
+
+                        ]
+                    ],
+                    [
                         "title" => "PQRS",
                         "route" => "administrar.v1.peticiones.listado",
                         "submenu" => [
@@ -181,6 +193,23 @@ class NetworkOperator extends Model
                         "value" => $equipment->id,
                     ];
                 }))->toArray()
+        ));
+    }
+
+    public function equipmentTypesAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el tipo de equipo ...",
+                "value" => null
+            ]],
+            ($this->admin->adminEquipmentTypes()->with("equipmentType")->get()->map(function ($equipmentType) {
+                return [
+                    "key" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : "") . "- "
+                        . ucfirst(strtolower(($equipmentType->equipmentType ? $equipmentType->equipmentType->type : ""))),
+                    "value" => ($equipmentType->equipmentType ? $equipmentType->equipmentType->id : ""),
+                ];
+            }))->toArray()
         ));
     }
 

@@ -13,6 +13,10 @@ class EquipmentObserver
             if ($admin = Auth::user()->admin) {
                 $equipment->admin_id = $admin->id;
             }
+            if ($networkOperator = Auth::user()->networkOperator) {
+                $equipment->network_operator_id = $networkOperator->id;
+                $equipment->admin_id = $networkOperator->admin_id;
+            }
         }
     }
 }
