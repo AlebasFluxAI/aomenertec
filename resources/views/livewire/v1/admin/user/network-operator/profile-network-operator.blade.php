@@ -12,7 +12,7 @@
 
     {{----------------------------------Formulario--------------------------}}
     @include("partials.v1.tab.v1.tab",[
-
+                           "wire_ignore"=>true,
                            "tab_titles"=>[
                                                [
                                                    "title"=>"Mis datos",
@@ -34,6 +34,9 @@
                                                    "title"=>"Mis tecnicos",
 
                                                ],
+                                               [
+                                                    "title"=>"Precios"
+                                               ]
 
                                           ],
 
@@ -184,6 +187,15 @@
                                                                        "view_header"=>false,
                                                                        "col_filter"=>false,
                                                                        "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.user.network-operator.price-configuration-network-operator",
+                                                   "view_values"=>[
+                                                                       "data"=>\App\Models\V1\Stratum::get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "col_filter"=>false,
                                                                   ]
                                                ],
 

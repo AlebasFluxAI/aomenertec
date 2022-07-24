@@ -15,6 +15,25 @@ use Livewire\Component;
 trait AddUserFormTrait
 {
 
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
+    public $model;
+    public $name;
+    public $last_name;
+    public $email;
+    public $address;
+    public $message;
+    public $phone;
+    public $identification;
+    public $person_types;
+    public $identification_types;
+    public $admins;
+    public $admin_id;
+    public $network_operators;
+    public $network_operator_id;
+
     private function identificationTypes($person_type)
     {
         if ($person_type == User::PERSON_TYPE_NATURAL) {
@@ -48,14 +67,15 @@ trait AddUserFormTrait
                 ],
                 [
                     "key" => User::IDENTIFICATION_TYPE_OTHER,
-                    "value" =>  "OTRO"
+                    "value" => "OTRO"
                 ],
 
             ];
         }
     }
 
-    public function updatedLatitude(Component $component){
+    public function updatedLatitude(Component $component)
+    {
         $latlng = "{$component->latitude},{$component->longitude}";
         $heremap = null;
         $response = Http::get('https://revgeocode.search.hereapi.com/v1/revgeocode', [
@@ -79,6 +99,10 @@ trait AddUserFormTrait
 
 
         try {
+            if (!array_key_exists(0, $map->items)) {
+                $component->addError('address_error', "No se encuentra informacion de a ubicacion seleccionada");
+                return;
+            }
             $map = $map->items[0];
             $hereAddress = $map->address;
 
@@ -96,7 +120,8 @@ trait AddUserFormTrait
         }
     }
 
-    public function updatedLongitude(Component $component){
+    public function updatedLongitude(Component $component)
+    {
         $latlng = "{$component->latitude},{$component->longitude}";
         $heremap = null;
         $response = Http::get('https://revgeocode.search.hereapi.com/v1/revgeocode', [
@@ -145,11 +170,11 @@ trait AddUserFormTrait
                 User::PERSON_TYPE_JURIDICAL => [
                     [
                         "key" => User::IDENTIFICATION_TYPE_NIT,
-                        "value" =>  User::IDENTIFICATION_TYPE_NIT
+                        "value" => User::IDENTIFICATION_TYPE_NIT
                     ],
                     [
                         "key" => User::IDENTIFICATION_TYPE_OTHER,
-                        "value" =>  "OTRO"
+                        "value" => "OTRO"
                     ],
                 ],
                 User::PERSON_TYPE_NATURAL => [
@@ -176,13 +201,13 @@ trait AddUserFormTrait
                 ],
                 default => []
             };
-            if ($value == User::PERSON_TYPE_JURIDICAL){
+            if ($value == User::PERSON_TYPE_JURIDICAL) {
                 $component->model['identification_type'] = User::IDENTIFICATION_TYPE_NIT;
             } else {
                 $component->model['identification_type'] = User::IDENTIFICATION_TYPE_CC;
             }
-        } elseif ($key == "name" || $key == "last_name"){
-            $component->model['billing_name'] = $component->model['name']. " " .$component->model['last_name'];
+        } elseif ($key == "name" || $key == "last_name") {
+            $component->model['billing_name'] = $component->model['name'] . " " . $component->model['last_name'];
         }
     }
 

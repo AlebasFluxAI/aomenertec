@@ -28,6 +28,8 @@ return [
         Permissions::NETWORK_OPERATOR_SHOW,
         Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT,
         Permissions::NETWORK_OPERATOR_ENABLED,
+        Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
+
 
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
@@ -102,6 +104,7 @@ return [
         Permissions::NETWORK_OPERATOR_SHOW,
         Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT,
         Permissions::NETWORK_OPERATOR_ENABLED,
+        Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
 
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
@@ -153,11 +156,15 @@ return [
     ],
     // Operador de red
     NetworkOperator::class => [
+
+
+        Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
+
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
         Permissions::EQUIPMENT_DELETE,
         Permissions::EQUIPMENT_SHOW,
-        
+
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
         Permissions::TECHNICIAN_DELETE,
@@ -195,6 +202,7 @@ return [
         Permissions::PQR_REPLY,
         Permissions::PQR_CREATE_NETWORK_OPERATOR,
         Permissions::PQR_CLOSE,
+
     ],
     // Tecnico
     Technician::class => [
@@ -222,6 +230,7 @@ return [
     Seller::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::SELLER_MANAGE_PURCHASE
     ],
     // Supervisor
     Supervisor::class => [

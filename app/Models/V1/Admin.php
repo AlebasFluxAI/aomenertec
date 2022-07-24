@@ -49,7 +49,6 @@ class Admin extends Model
     use PermissionTrait;
 
 
-
     public static function getRole()
     {
         return "administrator";

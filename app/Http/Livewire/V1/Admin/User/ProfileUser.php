@@ -156,6 +156,40 @@ class ProfileUser extends Component
     }
 
 
+    public function changeSubsidy($event, $stratum_id)
+    {
+        return $this->profileUserService->getSubsidy($this, $event, $stratum_id);
+
+    }
+
+    public function changeCredit($event, $stratum_id)
+    {
+        return $this->profileUserService->changeCredit($this, $event, $stratum_id);
+
+    }
+
+    public function changeValue($event, $stratum_id)
+    {
+        
+        return $this->profileUserService->changeValue($this, $event, $stratum_id);
+    }
+
+    public function getSubsidy($stratum_id)
+    {
+        return $this->profileUserService->getSubsidy($this, $stratum_id);
+    }
+
+    public function getCredit($stratum_id)
+    {
+        return $this->profileUserService->getCredit($this, $stratum_id);
+    }
+
+    public function getValue($stratum_id)
+    {
+        return $this->profileUserService->getValue($this, $stratum_id);
+    }
+
+
     public function render()
     {
         return view($this->profileUserService->getViewName())

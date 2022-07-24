@@ -39,7 +39,8 @@
                             </li>
                         </ul>
                         <div class="mt-4 mb-4">
-                            @auth                        @include("layouts.menu.v1.profile")
+                            @auth
+                                @include("layouts.menu.v1.profile")
 
                             @endauth
                         </div>
@@ -104,8 +105,12 @@
 
                     </form>
                 </div>
-    </div>
-    </div>
-    </section>
+                @include("partials.v1.home_card",[
+                             "tittle"=>"Recarga online",
+                             "redirect"=>"guest.add-purchase",
+                             "image_alt"=>"Gestión de proyectos energéticos y de telecomunicaciones",
+                             "image_url"=>"assets/images/icons/icons-aom-03.svg"
+                             ])
+            </section>
     </div>
 @endsection

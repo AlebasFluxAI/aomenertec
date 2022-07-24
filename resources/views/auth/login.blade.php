@@ -26,104 +26,45 @@
                     </div>
                 </div>
             </div>
+            <br>
             <div class="container " data-aos="fade-up">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-8">
                         <div class="row d-flex mt-2 justify-content-center">
-                            <h5 class="text-center p3"><b><span class="naranja">Post</span><span
-                                        class="azul">pago</span></b></h5>
-                            <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2 ">
-                                <div class="col-6">
-                                    <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
-                                             src="assets/images/icons/icons-aom-03.svg">
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-md-10">
-                                    <h3 class="header tituloServiciosHome">
-                                        <a href="#" class="linkServiciosHome">
-                                            Pagar factura
-                                        </a>
-                                    </h3>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
-                                <div class="col-6">
-                                    <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
-                                             src="assets/images/icons/icons-aom-10.svg">
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-md-10">
-                                    <h3 class="header tituloServiciosHome">
-                                        <a href="#" class="linkServiciosHome">
-                                            Historial consumo
-                                        </a>
-                                    </h3>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
-                                <div class="col-6">
-                                    <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
-                                             src="assets/images/icons/icons-aom-06.svg">
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-md-10">
-                                    <h3 class="header tituloServiciosHome">
-                                        <a href="#" class="linkServiciosHome">
-                                            Telemetría
-                                        </a>
-                                    </h3>
-                                </div>
-                            </div>
-                            <h5 class="text-center p3"><b><span class="naranja">Pre</span><span class="azul">pago</span></b>
-                            </h5>
-                            <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
-                                <div class="col-6">
-                                    <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
-                                             src="assets/images/icons/icons-aom-03.svg">
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-md-10">
-                                    <h3 class="header tituloServiciosHome">
-                                        <a href="#" class="linkServiciosHome">
-                                            Recarga online
-                                        </a>
-                                    </h3>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
-                                <div class="col-6">
-                                    <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
-                                             src="assets/images/icons/icons-aom-04.svg">
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-md-10">
-                                    <h3 class="header tituloServiciosHome">
-                                        <a href="#" class="linkServiciosHome">
-                                            Historial recargas
-                                        </a>
-                                    </h3>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
-                                <div class="col-6">
-                                    <a href="#" class="linkServiciosHome">
-                                        <img alt="Gestión de proyectos energéticos y de telecomunicaciones"
-                                             src="assets/images/icons/icons-aom-07.svg">
-                                    </a>
-                                </div>
-                                <div class="col-sm-12 col-md-10">
-                                    <h3 class="header tituloServiciosHome">
-                                        <a href="#" class="linkServiciosHome">
-                                            Deudas
-                                        </a>
-                                    </h3>
-                                </div>
-                            </div>
+                            @include("partials.v1.home_card",[
+                            "tittle"=>"Pagar factura",
+                            "image_alt"=>"Gestión de proyectos energéticos y de telecomunicaciones",
+                            "image_url"=>"assets/images/icons/icons-aom-03.svg"
+                            ])
+
+                            @include("partials.v1.home_card",[
+                            "tittle"=>"Historial consumo",
+                            "image_alt"=>"Gestión de proyectos energéticos y de telecomunicaciones",
+                            "image_url"=>"assets/images/icons/icons-aom-10.svg"
+                            ])
+
+                            @include("partials.v1.home_card",[
+                            "tittle"=>"Telemetría",
+                            "image_alt"=>"Gestión de proyectos energéticos y de telecomunicaciones",
+                            "image_url"=>"assets/images/icons/icons-aom-06.svg"
+                            ])
+
+                            @include("partials.v1.home_card",[
+                           "tittle"=>"Recarga online",
+                           "redirect"=>"guest.add-purchase",
+                           "image_alt"=>"Gestión de proyectos energéticos y de telecomunicaciones",
+                           "image_url"=>"assets/images/icons/icons-aom-03.svg"
+                           ])
+                            @include("partials.v1.home_card",[
+                           "tittle"=>"Historial recargas",
+                           "image_alt"=>"Gestión de proyectos energéticos y de telecomunicaciones",
+                           "image_url"=>"assets/images/icons/icons-aom-04.svg"
+                           ])
+                            @include("partials.v1.home_card",[
+                           "tittle"=>"Deudas",
+                           "image_alt"=>"Gestión de proyectos energéticos y de telecomunicaciones",
+                           "image_url"=>"assets/images/icons/icons-aom-07.svg"
+                           ])
 
                         </div>
                     </div>
