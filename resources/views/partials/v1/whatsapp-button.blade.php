@@ -1,12 +1,26 @@
-<a href="https://api.whatsapp.com/send?phone=3058139238" target="_blank"
-><i style="color: green;font-size: 4rem;
-    position:fixed;
-	width:60px;
-	height:60px;
-	bottom:40px;
-	right:40px;
-	background-color:#0C9;
-	color:#FFF;
-	border-radius:50px;
-	text-align:center;
-	box-shadow: 2px 2px 3px #999;" class="fa-brands fa-whatsapp"></i></a>
+<script>  var MessageBirdChatWidgetSettings = {
+        widgetId: 'b8f109fa-6b36-4fec-920b-0826df0fac9a',
+        initializeOnLoad: true,
+    };
+    !function () {
+        "use strict";
+        if (Boolean(document.getElementById("live-chat-widget-script"))) console.error("MessageBirdChatWidget: Snippet loaded twice on page"); else {
+            var e, t;
+            window.MessageBirdChatWidget = {}, window.MessageBirdChatWidget.queue = [];
+            for (var i = ["init", "setConfig", "toggleChat", "identify", "hide", "on", "shutdown"], n = function () {
+                var e = i[d];
+                window.MessageBirdChatWidget[e] = function () {
+                    for (var t = arguments.length, i = new Array(t), n = 0; n < t; n++) i[n] = arguments[n];
+                    window.MessageBirdChatWidget.queue.push([[e, i]])
+                }
+            }, d = 0; d < i.length; d++) n();
+            var a = (null === (e = window) || void 0 === e || null === (t = e.MessageBirdChatWidgetSettings) || void 0 === t ? void 0 : t.widgetId) || "",
+                o = function () {
+                    var e, t = document.createElement("script");
+                    t.type = "text/javascript", t.src = "https://livechat.messagebird.com/bootstrap.js?widgetId=".concat(a), t.async = !0, t.id = "live-chat-widget-script";
+                    var i = document.getElementsByTagName("script")[0];
+                    null == i || null === (e = i.parentNode) || void 0 === e || e.insertBefore(t, i)
+                };
+            "complete" === document.readyState ? o() : window.attachEvent ? window.attachEvent("onload", o) : window.addEventListener("load", o, !1)
+        }
+    }();</script>
