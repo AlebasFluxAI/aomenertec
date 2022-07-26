@@ -93,7 +93,7 @@ class WhatsAppChannel
 
         try {
             $response = $this->httpClient->post(
-                'https://conversations.messagebird.com/v1/conversations/start',
+                'https://conversations.messagebird.com/v1/send',
                 [
                     'to' => $cellphone,
                     'channelId' => config('whatsapp.channel_id'),

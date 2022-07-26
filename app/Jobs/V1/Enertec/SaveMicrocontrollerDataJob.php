@@ -38,7 +38,7 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
     public function handle()
     {
         AuxData::create([
-            "Data" => $this->raw_json,
+            "data" => $this->raw_json,
         ]);
         $this->data = MicrocontrollerData::create([
             "raw_json" => $this->raw_json,
