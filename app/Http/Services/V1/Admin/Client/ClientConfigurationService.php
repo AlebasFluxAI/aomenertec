@@ -333,11 +333,9 @@ class ClientConfigurationService extends Singleton
             $message['passMqtt'] =  $component->client_config->mqtt_password;
             $flag = true;
         }
-        if ($component->client_config->wasChanged('storage_latency')) {
+        if ($component->client_config->wasChanged('storage_latency')
+            || $component->client_config->wasChanged('storage_type_latency')) {
             $message['storage_latency'] =  $component->client_config->storage_latency;
-            $flag = true;
-        }
-        if ($component->client_config->wasChanged('storage_type_latency')) {
             $message['storage_latency_type'] =  substr($component->client_config->storage_type_latency, 0, 1);
             $flag = true;
         }
