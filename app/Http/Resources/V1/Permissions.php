@@ -76,6 +76,8 @@ class Permissions
     public const SELLER_LINK_CLIENT = "seller.link_client";
     public const SELLER_ENABLED = "seller.enabled";
     public const SELLER_MANAGE_PURCHASE = "seller.manage_purchase";
+    public const SELLER_MANAGE_PURCHASE_CREATE = "seller.manage_purchase_create";
+    public const SELLER_PURCHASE_HISTORICAL = "seller.purchase_historical";
 
     public const CLIENT_CREATE = "client.create";
     public const CLIENT_EDIT = "client.edit";

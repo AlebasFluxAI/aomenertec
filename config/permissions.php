@@ -44,6 +44,7 @@ return [
         Permissions::SELLER_DELETE,
         Permissions::SELLER_SHOW,
         Permissions::SELLER_LINK_CLIENT,
+        Permissions::SELLER_MANAGE_PURCHASE,
 
         Permissions::CLIENT_CREATE,
         Permissions::CLIENT_EDIT,
@@ -178,6 +179,7 @@ return [
         Permissions::SELLER_DELETE,
         Permissions::SELLER_SHOW,
         Permissions::SELLER_LINK_CLIENT,
+        Permissions::SELLER_MANAGE_PURCHASE,
 
         Permissions::CLIENT_CREATE,
         Permissions::CLIENT_EDIT,
@@ -230,7 +232,8 @@ return [
     Seller::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
-        Permissions::SELLER_MANAGE_PURCHASE
+        Permissions::SELLER_MANAGE_PURCHASE,
+        Permissions::SELLER_MANAGE_PURCHASE_CREATE,
     ],
     // Supervisor
     Supervisor::class => [

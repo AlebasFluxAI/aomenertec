@@ -42,9 +42,10 @@ class CreateClientRecharges extends Migration
             $table->double("kwh_price")->default(0.0);
             $table->double("kwh_credit")->default(0.0);
             $table->double("kwh_quantity")->default(0.0);
+            $table->double("kwh_subsidy")->default(0.0);
             $table->double("total")->default(0.0);
             $table->boolean("notified")->default(false);
-            
+            $table->string("reference");
             AuditFieldMigration::auditoryField($table);
             $table->softDeletes();
             $table->timestamps();

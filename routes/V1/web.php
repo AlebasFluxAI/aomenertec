@@ -192,8 +192,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                             ->name("administrar.v1.usuarios.vendedores.agregar_clientes")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SELLER_LINK_CLIENT));
 
-                        Route::get('recargas/{seller}', Livewire\V1\Admin\Purchase\PurchaseCreateComponent::class)
-                            ->name("administrar.v1.usuarios.vendedores.recargas")
+                        Route::get('{seller}/recargas/crear', Livewire\V1\Admin\Purchase\PurchaseCreateComponent::class)
+                            ->name("administrar.v1.usuarios.vendedores.recargas.crear")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SELLER_MANAGE_PURCHASE_CREATE));
+
+                        Route::get('{seller}/recargas/historico', Livewire\V1\Admin\Purchase\PurchaseHistoricalComponent::class)
+                            ->name("administrar.v1.usuarios.vendedores.recargas.historico")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SELLER_MANAGE_PURCHASE));
                     });
 

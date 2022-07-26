@@ -129,44 +129,14 @@
 
                                                                   ]
                                                ],
-                                               [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                [
+                                                  "view_name"=>"livewire.v1.admin.user.seller.index-seller",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.detalles",
-                                                                                                            "binding"=>"seller"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search",
-                                                                                                    "tooltip_title"=>"Detalles",
-                                                                                            ],
-                                                                                            [
-                                                                                                "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.editar",
-                                                                                                            "binding"=>"seller"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil",
-                                                                                                    "tooltip_title"=>"Editar",
-                                                                                            ],
-                                                                                            [
-                                                                                                "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.agregar_clientes",
-                                                                                                            "binding"=>"seller"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-users",
-                                                                                                    "tooltip_title"=>"Asociar clientes",
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows" => $model->sellers
-
+                                                                       "data"=>$model->sellers()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
                                                                   ]
                                                ],
                                                [
@@ -175,6 +145,7 @@
                                                                        "data"=>$model->supervisors()->get(),
                                                                        "table_class_container"=>"",
                                                                        "view_header"=>false,
+                                                                       "is_filtered"=>false,
                                                                        "col_filter"=>false,
                                                                        "network_operator_conditional_delete"=>"conditionalDeleteSupervisor",
                                                                   ]
@@ -185,6 +156,7 @@
                                                                        "data"=>$model->technicians()->get(),
                                                                        "table_class_container"=>"",
                                                                        "view_header"=>false,
+                                                                       "is_filtered"=>false,
                                                                        "col_filter"=>false,
                                                                        "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
                                                                   ]

@@ -178,10 +178,27 @@
                                 </p>
 
                                 <div class="text-right">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                        <i class="fas fa-check"></i>
-                                        Confirmar
-                                    </button>
+                                    <form action="https://checkout.wompi.co/p/"
+                                          method="GET">
+                                        <!-- OBLIGATORIOS -->
+                                        <input type="hidden" name="public-key"
+                                               value="pub_test_knPE3DSMREXJQgxqle2QgpGDEs7x3wJT"/>
+                                        <input type="hidden" name="currency" value="COP"/>
+                                        <input type="hidden" name="amount-in-cents" value="{{$total."00"}}"/>
+                                        <input type="hidden" name="reference" value="{{$reference}}"/>
+                                        <input type="hidden" name="customer-data.email" value="{{$client->email}}"/>
+                                        <input type="hidden" name="customer-data.full-name"
+                                               value="{{$client->name." ".$client->last_name}}"/>
+                                        <input type="hidden" name="customer-data.phone-number"
+                                               value="{{$client->phone}}"/>
+                                        <input type="hidden" name="customer-data.phone-number-prefix"
+                                               value="+57"/>
+                                        <input type="hidden" name="customer-data.legal-id"
+                                               value="{{$client->identification}}"/>
+                                        <input type="hidden" name="customer-data.legal-type"
+                                               value="{{$client->identification_type}}"/>
+                                        <button wire:click="confirmRecharge" type="submit">Pagar recarga</button>
+                                    </form>
                                 </div>
                             </div>
 

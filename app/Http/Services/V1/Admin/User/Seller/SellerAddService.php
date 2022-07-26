@@ -4,10 +4,12 @@ namespace App\Http\Services\V1\Admin\User\Seller;
 
 use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
+use App\Models\V1\Technician;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,90 +17,57 @@ use Livewire\Component;
 
 class SellerAddService extends Singleton
 {
+    use AddUserFormTrait;
+
     public function mount(Component $component)
     {
-        $component->form_title = "Informacion del vendedor";
-        $component->fill($this->getMountData());
-    }
-
-    private function getMountData()
-    {
-        $user = Auth::user();
-        if ($user->hasRole(User::TYPE_NETWORK_OPERATOR)) {
-            return [
-                'admins' => [],
-                "networkOperators" => [],
-                "network_operator_id" => $user->networkOperator->id,
-                'picked' => false
-            ];
-        }
-        $model = Menu::getUserModel();
-
-        return [
-            'network_operator_id' => null,
-            'admins' => [],
-            "network_operators" => $model->networkOperatorsAsKeyValue(),
-            'picked' => false
-        ];
-    }
-
-    public function updatedNetworkOperator(Component $component)
-    {
-        $component->picked_network_operator = false;
-        $component->message_network_operator = "No hay operador de red registrado con esta identificación";
-        if ($component->network_operator != "") {
-            $component->networkOperators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
-                ->orWhere("name", "like", '%' . $component->network_operator . "%")
-                ->take(3)->get();
-        }
-    }
-
-    public function assignNetworkOperator(Component $component, $network_operator)
-    {
-        $obj = json_decode($network_operator);
-        $component->network_operator = $obj->id . "-" . $obj->name . "-" . $obj->identification;
-        $component->network_operator_id = $obj->id;
-        $component->picked = true;
-    }
-
-    public function setNetworkOperatorId(Component $component, $admin)
-    {
-        $component->picked = true;
-        $admin = json_decode($admin);
-        $component->network_operator_id = $admin->id;
-        $networkOperator = NetworkOperator::find($component->network_operator_id);
-        $component->network_operator = $networkOperator->id . "-" . $networkOperator->name . "-" . $networkOperator->identification;
+        $component->fill([
+            "form_tittle" => "Datos del tecnico",
+            "decodedAddress" => "",
+            "identification_types" => $this->identificationTypes(User::PERSON_TYPE_NATURAL),
+            'person_types' => [
+                ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
+                ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
+            ],
+            "admins" => (Auth::user()->superAdmin) ? Auth::user()->superAdmin->adminsAsKeyValue() : ((Auth::user()->admin) ? [] : []),
+            "admin_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? Auth::user()->admin->id : Auth::user()->networkOperator->admin->id),
+            "network_operators" => (Auth::user()->superAdmin) ? [] : ((Auth::user()->admin) ? Auth::user()->admin->networkOperatorsAsKeyValue() : []),
+            "model.network_operator_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? "" : Auth::user()->networkOperator->id),
+            'model.person_type' => User::PERSON_TYPE_NATURAL,
+            "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
+            "latitude" => 4.134750,
+            "longitude" => -73.637094,
+            "model.billing_name" => "",
+            "model.last_name" => "",
+            "model.name" => "",
+        ]);
     }
 
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
-            $component->validate();
-
-            $seller = Seller::create($this->mapper($component));
-            $user = User::create(array_merge($this->mapper($component), [
-                "password" => bcrypt($component->password),
-                "type" => User::TYPE_SELLER
-            ]));
+            $component->model['latitude'] = $component->latitude;
+            $component->model['longitude'] = $component->longitude;
+            $seller = Seller::create($component->model);
+            $user = User::create($this->mapper($component));
             $seller->update([
                 "user_id" => $user->id
             ]);
-
             $component->redirectRoute("administrar.v1.usuarios.vendedores.detalles", ["seller" => $seller->id]);
         });
+
     }
+
 
     private function mapper($component)
     {
         return [
-            "name" => $component->name,
-            "last_name" => $component->last_name,
-            "email" => $component->email,
-            "phone" => $component->phone,
-            "network_operator_id" => $component->network_operator_id,
-            "identification" => $component->identification,
-            "latitude" => $component->latitude,
-            "longitude" => $component->longitude,
+            "name" => $component->model['name'],
+            "last_name" => $component->model['last_name'],
+            "email" => $component->model['email'],
+            "phone" => $component->model['phone'],
+            "identification" => $component->model['identification'],
+            "type" => User::TYPE_SELLER
         ];
     }
 }

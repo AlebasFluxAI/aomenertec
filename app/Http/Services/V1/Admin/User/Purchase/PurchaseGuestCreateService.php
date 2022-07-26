@@ -11,6 +11,7 @@ use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertIndexService;
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrGuestClientService;
 use App\Http\Services\V1\Admin\Pqr\PqrIndexService;
+use App\Models\Traits\CreateRechargeTrait;
 use App\Models\Traits\PassTrait;
 use App\Models\V1\AlertType;
 use App\Models\V1\ClientRecharge;
@@ -19,6 +20,8 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use App\Models\V1\Pqr;
+use App\Models\V1\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -28,59 +31,27 @@ use App\Models\V1\Client;
 class PurchaseGuestCreateService extends Singleton
 {
 
+    use CreateRechargeTrait;
 
-    public function mount(Component $component)
+
+    public function confirmRecharge(Component $component)
     {
-        $component->fill([
-            "purchase_types" => $this->getPurchaseType(),
-            "total" => 0,
-            "purchase_type" => PurchaseGuestCreateComponent::PURCHASE_TYPE_CASH,
-        ]);
+
+        DB::transaction(function () use ($component) {
+            ClientRecharge::create([
+                "client_id" => $component->client->id,
+                "network_operator_id" => $component->networkOperator->id,
+                "kwh_price" => $component->price->price,
+                "kwh_credit" => $component->price->credit,
+                "kwh_subsidy" => $component->price->subsidy,
+                "kwh_quantity" => $component->kwh_quantity,
+                "total" => $component->total,
+                "reference" => $component->reference,
+                "status" => ClientRecharge::PURCHASE_PAYMENT_STATUS_PENDING,
+            ]);
+        });
+
     }
 
-    private function getPurchaseType()
-    {
-        return [
-            [
-                "key" => "Recarga por dinero",
-                "value" => PurchaseGuestCreateComponent::PURCHASE_TYPE_CASH,
-            ],
-            [
-                "key" => "Recarga por Kwh",
-                "value" => PurchaseGuestCreateComponent::PURCHASE_TYPE_KWH,
-            ],
-        ];
-    }
-
-    public function submitForm(Component $component)
-    {
-        $client_code = $component->client_code;
-        $client_identification = $component->client_identification;
-
-        if (!$client_code and !$client_identification) {
-            $component->addError('blank_client', "Debes ingresar tu codigo o identificación");
-        }
-
-        $client = Client::whereIdentification($client_identification)->first();
-        if (!$client) {
-            $client = Client::whereCode($client_code)->first();
-        }
-        if (!$client) {
-            $component->addError('blank_client', "No se existe un cliente con los datos registrados");
-            return;
-        }
-
-        $networkOperator = $client->networkOperator;
-        if (!$networkOperator) {
-            $component->addError('blank_client', "No se encuetran tarifas contacta con soporte");
-            return;
-        }
-
-        $component->price = $networkOperator->photovoltaicPrice()
-            ->whereStratumId($client->stratum_id)
-            ->first();
-
-
-    }
 
 }

@@ -1,6 +1,7 @@
 @if($view_header??true)
     <div class="login">
-        @section("header") {{--extended app.blade--}}
+        @section("header")
+            {{--extended app.blade--}}
 
         @endsection
 
@@ -8,7 +9,7 @@
               "second_title"=>"de administradores",
               "first_title"=>"Listado"
           ])
-@endif
+        @endif
         @include("partials.v1.table_nav",
                [
                     "mt"=>2,
@@ -26,7 +27,7 @@
               ])
 
         @include("partials.v2.table.primary-table",[
-                    "class_container"=>$table_class_container??null,
+                   "class_container"=>$table_class_container??null,
                    "table_pageable"=>$table_pageable??true,
                    "table_headers"=>[
                           [
@@ -142,6 +143,6 @@
                    "table_rows"=>$data
 
                ])
-@if($view_header??true)
+        @if($view_header??true)
     </div>
 @endif

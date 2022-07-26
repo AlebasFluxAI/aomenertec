@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\PermissionTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Seller extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use PermissionTrait;
 
     protected $fillable = [
         'identification',
@@ -36,7 +38,6 @@ class Seller extends Model
     ];
 
 
-
     public static function getRole()
     {
         return User::TYPE_SELLER;
@@ -51,7 +52,7 @@ class Seller extends Model
                 [
                     [
                         "title" => "Clientes",
-                        "route" => null,
+                        "route" => "v1.admin.client.list.client",
                         "submenu" => [
                             [
                                 "title" => "Clientes",
@@ -60,6 +61,26 @@ class Seller extends Model
 
                                 ]
                             ]
+
+                        ]
+
+                    ],
+                    [
+                        "title" => "Recargas",
+                        "route" => "administrar.v1.usuarios.vendedores.recargas.crear",
+                        "binding" => "seller",
+                        "binding_value" => User::getUserModel()->id,
+                        "submenu" => [
+                            [
+                                "title" => "Recargar",
+                                "route" => "administrar.v1.usuarios.vendedores.recargas.crear",
+                                "binding" => "seller",
+                                "binding_value" => User::getUserModel()->id,
+                                "submenu" => [
+
+                                ]
+                            ]
+
                         ]
 
                     ],
@@ -90,5 +111,10 @@ class Seller extends Model
     public function clientSellers()
     {
         return $this->hasMany(ClientSeller::class);
+    }
+
+    public function clientRecharges()
+    {
+        return $this->hasMany(ClientRecharge::class);
     }
 }

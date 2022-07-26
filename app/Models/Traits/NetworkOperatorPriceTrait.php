@@ -58,8 +58,9 @@ trait NetworkOperatorPriceTrait
     {
         if ($price = PhotovoltaicPrice::whereNetworkOperatorId($component->model->id)
             ->whereStratumId($stratum_id)->first()) {
+
             $price->update([
-                "value" => $event,
+                "price" => $event,
                 "stratum_id" => $stratum_id
             ]);
 
@@ -67,7 +68,7 @@ trait NetworkOperatorPriceTrait
         } else {
             PhotovoltaicPrice::create([
                 "network_operator_id" => $component->model->id,
-                "value" => $event,
+                "price" => $event,
                 "stratum_id" => $stratum_id
             ]);
         }

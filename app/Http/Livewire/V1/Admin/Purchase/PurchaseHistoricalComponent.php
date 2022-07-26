@@ -10,64 +10,50 @@ use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrGuestClientService;
 use App\Http\Services\V1\Admin\Pqr\PqrIndexService;
 use App\Http\Services\V1\Admin\User\Purchase\PurchaseCreateService;
-use App\Models\Traits\CreateRechargeTrait;
+use App\Http\Services\V1\Admin\User\Purchase\PurchaseHistoricalService;
 use App\Models\Traits\PassTrait;
 use App\Models\V1\AlertType;
 use App\Models\V1\Equipment;
 
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
+use App\Models\V1\Seller;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use function view;
 
-class PurchaseCreateComponent extends Component
+class PurchaseHistoricalComponent extends Component
 {
 
-    private $purchaseCreateService;
+    private $purchaseHistoricalService;
+    public $model;
 
-    use CreateRechargeTrait;
-
+    use WithPagination;
 
     public function __construct($id = null)
     {
-        $this->purchaseCreateService = PurchaseCreateService::getInstance();
+        $this->purchaseHistoricalService = PurchaseHistoricalService::getInstance();
         parent::__construct($id);
     }
 
-
-    public function mount()
+    public function mount(Seller $seller)
     {
-        $this->purchaseCreateService->mount($this);
+        $this->purchaseHistoricalService->mount($this, $seller);
     }
 
-    public function updatedPurchaseType()
+    public function getData()
     {
-        $this->purchaseCreateService->updatedPurchaseType($this);
+        return $this->purchaseHistoricalService->getData($this);
     }
-
-    public function updatedKwhQuantity()
-    {
-        $this->purchaseCreateService->updatedKwhQuantity($this);
-    }
-
-    public function confirmRecharge()
-    {
-        $this->purchaseCreateService->confirmRecharge($this);
-    }
-
-    public function submitForm()
-    {
-        $this->purchaseCreateService->submitForm($this);
-
-    }
-
 
     public function render()
     {
         return view(
-            'livewire.v1.admin.purchase.create-purchase'
+            'livewire.v1.admin.purchase.historical-purchase',
+            [
+                "data" => $this->getData()
+            ]
         )->extends('layouts.v1.app');
     }
 

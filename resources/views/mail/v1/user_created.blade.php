@@ -180,7 +180,7 @@
                                                 style="font-size:0px;padding:18px 0px;word-break:break-word;">
                                                 <div
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:20px;line-height:1;text-align:left;color:#ffffff;">
-                                                    Bienvenido a <b>{{$data->getAdmin()->name}}</b></div>
+                                                    Bienvenido <b>{{$data->name}}</b></div>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -261,7 +261,8 @@
                                                     @else
                                                         <strong>Has sido registrado como "{{$data->getUserType()}}" en
                                                             la
-                                                            plataforma de {{$data->getAdmin()->name}} </strong>
+                                                            plataforma
+                                                            de {{is_object($data->getAdmin())?$data->getAdmin()->name:"Enertec"}} </strong>
                                                     @endif
                                                 </div>
                                             </td>

@@ -10,15 +10,35 @@ use Livewire\Component;
 
 class AddSeller extends Component
 {
-    use ValidateUserFormTrait;
-    use AddUserFormTrait;
-    use PassTrait;
 
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
+    public $model;
     public $message;
-    public $picked;
+    public $person_types;
+    public $identification_types;
+    public $admins;
+    public $admin_id;
     public $network_operators;
-    public $network_operator;
-    public $network_operator_id;
+
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+        'model.network_operator_id' => 'required',
+    ];
 
 
     private $sellerAddService;
@@ -34,21 +54,36 @@ class AddSeller extends Component
         $this->sellerAddService->mount($this);
     }
 
+    public function updatedModel($value, $key)
+    {
+        $this->sellerAddService->updatedModel($this, $value, $key);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->sellerAddService->updated($this, $propertyName);
+    }
+
+    public function updatedLatitude()
+    {
+        $this->sellerAddService->updatedLatitude($this);
+    }
+
+    public function updatedLongitude()
+    {
+        $this->sellerAddService->updatedLongitude($this);
+    }
+
+    public function updatedAdminId()
+    {
+        $this->sellerAddService->updatedAdminId($this);
+    }
+
     public function submitForm()
     {
         $this->sellerAddService->submitForm($this);
     }
 
-    public function updatedNetworkOperator()
-    {
-        $this->sellerAddService->updatedNetworkOperator($this);
-    }
-
-
-    public function setNetworkOperatorId($admin)
-    {
-        $this->sellerAddService->setNetworkOperatorId($this, $admin);
-    }
 
     public function render()
     {
