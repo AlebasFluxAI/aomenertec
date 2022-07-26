@@ -53,7 +53,7 @@ class AddClientService extends Singleton
             'technicians' => $this->getTechnicians($component),
             'strata' => Stratum::get(),
             'client_types' => $this->getClientTypes($component),
-            "technician_id" => 1,
+            "technician_id" => 0,
             'client_type_id' => 0,
             'voltage_levels' => VoltageLevel::get(),
             'subsistence_consumptions' => SubsistenceConsumption::get(), 'contribution' => true,
@@ -463,7 +463,7 @@ class AddClientService extends Singleton
         $supervisor = Supervisor::create(
             [
                 "name" => $component->name,
-                "last_name" => $component->last_name,
+                "last_name" => "test",
                 "email" => $component->email,
                 "phone" => $component->phone,
                 "network_operator_id" => $component->network_operator_id,

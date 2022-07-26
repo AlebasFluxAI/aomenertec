@@ -47,6 +47,15 @@ class MicrocontrollerData extends Model
         return $this->hasMany(AlertHistory::class);
     }
 
+    public function updateData(){
+        $decode = bin2hex(base64_decode($this->raw_json));
+        $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
+        $date = new Carbon();
+        $date->setTimestamp($timestamp);
+        $this->source_timestamp = $date->format("Y-m-d H:i:s");
+        $this->saveQuietly();
+    }
+
     public function miningData()
     {
         $data_frame = config('data-frame.data_frame');
@@ -57,17 +66,12 @@ class MicrocontrollerData extends Model
                 $bin = hex2bin($split);
                 if ($data['start'] >= 440) {
                     $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                    $json["data".$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                 } else {
                     if ($data['variable_name'] == "flags") {
                         $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                     } else {
                         $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                        if ($data['variable_name'] == "timestamp"){
-                            $date = new Carbon();
-                            $date->setTimestamp($json['timestamp']);
-                            $this->source_timestamp = $date->format("Y-m-d H:i:s");
-                            $this->saveQuietly();
-                        }
                     }
                 }
 
@@ -81,6 +85,12 @@ class MicrocontrollerData extends Model
             } catch (Exception $e) {
                 echo 'Excepción capturada: ', $e->getMessage(), "\n";
             }
+        }
+        $this->raw_json = $json;
+        $this->saveQuietly();
+        if ($json['import_wh'] == 0) {
+            $this->delete();
+            return;
         }
         $this->jsonEdit($json);
     }
@@ -102,24 +112,11 @@ class MicrocontrollerData extends Model
             $this->delete();
             return;
         }
-
-        $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
-
-        if ($last_data != null) {
-            $last_raw_json = json_decode($last_data->raw_json, true);
-            if ($json['import_wh'] == 0) {
-                $json['import_wh'] = $last_raw_json['import_wh'];
-                $json['import_VArh'] = $last_raw_json['import_VArh'];
-                $json['ph1_import_kvarh'] = $last_raw_json['ph1_import_kvarh'];
-                $json['ph2_import_kvarh'] = $last_raw_json['ph2_import_kvarh'];
-                $json['ph3_import_kvarh'] = $last_raw_json['ph3_import_kvarh'];
-                $json['ph1_import_kwh'] = $last_raw_json['ph1_import_kwh'];
-                $json['ph2_import_kwh'] = $last_raw_json['ph2_import_kwh'];
-                $json['ph3_import_kwh'] = $last_raw_json['ph3_import_kwh'];
-            }
-        }
-
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
+            $date = new Carbon();
+            $date->setTimestamp($json['timestamp']);
+            $this->source_timestamp = $date->format("Y-m-d H:i:s");
+            $this->saveQuietly();
             $this->delete();
             return;
         }
@@ -144,6 +141,9 @@ class MicrocontrollerData extends Model
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
+            $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+            $last_raw_json = json_decode($last_data->raw_json, true);
+
             $reference_hour = new Carbon();
             $reference_hour->setTimestamp($timestamp_unix);
             $reference_hour->subHour();
@@ -161,30 +161,32 @@ class MicrocontrollerData extends Model
             }
 
             if (empty($reference_data)) {
-                $json['kwh_interval'] = 0;
-                $json['varh_interval'] = 0;
-                $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
-                $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
-                $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
-                $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
-                $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
-                $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
-                $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-                $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
-                $json['ph1_varCh_interval'] = 0;
-                $json['ph1_varLh_interval'] = 0;
-                $json['ph2_varCh_interval'] = 0;
-                $json['ph2_varLh_interval'] = 0;
-                $json['ph3_varCh_interval'] = 0;
-                $json['ph3_varLh_interval'] = 0;
-                $json['ph1_kwh_interval'] = 0;
-                $json['ph2_kwh_interval'] = 0;
-                $json['ph3_kwh_interval'] = 0;
-                $json['ph1_varh_interval'] = 0;
-                $json['ph2_varh_interval'] = 0;
-                $json['ph3_varh_interval'] = 0;
-                $json['varCh_interval'] = 0;
-                $json['varLh_interval'] = 0;
+                if($last_data != null){
+                    $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
+                    $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
+                    $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
+                    $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
+                    $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
+                    $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
+                    $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
+                    $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
+                    $json['varCh_acumm'] = $json['varCh_acumm'] + $last_raw_json['varCh_acumm'];
+                    $json['varLh_acumm'] = $json['varLh_acumm'] + $last_raw_json['varLh_acumm'];
+                    $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $last_raw_json['ph1_varCh_acumm'];
+                    $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $last_raw_json['ph1_varLh_acumm'];
+                    $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $last_raw_json['ph2_varCh_acumm'];
+                    $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $last_raw_json['ph2_varLh_acumm'];
+                    $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $last_raw_json['ph3_varCh_acumm'];
+                    $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $last_raw_json['ph3_varLh_acumm'];
+                    $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $last_raw_json['ph1_import_kwh'];
+                    $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $last_raw_json['ph2_import_kwh'];
+                    $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $last_raw_json['ph3_import_kwh'];
+                    $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $last_raw_json['ph1_import_kvarh'];
+                    $json['ph2_varh_interval'] = $json['ph2_import_kvarhl'] - $last_raw_json['ph2_import_kvarhl'];
+                    $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $last_raw_json['ph3_import_kvarh'];
+                    $json['varCh_interval'] = $json['varCh_acumm'] - $last_raw_json['varCh_acumm'];
+                    $json['varLh_interval'] = $json['varLh_acumm'] - $last_raw_json['varLh_acumm'];
+                }
             } else {
                 $reference_data_json = json_decode($reference_data->raw_json, true);
                 $json['kwh_interval'] = $json['import_wh'] - $reference_data_json['import_wh'];
@@ -195,8 +197,8 @@ class MicrocontrollerData extends Model
                 $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
                 $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
                 $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
-                $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-                $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
+                $json['varCh_acumm'] = $json['varCh_acumm'] + $last_raw_json['varCh_acumm'];
+                $json['varLh_acumm'] = $json['varLh_acumm'] + $last_raw_json['varLh_acumm'];
                 $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $reference_data_json['ph1_varCh_acumm'];
                 $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $reference_data_json['ph1_varLh_acumm'];
                 $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $reference_data_json['ph2_varCh_acumm'];

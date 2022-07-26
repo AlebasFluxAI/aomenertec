@@ -18,7 +18,7 @@ class ClientAlertObserver
      */
     public function created(ClientAlert $clientAlert)
     {
-        $aux = User::find(2);
+        $aux = User::find(10);
         event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $aux->id));
         $aux->notify(new AlertNotification());
     }
