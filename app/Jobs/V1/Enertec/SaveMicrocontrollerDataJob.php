@@ -2,6 +2,7 @@
 
 namespace App\Jobs\V1\Enertec;
 
+use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -36,8 +37,12 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
+        AuxData::create([
+            "Data" => $this->raw_json,
+        ]);
         $this->data = MicrocontrollerData::create([
             "raw_json" => $this->raw_json,
         ]);
+
     }
 }

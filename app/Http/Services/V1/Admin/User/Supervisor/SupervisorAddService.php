@@ -72,7 +72,7 @@ class SupervisorAddService extends Singleton
             "email" => $component->model['email'],
             "phone" => $component->model['phone'],
             "identification" => $component->model['identification'],
-            "type" => User::TYPE_TECHNICIAN
+            "type" => User::TYPE_SUPERVISOR
         ];
     }
 

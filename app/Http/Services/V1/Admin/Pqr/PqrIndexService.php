@@ -8,6 +8,7 @@ use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\Traits\PqrStatusTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\AdminEquipmentType;
+use App\Models\V1\Client;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\NetworkOperator;
@@ -44,6 +45,11 @@ class PqrIndexService extends Singleton
             $techniciansUserId = Technician::whereIn("network_operator_id", $model->networkOperators()->pluck("id"))
                 ->pluck("id");
             return Pqr::whereIn("technician_id", $techniciansUserId)->paginate();
+        }
+        if ($model::class == Supervisor::class) {
+            $clientsUserId = Client::whereIn("id", $model->clientSupervisors->pluck("id"))
+                ->pluck("id");
+            return Pqr::whereIn("client_id", $clientsUserId)->paginate();
         }
 
         $user = Auth::user();
