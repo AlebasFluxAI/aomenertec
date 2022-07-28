@@ -19,6 +19,7 @@ use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 use function auth;
 use function session;
 
@@ -26,6 +27,7 @@ class ProfileUserService extends Singleton
 {
     public function mount(Component $component)
     {
+
         $component->model = $this->getModelByUser();
         if (Auth::user()->hasRole(User::TYPE_SUPER_ADMIN)) ;
         {

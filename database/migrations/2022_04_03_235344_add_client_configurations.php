@@ -41,6 +41,7 @@ class AddClientConfigurations extends Migration
                 \App\Models\V1\ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY,
                 \App\Models\V1\ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES,
             ])->default(\App\Models\V1\ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES);
+            $table->integer('billing_day');
             $table->softDeletes();
             $table->timestamps();
         });

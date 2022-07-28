@@ -19,9 +19,13 @@ class CreateHourlyMicrocontrollerDataTable extends Migration
             $table->string("month");
             $table->string("day");
             $table->string("hour");
-            $table->string("minute");
             $table->foreignId('client_id')->constrained();
             $table->unsignedBigInteger("microcontroller_data_id");
+            $table->double("interval_real_consumption")->nullable();
+            $table->double("interval_reactive_capacitive_consumption")->nullable();
+            $table->double("interval_reactive_inductive_consumption")->nullable();
+            $table->double("penalizable_reactive_capacitive_consumption")->nullable();
+            $table->double("penalizable_reactive_inductive_consumption")->nullable();
             $table->foreign("microcontroller_data_id")
                 ->references("id")
                 ->on("microcontroller_data");

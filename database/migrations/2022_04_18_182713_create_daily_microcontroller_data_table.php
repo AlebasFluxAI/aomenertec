@@ -18,14 +18,14 @@ class CreateDailyMicrocontrollerDataTable extends Migration
             $table->string("year");
             $table->string("month");
             $table->string("day");
-            $table->string("hour");
             $table->foreignId('client_id')->constrained();
-            $table->unsignedBigInteger("microcontroller_data_id");
-            $table->double("interval_real_consumption");
-            $table->double("interval_reactive_capacitive_consumption");
-            $table->double("interval_reactive_inductive_consumption");
-            $table->double("penalizable_reactive_capacitive_consumption");
-            $table->double("penalizable_reactive_inductive_consumption");
+            $table->unsignedBigInteger("microcontroller_data_id")->nullable();
+            $table->double("interval_real_consumption")->nullable();
+            $table->double("interval_reactive_capacitive_consumption")->nullable();
+            $table->double("interval_reactive_inductive_consumption")->nullable();
+            $table->double("penalizable_reactive_capacitive_consumption")->nullable();
+            $table->double("penalizable_reactive_inductive_consumption")->nullable();
+            $table->text("raw_json")->nullable();
             $table->foreign("microcontroller_data_id")
                 ->references("id")
                 ->on("microcontroller_data");
