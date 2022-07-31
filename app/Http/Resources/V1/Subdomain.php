@@ -15,7 +15,7 @@ class Subdomain
         return match (Route::input("subdomain")) {
             self::SUBDOMAIN_AOM => "Enertec",
             self::SUBDOMAIN_COENERGIA => "Coenergia",
-            self::SUBDOMAIN_VAUPES => "Gobernacion del Vaupes",
+            self::SUBDOMAIN_VAUPES => "Gobernación del Vaupes",
             default => "Enertec",
         };
     }
