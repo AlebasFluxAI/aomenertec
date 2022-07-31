@@ -29,8 +29,6 @@ class ActionByObserve
         if (($user = Auth::user())) {
             $models->updated_by = $user->id;
         }
-
-
     }
 
     /**

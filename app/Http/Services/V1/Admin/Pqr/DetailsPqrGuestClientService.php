@@ -21,7 +21,6 @@ class DetailsPqrGuestClientService extends Singleton
 
     public function mapper(Component $component)
     {
-
         return [
             'subject' => $component->subject,
             'client_code' => $component->client_code,
@@ -42,6 +41,4 @@ class DetailsPqrGuestClientService extends Singleton
         $component->model = $model;
         $messages = $component->messages;
     }
-
-
 }

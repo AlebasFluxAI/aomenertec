@@ -1291,15 +1291,16 @@ footer .copyright {
 }
 
 .serviciosHomeCaja:hover {
-    border-top-left-radius: 35px;
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 35px;
-    transition: .7s;
-    -webkit-box-shadow: 0px 0px 12px -2px rgba(99, 99, 99, 1);
-    -moz-box-shadow: 0px 0px 12px -2px rgba(99, 99, 99, 1);
-    box-shadow: 0px 0px 12px -2px rgba(99, 99, 99, 1);
 
+    transition: .7s;
+    margin: 10px;
+    background-color: #f2f2f2;
+
+}
+
+.error {
+    color: red;
+    font-weight: bold;
 }
 
 .tituloServiciosHome {

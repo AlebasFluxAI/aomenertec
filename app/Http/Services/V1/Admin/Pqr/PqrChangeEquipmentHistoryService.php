@@ -25,7 +25,5 @@ class PqrChangeEquipmentHistoryService extends Singleton
     public function mount(Component $component, $model)
     {
         $component->model = $model;
-        
     }
-
 }

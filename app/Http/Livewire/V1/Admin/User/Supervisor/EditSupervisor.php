@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 
-
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorEditService;
 use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\SuperAdmin;
@@ -11,8 +10,6 @@ use Livewire\Component;
 
 class EditSupervisor extends Component
 {
-
-
     public $decodedAddress;
     public $latitude;
     public $longitude;

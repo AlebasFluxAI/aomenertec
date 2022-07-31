@@ -28,10 +28,10 @@ class SupervisorAddService extends Singleton
                 ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
                 ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
             ],
-            "admins" => (Auth::user()->superAdmin)?Auth::user()->superAdmin->adminsAsKeyValue():((Auth::user()->admin)?[]:[]),
-            "admin_id" => (Auth::user()->superAdmin)?"":((Auth::user()->admin)?Auth::user()->admin->id:Auth::user()->networkOperator->admin->id),
-            "network_operators" => (Auth::user()->superAdmin)?[]:((Auth::user()->admin)?Auth::user()->admin->networkOperatorsAsKeyValue():[]),
-            "model.network_operator_id" => (Auth::user()->superAdmin)?"":((Auth::user()->admin)?"":Auth::user()->networkOperator->id),
+            "admins" => (Auth::user()->superAdmin) ? Auth::user()->superAdmin->adminsAsKeyValue() : ((Auth::user()->admin) ? [] : []),
+            "admin_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? Auth::user()->admin->id : Auth::user()->networkOperator->admin->id),
+            "network_operators" => (Auth::user()->superAdmin) ? [] : ((Auth::user()->admin) ? Auth::user()->admin->networkOperatorsAsKeyValue() : []),
+            "model.network_operator_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? "" : Auth::user()->networkOperator->id),
             'model.person_type' => User::PERSON_TYPE_NATURAL,
             "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
             "latitude" => 4.134750,
@@ -49,7 +49,6 @@ class SupervisorAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         DB::transaction(function () use ($component) {
             $component->model['latitude'] = $component->latitude;
             $component->model['longitude'] = $component->longitude;
@@ -75,6 +74,4 @@ class SupervisorAddService extends Singleton
             "type" => User::TYPE_SUPERVISOR
         ];
     }
-
-
 }

@@ -127,6 +127,7 @@
                 @foreach($custom_input??[] as $input)
                     @include($input["view_name"],$input["view_values"])
                 @endforeach
+                @error('address_error') <span class="error">{{ $message }}</span> @enderror
 
                 @include("partials.v1.divider_title")
 

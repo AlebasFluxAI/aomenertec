@@ -154,10 +154,12 @@ class Client extends Model
 
     public function equipments()
     {
-        return $this->belongsToMany(Equipment::class,
+        return $this->belongsToMany(
+            Equipment::class,
             'equipment_clients',
             'client_id',
-            'equipment_id')
+            'equipment_id'
+        )
             ->where("current_assigned", true)
             ->whereNull("equipment_clients.deleted_at");
     }
@@ -181,5 +183,4 @@ class Client extends Model
     {
         return $this->hasMany(ClientAlert::class);
     }
-
 }

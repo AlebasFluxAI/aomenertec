@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\User;
 use App\Http\Livewire\V1\Admin\User\EditUser;
 use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
+use App\Models\Traits\NetworkOperatorPriceTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\Client;
 use App\Models\V1\Consumer;
@@ -24,6 +25,8 @@ use function session;
 
 class ProfileUserService extends Singleton
 {
+    use NetworkOperatorPriceTrait;
+
     public function mount(Component $component)
     {
         $component->model = $this->getModelByUser();
@@ -58,20 +61,20 @@ class ProfileUserService extends Singleton
         $admin = Admin::find($modelId);
         $admin->user->enabled = false;
         $admin->push();
-        foreach ($admin->adminClientTypes()->get() as $type){
+        foreach ($admin->adminClientTypes()->get() as $type) {
             $type->delete();
         }
-        foreach ($admin->adminClientTypes()->get() as $type){
+        foreach ($admin->adminClientTypes()->get() as $type) {
             $type->delete();
         }
-        foreach ($admin->adminEquipmentTypes()->get() as $type){
+        foreach ($admin->adminEquipmentTypes()->get() as $type) {
             $type->delete();
         }
-        foreach ($admin->equipments()->get() as $type){
+        foreach ($admin->equipments()->get() as $type) {
             $type->admin_id = "";
             $type->save();
         }
-        if ($admin->configAdmin()->exists()){
+        if ($admin->configAdmin()->exists()) {
             $admin->configAdmin()->delete();
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} eliminado"]);
@@ -83,7 +86,7 @@ class ProfileUserService extends Singleton
         $operator = NetworkOperator::find($networkOperatorId);
         $operator->user->enabled = false;
         $operator->push();
-        foreach ($operator->equipments()->get() as $type){
+        foreach ($operator->equipments()->get() as $type) {
             $type->network_operator_id = "";
             $type->save();
         }
@@ -97,7 +100,6 @@ class ProfileUserService extends Singleton
     }
 
 
-
     public function conditionalMonitoring($clientId)
     {
         return !MicrocontrollerData::whereClientId($clientId)->exists();
@@ -105,9 +107,9 @@ class ProfileUserService extends Singleton
 
     public function blinkSupportPqrAvailability($supportId)
     {
-
         return Support::find($supportId)->blinkPqrAvailability();
     }
+
     public function disableAdmin(Component $component, $modelId)
     {
         $admin = Admin::find($modelId);
@@ -116,9 +118,8 @@ class ProfileUserService extends Singleton
         $admin->push();
         if (!$admin->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -129,7 +130,7 @@ class ProfileUserService extends Singleton
 
     public function getEnabledAuxAdmin(Component $component, $modelId)
     {
-        if (!Admin::find($modelId)->enabled){
+        if (!Admin::find($modelId)->enabled) {
             return false;
         }
         return true;
@@ -143,9 +144,8 @@ class ProfileUserService extends Singleton
         $operator->push();
         if (!$operator->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -156,7 +156,7 @@ class ProfileUserService extends Singleton
 
     public function getEnabledAuxNetworkOperator(Component $component, $modelId)
     {
-        if (!NetworkOperator::find($modelId)->enabled){
+        if (!NetworkOperator::find($modelId)->enabled) {
             return false;
         }
         return true;
@@ -167,7 +167,7 @@ class ProfileUserService extends Singleton
         $technician = Technician::find($technicianId);
         $technician->user->enabled = false;
         $technician->push();
-        foreach ($technician->equipments()->get() as $type){
+        foreach ($technician->equipments()->get() as $type) {
             $type->technician_id = "";
             $type->save();
         }
@@ -183,9 +183,8 @@ class ProfileUserService extends Singleton
         $technician->push();
         if (!$technician->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -196,7 +195,7 @@ class ProfileUserService extends Singleton
 
     public function getEnabledAuxTechnician(Component $component, $modelId)
     {
-        if (!Technician::find($modelId)->enabled){
+        if (!Technician::find($modelId)->enabled) {
             return false;
         }
         return true;
@@ -233,7 +232,7 @@ class ProfileUserService extends Singleton
         $supervisor->push();
         if (!$supervisor->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
         }
     }
@@ -245,7 +244,7 @@ class ProfileUserService extends Singleton
 
     public function getEnabledAuxSupervisor(Component $component, $modelId)
     {
-        if (!Supervisor::find($modelId)->enabled){
+        if (!Supervisor::find($modelId)->enabled) {
             return false;
         }
         return true;
@@ -260,5 +259,4 @@ class ProfileUserService extends Singleton
     {
         return !Supervisor::find($modelId)->networkOperator->clients()->exists();
     }
-
 }

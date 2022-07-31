@@ -19,7 +19,6 @@ class AddPqrGuestClientService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         if (!$component->client_code) {
             $component->validate();
         }
@@ -39,7 +38,6 @@ class AddPqrGuestClientService extends Singleton
 
     public function mapper(Component $component)
     {
-
         return [
             'subject' => $component->subject,
             'client_code' => $component->client_code,
@@ -68,6 +66,4 @@ class AddPqrGuestClientService extends Singleton
             "request_equipment" => false
         ]);
     }
-
-
 }

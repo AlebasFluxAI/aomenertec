@@ -6,6 +6,7 @@ use App\Models\V1\Admin;
 use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientAlertConfiguration;
+use App\Models\V1\ClientRecharge;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\EquipmentType;
@@ -29,11 +30,8 @@ use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
 use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
-use App\Observers\EquipmentClient\EquipmentClientObserver;
 use App\Observers\HereMapObserver;
-use App\Observers\HistoricalClientEquipment\HistoricalClientEquipmentObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
-use App\Observers\NotificationObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
 use App\Observers\Pqr\PqrObserver;
@@ -49,7 +47,9 @@ use App\Observers\ClientAlert\ClientAlertObserver;
 use App\Models\V1\ClientAlert;
 use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use NumberFormatter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -84,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
         //ClientAlertConfiguration::observe(ClientAlertConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
         ClientAlert::observe(ClientAlertObserver::class);
+        Admin::observe(UserAdminObserver::class);
 
         ClientAddress::observe(AddressObserver::class);
         Technician::observe(AddressObserver::class);
@@ -104,13 +105,16 @@ class AppServiceProvider extends ServiceProvider
 
 
         BillingInformation::observe(BillingInformationObserver::class);
+
         Pqr::observe(PqrObserver::class);
         Pqr::observe(PqrLogObserver::class);
-        PqrLog::observe(ActionByObserve::class);
-        HistoricalClientEquipment::observe(ActionByObserve::class);
+
 
         PqrUser::observe(PqrUserObserver::class);
-        
 
+        //ACTION AUDIT
+        PqrLog::observe(ActionByObserve::class);
+        ClientRecharge::observe(ActionByObserve::class);
+        HistoricalClientEquipment::observe(ActionByObserve::class);
     }
 }

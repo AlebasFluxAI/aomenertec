@@ -60,6 +60,15 @@
 
                                                                             "value"=>$model->phone
                                                                         ],
+                                                                        [
+                                                                            "key"=>"Mi operador de red",
+                                                                            "value"=>$model->networkOperator->name." ".$model->networkOperator->last_name
+                                                                        ],
+                                                                        [
+                                                                            "key"=>"Correo de mi operador de red",
+                                                                            "value"=>$model->networkOperator->email
+                                                                        ],
+
                                                                     ]
                                                            ],
 

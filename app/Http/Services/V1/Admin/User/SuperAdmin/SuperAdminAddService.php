@@ -11,7 +11,6 @@ use Livewire\Component;
 
 class SuperAdminAddService extends Singleton
 {
-
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
@@ -33,5 +32,4 @@ class SuperAdminAddService extends Singleton
     {
         $component->validateOnly($propertyName);
     }
-
 }

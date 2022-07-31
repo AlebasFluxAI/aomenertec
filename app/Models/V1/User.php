@@ -163,7 +163,6 @@ class User extends Authenticatable
 
     public function getAdmin()
     {
-
         if ($superAdmin = $this->superAdmin) {
             return $superAdmin;
         }
@@ -178,13 +177,12 @@ class User extends Authenticatable
             return $seller->networkOperator->admin;
         }
         if ($supervisor = $this->supervisor) {
-            
             return $supervisor->networkOperator->admin;
         }
         if ($technician = $this->technician) {
             return $technician->networkOperator->admin;
         }
-        return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
+        return "Enertec";
     }
 
     public function pqrUsers()

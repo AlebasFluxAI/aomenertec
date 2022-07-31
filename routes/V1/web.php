@@ -57,8 +57,10 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
         Route::get('/historial/{pqr}', Livewire\V1\Admin\Pqr\HistoricalPqrGuestClientComponent::class)->name("historical.details-pqr");
     });
 
+    Route::prefix("clientes/invitados/recargas")->group(function () {
+        Route::get('/crear', Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent::class)->name("guest.add-purchase");
+    });
 });
-
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
     ->middleware(['guest:' . config('fortify.guard')]);
@@ -160,6 +162,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_equipos/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\AddEquipmentNetworkOperator::class)
                             ->name("administrar.v1.usuarios.operadores.agregar_equipos")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT));
+
+                        Route::get('configurar_precios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\PriceConfigurationNetworkOperator::class)
+                            ->name("administrar.v1.usuarios.operadores.configurar_precios")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
                     });
 
 
@@ -183,6 +189,14 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_clientes/{seller}', Livewire\V1\Admin\User\Seller\AddClientSeller::class)
                             ->name("administrar.v1.usuarios.vendedores.agregar_clientes")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SELLER_LINK_CLIENT));
+
+                        Route::get('{seller}/recargas/crear', Livewire\V1\Admin\Purchase\PurchaseCreateComponent::class)
+                            ->name("administrar.v1.usuarios.vendedores.recargas.crear")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SELLER_MANAGE_PURCHASE_CREATE));
+
+                        Route::get('{seller}/recargas/historico', Livewire\V1\Admin\Purchase\PurchaseHistoricalComponent::class)
+                            ->name("administrar.v1.usuarios.vendedores.recargas.historico")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SELLER_MANAGE_PURCHASE));
                     });
 
 
@@ -365,8 +379,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get("historico_cambio_de_equipo/{pqr}", Livewire\V1\Admin\Pqr\PqrChangeEquipmentHistoryComponent::class)
                         ->name("administrar.v1.peticiones.cambio-equipo-historico")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_EQUIPMENT_CHANGE_MANAGE));
-
-
                 });
             });
         });

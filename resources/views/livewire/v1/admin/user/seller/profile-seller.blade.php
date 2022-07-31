@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
 
     @include("partials.v1.title",[
@@ -17,10 +18,15 @@
                                                    "title"=>"Mis datos",
 
                                                ],
-                                                [
+                                               [
                                                    "title"=>"Mis clientes",
 
                                                ],
+                                               [
+                                                   "title"=>"Mis ventas",
+
+                                               ],
+
 
 
                                           ],
@@ -92,6 +98,16 @@
                                                                                     ],
                                                                       "table_rows"=>$model->clients
 
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.purchase.historical-purchase",
+                                                   "view_values"=>[
+                                                                       "data"=>$model->clientRecharges()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
                                                                   ]
                                                ],
 

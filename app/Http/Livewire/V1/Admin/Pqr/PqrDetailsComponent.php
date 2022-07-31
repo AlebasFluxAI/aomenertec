@@ -23,7 +23,6 @@ use function view;
 
 class PqrDetailsComponent extends Component
 {
-
     public $model;
     private $pqrIndexService;
 
@@ -46,7 +45,8 @@ class PqrDetailsComponent extends Component
     public function render()
     {
         return view(
-            'livewire.v1.admin.pqr.details-pqr', [
+            'livewire.v1.admin.pqr.details-pqr',
+            [
                 "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');

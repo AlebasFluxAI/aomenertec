@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\User\Admin;
 use App\Http\Services\V1\Admin\User\Admin\AdminAddEquipmentService;
 use App\Models\Traits\TableRowCheckTrait;
 use App\Models\V1\Admin;
+use App\Models\V1\NetworkOperator;
 use Livewire\Component;
 
 class AddEquipmentAdmin extends Component
@@ -23,7 +24,7 @@ class AddEquipmentAdmin extends Component
     public $equipmentPicked;
     public $equipmentFilter;
     public $equipmentBachelors;
-
+    public $assignationType = Admin::class;
     private $adminAddEquipmentService;
 
     public function __construct($id = null)

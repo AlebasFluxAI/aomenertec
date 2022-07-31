@@ -9,16 +9,13 @@ class PqrLogObserver
 {
     public function created(Pqr $pqr)
     {
-
         $pqr->logs()->create([
             "activity_type" => PqrLog::ACTIVITY_TYPE_OPEN_TICKET,
         ]);
-
     }
 
     public function updated(Pqr $pqr)
     {
-
         $activityType = match ($pqr->status) {
             Pqr::STATUS_PROCESSING => PqrLog::ACTIVITY_TYPE_OPEN_TICKET,
             Pqr::STATUS_CLOSED => PqrLog::ACTIVITY_TYPE_CLOSE_TICKET,
@@ -30,6 +27,5 @@ class PqrLogObserver
         $pqr->logs()->create([
             "activity_type" => $activityType,
         ]);
-
     }
 }

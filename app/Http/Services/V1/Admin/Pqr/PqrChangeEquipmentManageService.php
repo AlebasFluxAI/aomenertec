@@ -35,7 +35,6 @@ class PqrChangeEquipmentManageService extends Singleton
         $component->equipmentToChange = Equipment::whereIn("id", $component->selectedRows)
             ->where("status", "!=", Equipment::STATUS_REPAIR_PENDING)
             ->get();
-
     }
 
     public function equipmentByType(Component $component, $equipmentType)
@@ -48,7 +47,6 @@ class PqrChangeEquipmentManageService extends Singleton
     public function confirmEquipmentChange(Component $component, $equipmentId)
     {
         DB::transaction(function () use ($component, $equipmentId) {
-
             $equipment = Equipment::find($equipmentId);
             $equipmentSelectedToChange = $component->equipmentToChange
                 ->where("equipment_type_id", $equipment->equipment_type_id)
@@ -68,7 +66,6 @@ class PqrChangeEquipmentManageService extends Singleton
                 ->whereEquipmentId($equipmentSelectedToChange)
                 ->whereCurrentAssigned(true)
                 ->exists()) {
-
                 EquipmentClient::create([
                     'client_id' => $client->id,
                     'equipment_id' => $equipmentId,
@@ -92,16 +89,16 @@ class PqrChangeEquipmentManageService extends Singleton
             $component->selectedRows = [];
             $component->model->setEquipmentChanged();
             if (!$component->equipmentToChange->count()) {
-                $component->redirectRoute("administrar.v1.peticiones.cambio-equipo-historico"
-                    , ["pqr" => $component->model->id]);
+                $component->redirectRoute("administrar.v1.peticiones.cambio-equipo-historico", ["pqr" => $component->model->id]);
             } else {
-                $component->emitTo('livewire-toast', 'show',
+                $component->emitTo(
+                    'livewire-toast',
+                    'show',
                     ['type' => 'success',
                         'message' => "Se realizo el cambio del equipo"
-                    ]);
+                    ]
+                );
             }
         });
-
     }
-
 }

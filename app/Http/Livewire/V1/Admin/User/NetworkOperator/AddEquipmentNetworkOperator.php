@@ -14,6 +14,8 @@ class AddEquipmentNetworkOperator extends Component implements AssignedEquipment
     use EquipmentAssignationTrait;
     use TableRowCheckTrait;
 
+    public $assignationType = NetworkOperator::class;
+
     public $model;
     public $equipmentRelated;
 

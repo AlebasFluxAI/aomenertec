@@ -33,7 +33,6 @@ class SuperAdminIndexService extends Singleton
         $super_admin->push();
         $super_admin->delete();
         $component->emitTo('livewire-toast', 'show', ['type' => 'info', 'message' => "Usuario eliminado"]);
-
     }
 
     public function disableSuperAdmin(Component $component, $modelId)
@@ -44,9 +43,8 @@ class SuperAdminIndexService extends Singleton
         $super_admin->push();
         if (!$super_admin->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -57,7 +55,7 @@ class SuperAdminIndexService extends Singleton
 
     public function getEnabledAuxSuperAdmin(Component $component, $modelId)
     {
-        if (!SuperAdmin::find($modelId)->enabled){
+        if (!SuperAdmin::find($modelId)->enabled) {
             return false;
         }
         return true;

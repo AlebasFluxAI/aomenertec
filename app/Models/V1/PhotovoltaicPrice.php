@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PricePhotovoltaic extends Model
+class PhotovoltaicPrice extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable=[
+    protected $fillable = [
         "network_operator_id",
-"stratum_id",
-"subsidy",
-"price",
-"credit",
+        "stratum_id",
+        "subsidy",
+        "price",
+        "credit",
     ];
 
     public function network_operator()

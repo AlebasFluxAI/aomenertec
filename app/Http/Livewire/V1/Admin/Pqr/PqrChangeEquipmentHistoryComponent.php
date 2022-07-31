@@ -27,10 +27,10 @@ use function view;
 class PqrChangeEquipmentHistoryComponent extends Component
 {
     use TableRowCheckTrait;
+    use WithPagination;
 
     public $equipmentToChange;
     private $pqrChangeEquipmentManageService;
-    use WithPagination;
 
     public function __construct($id = null)
     {
@@ -50,5 +50,4 @@ class PqrChangeEquipmentHistoryComponent extends Component
             'livewire.v1.admin.pqr.change-equipment-historical-pqr',
         )->extends('layouts.v1.app');
     }
-
 }

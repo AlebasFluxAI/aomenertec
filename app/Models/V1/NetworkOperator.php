@@ -112,6 +112,11 @@ class NetworkOperator extends Model
         ];
     }
 
+    public function photovoltaicPrice()
+    {
+        return $this->hasMany(PhotovoltaicPrice::class);
+    }
+
     public static function getHome()
     {
         return "livewire.v1.admin.user.network-operator.profile-network-operator";

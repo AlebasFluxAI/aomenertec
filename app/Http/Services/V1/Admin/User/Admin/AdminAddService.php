@@ -38,7 +38,6 @@ class AdminAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         DB::transaction(function () use ($component) {
             $component->validate([
                 'icon' => 'image|max:10240', // 1MB Max
