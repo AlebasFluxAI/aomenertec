@@ -45,11 +45,24 @@ trait PqrStatusTrait
         );
     }
 
+    public function equipmentRequest(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        if ($pqr->has_equipment_changed) {
+            return true;
+        }
+        return !($this->equipmentNotRequest($component, $id));
+    }
 
     public function equipmentNotRequest(Component $component, $id)
     {
         $pqr = Pqr::find($id);
-
+        if ($pqr->status == Pqr::STATUS_CLOSED) {
+            return true;
+        }
+        if ($pqr->has_equipment_changed) {
+            return true;
+        }
         return ($pqr->change_equipment);
     }
 }

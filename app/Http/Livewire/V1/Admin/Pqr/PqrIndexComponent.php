@@ -49,7 +49,7 @@ class PqrIndexComponent extends Component
 
     public function equipmentRequest($id)
     {
-        return !($this->pqrIndexService->equipmentNotRequest($this, $id));
+        return $this->pqrIndexService->equipmentRequest($this, $id);
     }
 
 

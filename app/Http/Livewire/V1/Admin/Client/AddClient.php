@@ -10,6 +10,7 @@ class AddClient extends Component
 {
     use ClientFormTrait;
 
+    public $model;
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
         'name' => 'required|min:8',
@@ -27,6 +28,7 @@ class AddClient extends Component
         'equipment.*.disable' => 'required|min:2',
     ];
     private $addClientService;
+
 
     public function __construct()
     {

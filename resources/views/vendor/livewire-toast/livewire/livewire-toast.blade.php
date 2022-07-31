@@ -1,7 +1,7 @@
-<div style="z-index: 1" class="fixed {{$positionCss}} @if($hideOnClick) cursor-pointer @endif"
+<div style="z-index: 100" class="fixed {{$positionCss}} @if($hideOnClick) cursor-pointer @endif"
      x-data="{show: false, timeout: null, duration: null}"
      @if($message)
-     x-init="() => { duration = @this.duration; clearTimeout(timeout); show = true;
+         x-init="() => { duration = @this.duration; clearTimeout(timeout); show = true;
                 if( duration > 0 ) {timeout = setTimeout(() => { show = false }, duration); }}"
      @endif
      @new-toast.window="duration = @this.duration; clearTimeout(timeout); show = true;
@@ -10,7 +10,7 @@
      x-show="show"
 
      @if($transition)
-     x-transition:enter="transition ease-in-out duration-300"
+         x-transition:enter="transition ease-in-out duration-300"
      x-transition:enter-start="opacity-0 transform {{$this->transitioClasses['enter_start_class']}}"
      x-transition:enter-end="opacity-100 transform {{$this->transitioClasses['enter_end_class']}}"
      x-transition:leave="transition ease-in-out duration-500"
@@ -26,8 +26,8 @@
                 <div class="text-{{$bgColorCss}} rounded-full bg-{{$textColorCss}} mr-3">
                     @include('livewire-toast::icons.' . $type)
                 </div>
-        @endif
-        <!-- message -->
+            @endif
+            <!-- message -->
             <div class="text-{{$textColorCss}} max-w-xs ">
                 {{$message}}
             </div>

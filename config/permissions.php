@@ -216,6 +216,7 @@ return [
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE,
+        Permissions::PQR_CLOSE
     ],
     // Soporte
     Support::class => [

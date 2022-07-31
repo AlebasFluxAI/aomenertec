@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\Pqr;
 
 use App\Http\Resources\V1\Menu;
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\Traits\PqrStatusTrait;
@@ -32,20 +33,29 @@ class PqrChangeEquipmentManageService extends Singleton
 
     public function updatedSelectedRows(Component $component)
     {
-        $component->equipmentToChange = Equipment::whereIn("id", $component->selectedRows)
+        $equipments = $component->equipmentToChange = Equipment::whereIn("id", $component->selectedRows)
             ->where("status", "!=", Equipment::STATUS_REPAIR_PENDING)
             ->get();
+        if (!count($equipments)) {
+            ToastEvent::launchToast($component, "show", "error", "No se encontraron equipos sustitutos");
+        }
+        return $equipments;
     }
 
     public function equipmentByType(Component $component, $equipmentType)
     {
-        return Equipment::whereEquipmentTypeId($equipmentType)
+        $equipments = Equipment::whereEquipmentTypeId($equipmentType)
             ->where("status", "!=", Equipment::STATUS_REPAIR_PENDING)
             ->get();
+        return $equipments;
     }
 
     public function confirmEquipmentChange(Component $component, $equipmentId)
     {
+        if ($component->model->has_equipment_changed) {
+            ToastEvent::launchToast($component, "show", "error", "Ya se realizo un cambio usando este PQR");
+            return;
+        }
         DB::transaction(function () use ($component, $equipmentId) {
             $equipment = Equipment::find($equipmentId);
             $equipmentSelectedToChange = $component->equipmentToChange
