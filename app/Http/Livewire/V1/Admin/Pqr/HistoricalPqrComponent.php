@@ -24,7 +24,6 @@ use function view;
 
 class HistoricalPqrComponent extends Component
 {
-
     private $historicalPqrService;
 
     public function __construct($id = null)
