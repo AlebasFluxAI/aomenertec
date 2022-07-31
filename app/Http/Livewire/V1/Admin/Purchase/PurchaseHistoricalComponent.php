@@ -25,11 +25,10 @@ use function view;
 
 class PurchaseHistoricalComponent extends Component
 {
+    use WithPagination;
 
     private $purchaseHistoricalService;
     public $model;
-
-    use WithPagination;
 
     public function __construct($id = null)
     {
@@ -56,6 +55,4 @@ class PurchaseHistoricalComponent extends Component
             ]
         )->extends('layouts.v1.app');
     }
-
-
 }

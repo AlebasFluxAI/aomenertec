@@ -60,8 +60,6 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::prefix("clientes/invitados/recargas")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent::class)->name("guest.add-purchase");
     });
-
-
 });
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
@@ -249,8 +247,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                         Route::get('agregar_equipos/{technician}', Livewire\V1\Admin\User\Technician\AddEquipmentTechnician::class)
                             ->name("administrar.v1.usuarios.tecnicos.agregar_equipos")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::TECHNICIAN_LINK_EQUIPMENT));
-
-
                     });
 
 
@@ -383,8 +379,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
                     Route::get("historico_cambio_de_equipo/{pqr}", Livewire\V1\Admin\Pqr\PqrChangeEquipmentHistoryComponent::class)
                         ->name("administrar.v1.peticiones.cambio-equipo-historico")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_EQUIPMENT_CHANGE_MANAGE));
-
-
                 });
             });
         });

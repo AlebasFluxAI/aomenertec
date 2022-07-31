@@ -9,10 +9,8 @@ class AdminDetailsService extends Singleton
 {
     public function mount(Component $component, $admin)
     {
-
         $component->fill([
             'admin' => $admin,
         ]);
     }
-
 }

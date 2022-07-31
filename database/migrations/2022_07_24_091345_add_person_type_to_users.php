@@ -29,8 +29,6 @@ class AddPersonTypeToUsers extends Migration
                 ])->default(\App\Models\V1\User::IDENTIFICATION_TYPE_CC);
                 $table->string('billing_name')->nullable();
                 $table->string('billing_address')->nullable();
-
-
             });
         }
 
@@ -71,6 +69,44 @@ class AddPersonTypeToUsers extends Migration
                 $table->string('billing_address')->nullable();
             });
         }
+
+        if (!Schema::hasColumn("admins", "person_type")) {
+            Schema::table('admins', function (Blueprint $table) {
+                $table->enum("person_type", [
+                    \App\Models\V1\User::PERSON_TYPE_JURIDICAL,
+                    \App\Models\V1\User::PERSON_TYPE_NATURAL
+                ])->default(\App\Models\V1\User::PERSON_TYPE_NATURAL);
+                $table->enum("identification_type", [
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_CC,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_CE,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_PEP,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_PP,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_NIT,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_OTHER,
+                ])->default(\App\Models\V1\User::IDENTIFICATION_TYPE_CC);
+                $table->string('billing_name')->nullable();
+                $table->string('billing_address')->nullable();
+            });
+        }
+
+        if (!Schema::hasColumn("network_operators", "person_type")) {
+            Schema::table('network_operators', function (Blueprint $table) {
+                $table->enum("person_type", [
+                    \App\Models\V1\User::PERSON_TYPE_JURIDICAL,
+                    \App\Models\V1\User::PERSON_TYPE_NATURAL
+                ])->default(\App\Models\V1\User::PERSON_TYPE_NATURAL);
+                $table->enum("identification_type", [
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_CC,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_CE,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_PEP,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_PP,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_NIT,
+                    \App\Models\V1\User::IDENTIFICATION_TYPE_OTHER,
+                ])->default(\App\Models\V1\User::IDENTIFICATION_TYPE_CC);
+                $table->string('billing_name')->nullable();
+                $table->string('billing_address')->nullable();
+            });
+        }
     }
 
     /**
@@ -80,6 +116,5 @@ class AddPersonTypeToUsers extends Migration
      */
     public function down()
     {
-
     }
 }

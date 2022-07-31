@@ -66,5 +66,4 @@ class IndexSupervisor extends Component
     {
         return $this->indexSupervisorService->conditionalLinkClientsSupervisor($this, $id);
     }
-
 }

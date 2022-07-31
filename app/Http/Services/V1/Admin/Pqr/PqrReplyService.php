@@ -17,7 +17,6 @@ use Livewire\Component;
 
 class PqrReplyService extends Singleton
 {
-
     use PqrTypesTrait;
 
     public function mount(Component $component, $model)
@@ -25,5 +24,4 @@ class PqrReplyService extends Singleton
         $component->model = $model;
         $messages = $component->messages;
     }
-
 }

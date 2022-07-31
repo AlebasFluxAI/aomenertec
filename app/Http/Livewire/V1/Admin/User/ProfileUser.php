@@ -76,7 +76,6 @@ class ProfileUser extends Component
 
     public function blinkSupportPqrAvailability($supportId)
     {
-
         return $this->profileUserService->blinkSupportPqrAvailability($this, $supportId);
     }
 
@@ -159,18 +158,15 @@ class ProfileUser extends Component
     public function changeSubsidy($event, $stratum_id)
     {
         return $this->profileUserService->getSubsidy($this, $event, $stratum_id);
-
     }
 
     public function changeCredit($event, $stratum_id)
     {
         return $this->profileUserService->changeCredit($this, $event, $stratum_id);
-
     }
 
     public function changeValue($event, $stratum_id)
     {
-        
         return $this->profileUserService->changeValue($this, $event, $stratum_id);
     }
 

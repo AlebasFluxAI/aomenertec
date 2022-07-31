@@ -24,10 +24,9 @@ use function view;
 
 class PurchaseCreateComponent extends Component
 {
+    use CreateRechargeTrait;
 
     private $purchaseCreateService;
-
-    use CreateRechargeTrait;
 
 
     public function __construct($id = null)
@@ -60,7 +59,6 @@ class PurchaseCreateComponent extends Component
     public function submitForm()
     {
         $this->purchaseCreateService->submitForm($this);
-
     }
 
 
@@ -70,6 +68,4 @@ class PurchaseCreateComponent extends Component
             'livewire.v1.admin.purchase.create-purchase'
         )->extends('layouts.v1.app');
     }
-
-
 }

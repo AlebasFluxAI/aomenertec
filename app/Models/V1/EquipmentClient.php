@@ -18,6 +18,4 @@ class EquipmentClient extends Model
         'equipment_id',
         'current_assigned'
     ];
-
-
 }

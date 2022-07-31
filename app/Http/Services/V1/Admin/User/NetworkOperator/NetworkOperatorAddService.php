@@ -27,8 +27,8 @@ class NetworkOperatorAddService extends Singleton
                 ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
                 ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
             ],
-            "admins" => (Auth::user()->admin)?[]:Admin::get(),
-            "model.admin_id" => (Auth::user()->admin)?Auth::user()->admin->id:Admin::first()->id,
+            "admins" => (Auth::user()->admin) ? [] : Admin::get(),
+            "model.admin_id" => (Auth::user()->admin) ? Auth::user()->admin->id : Admin::first()->id,
             'model.person_type' => User::PERSON_TYPE_NATURAL,
             "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
             "latitude" => 4.134750,
@@ -41,7 +41,6 @@ class NetworkOperatorAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         DB::transaction(function () use ($component) {
             $component->model['latitude'] = $component->latitude;
             $component->model['longitude'] = $component->longitude;
@@ -55,7 +54,6 @@ class NetworkOperatorAddService extends Singleton
 
             $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $operator->id]);
         });
-
     }
 
     private function mapper($component)

@@ -14,7 +14,6 @@ use Livewire\Component;
 
 trait AddUserFormTrait
 {
-
     public $decodedAddress;
     public $latitude;
     public $longitude;
@@ -164,7 +163,6 @@ trait AddUserFormTrait
 
     public function updatedModel(Component $component, $value, $key)
     {
-
         if ($key == "person_type") {
             $component->identification_types = match ($value) {
                 User::PERSON_TYPE_JURIDICAL => [

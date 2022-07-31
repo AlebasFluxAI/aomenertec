@@ -24,7 +24,6 @@ use function view;
 
 class PurchaseHistoricalService extends Singleton
 {
-
     public function mount(Component $component, $model)
     {
         $component->model = $model;

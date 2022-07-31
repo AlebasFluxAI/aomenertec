@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
+use App\Http\Resources\V1\Menu;
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Admin\AdminIndexService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorIndexService;
@@ -26,10 +27,6 @@ class IndexNetworkOperator extends Component
         $this->indexNetworkOperatorService = NetworkOperatorIndexService::getInstance();
         parent::__construct($id);
     }
-
-
-
-
 
 
     public function render()
@@ -66,7 +63,6 @@ class IndexNetworkOperator extends Component
     {
         return $this->indexNetworkOperatorService->getEnabledAuxNetworkOperator($this, $id);
     }
-
 
 
     public function conditionalDeleteNetworkOperator($networkOperatorId)

@@ -54,5 +54,4 @@ class TechnicianEditService extends Singleton
             $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $component->model->id]);
         });
     }
-
 }

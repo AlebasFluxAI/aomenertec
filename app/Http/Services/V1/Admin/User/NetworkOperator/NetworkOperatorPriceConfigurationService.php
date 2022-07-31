@@ -28,5 +28,4 @@ class NetworkOperatorPriceConfigurationService extends Singleton
     {
         return Stratum::get();
     }
-
 }

@@ -45,12 +45,10 @@ class ClientRecharge extends Model
     public function networkOperator()
     {
         return $this->belongsTo(NetworkOperator::class);
-
     }
 
     public function seller()
     {
         return $this->belongsTo(Seller::class);
-
     }
 }

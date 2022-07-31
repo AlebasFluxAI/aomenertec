@@ -48,8 +48,5 @@ class PurchaseCreateService extends Singleton
                 "status" => ClientRecharge::PURCHASE_PAYMENT_STATUS_PENDING,
             ]);
         });
-
     }
-
-
 }

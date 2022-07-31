@@ -14,7 +14,6 @@ use Livewire\Component;
 
 trait CreateRechargeTrait
 {
-
     public $client_code;
     public $client_identification;
     public $purchase_types;

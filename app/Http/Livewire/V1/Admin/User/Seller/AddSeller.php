@@ -10,7 +10,6 @@ use Livewire\Component;
 
 class AddSeller extends Component
 {
-
     public $decodedAddress;
     public $latitude;
     public $longitude;

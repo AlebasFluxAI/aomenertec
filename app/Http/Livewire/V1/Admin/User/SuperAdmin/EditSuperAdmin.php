@@ -10,7 +10,6 @@ use Livewire\Component;
 
 class EditSuperAdmin extends Component
 {
-
     public $model;
     private $superAdminEditService;
 

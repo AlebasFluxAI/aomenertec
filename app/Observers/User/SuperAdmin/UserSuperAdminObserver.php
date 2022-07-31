@@ -39,6 +39,5 @@ class UserSuperAdminObserver
     }
     public function deleted(SuperAdmin $superAdmin)
     {
-
     }
 }

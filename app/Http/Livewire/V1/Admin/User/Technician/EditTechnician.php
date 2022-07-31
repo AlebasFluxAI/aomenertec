@@ -12,7 +12,6 @@ use Livewire\WithFileUploads;
 
 class EditTechnician extends Component
 {
-
     public $decodedAddress;
     public $latitude;
     public $longitude;

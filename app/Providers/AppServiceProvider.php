@@ -84,6 +84,7 @@ class AppServiceProvider extends ServiceProvider
         //ClientAlertConfiguration::observe(ClientAlertConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
         ClientAlert::observe(ClientAlertObserver::class);
+        Admin::observe(UserAdminObserver::class);
 
         ClientAddress::observe(AddressObserver::class);
         Technician::observe(AddressObserver::class);
@@ -115,7 +116,5 @@ class AppServiceProvider extends ServiceProvider
         PqrLog::observe(ActionByObserve::class);
         ClientRecharge::observe(ActionByObserve::class);
         HistoricalClientEquipment::observe(ActionByObserve::class);
-
-
     }
 }

@@ -99,5 +99,4 @@ class Permissions
     public const PQR_EQUIPMENT_CHANGE_MANAGE = "pqr_equipment_change_manage";
 
     public const NETWORK_OPERATOR_PRICE_CONFIGURATION = "network_operator_price_configuration";
-
 }

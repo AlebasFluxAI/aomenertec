@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Request;
 
 trait ImageableTrait
 {
- 
     public function buildOneImageFromFile($image_name, $imageInput)
     {
         $image = new Image();

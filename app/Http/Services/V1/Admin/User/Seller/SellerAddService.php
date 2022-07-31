@@ -55,7 +55,6 @@ class SellerAddService extends Singleton
             ]);
             $component->redirectRoute("administrar.v1.usuarios.vendedores.detalles", ["seller" => $seller->id]);
         });
-
     }
 
 

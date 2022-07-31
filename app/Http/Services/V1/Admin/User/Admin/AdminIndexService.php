@@ -31,16 +31,16 @@ class AdminIndexService extends Singleton
     {
         $admin = Admin::find($modelId);
         $admin->user->enabled = false;
-        foreach ($admin->adminClientTypes()->get() as $type){
+        foreach ($admin->adminClientTypes()->get() as $type) {
             $type->delete();
         }
-        foreach ($admin->adminClientTypes()->get() as $type){
+        foreach ($admin->adminClientTypes()->get() as $type) {
             $type->delete();
         }
-        foreach ($admin->adminEquipmentTypes()->get() as $type){
+        foreach ($admin->adminEquipmentTypes()->get() as $type) {
             $type->delete();
         }
-        if ($admin->configAdmin()->exists()){
+        if ($admin->configAdmin()->exists()) {
             $admin->configAdmin()->delete();
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} eliminado"]);
@@ -55,9 +55,8 @@ class AdminIndexService extends Singleton
         $admin->push();
         if (!$admin->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -68,7 +67,7 @@ class AdminIndexService extends Singleton
 
     public function getEnabledAuxAdmin(Component $component, $modelId)
     {
-        if (!Admin::find($modelId)->enabled){
+        if (!Admin::find($modelId)->enabled) {
             return false;
         }
         return true;

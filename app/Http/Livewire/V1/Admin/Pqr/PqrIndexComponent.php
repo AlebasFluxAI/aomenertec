@@ -22,9 +22,9 @@ use function view;
 
 class PqrIndexComponent extends Component
 {
+    use WithPagination;
 
     private $pqrIndexService;
-    use WithPagination;
 
     public function __construct($id = null)
     {
@@ -45,26 +45,22 @@ class PqrIndexComponent extends Component
     public function equipmentNotRequest($id)
     {
         return $this->pqrIndexService->equipmentNotRequest($this, $id);
-
     }
 
     public function equipmentRequest($id)
     {
         return !($this->pqrIndexService->equipmentNotRequest($this, $id));
-
     }
 
 
     public function closePqr($id)
     {
         return $this->pqrIndexService->closePqr($this, $id);
-
     }
 
     public function requestEquipment($id)
     {
         $this->pqrIndexService->requestEquipment($this, $id);
-
     }
 
     public function openTicked($id)
@@ -75,13 +71,13 @@ class PqrIndexComponent extends Component
     public function closedTicked($id)
     {
         return $this->pqrIndexService->closedTicked($this, $id);
-
     }
 
     public function render()
     {
         return view(
-            'livewire.v1.admin.pqr.index-pqr', [
+            'livewire.v1.admin.pqr.index-pqr',
+            [
                 "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');

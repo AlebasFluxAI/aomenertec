@@ -20,7 +20,6 @@ trait NetworkOperatorPriceTrait
                 "subsidy" => $event,
                 "stratum_id" => $stratum_id
             ]);
-
         } else {
             PhotovoltaicPrice::create([
                 "network_operator_id" => $component->model->id,
@@ -30,7 +29,6 @@ trait NetworkOperatorPriceTrait
         }
 
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
-
     }
 
     public function changeCredit(Component $component, $event, $stratum_id)
@@ -41,7 +39,6 @@ trait NetworkOperatorPriceTrait
                 "credit" => $event,
                 "stratum_id" => $stratum_id
             ]);
-
         } else {
             PhotovoltaicPrice::create([
                 "network_operator_id" => $component->model->id,
@@ -50,21 +47,16 @@ trait NetworkOperatorPriceTrait
             ]);
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
-
-
     }
 
     public function changeValue(Component $component, $event, $stratum_id)
     {
         if ($price = PhotovoltaicPrice::whereNetworkOperatorId($component->model->id)
             ->whereStratumId($stratum_id)->first()) {
-
             $price->update([
                 "price" => $event,
                 "stratum_id" => $stratum_id
             ]);
-
-
         } else {
             PhotovoltaicPrice::create([
                 "network_operator_id" => $component->model->id,
@@ -73,13 +65,10 @@ trait NetworkOperatorPriceTrait
             ]);
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
-
-
     }
 
     public function getSubsidy(Component $component, $stratum_id)
     {
-
         if ($price = $component->model->photovoltaicPrice()->whereStratumId($stratum_id)->first()) {
             return $price->subsidy;
         }

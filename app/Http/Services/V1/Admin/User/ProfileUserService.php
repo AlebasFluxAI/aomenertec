@@ -107,7 +107,6 @@ class ProfileUserService extends Singleton
 
     public function blinkSupportPqrAvailability($supportId)
     {
-
         return Support::find($supportId)->blinkPqrAvailability();
     }
 
@@ -121,7 +120,6 @@ class ProfileUserService extends Singleton
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
         } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -148,7 +146,6 @@ class ProfileUserService extends Singleton
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
         } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -188,7 +185,6 @@ class ProfileUserService extends Singleton
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
         } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -263,5 +259,4 @@ class ProfileUserService extends Singleton
     {
         return !Supervisor::find($modelId)->networkOperator->clients()->exists();
     }
-
 }

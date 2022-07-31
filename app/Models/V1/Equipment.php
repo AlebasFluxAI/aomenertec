@@ -29,6 +29,10 @@ class Equipment extends Model
         'admin_id',
         'network_operator_id',
         'technician_id',
+        'has_admin',
+        'has_network_operator',
+        'has_technician',
+        'has_clients',
     ];
 
     public static function getModelAsKeyValue()

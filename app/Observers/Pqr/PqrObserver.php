@@ -40,21 +40,16 @@ class PqrObserver
 
     public function updating(Pqr $pqr)
     {
-
         if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
             $pqr->support_id = $this->getSupport();
         }
-
-
     }
 
     public function updated(Pqr $pqr)
     {
-
         if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
             $this->createPqrUser($pqr, $this->getSupportUser());
         }
-
     }
 
     private function createPqrUser($pqr, $user_id)
@@ -85,7 +80,6 @@ class PqrObserver
     private function getSupport()
     {
         if (!$support = Support::wherePqrAvailable(true)->inRandomOrder()->first()) {
-
             return null;
         }
 
@@ -95,7 +89,6 @@ class PqrObserver
     private function getSupportUser()
     {
         if (!$support = Support::wherePqrAvailable(true)->inRandomOrder()->first()) {
-
             return null;
         }
 
@@ -119,12 +112,10 @@ class PqrObserver
 
     private function getUserId(Pqr $pqr)
     {
-
         if (!$pqr->client) {
             return;
         }
         return $pqr->client->technician->first()->technician->user_id;
-
     }
 
     private function getSenderType($pqr)

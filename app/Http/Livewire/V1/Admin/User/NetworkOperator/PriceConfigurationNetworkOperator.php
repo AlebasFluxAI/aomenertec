@@ -33,19 +33,16 @@ class PriceConfigurationNetworkOperator extends Component
     public function mount(NetworkOperator $networkOperator)
     {
         return $this->priceConfiguratioNetworkOperatorService->mount($this, $networkOperator);
-
     }
 
     public function changeSubsidy($event, $stratum_id)
     {
         return $this->priceConfiguratioNetworkOperatorService->getSubsidy($this, $event, $stratum_id);
-
     }
 
     public function changeCredit($event, $stratum_id)
     {
         return $this->priceConfiguratioNetworkOperatorService->changeCredit($this, $event, $stratum_id);
-
     }
 
     public function changeValue($event, $stratum_id)
@@ -82,5 +79,4 @@ class PriceConfigurationNetworkOperator extends Component
     {
         return $this->priceConfiguratioNetworkOperatorService->getData($this);
     }
-
 }

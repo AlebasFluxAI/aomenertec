@@ -20,8 +20,8 @@ use App\Models\V1\Image;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use function view;
 use NumberFormatter;
+use function view;
 
 class PurchaseGuestCreateComponent extends Component
 {
@@ -64,7 +64,6 @@ class PurchaseGuestCreateComponent extends Component
     public function submitForm()
     {
         $this->purchaseGuestCreateService->submitForm($this);
-
     }
 
     public function render()
@@ -73,6 +72,4 @@ class PurchaseGuestCreateComponent extends Component
             'livewire.v1.admin.purchase.guest-create-purchase'
         )->extends('layouts.v1.app');
     }
-
-
 }

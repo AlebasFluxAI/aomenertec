@@ -25,18 +25,16 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use function view;
 use App\Models\V1\Client;
+use function view;
 
 class PurchaseGuestCreateService extends Singleton
 {
-
     use CreateRechargeTrait;
 
 
     public function confirmRecharge(Component $component)
     {
-
         DB::transaction(function () use ($component) {
             ClientRecharge::create([
                 "client_id" => $component->client->id,
@@ -50,8 +48,5 @@ class PurchaseGuestCreateService extends Singleton
                 "status" => ClientRecharge::PURCHASE_PAYMENT_STATUS_PENDING,
             ]);
         });
-
     }
-
-
 }

@@ -51,7 +51,6 @@ class AdminPqrGuestClientComponent extends Component
     public function closedTicked($id)
     {
         return $this->adminPqrGuestClientService->closedTicked($this, $id);
-
     }
 
     public function submitForm()

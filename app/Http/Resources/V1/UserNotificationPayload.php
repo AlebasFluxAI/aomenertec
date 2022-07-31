@@ -21,12 +21,10 @@ class UserNotificationPayload
         $this->binding_id = $binding_id;
         $this->binding = $binding;
         $this->data = $this->getData();
-
     }
 
     public function getData(): array
     {
-
         return [
             "message" => $this->message,
             "target" => $this->target,
