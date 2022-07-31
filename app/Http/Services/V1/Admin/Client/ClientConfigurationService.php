@@ -171,7 +171,6 @@ class ClientConfigurationService extends Singleton
     }
     public function updated(Component $component, $propertyName, $value)
     {
-
         $property = explode(".", $propertyName);
         if ($property[0] == "client_config_alert") {
             $component->validate([
@@ -217,10 +216,9 @@ class ClientConfigurationService extends Singleton
             $component->digital_outputs = $component->client->digitalOutputs()->get();
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Salidas configuradas"]);
             return redirect()->route("v1.admin.client.settings", ['client' => $component->client->id]);
-        } elseif($key == "storage_type_latency"){
+        } elseif ($key == "storage_type_latency") {
             $component->storage_latency_options = ClientConfiguration::STORAGE_LATENCY_OPTIONS[$value];
         }
-
     }
 
     public function outputRelation(Component $component, $id)

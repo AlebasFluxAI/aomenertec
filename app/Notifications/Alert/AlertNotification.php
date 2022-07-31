@@ -28,11 +28,13 @@ class AlertNotification extends Notification
 
     public function toDatabase()
     {
-        return new UserNotificationPayload("Alerta de consumo de cliente",
+        return new UserNotificationPayload(
+            "Alerta de consumo de cliente",
             "v1.admin.client.monitoring",
             "interna",
             1,
-            "client");
+            "client"
+        );
     }
 
     public function toWhatsApp($notifiable)

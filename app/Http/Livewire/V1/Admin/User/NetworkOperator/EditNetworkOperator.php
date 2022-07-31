@@ -10,8 +10,6 @@ use Livewire\Component;
 
 class EditNetworkOperator extends Component
 {
-
-
     public $decodedAddress;
     public $latitude;
     public $longitude;

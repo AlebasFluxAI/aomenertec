@@ -1,6 +1,7 @@
 @if($view_header??true)
     <div class="login">
-        @section("header") {{--extended app.blade--}}
+        @section("header")
+            {{--extended app.blade--}}
 
         @endsection
 
@@ -10,7 +11,7 @@
           ])
 
 
-@endif
+        @endif
         @include("partials.v1.table_nav",
                ["mt"=>2,
                 "nav_options"=>[
@@ -86,8 +87,6 @@
                                                            "tooltip_title"=>"Editar",
                                                            "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_EDIT],
                                                      ],
-
-
                                                     [
                                                        "redirect"=>[
                                                                    "route"=>"administrar.v1.usuarios.operadores.agregar_equipos",
@@ -112,13 +111,22 @@
                                                         "icon"=>"fa-solid fa-user-check",
                                                         "tooltip_title"=>"Activar"
                                                     ],
-                                            [
-                                                "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_DELETE],
-                                                    "function"=>"deleteNetworkOperator",
-                                                    "conditional"=>"conditionalDeleteNetworkOperator",
-                                                    "icon"=>"fas fa-trash",
-                                                    "tooltip_title"=>"Eliminar"
-                                            ],
+                                                    [
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_DELETE],
+                                                            "function"=>"deleteNetworkOperator",
+                                                            "conditional"=>"conditionalDeleteNetworkOperator",
+                                                            "icon"=>"fas fa-trash",
+                                                            "tooltip_title"=>"Eliminar"
+                                                    ],
+                                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.usuarios.operadores.configurar_precios",
+                                                                   "binding"=>"networkOperator"
+                                                             ],
+                                                           "icon"=>"fas fa-money-bill-wave",
+                                                           "tooltip_title"=>"Configurar precios",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION],
+                                                     ],
                                            ]
                                         ],
                                                     /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [
@@ -128,6 +136,6 @@
                    "table_rows"=>$data
 
                ])
-@if($view_header??true)
+        @if($view_header??true)
     </div>
 @endif

@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
 use App\Models\V1\BillingInformation;
@@ -308,6 +309,10 @@ class AddClientService extends Singleton
                 $component->equipment[$id]['post'] == "No registrado";
                 $type_id = $component->equipment[$id]['type_id'];
                 if (strlen($value) >= 2) {
+                    if (!$component->technician_id) {
+                        ToastEvent::launchToast($component, "show", "error", "Debes seleccionar un tecnico", ["duration" => "2s"]);
+                        return;
+                    }
                     $component->serials = Equipment::where([
                         ["serial", "like", '%' . $value . "%"],
                         ["equipment_type_id", $type_id],

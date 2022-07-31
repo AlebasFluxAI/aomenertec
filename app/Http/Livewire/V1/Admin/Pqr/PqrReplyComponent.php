@@ -24,6 +24,7 @@ use function view;
 
 class PqrReplyComponent extends Component
 {
+    use WithFileUploads;
     public $description;
     public $model;
     public $messages;
@@ -32,7 +33,6 @@ class PqrReplyComponent extends Component
         [
             "pqr_message_created" => 'refreshMessages',
         ];
-    use WithFileUploads;
 
     private $pqrReplyService;
 

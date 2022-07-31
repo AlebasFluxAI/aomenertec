@@ -11,7 +11,6 @@ use PhpMqtt\Client\Facades\MQTT;
 
 class Monitoring extends Component
 {
-
     use WithPagination;
     protected $listeners = ['tabChange'];
     public $data_chart;

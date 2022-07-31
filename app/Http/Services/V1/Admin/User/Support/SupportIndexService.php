@@ -49,5 +49,4 @@ class SupportIndexService extends Singleton
     {
         Support::find($support)->blinkPqrAvailability();
     }
-
 }

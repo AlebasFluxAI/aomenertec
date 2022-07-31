@@ -14,53 +14,26 @@ class SupportAddService extends Singleton
 {
     public function mount(Component $component)
     {
-        $component->fill($this->getMountData());
-    }
-
-    private function getMountData()
-    {
-        $user = Auth::user();
-        if ($user->hasRole(User::TYPE_NETWORK_OPERATOR)) {
-            return [
-                'admins' => [],
-                "network_operators" => [],
-                "network_operator_id" => $user->networkOperator->id,
-                'picked' => false
-            ];
-        }
-
-        return [
-            'network_operator_id' => null,
-            'admins' => [],
-            "network_operators" => [],
-            'picked' => false
-        ];
-    }
-
-    public function updatedNetworkOperator(Component $component)
-    {
-        $component->picked_network_operator = false;
-        $component->message_network_operator = "No hay operador de red registrado con esta identificación";
-        if ($component->network_operator != "") {
-            $component->network_operators = NetworkOperator::where("identification", "like", '%' . $component->network_operator . "%")
-                ->orWhere("name", "like", '%' . $component->network_operator . "%")
-                ->take(3)->get();
-        }
-    }
-
-    public function assignNetworkOperator(Component $component, $network_operator)
-    {
-        $obj = json_decode($network_operator);
-        $component->network_operator = $obj->identification . " - " . $obj->name;
-        $component->network_operator_id = $obj->id;
-        $component->picked = true;
-    }
-
-    public function setNetworkOperatorId(Component $component, $admin)
-    {
-        $component->picked = true;
-        $admin = json_decode($admin);
-        $component->network_operator_id = $admin->id;
+        $component->fill([
+            "form_tittle" => "Datos del tecnico",
+            "decodedAddress" => "",
+            "identification_types" => $this->identificationTypes(User::PERSON_TYPE_NATURAL),
+            'person_types' => [
+                ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
+                ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
+            ],
+            "admins" => (Auth::user()->superAdmin) ? Auth::user()->superAdmin->adminsAsKeyValue() : ((Auth::user()->admin) ? [] : []),
+            "admin_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? Auth::user()->admin->id : Auth::user()->networkOperator->admin->id),
+            "network_operators" => (Auth::user()->superAdmin) ? [] : ((Auth::user()->admin) ? Auth::user()->admin->networkOperatorsAsKeyValue() : []),
+            "model.network_operator_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? "" : Auth::user()->networkOperator->id),
+            'model.person_type' => User::PERSON_TYPE_NATURAL,
+            "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
+            "latitude" => 4.134750,
+            "longitude" => -73.637094,
+            "model.billing_name" => "",
+            "model.last_name" => "",
+            "model.name" => "",
+        ]);
     }
 
 
@@ -86,14 +59,12 @@ class SupportAddService extends Singleton
     private function mapper($component)
     {
         return [
-            "name" => $component->name,
-            "last_name" => $component->last_name,
-            "email" => $component->email,
-            "phone" => $component->phone,
-            "network_operator_id" => $component->network_operator_id,
-            "identification" => $component->identification,
-            "latitude" => $component->latitude,
-            "longitude" => $component->longitude,
+            "name" => $component->model['name'],
+            "last_name" => $component->model['last_name'],
+            "email" => $component->model['email'],
+            "phone" => $component->model['phone'],
+            "identification" => $component->model['identification'],
+            "type" => User::TYPE_SUPPORT
         ];
     }
 }

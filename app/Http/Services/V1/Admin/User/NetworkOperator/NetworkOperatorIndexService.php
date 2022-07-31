@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
+use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
 use App\Models\V1\NetworkOperator;
@@ -39,7 +40,7 @@ class NetworkOperatorIndexService extends Singleton
     {
         $operator = NetworkOperator::find($networkOperatorId);
         $operator->user->enabled = false;
-        foreach ($operator->equipments()->get() as $type){
+        foreach ($operator->equipments()->get() as $type) {
             $type->network_operator_id = "";
             $type->save();
         }
@@ -55,9 +56,8 @@ class NetworkOperatorIndexService extends Singleton
         $operator->push();
         if (!$operator->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -68,7 +68,7 @@ class NetworkOperatorIndexService extends Singleton
 
     public function getEnabledAuxNetworkOperator(Component $component, $modelId)
     {
-        if (!NetworkOperator::find($modelId)->enabled){
+        if (!NetworkOperator::find($modelId)->enabled) {
             return false;
         }
         return true;

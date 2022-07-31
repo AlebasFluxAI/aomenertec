@@ -107,19 +107,20 @@ trait PqrTypesTrait
 
     public function submitForm(Component $component)
     {
-
         $component->validate([
             'attach' => 'image|max:10240', // 1MB Max
         ]);
         DB::transaction(function () use ($component) {
             $pqr = Pqr::create($this->mapper($component));
             $pqr->buildOneImageFromFile("attach", $component->attach);
-            $component->emitTo('livewire-toast', 'show',
+            $component->emitTo(
+                'livewire-toast',
+                'show',
                 ['type' => 'success',
-                    'message' => "Se registro la peticion exitosamente"]);
+                    'message' => "Se registro la peticion exitosamente"]
+            );
 
             $component->redirectRoute("administrar.v1.peticiones.detalles", ["pqr" => $pqr->id]);
-
         });
     }
 
@@ -130,7 +131,6 @@ trait PqrTypesTrait
 
     public function submitMessage(Component $component)
     {
-
         DB::transaction(function () use ($component) {
             $message = $component->model->messages()->create([
                 "message" => $component->description,
@@ -139,14 +139,16 @@ trait PqrTypesTrait
             ]);
 
             if ($component->attach) {
-
                 $message->buildOneImageFromFile("attach", $component->attach);
             }
         });
         $component->description = "";
-        $component->emitTo('livewire-toast', 'show',
+        $component->emitTo(
+            'livewire-toast',
+            'show',
             ['type' => 'success',
-                'message' => "Se registro la respuesta exitosamente"]);
+                'message' => "Se registro la respuesta exitosamente"]
+        );
         $component->model->refresh();
         $component->attach = null;
         $component->emit("pqr_message_created");
@@ -156,5 +158,4 @@ trait PqrTypesTrait
     {
         $component->model->refresh();
     }
-
 }

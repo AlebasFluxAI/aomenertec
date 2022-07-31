@@ -75,6 +75,9 @@ class Permissions
     public const SELLER_SHOW = "seller.show";
     public const SELLER_LINK_CLIENT = "seller.link_client";
     public const SELLER_ENABLED = "seller.enabled";
+    public const SELLER_MANAGE_PURCHASE = "seller.manage_purchase";
+    public const SELLER_MANAGE_PURCHASE_CREATE = "seller.manage_purchase_create";
+    public const SELLER_PURCHASE_HISTORICAL = "seller.purchase_historical";
 
     public const CLIENT_CREATE = "client.create";
     public const CLIENT_EDIT = "client.edit";
@@ -95,4 +98,5 @@ class Permissions
     public const PQR_EQUIPMENT_CHANGE = "pqr_equipment_change";
     public const PQR_EQUIPMENT_CHANGE_MANAGE = "pqr_equipment_change_manage";
 
+    public const NETWORK_OPERATOR_PRICE_CONFIGURATION = "network_operator_price_configuration";
 }

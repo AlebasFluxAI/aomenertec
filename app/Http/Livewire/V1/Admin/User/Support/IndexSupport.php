@@ -69,13 +69,11 @@ class IndexSupport extends Component
     public function enablePqrSupport($support)
     {
         return $this->indexEquipmentService->enablePqrSupport($this, $support);
-
     }
 
     public function disablePqrSupport($support)
     {
         return $this->indexEquipmentService->enablePqrSupport($this, $support);
-
     }
 
     public function getData()

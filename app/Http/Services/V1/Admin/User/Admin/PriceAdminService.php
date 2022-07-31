@@ -92,7 +92,5 @@ class PriceAdminService extends Singleton
         $component->config->save();
         $component->prices = $component->model->priceAdmin()->get();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-
     }
-
 }

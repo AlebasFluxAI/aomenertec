@@ -10,8 +10,6 @@ use Livewire\Component;
 
 class AddSuperAdmin extends Component
 {
-
-
     public $model;
     public $message;
 

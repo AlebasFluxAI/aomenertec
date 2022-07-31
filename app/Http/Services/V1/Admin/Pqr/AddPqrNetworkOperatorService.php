@@ -21,7 +21,6 @@ class AddPqrNetworkOperatorService extends Singleton
 
     public function mapper(Component $component)
     {
-
         return [
             'subject' => $component->subject,
             'client_code' => $component->client_code,
@@ -40,7 +39,6 @@ class AddPqrNetworkOperatorService extends Singleton
 
     public function mount(Component $component)
     {
-
         $model = Menu::getUserModel();
         $component->model = $model;
         $component->fill([
@@ -51,5 +49,4 @@ class AddPqrNetworkOperatorService extends Singleton
             "has_client_code" => false,
         ]);
     }
-
 }

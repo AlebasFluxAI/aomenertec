@@ -43,7 +43,6 @@ class EquipmentIndexService extends Singleton
     {
         $model = User::getUserModel();
         if ($component->filter) {
-
             if ($model::class == NetworkOperator::class) {
                 return Equipment::whereNetworkOperatorId($model->id)
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')

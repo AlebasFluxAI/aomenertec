@@ -6,6 +6,7 @@ use App\Http\Livewire\V1\Admin\User\AssignedEquipmentInterface;
 use App\Http\Services\V1\Admin\User\Technician\TechnicianAddEquipmentService;
 use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\Traits\TableRowCheckTrait;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\Technician;
 use Livewire\Component;
 
@@ -14,7 +15,7 @@ class AddEquipmentTechnician extends Component implements AssignedEquipmentInter
     use TableRowCheckTrait;
     use EquipmentAssignationTrait;
 
-
+    public $assignationType = Technician::class;
     public $model;
     public $type;
     public $equipmentRelated;

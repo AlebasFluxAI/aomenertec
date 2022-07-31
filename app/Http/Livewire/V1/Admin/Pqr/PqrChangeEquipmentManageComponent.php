@@ -26,10 +26,10 @@ use function view;
 class PqrChangeEquipmentManageComponent extends Component
 {
     use TableRowCheckTrait;
+    use WithPagination;
 
     public $equipmentToChange;
     private $pqrChangeEquipmentManageService;
-    use WithPagination;
 
     public function __construct($id = null)
     {
@@ -53,11 +53,10 @@ class PqrChangeEquipmentManageComponent extends Component
         return $this->pqrChangeEquipmentManageService->equipmentByType($this, $equipmentType);
     }
 
-    
+
     public function confirmEquipmentChange($equipmentId)
     {
         $this->pqrChangeEquipmentManageService->confirmEquipmentChange($this, $equipmentId);
-
     }
 
     public function render()
@@ -66,5 +65,4 @@ class PqrChangeEquipmentManageComponent extends Component
             'livewire.v1.admin.pqr.change-equipment-manage-pqr',
         )->extends('layouts.v1.app');
     }
-
 }

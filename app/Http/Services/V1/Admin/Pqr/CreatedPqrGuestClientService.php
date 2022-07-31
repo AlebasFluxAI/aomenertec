@@ -14,11 +14,8 @@ use Livewire\Component;
 
 class CreatedPqrGuestClientService extends Singleton
 {
-
     public function mount(Component $component, $model)
     {
         $component->model = $model;
     }
-
-
 }

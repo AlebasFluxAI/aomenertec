@@ -2,8 +2,13 @@
 
 namespace App\Models\Traits;
 
+use App\Http\Resources\V1\Menu;
+use App\Models\V1\Admin;
 use App\Models\V1\Equipment;
 use App\Models\V1\Image;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\SuperAdmin;
+use App\Models\V1\Technician;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -42,7 +47,33 @@ trait EquipmentAssignationTrait
         if (!$component->equipmentTypeId) {
             return;
         }
-        $component->equipmentBachelors = Equipment::whereEquipmentTypeId($component->equipmentTypeId)
+        $component->equipmentBachelors = (match ($component->assignationType) {
+            Admin::class => $this->getEquipmentBachelors($component)->whereHasAdmin(false),
+            NetworkOperator::class => $this->getEquipmentBachelors($component)
+                ->whereHasNetworkOperator(false)
+                ->whereIn(
+                    "id",
+                    $component
+                    ->model
+                    ->admin
+                    ->equipments
+                    ->pluck("id")
+                ),
+            Technician::class => $this->getEquipmentBachelors($component)->whereHasTechnician(false)
+                ->whereIn(
+                    "id",
+                    $component
+                    ->model
+                    ->networkOperator
+                    ->equipments
+                    ->pluck("id")
+                ),
+        })->get();
+    }
+
+    private function getEquipmentBachelors(Component $component)
+    {
+        return Equipment::whereEquipmentTypeId($component->equipmentTypeId)
             ->where(function ($query) use ($component) {
                 if ($component->equipmentFilter) {
                     return $query->
@@ -52,8 +83,7 @@ trait EquipmentAssignationTrait
             })
             ->whereAssigned(false)
             ->whereNotIn("id", $component->model->refresh()->equipments->pluck("id"))
-            ->orderBy("id", "desc")
-            ->get();
+            ->orderBy("id", "desc");
     }
 
     public function updatedEquipmentFilter(Component $component)

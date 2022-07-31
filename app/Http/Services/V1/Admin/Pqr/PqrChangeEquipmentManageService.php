@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\Pqr;
 
 use App\Http\Resources\V1\Menu;
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\Traits\PqrStatusTrait;
@@ -32,23 +33,30 @@ class PqrChangeEquipmentManageService extends Singleton
 
     public function updatedSelectedRows(Component $component)
     {
-        $component->equipmentToChange = Equipment::whereIn("id", $component->selectedRows)
+        $equipments = $component->equipmentToChange = Equipment::whereIn("id", $component->selectedRows)
             ->where("status", "!=", Equipment::STATUS_REPAIR_PENDING)
             ->get();
-
+        if (!count($equipments)) {
+            ToastEvent::launchToast($component, "show", "error", "No se encontraron equipos sustitutos");
+        }
+        return $equipments;
     }
 
     public function equipmentByType(Component $component, $equipmentType)
     {
-        return Equipment::whereEquipmentTypeId($equipmentType)
+        $equipments = Equipment::whereEquipmentTypeId($equipmentType)
             ->where("status", "!=", Equipment::STATUS_REPAIR_PENDING)
             ->get();
+        return $equipments;
     }
 
     public function confirmEquipmentChange(Component $component, $equipmentId)
     {
+        if ($component->model->has_equipment_changed) {
+            ToastEvent::launchToast($component, "show", "error", "Ya se realizo un cambio usando este PQR");
+            return;
+        }
         DB::transaction(function () use ($component, $equipmentId) {
-
             $equipment = Equipment::find($equipmentId);
             $equipmentSelectedToChange = $component->equipmentToChange
                 ->where("equipment_type_id", $equipment->equipment_type_id)
@@ -68,7 +76,6 @@ class PqrChangeEquipmentManageService extends Singleton
                 ->whereEquipmentId($equipmentSelectedToChange)
                 ->whereCurrentAssigned(true)
                 ->exists()) {
-
                 EquipmentClient::create([
                     'client_id' => $client->id,
                     'equipment_id' => $equipmentId,
@@ -92,16 +99,16 @@ class PqrChangeEquipmentManageService extends Singleton
             $component->selectedRows = [];
             $component->model->setEquipmentChanged();
             if (!$component->equipmentToChange->count()) {
-                $component->redirectRoute("administrar.v1.peticiones.cambio-equipo-historico"
-                    , ["pqr" => $component->model->id]);
+                $component->redirectRoute("administrar.v1.peticiones.cambio-equipo-historico", ["pqr" => $component->model->id]);
             } else {
-                $component->emitTo('livewire-toast', 'show',
+                $component->emitTo(
+                    'livewire-toast',
+                    'show',
                     ['type' => 'success',
                         'message' => "Se realizo el cambio del equipo"
-                    ]);
+                    ]
+                );
             }
         });
-
     }
-
 }

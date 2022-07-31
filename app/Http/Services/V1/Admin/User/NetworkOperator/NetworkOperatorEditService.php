@@ -54,5 +54,4 @@ class NetworkOperatorEditService extends Singleton
             $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $component->model->id]);
         });
     }
-
 }

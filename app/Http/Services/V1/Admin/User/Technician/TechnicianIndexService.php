@@ -67,7 +67,6 @@ class TechnicianIndexService extends Singleton
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
         } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
-
         }
     }
 
@@ -101,6 +100,5 @@ class TechnicianIndexService extends Singleton
         } catch (\Throwable) {
             return true;
         }
-
     }
 }

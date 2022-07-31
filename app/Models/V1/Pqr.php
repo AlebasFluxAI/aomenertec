@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pqr extends Model
 {
-
     use HasFactory;
     use ImageableTrait;
     use SoftDeletes;
@@ -153,7 +152,6 @@ class Pqr extends Model
 
     public function sender()
     {
-
         if ($this->support) {
             return $this->support;
         }

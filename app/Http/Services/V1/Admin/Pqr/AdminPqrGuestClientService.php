@@ -35,15 +35,11 @@ class AdminPqrGuestClientService extends Singleton
 
         $component->pqrs = Pqr::whereCode($component->pqr_code)->get();
         $component->resetErrorBag();
-
     }
 
 
     public function mount(Component $component)
     {
         $component->subdomain = Route::input("subdomain");
-
     }
-
-
 }

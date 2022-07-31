@@ -16,7 +16,6 @@ class SupervisorEditService extends Singleton
 
     public function mount(Component $component, Supervisor $model)
     {
-
         $component->fill([
             "decodedAddress" => $model->address,
             "identification_types" => $this->identificationTypes($model->person_type),

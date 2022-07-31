@@ -18,7 +18,6 @@ class HistoricalPqrGuestClientService extends Singleton
 
     public function submitForm(Component $component)
     {
-
         if (!$component->client_code) {
             $component->validate();
         }
@@ -30,16 +29,17 @@ class HistoricalPqrGuestClientService extends Singleton
             $pqr = Pqr::create($this->mapper($component));
             $pqr->buildOneImageFromFile("attach", $component->attach);
         });
-        $component->emitTo('livewire-toast', 'show',
+        $component->emitTo(
+            'livewire-toast',
+            'show',
             ['type' => 'success',
-                'message' => "Se registro la peticion exitosamente"]);
+                'message' => "Se registro la peticion exitosamente"]
+        );
         $this->mount($component);
-
     }
 
     public function mapper(Component $component)
     {
-
         return [
             'subject' => $component->subject,
             'client_code' => $component->client_code,
@@ -65,6 +65,4 @@ class HistoricalPqrGuestClientService extends Singleton
             "has_client_code" => false,
         ]);
     }
-
-
 }

@@ -22,10 +22,12 @@
                 @foreach($table_headers as $table_header)
 
                     <th>{{$table_header["col_name"]}}
-                        @if($table_header["col_filter"])
-                            @include("partials.v1.table.table-filter-column",[
-                                                               "col_name"=>$table_header["col_data"]
-                                                             ])
+                        @if($is_filtered??true)
+                            @if($table_header["col_filter"])
+                                @include("partials.v1.table.table-filter-column",[
+                                                                   "col_name"=>$table_header["col_data"]
+                                                                 ])
+                            @endif
                         @endif
                     </th>
                 @endforeach

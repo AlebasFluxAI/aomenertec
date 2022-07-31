@@ -14,11 +14,14 @@
                       @elseif($updated_input??""=="defer")
                           wire:model.defer="{{ $input_model }}"
                       @else
+
                           wire:model="{{ $input_model }}"
                       @endif
                       rows="{{$input_rows}}" type="{{$input_type??"text"}}"
                       class="form-control" autocomplete="on" placeholder="{{$placeholder??""}}"
-                      required="{{$required??false}}"></textarea>
+                      @if($required??false)
+                          required
+                @endif></textarea>
         @elseif($input_type=="checkbox")
             <div class="form-check form-switch">
                 <input
@@ -29,7 +32,10 @@
             </div>
         @elseif($input_type=="select")
             <select wire:model.lazy="{{$input_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
-                    required="{{$required??false}}" @if($disabled??false)disabled @endif>
+                    @if($required??false)
+                        required
+                    @endif
+                    @if($disabled??false)disabled @endif>
                 <option disabled value="0"> {{$select_default??""}} </option>
                 @foreach($select_options??[] as $option)
                     <option @if($select_option_title??"" != "")title="{{ $option[$select_option_title] }}"
@@ -45,13 +51,17 @@
                    @else
                        wire:model="{{ $input_model }}"
                    @endif
+
                    id="{{$input_id??""}}" type="{{$input_type??"text"}}"
                    class="form-control" autocomplete="{{$autocomplete??"on"}}"
                    name="{{$input_name??""}}" onchange="{{$input_on_change??""}}()" placeholder="{{$placeholder??""}}"
                    @if($input_type??"text" == "number")
                        min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
                    @endif
-                   required="{{$required??false}}">
+                   @if($required??false)
+                       required
+                @endif
+            >
         @endif
     </div>
     @error($input_model)

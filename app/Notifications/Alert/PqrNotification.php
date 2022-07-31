@@ -9,8 +9,6 @@ use Illuminate\Notifications\Notification;
 
 class PqrNotification extends Notification
 {
-
-
     /**
      * Get the notification's delivery channels.
      *
@@ -36,25 +34,31 @@ class PqrNotification extends Notification
     public function toDatabase()
     {
         if ($this->pqr->networkOperator) {
-            return new UserNotificationPayload("Usuario operador de red " . $this->pqr->networkOperator->name . " " . $this->pqr->networkOperator->last_name . " a levantado un nuevo PQR",
+            return new UserNotificationPayload(
+                "Usuario operador de red " . $this->pqr->networkOperator->name . " " . $this->pqr->networkOperator->last_name . " a levantado un nuevo PQR",
                 "administrar.v1.peticiones.detalles",
                 "interna",
                 $this->pqr->id,
-                "pqr");
+                "pqr"
+            );
         }
         if ($this->pqr->supervisor) {
-            return new UserNotificationPayload("Usuario supervisor " . $this->pqr->supervisor->name . " " . $this->pqr->supervisor->last_name . " a levantado un nuevo PQR",
+            return new UserNotificationPayload(
+                "Usuario supervisor " . $this->pqr->supervisor->name . " " . $this->pqr->supervisor->last_name . " a levantado un nuevo PQR",
                 "administrar.v1.peticiones.detalles",
                 "interna",
                 $this->pqr->id,
-                "pqr");
+                "pqr"
+            );
         }
         if ($this->pqr->client) {
-            return new UserNotificationPayload("Cliente " . $this->pqr->client->name . " " . $this->pqr->client->last_name . " a levantado un nuevo PQR",
+            return new UserNotificationPayload(
+                "Cliente " . $this->pqr->client->name . " " . $this->pqr->client->last_name . " a levantado un nuevo PQR",
                 "administrar.v1.peticiones.detalles",
                 "interna",
                 $this->pqr->id,
-                "pqr");
+                "pqr"
+            );
         }
         return [];
     }

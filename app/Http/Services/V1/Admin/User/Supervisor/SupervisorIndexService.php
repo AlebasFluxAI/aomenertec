@@ -59,7 +59,7 @@ class SupervisorIndexService extends Singleton
         $supervisor->push();
         if (!$supervisor->enabled) {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario desactivado"]);
-        } else{
+        } else {
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
         }
     }
@@ -71,7 +71,7 @@ class SupervisorIndexService extends Singleton
 
     public function getEnabledAuxSupervisor(Component $component, $modelId)
     {
-        if (!Supervisor::find($modelId)->enabled){
+        if (!Supervisor::find($modelId)->enabled) {
             return false;
         }
         return true;

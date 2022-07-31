@@ -16,43 +16,53 @@ trait PqrStatusTrait
 {
     public function openTicked(Component $component, $id)
     {
-
         return (Pqr::find($id)->status == Pqr::STATUS_CLOSED);
     }
 
     public function closedTicked(Component $component, $id)
     {
         return !(Pqr::find($id)->status == Pqr::STATUS_CLOSED);
-
     }
 
     public function closePqr(Component $component, $id)
     {
         Pqr::find($id)->update(
-            ["status" => Pqr::STATUS_CLOSED]);
+            ["status" => Pqr::STATUS_CLOSED]
+        );
     }
 
     public function solvePqr(Component $component, $id)
     {
         Pqr::find($id)->update(
-            ["status" => Pqr::STATUS_RESOLVED]);
+            ["status" => Pqr::STATUS_RESOLVED]
+        );
     }
 
     public function requestEquipment(Component $component, $id)
     {
         Pqr::find($id)->update(
-            ["change_equipment" => true]);
+            ["change_equipment" => true]
+        );
     }
 
+    public function equipmentRequest(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        if ($pqr->has_equipment_changed) {
+            return true;
+        }
+        return !($this->equipmentNotRequest($component, $id));
+    }
 
     public function equipmentNotRequest(Component $component, $id)
     {
         $pqr = Pqr::find($id);
-
+        if ($pqr->status == Pqr::STATUS_CLOSED) {
+            return true;
+        }
+        if ($pqr->has_equipment_changed) {
+            return true;
+        }
         return ($pqr->change_equipment);
-
-
     }
-
-
 }
