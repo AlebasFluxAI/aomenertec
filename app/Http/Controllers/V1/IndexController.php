@@ -19,8 +19,7 @@ class IndexController extends Controller
 
         return match ($subdomain) {
             Subdomain::SUBDOMAIN_AOM => Subdomain::SUBDOMAIN_AOM > view('auth.login'),
-            Subdomain::SUBDOMAIN_COENERGIA => view("auth.coenergia_login"),
-            default => view('auth.login'),
+            default => view("auth.subdomain_login"),
         };
     }
 
