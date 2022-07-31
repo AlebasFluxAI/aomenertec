@@ -17,7 +17,7 @@ use Livewire\Component;
 
 class ToastEvent
 {
-    static public function launchToast(Component $component, $event = "show", $type = "success", $message = "", $extra_params = [])
+    public static function launchToast(Component $component, $event = "show", $type = "success", $message = "", $extra_params = [])
     {
         $component->emitTo('livewire-toast', $event, array_merge(["type" => $type, "message" => $message], $extra_params));
     }

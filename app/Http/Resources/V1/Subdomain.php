@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 class Subdomain
 {
     public const SUBDOMAIN_COENERGIA = "coenergia";
+    public const SUBDOMAIN_VAUPES = "vaupes";
     public const SUBDOMAIN_AOM = "aom";
 
     public static function getTitle()
@@ -14,6 +15,7 @@ class Subdomain
         return match (Route::input("subdomain")) {
             self::SUBDOMAIN_AOM => "Enertec",
             self::SUBDOMAIN_COENERGIA => "Coenergia",
+            self::SUBDOMAIN_VAUPES => "Gobernacion del Vaupes",
             default => "Enertec",
         };
     }
@@ -23,6 +25,7 @@ class Subdomain
         return match (Route::input("subdomain")) {
             self::SUBDOMAIN_AOM => "https://enerteclatam.com/media/wkvhaio3/favicon.png",
             self::SUBDOMAIN_COENERGIA => "https://enertedevops.s3.us-east-2.amazonaws.com/images/coenergia-icon.jpeg",
+            self::SUBDOMAIN_VAUPES => "https://enertedevops.s3.us-east-2.amazonaws.com/images/vaupes_icon_login.png",
             default => "https://enerteclatam.com/media/wkvhaio3/favicon.png",
         };
     }
@@ -32,6 +35,7 @@ class Subdomain
         return match (Route::input("subdomain")) {
             self::SUBDOMAIN_AOM => "https://aom.enerteclatam.com/images/logo-horizontal.svg",
             self::SUBDOMAIN_COENERGIA => "https://enertedevops.s3.us-east-2.amazonaws.com/images/16517642985208516/1651764298_Coenergia_login.png",
+            self::SUBDOMAIN_VAUPES => "https://enertedevops.s3.us-east-2.amazonaws.com/images/VAUPES-1.png",
             default => "https://aom.enerteclatam.com/images/logo-horizontal.svg",
         };
     }
@@ -39,8 +43,9 @@ class Subdomain
     public static function getHeaderColor()
     {
         return match (Route::input("subdomain")) {
-            self::SUBDOMAIN_AOM => "background-color:black;border-bottom-color:#009599;border-bottom-width:0.2rem",
-            self::SUBDOMAIN_COENERGIA => "background-color:whitesmoke;border-bottom-color:#3962a8;border-bottom-width:0.2rem",
+            self::SUBDOMAIN_AOM => "justify-content: space-between;padding: 2px;background-color:black;border-bottom-color:#009599;border-bottom-width:0.2rem",
+            self::SUBDOMAIN_COENERGIA => "justify-content: space-between;padding: 2px;background-color:whitesmoke;border-bottom-color:#3962a8;border-bottom-width:0.2rem",
+            self::SUBDOMAIN_VAUPES => "justify-content: space-between;padding: 2px;background-color:whitesmoke;border-bottom-color:#2a2a75;border-bottom-width:0.2rem",
             default => "background-color:black;border-bottom-color:#009599;border-bottom-width:0.2rem",
         };
     }

@@ -13,6 +13,52 @@
     --style_header_button: #f5b042;
 }
 
+.login-asside {
+    background-color: #f2f2f2;
+}
+
+.login-class {
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 8rem;
+    -webkit-box-shadow: -10px 0px 13px -7px #f2f2f2, 10px 0px 13px -7px #f2f2f2, -28px -25px 11px -15px rgba(107, 107, 107, 0.06);
+    box-shadow: -10px 0px 13px -7px #f2f2f2, 10px 0px 13px -7px #f2f2f2, -28px -25px 11px -15px rgba(107, 107, 107, 0.06);
+}
+
+.login-forgot-pass {
+    margin-left: 8px;
+    color: teal;
+}
+
+.login-button {
+    background-color: white;
+    border: solid var(--style_primary) 1px;
+    padding: 6px 12px;
+    margin: 3px;
+    color: var(--style_primary);
+    transition: 0.4s;
+    font-size: 0.9rem;
+}
+
+.login-button:hover {
+    background-color: var(--style_primary);
+    border: solid var(--style_primary) 1px;
+    padding: 6px 12px;
+    margin: 3px;
+    color: white;
+    transition: 0.4s;
+    font-size: 0.9rem;
+}
+
+.login-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.login-subtitle {
+    text-align: justify;
+}
+
 .click-zoom input[type=checkbox] {
     display: none
 }
@@ -150,7 +196,6 @@
     background-color: white;
     border-bottom-color: green;
     border-bottom-width: .2rem;
-
 }
 
 .btn-redirect {
@@ -546,7 +591,8 @@ dialog {
     color: white;
 }
 
-.contenedor-grande .imagen-logo {
+
+.imagen-logo {
     width: 130px;
     height: 60px;
 }
