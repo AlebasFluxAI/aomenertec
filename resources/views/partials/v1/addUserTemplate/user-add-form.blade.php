@@ -4,14 +4,12 @@
             @if($form_title??null)
                 @include("partials.v1.divider_title",[
                                "title"=>$form_title??""
-                    ]
-                    )
+                    ])
             @endif
             <div class="row pl-5 pr-3">
                 @include("partials.v1.divider_title",[
                                        "title"=>"Información de usuario"
-                            ]
-                            )
+                            ])
 
                 @include("partials.v1.form.form_input_icon",[
                       "input_model"=>"model.name",
@@ -21,7 +19,7 @@
                       "placeholder"=>"Nombre",
                       "col_with"=>8,
                       "input_type"=>"text",
-                      "required"=>true
+                      "required"=>true,
              ])
 
                 @include("partials.v1.form.form_input_icon",[
@@ -32,7 +30,7 @@
                        "placeholder"=>"Apellido",
                        "col_with"=>8,
                        "input_type"=>"text",
-                       "required"=>true
+                       "required"=>true,
                                     ])
 
                 @include("partials.v1.form.form_input_icon",[
@@ -92,7 +90,7 @@
                                "placeholder"=>"identificación",
                                "col_with"=>8,
                                "input_type"=>"text",
-                               "required"=>true
+                               "required"=>true,
                       ])
 
                 @include("partials.v1.form.form_input_icon",[
@@ -114,7 +112,7 @@
                                 "placeholder"=>"Direccion de facturacion",
                                 "col_with"=>8,
                                 "input_type"=>"text",
-                                "required"=>true
+                                "required"=>true,
                           ])
 
                 @include("partials.v1.divider_title",[

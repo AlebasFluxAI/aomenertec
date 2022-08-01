@@ -28,7 +28,6 @@ class Admin extends Model
         "user_id",
         'identification',
         'phone',
-        'nit',
         'address',
         'billing_address',
         'billing_name',
@@ -167,6 +166,10 @@ class Admin extends Model
                 "value" => "ecoenergia"
             ],
             [
+                "key" => "Vaupes",
+                "value" => "vaupes"
+            ],
+            [
                 "key" => "Gris - negro",
                 "value" => "gray_black"
             ],
@@ -239,6 +242,7 @@ class Admin extends Model
             "blue_red" => "Azul - rojo",
             "blue_red_black_header" => "Azul - rojo - Encabezado negro",
             "ecoenergia" => "Coenergia",
+            "vaupes" => "Vaupes",
             "gray_black" => "Gris - negro",
             "gray_blue" => "Gris - azul",
             "gray_blue_black_header" => "Gris - azul - Encabezado negro",

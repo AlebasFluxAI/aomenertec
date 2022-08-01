@@ -60,7 +60,7 @@
                    @endif
                    @if($required??false)
                        required
-                @endif
+                    @endif
             >
         @endif
     </div>
