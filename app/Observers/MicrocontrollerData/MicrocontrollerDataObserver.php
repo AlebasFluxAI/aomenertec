@@ -20,6 +20,6 @@ class MicrocontrollerDataObserver
     public function updated(MicrocontrollerData $microcontrollerData)
     {
         $microcontrollerData->jsonEdit();
-        $microcontrollerData->alertEvent();
+        //$microcontrollerData->alertEvent();
     }
 }

@@ -8,6 +8,7 @@ use App\Console\Commands\V1\RecordMonthlyConsumption;
 use App\Console\Commands\V1\UpdateDailyConsumption;
 use App\Console\Commands\V1\UpdateMonthlyConsumption;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
+use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -33,6 +34,9 @@ class Kernel extends ConsoleKernel
                 $date = new Carbon();
                 $date->setTimestamp($timestamp);
                 $item->source_timestamp = $date->format("Y-m-d H:i:s");
+                AuxData::create([
+                    'data'=> $item->raw_json
+                ]);
                 $item->saveQuietly();
             }
             $data = MicrocontrollerData::whereNull('client_id')
@@ -42,7 +46,7 @@ class Kernel extends ConsoleKernel
             foreach ($data as $item){
                 dispatch(new UpdatedMicrocontrollerDataJob($item));
             }
-        })->everyThreeMinutes()->withoutOverlapping();
+        })->everyThreeMinutes();
 
         ////accumulated daily consumption
         $schedule->command(RecordDailyConsumption::class)->dailyAt('00:03');
