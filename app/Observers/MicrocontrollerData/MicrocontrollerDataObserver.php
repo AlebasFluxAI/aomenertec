@@ -15,11 +15,11 @@ class MicrocontrollerDataObserver
      */
     public function created(MicrocontrollerData $microcontrollerData)
     {
-        $microcontrollerData->miningData();
+
     }
     public function updated(MicrocontrollerData $microcontrollerData)
     {
-        $microcontrollerData->intervalMiningData();
-        $microcontrollerData->alertEvent();
+        $microcontrollerData->jsonEdit();
+        //$microcontrollerData->alertEvent();
     }
 }
