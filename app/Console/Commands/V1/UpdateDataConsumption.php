@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\V1\Enertec\BackupMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
@@ -42,28 +41,64 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-
         $data = MicrocontrollerData::whereNull('client_id')
             ->whereNull('source_timestamp')
             ->orderBy('id')->get();
-
-        foreach ($data as $item){
-            $decode = bin2hex(base64_decode($item->raw_json));
-            $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
-            $date = new Carbon();
-            $date->setTimestamp($timestamp);
-            $item->source_timestamp = $date->format("Y-m-d H:i:s");
-            AuxData::create([
-                'data'=> $item->raw_json
-            ]);
-            $item->saveQuietly();
+        if ($data) {
+            foreach ($data as $item) {
+                $decode = bin2hex(base64_decode($item->raw_json));
+                $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
+                $date = new Carbon();
+                $date->setTimestamp($timestamp);
+                $item->source_timestamp = $date->format("Y-m-d H:i:s");
+                AuxData::create([
+                    'data' => $item->raw_json
+                ]);
+                $item->saveQuietly();
+            }
         }
         $data_aux = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')
             ->get();
-        foreach ($data_aux as $item){
-            UpdatedMicrocontrollerDataJob::dispatch($item);
+        if ($data_aux) {
+            $data_frame = config('data-frame.data_frame');
+            foreach ($data_aux as $item) {
+                $decode = bin2hex(base64_decode($item->raw_json));
+                foreach ($data_frame as $data) {
+                    try {
+                        $split = substr($decode, ($data['start']), ($data['lenght']));
+                        $bin = hex2bin($split);
+                        if ($data['start'] >= 440) {
+                            $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                            $json["data_".$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                        } else {
+                            if ($data['variable_name'] == "flags") {
+                                $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                            } else {
+                                $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                            }
+                        }
+
+                        if (is_nan($json[$data['variable_name']])) {
+                            $json[$data['variable_name']] = null;
+                        }
+
+                        if ($data['variable_name'] == "ph3_varLh_acumm") {
+                            break;
+                        }
+                    } catch (Exception $e) {
+                        echo 'Excepción capturada: ', $e->getMessage(), "\n";
+                    }
+                }
+                $item->raw_json = $json;
+                if ($json['import_wh'] == 0) {
+                    $item->updateQuietly();
+                    $item->delete();
+                    return;
+                }
+                $item->update();
+            }
         }
     }
 }
