@@ -215,7 +215,7 @@ class MicrocontrollerData extends Model
             'penalizable_reactive_inductive_consumption' => $penalizable_inductive]
         );
     }
-    
+
     public function alertEvent()
     {
 
