@@ -2,7 +2,6 @@
 
 namespace App\Jobs\V1\Enertec;
 
-use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;

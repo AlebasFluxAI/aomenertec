@@ -13,10 +13,7 @@ class MicrocontrollerDataObserver
      * @param MicrocontrollerData $microcontrollerData
      * @return void
      */
-    public function created(MicrocontrollerData $microcontrollerData)
-    {
 
-    }
     public function updated(MicrocontrollerData $microcontrollerData)
     {
         $microcontrollerData->jsonEdit();

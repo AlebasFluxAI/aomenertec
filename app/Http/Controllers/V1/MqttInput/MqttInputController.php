@@ -12,6 +12,6 @@ class MqttInputController extends Controller
 {
     public function __invoke(Request $request)
     {
-        dispatch(new SaveMicrocontrollerDataJob($request->message));
+        SaveMicrocontrollerDataJob::dispatch($request->message);
     }
 }
