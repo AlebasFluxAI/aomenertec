@@ -30,16 +30,16 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateDataConsumption::class)->everyFiveMinutes()->withoutOverlapping();
 
         ////accumulated daily consumption
-        $schedule->command(RecordDailyConsumption::class)->dailyAt('00:03');
+        $schedule->command(RecordDailyConsumption::class)->dailyAt('00:10');
 
         ////update accumulated daily consumption
-        $schedule->command(UpdateDailyConsumption::class)->dailyAt('00:06');
+        $schedule->command(UpdateDailyConsumption::class)->dailyAt('00:20');
 
         ////accumulated monthly consumption
-        $schedule->command(RecordMonthlyConsumption::class)->dailyAt('00:09');
+        $schedule->command(RecordMonthlyConsumption::class)->dailyAt('00:25');
 
         ////update accumulated monthly consumption
-        $schedule->command(UpdateMonthlyConsumption::class)->dailyAt('00:12');
+        $schedule->command(UpdateMonthlyConsumption::class)->dailyAt('00:30');
 
         ///Generar facturacion....
 
