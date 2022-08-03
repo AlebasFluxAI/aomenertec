@@ -6,7 +6,7 @@ namespace App\Console;
 use App\Console\Commands\V1\RecordDailyConsumption;
 use App\Console\Commands\V1\RecordMonthlyConsumption;
 use App\Console\Commands\V1\UpdateDailyConsumption;
-use App\Console\Commands\V1\UpdateDataConsumption2;
+use App\Console\Commands\V1\UpdateDataConsumption;
 use App\Console\Commands\V1\UpdateMonthlyConsumption;
 use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
-        $schedule->call(UpdateDataConsumption2::class)->everyThreeMinutes();
+        $schedule->command(UpdateDataConsumption::class)->everyThreeMinutes();
 
         ////accumulated daily consumption
         $schedule->command(RecordDailyConsumption::class)->dailyAt('00:03');

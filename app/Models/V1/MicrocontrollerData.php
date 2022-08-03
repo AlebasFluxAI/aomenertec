@@ -176,6 +176,7 @@ class MicrocontrollerData extends Model
         }
 
         $this->client_id = $client->id;
+        $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         $this->accumulated_real_consumption = $json['import_wh'];
         $this->interval_real_consumption = $json['kwh_interval'];
         $this->accumulated_reactive_consumption = $json['import_VArh'];
@@ -185,7 +186,7 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_capacitive_consumption = $json['varCh_interval'];
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
-        $this->updateQuietly();
+        $this->saveQuietly();
 
         $year = $current_time->format('Y');
         $month = $current_time->format('m');

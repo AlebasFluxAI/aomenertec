@@ -41,7 +41,8 @@ class UpdateDataConsumption extends Command
     public function handle()
     {
         $data = MicrocontrollerData::whereNull('client_id')
-            ->whereNull('source_timestamp')->get();
+            ->whereNull('source_timestamp')
+            ->orderBy('id')->get();
         foreach ($data as $item){
             BackupMicrocontrollerDataJob::dispatch($item)->onQueue('update_data');
         }
