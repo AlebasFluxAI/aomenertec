@@ -22,7 +22,7 @@ class UpdateDataConsumption extends Command
      *
      * @var string
      */
-    protected $description = 'This command will run every three minutes recording data consumption to clients';
+    protected $description = 'This command will run every five minutes recording data consumption to clients';
 
     /**
      * Create a new command instance.
@@ -42,28 +42,12 @@ class UpdateDataConsumption extends Command
     public function handle()
     {
         $data = MicrocontrollerData::whereNull('client_id')
-            ->whereNull('source_timestamp')
-            ->orderBy('id')->get();
-        if ($data) {
-            foreach ($data as $item) {
-                $decode = bin2hex(base64_decode($item->raw_json));
-                $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
-                $date = new Carbon();
-                $date->setTimestamp($timestamp);
-                $item->source_timestamp = $date->format("Y-m-d H:i:s");
-                AuxData::create([
-                    'data' => $item->raw_json
-                ]);
-                $item->saveQuietly();
-            }
-        }
-        $data_aux = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')
             ->get();
-        if ($data_aux) {
+        if ($data) {
             $data_frame = config('data-frame.data_frame');
-            foreach ($data_aux as $item) {
+            foreach ($data as $item) {
                 $decode = bin2hex(base64_decode($item->raw_json));
                 foreach ($data_frame as $data) {
                     try {
