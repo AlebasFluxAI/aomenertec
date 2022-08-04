@@ -24,6 +24,7 @@ class Admin extends Model
 
 
     use PermissionTrait;
+
     protected $fillable = [
         "user_id",
         'identification',
@@ -230,7 +231,7 @@ class Admin extends Model
 
     public function icon()
     {
-        return $this->morphOne(Image::class, "imageable") ?? new Image(["url" => "https://aom.enerteclatam.com/images/logo-horizontal.svg"]);
+        return $this->morphOne(Image::class, "imageable") ?? new Image(["url" => "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png"]);
     }
 
     public function getCssFileNameAttribute()
