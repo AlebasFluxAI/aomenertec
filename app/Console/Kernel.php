@@ -8,6 +8,7 @@ use App\Console\Commands\V1\RecordMonthlyConsumption;
 use App\Console\Commands\V1\UpdateDailyConsumption;
 use App\Console\Commands\V1\UpdateDataConsumption;
 use App\Console\Commands\V1\UpdateMonthlyConsumption;
+use App\Console\Commands\V1\UpdateTimestampDataConsumption;
 use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AuxData;
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
+        $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
         $schedule->command(UpdateDataConsumption::class)->everyFiveMinutes()->withoutOverlapping();
 
         ////accumulated daily consumption

@@ -187,34 +187,6 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
         $this->saveQuietly();
-
-        $year = $current_time->format('Y');
-        $month = $current_time->format('m');
-        $day = $current_time->format('d');
-        $hour = $current_time->format('H');
-        if ($this->interval_real_consumption == 0) {
-            $penalizable_inductive = $this->interval_reactive_inductive_consumption;
-        } else {
-            $percent_penalizable_inductive = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
-            if ($percent_penalizable_inductive >= 50) {
-                $penalizable_inductive = ($this->interval_real_consumption * $percent_penalizable_inductive / 100) - ($this->interval_real_consumption * 0.5);
-            } else {
-                $penalizable_inductive = 0;
-            }
-        }
-        HourlyMicrocontrollerData::updateOrCreate(
-            ['year' => $year,
-            'month' => $month,
-            'day' => $day,
-            'hour' => $hour,
-            'client_id' => $client->id],
-            ['microcontroller_data_id' => $this->id,
-            'interval_real_consumption' => $this->interval_real_consumption,
-            'interval_reactive_capacitive_consumption' => $this->interval_reactive_capacitive_consumption,
-            'interval_reactive_inductive_consumption' => $this->interval_reactive_inductive_consumption,
-            'penalizable_reactive_capacitive_consumption' => $this->interval_reactive_capacitive_consumption,
-            'penalizable_reactive_inductive_consumption' => $penalizable_inductive]
-        );
     }
 
     public function alertEvent()

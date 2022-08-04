@@ -2,7 +2,9 @@
 
 namespace App\Jobs\V1\Enertec;
 
+use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -38,45 +40,33 @@ class UpdatedMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->miningData();
-    }
-
-    private function miningData()
-    {
-        $data_frame = config('data-frame.data_frame');
-        $decode = bin2hex(base64_decode($this->model->raw_json));
-        foreach ($data_frame as $data) {
-            try {
-                $split = substr($decode, ($data['start']), ($data['lenght']));
-                $bin = hex2bin($split);
-                if ($data['start'] >= 440) {
-                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                    $json["data_".$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                } else {
-                    if ($data['variable_name'] == "flags") {
-                        $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
-                    } else {
-                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                    }
-                }
-
-                if (is_nan($json[$data['variable_name']])) {
-                    $json[$data['variable_name']] = null;
-                }
-
-                if ($data['variable_name'] == "ph3_varLh_acumm") {
-                    break;
-                }
-            } catch (Exception $e) {
-                echo 'Excepción capturada: ', $e->getMessage(), "\n";
+        $current_time = new Carbon($this->model->source_timestamp);
+        $year = $current_time->format('Y');
+        $month = $current_time->format('m');
+        $day = $current_time->format('d');
+        $hour = $current_time->format('H');
+        if ($this->model->interval_real_consumption == 0) {
+            $penalizable_inductive = $this->model->interval_reactive_inductive_consumption;
+        } else {
+            $percent_penalizable_inductive = ($this->model->interval_reactive_inductive_consumption * 100) / $this->model->interval_real_consumption;
+            if ($percent_penalizable_inductive >= 50) {
+                $penalizable_inductive = ($this->model->interval_real_consumption * $percent_penalizable_inductive / 100) - ($this->model->interval_real_consumption * 0.5);
+            } else {
+                $penalizable_inductive = 0;
             }
         }
-        $this->model->raw_json = $json;
-        if ($json['import_wh'] == 0) {
-            $this->model->updateQuietly();
-            $this->model->delete();
-            return;
-        }
-        $this->model->update();
+        HourlyMicrocontrollerData::updateOrCreate(
+            ['year' => $year,
+                'month' => $month,
+                'day' => $day,
+                'hour' => $hour,
+                'client_id' => $this->model->client_id],
+            ['microcontroller_data_id' => $this->model->id,
+                'interval_real_consumption' => $this->model->interval_real_consumption,
+                'interval_reactive_capacitive_consumption' => $this->model->interval_reactive_capacitive_consumption,
+                'interval_reactive_inductive_consumption' => $this->model->interval_reactive_inductive_consumption,
+                'penalizable_reactive_capacitive_consumption' => $this->model->interval_reactive_capacitive_consumption,
+                'penalizable_reactive_inductive_consumption' => $penalizable_inductive]
+        );
     }
 }
