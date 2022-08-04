@@ -102,12 +102,12 @@ class HeatMapChart extends Component
         $this->series_heat_map = [];
         for ($i=0; $i<=$days; $i++) {
             if ($i == 0) {
-                $data_chart = $this->client->dailyMicrocontrollerData()
+                $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate("source_timestamp", $this->end_day->format('Y-m-d'));
                     })->get();
             } else {
-                $data_chart = $this->client->dailyMicrocontrollerData()
+                $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate("source_timestamp", $this->end_day->subDay(1)->format('Y-m-d'));
                     })->get();

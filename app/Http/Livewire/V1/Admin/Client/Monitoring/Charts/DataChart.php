@@ -40,8 +40,13 @@ class DataChart extends Component
         $this->chart_type = $aux['chart_type'];
         $this->time_id = $time;
         $this->data_chart = $data_chart;
-        $this->end = $data_chart->first()->microcontrollerData->source_timestamp;
-        $this->start = $data_chart->last()->microcontrollerData->source_timestamp;
+        if ($time == 1){
+            $this->end = $data_chart->first()->source_timestamp;
+            $this->start = $data_chart->last()->source_timestamp;
+        } else {
+            $this->end = $data_chart->first()->microcontrollerData->source_timestamp;
+            $this->start = $data_chart->last()->microcontrollerData->source_timestamp;
+        }
         $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
     }
@@ -112,22 +117,21 @@ class DataChart extends Component
             $data_chart = $this->data_chart;
         } else {
             if ($this->time_id == 1) {
+                $data_chart = $this->client->microcontrollerData()
+                    ->whereBetween("source_timestamp", [$this->start, $this->end])
+                    ->limit(120)->get();
+            } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })->limit(120)->get();
-            } elseif ($this->time_id == 2) {
+            } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })->limit(120)->get();
-            } elseif ($this->time_id == 3) {
-                $data_chart = $this->client->monthlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
-                    })->limit(120)->get();
             } else {
-                $data_chart = $this->client->annualMicrocontrollerData()
+                $data_chart = $this->client->monthlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })->limit(120)->get();
@@ -135,8 +139,13 @@ class DataChart extends Component
             $this->data_chart = $data_chart;
         }
         if (count($data_chart)>0) {
-            $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-            $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+            if ($this->time_id == 1){
+                $this->end = $this->data_chart->first()->source_timestamp;
+                $this->start = $this->data_chart->last()->source_timestamp;
+            } else {
+                $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+                $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+            }
             $this->date_range = $this->start . " - " . $this->end;
             $array_aux = $data_chart->reverse();
             $this->series = [];
@@ -149,19 +158,22 @@ class DataChart extends Component
                     if ($this->time_id == 3 || $this->time_id == 4) {
                         $raw_json = json_decode($item->raw_json, true);
                         array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                    } else {
+                    } elseif ($this->time_id == 2) {
                         $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                        array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                    } else {
+                        $raw_json = json_decode($item->raw_json, true);
                         array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
                     }
                     if ($index == 0) {
                         if ($this->time_id == 1) {
-                            $x = Carbon::create($item->microcontrollerData->source_timestamp)->format('d F H:i:s');
+                            $x = Carbon::create($item->source_timestamp)->format('d F H:i:s');
                         } elseif ($this->time_id == 2) {
                             $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
                         } elseif ($this->time_id == 3) {
                             $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
                         } else {
-                            $x = Carbon::create($item->year, $item->month)->format(' F Y');
+                            $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
                         }
                         array_push($this->x_axis, $x);
                     }
