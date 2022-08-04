@@ -6,7 +6,7 @@
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="/"><img class="imagen-logo"
-                                                              src="https://aom.enerteclatam.com/images/logo-horizontal.svg"
+                                                              src="https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png"
                                                               alt=""></a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"

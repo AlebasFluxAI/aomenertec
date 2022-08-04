@@ -49,7 +49,9 @@ use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use NumberFormatter;
+use Illuminate\Support\Facades\Event;
+use Laravel\Sanctum\PersonalAccessToken;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -70,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
         MicrocontrollerData::observe(MicrocontrollerDataObserver::class);
