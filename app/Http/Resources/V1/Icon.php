@@ -19,7 +19,7 @@ class Icon extends Singleton
         try {
             return self::getUserIcon();
         } catch (Throwable $exception) {
-            return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
+            return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
         }
     }
 
@@ -28,6 +28,6 @@ class Icon extends Singleton
         if ($admin = Auth::user()->getAdmin()) {
             return $admin->icon->url;
         }
-        return "https://aom.enerteclatam.com/images/logo-horizontal.svg";
+        return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
     }
 }

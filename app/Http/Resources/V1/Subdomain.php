@@ -20,7 +20,7 @@ class Subdomain
         };
     }
 
-    public static function getIcon()
+    public static function getIcon() // Esta es la imagen que aparece como favicon en la opagina
     {
         return match (Route::input("subdomain")) {
             self::SUBDOMAIN_AOM => "https://enerteclatam.com/media/wkvhaio3/favicon.png",
@@ -30,13 +30,13 @@ class Subdomain
         };
     }
 
-    public static function getHeaderIcon()
+    public static function getHeaderIcon() // Esta es la imagen que aparece en el header principal
     {
         return match (Route::input("subdomain")) {
-            self::SUBDOMAIN_AOM => "https://aom.enerteclatam.com/images/logo-horizontal.svg",
+            self::SUBDOMAIN_AOM => "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png",
             self::SUBDOMAIN_COENERGIA => "https://enertedevops.s3.us-east-2.amazonaws.com/images/16517642985208516/1651764298_Coenergia_login.png",
             self::SUBDOMAIN_VAUPES => "https://enertedevops.s3.us-east-2.amazonaws.com/images/VAUPES-1.png",
-            default => "https://aom.enerteclatam.com/images/logo-horizontal.svg",
+            default => "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png",
         };
     }
 

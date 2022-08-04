@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
 
     @include("partials.v1.title",[
@@ -90,7 +91,7 @@
                                                                           [
                                                                             "key"=>"Logo",
                                                                             "type"=>"image",
-                                                                            "value"=>$model->icon?$model->icon->url:"https://aom.enerteclatam.com/images/logo-horizontal.svg"
+                                                                            "value"=>$model->icon?$model->icon->url:"https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png"
                                                                         ],
                                                                     ]
                                                            ],
