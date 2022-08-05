@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ class Equipment extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     // Agregasr estato pendiente de reparacion
     public const STATUS_NEW = 'new';
