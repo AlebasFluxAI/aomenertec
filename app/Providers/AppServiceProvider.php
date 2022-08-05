@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Traits\AuditableTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientAddress;
@@ -45,8 +46,10 @@ use App\Observers\User\Technician\UserTechnicianObserver;
 use App\Observers\User\UserObserver;
 use App\Observers\ClientAlert\ClientAlertObserver;
 use App\Models\V1\ClientAlert;
+use App\Observers\V1\Change\ChangeObserver;
 use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
@@ -72,6 +75,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+        Event::listen(['eloquent.deleting:*', 'eloquent.updating:*', 'eloquent.creating:*'], function ($model) {
+            $model = trim(explode(':', $model)[1]);
+            if (is_subclass_of($model, Model::class) and
+                array_key_exists(AuditableTrait::class, class_uses_recursive($model))) {
+                $model::observe(ChangeObserver::class);
+            }
+        });
 
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
