@@ -24,14 +24,20 @@ class ChangeRegisterJob implements ShouldQueue
      * @return void
      */
     private $model;
+    private $before;
+    private $after;
     private $type;
     private $user;
+    private $changes;
 
-    public function __construct(Model $model, $type, User $user)
+    public function __construct($model, $before, $after, $type, User $user, $changes)
     {
         $this->model = $model;
+        $this->before = $before;
+        $this->after = $after;
         $this->type = $type;
         $this->user = $user;
+        $this->changes = $changes;
     }
 
     /**
@@ -43,13 +49,13 @@ class ChangeRegisterJob implements ShouldQueue
     {
         switch ($this->type) {
             case(Change::CHANGE_TYPE_CREATED):
-                $this->createChange(Change::CHANGE_TYPE_CREATED, $this->model);
+                $this->createChange($this->model, $this->before, $this->after, Change::CHANGE_TYPE_CREATED, $this->changes);
                 break;
             case(Change::CHANGE_TYPE_UPDATED):
-                $this->createChange(Change::CHANGE_TYPE_UPDATED, $this->model);
+                $this->createChange($this->model, $this->before, $this->after, Change::CHANGE_TYPE_UPDATED, $this->changes);
                 break;
             case(Change::CHANGE_TYPE_DELETED):
-                $this->createChange(Change::CHANGE_TYPE_DELETED, $this->model);
+                $this->createChange($this->model, $this->before, $this->after, Change::CHANGE_TYPE_DELETED, $this->changes);
                 break;
             default:
                 break;
@@ -57,13 +63,12 @@ class ChangeRegisterJob implements ShouldQueue
 
     }
 
-    private function createChange($type, $model)
+    private function createChange($model, $before, $after, $type, $changes)
     {
-
         DB::table("changes")->insert([
-            "before" => json_encode($model->getOriginal()),
-            "after" => $model->toJson(),
-            "delta" => json_encode($model->getChanges()),
+            "before" => json_encode($before),
+            "after" => json_encode($after),
+            "delta" => json_encode($changes),
             "user_id" => $this->user->id,
             "type" => $type,
             "model_id" => $model->id,

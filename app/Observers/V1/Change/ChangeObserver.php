@@ -13,16 +13,18 @@ class ChangeObserver
 
     public function created(Model $model)
     {
-        dispatch(new ChangeRegisterJob($model, Change::CHANGE_TYPE_CREATED, Auth::user()));
+        dispatch(new ChangeRegisterJob($model, $model->getOriginal(), $model->getAttributes(), Change::CHANGE_TYPE_CREATED, Auth::user(), $model->getChanges()));
     }
 
     public function updated(Model $model)
     {
-        dispatch(new ChangeRegisterJob($model, Change::CHANGE_TYPE_UPDATED, Auth::user()));
+        
+
+        dispatch(new ChangeRegisterJob($model, $model->getOriginal(), $model->getAttributes(), Change::CHANGE_TYPE_UPDATED, Auth::user(), $model->getChanges()));
     }
 
     public function deleted(Model $model)
     {
-        dispatch(new ChangeRegisterJob($model, Change::CHANGE_TYPE_DELETED, Auth::user()));
+        dispatch(new ChangeRegisterJob($model, $model->getOriginal(), $model->getAttributes(), Change::CHANGE_TYPE_DELETED, Auth::user(), $model->getChanges()));
     }
 }

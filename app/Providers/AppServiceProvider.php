@@ -83,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
                 $model::observe(ChangeObserver::class);
             }
         });
-
+        
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
         MicrocontrollerData::observe(MicrocontrollerDataObserver::class);
