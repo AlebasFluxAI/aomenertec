@@ -49,6 +49,7 @@ class ReactiveChart extends Component
         if ($this->time_reactive_id == 1) {
             $data_chart = $this->client->microcontrollerData()
                 ->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive])
+                ->orderBy('source_timestamp', 'desc')
                 ->limit(60)->get();
         } elseif ($this->time_reactive_id == 2) {
             if ($this->penalizable) {
@@ -106,6 +107,7 @@ class ReactiveChart extends Component
             }
         }
         if (count($data_chart)>0) {
+            $this->data_chart_reactive = $data_chart;
             if ($this->time_reactive_id == 1) {
                 $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
                 $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
@@ -113,7 +115,6 @@ class ReactiveChart extends Component
                 $this->end_reactive = $this->data_chart_reactive->first()->microcontrollerData->source_timestamp;
                 $this->start_reactive = $this->data_chart_reactive->last()->microcontrollerData->source_timestamp;
             }
-            $this->data_chart_reactive = $data_chart;
             $this->date_range_reactive = $this->start_reactive . " - " . $this->end_reactive;
         }
         return $data_chart;
@@ -136,7 +137,7 @@ class ReactiveChart extends Component
             MQTT::disconnect();
         }
         if ($this->time_reactive_id == 1) {
-            $data_chart = $this->client->microcontrollerData()->limit(60)->get();
+            $data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
         } elseif ($this->time_reactive_id == 2) {
             if ($this->penalizable) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()

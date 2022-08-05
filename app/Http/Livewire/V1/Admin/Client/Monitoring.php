@@ -35,7 +35,7 @@ class Monitoring extends Component
         $this->time = 2;
         $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
         if (count($this->data_chart)==0) {
-            $this->data_chart = $this->client->microcontrollerData()->limit(60)->get();
+            $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
             $this->time = 1;
         }
     }

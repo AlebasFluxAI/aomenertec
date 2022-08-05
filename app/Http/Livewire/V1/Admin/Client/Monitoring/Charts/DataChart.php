@@ -54,16 +54,21 @@ class DataChart extends Component
     public function restartDateRange()
     {
         if ($this->time_id == 1) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(60)->get();
+            $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
         } elseif ($this->time_id == 2) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(24)->get();
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
         } elseif ($this->time_id == 3) {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData()->limit(31)->get();
+            $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(31)->get();
         } else {
-            $this->data_chart = $this->client->annualMicrocontrollerData()->limit(12)->get();
+            $this->data_chart = $this->client->monthlyMicrocontrollerData()->limit(12)->get();
         }
-        $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-        $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        if ($this->time_id == 1){
+            $this->end = $this->data_chart->first()->source_timestamp;
+            $this->start = $this->data_chart->last()->source_timestamp;
+        } else {
+            $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+            $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        }
         $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
     }
@@ -119,6 +124,7 @@ class DataChart extends Component
             if ($this->time_id == 1) {
                 $data_chart = $this->client->microcontrollerData()
                     ->whereBetween("source_timestamp", [$this->start, $this->end])
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(120)->get();
             } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
