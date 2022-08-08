@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,8 +11,9 @@ class PriceConventional extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
-    protected $fillable=[
+    protected $fillable = [
         "network_operator_id",
         "stratum_id",
         "voltage_level_id",
