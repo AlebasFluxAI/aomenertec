@@ -9,6 +9,7 @@ class Subdomain
     public const SUBDOMAIN_COENERGIA = "coenergia";
     public const SUBDOMAIN_VAUPES = "vaupes";
     public const SUBDOMAIN_AOM = "aom";
+    public const SUBDOMAIN_DEFAULT = "aom";
 
     public static function getTitle()
     {

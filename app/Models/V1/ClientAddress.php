@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 class ClientAddress extends Model
 {
     use HasFactory;
-
+    use AuditableTrait;
 
     public const STATUS_ENABLED = "enabled";
     public const STATUS_DISABLED = "disabled";

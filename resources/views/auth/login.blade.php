@@ -105,7 +105,7 @@
                             </div>
                             @if (Route::has('password.request'))
                                 <div class="text-center"><a
-                                        href="{{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"enertec"]) }}">¿Olvidaste
+                                        href="{{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??\App\Http\Resources\V1\Subdomain::SUBDOMAIN_DEFAULT]) }}">¿Olvidaste
                                         la
                                         contraseña?</a></div>
                             @endif

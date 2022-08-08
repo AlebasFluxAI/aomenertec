@@ -11,7 +11,7 @@
 
     <br>
     <form method="POST"
-          action="{{ route('password.update',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"enertec"]) }}">
+          action="{{ route('password.update',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??\App\Http\Resources\V1\Subdomain::SUBDOMAIN_DEFAULT]) }}">
         @csrf
 
         <input type="hidden" name="token" value="{{ $request->route('token') }}">

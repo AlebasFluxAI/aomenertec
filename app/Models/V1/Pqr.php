@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ class Pqr extends Model
     use HasFactory;
     use ImageableTrait;
     use SoftDeletes;
+    use AuditableTrait;
 
     public const STATUS_CREATED = 'created';
     public const STATUS_PROCESSING = 'processing';
