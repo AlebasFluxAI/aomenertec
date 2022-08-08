@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ class ClientAlert extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     public const ALERT = "alert";
     public const CONTROL = "control";
@@ -20,7 +22,8 @@ class ClientAlert extends Model
         'client_alert_configuration_id',
         'value',
         'type'
-                        ];
+    ];
+
     public function microcontrollerData()
     {
         return $this->belongsTo(MicrocontrollerData::class);

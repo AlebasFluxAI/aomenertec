@@ -11,6 +11,7 @@ class Location extends Model
     use HasFactory;
     use SoftDeletes;
 
+
     protected $fillable = [
         'id',
         'location_type_id',
@@ -22,10 +23,12 @@ class Location extends Model
     {
         return $this->hasMany(Client::class);
     }
+
     public function municipality()
     {
         return $this->belongsTo(Municipality::class);
     }
+
     public function locationType()
     {
         return $this->belongsTo(LocationType::class);

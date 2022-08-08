@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ class PqrUser extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
 
     public const STATUS_ENABLED = "enabled";

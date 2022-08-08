@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ class DailyMicrocontrollerData extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     protected $fillable = [
         'year',
@@ -29,6 +31,7 @@ class DailyMicrocontrollerData extends Model
     {
         return $this->belongsTo(MicrocontrollerData::class);
     }
+
     public function client()
     {
         return $this->belongsTo(Client::class);

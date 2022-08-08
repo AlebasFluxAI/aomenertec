@@ -12,7 +12,7 @@
                  "target_route"=>"guest.admin-pqr",
                  "button_align"=>"right",
                  "target_binding"=>"subdomain",
-                 "target_binding_value"=>\Illuminate\Support\Facades\Route::input("subdomain")??"enertec"
+                 "target_binding_value"=>\Illuminate\Support\Facades\Route::input("subdomain")??\App\Http\Resources\V1\Subdomain::SUBDOMAIN_DEFAULT
 
             ])
         <div class="section-title my-5">

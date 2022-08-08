@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdAscScope;
 use App\Scope\OrderIdScope;
@@ -14,6 +15,7 @@ class PqrMessage extends Model
     use ImageableTrait;
     use HasFactory;
     use SoftDeletes;
+    use AuditableTrait;
 
     public const SENDER_TYPE_USER = "user";
     public const SENDER_TYPE_NETWORK_OPERATOR = "network_operator";
