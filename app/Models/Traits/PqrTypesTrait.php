@@ -2,9 +2,12 @@
 
 namespace App\Models\Traits;
 
+use App\Http\Resources\V1\ToastEvent;
+use App\Models\V1\Client;
 use App\Models\V1\Image;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrMessage;
+use App\Models\V1\Supervisor;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -110,6 +113,9 @@ trait PqrTypesTrait
         $component->validate([
             'attach' => 'image|max:10240', // 1MB Max
         ]);
+        if (!$this->validateSupervisor($component)) {
+            return;
+        }
         DB::transaction(function () use ($component) {
             $pqr = Pqr::create($this->mapper($component));
             $pqr->buildOneImageFromFile("attach", $component->attach);
@@ -122,6 +128,27 @@ trait PqrTypesTrait
 
             $component->redirectRoute("administrar.v1.peticiones.detalles", ["pqr" => $pqr->id]);
         });
+    }
+
+    private function validateSupervisor(Component $component)
+    {
+        $pqr_mapped = $this->mapper($component);
+        if (array_key_exists("supervisor_id", $pqr_mapped)) {
+            $supervisor_id = $this->mapper($component)["supervisor_id"];
+            $supervisor = Supervisor::find($supervisor_id);
+            if (array_key_exists("client_code", $pqr_mapped)) {
+                $client = Client::whereCode($pqr_mapped["client_code"])->first();
+            } else {
+                $client = Client::whereIdentification($pqr_mapped["identification"])->first();
+            }
+
+            if (!$client || !in_array($client->id, $supervisor->clients->pluck('id')->toArray())) {
+                ToastEvent::launchToast($component, "show", "error", "El cliente no esta vinculado al administrador");
+                return false;
+            }
+        }
+        return true;
+
     }
 
     public function closePqr(Component $component, $pqr)
