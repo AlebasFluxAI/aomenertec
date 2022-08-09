@@ -243,5 +243,6 @@ return [
         Permissions::PQR_CREATE,
         Permissions::PQR_SHOW,
         Permissions::PQR_REPLY,
+        Permissions::PQR_CLOSE,
     ]
 ];

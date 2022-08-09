@@ -30,6 +30,7 @@ class PqrObserver
         }
     }
 
+
     private function getClient(Pqr $pqr)
     {
         if ($client_code = $pqr->client_code) {
