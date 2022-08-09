@@ -43,11 +43,11 @@ class Menu extends Singleton
                 ]),
 
                 new Menu("Equipos", null, [
-                    new Menu("Equipos", "administrar.v1.equipos.listado", [], ),
+                    new Menu("Equipos", "administrar.v1.equipos.listado", [],),
                     new Menu("Alertas", null, [
                         new Menu("Alertas", "administrar.v1.equipos.alertas.listado", []),
-                    ], ),
-                ], )
+                    ],),
+                ],)
             ]
         )
         ];
@@ -70,7 +70,7 @@ class Menu extends Singleton
                                 "route" => "administrar.v1.usuarios.superadmin.listado",
                                 "submenu" => [
                                     [
-                                        "title" => "Usuario sporte",
+                                        "title" => "Usuario soporte",
                                         "route" => "administrar.v1.usuarios.admin.listado",
                                         "submenu" => []
                                     ],

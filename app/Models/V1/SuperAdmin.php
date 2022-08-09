@@ -39,7 +39,7 @@ class SuperAdmin extends Model
                                 "route" => "administrar.v1.usuarios.superadmin.listado",
                                 "submenu" => [
                                     [
-                                        "title" => "Usuario sporte",
+                                        "title" => "Usuario soporte",
                                         "route" => "administrar.v1.usuarios.soporte.listado",
                                         "submenu" => []
                                     ],
