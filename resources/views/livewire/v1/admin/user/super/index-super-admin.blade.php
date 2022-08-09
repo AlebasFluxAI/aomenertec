@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
 
     @endsection
 
@@ -61,7 +62,6 @@
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
-                                    "delete"=>"delete",
                                     "customs" => [
                                                     [
                                                         "permission" => [\App\Http\Resources\V1\Permissions::SUPER_ADMIN_ENABLED],
