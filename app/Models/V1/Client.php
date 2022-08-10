@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,6 +15,7 @@ class Client extends Model
     use HasFactory;
     use SoftDeletes;
     use Notifiable;
+    use AuditableTrait;
 
     public const MONOPHASIC = 'monophasic';
     public const BIPHASIC = 'biphasic';

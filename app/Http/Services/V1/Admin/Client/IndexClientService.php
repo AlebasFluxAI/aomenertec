@@ -74,6 +74,14 @@ class IndexClientService extends Singleton
             return $networkOperator->clients()->paginate(15);
         }
 
+        if ($supervisor = $user->supervisor) {
+
+            if ($component->filter) {
+                return Client::whereIn('id', $supervisor->clients->pluck('id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return Client::whereIn('id', $supervisor->clients->pluck('id'))->paginate(15);
+        }
         if ($admin = $user->admin) {
             if ($component->filter) {
                 return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))

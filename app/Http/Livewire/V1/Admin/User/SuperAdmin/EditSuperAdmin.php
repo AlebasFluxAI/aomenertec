@@ -32,10 +32,6 @@ class EditSuperAdmin extends Component
         $this->superAdminEditService->mount($this, $superAdmin);
     }
 
-    public function updated($propertyName)
-    {
-        $this->superAdminEditService->updated($this, $propertyName);
-    }
 
     public function submitForm()
     {

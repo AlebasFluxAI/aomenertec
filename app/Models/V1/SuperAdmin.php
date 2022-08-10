@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ class SuperAdmin extends Model
     use HasFactory;
     use SoftDeletes;
     use PermissionTrait;
+    use AuditableTrait;
 
     protected $fillable = ['identification',
         'phone',
@@ -37,7 +39,7 @@ class SuperAdmin extends Model
                                 "route" => "administrar.v1.usuarios.superadmin.listado",
                                 "submenu" => [
                                     [
-                                        "title" => "Usuario sporte",
+                                        "title" => "Usuario soporte",
                                         "route" => "administrar.v1.usuarios.soporte.listado",
                                         "submenu" => []
                                     ],

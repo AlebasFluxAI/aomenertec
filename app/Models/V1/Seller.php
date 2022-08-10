@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,6 +14,7 @@ class Seller extends Model
     use HasFactory;
     use SoftDeletes;
     use PermissionTrait;
+    use AuditableTrait;
 
     protected $fillable = [
         'identification',
