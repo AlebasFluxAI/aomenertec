@@ -86,20 +86,15 @@
                                                             ]
                                                 ],
                                                 [
-                                                    "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>  [
-
-                                                                              "table_pageable"=>false,
-                                                                               "table_headers"=>[
-                                                                                        "ID"=>"client.id",
-                                                                                        "Nombre"=>"client.name",
-                                                                                        "Apellido"=>"client.last_name",
-                                                                                        "Correo electronico"=>"client.email",
-                                                                                        "Telefono"=>"client.phone",
-                                                                                 ],
-                                                                               "table_rows"=>$model->clientSupervisors,
-                                                                                  ]
-                                                                            ]
+                                                  "view_name"=>"livewire.v1.admin.client.index-client",
+                                                  "view_values"=>[
+                                                      "data"=>$model->clients()->get(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ]
 
 
 

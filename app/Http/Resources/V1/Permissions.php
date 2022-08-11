@@ -44,6 +44,7 @@ class Permissions
     public const NETWORK_OPERATOR_DELETE = "network_operator.delete";
     public const NETWORK_OPERATOR_SHOW = "network_operator.show";
     public const NETWORK_OPERATOR_LINK_EQUIPMENT = "network_operator.link_equipment";
+    public const NETWORK_OPERATOR_REMOVE_EQUIPMENT = "network_operator.remove_equipment";
     public const NETWORK_OPERATOR_ENABLED = "admin.enabled";
 
     public const TECHNICIAN_CREATE = "technician.create";
@@ -52,6 +53,7 @@ class Permissions
     public const TECHNICIAN_SHOW = "technician.show";
     public const TECHNICIAN_LINK_CLIENT = "technician.link_client";
     public const TECHNICIAN_LINK_EQUIPMENT = "technician.link_equipment";
+    public const TECHNICIAN_REMOVE_EQUIPMENT = "technician.remove_equipment";
     public const TECHNICIAN_ENABLED = "technician.enabled";
 
     public const SUPPORT_CREATE = "support.create";

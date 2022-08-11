@@ -25,6 +25,19 @@ class DetailsSupervisor extends Component
         $this->supervisorDetailService->mount($this, $supervisor);
     }
 
+    public function conditionalMonitoring($id)
+    {
+        return $this->supervisorDetailService->conditionalMonitoring($this, $id);
+    }
+    public function conditionalDeleteClient($id)
+    {
+        return $this->supervisorDetailService->conditionalDeleteClient($this, $id);
+    }
+    public function deleteClient($id)
+    {
+        $this->supervisorDetailService->deleteclient($this, $id);
+    }
+
 
     public function render()
     {

@@ -62,22 +62,6 @@
                  "table_actions"=>[
                                     "details"=>"details",
                                     "edit"=>"edit",
-                                    "customs" => [
-                                                    [
-                                                        "permission" => [\App\Http\Resources\V1\Permissions::SUPER_ADMIN_ENABLED],
-                                                        "conditional" => "getEnabledSuperAdmin",
-                                                        "function"=>"disableSuperAdmin",
-                                                        "icon"=>"fa-solid fa-user-xmark",
-                                                        "tooltip_title"=>"Desactivar"
-                                                    ],
-                                                    [
-                                                        "permission" => [\App\Http\Resources\V1\Permissions::SUPER_ADMIN_ENABLED],
-                                                        "conditional" => "getEnabledAuxSuperAdmin",
-                                                        "function"=>"disableSuperAdmin",
-                                                        "icon"=>"fa-solid fa-user-check",
-                                                        "tooltip_title"=>"Activar"
-                                                    ],
-                                                ]
                                     ],
 
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

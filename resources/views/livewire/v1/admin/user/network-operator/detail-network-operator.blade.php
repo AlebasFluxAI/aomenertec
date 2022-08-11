@@ -44,6 +44,10 @@
                                                     "title"=>"Tecnicos",
 
                                                 ],
+                                                [
+                                                    "title"=>"Equipos",
+
+                                                ],
                                            ],
 
                             "tab_contents"=>[
@@ -103,120 +107,61 @@
                                                             ]
                                                 ],
                                             [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.client.index-client",
+                                                  "view_values"=>[
+                                                      "data"=>$model->clients()->get(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.user.seller.index-seller",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                                        "Codigo"=>"code",
-                                                                                        "Telefono"=>"phone"
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"v1.admin.client.detail.client",
-                                                                                                            "binding"=>"client"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search"
-                                                                                            ],
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$model->clients
-
+                                                                       "data"=>$model->sellers()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
                                                                   ]
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.user.supervisor.index-supervisor",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.detalles",
-                                                                                                            "binding"=>"seller"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search"
-                                                                                            ],
-                                                                                            [
-                                                                                                "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.vendedores.editar",
-                                                                                                            "binding"=>"seller"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil"
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows" => $model->sellers
-
+                                                                       "data"=>$supervisors,
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteSupervisor",
                                                                   ]
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.user.technician.index-technician",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.detalles",
-                                                                                                            "binding"=>"supervisor"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search"
-                                                                                            ],
-                                                                                            [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.supervisores.editar",
-                                                                                                            "binding"=>"supervisor"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil"
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$model->supervisors
-
+                                                                       "data"=>$model->technicians()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
                                                                   ]
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
-                                                   "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.detalles",
-                                                                                                            "binding"=>"technician"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search"
-                                                                                            ],
-                                                                                            [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.usuarios.tecnicos.editar",
-                                                                                                            "binding"=>"technician"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-pencil"
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$model->technicians
-
-                                                                  ]
-                                               ]
+                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
+                                                  "view_values"=>[
+                                                      "data"=>$model->equipments()->get(),
+                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_REMOVE_EQUIPMENT],
+                                                      "functionRemoveEquipment" => "removeEquipmentNetworkOperator",
+                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentNetworkOperator",
+                                                      "availableFlag" => "has_network_operator",
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
 
                                                                                         ]
          ])

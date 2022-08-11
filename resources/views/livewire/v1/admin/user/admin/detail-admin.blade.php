@@ -11,21 +11,11 @@
 
     @include("partials.v1.table_nav",
          ["nav_options"=>[
-                    [
-                        "button_align"=>"right",
-                        "click_action"=>"",
-                        "button_icon"=>"fas fa-pencil",
-                        "button_content"=>"Editar",
-                        "target_route"=>"administrar.v1.usuarios.admin.editar",
-                        "target_binding"=>"admin",
-                        "target_binding_value"=>$admin->id
-                    ],
-                    [
-                        "button_align"=>"right",
-                        "click_action"=>"",
-                        "button_icon"=>"fas fa-list",
-                        "button_content"=>"Ver listado",
-                        "target_route"=>"administrar.v1.usuarios.admin.listado",
+                    ["button_align"=>"right",
+                    "click_action"=>"",
+                    "button_icon"=>"fas fa-list",
+                    "button_content"=>"Ver listado",
+                    "target_route"=>"administrar.v1.usuarios.admin.listado",
                     ],
                 ]
         ])
@@ -42,6 +32,10 @@
                                                 ],
                                                   [
                                                     "title"=>"Operadores de red",
+
+                                                ],
+                                                [
+                                                    "title"=>"Equipos",
 
                                                 ],
                                                 [
@@ -142,58 +136,41 @@
 
                                                 ],
                                                 [
-                                                   "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>[
-                                                                        "table_pageable"=>false,
-                                                                       "table_headers"=>["ID"=>"id",
-                                                                                         "Nombre"=>"name",
-                                                                                         "Correo"=>"email",
-                                                                                         "Identificacion"=>"identification",
-
-                                                                        ],
-                                                                       "table_rows"=>$admin->networkOperators
-
-                                                                   ]
-                                                ],
-                                                  [
-                                                   "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>[
-                                                                        "table_pageable"=>false,
-                                                                       "table_headers"=>[
-                                                                                          "ID"=>"id",
-                                                                                         "Nombre"=>"name",
-                                                                                         "Correo"=>"email",
-                                                                                         "Identificacion"=>"identification",
-                                                                        ],
-
-                                                                       "table_rows"=>$admin->clients
-
-                                                                   ]
-                                                ],
-                                                 [
-                                                  "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.user.network-operator.index-network-operator",
                                                    "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"equipmentType.type",
-                                                                                        "Serial"=>"serial",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.equipos.detalle",
-                                                                                                            "binding"=>"equipment"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search",
-                                                                                                     "tooltip_title"=>"Detalles",
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$admin->equipments
-
+                                                                       "data"=>$admin->networkOperators()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteNetworkOperator",
                                                                   ]
                                                ],
+                                                  [
+                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
+                                                  "view_values"=>[
+                                                      "data"=>$admin->equipments()->get(),
+                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::ADMIN_REMOVE_EQUIPMENT],
+                                                      "functionRemoveEquipment" => "removeEquipmentAdmin",
+                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentAdmin",
+                                                      "availableFlag" => "has_admin",
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
+                                                  [
+                                                  "view_name"=>"livewire.v1.admin.client.index-client",
+                                                  "view_values"=>[
+                                                      "data"=>$admin->getClientsAttribute(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
+
+
 
 
 

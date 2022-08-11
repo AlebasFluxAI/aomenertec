@@ -27,6 +27,7 @@ return [
         Permissions::NETWORK_OPERATOR_DELETE,
         Permissions::NETWORK_OPERATOR_SHOW,
         Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT,
+        Permissions::NETWORK_OPERATOR_REMOVE_EQUIPMENT,
         Permissions::NETWORK_OPERATOR_ENABLED,
         Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
 
@@ -36,7 +37,9 @@ return [
         Permissions::TECHNICIAN_DELETE,
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
+        Permissions::TECHNICIAN_LINK_CLIENT,
         Permissions::TECHNICIAN_LINK_EQUIPMENT,
+        Permissions::TECHNICIAN_REMOVE_EQUIPMENT,
         Permissions::TECHNICIAN_ENABLED,
 
         Permissions::SELLER_CREATE,
@@ -48,7 +51,6 @@ return [
 
         Permissions::CLIENT_CREATE,
         Permissions::CLIENT_EDIT,
-        Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_SHOW_MONITORING,
@@ -82,6 +84,7 @@ return [
     SuperAdmin::class => [
         Permissions::ADMIN_CREATE,
         Permissions::ADMIN_LINK_EQUIPMENT,
+        Permissions::ADMIN_REMOVE_EQUIPMENT,
         Permissions::ADMIN_LINK_EQUIPMENT_TYPE,
         Permissions::ADMIN_EDIT,
         Permissions::ADMIN_DELETE,
@@ -89,21 +92,22 @@ return [
         Permissions::ADMIN_ENABLED,
 
 
-        Permissions::EQUIPMENT_CREATE,
-        Permissions::EQUIPMENT_EDIT,
-        Permissions::EQUIPMENT_DELETE,
-        Permissions::EQUIPMENT_SHOW,
-
         Permissions::EQUIPMENT_TYPE_CREATE,
         Permissions::EQUIPMENT_TYPE_EDIT,
         Permissions::EQUIPMENT_TYPE_DELETE,
         Permissions::EQUIPMENT_TYPE_SHOW,
+
+        Permissions::EQUIPMENT_CREATE,
+        Permissions::EQUIPMENT_EDIT,
+        Permissions::EQUIPMENT_DELETE,
+        Permissions::EQUIPMENT_SHOW,
 
         Permissions::NETWORK_OPERATOR_CREATE,
         Permissions::NETWORK_OPERATOR_EDIT,
         Permissions::NETWORK_OPERATOR_DELETE,
         Permissions::NETWORK_OPERATOR_SHOW,
         Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT,
+        Permissions::NETWORK_OPERATOR_REMOVE_EQUIPMENT,
         Permissions::NETWORK_OPERATOR_ENABLED,
         Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
 
@@ -113,6 +117,8 @@ return [
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
         Permissions::TECHNICIAN_ENABLED,
+        Permissions::TECHNICIAN_LINK_EQUIPMENT,
+        Permissions::TECHNICIAN_REMOVE_EQUIPMENT,
 
         Permissions::SELLER_CREATE,
         Permissions::SELLER_EDIT,
@@ -163,7 +169,6 @@ return [
 
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
-        Permissions::EQUIPMENT_DELETE,
         Permissions::EQUIPMENT_SHOW,
 
         Permissions::TECHNICIAN_CREATE,
@@ -172,6 +177,7 @@ return [
         Permissions::TECHNICIAN_SHOW,
         Permissions::TECHNICIAN_LINK_CLIENT,
         Permissions::TECHNICIAN_LINK_EQUIPMENT,
+        Permissions::TECHNICIAN_REMOVE_EQUIPMENT,
         Permissions::TECHNICIAN_ENABLED,
 
         Permissions::SELLER_CREATE,
@@ -183,7 +189,6 @@ return [
 
         Permissions::CLIENT_CREATE,
         Permissions::CLIENT_EDIT,
-        Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
         Permissions::CLIENT_SETTINGS,

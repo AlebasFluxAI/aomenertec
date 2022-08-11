@@ -3,6 +3,13 @@
 namespace App\Http\Services\V1\Admin\User\Technician;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Admin;
+use App\Models\V1\Client;
+use App\Models\V1\Equipment;
+use App\Models\V1\MicrocontrollerData;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\SuperAdmin;
+use App\Models\V1\User;
 use Livewire\Component;
 
 class TechnicianDetailsService extends Singleton
@@ -14,13 +21,52 @@ class TechnicianDetailsService extends Singleton
         ]);
     }
 
-    public function edit(Component $component)
+    public function conditionalDeleteEquipment(Component $component, $id)
     {
-        $component->redirectRoute("administrar.v1.usuarios.tecnicos.editar", ["technician" => $component->model->id]);
+        $model = User::getUserModel();
+        if ($model::class == SuperAdmin::class) {
+            return Equipment::find($id)->has_admin;
+        } elseif ($model::class == Admin::class){
+            return Equipment::find($id)->has_network_operator;
+        }
+        return false;
+    }
+    public function deleteEquipment(Component $component, $equipmentId)
+    {
+        Equipment::find($equipmentId)->delete();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
+        $component->reset();
+    }
+    public function conditionalRemoveEquipmentTechnician(Component $component, $id){
+
+        if (Equipment::find($id)->has_clients) {
+            return Equipment::find($id)->has_clients;
+        } else{
+            return !Equipment::find($id)->has_technician;
+        }
+    }
+    public function removeEquipmentTechnician(Component $component, $id){
+        $model = User::getUserModel();
+        $equipment = Equipment::find($id);
+        $equipment->has_technician = false;
+        $equipment->technician_id = null;
+        $equipment->save();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
+        $component->reset();
     }
 
-    public function details(Component $component, $modelId)
+    public function delete(Component $component, $clientId)
     {
-        $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $modelId]);
+        Client::find($clientId)->delete();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
+        $component->reset();
+    }
+    public function conditionalMonitoring(Component $component, $modelId)
+    {
+        return !MicrocontrollerData::whereClientId($modelId)->exists();
+    }
+    public function conditionalDeleteClient(Component $component, $modelId)
+    {
+        return MicrocontrollerData::whereClientId($modelId)->exists();
     }
 }
