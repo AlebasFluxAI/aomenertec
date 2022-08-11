@@ -29,30 +29,20 @@ class IndexClient extends Component
         return $this->indexClientService->getClient();
     }
 
-    public function details($id)
-    {
-        $this->indexClientService->details($this, $id);
-    }
-
-    public function edit($id)
-    {
-        $this->indexClientService->edit($this, $id);
-    }
 
     public function conditionalMonitoring($id)
     {
         return $this->indexClientService->conditionalMonitoring($this, $id);
     }
-
-    public function delete($id)
+    public function conditionalDeleteClient($id)
     {
-        $this->indexClientService->delete($this, $id);
+        return $this->indexClientService->conditionalDeleteClient($this, $id);
+    }
+    public function deleteClient($id)
+    {
+        $this->indexClientService->deleteclient($this, $id);
     }
 
-    public function settings($id)
-    {
-        $this->indexClientService->settings($this, $id);
-    }
 
     public function render()
     {

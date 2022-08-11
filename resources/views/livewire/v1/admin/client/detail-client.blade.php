@@ -36,6 +36,12 @@
                                                 ],
                                                 [
                                                     "title"=>"Tecnico",
+                                                ],
+                                                [
+                                                    "title"=>"Supervisores",
+                                                ],
+                                                [
+                                                    "title"=>"Equipos",
                                                 ]
                                            ],
 
@@ -162,33 +168,40 @@
 
                                                 ],
                                                   [
-                                                   "view_name"=>"partials.v1.table.primary-table",
+                                                  "view_name"=>"livewire.v1.admin.user.technician.index-technician",
                                                    "view_values"=>[
-                                                                        "table_pageable"=>false,
-                                                                       "table_headers"=>[
-                                                                                         "ID"=>"id",
-                                                                                         "Nombre"=>"technician.name",
-                                                                                         "Correo"=>"technician.email",
-                                                                                         "Identificacion"=>"technician.identification",
-                                                                        ],
-                                                                        "table_actions"=>[
-                                                                            "customs"=>[
-                                                                                [
-                                                                                   "redirect"=>[
-                                                                                               "route"=>"administrar.v1.usuarios.tecnicos.detalles",
-                                                                                               "binding"=>"technician",
-
-                                                                                         ],
-                                                                                       "icon"=>"fas fa-search",
-                                                                                       "tooltip_title"=>"Detalle de tecnico",
-
-                                                                                 ],
-                                                                               ]
-                                                                            ],
-                                                                       "table_rows"=>$client->technician,
-                                                                   ],
-
-                                                ],
+                                                                       "data"=>$client->clientTechnician()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.user.supervisor.index-supervisor",
+                                                   "view_values"=>[
+                                                                       "data"=>$client->supervisors()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteSupervisor",
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
+                                                  "view_values"=>[
+                                                      "data"=>$client->equipments()->get(),
+                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::ADMIN_REMOVE_EQUIPMENT],
+                                                      "functionRemoveEquipment" => "removeEquipmentAdmin",
+                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentAdmin",
+                                                      "availableFlag" => "has_clients",
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
 
                                         ]
          ])

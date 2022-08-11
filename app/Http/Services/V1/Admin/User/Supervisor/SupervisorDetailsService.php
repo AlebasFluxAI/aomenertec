@@ -3,6 +3,8 @@
 namespace App\Http\Services\V1\Admin\User\Supervisor;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Client;
+use App\Models\V1\MicrocontrollerData;
 use Livewire\Component;
 
 class SupervisorDetailsService extends Singleton
@@ -14,13 +16,18 @@ class SupervisorDetailsService extends Singleton
         ]);
     }
 
-    public function edit(Component $component)
+    public function delete(Component $component, $clientId)
     {
-        $component->redirectRoute("administrar.v1.usuarios.supervisores.editar", ["supervisor" => $component->model->id]);
+        Client::find($clientId)->delete();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
+        $component->reset();
     }
-
-    public function details(Component $component, $modelId)
+    public function conditionalMonitoring(Component $component, $modelId)
     {
-        $component->redirectRoute("administrar.v1.usuarios.supervisores.detalles", ["supervisor" => $modelId]);
+        return !MicrocontrollerData::whereClientId($modelId)->exists();
+    }
+    public function conditionalDeleteClient(Component $component, $modelId)
+    {
+        return MicrocontrollerData::whereClientId($modelId)->exists();
     }
 }

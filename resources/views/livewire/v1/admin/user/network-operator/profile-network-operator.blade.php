@@ -35,6 +35,10 @@
 
                                                ],
                                                [
+                                                   "title"=>"Mis Equipos",
+
+                                               ],
+                                               [
                                                     "title"=>"Precios"
                                                ]
 
@@ -76,58 +80,14 @@
 
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
-                                                   "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                                        "Telefono"=>"phone",
-                                                                                        "Correo electronico"=>"email",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                        "customs"=>[
-                                                                                                          [
-                                                                                                            "redirect"=>[
-                                                                                                                    "route"=>"v1.admin.client.detail.client",
-                                                                                                                    "binding"=>"client"
-                                                                                                              ],
-                                                                                                                        "icon"=>"fas fa-search",
-                                                                                                                        "tooltip_title"=>"Detalles",
-                                                                                                                ],
-                                                                                                                [
-                                                                                                                        "redirect"=>[
-                                                                                                                                "route"=>"v1.admin.client.edit.client",
-                                                                                                                                "binding"=>"client"
-                                                                                                                          ],
-                                                                                                                        "icon"=>"fas fa-pencil",
-                                                                                                                        "tooltip_title"=>"Editar",
-                                                                                                                ],
-                                                                                                                 [
-                                                                                                                    "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
-                                                                                                                        "function"=>"settings",
-                                                                                                                        "tooltip_title"=>"Configuración de equipos",
-                                                                                                                        "icon"=>"fas fa-gear",
-                                                                                                                        "redirect"=>[
-                                                                                                                                "route"=>"v1.admin.client.settings",
-                                                                                                                                "binding"=>"client"
-                                                                                                                          ],
-                                                                                                                   ],
-                                                                                                             [
-                                                                                                            "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
-                                                                                                            "redirect"=>[
-                                                                                                                        "route"=>"v1.admin.client.monitoring",
-                                                                                                                        "binding"=>"client"
-                                                                                                                  ],
-                                                                                                                "icon"=>"fa fa-connectdevelop",
-                                                                                                                "tooltip_title"=>"Monitoreo",
-                                                                                                                "conditional" => "conditionalMonitoring",
-                                                                                                        ],
-                                                                                                    ],
-                                                                                    ],
-                                                                      "table_rows"=>$model->clients
-
-                                                                  ]
+                                                  "view_name"=>"livewire.v1.admin.client.index-client",
+                                                  "view_values"=>[
+                                                      "data"=>$model->clients()->get(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
                                                ],
                                                 [
                                                   "view_name"=>"livewire.v1.admin.user.seller.index-seller",
@@ -142,7 +102,7 @@
                                                [
                                                   "view_name"=>"livewire.v1.admin.user.supervisor.index-supervisor",
                                                    "view_values"=>[
-                                                                       "data"=>$model->supervisors()->get(),
+                                                                       "data"=>$supervisors,
                                                                        "table_class_container"=>"",
                                                                        "view_header"=>false,
                                                                        "is_filtered"=>false,
@@ -160,6 +120,20 @@
                                                                        "col_filter"=>false,
                                                                        "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
                                                                   ]
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
+                                                  "view_values"=>[
+                                                      "data"=>$model->equipments()->get(),
+                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_REMOVE_EQUIPMENT],
+                                                      "functionRemoveEquipment" => "removeEquipmentNetworkOperator",
+                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentNetworkOperator",
+                                                      "availableFlag" => "has_network_operator",
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
                                                ],
                                                [
                                                   "view_name"=>"livewire.v1.admin.user.network-operator.price-configuration-network-operator",

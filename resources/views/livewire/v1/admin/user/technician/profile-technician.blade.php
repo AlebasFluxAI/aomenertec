@@ -75,73 +75,27 @@
 
                                                ],
                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
-                                                   "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"name",
-                                                                                        "Identificacion"=>"identification",
-                                                                                        "Telefono"=>"phone",
-                                                                                        "Correo electronico"=>"email",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-    [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"v1.admin.client.detail.client",
-                                                                                                            "binding"=>"client"
-                                                                                                      ],
-                                                                                                                "icon"=>"fas fa-search",
-                                                                                                                "tooltip_title"=>"Detalles",
-                                                                                                        ],
-                                                                                                        [
-                                                                                                                "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_EDIT],
-                                                                                                                "redirect"=>[
-                                                                                                                        "route"=>"v1.admin.client.edit.client",
-                                                                                                                        "binding"=>"client"
-                                                                                                                  ],
-                                                                                                                "icon"=>"fas fa-pencil",
-                                                                                                                "tooltip_title"=>"Editar",
-                                                                                                        ],
-                                                                                                        [
-                                                                                                            "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
-                                                                                                            "redirect"=>[
-                                                                                                                        "route"=>"v1.admin.client.monitoring",
-                                                                                                                        "binding"=>"client"
-                                                                                                                  ],
-                                                                                                                "icon"=>"fa fa-connectdevelop",
-                                                                                                                "tooltip_title"=>"Monitoreo",
-                                                                                                                "conditional" => "conditionalMonitoring",
-                                                                                                        ],
-                                                                                                    ],
-                                                                                    ],
-                                                                      "table_rows"=>$model->clients
-
-                                                                  ]
+                                                  "view_name"=>"livewire.v1.admin.client.index-client",
+                                                  "view_values"=>[
+                                                      "data"=>$model->clients()->get(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
                                                ],
-                                                [
-                                                  "view_name"=>"partials.v1.table.primary-table",
-                                                   "view_values"=>[
-                                                                       "table_pageable"=>false,
-                                                                      "table_headers"=>["ID"=>"id",
-                                                                                        "Nombre"=>"equipmentType.type",
-                                                                                        "Serial"=>"serial",
-                                                                       ],
-                                                                      "table_actions"=>[
-                                                                                    "customs"=>[
-                                                                                           [
-                                                                                                    "redirect"=>[
-                                                                                                            "route"=>"administrar.v1.equipos.detalle",
-                                                                                                            "binding"=>"equipment"
-                                                                                                      ],
-                                                                                                    "icon"=>"fas fa-search",
-                                                                                                     "tooltip_title"=>"Detalles",
-                                                                                            ]
-                                                                                        ]
-                                                                                    ],
-                                                                      "table_rows"=>$model->equipments
-
-                                                                  ]
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
+                                                  "view_values"=>[
+                                                      "data"=>$model->equipments()->get(),
+                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::TECHNICIAN_REMOVE_EQUIPMENT],
+                                                      "functionRemoveEquipment" => "removeEquipmentTechnician",
+                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentTechnician",
+                                                      "availableFlag" => "has_technician",
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
                                                ],
 
 

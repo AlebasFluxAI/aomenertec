@@ -31,38 +31,26 @@ use function session;
 
 class IndexClientService extends Singleton
 {
+    public function getClients()
+    {
+        return Client::get()->paginate(15);
+    }
+
     public function delete(Component $component, $clientId)
     {
         Client::find($clientId)->delete();
         $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
         $component->reset();
     }
-
-    public function getClients()
-    {
-        return Client::get()->paginate(15);
-    }
-
-    public function edit(Component $component, $clientId)
-    {
-        $component->redirectRoute("v1.admin.client.edit.client", ["client" => $clientId]);
-    }
-
     public function conditionalMonitoring(Component $component, $modelId)
     {
         return !MicrocontrollerData::whereClientId($modelId)->exists();
     }
-
-
-    public function details(Component $component, $clientId)
+    public function conditionalDeleteClient(Component $component, $modelId)
     {
-        $component->redirectRoute("v1.admin.client.detail.client", ["client" => $clientId]);
+        return MicrocontrollerData::whereClientId($modelId)->exists();
     }
 
-    public function settings(Component $component, $clientId)
-    {
-        $component->redirectRoute("v1.admin.client.settings", ["client" => $clientId]);
-    }
 
     public function getData(Component $component)
     {

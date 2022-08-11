@@ -142,6 +142,16 @@ class Client extends Model
         return $this->hasMany(ClientTechnician::class)->latest();
     }
 
+    public function clientTechnician()
+    {
+        return $this->belongsToMany(
+            Technician::class,
+            'client_technicians',
+            'client_id',
+            'technician_id'
+        );
+    }
+
     public function equipmentsAsKeyValue()
     {
         return (($this->equipments()

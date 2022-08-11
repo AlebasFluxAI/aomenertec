@@ -9,20 +9,47 @@ use Livewire\Component;
 class DetailsTechnician extends Component
 {
     public $model;
-    private $detailsNetworkOperatorService;
+    private $detailsTechnicianService;
 
 
     public function __construct($id = null)
     {
-        $this->detailsNetworkOperatorService = TechnicianDetailsService::getInstance();
+        $this->detailsTechnicianService = TechnicianDetailsService::getInstance();
         parent::__construct($id);
     }
 
     public function mount(Technician $technician)
     {
-        $this->detailsNetworkOperatorService->mount($this, $technician);
+        $this->detailsTechnicianService->mount($this, $technician);
     }
 
+    public function conditionalDeleteEquipment($id){
+        return $this->detailsTechnicianService->conditionalDeleteEquipment($this, $id);
+    }
+    public function deleteEquipment($id)
+    {
+        $this->detailsTechnicianService->deleteEquipment($this, $id);
+    }
+    public function conditionalRemoveEquipmentTechnician($id){
+        return $this->detailsTechnicianService->conditionalRemoveEquipmentTechnician($this, $id);
+    }
+    public function removeEquipmentTechnician($id)
+    {
+        $this->detailsTechnicianService->removeEquipmentTechnician($this, $id);
+    }
+
+    public function conditionalMonitoring($id)
+    {
+        return $this->detailsTechnicianService->conditionalMonitoring($this, $id);
+    }
+    public function conditionalDeleteClient($id)
+    {
+        return $this->detailsTechnicianService->conditionalDeleteClient($this, $id);
+    }
+    public function deleteClient($id)
+    {
+        $this->detailsTechnicianService->deleteclient($this, $id);
+    }
 
     public function render()
     {

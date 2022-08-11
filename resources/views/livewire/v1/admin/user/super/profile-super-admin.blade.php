@@ -20,6 +20,12 @@
                                                    "title"=>"Administradores",
 
                                                ],
+                                                [
+                                                   "title"=>"Operadores de red",
+                                               ],
+                                                [
+                                                   "title"=>"Equipos",
+                                               ],
 
                                           ],
 
@@ -65,7 +71,30 @@
                                                   "view_values"=>[
                                                       "data"=>$admins,
                                                       "table_pageable"=>false,
-                                                      "admin_conditional_delete"=>"deleteAdminConditional",
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.user.network-operator.index-network-operator",
+                                                  "view_values"=>[
+                                                      "data"=>$network_operators,
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
+                                                  "view_values"=>[
+                                                      "data"=>$equipment,
+                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::ADMIN_REMOVE_EQUIPMENT],
+                                                      "functionRemoveEquipment" => "removeEquipmentAdmin",
+                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentAdmin",
+                                                      "availableFlag" => "has_admin",
+                                                      "table_pageable"=>false,
                                                       "table_class_container"=>"",
                                                       "view_header"=>false,
                                                       "col_filter"=>false

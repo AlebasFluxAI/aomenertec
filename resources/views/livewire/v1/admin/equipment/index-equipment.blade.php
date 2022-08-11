@@ -1,3 +1,4 @@
+@if($view_header??true)
 <div class="login">
 
     @section("header")
@@ -10,7 +11,7 @@
           "first_title"=>"Listado"
       ])
 
-
+        @endif
     <div>
         @include("partials.v1.table_nav",
                ["mt"=>2,"nav_options"=>[
@@ -27,21 +28,23 @@
               ])
 
         @include("partials.v2.table.primary-table",[
+    "class_container"=>$table_class_container??null,
+                   "table_pageable"=>$table_pageable??true,
                    "table_headers"=>[
                            [
                                "col_name" =>"ID",
                                "col_data" =>"id",
-                               "col_filter"=>true
+                               "col_filter"=>$col_filter??true
                            ],
                            [
                                "col_name" =>"Nombre",
                                "col_data" =>"name",
-                               "col_filter"=>true
+                               "col_filter"=>$col_filter??true
                            ],
                              [
                                "col_name" =>"Serial",
                                "col_data" =>"serial",
-                               "col_filter"=>true
+                               "col_filter"=>$col_filter??true
                            ],
                              [
                                "col_name" =>"Tipo",
@@ -51,12 +54,12 @@
                            [
                                "col_name" =>"Descripcion",
                                "col_data" =>"description",
-                               "col_filter"=>true
+                               "col_filter"=>$col_filter??true
                            ],
                            [
                                "col_name" =>"Disponible",
-                               "col_data" =>"assigned",
-                               "col_filter"=>true,
+                               "col_data" =>$availableFlag,
+                               "col_filter"=>$col_filter??true,
                                "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
                            ],
                            [
@@ -69,27 +72,40 @@
                      "table_actions"=>[
 
                                         "customs"=>[
-                                                 [
-
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_SHOW],
-                                                        "function"=>"details",
-                                                        "icon"=>"fas fa-search",
-                                                        "tooltip_title"=>"Detalles"
-                                                ],
+                                            [
+                                               "redirect"=>[
+                                                           "route"=>"administrar.v1.equipos.detalle",
+                                                           "binding"=>"equipment"
+                                                     ],
+                                                   "icon"=>"fas fa-search",
+                                                   "tooltip_title"=>"Detalles",
+                                                   "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_SHOW],
+                                             ],
+                                            [
+                                               "redirect"=>[
+                                                           "route"=>"administrar.v1.equipos.editar",
+                                                           "binding"=>"equipment"
+                                                     ],
+                                                   "icon"=>"fas fa-pencil",
+                                                   "tooltip_title"=>"Editar",
+                                                   "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_EDIT],
+                                             ],
                                                 [
-
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_EDIT],
-                                                        "function"=>"edit",
-                                                        "icon"=>"fas fa-pencil",
-                                                        "tooltip_title"=>"Editar"
-                                                ],
+                                                        "permission" => $permissionRemove,
+                                                        "conditional" => $conditionalRemoveEquipment,
+                                                        "function"=>$functionRemoveEquipment,
+                                                        "icon"=>"fa-solid fa-square-minus",
+                                                        "tooltip_title"=>"Desvincular equipo"
+                                                    ],
                                                 [
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_DELETE],
-                                                        "function"=>"deleteEquipment",
-                                                        "conditional"=>"conditionalDelete",
-                                                        "icon"=>"fas fa-trash",
-                                                        "tooltip_title"=>"Eliminar"
-                                                ],
+                                                    "function"=>"deleteEquipment",
+                                                    "conditional"=>"conditionalDeleteEquipment",
+                                                    "icon"=>"fas fa-trash",
+                                                    "tooltip_title"=>"Eliminar",
+                                                    "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_DELETE],
+                                            ],
+
+
                                             ],
                                         ],
 
@@ -101,5 +117,6 @@
 
                ])
     </div>
+        @if($view_header??true)
 </div>
-
+@endif

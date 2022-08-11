@@ -1,3 +1,4 @@
+@if($view_header??true)
 <div class="login">
     @section("header")
         {{--extended app.blade--}}
@@ -9,6 +10,7 @@
           "second_title"=>"de clientes",
           "first_title"=>"Listado"
       ])
+@endif
     @include("partials.v1.table_nav",
            [
                "mt"=>2,
@@ -26,6 +28,8 @@
           ])
 
     @include("partials.v2.table.primary-table",[
+    "class_container"=>$table_class_container??null,
+                   "table_pageable"=>$table_pageable??true,
            "table_headers"=>[
           [
                "col_name" =>"ID",
@@ -67,32 +71,34 @@
              "table_actions"=>[
 
                                 "customs"=>[
-                                                [
+                                    [
+                                               "redirect"=>[
+                                                           "route"=>"v1.admin.client.detail.client",
+                                                           "binding"=>"client"
+                                                     ],
+                                                   "icon"=>"fas fa-search",
+                                                   "tooltip_title"=>"Detalles",
+                                                   "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
+                                             ],
+                                            [
+                                               "redirect"=>[
+                                                           "route"=>"v1.admin.client.edit.client",
+                                                           "binding"=>"client"
+                                                     ],
+                                                   "icon"=>"fas fa-pencil",
+                                                   "tooltip_title"=>"Editar",
+                                                   "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_EDIT],
+                                             ],
+                                            [
+                                               "redirect"=>[
+                                                           "route"=>"v1.admin.client.settings",
+                                                           "binding"=>"client"
+                                                     ],
+                                                   "icon"=>"fas fa-gear",
+                                                   "tooltip_title"=>"Configuración de equipos",
+                                                   "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
+                                             ],
 
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
-                                                        "function"=>"details",
-                                                        "icon"=>"fas fa-search",
-                                                        "tooltip_title"=>"Detalles"
-                                                ],
-                                                [
-
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_EDIT],
-                                                         "function"=>"edit",
-                                                        "icon"=>"fas fa-pencil",
-                                                        "tooltip_title"=>"Editar"
-                                                ],
-                                                [
-                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_DELETE],
-                                                        "function"=>"delete",
-                                                        "icon"=>"fas fa-trash",
-                                                        "tooltip_title"=>"Eliminar"
-                                                ],
-                                                [
-                                                    "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
-                                                    "function"=>"settings",
-                                                    "tooltip_title"=>"Configuración de equipos",
-                                                    "icon"=>"fas fa-gear"
-                                                ],
                                                 [
                                                     "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
                                                     "redirect"=>[
@@ -103,6 +109,13 @@
                                                         "tooltip_title"=>"Monitoreo",
                                                         "conditional" => "conditionalMonitoring",
                                                 ],
+                                                [
+                                                    "function"=>"deleteClient",
+                                                    "conditional"=>"conditionalDeleteClient",
+                                                    "icon"=>"fas fa-trash",
+                                                    "tooltip_title"=>"Eliminar",
+                                                    "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_DELETE],
+                                            ],
                                 ]
                                 ],
 
@@ -115,5 +128,6 @@
 
 
        ])
-
+        @if($view_header??true)
 </div>
+@endif
