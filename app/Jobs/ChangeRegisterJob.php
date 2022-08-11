@@ -30,7 +30,7 @@ class ChangeRegisterJob implements ShouldQueue
     private $user;
     private $changes;
 
-    public function __construct($model, $before, $after, $type, User $user, $changes)
+    public function __construct($model, $before, $after, $type, $user, $changes)
     {
         $this->model = $model;
         $this->before = $before;
