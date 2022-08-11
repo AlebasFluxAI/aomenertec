@@ -113,7 +113,7 @@
                                                       "permissionRemove" => [\App\Http\Resources\V1\Permissions::TECHNICIAN_REMOVE_EQUIPMENT],
                                                       "functionRemoveEquipment" => "removeEquipmentTechnician",
                                                       "conditionalRemoveEquipment" => "conditionalRemoveEquipmentTechnician",
-                                                      "availableFlag" => "has_technician",
+                                                      "availableFlag" => "has_clients",
                                                       "table_class_container"=>"",
                                                       "view_header"=>false,
                                                       "col_filter"=>false

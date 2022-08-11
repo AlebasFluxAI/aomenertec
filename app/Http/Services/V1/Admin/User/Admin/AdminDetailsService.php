@@ -84,7 +84,6 @@ class AdminDetailsService extends Singleton
         $equipment->admin_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
     }
 
     public function conditionalDeleteEquipment(Component $component, $id)

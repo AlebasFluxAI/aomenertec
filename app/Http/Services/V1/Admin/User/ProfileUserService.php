@@ -132,7 +132,6 @@ class ProfileUserService extends Singleton
         $equipment->admin_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
     }
 
     public function conditionalDeleteNetworkOperator(Component $component, $modelId)
@@ -199,7 +198,6 @@ class ProfileUserService extends Singleton
         $equipment->network_operator_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
     }
 
     public function deleteTechnician(Component $component, $technicianId)
@@ -260,7 +258,7 @@ class ProfileUserService extends Singleton
         $equipment->technician_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
+
     }
 
     public function conditionalDeleteSupervisor(Component $component, $modelId)
