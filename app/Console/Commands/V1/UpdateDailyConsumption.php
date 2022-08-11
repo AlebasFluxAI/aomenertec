@@ -45,7 +45,7 @@ class UpdateDailyConsumption extends Command
         $reference_date->subDay();
         $clients = Client::get();
         foreach ($clients as $client) {
-            $billing_day = $client->clientXonfiguration->billing_day;
+            $billing_day = $client->clientConfiguration->billing_day;
             $data_frame = collect(config('data-frame.data_frame'));
             $accum_variable = $data_frame->where('bolean_accum', true);
             $data_aux = $client->dailyMicrocontrollerData()

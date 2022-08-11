@@ -93,7 +93,8 @@ class ClientConfiguration extends Model
         "storage_type_latency",
         "digital_outputs",
         "active_real_time",
-        "connection_type"
+        "connection_type",
+        "billing_day"
     ];
 
     public function client()
