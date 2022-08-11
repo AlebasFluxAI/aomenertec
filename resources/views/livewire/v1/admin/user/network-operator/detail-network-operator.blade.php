@@ -155,7 +155,7 @@
                                                       "permissionRemove" => [\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_REMOVE_EQUIPMENT],
                                                       "functionRemoveEquipment" => "removeEquipmentNetworkOperator",
                                                       "conditionalRemoveEquipment" => "conditionalRemoveEquipmentNetworkOperator",
-                                                      "availableFlag" => "has_network_operator",
+                                                      "availableFlag" => "has_technician",
                                                       "table_pageable"=>false,
                                                       "table_class_container"=>"",
                                                       "view_header"=>false,

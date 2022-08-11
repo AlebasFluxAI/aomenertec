@@ -4,7 +4,7 @@
 
         @include("partials.v1.title",[
                 "first_title"=>"Super administrador",
-                "second_title"=>$model->user->name
+                "second_title"=>$model->name
             ])
 
 

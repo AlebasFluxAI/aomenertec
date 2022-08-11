@@ -52,7 +52,6 @@ class TechnicianDetailsService extends Singleton
         $equipment->technician_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
     }
 
     public function delete(Component $component, $clientId)

@@ -90,7 +90,6 @@ class NetworkOperatorDetailsService extends Singleton
         $equipment->network_operator_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
     }
 
     public function conditionalDeleteSupervisor(Component $component, $modelId)

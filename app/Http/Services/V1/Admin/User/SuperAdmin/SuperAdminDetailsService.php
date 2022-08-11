@@ -94,7 +94,6 @@ class SuperAdminDetailsService extends Singleton
         $equipment->admin_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
     }
 
     public function conditionalDeleteNetworkOperator(Component $component, $modelId)
@@ -161,7 +160,6 @@ class SuperAdminDetailsService extends Singleton
         $equipment->network_operator_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-        $component->reset();
     }
 
     public function conditionalDeleteEquipment(Component $component, $id)

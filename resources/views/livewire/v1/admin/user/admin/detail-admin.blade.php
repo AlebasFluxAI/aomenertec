@@ -152,7 +152,7 @@
                                                       "permissionRemove" => [\App\Http\Resources\V1\Permissions::ADMIN_REMOVE_EQUIPMENT],
                                                       "functionRemoveEquipment" => "removeEquipmentAdmin",
                                                       "conditionalRemoveEquipment" => "conditionalRemoveEquipmentAdmin",
-                                                      "availableFlag" => "has_admin",
+                                                      "availableFlag" => "has_network_operator",
                                                       "table_pageable"=>false,
                                                       "table_class_container"=>"",
                                                       "view_header"=>false,
