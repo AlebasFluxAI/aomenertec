@@ -8,6 +8,7 @@ use App\Models\V1\Admin;
 use App\Models\V1\AdminClientType;
 use App\Models\V1\AdminConfiguration;
 use App\Models\V1\AdminPrice;
+use App\Models\V1\AvailableChannel;
 use App\Models\V1\ClientType;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
@@ -17,6 +18,8 @@ class PriceAdminService extends Singleton
 {
     public function mount(Component $component, Admin $model)
     {
+
+        $component->channels = $model->channels;
         if (!$model->priceAdmin()->exists()) {
             if ($model->adminClientTypes()->exists()) {
                 foreach ($model->adminClientTypes as $type) {
@@ -64,6 +67,12 @@ class PriceAdminService extends Singleton
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
     }
 
+    public function blinkChannel(Component $component, $channel)
+    {
+
+        AvailableChannel::find($channel)->blink();
+        $component->channels = $component->model->refresh()->channels;
+    }
 
     public function submitFormConfiguration(Component $component)
     {
