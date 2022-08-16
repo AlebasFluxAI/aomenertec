@@ -6,6 +6,7 @@ use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
 use App\Http\Resources\V1\PermissionInterface;
 use App\Http\Resources\V1\Permissions;
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\AvailableChannelTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
@@ -23,6 +24,7 @@ class Admin extends Model
     use HasPermissions;
     use SoftDeletes;
     use AuditableTrait;
+    use AvailableChannelTrait;
 
 
     use PermissionTrait;
@@ -374,4 +376,6 @@ class Admin extends Model
             }))->toArray()
         ));
     }
+
+
 }

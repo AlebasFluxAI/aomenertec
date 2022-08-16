@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\AvailableChannelTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -16,6 +17,7 @@ class Client extends Model
     use SoftDeletes;
     use Notifiable;
     use AuditableTrait;
+    use AvailableChannelTrait;
 
     public const MONOPHASIC = 'monophasic';
     public const BIPHASIC = 'biphasic';
@@ -195,4 +197,6 @@ class Client extends Model
     {
         return $this->hasMany(ClientAlert::class);
     }
+
+
 }

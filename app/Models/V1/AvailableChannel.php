@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Models\V1;
+
+use App\Scope\OrderIdScope;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class AvailableChannel extends Model
+{
+    use HasFactory;
+    use SoftDeletes;
+
+    public const CHANNEL_WHATSAPP = "whatsapp";
+    public const CHANNEL_EMAIL = "email";
+
+    protected $fillable = [
+        "channel",
+        "enabled",
+        "channel_class"
+    ];
+
+    public function blink()
+    {
+        $this->update([
+            "enabled" => !$this->enabled
+        ]);
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
+
+}
