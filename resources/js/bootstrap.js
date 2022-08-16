@@ -2,7 +2,8 @@ window._ = require('lodash');
 
 try {
     require('bootstrap');
-} catch (e) {}
+} catch (e) {
+}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -25,10 +26,11 @@ import Echo from 'laravel-echo';
 window.io = require('socket.io-client');
 window.Echo = new Echo({
     broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001',
+    host: 'aom.enereteclatam.com:6001',
     transports: ['websocket']
 
 });
 
 import ApexCharts from 'apexcharts';
+
 window.ApexCharts = ApexCharts;
