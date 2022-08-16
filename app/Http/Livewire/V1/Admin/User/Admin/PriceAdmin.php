@@ -17,6 +17,7 @@ class PriceAdmin extends Component
     public $admin_client_types;
     public $admin_notification_types;
     public $model;
+    public $channels;
 
     private $priceAdminService;
 
@@ -30,7 +31,7 @@ class PriceAdmin extends Component
 
     public function __construct($id = null)
     {
-        $this->priceAdminService= PriceAdminService::getInstance();
+        $this->priceAdminService = PriceAdminService::getInstance();
         parent::__construct($id);
     }
 
@@ -47,6 +48,11 @@ class PriceAdmin extends Component
     public function submitFormConfiguration()
     {
         $this->priceAdminService->submitFormConfiguration($this);
+    }
+
+    public function blinkChannel($channel)
+    {
+        $this->priceAdminService->blinkChannel($this, $channel);
     }
 
     public function render()
