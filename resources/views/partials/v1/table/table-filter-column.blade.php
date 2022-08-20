@@ -1,8 +1,8 @@
 <div class="btn-group">
     <a class="btn btn-redirect btn-sm"
-            data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false">
-        <span class="fas fa-search"></span>
+       data-toggle="dropdown"
+       aria-haspopup="true" aria-expanded="false">
+        <span style="font-size: 10px" class="fas fa-search"></span>
     </a>
     <div class="dropdown-menu p-1 container">
         <div class="row">

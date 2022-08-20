@@ -11,8 +11,7 @@ use Livewire\WithFileUploads;
 
 class AddSupport extends Component
 {
-    use ValidateUserFormTrait;
-    use AddUserFormTrait;
+
     use PassTrait;
 
     public $message;
@@ -20,9 +19,36 @@ class AddSupport extends Component
     public $network_operators;
     public $network_operator;
     public $network_operator_id;
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
+    public $model;
+
+    public $person_types;
+    public $identification_types;
+    public $admins;
+    public $admin_id;
 
 
     private $superSupportAddService;
+
+
+    protected $rules = [
+        'model.identification' => 'required|min:6|unique:users,identification',
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.phone' => 'min:7|unique:users,phone',
+        'model.email' => 'required|email|unique:users,email',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+    ];
+
 
     public function __construct($id = null)
     {
@@ -33,6 +59,11 @@ class AddSupport extends Component
     public function assignNetworkOperator($network_operator)
     {
         $this->superSupportAddService->assignNetworkOperator($this, $network_operator);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->superSupportAddService->updated($this, $propertyName);
     }
 
     public function updatedNetworkOperator()

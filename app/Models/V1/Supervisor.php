@@ -17,7 +17,7 @@ class Supervisor extends Model
     use PermissionTrait;
     use AuditableTrait;
 
-    protected $fillable = ['identification',
+    protected $fillable = [
         'identification',
         'phone',
         'name',

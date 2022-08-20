@@ -57,7 +57,7 @@ class AddClientTechnician extends Component
 
     public function delete($client)
     {
-        $this->addTechnicianClient->delete($this, $client["id"]);
+        $this->addTechnicianClient->delete($this, collect(json_decode($client))->get("id"));
     }
 
     public function render()

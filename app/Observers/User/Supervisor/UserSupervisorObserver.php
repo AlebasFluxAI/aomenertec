@@ -10,6 +10,7 @@ class UserSupervisorObserver
 {
     public function creating(Supervisor $supervisor)
     {
+
         $this->setHereMapJson($supervisor);
         $this->setInformation($supervisor);
         $user = $supervisor->user;
@@ -41,6 +42,7 @@ class UserSupervisorObserver
             "identification" => $supervisor->identification,
         ]);
     }
+
     public function setHereMapJson($model)
     {
         if (!$model->latitude or !$model->longitude) {

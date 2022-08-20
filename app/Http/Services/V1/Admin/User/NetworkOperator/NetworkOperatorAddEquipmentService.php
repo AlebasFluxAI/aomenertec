@@ -44,7 +44,7 @@ class NetworkOperatorAddEquipmentService extends Singleton
         Equipment::whereId($equipmentId)->update([
             "network_operator_id" => null
         ]);
-        $this->refreshEquipmentType($component);
+        $component->model->refresh();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);
     }
 

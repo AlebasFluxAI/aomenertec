@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
+use App\Models\V1\ClientTechnician;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
 use App\Models\V1\Department;
@@ -76,6 +77,14 @@ class IndexClientService extends Singleton
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
             }
             return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->paginate(15);
+        }
+
+        if ($technician = $user->technician) {
+            if ($component->filter) {
+                return Client::whereIn('id', $technician->clients->pluck("id"))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            }
+            return Client::whereIn('id', $technician->clients->pluck("id"))->paginate(15);
         }
 
 

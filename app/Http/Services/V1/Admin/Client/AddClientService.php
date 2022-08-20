@@ -7,6 +7,7 @@ use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
 use App\Models\V1\BillingInformation;
+use App\Models\V1\ClientSupervisor;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
 use App\Models\V1\Department;
@@ -465,26 +466,36 @@ class AddClientService extends Singleton
         if (!$component->create_supervisor) {
             return;
         }
+
         $supervisor = Supervisor::create(
             [
                 "name" => $component->name,
-                "last_name" => "test",
+                "last_name" => $component->last_name ?? "",
                 "email" => $component->email,
                 "phone" => $component->phone,
                 "network_operator_id" => $component->network_operator_id,
                 "identification" => $component->identification,
-                'address_details' => $component->addressDetails,
-                'latitude' => $component->latitude,
-                'longitude' => $component->longitude,
-                'billing_name' => $component->billing_name,
-                'billing_address' => $component->billing_address,
-                'person_type' => $component->person_type,
-                'identification_type' => $component->identification_type,
+
             ]
         );
 
-        $client->supervisors()->create([
-            "supervisor_id" => $supervisor,
+        $user = User::create([
+            "name" => $component->name,
+            "last_name" => $component->last_name ?? "",
+            "email" => $component->email,
+            "phone" => $component->phone,
+            "network_operator_id" => $component->network_operator_id,
+            "identification" => $component->identification,
+            "type" => User::TYPE_SUPERVISOR
+
+        ]);
+        $supervisor->update([
+            "user_id" => $user->id
+        ]);
+
+        ClientSupervisor::create([
+            "client_id" => $client->id,
+            "supervisor_id" => $supervisor->id,
             "active" => true
         ]);
     }
