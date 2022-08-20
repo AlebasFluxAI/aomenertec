@@ -594,6 +594,7 @@ dialog {
 
 .imagen-logo {
     height: auto;
+    width: 300px;
     object-fit: contain;
 }
 
