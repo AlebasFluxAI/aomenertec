@@ -1,12 +1,14 @@
 <section class="top-info">
     <div class="contenedor-grande ">
         <nav class="navbar navbar-expand-lg navbar-custom " style="justify-content: space-between;padding: 5px">
-            <a href="{{route("administrar.v1.perfil")}}">
-                <img class="imagen-logo"
-                     src='{{\App\Http\Resources\V1\Icon::getIcon()}}'
+            <div class="col-md-2">
+                <a href="{{route("administrar.v1.perfil")}}">
+                    <img class="img-fluid imagen-logo"
+                         src='{{\App\Http\Resources\V1\Icon::getIcon()}}'
 
-                     alt="">
-            </a>
+                         alt="">
+                </a>
+            </div>
             <button class="navbar-toggler" id="button-menu" type="button" data-toggle="collapse"
                     data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +37,8 @@
                     </li>
                 </ul>
                 <div class="mt-4 mb-4">
-                    @auth                        @include("layouts.menu.v1.profile")
+                    @auth
+                        @include("layouts.menu.v1.profile")
 
                     @endauth
                 </div>

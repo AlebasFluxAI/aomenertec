@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -40,19 +41,19 @@
                                                                         "table_info"=>[
                                                                          [
                                                                              "key"=>"Id",
-                                                                             "value"=>$model->user->id
+                                                                             "value"=>$model->id
                                                                          ],
                                                                          [
                                                                              "key"=>"Nombre",
-                                                                             "value"=>$model->user->name
+                                                                             "value"=>$model->name
                                                                          ],
                                                                          [
                                                                              "key"=>"Apellido",
-                                                                             "value"=>$model->user->last_name
+                                                                             "value"=>$model->last_name
                                                                          ],
                                                                          [
                                                                              "key"=>"Correo electronico",
-                                                                             "value"=>$model->user->email
+                                                                             "value"=>$model->email
                                                                          ],
                                                                           [
                                                                              "key"=>"Identificacion",
@@ -60,7 +61,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Telefono",
-                                                                             "value"=>$model->user->phone
+                                                                             "value"=>$model->phone
                                                                          ],
                                                                          [
                                                                              "key"=>"Pais",

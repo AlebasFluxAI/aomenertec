@@ -18,17 +18,25 @@
                         </th>
                     @endif
                 @endif
-
                 @foreach($table_headers as $table_header)
+                    <th style="width:10%">
+                        <div class="container">
+                            <div class="row">
 
-                    <th>{{$table_header["col_name"]}}
-                        @if($is_filtered??true)
-                            @if($table_header["col_filter"])
-                                @include("partials.v1.table.table-filter-column",[
-                                                                   "col_name"=>$table_header["col_data"]
-                                                                 ])
-                            @endif
-                        @endif
+                                <div class="col-md-8">
+                                    {{$table_header["col_name"]}}
+                                </div>
+                                <div class="col-md-2">
+                                    @if($is_filtered??true)
+                                        @if($table_header["col_filter"])
+                                            @include("partials.v1.table.table-filter-column",[
+                                                                               "col_name"=>$table_header["col_data"]
+                                                                             ])
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </th>
                 @endforeach
                 @isset($table_actions)

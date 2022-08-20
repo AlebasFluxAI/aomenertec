@@ -1,4 +1,5 @@
 <div class="float-end mt-{{ $mt??0 }} mb-{{ $mb??0 }}">
+    <br>
     <nav class=" navbar ">
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
