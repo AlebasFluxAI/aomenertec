@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Technician;
 
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
 use App\Models\V1\Technician;
@@ -104,6 +105,7 @@ class TechnicianAddClientService extends Singleton
     {
         $component->model->clientTechnicians()->whereClientId($clientId)->delete();
         $this->refreshClientSeller($component);
+        ToastEvent::launchToast($component, "show", "success", "Cliente desvinculado");
     }
 
     private function mapper($component)

@@ -465,6 +465,7 @@ class AddClientService extends Singleton
         if (!$component->create_supervisor) {
             return;
         }
+        
         $supervisor = Supervisor::create(
             [
                 "name" => $component->name,
@@ -473,7 +474,7 @@ class AddClientService extends Singleton
                 "phone" => $component->phone,
                 "network_operator_id" => $component->network_operator_id,
                 "identification" => $component->identification,
-                'address_details' => $component->addressDetails,
+                'address_details' => $component->model["address_details"],
                 'latitude' => $component->latitude,
                 'longitude' => $component->longitude,
                 'billing_name' => $component->billing_name,

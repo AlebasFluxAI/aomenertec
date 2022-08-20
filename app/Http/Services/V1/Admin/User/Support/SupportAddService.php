@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\Support;
 
 use App\Http\Services\Singleton;
+use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Support;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
@@ -12,6 +13,9 @@ use Livewire\Component;
 
 class SupportAddService extends Singleton
 {
+
+    use AddUserFormTrait;
+
     public function mount(Component $component)
     {
         $component->fill([
@@ -40,18 +44,16 @@ class SupportAddService extends Singleton
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
+            $component->model['latitude'] = $component->latitude;
+            $component->model['longitude'] = $component->longitude;
             $component->validate();
-
-            $model = Support::create($this->mapper($component));
-            $user = User::create(array_merge($this->mapper($component), [
-                "password" => bcrypt($component->password),
-                "type" => User::TYPE_SUPPORT
-            ]));
-            $model->update([
+            $support = Support::create($component->model);
+            $user = User::create($this->mapper($component));
+            $support->update([
                 "user_id" => $user->id
             ]);
-
-            $component->redirectRoute("administrar.v1.usuarios.soporte.detalles", ["support" => $model->id]);
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$support->name} creado"]);
+            $component->redirectRoute("administrar.v1.usuarios.soporte.detalles", ["support" => $support->id]);
         });
     }
 
