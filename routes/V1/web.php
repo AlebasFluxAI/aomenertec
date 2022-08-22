@@ -86,7 +86,7 @@ Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 Route::get("mail/test/user_created", (MailTestController::class) . "@userCreatedNotification");
 Route::get("mail/test/whatsapp_created", (MailTestController::class) . "@whatsappNotification");
 
-Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::prefix("v1")->group(function () {
         Route::get('/inicio', Livewire\V1\Admin\User\ProfileUser::class)->name("administrar.v1.perfil");
