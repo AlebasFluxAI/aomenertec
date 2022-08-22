@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\V1\Authenticate;
+use App\Http\Middleware\V1\CheckEnableUser;
 use App\Http\Middleware\V1\CustomPermissionMiddleware;
 use App\Http\Middleware\V1\EncryptCookies;
 use App\Http\Middleware\V1\PermissionMiddleware;
@@ -89,5 +90,6 @@ class Kernel extends HttpKernel
         'verified' => EnsureEmailIsVerified::class,
         'permission' => PermissionMiddleware::class,
         'custom_permissions' => CustomPermissionMiddleware::class,
+        'enable_user' => CheckEnableUser::class
     ];
 }
