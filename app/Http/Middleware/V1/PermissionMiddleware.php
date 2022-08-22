@@ -19,6 +19,7 @@ class PermissionMiddleware
      */
     public function handle(Request $request, Closure $next, $permission)
     {
+
         if (Auth::guest()) {
             return redirect('/');
         }
