@@ -26,7 +26,7 @@ import Echo from 'laravel-echo';
 window.io = require('socket.io-client');
 window.Echo = new Echo({
     broadcaster: 'socket.io',
-    host: 'aom.enereteclatam.com:6001',
+    host: 'aom.enerteclatam.com:6001',
     transports: ['websocket']
 
 });
