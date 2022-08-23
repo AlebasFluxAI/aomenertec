@@ -9,7 +9,10 @@
     ],
     "database": "redis",
     "databaseConfig": {
-        "redis": {},
+        "redis": {
+            "port": "6379",
+            "host": "aom.enerteclatam.com"
+        },
         "sqlite": {
             "databasePath": "/database/laravel-echo-server.sqlite"
         }
@@ -17,17 +20,17 @@
     "devMode": true,
     "host": "0.0.0.0",
     "port": "6001",
-    "protocol": "http",
+    "protocol": "https",
     "socketio": {
         "cors": {
-            "origin": "http://127.0.0.1:8000",
+            "origin": "http://0.0.0.0:8000",
             "credentials": false
         }
     },
     "secureOptions": 67108864,
-    "sslCertPath": "",
-    "sslKeyPath": "",
-    "sslCertChainPath": "",
+    "sslCertPath": "/home/ssl/enertec.crt",
+    "sslKeyPath": "/home/ssl/enertec.key",
+    "sslCertChainPath": "/home/ssl/enertec.ca-bundle",
     "sslPassphrase": "",
     "subscribers": {
         "http": true,
@@ -40,3 +43,5 @@
         "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
     }
 }
+
+
