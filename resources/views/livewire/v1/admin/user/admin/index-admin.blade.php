@@ -12,7 +12,6 @@
         @endif
         @include("partials.v1.table_nav",
                [
-                    "mt"=>2,
                     "nav_options"=>[
                           [
                               "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_CREATE],

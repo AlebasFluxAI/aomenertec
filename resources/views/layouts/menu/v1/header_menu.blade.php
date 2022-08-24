@@ -1,6 +1,6 @@
 <section class="top-info">
     <div class="contenedor-grande ">
-        <nav class="navbar navbar-expand-lg navbar-custom " style="justify-content: space-between;padding: 5px">
+        <nav class="navbar navbar-expand-lg navbar-custom " style="justify-content: space-between;padding:0px">
             <div class="col-md-2">
                 <a href="{{route("administrar.v1.perfil")}}">
                     <img class="img-fluid imagen-logo"
@@ -36,7 +36,7 @@
 
                     </li>
                 </ul>
-                <div class="mt-4 mb-4">
+                <div class="">
                     @auth
                         @include("layouts.menu.v1.profile")
 
