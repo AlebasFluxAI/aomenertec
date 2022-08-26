@@ -90,6 +90,13 @@
             @yield('content')
         </div>
     </section>
+
+
+
+
+        <div class="mt-6">
+            @include("footer")
+        </div>
 </div>
 
 
