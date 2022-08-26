@@ -90,7 +90,12 @@
             @yield('content')
         </div>
     </section>
+
+
+
+
 </div>
+@include("footer")
 
 
 <!-- Vendor JS Files -->
