@@ -1,6 +1,7 @@
-<div class="float-end mt-{{ $mt??0 }} mb-{{ $mb??0 }}">
+
+<div class=" mt-{{ $mt??0 }} mb-{{ $mb??0 }}">
     <br>
-    <nav class=" navbar ">
+    <nav class=" navbar justify-content-end">
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
                 @if(isset($option["permission"]) and !array_intersect($option["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))

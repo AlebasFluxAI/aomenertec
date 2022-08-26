@@ -94,8 +94,10 @@
 
 
 
+        <div class="mt-6">
+            @include("footer")
+        </div>
 </div>
-@include("footer")
 
 
 <!-- Vendor JS Files -->
