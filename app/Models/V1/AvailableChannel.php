@@ -28,6 +28,20 @@ class AvailableChannel extends Model
         ]);
     }
 
+    public function enable()
+    {
+        $this->update([
+            "enabled" => true
+        ]);
+    }
+
+    public function disable()
+    {
+        $this->update([
+            "enabled" => false
+        ]);
+    }
+
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());

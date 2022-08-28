@@ -6,14 +6,14 @@
         @else
             <li><a>
                     <button wire:click="{{ $click_action }}" type="button" data-toggle="modal"
-                            data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder }}</button>
+                            data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder??"" }}</button>
                 </a></li>
         @endif
     </div>
     <div class="col-md-4 input-group">
 
         @if($icon_class??null)
-        <div class="input-group-prepend">
+            <div class="input-group-prepend">
                                     <span class="input-group-text">
                                      <i class="{{$icon_class}}"></i>
                                     </span>
@@ -51,18 +51,20 @@
             </select>
         @elseif($input_type == "multiselect")
 
-                <div wire:ignore class="dropdown form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_width??6}} col-sm-12" id="for-picker_{{$name_select}}">
-                    
-                    <select  wire:model.defer="{{$model_select}}" class="selectpicker" name="{{$name_select}}" data-container="#for-picker_{{$name_select}}" multiple>
-                            @foreach($options_list as $index => $option)
-                                <option value="{{ $option[$option_value] }}">{{ $option[$option_view] }}</option>
-                            @endforeach
+            <div wire:ignore class="dropdown form-group mb-{{$mb??2}} mt-{{$mt??0}} col-md-{{$col_width??6}} col-sm-12"
+                 id="for-picker_{{$name_select}}">
 
-                    </select>
+                <select wire:model.defer="{{$model_select}}" class="selectpicker" name="{{$name_select}}"
+                        data-container="#for-picker_{{$name_select}}" multiple>
+                    @foreach($options_list as $index => $option)
+                        <option value="{{ $option[$option_value] }}">{{ $option[$option_view] }}</option>
+                    @endforeach
 
-                </div>
+                </select>
 
-            @else
+            </div>
+
+        @else
             <input @if($updated_input=="lazy")
                        wire:model.lazy="{{ $input_model }}"
                    @elseif($updated_input=="defer")
@@ -71,18 +73,16 @@
                        wire:model="{{ $input_model }}"
                    @endif
 
-                    type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
+                   type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
 
-                     required="{{$required??false}}"
+                   required="{{$required??false}}"
 
-                    @if($input_type??"text" == "number")
-                        min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
-                    @endif
+                   @if($input_type??"text" == "number")
+                       min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
+                   @endif
                    @if($disabled??false)
-                   disabled
-                    @endif>
-
-
+                       disabled
+                @endif>
 
         @endif
 
