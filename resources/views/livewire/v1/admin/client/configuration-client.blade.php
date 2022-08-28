@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -31,6 +32,10 @@
                                                     "title"=>"Alertas",
 
                                                 ],
+                                                [
+                                                     "title"=>"Notificaciones",
+                                                ],
+
 
                                            ],
 
@@ -110,33 +115,13 @@
                                                                                                 "input_model"=>"client_config.digital_outputs",
                                                                                                 "icon_class"=>null,
                                                                                                 "placeholder"=>"Salidas disponibles",
-                                                                                                "offset"=>2,
+                                                                                                "offset"=>0,
                                                                                                 "updated_input"=>"lazy",
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
                                                                                                 "required"=>false,
 
                                                                                             ],
-                                                                                            [    "model_select"=>"client_config.client_notification_type",
-                                                                                             "mb"=>2,
-                                                                                             "updated_input"=>"defer",
-                                                                                             "input_field"=>"",
-                                                                                             "input_type"=>"multiselect",
-                                                                                             "icon_class"=>null,
-                                                                                             "placeholder"=>"Servicios de notificaciones",
-                                                                                             "col_width"=>6,
-                                                                                             "offset"=>2,
-                                                                                             "required"=>true,
-                                                                                             "offset"=>'',
-                                                                                             "data_target"=>'',
-                                                                                             "placeholder_clickable"=>false,
-                                                                                             "input_rows"=>0,
-                                                                                             "options_list"=> $notification_types,
-                                                                                             "name_select"=>"notification_types",
-                                                                                                "option_value"=>"value",
-                                                                                                "option_view"=>"key",
-                                                                                            ],
-
                                                                                             [
                                                                                                 "input_type"=>"divider",
                                                                                                 "title"=>"Configuraciones de muestreo"
@@ -216,78 +201,86 @@
 
                                                             ]
                                                 ],
+                                                 [
+                                                                        "view_name"=>"livewire.v1.admin.user.admin.channels-admin",
+                                                                        "view_values"=>  [
+                                                                        ]
+                                                   ]
 
                                           ]
          ])
-@foreach($client_config_alert as $index => $item)
-    <div wire:ignore.self class="modal fade" id="modal_{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="ModalLabel_{{ $item->id }}" aria-hidden="true">
-        <div  class="modal-dialog modal-xl" role="document">
-            <div  class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel_{{ $item->id }}">Seleccione las salidas relacionadas para control automatico</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div  class="modal-body">
-                    @if($item->flag_id < 47)
-                        @include('partials.v2.form.form_input_max_min',[
-                                        "input_type"=>"input_min_max",
-                                        "input_min_model"=> "client_config_alert.".$index.".min_control",
-                                        "input_max_model"=>"client_config_alert.".$index.".max_control",
-                                        "placeholder"=>$placeholders[$index],
-                                        "col_with"=>12,
-                                        "required"=>false,
-                                        "updated_input" => "lazy",
-                                        "placeholder_clickable"=>false,
-                                        "data_target"=>"",
-                                        "click_action" => "",
-                                ])
-                    @else
-                        @include('partials.v2.form.form_input_icon',[
-                                        "input_type"=>"number",
-                                        "offset"=>2,
-                                        "input_model"=>"client_config_alert.".$index.".max_control",
-                                        "placeholder"=>$placeholders[$index],
-                                        "col_with"=>8,
-                                        "updated_input" => "lazy",
-                                        "required"=>false,
-                                        "placeholder_clickable"=>true,
-                                        "data_target"=>"modal_".$item['id'],
-                                        "click_action" => "",
-                                ])
-                    @endif
-                    @foreach($digital_outputs as $index => $output)
-                        @include("partials.v1.form.check_button",[
-                            "mt"=>0,
-                            "mb"=>0,
-                            "col_width"=>3,
-                            "check_model"=>"checks.". $index .".output",
-                            "check_label"=>$output->name,
-                            "check_id"=>$index,
+    @foreach($client_config_alert as $index => $item)
+        <div wire:ignore.self class="modal fade" id="modal_{{ $item->id }}" tabindex="-1" role="dialog"
+             aria-labelledby="ModalLabel_{{ $item->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel_{{ $item->id }}">Seleccione las salidas relacionadas para
+                            control automatico</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @if($item->flag_id < 47)
+                            @include('partials.v2.form.form_input_max_min',[
+                                            "input_type"=>"input_min_max",
+                                            "input_min_model"=> "client_config_alert.".$index.".min_control",
+                                            "input_max_model"=>"client_config_alert.".$index.".max_control",
+                                            "placeholder"=>$placeholders[$index],
+                                            "col_with"=>12,
+                                            "required"=>false,
+                                            "updated_input" => "lazy",
+                                            "placeholder_clickable"=>false,
+                                            "data_target"=>"",
+                                            "click_action" => "",
+                                    ])
+                        @else
+                            @include('partials.v2.form.form_input_icon',[
+                                            "input_type"=>"number",
+                                            "offset"=>2,
+                                            "input_model"=>"client_config_alert.".$index.".max_control",
+                                            "placeholder"=>$placeholders[$index],
+                                            "col_with"=>8,
+                                            "updated_input" => "lazy",
+                                            "required"=>false,
+                                            "placeholder_clickable"=>true,
+                                            "data_target"=>"modal_".$item['id'],
+                                            "click_action" => "",
+                                    ])
+                        @endif
+                        @foreach($digital_outputs as $index => $output)
+                            @include("partials.v1.form.check_button",[
+                                "mt"=>0,
+                                "mb"=>0,
+                                "col_width"=>3,
+                                "check_model"=>"checks.". $index .".output",
+                                "check_label"=>$output->name,
+                                "check_id"=>$index,
 
-                            ])
-                    @endforeach
+                                ])
+                        @endforeach
 
-                </div>
-                <div class="modal-footer">
-                    <button><a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a></button>
-                    <button><a wire:click="assignmentOutput('{{ $item->id }}','{{ $index }}')" type="button" class="btn btn-primary">Save changes</a></button>
+                    </div>
+                    <div class="modal-footer">
+                        <button><a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a></button>
+                        <button><a wire:click="assignmentOutput('{{ $item->id }}','{{ $index }}')" type="button"
+                                   class="btn btn-primary">Save changes</a></button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     @endforeach
     <script>
         document.addEventListener('livewire:load', function () {
-            @this.on('closeModal', (e) => {
+        @this.on('closeModal', (e) => {
 
-                $('#modal_'+e.id).hide()
-                if ($('.modal-backdrop').is(':visible')) {
-                    $('body').removeClass('modal-open');
-                    $('.modal-backdrop').remove();
-                }
-            })
+            $('#modal_' + e.id).hide()
+            if ($('.modal-backdrop').is(':visible')) {
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+            }
+        })
         })
     </script>
 </div>

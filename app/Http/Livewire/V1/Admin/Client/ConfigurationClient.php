@@ -23,12 +23,11 @@ class ConfigurationClient extends Component
     public $storage_latency_types;
     public $frame_types;
     public $notification_types;
-    public $client_notification_type;
+    public $channels;
     public $outputs_selected;
 
 
     private $configurationClientService;
-
 
 
     public function __construct($id = null)
@@ -41,14 +40,17 @@ class ConfigurationClient extends Component
     {
         $this->configurationClientService->mount($this, $client);
     }
+
     protected function rules()
     {
         return $this->configurationClientService->rules($this);
     }
+ 
     public function outputRelation($id)
     {
         $this->configurationClientService->outputRelation($this, $id);
     }
+
     public function assignmentOutput($id, $index)
     {
         $this->configurationClientService->assignmentOutput($this, $id, $index);
@@ -58,6 +60,7 @@ class ConfigurationClient extends Component
     {
         $this->configurationClientService->updated($this, $key, $value);
     }
+
     public function updatedClientConfig($value, $key)
     {
         $this->configurationClientService->updatedClientConfig($this, $value, $key);
@@ -68,10 +71,17 @@ class ConfigurationClient extends Component
     {
         $this->configurationClientService->submitFormConection($this);
     }
+
     public function submitFormAlert()
     {
         $this->configurationClientService->submitFormAlert($this);
     }
+
+    public function blinkChannel($channel)
+    {
+        $this->configurationClientService->blinkChannel($this, $channel);
+    }
+
 
     public function render()
     {

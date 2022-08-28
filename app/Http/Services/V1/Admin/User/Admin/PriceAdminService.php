@@ -69,7 +69,6 @@ class PriceAdminService extends Singleton
 
     public function blinkChannel(Component $component, $channel)
     {
-
         AvailableChannel::find($channel)->blink();
         $component->channels = $component->model->refresh()->channels;
     }
