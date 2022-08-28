@@ -595,8 +595,9 @@ dialog {
 
 .imagen-logo {
     height: auto;
-    width: 300px;
+    width: 150px;
     object-fit: contain;
+    margin: 10px;
 }
 
 .contenedor-grande .fecha-to {
@@ -2209,74 +2210,91 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 
 /*footer*/
 
-.footer{
+.footer {
     background-color: #e9e7e7;
-    /* border-top: 3px solid #f9b000; */
-    margin-top: 100px;
     width: 100%;
+    z-index: 100;
+    position: fixed;
+    bottom: 0;
+    padding: 5px;
+    border-top-color: #c3c3c3;
+    border-top-width: 2px;
 }
-.containerFooter{
+
+.containerFooter {
     color: #000000;
     display: grid;
     grid-template-columns: 0.5fr 3fr 1.5fr;
     grid-gap: 30px;
-    padding: 0px 5px;
+
 }
-.textClientes{
+
+.textClientes {
     display: flex;
     /* align-items: stretch; */
     text-align: center;
     margin-top: 17px;
     font-size: 15px;
     font-weight: 600;
-}justify-content-end
-.textClientes p{
-    padding-top: 3px ;
 }
-.containerFooter a{
+
+justify-content-end
+.textClientes p {
+    padding-top: 3px;
+}
+
+.containerFooter a {
     color: #000000;
     text-decoration: none;
     padding-top: 2px;
     padding-left: 2px;
 }
+
 /* .containerFooter a:hover{
     color:#f9b000;;
     text-decoration: none;
 } */
-.logos{
+.logos {
     display: flex;
     padding-left: 20px;
     height: 20px;
 }
-.textDerechos{
+
+.textDerechos {
     text-align: end;
     color: gray;
     margin-top: 19px;
     font-size: 0.9rem;
     font-weight: 400;
 }
-@media (max-width:420px) {
-    .containerFooter{
+
+@media (max-width: 420px) {
+    .containerFooter {
         text-align: center;
         grid-template-columns: repeat(1, 1fr);
         grid-gap: 2px;
         padding: 2px 5px 2px 5px;
     }
-    .logos{
+
+    .logos {
         padding-left: 0;
     }
-    .containerFooter a{
+
+    .containerFooter a {
         padding-top: 4px;
     }
-    .textClientes p{
+
+    .textClientes p {
         padding-top: 4px;
     }
-    .textClientes{
+
+    .textClientes {
         margin-top: 0px;
         font-size: 0.75rem;
         justify-content: space-evenly;
     }
-    .textDerechos{
+
+    .textDerechos {
         margin-top: 5px;
         text-align: center;
         font-size: 0.6rem;
@@ -2285,25 +2303,30 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
 }
 
 
-@media (max-width:360px) {
-    .textClientes{
+@media (max-width: 360px) {
+    .textClientes {
         font-size: 0.7rem;
     }
-    .containerFooter a{
+
+    .containerFooter a {
         padding-top: 5px;
     }
-    .textClientes p{
+
+    .textClientes p {
         padding-top: 5px;
     }
-    .textDerechos{
+
+    .textDerechos {
         font-size: 0.5rem;
     }
 }
-@media (max-width:320px) {
-    .textClientes{
+
+@media (max-width: 320px) {
+    .textClientes {
         font-size: 0.65rem;
     }
-    .textDerechos{
+
+    .textDerechos {
         font-size: 0.5rem;
     }
 }

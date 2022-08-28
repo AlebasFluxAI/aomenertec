@@ -11,17 +11,27 @@ use Livewire\WithFileUploads;
 
 class EditSupport extends Component
 {
+    public $decodedAddress;
+    public $latitude;
+    public $longitude;
+    public $form_title;
     public $model;
-    public $name;
-    public $last_name;
-    public $phone;
-    public $email;
-    public $identification;
-    public $clients;
-    public $client;
-    public $client_picked;
-    public $message_client;
+    public $message;
+    public $person_types;
+    public $identification_types;
     private $editSupportService;
+
+    protected $rules = [
+        'model.name' => 'required|min:6',
+        'model.last_name' => 'required|min:6',
+        'model.address_details' => 'required',
+        'model.latitude' => 'required',
+        'model.longitude' => 'required',
+        'model.billing_name' => 'required',
+        'model.billing_address' => 'required',
+        'model.person_type' => 'required',
+        'model.identification_type' => 'required',
+    ];
 
     public function __construct($id = null)
     {
