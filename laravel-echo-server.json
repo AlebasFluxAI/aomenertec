@@ -1,5 +1,5 @@
 {
-    "authHost": "http://0.0.0.0:8000",
+    "authHost": "http://localhost:8000",
     "authEndpoint": "/broadcasting/auth",
     "clients": [
         {
@@ -11,7 +11,7 @@
     "databaseConfig": {
         "redis": {
             "port": "6379",
-            "host": "aom.enerteclatam.com"
+            "host": "localhost"
         },
         "sqlite": {
             "databasePath": "/database/laravel-echo-server.sqlite"
@@ -23,7 +23,7 @@
     "protocol": "https",
     "socketio": {
         "cors": {
-            "origin": "http://0.0.0.0:8000",
+            "origin": "http://localhost:8000",
             "credentials": false
         }
     },
