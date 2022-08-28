@@ -34,13 +34,16 @@ class IndexClient extends Component
     {
         return $this->indexClientService->conditionalMonitoring($this, $id);
     }
+
     public function conditionalDeleteClient($id)
     {
+   
         return $this->indexClientService->conditionalDeleteClient($this, $id);
     }
+
     public function deleteClient($id)
     {
-        $this->indexClientService->deleteclient($this, $id);
+        $this->indexClientService->deleteClient($this, $id);
     }
 
 

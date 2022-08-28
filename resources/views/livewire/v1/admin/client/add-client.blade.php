@@ -271,7 +271,7 @@
 
                                 <div class="col-12 text-left"> &nbsp;&nbsp; <strong> Seriales de componentes</strong>
                                 </div>
-                                @foreach([] as $index => $item)
+                                @foreach($equipment as $index => $item)
                                     <div wire:key="equipment-field-{{ $index }}"
                                          class="form-group mb-2 align-content-start col-md-3 col-sm-12">
                                         @include("partials.v1.form.form_list",[
