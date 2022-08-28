@@ -64,7 +64,7 @@
                                   "input_type"=>"text",
                                   "list_model" => "model.person_type",
                                   "list_default" => "Tipo de persona ...",
-                                  "list_options" => $person_types,
+                                  "list_options" => $person_types??[],
                                   "list_option_value"=>"value",
                                   "list_option_view"=>"key",
                                   "list_option_title"=>"",

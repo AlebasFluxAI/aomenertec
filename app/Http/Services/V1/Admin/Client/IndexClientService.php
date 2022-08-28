@@ -43,15 +43,22 @@ class IndexClientService extends Singleton
         $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
         $component->reset();
     }
+
     public function conditionalMonitoring(Component $component, $modelId)
     {
         return !MicrocontrollerData::whereClientId($modelId)->exists();
     }
+
     public function conditionalDeleteClient(Component $component, $modelId)
     {
         return MicrocontrollerData::whereClientId($modelId)->exists();
     }
 
+    public function deleteClient(Component $component, $modelId)
+    {
+        Client::find($modelId)->delete();
+        $this->getData($component);
+    }
 
     public function getData(Component $component)
     {

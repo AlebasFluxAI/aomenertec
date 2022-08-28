@@ -92,13 +92,10 @@
     </section>
 
 
-
-
-        <div class="mt-6">
-            @include("footer")
-        </div>
 </div>
-
+<div>
+    @include("footer")
+</div>
 
 <!-- Vendor JS Files -->
 @livewireScripts
@@ -124,6 +121,7 @@
     })
 </script>
 @include("partials.v1.whatsapp-button")
+
 </body>
 
 </html>

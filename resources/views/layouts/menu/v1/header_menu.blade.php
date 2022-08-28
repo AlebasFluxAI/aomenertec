@@ -1,7 +1,7 @@
 <section class="top-info">
     <div class="contenedor-grande ">
         <nav class="navbar navbar-expand-lg navbar-custom " style="justify-content: space-between;padding:0px">
-            <div class="col-md-2">
+            <div>
                 <a href="{{route("administrar.v1.perfil")}}">
                     <img class="img-fluid imagen-logo"
                          src='{{\App\Http\Resources\V1\Icon::getIcon()}}'
