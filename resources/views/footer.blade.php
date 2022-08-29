@@ -2,7 +2,7 @@
     <div class="containerFooter">
         <a href="{{route("administrar.v1.perfil")}}">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="180px" height="50px"
+                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="180px" height="25px"
                  viewBox="0 0 200 50" enable-background="new 0 0 200 50" xml:space="preserve">  <image id="image0"
                                                                                                        width="120"
                                                                                                        height="50" x="0"

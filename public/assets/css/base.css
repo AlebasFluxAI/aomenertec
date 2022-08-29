@@ -2216,7 +2216,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
     z-index: 100;
     position: fixed;
     bottom: 0;
-    padding: 5px;
+    padding: 2px;
     border-top-color: #c3c3c3;
     border-top-width: 2px;
 }
@@ -2233,14 +2233,14 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
     display: flex;
     /* align-items: stretch; */
     text-align: center;
-    margin-top: 17px;
+    margin: 2px 5px;
     font-size: 15px;
     font-weight: 600;
 }
 
 justify-content-end
 .textClientes p {
-    padding-top: 3px;
+    padding-top: 2px;
 }
 
 .containerFooter a {
@@ -2263,7 +2263,7 @@ justify-content-end
 .textDerechos {
     text-align: end;
     color: gray;
-    margin-top: 19px;
+    margin: 2px 5px;
     font-size: 0.9rem;
     font-weight: 400;
 }
