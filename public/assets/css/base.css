@@ -2234,7 +2234,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
     /* align-items: stretch; */
     text-align: center;
     margin: 2px 5px;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
 }
 
@@ -2264,7 +2264,7 @@ justify-content-end
     text-align: end;
     color: gray;
     margin: 2px 5px;
-    font-size: 0.9rem;
+    font-size: 13px;
     font-weight: 400;
 }
 

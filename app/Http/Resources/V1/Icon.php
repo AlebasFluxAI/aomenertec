@@ -19,7 +19,7 @@ class Icon extends Singleton
         try {
             return self::getUserIcon();
         } catch (Throwable $exception) {
-            return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
+            return "https://enertedevops.s3.us-east-2.amazonaws.com/images/enerteclogo-simple.png";
         }
     }
 
