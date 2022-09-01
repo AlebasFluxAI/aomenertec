@@ -42,8 +42,8 @@ class ConsumerCommand extends Command
     {
         $consumer = Kafka::createConsumer(["real_time_topic"], 'monolith', "3.138.63.140:9092")
             ->withHandler(function (KafkaConsumerMessage $message) {
-                print ($message->getBody());
-                dispatch(new PushRealTimeMicrocontrollerDataJob(json_decode($message->getBody())));
+                print(json_encode($message->getBody()) . "\n");
+                dispatch(new PushRealTimeMicrocontrollerDataJob($message->getBody()));
             })
             ->build();
         $consumer->consume();
