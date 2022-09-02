@@ -35,7 +35,7 @@ class RealTimeMonitoringEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('data-monitoring.1');
+        return new Channel('data-monitoring.'.$this->raw_json['client_id']);
     }
     public function broadcastAs()
     {

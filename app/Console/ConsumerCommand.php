@@ -47,8 +47,6 @@ class ConsumerCommand extends Command
             })
             ->build();
         $consumer->consume();
-
-
     }
 
 
