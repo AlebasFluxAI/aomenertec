@@ -56,11 +56,6 @@ class PqrIndexService extends Singleton
         return Pqr::whereIn("id", $user->pqrUsers()->pluck("pqr_id"))->paginate();
     }
 
-    public function details(Component $component, $modelId)
-    {
-        $component->redirectRoute("administrar.v1.peticiones.detalles", ["pqr" => $modelId]);
-    }
-
     public function changeLevel(Component $component, $id)
     {
         $pqr = Pqr::find($id);

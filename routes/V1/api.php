@@ -20,3 +20,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post("/v1/mqtt_input", MqttInputController::class);
 Route::post("/v1/mqtt_input/real-time", \App\Http\Controllers\V1\MqttInput\MqttRealTimeInputController::class);
+
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+
+    Route::post('login', 'AuthController@login');
+    Route::post('logout', 'AuthController@logout');
+    Route::post('refresh', 'AuthController@refresh');
+    Route::post('job-list', 'AuthController@joblist');
+    Route::post('me', 'AuthController@me');
+
+});

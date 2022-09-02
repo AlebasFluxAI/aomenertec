@@ -87,7 +87,7 @@ class RealTimeChart extends Component
     public function getListeners()
     {
         return [
-            "echo:data-monitoring." . $this->client->id . ",.dataEventRealTime" => 'addPoint',
+            "echo:data-monitoring.1,.dataEventRealTime" => 'addPoint',
             "selectRealTime"
         ];
     }
@@ -134,6 +134,7 @@ class RealTimeChart extends Component
 
     public function addPoint($data)
     {
+        dd($data);
         if (count($this->data_real_time) == 20) {
             array_shift($this->data_real_time);
         }

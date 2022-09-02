@@ -4,13 +4,16 @@ namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorDetailsService;
 use App\Models\V1\NetworkOperator;
+use App\Models\V1\Pqr;
 use Livewire\Component;
+use App\Models\Traits\PqrStatusTrait;
 
 class DetailsNetworkOperator extends Component
 {
     public $model;
     public $supervisors;
     private $detailsNetworkOperatorService;
+
 
 
     public function __construct($id = null)
@@ -105,6 +108,36 @@ class DetailsNetworkOperator extends Component
     public function deleteClient($id)
     {
         $this->detailsNetworkOperatorService->deleteclient($this, $id);
+    }
+
+    //PQR
+    public function changeLevel($id)
+    {
+        return $this->detailsNetworkOperatorService->changeLevel($this, $id);
+    }
+    public function equipmentNotRequest($id)
+    {
+        return $this->detailsNetworkOperatorService->equipmentNotRequest($this, $id);
+    }
+    public function equipmentRequest($id)
+    {
+        return $this->detailsNetworkOperatorService->equipmentRequest($this, $id);
+    }
+    public function closePqr($id)
+    {
+        return $this->detailsNetworkOperatorService->closePqr($this, $id);
+    }
+    public function requestEquipment($id)
+    {
+        $this->detailsNetworkOperatorService->requestEquipment($this, $id);
+    }
+    public function openTicked($id)
+    {
+        return $this->detailsNetworkOperatorService->openTicked($this, $id);
+    }
+    public function closedTicked($id)
+    {
+        return $this->detailsNetworkOperatorService->closedTicked($this, $id);
     }
 
 
