@@ -296,9 +296,9 @@ class ClientConfigurationService extends Singleton
         foreach ($component->client->refresh()->channels as $channel) {
             $channel->disable();
         }
-        foreach ($component->client_notification_types as $notification_channel) {
+        /*foreach ($component->client_notification_types as $notification_channel) {
             AvailableChannel::find($component->client->refresh()->channels()->whereChannel($notification_channel)->first())->enable();
-        }
+        }*/
 
     }
 
