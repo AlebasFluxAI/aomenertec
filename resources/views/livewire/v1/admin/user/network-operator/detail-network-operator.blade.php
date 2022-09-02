@@ -48,6 +48,10 @@
                                                     "title"=>"Equipos",
 
                                                 ],
+                                                [
+                                                    "title"=>"PQRS",
+
+                                                ],
                                            ],
 
                             "tab_contents"=>[
@@ -161,6 +165,17 @@
                                                       "view_header"=>false,
                                                       "col_filter"=>false
                                                    ],
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.pqr.index-pqr",
+                                                  "view_values"=>[
+                                                                       "data"=>$model->pqrs()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
+                                                                  ]
                                                ],
 
                                                                                         ]

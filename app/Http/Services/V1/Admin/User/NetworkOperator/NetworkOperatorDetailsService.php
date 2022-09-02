@@ -3,12 +3,14 @@
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
 use App\Http\Services\Singleton;
+use App\Models\Traits\PqrStatusTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\Client;
 use App\Models\V1\ClientSupervisor;
 use App\Models\V1\Equipment;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
+use App\Models\V1\Pqr;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
@@ -17,6 +19,7 @@ use Livewire\Component;
 
 class NetworkOperatorDetailsService extends Singleton
 {
+    use PqrStatusTrait;
     public function mount(Component $component, $model)
     {
         $supervisors_id = ClientSupervisor::whereIn('client_id', $model->clients()->pluck('id'))->get()->pluck('supervisor_id');
@@ -26,6 +29,14 @@ class NetworkOperatorDetailsService extends Singleton
         ]);
     }
 
+
+    public function changeLevel(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        $pqr->update([
+            "level" => ($pqr->level == Pqr::PQR_LEVEL_1 ? Pqr::PQR_LEVEL_2 : Pqr::PQR_LEVEL_1)
+        ]);
+    }
     public function conditionalDeleteTechnician(Component $component, $modelId)
     {
         return Technician::find($modelId)->clientTechnicians()->exists();

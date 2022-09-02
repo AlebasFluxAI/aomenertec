@@ -37,11 +37,6 @@ class PqrIndexComponent extends Component
         return $this->pqrIndexService->changeLevel($this, $id);
     }
 
-    public function details($id)
-    {
-        $this->pqrIndexService->details($this, $id);
-    }
-
     public function equipmentNotRequest($id)
     {
         return $this->pqrIndexService->equipmentNotRequest($this, $id);

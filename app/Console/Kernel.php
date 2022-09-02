@@ -19,6 +19,10 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+    protected $commands = [
+        ConsumerCommand::class
+    ];
+
     /**
      * Define the application's command schedule.
      *
@@ -44,11 +48,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateMonthlyConsumption::class)->dailyAt('00:30');
 
         ///Generar facturacion....
-
-
-
-
-
 
 
     }

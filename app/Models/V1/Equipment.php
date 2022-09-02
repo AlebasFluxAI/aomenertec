@@ -75,7 +75,7 @@ class Equipment extends Model
         return $this->belongsTo(Admin::class);
     }
 
-    public function networkOperators()
+    public function networkOperator()
     {
         return $this->belongsTo(Equipment::class);
     }

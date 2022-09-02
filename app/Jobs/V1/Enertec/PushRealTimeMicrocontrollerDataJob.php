@@ -41,8 +41,8 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        $data = $this->unpackData();
-        event(new RealTimeMonitoringEvent($data));
+        //$data = $this->unpackData();
+        event(new RealTimeMonitoringEvent($this->raw_json));
     }
     private function unpackData()
     {

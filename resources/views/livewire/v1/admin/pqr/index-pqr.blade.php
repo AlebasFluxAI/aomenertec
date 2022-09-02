@@ -88,12 +88,15 @@
              "table_actions"=>[
 
                                 "customs"=>[
-                                                 [
-                                                         "function"=>"details",
-                                                         "icon"=>"fas fa-search",
-                                                         "tooltip_title"=>"Detalles",
-                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_SHOW],
-                                                 ],
+                                    [
+                                                       "redirect"=>[
+                                                                   "route"=>"administrar.v1.peticiones.detalles",
+                                                                   "binding"=>"pqr"
+                                                             ],
+                                                           "icon"=>"fas fa-search",
+                                                           "tooltip_title"=>"Detalles",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::PQR_SHOW],
+                                                     ],
                                                  [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CHANGE_LEVEL],

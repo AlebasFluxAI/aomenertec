@@ -40,7 +40,6 @@ def on_disconnect(client, userdata, rc):
 
 def on_message(client, userdata, message):
     try:
-
         res = requests.post("http://localhost/api/v1/mqtt_input/real-time", data={"message": message.payload})
         print(" -> " + res.text)
     except (Exception, Error) as error:

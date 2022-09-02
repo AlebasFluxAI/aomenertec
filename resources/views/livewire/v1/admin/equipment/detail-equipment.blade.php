@@ -26,6 +26,22 @@
                                                     "title"=>"Detalles",
 
                                                 ],
+                                                [
+                                                    "title"=>"Administrador",
+
+                                                ],
+                                                [
+                                                    "title"=>"Operador",
+
+                                                ],
+                                                [
+                                                    "title"=>"Tecnico",
+
+                                                ],
+                                                [
+                                                    "title"=>"Cliente",
+
+                                                ],
 
                                            ],
 
@@ -59,6 +75,47 @@
                                                                      ]
                                                             ]
                                                 ],
+                                                [
+                                                  "view_name"=>"livewire.v1.admin.user.admin.index-admin",
+                                                  "view_values"=>[
+                                                      "data"=>$equipment->admin()->get(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.user.network-operator.index-network-operator",
+                                                  "view_values"=>[
+                                                      "data"=>$equipment->networkOperator()->get(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.user.technician.index-technician",
+                                                   "view_values"=>[
+                                                                       "data"=>$equipment->technicians()->get(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "is_filtered"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
+                                                                  ]
+                                               ],
+                                               [
+                                                  "view_name"=>"livewire.v1.admin.client.index-client",
+                                                  "view_values"=>[
+                                                      "data"=>$equipment->clients()->get(),
+                                                      "table_pageable"=>false,
+                                                      "table_class_container"=>"",
+                                                      "view_header"=>false,
+                                                      "col_filter"=>false
+                                                   ],
+                                               ],
 
                                           ]
          ])

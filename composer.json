@@ -27,10 +27,12 @@
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1",
         "magentron/laravel-blade-lint": "^1.0",
+        "mateusjunges/laravel-kafka": "^1.8",
         "nesbot/carbon": "^2.58",
         "php-mqtt/laravel-client": "^1.0",
         "predis/predis": "^1.1",
         "spatie/laravel-permission": "^5.5",
+        "tymon/jwt-auth": "^1.0",
         "zgldh/crc16-php": "^1.1"
     },
     "require-dev": {
