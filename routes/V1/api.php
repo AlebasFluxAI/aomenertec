@@ -3,6 +3,7 @@
 use App\Http\Controllers\V1\MqttInput\MqttInputController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\v1\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,11 +28,14 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('login', 'login');
+        Route::post('logout', 'logout');
+        Route::post('refresh', 'refresh');
+        Route::post('job-list', 'joblist');
+        Route::post('me', 'me');
+    });
 
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('job-list', 'AuthController@joblist');
-    Route::post('me', 'AuthController@me');
+
 
 });

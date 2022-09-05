@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\V1;
 
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\V1\Controller;
-use App;
+use App\Http\Controllers\v1\Controller;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -94,7 +93,7 @@ class AuthController extends Controller
         }else{
             $ubicacion = $client->resguardo->name;
         }
-         if ($client2->tipo_ubicacion == 1 || $client2->tipo_ubicacion == 2){
+        if ($client2->tipo_ubicacion == 1 || $client2->tipo_ubicacion == 2){
             $ubicacion1 = $client2->centro_poblado->name;
         }elseif ($client2->tipo_ubicacion == 3){
             $ubicacion1 = $client2->vereda->name;
@@ -105,8 +104,8 @@ class AuthController extends Controller
             $pass = "jghsdjfg626FFDS5266s";
             $pass1 = "jkdhjk54858DDS55";
         }else{
-           $pass = "6456dsiksdhhjSDSDA";
-           $pass1 = "ghdjsds55dDJSIOd5";
+            $pass = "6456dsiksdhhjSDSDA";
+            $pass1 = "ghdjsds55dDJSIOd5";
         }
         $respuesta = [['uid'=>"123456789", 'did'=>'999999', 'ssid'=>'wifi_123456789',
             'password'=>"00000000", 'nombre'=>$client->name, 'direccion'=>$client->direccion, 'departamento'=>$client->departamento->departamento,
@@ -116,11 +115,11 @@ class AuthController extends Controller
                 'password'=>"00000001", 'nombre'=>$client2->name, 'direccion'=>$client2->direccion, 'departamento'=>$client2->departamento->departamento,
                 'municipio'=>$client2->municipio->municipio, 'ubicacion'=>$ubicacion1, "latitud"=>$client2->latitud, "longitud"=>$client2->longitud,
                 'celular'=>$client2->celular, "fecha_lectura"=>"25/12/2021", "estado"=>"inhabilitado", "orden"=>"conexion", "pass"=>$pass1, "macAddres"=>"00:19:06:35:7F:27"],
-        ['uid'=>$client2->user->identificacion, 'did'=>"444444", 'ssid'=>'wifi_44444444',
+            ['uid'=>$client2->user->identificacion, 'did'=>"444444", 'ssid'=>'wifi_44444444',
                 'password'=>"00000004", 'nombre'=>"SNEIDER FUENTES", 'direccion'=>'CRR 22 38-47', 'departamento'=>'META',
                 'municipio'=>"VILLAVICENCIO", 'ubicacion'=>"VILLAVICENCIO", "latitud"=>"", "longitud"=>"",
                 'celular'=>"3444444444", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"lectura", "pass"=>"kedjidjiosdjsio", "macAddres"=>"00:19:06:35:7F:27"],
-        ['uid'=>$client2->user->identificacion, 'did'=>"555555", 'ssid'=>'wifi_55555555',
+            ['uid'=>$client2->user->identificacion, 'did'=>"555555", 'ssid'=>'wifi_55555555',
                 'password'=>"00000005", 'nombre'=>"ENERTEC PRUEBA", 'direccion'=>"LLANOCENTRO", 'departamento'=>"META",
                 'municipio'=>"VILLAVICENCIO", 'ubicacion'=>"VILLAVICENCIO", "latitud"=>"", "longitud"=>"",
                 'celular'=>"3959758995", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"corte", "pass"=>"lmnd848ojeoijef3", "macAddres"=>"00:19:06:35:7F:27"],

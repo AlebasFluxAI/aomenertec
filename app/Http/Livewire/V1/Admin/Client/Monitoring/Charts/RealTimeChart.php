@@ -134,7 +134,6 @@ class RealTimeChart extends Component
 
     public function addPoint($data)
     {
-        dd($data);
         if (count($this->data_real_time) == 20) {
             array_shift($this->data_real_time);
         }
