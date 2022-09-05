@@ -32,7 +32,7 @@
         "php-mqtt/laravel-client": "^1.0",
         "predis/predis": "^1.1",
         "spatie/laravel-permission": "^5.5",
-        "tymon/jwt-auth": "*",
+        "tymon/jwt-auth": "^1.0.0-beta.3@dev",
         "zgldh/crc16-php": "^1.1"
     },
     "require-dev": {
