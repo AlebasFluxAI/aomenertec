@@ -84,42 +84,23 @@ class AuthController extends Controller
     public function joblist()
     {
         $user = auth("api")->user();
-        $client = App\Cliente::find(114);
-        $client2 = App\Cliente::find(115);
-        if ($client->tipo_ubicacion == 1 || $client->tipo_ubicacion == 2){
-            $ubicacion = $client->centro_poblado->name;
-        }elseif ($client->tipo_ubicacion == 3){
-            $ubicacion = $client->vereda->name;
-        }else{
-            $ubicacion = $client->resguardo->name;
-        }
-        if ($client2->tipo_ubicacion == 1 || $client2->tipo_ubicacion == 2){
-            $ubicacion1 = $client2->centro_poblado->name;
-        }elseif ($client2->tipo_ubicacion == 3){
-            $ubicacion1 = $client2->vereda->name;
-        }else{
-            $ubicacion1 = $client2->resguardo->name;
-        }
-        if (auth("api")->user()->hasRole('sponsor')){
+
             $pass = "jghsdjfg626FFDS5266s";
             $pass1 = "jkdhjk54858DDS55";
-        }else{
-            $pass = "6456dsiksdhhjSDSDA";
-            $pass1 = "ghdjsds55dDJSIOd5";
-        }
+
         $respuesta = [['uid'=>"123456789", 'did'=>'999999', 'ssid'=>'wifi_123456789',
-            'password'=>"00000000", 'nombre'=>$client->name, 'direccion'=>$client->direccion, 'departamento'=>$client->departamento->departamento,
-            'municipio'=>$client->municipio->municipio, 'ubicacion'=>$ubicacion, "latitud"=>$client->latitud, "longitud"=>$client->longitud,
-            'celular'=>$client->celular, "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"lectura", "pass"=>$pass, "macAddres"=>"CC:50:E3:95:F4:B6"],
-            ['uid'=>$client2->user->identificacion, 'did'=>'888888', 'ssid'=>'wifi_'.$client2->identificacion,
-                'password'=>"00000001", 'nombre'=>$client2->name, 'direccion'=>$client2->direccion, 'departamento'=>$client2->departamento->departamento,
-                'municipio'=>$client2->municipio->municipio, 'ubicacion'=>$ubicacion1, "latitud"=>$client2->latitud, "longitud"=>$client2->longitud,
-                'celular'=>$client2->celular, "fecha_lectura"=>"25/12/2021", "estado"=>"inhabilitado", "orden"=>"conexion", "pass"=>$pass1, "macAddres"=>"00:19:06:35:7F:27"],
-            ['uid'=>$client2->user->identificacion, 'did'=>"444444", 'ssid'=>'wifi_44444444',
+            'password'=>"00000000", 'nombre'=>'cliente 1', 'direccion'=>'direccion cliente 1', 'departamento'=>'meta',
+            'municipio'=>'villavicencio', 'ubicacion'=>"", "latitud"=>"", "longitud"=>"",
+            'celular'=>"", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"lectura", "pass"=>$pass, "macAddres"=>"CC:50:E3:95:F4:B6"],
+            ['uid'=>"123456789", 'did'=>'888888', 'ssid'=>'wifi_00000',
+                'password'=>"00000001", 'nombre'=>"cliente 2", 'direccion'=>"direccion cliente 2", 'departamento'=>"meta",
+                'municipio'=>"villavicewncio", 'ubicacion'=>"", "latitud"=>"", "longitud"=>"",
+                'celular'=>"", "fecha_lectura"=>"25/12/2021", "estado"=>"inhabilitado", "orden"=>"conexion", "pass"=>$pass1, "macAddres"=>"00:19:06:35:7F:27"],
+            ['uid'=>123456789, 'did'=>"444444", 'ssid'=>'wifi_44444444',
                 'password'=>"00000004", 'nombre'=>"SNEIDER FUENTES", 'direccion'=>'CRR 22 38-47', 'departamento'=>'META',
                 'municipio'=>"VILLAVICENCIO", 'ubicacion'=>"VILLAVICENCIO", "latitud"=>"", "longitud"=>"",
                 'celular'=>"3444444444", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"lectura", "pass"=>"kedjidjiosdjsio", "macAddres"=>"00:19:06:35:7F:27"],
-            ['uid'=>$client2->user->identificacion, 'did'=>"555555", 'ssid'=>'wifi_55555555',
+            ['uid'=>123456789, 'did'=>"555555", 'ssid'=>'wifi_55555555',
                 'password'=>"00000005", 'nombre'=>"ENERTEC PRUEBA", 'direccion'=>"LLANOCENTRO", 'departamento'=>"META",
                 'municipio'=>"VILLAVICENCIO", 'ubicacion'=>"VILLAVICENCIO", "latitud"=>"", "longitud"=>"",
                 'celular'=>"3959758995", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"corte", "pass"=>"lmnd848ojeoijef3", "macAddres"=>"00:19:06:35:7F:27"],
