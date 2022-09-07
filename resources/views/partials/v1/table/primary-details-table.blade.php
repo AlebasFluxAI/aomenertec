@@ -1,4 +1,4 @@
-<div class="mb-3">
+<div class="mb-1">
     <div class="detail-table">
 
         <table class="table table-bordered">

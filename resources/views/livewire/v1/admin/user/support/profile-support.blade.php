@@ -87,19 +87,8 @@
 
 
 
-                                ]
+                                ],
+                           "logout_button"=>true
         ])
 
-    @include("partials.v1.table_nav",
-       ["mt"=>2,
-       "nav_options"=>[
-                  ["button_align"=>"right",
-                  "click_action"=>"",
-                  "button_content"=>"Cerrar sesion",
-                  "button_icon"=>"fa-solid fa-right-from-bracket",
-                  "target_route"=>"logout",
-                  ],
-
-              ]
-      ])
 </div>
