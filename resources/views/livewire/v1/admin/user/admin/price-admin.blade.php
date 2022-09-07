@@ -168,7 +168,7 @@
                                                                     ]
                                            ]                                ,
                                            [
-                                                                        "view_name"=>"livewire.v1.client.channels-client",
+                                                                        "view_name"=>"livewire.v1.admin.user.admin.channels-admin",
                                                                         "view_values"=>  [
                                                                         ]
                                            ]
