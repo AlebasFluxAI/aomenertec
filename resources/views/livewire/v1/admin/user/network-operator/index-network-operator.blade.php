@@ -13,7 +13,7 @@
 
         @endif
         @include("partials.v1.table_nav",
-               ["mt"=>2,
+               [
                 "nav_options"=>[
                           ["button_align"=>"right",
                           "click_action"=>"",

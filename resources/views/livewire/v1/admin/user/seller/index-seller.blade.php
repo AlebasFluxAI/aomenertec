@@ -13,7 +13,7 @@
 
 
         @include("partials.v1.table_nav",
-               ["mt"=>2,
+               [
                "nav_options"=>[
                           ["button_align"=>"right",
                            "permission"=>[\App\Http\Resources\V1\Permissions::SELLER_CREATE],
