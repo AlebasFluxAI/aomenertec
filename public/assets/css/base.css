@@ -298,7 +298,7 @@ body {
     color: #444444;
     min-height: 100vh;
     position: relative;
-    /* padding-bottom: 6px; */
+    padding-bottom: 6px;
 }
 
 a {
@@ -2216,7 +2216,7 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before, table
     background-color: #e9e7e7;
     width: 100%;
     z-index: 100;
-    position: relative;
+    position: absolute;
     /* display: inline-block; */
     bottom: 0;
     margin-top: 100px;
