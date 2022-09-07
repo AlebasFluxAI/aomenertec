@@ -1,4 +1,4 @@
-<div class="{{ $class_container??'contenedor-grande' }} mb-1">
+<div class="{{ $class_container??'contenedor-grande' }}">
     <div class="primary-content">
         <table class="table table-bordered">
             <thead style="position: sticky;top: 0;z-index: 2">

@@ -1,4 +1,4 @@
-<div class="mb-3">
+<div class="mb-1">
     <div class="primary-content">
         <table class="table table-bordered">
             <thead style="position: sticky;top: 0;z-index: 2">
