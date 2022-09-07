@@ -600,7 +600,7 @@ dialog {
     height: auto;
     width: 150px;
     object-fit: contain;
-    margin: 10px;
+    margin: 5px;
 }
 
 .contenedor-grande .fecha-to {
@@ -1333,10 +1333,8 @@ footer .copyright {
 
 .serviciosHomeCaja {
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 4px;
     margin: 5px;
     border-radius: 10px;
 }
@@ -1344,7 +1342,7 @@ footer .copyright {
 .serviciosHomeCaja:hover {
 
     transition: .7s;
-    margin: 10px;
+    margin: 0px;
     background-color: #f2f2f2;
 
 }

@@ -2,7 +2,7 @@
 
 @section('header')
     <section class="top-info">
-        <div>
+        <div class="flex-column">
             <nav class="navbar navbar-expand-lg"
                  style="{{\App\Http\Resources\V1\Subdomain::getHeaderColor()}}">
                 <a class="navbar-brand" href="/">

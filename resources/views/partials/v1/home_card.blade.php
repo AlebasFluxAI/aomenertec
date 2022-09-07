@@ -1,4 +1,5 @@
-<div class="col-lg-3 col-sm-12  serviciosHomeCaja mb-md-4 p-md-2 ">
+<div class="col-lg-3 col-sm-12 d-flex serviciosHomeCaja mb-md-4 p-md-2">
+
     <div class="col-6">
         <a href="{{($redirect??null)?route($redirect,["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??\App\Http\Resources\V1\Subdomain::SUBDOMAIN_DEFAULT]):"#"}}"
            class="linkServiciosHome">
