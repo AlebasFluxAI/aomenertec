@@ -20,7 +20,8 @@
 .login-class {
     border-radius: 15px;
     padding: 20px;
-    margin-top: 8rem;
+    margin-top: 6rem;
+    margin-bottom: 6rem;
     -webkit-box-shadow: -10px 0px 13px -7px #f2f2f2, 10px 0px 13px -7px #f2f2f2, -28px -25px 11px -15px rgba(107, 107, 107, 0.06);
     box-shadow: -10px 0px 13px -7px #f2f2f2, 10px 0px 13px -7px #f2f2f2, -28px -25px 11px -15px rgba(107, 107, 107, 0.06);
 }
