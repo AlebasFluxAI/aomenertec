@@ -34,7 +34,7 @@ class Subdomain
     public static function getHeaderIcon() // Esta es la imagen que aparece en el header principal
     {
         return match (Route::input("subdomain")) {
-            self::SUBDOMAIN_AOM => "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png",
+            self::SUBDOMAIN_AOM => "https://enertedevops.s3.us-east-2.amazonaws.com/images/enertec-logotipo-new.png",
             self::SUBDOMAIN_COENERGIA => "https://enertedevops.s3.us-east-2.amazonaws.com/images/16517642985208516/1651764298_Coenergia_login.png",
             self::SUBDOMAIN_VAUPES => "https://enertedevops.s3.us-east-2.amazonaws.com/images/VAUPES-1.png",
             default => "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png",
@@ -44,9 +44,9 @@ class Subdomain
     public static function getHeaderColor()
     {
         return match (Route::input("subdomain")) {
-            self::SUBDOMAIN_AOM => "justify-content: space-between;padding: 2px;background-color:black;border-bottom-color:#009599;border-bottom-width:0.2rem",
-            self::SUBDOMAIN_COENERGIA => "justify-content: space-between;padding: 2px;background-color:whitesmoke;border-bottom-color:#3962a8;border-bottom-width:0.2rem",
-            self::SUBDOMAIN_VAUPES => "justify-content: space-between;padding: 2px;background-color:whitesmoke;border-bottom-color:#2a2a75;border-bottom-width:0.2rem",
+            self::SUBDOMAIN_AOM => "justify-content: space-between;padding: 0px;background-color:black;border-bottom-color:#009599;border-bottom-width:0.2rem",
+            self::SUBDOMAIN_COENERGIA => "justify-content: space-between;padding: 0px;background-color:whitesmoke;border-bottom-color:#3962a8;border-bottom-width:0.2rem",
+            self::SUBDOMAIN_VAUPES => "justify-content: space-between;padding: 0px;background-color:whitesmoke;border-bottom-color:#2a2a75;border-bottom-width:0.2rem",
             default => "background-color:black;border-bottom-color:#009599;border-bottom-width:0.2rem",
         };
     }

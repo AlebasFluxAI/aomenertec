@@ -18,7 +18,7 @@ class IndexController extends Controller
         $subdomain = Route::input("subdomain");
 
         return match ($subdomain) {
-            Subdomain::SUBDOMAIN_AOM => view('auth.login'),
+            Subdomain::SUBDOMAIN_AOM => view('auth.subdomain_login'),
             default => view("auth.subdomain_login"),
         };
     }
