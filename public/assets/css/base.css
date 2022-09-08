@@ -324,9 +324,6 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--style_secondary);
 }
 
-.imagen-logo-login {
-    padding: 0 80px;
-}
 
 /*------------------
 primary
@@ -595,6 +592,50 @@ dialog {
     color: white;
 }
 
+.slide-login {
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+    background-color: #364d69;
+    border-right-color: var(--style_primary);
+    border-right-width: 4px;
+}
+
+.service_list {
+    color: black;
+    align-content: center;
+}
+
+.service_list_item:hover {
+    transition: 0.5s;
+    padding: 3%;
+    cursor: pointer;
+    background-color: var(--style_secondary);
+    border-color: var(--style_primary);
+    border-width: 3px;
+}
+
+.service_list_item {
+    background-color: whitesmoke;
+    margin-top: 5%;
+    padding: 2%;
+    border-radius: 0px 50px 50px 5px;
+}
+
+.login-container {
+    background-color: #f2f2f2;
+    padding: 3%;
+    border-radius: 2%;
+    margin-top: 15%;
+    -webkit-box-shadow: 5px 5px 14px 5px rgba(0, 0, 0, 0.23);
+    box-shadow: 5px 5px 14px 5px rgba(0, 0, 0, 0.23);
+}
+
+.imagen-logo-login {
+    width: 80%;
+    object-fit: contain;
+    margin: 10%;
+}
 
 .imagen-logo {
     height: auto;
