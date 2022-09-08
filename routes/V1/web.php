@@ -62,10 +62,6 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     });
 });
 
-Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->middleware(['guest:' . config('fortify.guard')]);
-
-
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
     ->middleware(['guest:' . config('fortify.guard')]);
 
