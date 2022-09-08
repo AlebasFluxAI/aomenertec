@@ -37,7 +37,7 @@ class Subdomain
             self::SUBDOMAIN_AOM => "https://enertedevops.s3.us-east-2.amazonaws.com/images/enertec-logotipo-new.png",
             self::SUBDOMAIN_COENERGIA => "https://enertedevops.s3.us-east-2.amazonaws.com/images/16517642985208516/1651764298_Coenergia_login.png",
             self::SUBDOMAIN_VAUPES => "https://enertedevops.s3.us-east-2.amazonaws.com/images/VAUPES-1.png",
-            default => "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png",
+            default => "https://enertedevops.s3.us-east-2.amazonaws.com/images/enertec-logotipo-new.png",
         };
     }
 
