@@ -74,7 +74,7 @@
                         <label for="password">Contraseña </label>
                         @if (Route::has('password.request'))
                             <a class="login-forgot-pass" href="
-                                    {{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"coenergia"]) }}
+                                    {{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"enertec"]) }}
                             ">
                                 ¿La olvidaste?</a>
                         @endif
