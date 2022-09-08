@@ -94,7 +94,9 @@
 
 </div>
 <div>
+
     @include("footer")
+
 </div>
 
 <!-- Vendor JS Files -->
