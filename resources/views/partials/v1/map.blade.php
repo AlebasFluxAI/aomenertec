@@ -6,12 +6,33 @@
     let map;
     let marker;
 
-
     function myMap() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                // Success function
+                getLocation,
+                // Error function
+                null,
+                // Options. See MDN for details.
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function getLocation(position) {
         var center = {
-            lat: Number(@js($latitude)),
-            lng: Number(@js($longitude))
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
         };
+    @this.latitude
+        = position.coords.latitude;
+    @this.longitude
+        = position.coords.longitude;
         var mapProp = {
             center: center,
             zoom: 14,
