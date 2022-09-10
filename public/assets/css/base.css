@@ -608,7 +608,7 @@ dialog {
 
 .service_list_item:hover {
     transition: 0.5s;
-    padding: 3%;
+    padding: 10px;
     cursor: pointer;
     background-color: var(--style_secondary);
     border-color: var(--style_primary);
@@ -617,8 +617,8 @@ dialog {
 
 .service_list_item {
     background-color: whitesmoke;
-    margin-top: 5%;
-    padding: 2%;
+    margin-top: 20px;
+    padding: 5px;
     border-radius: 0px 50px 50px 5px;
 }
 
