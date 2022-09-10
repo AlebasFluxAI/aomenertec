@@ -32,8 +32,6 @@ class SupportAddService extends Singleton
             "model.network_operator_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? "" : Auth::user()->networkOperator->id),
             'model.person_type' => User::PERSON_TYPE_NATURAL,
             "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
-            "latitude" => 4.134750,
-            "longitude" => -73.637094,
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",

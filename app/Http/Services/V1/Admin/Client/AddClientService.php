@@ -42,8 +42,6 @@ class AddClientService extends Singleton
     public function mount(Component $component)
     {
         $component->fill([
-            "latitude" => 4.134750,
-            "longitude" => -73.637094,
             "network_topologies" => $this->topologies(),
             "network_topology" => "monophasic",
             'serials' => collect([]),
