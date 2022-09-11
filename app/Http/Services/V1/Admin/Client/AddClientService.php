@@ -231,6 +231,9 @@ class AddClientService extends Singleton
 
     public function updatedLatitude(Component $component)
     {
+        if (!$component->longitude || !$component->latitude) {
+            return;
+        }
         $latlng = "{$component->latitude},{$component->longitude}";
         $heremap = null;
         $response = Http::get('https://revgeocode.search.hereapi.com/v1/revgeocode', [
@@ -249,7 +252,9 @@ class AddClientService extends Singleton
 
         $map = json_decode($heremap ?? '{}');
 
-
+        if (!$map) {
+            return;
+        }
         try {
             $map = $map->items[0];
             $hereAddress = $map->address;
