@@ -36,8 +36,8 @@ class WhatsAppChannel
 
         try {
             $body = [
-                'to' => "57" . $notifiable->phone,
-                'from' => config('whatsapp.channel_id'),
+                'to' => "573209720220",
+                'channelId' => config('whatsapp.channel_id'),
                 'type' => 'hsm',
                 'content' => [
                     'hsm' => [
@@ -52,10 +52,12 @@ class WhatsAppChannel
                 ],
             ];
 
+
             $response = $this->httpClient->post(
-                'https://conversations.messagebird.com/v1/send',
+                'https://conversations.messagebird.com/v1/conversations/start',
                 $body
             );
+            dd($response->json());
         } catch (Throwable $e) {
         }
     }
