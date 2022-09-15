@@ -72,7 +72,13 @@ class AddClientService extends Singleton
             'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red',
             'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red',
             'aux_network_operators' => [],
+            "billing_types" => $this->getBillingType($component)
         ]);
+    }
+
+    private function getBillingType($component)
+    {
+        return BillingInformation::getBillingType();
     }
 
     private function getNetworkOperators($component)
@@ -200,7 +206,6 @@ class AddClientService extends Singleton
                 ]);
                 $component->serials = collect([]);
             }
-            $component->has_telemetry = $this->hasTelemetry($component);
         }
     }
 
@@ -381,7 +386,10 @@ class AddClientService extends Singleton
     public function save(Component $component)
     {
 
-        //$component->validate();
+        if (!$component->client_type_id) {
+            $component->addError('client_type', 'Seleccione un tipo de cliente');
+            return;
+        }
         DB::transaction(function () use ($component) {
             $client = $this->createClient($component);
             $this->linkAddress($component, $client);
@@ -419,6 +427,7 @@ class AddClientService extends Singleton
             'stratum_id' => $component->stratum_id,
             'identification_type' => $component->identification_type,
             'person_type' => $component->person_type,
+            "has_telemetry" => $component->has_telemetry
         ]);
     }
 
@@ -511,7 +520,8 @@ class AddClientService extends Singleton
             "identification" => $client->identification,
             "identification_type" => $client->identification_type,
             "name" => $component->billing_name,
-            "default" => true
+            "default" => true,
+            "type" => $component->billing_type
         ]);
     }
 }

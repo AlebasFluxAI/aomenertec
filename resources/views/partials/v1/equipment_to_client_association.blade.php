@@ -2,12 +2,12 @@
                       "title"=>"Equipos de clientes"
                       ]
                      )
-<div class="contenedor-grande row pl-5 pr-3">
+<div class="row pl-5 pr-3">
 
 
     <div class="col-12 text-left"> &nbsp;&nbsp; <strong> Seriales de componentes</strong>
     </div>
-    @foreach($equipment as $index => $item)
+    @foreach($equipment??[] as $index => $item)
         <div wire:key="equipment-field-{{ $index }}"
              class="form-group mb-2 align-content-start col-md-3 col-sm-12">
             @include("partials.v1.form.form_list",[
@@ -17,7 +17,7 @@
          "aux_class"=>"no-border",
          "list_model" => "equipment.".$index.".type_id",
          "list_default" => "Seleccione equipo...",
-         "list_options" => $equipment_types,
+         "list_options" => $equipment_types??[],
          "list_option_value"=>"id",
          "list_option_view"=>"type",
          "list_option_title"=>""

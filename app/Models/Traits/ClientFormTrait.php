@@ -81,4 +81,6 @@ trait ClientFormTrait
     public $kvarch_hour;
     public $kvarlh_penalizable;
     public $alerts;
+    public $billing_types;
+    public $billing_type;
 }
