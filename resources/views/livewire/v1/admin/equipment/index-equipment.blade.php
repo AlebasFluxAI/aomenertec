@@ -14,7 +14,7 @@
         @endif
         <div>
             @include("partials.v1.table_nav",
-                   ["nav_options"=>$tab_options?: [
+                   ["nav_options"=>[
                                 [
                                    "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_CREATE],
                                    "button_align"=>"right",

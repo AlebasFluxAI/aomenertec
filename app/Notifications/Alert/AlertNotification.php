@@ -16,8 +16,11 @@ class AlertNotification extends Notification
      *
      * @return array
      */
-    public function __construct()
+    public $clientAlert;
+
+    public function __construct($clientAlert)
     {
+        $this->clientAlert = $clientAlert;
         $this->code = rand(100000, 999999);
     }
 
@@ -29,7 +32,7 @@ class AlertNotification extends Notification
     public function toDatabase()
     {
         return new UserNotificationPayload(
-            "Alerta de consumo de cliente",
+            "Se ha presentado una variable fuera de rango en el dispositivo de usuario ". $this->clientAlert->client->name,
             "v1.admin.client.monitoring",
             "interna",
             1,
@@ -39,11 +42,12 @@ class AlertNotification extends Notification
 
     public function toWhatsApp($notifiable)
     {
-        $template = 'alert_v1';
-
+        $template = 'alert_variable';
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
             ->template_name($template)
-            ->params([]);
+            ->params([$this->clientAlert->client->name, $this->clientAlert->clientAlertConfiguration->getVariableName(),
+                $this->clientAlert->value, $this->clientAlert->created_at->format('d F H:i'), "https://aom.enerteclatam.com/v1/administrar/clientes/monitoreo/".$this->clientAlert->client_id
+            ]);
     }
 }
