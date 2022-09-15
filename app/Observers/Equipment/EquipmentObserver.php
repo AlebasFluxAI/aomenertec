@@ -25,6 +25,9 @@ class EquipmentObserver
 
     public function creating(Equipment $equipment)
     {
+        if (!$equipment->description) {
+            $equipment->description = "Sin descripcion";
+        }
         if (Auth::check()) {
             if ($admin = Auth::user()->admin) {
                 $equipment->admin_id = $admin->id;

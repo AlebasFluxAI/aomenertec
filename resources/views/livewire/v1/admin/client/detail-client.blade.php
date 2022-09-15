@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -192,6 +193,27 @@
                                                [
                                                   "view_name"=>"livewire.v1.admin.equipment.index-equipment",
                                                   "view_values"=>[
+                                                      "tab_options"=>[
+                                                           [
+                                                               "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_CREATE],
+                                                               "button_align"=>"right",
+                                                               "click_action"=>"",
+                                                               "button_content"=>"Crear nuevo",
+                                                               "icon"=>"fa-solid fa-plus",
+                                                               "target_route"=>"administrar.v1.equipos.agregar",
+                                                          ],
+                                                          [
+                                                              "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_ADD_EQUIPMENT],
+                                                              "button_align"=>"right",
+                                                              "click_action"=>"",
+                                                              "button_content"=>"Asociar equipo a cliente",
+                                                              "icon"=>"fa-solid fa-computer",
+                                                              "target_route"=>"v1.admin.client.add.equipment",
+                                                              "target_binding"=>"client",
+                                                              "target_binding_value"=>$client->id
+                                                          ]
+
+                                                       ],
                                                       "data"=>$client->equipments()->get(),
                                                       "permissionRemove" => [\App\Http\Resources\V1\Permissions::ADMIN_REMOVE_EQUIPMENT],
                                                       "functionRemoveEquipment" => "removeEquipmentAdmin",

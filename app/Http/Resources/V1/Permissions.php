@@ -27,6 +27,7 @@ class Permissions
     public const ADMIN_REMOVE_CLIENT = "admin.remove_client";
     public const ADMIN_MONITORING = "admin.monitoring";
     public const ADMIN_SETTING_CLIENT = "admin.setting_client";
+    public const CLIENT_ADD_EQUIPMENT = "client_add_equipment";
 
     public const EQUIPMENT_CREATE = "equipment.create";
     public const EQUIPMENT_EDIT = "equipment.edit";

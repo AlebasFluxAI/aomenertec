@@ -289,6 +289,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], func
                         ->name("v1.admin.client.edit.client")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_EDIT));
 
+                    Route::get('equipos/{client}', Livewire\V1\Admin\Client\AddEquipmentToClient::class)
+                        ->name("v1.admin.client.add.equipment")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_ADD_EQUIPMENT));
+
                     Route::get('monitoreo/{client}', Livewire\V1\Admin\Client\Monitoring::class)
                         ->name("v1.admin.client.monitoring")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW_MONITORING));
