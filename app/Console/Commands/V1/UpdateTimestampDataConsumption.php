@@ -51,9 +51,6 @@ class UpdateTimestampDataConsumption extends Command
                 $date->setTimestamp($timestamp);
                 $item->source_timestamp = $date->format("Y-m-d H:i:s");
                 $item->saveQuietly();
-                AuxData::create([
-                    'data' => $item->raw_json
-                ]);
             }
         }
     }

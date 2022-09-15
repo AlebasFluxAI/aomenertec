@@ -129,7 +129,7 @@
                                                                         "table_pageable"=>false,
                                                                         "table_headers"=>[
                                                                                             "ID"=>'id',
-                                                                                            "Variable"=>'flag_index',
+                                                                                            "Variable"=>'name',
                                                                                             "Limite min" => "clientAlertConfiguration.min_alert",
                                                                                             "Limite max" => "clientAlertConfiguration.max_alert",
                                                                                             "Valor alerta"=>'value',

@@ -18,9 +18,12 @@ class ClientAlertObserver
      */
     public function created(ClientAlert $clientAlert)
     {
-        $aux = User::find(10);
-        event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $aux->id));
-        $aux->notify(new AlertNotification());
+        $users = User::find([8, 2]);
+        foreach ($users as $user){
+            event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->id));
+            $user->notify(new AlertNotification());
+        }
+
     }
 
     /**

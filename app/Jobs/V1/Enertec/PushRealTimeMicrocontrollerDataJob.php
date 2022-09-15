@@ -31,7 +31,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
 
     public function __construct($raw_json)
     {
-        $this->raw_json = $raw_json->data;
+        $this->raw_json = $raw_json;
     }
 
     /**

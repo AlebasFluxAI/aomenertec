@@ -27,7 +27,10 @@ class Monitoring extends Component
     public function mount(Client $client)
     {
         $this->client = $client;
-        $this->clientAlerts = $this->client->clientAlerts()->get();
+        $this->clientAlerts = $this->client->clientAlerts;
+        foreach ($this->clientAlerts as &$alert){
+            $alert->name = $alert->clientAlertConfiguration->getVariableName();
+        }
         $this->data_frame = collect(config('data-frame.data_frame'));
         $this->variables = collect(config('data-frame.variables'));
         $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
