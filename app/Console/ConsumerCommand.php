@@ -5,6 +5,8 @@ namespace App\Console;
 use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
+use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
+use App\Jobs\V1\Enertec\SaveAlertDataJob;
 use FlixTech\AvroSerializer\Objects\RecordSerializer;
 use FlixTech\SchemaRegistryApi\Registry\BlockingRegistry;
 use FlixTech\SchemaRegistryApi\Registry\Cache\AvroObjectCacheAdapter;
@@ -15,8 +17,10 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Junges\Kafka\Contracts\KafkaConsumerMessage;
 use Junges\Kafka\Facades\Kafka;
+use PhpMqtt\Client\Facades\MQTT;
 
-class ConsumerCommand extends Command
+class
+ConsumerCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -40,13 +44,19 @@ class ConsumerCommand extends Command
 
     public function handle()
     {
-        $consumer = Kafka::createConsumer(["real_time_topic"], 'monolith', "3.138.63.140:9092")
-            ->withHandler(function (KafkaConsumerMessage $message) {
-                print(json_encode($message->getBody()) . "\n");
-                dispatch(new PushRealTimeMicrocontrollerDataJob($message->getBody()));
-            })
-            ->build();
-        $consumer->consume();
+        $mqtt = MQTT::connection();
+        $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
+            dispatch(new PushRealTimeMicrocontrollerDataJob($message));
+        }, 0);
+        $mqtt->subscribe('mc/data', function (string $topic, string $message) {
+            dispatch(new SaveMicrocontrollerDataJob($message));
+        }, 1);
+        $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
+            dispatch(new SaveMicrocontrollerDataJob($message));
+            dispatch(new SaveAlertDataJob($message));
+        }, 1);
+        $mqtt->loop();
+
     }
 
 

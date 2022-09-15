@@ -70,7 +70,8 @@ class AdminAddEquipmentService extends Singleton
     public function deleteEquipmentAssigned(Component $component, $equipmentId)
     {
         Equipment::whereId($equipmentId)->update([
-            "admin_id" => null
+            "admin_id" => null,
+            "has_admin" => false
         ]);
         $component->model->refresh();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);

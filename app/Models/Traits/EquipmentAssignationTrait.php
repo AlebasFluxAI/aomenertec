@@ -48,25 +48,25 @@ trait EquipmentAssignationTrait
             return;
         }
         $component->equipmentBachelors = (match ($component->assignationType) {
-            Admin::class => $this->getEquipmentBachelors($component)->whereHasAdmin(false),
+            Admin::class => $this->getEquipmentBachelors($component)->whereNull("admin_id"),
             NetworkOperator::class => $this->getEquipmentBachelors($component)
                 ->whereHasNetworkOperator(false)
                 ->whereIn(
                     "id",
                     $component
-                    ->model
-                    ->admin
-                    ->equipments
-                    ->pluck("id")
+                        ->model
+                        ->admin
+                        ->equipments
+                        ->pluck("id")
                 ),
-            Technician::class => $this->getEquipmentBachelors($component)->whereHasTechnician(false)
+            Technician::class => $this->getEquipmentBachelors($component)->whereNull("technician_id")
                 ->whereIn(
                     "id",
                     $component
-                    ->model
-                    ->networkOperator
-                    ->equipments
-                    ->pluck("id")
+                        ->model
+                        ->networkOperator
+                        ->equipments
+                        ->pluck("id")
                 ),
         })->get();
     }

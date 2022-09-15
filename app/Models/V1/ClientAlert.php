@@ -28,6 +28,10 @@ class ClientAlert extends Model
     {
         return $this->belongsTo(MicrocontrollerData::class);
     }
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 
     public function clientAlertConfiguration()
     {

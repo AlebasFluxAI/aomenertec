@@ -2,6 +2,7 @@
 
 namespace App\Observers\ClientAlert;
 
+use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\User;
 use App\Notifications\Alert\AlertNotification;
@@ -18,9 +19,25 @@ class ClientAlertObserver
      */
     public function created(ClientAlert $clientAlert)
     {
-        $aux = User::find(10);
-        event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $aux->id));
-        $aux->notify(new AlertNotification());
+        $client =$clientAlert->client;
+        $technicians = $client->clientTechnician;
+        $supervisors = $client->supervisors;
+        $flag = true;
+        foreach ($technicians as $user){
+            event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+            $user->user->notify(new AlertNotification($clientAlert));
+        }
+        foreach ($supervisors as $user){
+            if ($user->user->phone == $client->phone){
+                $flag = false;
+            }
+            event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+            $user->user->notify(new AlertNotification($clientAlert));
+        }
+        if ($flag){
+            $client->notify(new AlertNotification($clientAlert));
+        }
+
     }
 
     /**

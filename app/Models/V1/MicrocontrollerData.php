@@ -56,7 +56,7 @@ class MicrocontrollerData extends Model
     public function jsonEdit()
     {
         $date = new Carbon();
-        $timestamp_unix = $this->raw_json['timestamp'];   /////// timesatmp correct
+        $timestamp_unix = $this->raw_json['timestamp'];
         $current_time = $date->setTimestamp($timestamp_unix);
         $equipment_serial = $this->raw_json['equipment_id'];
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
@@ -176,7 +176,6 @@ class MicrocontrollerData extends Model
         }
 
         $this->client_id = $client->id;
-        $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         $this->accumulated_real_consumption = $json['import_wh'];
         $this->interval_real_consumption = $json['kwh_interval'];
         $this->accumulated_reactive_consumption = $json['import_VArh'];
@@ -189,9 +188,74 @@ class MicrocontrollerData extends Model
         $this->saveQuietly();
     }
 
-    public function alertEvent()
-    {
+    public function alertVariableEvent(){
+        $flags_frame = config('data-frame.flags_frame');
+        $binary_flags = sprintf("%064b", ($this->raw_json['flags']));
+        $this->source_timestamp = new Carbon($this->source_timestamp);
+        $is_wifi = substr($binary_flags, 2, 1);
+        $client = Client::find($this->client_id);
+        $value = 0;
+        foreach ($flags_frame as $item) {
+            if ($item['id'] >= 14 and $item['id'] <= 46) {
+                $type = "";
+                $split = substr($binary_flags, $item['bit'], 1);
+                if ($split == "1") {
+                    if ($item['flag_name'] == 'flagOpened') {
+                        $value = 1;
+                        $type = ClientAlert::ALERT;
+                    } else {
+                        $value = $this->raw_json[$item['variable_name']];
+                        $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
+                        if ($alert->active_control) {
+                            if ($alert->min_alert != 0) {
+                                if ($value < $alert->min_alert) {
+                                    $type = ClientAlert::ALERT;
+                                }
+                            }
+                            if ($alert->max_alert != 0) {
+                                if ($value > $alert->max_alert) {
+                                    $type = ClientAlert::ALERT;
+                                }
+                            }
+                            if ($alert->min_control != 0) {
+                                if ($value < $alert->min_control) {
+                                    $type = ClientAlert::CONTROL;
+                                }
+                            }
+                            if ($alert->max_control != 0) {
+                                if ($value > $alert->max_control) {
+                                    $type = ClientAlert::CONTROL;
+                                }
+                            }
+                        } else {
+                            if ($alert->min_alert != 0) {
+                                if ($value < $alert->min_alert) {
+                                    $type = ClientAlert::ALERT;
+                                }
+                            }
+                            if ($alert->max_alert != 0) {
+                                if ($value > $alert->max_alert) {
+                                    $type = ClientAlert::ALERT;
+                                }
+                            }
+                        }
+                    }
+                    if ($type != "") {
+                        ClientAlert::create([
+                            'client_id' => $this->client_id,
+                            'microcontroller_data_id' => $this->id,
+                            'client_alert_configuration_id' => $alert->id,
+                            'value' => $value,
+                            'type' => $type
+                        ]);
+                    }
+                }
+            }
+        }
+    }
 
+    public function alertEnergyEvent()
+    {
         $binary_flags = sprintf("%064b", ($this->raw_json['flags']));
         $this->source_timestamp = new Carbon($this->source_timestamp);
         $is_wifi = substr($binary_flags, 2, 1);
