@@ -47,10 +47,10 @@ class UpdateDataConsumption extends Command
             ->get();
         if ($data) {
             $data_frame = config('data-frame.data_frame');
+            $date = Carbon::now();
             foreach ($data as $item) {
-                $date = new Carbon();
-                $source_timestamp = Carbon::createFromTimestamp($item->sorce_timestamp);
-                if ($date->diffInDays($source_timestamp) < 30) {
+                $source_timestamp = Carbon::create($item->source_timestamp);
+                if ($date->diffInDays($source_timestamp) <= 30) {
                     $decode = bin2hex(base64_decode($item->raw_json));
                     foreach ($data_frame as $data) {
                         try {
