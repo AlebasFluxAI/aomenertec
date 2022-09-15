@@ -78,6 +78,7 @@ return [
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
+        Permissions::CLIENT_ADD_EQUIPMENT,
     ],
 
     // Super admin

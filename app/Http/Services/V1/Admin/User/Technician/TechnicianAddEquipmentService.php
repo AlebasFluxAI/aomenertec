@@ -44,7 +44,8 @@ class TechnicianAddEquipmentService extends Singleton
     public function deleteEquipmentAssigned(Component $component, $equipmentId)
     {
         Equipment::whereId($equipmentId)->update([
-            "technician_id" => null
+            "technician_id" => null,
+            "has_technician" => false
         ]);
         $component->model->refresh();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Equipo eliminado"]);

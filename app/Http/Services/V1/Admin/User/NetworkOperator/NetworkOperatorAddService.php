@@ -31,8 +31,6 @@ class NetworkOperatorAddService extends Singleton
             "model.admin_id" => (Auth::user()->admin) ? Auth::user()->admin->id : Admin::first()->id,
             'model.person_type' => User::PERSON_TYPE_NATURAL,
             "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
-            "latitude" => 4.134750,
-            "longitude" => -73.637094,
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",

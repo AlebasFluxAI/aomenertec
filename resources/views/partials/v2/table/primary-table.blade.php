@@ -9,7 +9,7 @@
 
                         </th>
                     @else
-                        <th>
+                        <th style="width:10%">
                             <div class="form-check">
                                 <input wire:model="selectedAll" class="form-check-input" type="checkbox"
                                     {{count($table_rows)==0?"disabled":""}}

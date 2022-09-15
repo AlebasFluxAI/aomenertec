@@ -21,19 +21,16 @@ class AdminAddService extends Singleton
             "decodedAddress" => "",
             "identification_types" => $this->identificationTypes(User::PERSON_TYPE_NATURAL),
             'person_types' => [
-                                    ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
-                                    ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
-                              ],
+                ["key" => "Persona natural", "value" => User::PERSON_TYPE_NATURAL],
+                ["key" => "Persona juridica", "value" => User::PERSON_TYPE_JURIDICAL]
+            ],
             'model.person_type' => User::PERSON_TYPE_NATURAL,
             "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
-            "latitude" => 4.134750,
-            "longitude" => -73.637094,
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
         ]);
     }
-
 
 
     public function submitForm(Component $component)
