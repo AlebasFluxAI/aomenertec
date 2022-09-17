@@ -36,7 +36,7 @@ class WhatsAppChannel
 
         try {
             $body = [
-                'to' => "573209720220",
+                'to' => "57" . $notifiable->phone,
                 'channelId' => config('whatsapp.channel_id'),
                 'type' => 'hsm',
                 'content' => [
@@ -57,7 +57,7 @@ class WhatsAppChannel
                 'https://conversations.messagebird.com/v1/conversations/start',
                 $body
             );
-            
+
 
         } catch (Throwable $e) {
         }
