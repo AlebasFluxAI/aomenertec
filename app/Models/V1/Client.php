@@ -54,7 +54,8 @@ class Client extends Model
         'stratum_id',
         'network_topology',
         "person_type",
-        "identification_type"
+        "identification_type",
+        "has_telemetry"
     ];
 
     protected static function booted()
