@@ -94,14 +94,8 @@ class AddClientService extends Singleton
 
     private function getClientTypes($component)
     {
-        if (Auth::user()->networkOperator) {
-            $admin = Auth::user()->networkOperator->admin;
-            return $admin->clientTypesAsKeyValue();
-        }
 
-        $admin = User::getUserModel();
-
-        return $admin->clientTypesAsKeyValue();
+        return ClientType::clientTypesAsKeyValue();
     }
 
     public function getTechnicians($component)

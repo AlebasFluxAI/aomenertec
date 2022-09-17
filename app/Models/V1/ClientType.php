@@ -28,4 +28,20 @@ class ClientType extends Model
     {
         return $this->belongsToMany(EquipmentType::class, 'client_type_equipment_types');
     }
+
+    public static function clientTypesAsKeyValue()
+    {
+        return (array_merge(
+            [[
+                "key" => "Seleccione el tipo de cliente ...",
+                "value" => null
+            ]],
+            (self::get()->map(function ($clientType) {
+                return [
+                    "key" => $clientType->id . " - " . $clientType->type,
+                    "value" => $clientType->id,
+                ];
+            }))->toArray()
+        ));
+    }
 }
