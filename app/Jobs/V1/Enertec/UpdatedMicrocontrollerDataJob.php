@@ -40,6 +40,7 @@ class UpdatedMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
+
         $current_time = new Carbon($this->model->source_timestamp);
         $year = $current_time->format('Y');
         $month = $current_time->format('m');

@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AlertHistory;
 use App\Models\V1\Client;
 use Carbon\Carbon;
@@ -186,72 +187,8 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
         $this->saveQuietly();
-    }
-
-    public function alertVariableEvent(){
-        $flags_frame = config('data-frame.flags_frame');
-        $binary_flags = sprintf("%064b", ($this->raw_json['flags']));
-        $this->source_timestamp = new Carbon($this->source_timestamp);
-        $is_wifi = substr($binary_flags, 2, 1);
-        $client = Client::find($this->client_id);
-        $value = 0;
-        foreach ($flags_frame as $item) {
-            if ($item['id'] >= 14 and $item['id'] <= 46) {
-                $type = "";
-                $split = substr($binary_flags, $item['bit'], 1);
-                if ($split == "1") {
-                    if ($item['flag_name'] == 'flagOpened') {
-                        $value = 1;
-                        $type = ClientAlert::ALERT;
-                    } else {
-                        $value = $this->raw_json[$item['variable_name']];
-                        $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
-                        if ($alert->active_control) {
-                            if ($alert->min_alert != 0) {
-                                if ($value < $alert->min_alert) {
-                                    $type = ClientAlert::ALERT;
-                                }
-                            }
-                            if ($alert->max_alert != 0) {
-                                if ($value > $alert->max_alert) {
-                                    $type = ClientAlert::ALERT;
-                                }
-                            }
-                            if ($alert->min_control != 0) {
-                                if ($value < $alert->min_control) {
-                                    $type = ClientAlert::CONTROL;
-                                }
-                            }
-                            if ($alert->max_control != 0) {
-                                if ($value > $alert->max_control) {
-                                    $type = ClientAlert::CONTROL;
-                                }
-                            }
-                        } else {
-                            if ($alert->min_alert != 0) {
-                                if ($value < $alert->min_alert) {
-                                    $type = ClientAlert::ALERT;
-                                }
-                            }
-                            if ($alert->max_alert != 0) {
-                                if ($value > $alert->max_alert) {
-                                    $type = ClientAlert::ALERT;
-                                }
-                            }
-                        }
-                    }
-                    if ($type != "") {
-                        ClientAlert::create([
-                            'client_id' => $this->client_id,
-                            'microcontroller_data_id' => $this->id,
-                            'client_alert_configuration_id' => $alert->id,
-                            'value' => $value,
-                            'type' => $type
-                        ]);
-                    }
-                }
-            }
-        }
+        $this->alertEnergyEvent();
+        UpdatedMicrocontrollerDataJob::dispatch($this);
     }
 
     public function alertEnergyEvent()
@@ -313,117 +250,6 @@ class MicrocontrollerData extends Model
                 }
             }
         }
-        /*if ($is_alert == "1") {
-            foreach ($flags_frame as $item) {
-                if ($item['id'] >= 14 and $item['id'] <= 46) {
-                    $type = "";
-                    $split = substr($binary_flags, $item['bit'], 1);
-                    if ($split == "1") {
-                        if ($item['flag_name'] == 'flagOpened') {
-                            $value = 1;
-                            $type = ClientAlert::ALERT;
-                        } else {
-                            $value = $this->raw_json[$item['variable_name']];
-                            $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
-                            if ($alert->active_control) {
-                                if ($alert->min_alert != 0) {
-                                    if ($value < $alert->min_alert) {
-                                        $type = ClientAlert::ALERT;
-                                    }
-                                }
-                                if ($alert->max_alert != 0) {
-                                    if ($value > $alert->max_alert) {
-                                        $type = ClientAlert::ALERT;
-                                    }
-                                }
-                                if ($alert->min_control != 0) {
-                                    if ($value < $alert->min_control) {
-                                        $type = ClientAlert::CONTROL;
-                                    }
-                                }
-                                if ($alert->max_control != 0) {
-                                    if ($value > $alert->max_control) {
-                                        $type = ClientAlert::CONTROL;
-                                    }
-                                }
-                            } else {
-                                if ($alert->min_alert != 0) {
-                                    if ($value < $alert->min_alert) {
-                                        $type = ClientAlert::ALERT;
-                                    }
-                                }
-                                if ($alert->max_alert != 0) {
-                                    if ($value > $alert->max_alert) {
-                                        $type = ClientAlert::ALERT;
-                                    }
-                                }
-                            }
-                        }
-                        if ($type != "") {
-                            ClientAlert::create([
-                                'client_id' => $this->client_id,
-                                'microcontroller_data_id' => $this->id,
-                                'client_alert_configuration_id' => $alert->id,
-                                'value' => $value,
-                                'type' => $type
-                            ]);
-                        }
-                    }
-                }
-            }
-        } else {
-            $value = 0;
-            $unix_time = $this->raw_json["timestamp"];
-            $current_time = new Carbon();
-            $current_time_aux = new Carbon();
-            $current_time->setTimestamp($unix_time);
-            $current_time_aux->setTimestamp($unix_time);
-            $current_time->subHour();
-            $current_time_aux->subMonth();
-            $energy_alerts = $client->clientAlertConfiguration()->where('flag_id', '>=', 47)
-                ->where('max_alert', '>', 0)->get();
-            $energy_control = $client->clientAlertConfiguration()->where('flag_id', '>=', 47)
-                ->where('active_control', true)->where('max_control', '>', 0)->get();
-            $alerts = $energy_alerts->merge($energy_control);
-            $energy_hour = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time->format('Y-m-d H:00:00'), $current_time->format('Y-m-d H:59:59')])
-                ->orderBy('source_timestamp', 'desc')->first();
-            $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time_aux->format('Y-m-1 00:00:00'), $current_time_aux->format('Y-m-t 23:59:59')])
-                ->orderBy('source_timestamp', 'desc')->first();
-
-            if (!$energy_hour) {
-                $energy_hour = $client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-d H:00:00'), $this->source_timestamp->format('Y-m-d H:59:59')])
-                    ->orderBy('source_timestamp')
-                    ->first();
-            }
-            if (!$energy_month) {
-                $energy_month = $client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-1 00:00:00'), $this->source_timestamp->format('Y-m-t 23:59:59')])
-                    ->orderBy('source_timestamp')
-                    ->first();
-            }
-            foreach ($alerts as $alert) {
-                $value = $this->calculateValueAlert($alert->flag_id, $energy_month, $energy_hour);
-                if ($alert->active_control) {
-                    if ($alert->max_alert >= $value and $alert->max_control >= $value) {
-                        continue;
-                    } else {
-                        if ($alert->max_alert < $value) {
-                            $type = ClientAlert::ALERT;
-                        }
-                        if ($alert->max_control < $value) {
-                            $type = ClientAlert::CONTROL;
-                        }
-                        $this->createAlert($value, $type, $alert);
-                    }
-                } else {
-                    if ($alert->max_alert <= $value) {
-                        $type = ClientAlert::ALERT;
-                        $this->createAlert($value, $type, $alert);
-                    }
-                }
-            }
-        }*/
     }
 
     private function calculateValueAlert($flag_id, $energy_month, $energy_hour)
@@ -452,7 +278,16 @@ class MicrocontrollerData extends Model
 
     private function createAlert($value, $type, $alert)
     {
-        if ($alert->flag_id == 47
+        if ($alert->flag_id == 53){
+            ClientAlert::create([
+                'client_id' => $this->client_id,
+                'microcontroller_data_id' => $this->id,
+                'client_alert_configuration_id' => $alert->id,
+                'value' => $value,
+                'type' => $type
+            ]);
+        }
+        elseif ($alert->flag_id == 47
             || $alert->flag_id == 48
             || $alert->flag_id == 49) {
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
