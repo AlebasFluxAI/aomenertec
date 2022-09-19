@@ -14,8 +14,6 @@ class AddClient extends Component
     protected $rules = [
         'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
         'name' => 'required|min:8',
-        'phone' => 'min:7',
-        'email' => 'email|unique:users,email',
         'network_operator' => 'required|min:2',
         'aux_network_operator' => 'required|min:2',
         'equipment.*.id' => 'required|min:2',

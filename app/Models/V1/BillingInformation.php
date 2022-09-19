@@ -14,7 +14,9 @@ class BillingInformation extends Model
     use AuditableTrait;
 
     protected $table = "billing_informations";
-
+    public const BILLING_TYPE_PREPAID = "prepaid";
+    public const BILLING_TYPE_POSTPAID = "postpaid";
+    public const BILLING_TYPE_NONE = "none";
     protected $fillable = [
         "client_id",
         "name",
@@ -22,8 +24,27 @@ class BillingInformation extends Model
         "identification",
         "phone",
         "identification_type",
-        "default"
+        "default",
+        "type"
     ];
+
+    public static function getBillingType()
+    {
+        return [
+            [
+                "key" => "Prepago",
+                "value" => BillingInformation::BILLING_TYPE_PREPAID
+            ],
+            [
+                "key" => "Postpago",
+                "value" => BillingInformation::BILLING_TYPE_POSTPAID
+            ],
+            [
+                "key" => "Sin facturación",
+                "value" => BillingInformation::BILLING_TYPE_NONE
+            ],
+        ];
+    }
 
     public function client()
     {

@@ -111,6 +111,18 @@
                                     "input_type"=>"text",
                                     "required"=>true
                            ])
+                            @include("partials.v1.form.form_list",[
+                               "col_with"=>8,
+                               "input_label"=>"Seleccione el tipo de facturacion",
+                               "input_type"=>"text",
+                               "list_model" => "billing_type",
+                               "list_default" => "Tipo de facturacion ...",
+                               "list_options" => $billing_types,
+                               "list_option_value"=>"value",
+                               "list_option_view"=>"key",
+                               "list_option_title"=>"",
+                      ])
+
                             @include("partials.v1.form.form_input_icon",[
                                   "input_label"=>"Nombre para facturación",
                                   "input_model"=>"billing_name",
@@ -121,6 +133,8 @@
                                   "input_type"=>"text",
                                   "required"=>true
                             ])
+
+
                             @include("partials.v1.form.form_input_icon",[
                                 "input_label"=>"Direccion de facturacion",
                                 "input_model"=>"billing_address",
@@ -166,6 +180,7 @@
                                      "list_option_view"=>"key",
                                      "list_option_title"=>"",
                             ])
+                            @error('client_type') <span class="error">{{ $message }}</span> @enderror
 
 
                             @if($client_type != "")
@@ -209,6 +224,7 @@
                                 @endif
                             @endif
 
+
                             @include("partials.v1.form.form_list",[
                                   "col_with"=>8,
                                   "input_label"=>"Seleccione la topologia de red",
@@ -220,12 +236,19 @@
                                   "list_option_view"=>"key",
                                   "list_option_title"=>"",
                          ])
-
-                            @if($has_telemetry)
+                            <div class="col-md-12 mt-3">
                                 @include("partials.v1.form.radio_button",[
-                                   "input_label"=>"¿ Crear supervisor asociado a cliente ?",
-                                   "input_model"=>"create_supervisor"
-                               ])
+                                         "input_label"=>"Cliente con telemetria",
+                                         "input_model"=>"has_telemetry"
+                                     ])
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                @if($has_telemetry)
+                                    @include("partials.v1.form.radio_button",[
+                                       "input_label"=>"¿ Crear supervisor asociado a cliente ?",
+                                       "input_model"=>"create_supervisor"
+                                   ])
+                            </div>
                             @endif
                         </div>
 
@@ -262,6 +285,7 @@
                              ])
 
                         </div>
+
                         @include("partials.v1.equipment_to_client_association")
 
                         <div class="text-right">

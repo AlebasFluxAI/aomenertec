@@ -15,15 +15,18 @@
 
         ]
     ])
-    <form wire:submit.prevent="save" id="formulario" class="needs-validation" role="form">
-        @include("partials.v1.equipment_to_client_association")
+    <div class="contenedor-grande ">
+        <form wire:submit.prevent="save" id="formulario" class="needs-validation" role="form">
+            @include("partials.v1.equipment_to_client_association")
 
-        <div class="text-right">
-            <button id="add" type="submit" class="mb-2 py-2 px-4">
-                <b>
-                    Guardar
-                </b>
-            </button>
-        </div>
-    </form>
+            <div class="text-right">
+                <button id="add" type="submit" class="mb-2 py-2 px-4">
+                    <b>
+                        Guardar
+                    </b>
+                </button>
+            </div>
+        </form>
+    </div>
+
 </div>
