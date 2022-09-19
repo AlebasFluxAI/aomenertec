@@ -25,7 +25,5 @@ class MicrocontrollerDataObserver
     public function updated(MicrocontrollerData $microcontrollerData)
     {
         $microcontrollerData->jsonEdit();
-        UpdatedMicrocontrollerDataJob::dispatch($microcontrollerData);
-
     }
 }
