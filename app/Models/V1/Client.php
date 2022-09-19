@@ -89,6 +89,11 @@ class Client extends Model
         return $this->belongsTo(SubsistenceConsumption::class);
     }
 
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
+
     public function voltageLevel()
     {
         return $this->belongsTo(VoltageLevel::class);

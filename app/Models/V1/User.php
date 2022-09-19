@@ -91,12 +91,21 @@ class User extends Authenticatable implements JWTSubject
         'profile_photo_url',
     ];
 
-    public function getJWTIdentifier() {
+    public function getJWTIdentifier()
+    {
         return $this->getKey();
     }
-    public function getJWTCustomClaims() {
+
+    public function getJWTCustomClaims()
+    {
         return [];
     }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
+    }
+
     public static function getUserModel()
     {
         $user = Auth::user();
