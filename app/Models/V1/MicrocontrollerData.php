@@ -57,9 +57,15 @@ class MicrocontrollerData extends Model
     public function jsonEdit()
     {
         $date = new Carbon();
-        $timestamp_unix = $this->raw_json['timestamp'];
+        if (is_string($this->raw_json)){
+            $json = json_decode($this->raw_json, true);
+        } elseif (is_array($this->raw_json)){
+            $json = $this->raw_json;
+        }
+
+        $timestamp_unix = $json['timestamp'];
         $current_time = $date->setTimestamp($timestamp_unix);
-        $equipment_serial = $this->raw_json['equipment_id'];
+        $equipment_serial = $json['equipment_id'];
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment == null) {
@@ -74,9 +80,10 @@ class MicrocontrollerData extends Model
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             $this->delete();
+
             return;
         }
-        $json = $this->raw_json;
+
         if (!$client->microcontrollerData()->exists()) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
@@ -279,13 +286,17 @@ class MicrocontrollerData extends Model
     private function createAlert($value, $type, $alert)
     {
         if ($alert->flag_id == 53){
-            ClientAlert::create([
-                'client_id' => $this->client_id,
-                'microcontroller_data_id' => $this->id,
-                'client_alert_configuration_id' => $alert->id,
-                'value' => $value,
-                'type' => $type
-            ]);
+            if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
+                $query->whereBetween("source_timestamp", [$this->source_timestamp->copy()->subMinutes(10)->format('Y-m-d H:i:s'), $this->source_timestamp->format('Y-m-d H:i:s')]);
+            })->exists()) {
+                ClientAlert::create([
+                    'client_id' => $this->client_id,
+                    'microcontroller_data_id' => $this->id,
+                    'client_alert_configuration_id' => $alert->id,
+                    'value' => $value,
+                    'type' => $type
+                ]);
+            }
         }
         elseif ($alert->flag_id == 47
             || $alert->flag_id == 48
