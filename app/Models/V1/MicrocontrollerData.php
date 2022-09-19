@@ -57,9 +57,15 @@ class MicrocontrollerData extends Model
     public function jsonEdit()
     {
         $date = new Carbon();
-        $timestamp_unix = $this->raw_json['timestamp'];
+        if (is_string($this->raw_json)){
+            $json = json_decode($this->raw_json, true);
+        } elseif (is_array($this->raw_json)){
+            $json = $this->raw_json;
+        }
+
+        $timestamp_unix = $json['timestamp'];
         $current_time = $date->setTimestamp($timestamp_unix);
-        $equipment_serial = $this->raw_json['equipment_id'];
+        $equipment_serial = $json['equipment_id'];
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment == null) {
@@ -74,9 +80,10 @@ class MicrocontrollerData extends Model
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             $this->delete();
+
             return;
         }
-        $json = $this->raw_json;
+
         if (!$client->microcontrollerData()->exists()) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
