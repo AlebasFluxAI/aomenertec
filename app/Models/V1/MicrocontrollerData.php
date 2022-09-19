@@ -286,13 +286,17 @@ class MicrocontrollerData extends Model
     private function createAlert($value, $type, $alert)
     {
         if ($alert->flag_id == 53){
-            ClientAlert::create([
-                'client_id' => $this->client_id,
-                'microcontroller_data_id' => $this->id,
-                'client_alert_configuration_id' => $alert->id,
-                'value' => $value,
-                'type' => $type
-            ]);
+            if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
+                $query->whereBetween("source_timestamp", [$this->source_timestamp->copy()->subMinutes(10)->format('Y-m-d H:i:s'), $this->source_timestamp->format('Y-m-d H:i:s')]);
+            })->exists()) {
+                ClientAlert::create([
+                    'client_id' => $this->client_id,
+                    'microcontroller_data_id' => $this->id,
+                    'client_alert_configuration_id' => $alert->id,
+                    'value' => $value,
+                    'type' => $type
+                ]);
+            }
         }
         elseif ($alert->flag_id == 47
             || $alert->flag_id == 48
