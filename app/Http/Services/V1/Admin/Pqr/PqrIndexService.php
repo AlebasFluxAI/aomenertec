@@ -39,7 +39,7 @@ class PqrIndexService extends Singleton
         if ($model::class == NetworkOperator::class) {
             $techniciansUserId = Technician::whereNetworkOperatorId($model->id)
                 ->pluck("id");
-            return Pqr::whereIn("technician_id", $techniciansUserId)->paginate();
+            return Pqr::whereIn("technician_id", $techniciansUserId)->orWhere("network_operator_id", $model->id)->paginate();
         }
         if ($model::class == Admin::class) {
             $techniciansUserId = Technician::whereIn("network_operator_id", $model->networkOperators()->pluck("id"))

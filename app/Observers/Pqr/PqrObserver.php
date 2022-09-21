@@ -26,8 +26,13 @@ class PqrObserver
         }
         if ($client) {
             $pqr->client_id = $client->id;
-            $pqr->technician_id = $client->technician->first()->technician->id;
+            if ($pqr->client->technician->first()) {
+                $pqr->technician_id = $client->technician->first()->technician->id;
+                return;
+            }
+            $pqr->network_operator_id = $pqr->client->network_operator_id;
         }
+
     }
 
 
@@ -116,7 +121,11 @@ class PqrObserver
         if (!$pqr->client) {
             return;
         }
-        return $pqr->client->technician->first()->technician->user_id;
+        if ($pqr->client->technician->first()) {
+            return $pqr->client->technician->first()->technician->user_id;
+        }
+        return $pqr->client->networkOperator->user_id;
+
     }
 
     private function getSenderType($pqr)

@@ -387,6 +387,10 @@ class AddClientService extends Singleton
             $component->addError('client_type', 'Seleccione un tipo de cliente');
             return;
         }
+        if (!is_numeric($component->network_operator_id)) {
+            $component->addError('network_operator', 'Seleccione un operador de red');
+            return;
+        }
         DB::transaction(function () use ($component) {
             $client = $this->createClient($component);
             $this->linkAddress($component, $client);
@@ -425,8 +429,6 @@ class AddClientService extends Singleton
             'identification_type' => $component->identification_type,
             'person_type' => $component->person_type,
             "has_telemetry" => $component->has_telemetry,
-            "latitude" => $component->latitude,
-            "longitude" => $component->longitude,
         ]);
     }
 

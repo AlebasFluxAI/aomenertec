@@ -210,6 +210,8 @@ return [
         Permissions::PQR_REPLY,
         Permissions::PQR_CREATE_NETWORK_OPERATOR,
         Permissions::PQR_CLOSE,
+        Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
+        Permissions::PQR_CHANGE_LEVEL,
 
     ],
     // Tecnico
