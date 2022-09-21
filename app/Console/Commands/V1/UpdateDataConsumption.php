@@ -4,6 +4,7 @@ namespace App\Console\Commands\V1;
 
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AuxData;
+use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -49,11 +50,24 @@ class UpdateDataConsumption extends Command
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data as $item) {
+                $last_data = null;
+                $decode = bin2hex(base64_decode($item->raw_json));
+                $equipment_serial = $this->calculateValueAlert(2, $decode);
+                $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                    ->first();
+                if ($equipment) {
+                    $client = $equipment->clients()->first();
+                    if ($client) {
+                        $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                    }
+                }
+                if ($last_data) {
+                    $last_raw_json = json_decode($last_data->raw_json, true);
+                }
                 $source_timestamp = Carbon::create($item->source_timestamp);
                 if ($date->diffInDays($source_timestamp) <= 30) {
                     $pos = strpos(strval($item->raw_json), '{');
                     if ($pos === false) {
-                        $decode = bin2hex(base64_decode($item->raw_json));
                         foreach ($data_frame as $data) {
                             try {
                                 $split = substr($decode, ($data['start']), ($data['lenght']));
@@ -66,6 +80,19 @@ class UpdateDataConsumption extends Command
                                         $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                     } else {
                                         $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                    }
+                                }
+                                if ($data['start'] >= 72) {
+                                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
+                                        if ($data['default'] = true) {
+                                            if ($last_data) {
+                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                            } else{
+                                                $json[$data['variable_name']] = 0;
+                                            }
+                                        } else {
+                                            $json[$data['variable_name']] = $data['default'];
+                                        }
                                     }
                                 }
 
@@ -97,5 +124,22 @@ class UpdateDataConsumption extends Command
 
             }
         }
+    }
+
+    private function calculateValueAlert($variable_id, $decode){
+        $data_frame = collect(config('data-frame.data_frame'));
+        $variable = $data_frame->where('id', $variable_id)->first();
+        $split = substr($decode, ($variable['start']), ($variable['lenght']));
+        $bin = hex2bin($split);
+        if ($variable['start'] >= 440) {
+            $value = (unpack($variable['type'], $bin)[1]) / 1000;
+        } else {
+            if ($variable['variable_name'] == "flags") {
+                $value = strval(unpack($variable['type'], $bin)[1]);
+            } else {
+                $value = unpack($variable['type'], $bin)[1];
+            }
+        }
+        return $value;
     }
 }
