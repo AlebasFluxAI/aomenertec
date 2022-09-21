@@ -51,6 +51,16 @@
                          ])
 
                             @include("partials.v1.form.form_input_icon",[
+                                "input_model"=>"last_name",
+                                "updated_input"=> "defer",
+                                "input_label"=>"Apellido del cliente",
+                                "icon_class"=>"fas fa-user",
+                                "placeholder"=>"Apellido del cliente",
+                                "col_with"=>8,
+                                "input_type"=>"text",
+                                "required"=>true
+                       ])
+                            @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Telefono del cliente (Sin indicativo)",
                                     "input_model"=>"phone",
                                    "updated_input"=>"defer",
@@ -289,8 +299,7 @@
                         @include("partials.v1.equipment_to_client_association")
 
                         <div class="text-right">
-                            <button id="add" type="submit" class="mb-2 py-2 px-4"
-                                    @if(!$technician_id) disabled="true" @endif>
+                            <button id="add" type="submit" class="mb-2 py-2 px-4">
                                 <b>
                                     Guardar cliente
                                 </b>

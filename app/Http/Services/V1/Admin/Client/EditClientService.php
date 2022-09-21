@@ -13,6 +13,7 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Location;
 use App\Models\V1\LocationType;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
@@ -50,8 +51,6 @@ class EditClientService extends Singleton
             'active_client' => $client->active_client,
             'network_operator_id' => $client->networkOperator->id,
             'network_operator' => $client->networkOperator->user->identification,
-
-
             "network_topologies" => $this->topologies(),
             "network_topology" => $client->network_topology,
             'serials' => collect([]),
@@ -60,8 +59,8 @@ class EditClientService extends Singleton
             "create_supervisor" => false,
             "technician_select_disabled" => true,
             "stratum_id" => Stratum::first() ? Stratum::first()->id : null,
-            'technicians' => [],
             'strata' => Stratum::get(),
+            'technicians' => $this->getTechnicians($component),
             'client_types' => $this->getClientTypes($component),
             "technician_id" => null,
             'client_type_id' => $client->clientType->id,
@@ -75,15 +74,51 @@ class EditClientService extends Singleton
                 ["key" => "Persona juridica", "value" => Client::PERSON_TYPE_JURIDICAL,]
 
             ],
-
+            'network_operators' => $this->getNetworkOperators($component),
             'subsistence_consumption_id' => $client->subsistence_consumption_id,
             'voltage_level_id' => $client->voltage_level_id,
-
             "billing_name" => $billingInformation ? $billingInformation->name : "",
             "billing_address" => $billingInformation ? $billingInformation->address : "",
             "addressDetails" => $clientAddress ? $clientAddress->details : "",
             "decodedAddress" => $clientAddress ? $clientAddress->address : "",
         ]);
+    }
+
+    private function getNetworkOperators($component)
+    {
+        if (Auth::user()->networkOperator) {
+            $component->network_operator_id = Auth::user()->networkOperator->id;
+            return [];
+        }
+        $admin = User::getUserModel();
+
+        return $admin->networkOperatorsAsKeyValue();
+    }
+
+    public function updatedNetworkOperatorId(Component $component)
+    {
+        if (!$component->network_operator_id) {
+            return;
+        }
+        $component->technician_select_disabled = false;
+        $component->technicians = NetworkOperator::find($component->network_operator_id)->techniciansAsKeyValue();
+        $component->technician_id = null;
+    }
+
+    public function getTechnicians($component)
+    {
+        if (Auth::user()->networkOperator) {
+            $component->technician_select_disabled = false;
+            return Technician::whereNetworkOperatorId($component->network_operator_id)
+                ->get()->map(function ($technician) {
+                    return [
+                        "key" => $technician->id . " - " . $technician->name . " - " . $technician->identification,
+                        "value" => $technician->id
+                    ];
+                })->toArray();
+        }
+        $component->technician_select_disabled = true;
+        return [];
     }
 
     private function getClientTypes($component)
@@ -123,10 +158,22 @@ class EditClientService extends Singleton
         DB::transaction(function () use ($component) {
             $component->client->fill($this->mapper($component));
             $component->client->update();
+            $this->linkTechnician($component, $component->client);
             $this->linkAddress($component, $component->client);
             $this->linkBillingInformation($component, $component->client);
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
         });
+    }
+
+    private function linkTechnician(Component $component, Client $client)
+    {
+        if (!$component->technician_id) {
+            return;
+        }
+        $client->technician()->delete();
+        $client->technician()->create([
+            "technician_id" => $component->technician_id
+        ]);
     }
 
     private function mapper(Component $component)
@@ -134,6 +181,7 @@ class EditClientService extends Singleton
         return [
             'name' => $component->name,
             'email' => $component->email,
+            'last_name' => $component->last_name,
             'phone' => $component->phone,
             'identification' => $component->identification,
             'latitude' => $component->latitude,

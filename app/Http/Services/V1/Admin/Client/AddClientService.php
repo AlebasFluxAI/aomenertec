@@ -210,6 +210,9 @@ class AddClientService extends Singleton
 
     public function updatedNetworkOperatorId(Component $component)
     {
+        if (!$component->network_operator_id) {
+            return;
+        }
         $component->technician_select_disabled = false;
         $component->technicians = NetworkOperator::find($component->network_operator_id)->techniciansAsKeyValue();
         $component->technician_id = null;
@@ -421,7 +424,9 @@ class AddClientService extends Singleton
             'stratum_id' => $component->stratum_id,
             'identification_type' => $component->identification_type,
             'person_type' => $component->person_type,
-            "has_telemetry" => $component->has_telemetry
+            "has_telemetry" => $component->has_telemetry,
+            "latitude" => $component->latitude,
+            "longitude" => $component->longitude,
         ]);
     }
 
@@ -447,6 +452,9 @@ class AddClientService extends Singleton
 
     private function linkTechnician(Component $component, Client $client)
     {
+        if (!$component->technician_id) {
+            return;
+        }
         $client->technician()->create([
             "technician_id" => $component->technician_id
         ]);
