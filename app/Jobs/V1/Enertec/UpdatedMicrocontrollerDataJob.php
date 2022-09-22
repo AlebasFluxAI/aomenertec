@@ -30,7 +30,7 @@ class UpdatedMicrocontrollerDataJob implements ShouldQueue
 
     public function __construct(MicrocontrollerData $model)
     {
-        $this->model = $model->withoutRelations();
+        $this->model = $model;
     }
 
     /**
