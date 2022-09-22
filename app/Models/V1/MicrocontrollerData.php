@@ -194,8 +194,8 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_capacitive_consumption = $json['varCh_interval'];
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
+        dispatch(new UpdatedMicrocontrollerDataJob($this));
         $this->saveQuietly();
-        dispatch(new PushRealTimeMicrocontrollerDataJob($this));
         $this->alertEnergyEvent();
     }
 
