@@ -14,7 +14,7 @@ class DropUniqueRestrictionOnEmailClient extends Migration
     public function up()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->dropUnique("clients_identification_unique");
+            $table->dropUnique("clients_email_unique");
         });
 
     }
