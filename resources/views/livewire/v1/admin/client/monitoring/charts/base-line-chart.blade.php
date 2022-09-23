@@ -156,7 +156,7 @@
 
             chart_baseline.render();
             var pos1 = 0;
-            var pos2 = 0;
+            var pos2 = @js($series)[0].data[0];
 
             @js($series)[0].data.forEach(function (element){
                 if (pos1<element){
@@ -164,7 +164,7 @@
                 }
             }  );
             @js($series)[1].data.forEach(function (element){
-                if (pos2<element){
+                if (pos2>element){
                     pos2 = element
                 }
             }  );
@@ -341,10 +341,10 @@
             });
         })
             $('input[name="datetimes_baseline_result"]').on('apply.daterangepicker', function(ev, picker) {
-            @this.emit('changeDateRangeResult', picker.startDate.format('YYYY-MM-DD HH:mm:00'),picker.endDate.format('YYYY-MM-DD HH:mm:00'))
+            @this.emit('changeDateRangeResult', picker.startDate.format('YYYY-MM-DD 00:00:00'),picker.endDate.format('YYYY-MM-DD 23:59:59'))
             });
             $('input[name="datetimes_baseline_reference"]').on('apply.daterangepicker', function(ev, picker) {
-            @this.emit('changeDateRangeReference', picker.startDate.format('YYYY-MM-DD HH:mm:00'),picker.endDate.format('YYYY-MM-DD HH:mm:00'))
+            @this.emit('changeDateRangeReference', picker.startDate.format('YYYY-MM-DD 00:00:00'),picker.endDate.format('YYYY-MM-DD 23:59:59'))
             });
         })
     </script>
