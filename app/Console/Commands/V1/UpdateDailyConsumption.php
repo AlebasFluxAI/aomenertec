@@ -41,11 +41,11 @@ class UpdateDailyConsumption extends Command
     {
         $fortnight_date = new Carbon();
         $reference_date = new Carbon();
-        $fortnight_date->subDays(16);
+        $fortnight_date->subDays(200);
         $reference_date->subDay();
-        $clients = Client::get();
+        $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
-            $billing_day = $client->clientConfiguration->billing_day;
+            //$billing_day = $client->clientConfiguration->billing_day;
             $data_frame = collect(config('data-frame.data_frame'));
             $accum_variable = $data_frame->where('bolean_accum', true);
             $data_aux = $client->dailyMicrocontrollerData()
@@ -71,12 +71,17 @@ class UpdateDailyConsumption extends Command
                             ->where('month', $daily_data->month)
                             ->where('day', $daily_data->day)->get();
                         if (count($data_day) > 0) {
+                            $reference_data_first = $client->microcontrollerData()
+                                ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
+                                ->orderBy('source_timestamp')
+                                ->first();
                             $json = json_decode($data->raw_json, true);
                             $penalizable_inductive_day = 0;
                             $penalizable_capacitive_day = 0;
-                            $interval_active_day = 0;
-                            $interval_capacitive_day = 0;
-                            $interval_inductive_day = 0;
+                            $interval_active_day = $data->accumulated_real_consumption - $reference_data_first->accumulated_real_consumption;
+                            $interval_capacitive_day = $data->accumulated_reactive_capacitive_consumption - $reference_data_first->accumulated_reactive_capacitive_consumption;
+                            $interval_inductive_day = $data->accumulated_reactive_inductive_consumption - $reference_data_first->accumulated_reactive_inductive_consumption;
+
                             foreach ($data_day as $item) {
                                 $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                                 foreach ($accum_variable as $index => $variable) {
@@ -84,9 +89,6 @@ class UpdateDailyConsumption extends Command
                                         $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
                                     }
                                 }
-                                $interval_active_day = $interval_active_day + $item->interval_real_consumption;
-                                $interval_capacitive_day = $interval_capacitive_day + $item->interval_reactive_capacitive_consumption;
-                                $interval_inductive_day = $interval_inductive_day + $item->interval_reactive_inductive_consumption;
                                 $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
                                 $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
                             }
