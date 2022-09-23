@@ -71,25 +71,24 @@ class DataReport extends Component
     private function arrayCreate()
     {
         if ($this->time_report_id == 1) {
-            $data_report = $this->client->hourlyMicrocontrollerData()
-                ->whereHas('microcontrollerData', function ($query) {
-                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
-                })->limit(1440)->get();
+            $data_report = $this->client->microcontrollerData()
+                ->whereBetween("source_timestamp", [$this->start_report, $this->end_report])
+                ->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA", "MINUTO"];
         } elseif ($this->time_report_id == 2) {
-            $data_report = $this->client->dailyMicrocontrollerData()
+            $data_report = $this->client->hourlyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
                 })->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA"];
         } elseif ($this->time_report_id == 3) {
-            $data_report = $this->client->monthlyMicrocontrollerData()
+            $data_report = $this->client->dailyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
                 })->limit(720)->get();
             $array_title = ["ANIO", "MES", "DIA"];
         } else {
-            $data_report = $this->client->annualMicrocontrollerData()
+            $data_report = $this->client->monthlyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
                 })->limit(24)->get();
@@ -106,16 +105,17 @@ class DataReport extends Component
             }
             foreach ($data_report as $index => $data) {
                 if ($this->time_report_id == 1) {
-                    $array[$index] = [$data->year, $data->month, $data->day, $data->hour, $data->minute];
-                    $raw_json = json_decode($data->microcontrollerData->raw_json, true);
+                    $date = Carbon::create($data->source_timestamp);
+                    $array[$index] = [intval($date->format('Y')), intval($date->format('m')), intval($date->format('d')), intval($date->format('H')), intval($date->format('i'))];
+                    $raw_json = json_decode($data->raw_json, true);
                 } elseif ($this->time_report_id == 2) {
-                    $array[$index] = [$data->year, $data->month, $data->day, $data->hour];
+                    $array[$index] = [intval($data->year), intval($data->month), intval($data->day), intval($data->hour)];
                     $raw_json = json_decode($data->microcontrollerData->raw_json, true);
                 } elseif ($this->time_report_id == 3) {
-                    $array[$index] = [$data->year, $data->month, $data->day];
+                    $array[$index] = [intval($data->year), intval($data->month), intval($data->day)];
                     $raw_json = json_decode($data->raw_json, true);
                 } else {
-                    $array[$index] = [$data->year, $data->month];
+                    $array[$index] = [intval($data->year), intval($data->month)];
                     $raw_json = json_decode($data->raw_json, true);
                 }
                 foreach ($this->variables_selected as $variable) {
@@ -153,12 +153,12 @@ class DataReport extends Component
         $days = $aux_day->diffInDays($start_day);
         for ($i = 0; $i <= $days; $i++) {
             if ($i == 0) {
-                $data_report = $this->client->dailyMicrocontrollerData()
+                $data_report = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate('source_timestamp', $this->end_day->format('Y-m-d'));
                     })->get();
             } else {
-                $data_report = $this->client->dailyMicrocontrollerData()
+                $data_report = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate('source_timestamp', $this->end_day->subDay(1)->format('Y-m-d'));
                     })->get();
