@@ -58,12 +58,16 @@ class RecordDailyConsumption extends Command
                         ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
+                    $reference_data_first = $data->client->microcontrollerData()
+                        ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
+                        ->orderBy('source_timestamp')
+                        ->first();
                     $json = json_decode($reference_data->raw_json, true);
                     $penalizable_inductive_day = 0;
                     $penalizable_capacitive_day = 0;
-                    $interval_active_day = 0;
-                    $interval_capacitive_day = 0;
-                    $interval_inductive_day = 0;
+                    $interval_active_day = $reference_data->accumulated_real_consumption - $reference_data_first->accumulated_real_consumption;
+                    $interval_capacitive_day = $reference_data->accumulated_reactive_capacitive_consumption - $reference_data_first->accumulated_reactive_capacitive_consumption;
+                    $interval_inductive_day = $reference_data->accumulated_reactive_inductive_consumption - $reference_data_first->accumulated_reactive_inductive_consumption;
                     foreach ($data_day as $item) {
                         $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                         foreach ($accum_variable as $index => $variable) {
@@ -71,9 +75,6 @@ class RecordDailyConsumption extends Command
                                 $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
                             }
                         }
-                        $interval_active_day = $interval_active_day + $item->interval_real_consumption;
-                        $interval_capacitive_day = $interval_capacitive_day + $item->interval_reactive_capacitive_consumption;
-                        $interval_inductive_day = $interval_inductive_day + $item->interval_reactive_inductive_consumption;
                         $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
                         $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
                     }
@@ -88,70 +89,82 @@ class RecordDailyConsumption extends Command
                 }
             }
         }
-        $clients = Client::get();
+        $clients = Client::whereHasTelemetry(true)->get();
         $reference_date = new Carbon();
         $aux_date = new Carbon();
-        $aux_date->subDays(15);
+        $aux_date->subDays(30);
         $null_data = DailyMicrocontrollerData::whereNull('microcontroller_data_id')
             ->whereDate('created_at', '<', $aux_date->format('Y-m-d'))
             ->get();
         foreach ($null_data as $data){
             $data->delete();
         }
-        $reference_date->subDay();
-        foreach ($clients as $client) {
+        $i = 0;
+        while (true){
+            $reference_date->subDay();
+            $i++;
+            foreach ($clients as $client) {
 
-            $data_day = $client->hourlyMicrocontrollerData()
-                ->where('year', $reference_date->format('Y'))
-                ->where('month', $reference_date->format('m'))
-                ->where('day', $reference_date->format('d'))->get();
+                $data_day = $client->hourlyMicrocontrollerData()
+                    ->where('year', $reference_date->format('Y'))
+                    ->where('month', $reference_date->format('m'))
+                    ->where('day', $reference_date->format('d'))->get();
 
-            if (count($data_day) > 0) {
-                $reference_data = $client->microcontrollerData()
-                    ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
-                    ->orderBy('source_timestamp', 'desc')
-                    ->first();
-                $json = json_decode($reference_data->raw_json, true);
-                $penalizable_inductive_day = 0;
-                $penalizable_capacitive_day = 0;
-                $interval_active_day = 0;
-                $interval_capacitive_day = 0;
-                $interval_inductive_day = 0;
-                foreach ($data_day as $item) {
-                    $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                    foreach ($accum_variable as $index=>$variable) {
-                        if ($item->microcontroller_data_id != $reference_data->id) {
-                            $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
+                if (count($data_day) > 0) {
+                    $reference_data = $client->microcontrollerData()
+                        ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
+                        ->orderBy('source_timestamp', 'desc')
+                        ->first();
+                    $reference_data_first = $client->microcontrollerData()
+                        ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
+                        ->orderBy('source_timestamp')
+                        ->first();
+                    $json = json_decode($reference_data->raw_json, true);
+                    $penalizable_inductive_day = 0;
+                    $penalizable_capacitive_day = 0;
+                    $interval_active_day = $reference_data->accumulated_real_consumption - $reference_data_first->accumulated_real_consumption;
+                    $interval_capacitive_day = $reference_data->accumulated_reactive_capacitive_consumption - $reference_data_first->accumulated_reactive_capacitive_consumption;
+                    $interval_inductive_day = $reference_data->accumulated_reactive_inductive_consumption - $reference_data_first->accumulated_reactive_inductive_consumption;
+                    foreach ($data_day as $item) {
+                        if ($item->microcontrollerData) {
+                            $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                            foreach ($accum_variable as $index => $variable) {
+                                if ($item->microcontroller_data_id != $reference_data->id) {
+                                    $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
+                                }
+                            }
+                            $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
+                            $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
                         }
                     }
-                    $interval_active_day = $interval_active_day + $item->interval_real_consumption;
-                    $interval_capacitive_day = $interval_capacitive_day + $item->interval_reactive_capacitive_consumption;
-                    $interval_inductive_day = $interval_inductive_day + $item->interval_reactive_inductive_consumption;
-                    $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
-                    $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
-                }
-                DailyMicrocontrollerData::create([
-                    'year' => $reference_date->format('Y'),
-                    'month' => $reference_date->format('m'),
-                    'day' => $reference_date->format('d'),
-                    'client_id' => $client->id,
-                    'microcontroller_data_id' => $reference_data->id,
-                    'interval_real_consumption' => $interval_active_day,
-                    'interval_reactive_capacitive_consumption' => $interval_capacitive_day,
-                    'interval_reactive_inductive_consumption' => $interval_inductive_day,
-                    'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_day,
-                    'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
-                    'raw_json' => json_encode($json),
-                ]);
+                    DailyMicrocontrollerData::create([
+                        'year' => $reference_date->format('Y'),
+                        'month' => $reference_date->format('m'),
+                        'day' => $reference_date->format('d'),
+                        'client_id' => $client->id,
+                        'microcontroller_data_id' => $reference_data->id,
+                        'interval_real_consumption' => $interval_active_day,
+                        'interval_reactive_capacitive_consumption' => $interval_capacitive_day,
+                        'interval_reactive_inductive_consumption' => $interval_inductive_day,
+                        'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_day,
+                        'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
+                        'raw_json' => json_encode($json),
+                    ]);
 
-            } else{
-                DailyMicrocontrollerData::create([
-                    'year' => $reference_date->format('Y'),
-                    'month' => $reference_date->format('m'),
-                    'day' => $reference_date->format('d'),
-                    'client_id' => $client->id
-                ]);
+                } else{
+                    DailyMicrocontrollerData::create([
+                        'year' => $reference_date->format('Y'),
+                        'month' => $reference_date->format('m'),
+                        'day' => $reference_date->format('d'),
+                        'client_id' => $client->id
+                    ]);
+                }
             }
+            if ($i==100){
+                break;
+            }
+
         }
+
     }
 }

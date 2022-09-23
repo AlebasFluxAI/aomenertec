@@ -51,15 +51,12 @@
                          "mt"=>4,
                          "mb"=>0,
                          "input_type"=>"text",
-                         "list_model" => "time_id",
+                         "list_model" => "time_id_baseline",
                          "list_default" => "Muestreo...",
                          "list_options" => [
-                                            ['id'=>1, 'display_name'=> 'Minuto'],
                                             ['id'=>2, 'display_name'=> 'Hora'],
                                             ['id'=>3, 'display_name'=> 'Dia'],
                                             ['id'=>4, 'display_name'=> 'Mes'],
-
-
                                            ],
                          "list_option_value"=>"id",
                          "list_option_view"=>"display_name",
@@ -248,18 +245,20 @@
             });
         @this.on('changeAxis',(e) =>{
             var pos1 = 0;
-            var pos2 = 0;
-
+            var pos2 = e.series[1].data[0];
+            var value_pos2 = (e.accumulated_result[1]-e.accumulated_result[0]).toFixed(2)
+            var value_pos1 = (e.accumulated_reference[1]-e.accumulated_reference[0]).toFixed(2)
             e.series[0].data.forEach(function (element){
                 if (pos1<element){
                     pos1 = element
                 }
             }  );
             e.series[1].data.forEach(function (element){
-                if (pos2<element){
+                if (pos2>element){
                     pos2 = element
                 }
             }  );
+
 
             ApexCharts.exec('baseline_chart', "updateOptions", {
                 series: e.series,
@@ -286,18 +285,18 @@
                                         bottom: 3,
                                     }
                                 },
-                                text:(e.series[0].data.reduce((a, b) => a + b, 0)).toFixed(2)
+                                text:value_pos1
                             }
                         },
 
                         {
                             y: (pos1+pos2)/2,
-                            borderColor: ((e.series[0].data.reduce((a, b) => a + b, 0))>=(e.series[1].data.reduce((a, b) => a + b, 0)))?'#4CAF50':'#D4526E',
+                            borderColor: ((value_pos1)>=(value_pos2))?'#4CAF50':'#D4526E',
                             label: {
-                                borderColor: ((e.series[0].data.reduce((a, b) => a + b, 0))>=(e.series[1].data.reduce((a, b) => a + b, 0)))?'#4CAF50':'#D4526E',
+                                borderColor: ((value_pos1)>=(value_pos2))?'#4CAF50':'#D4526E',
                                 style: {
                                     color: '#fff',
-                                    background: ((e.series[0].data.reduce((a, b) => a + b, 0))>=(e.series[1].data.reduce((a, b) => a + b, 0)))?'#4CAF50':'#D4526E',
+                                    background: ((value_pos1)>=(value_pos2))?'#4CAF50':'#D4526E',
                                     padding: {
                                         left: 5,
                                         right: 5,
@@ -305,7 +304,7 @@
                                         bottom: 3,
                                     }
                                 },
-                                text:((e.series[0].data.reduce((a, b) => a + b, 0))>=(e.series[1].data.reduce((a, b) => a + b, 0)))?'Ahorro: '+ (100 - ((e.series[1].data.reduce((a, b) => a + b, 0))*100/(e.series[0].data.reduce((a, b) => a + b, 0)))).toFixed(3)+"%":'Extra consumo: '+ (100 - ((e.series[1].data.reduce((a, b) => a + b, 0))*100/(e.series[0].data.reduce((a, b) => a + b, 0)))).toFixed(3) +"%"
+                                text:((value_pos1)>=(value_pos2))?'Ahorro: '+ (100 - (value_pos2*100/(value_pos1))).toFixed(3)+"%":'Extra consumo: '+ (100 - (value_pos2*100/(value_pos1))).toFixed(3) +"%"
                             }
                         },
                         {
@@ -323,7 +322,7 @@
                                         bottom: 3,
                                     }
                                 },
-                                text: (e.series[1].data.reduce((a, b) => a + b, 0)).toFixed(2)
+                                text: value_pos2
                             }
                         },
                     ]
