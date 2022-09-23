@@ -22,6 +22,7 @@ class Monitoring extends Component
     public $real_time_variables;
     public $time;
     public $clientAlerts;
+    public $data_chart_result;
 
 
     public function mount(Client $client)
@@ -36,6 +37,12 @@ class Monitoring extends Component
         $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
         $this->real_time_variables = $this->variables->where('real_time', true);
         $this->time = 2;
+        $first_day = Carbon::now();
+        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()
+            ->where('year', $first_day->format('Y'))
+            ->where('month', $first_day->format('m'))
+            ->where('day', 01)
+            ->get();
         $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
         if (count($this->data_chart)==0) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
