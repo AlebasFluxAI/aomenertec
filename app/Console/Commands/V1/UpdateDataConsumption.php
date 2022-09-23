@@ -44,7 +44,7 @@ class UpdateDataConsumption extends Command
     {
         $data = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
-            ->orderBy('source_timestamp')
+            ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
         if ($data) {
             $data_frame = config('data-frame.data_frame');

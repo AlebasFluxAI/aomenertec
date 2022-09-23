@@ -121,7 +121,7 @@
                         fontFamily: 'sans-serif',
                         color: '#000'
                     },
-                }
+                },
             });
         @this.on('changeAxis',(e) =>{
 
@@ -132,7 +132,7 @@
                 },
                 title: {
                     text: e.title,
-                }
+                },
             });
         })
         @this.on('loading',(e) =>{
