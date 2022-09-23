@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
-        $schedule->command(UpdateTimestampDataConsumption::class)->everyThreeMinutes()->withoutOverlapping();
+        $schedule->command(UpdateTimestampDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
         $schedule->command(UpdateDataConsumption::class)->everyFiveMinutes()->withoutOverlapping();
 
         ////accumulated daily consumption

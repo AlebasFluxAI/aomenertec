@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AlertHistory;
 use App\Models\V1\Client;
@@ -193,9 +194,9 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_capacitive_consumption = $json['varCh_interval'];
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
+        dispatch(new UpdatedMicrocontrollerDataJob($this));
         $this->saveQuietly();
         $this->alertEnergyEvent();
-        UpdatedMicrocontrollerDataJob::dispatch($this);
     }
 
     public function alertEnergyEvent()
