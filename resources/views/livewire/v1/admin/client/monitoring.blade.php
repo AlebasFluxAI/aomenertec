@@ -46,6 +46,11 @@
 
                                                 ],
                                                 [
+                                                    "title"=>"BaseLine",
+                                                    "action" => "emit('selectBaseLine')"
+
+                                                ],
+                                                [
                                                     "title"=>"Reportes",
                                                     "action" => "emit('selectReport')"
 
@@ -103,6 +108,18 @@
                                                                         "variables"=>$reactive_variables,
                                                                         "client"=>$client,
                                                                         "data_chart"=>$data_chart
+
+                                                                     ]
+                                                ],
+                                                [
+                                                    "view_name"=>"partials.v1.chart.client_monitoring",
+                                                    "view_values"=>  [
+                                                                        "type" => "baseline_data",
+                                                                        "variables"=>$variables,
+                                                                        "client"=>$client,
+                                                                        "data_frame"=>$data_frame,
+                                                                        "data_chart" => $data_chart,
+                                                                        "time" => $time
 
                                                                      ]
                                                 ],
