@@ -66,7 +66,7 @@ class MicrocontrollerData extends Model
 
         $timestamp_unix = $json['timestamp'];
         $current_time = $date->setTimestamp($timestamp_unix);
-        $equipment_serial = $json['equipment_id'];
+        $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment == null) {
