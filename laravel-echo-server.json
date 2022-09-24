@@ -17,19 +17,19 @@
             "databasePath": "/database/laravel-echo-server.sqlite"
         }
     },
-    "devMode": false,
+    "devMode": true,
     "host": "0.0.0.0",
     "port": "8443",
-    "protocol": "https",
+    "protocol": "http",
     "socketio": {
         "cors": {
             "origin": "http://localhost:8000",
             "credentials": false
         }
     },
-    "secureOptions": 67108864,
-    "sslCertPath": "/home/ssl/ssl_cloudfire/enertec.pem",
-    "sslKeyPath": "/home/ssl/ssl_cloudfire/enertec.key",
+    "secureOptions": "",
+    "sslCertPath": "",
+    "sslKeyPath": "",
     "sslPassphrase": "",
     "subscribers": {
         "http": true,

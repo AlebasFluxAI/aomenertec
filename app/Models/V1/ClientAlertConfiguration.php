@@ -34,7 +34,11 @@ class ClientAlertConfiguration extends Model
         return $this->hasMany(ClientAlert::class);
     }
      public function getVariableName(){
-         $flags_frame = collect(config('data-frame.flags_frame'));
+        if ($this->client_id == 1 or $this->client_id == 4){
+            $flags_frame = collect(config('data-frame-v1.flags_frame'));
+         } else{
+            $flags_frame = collect(config('data-frame.flags_frame'));
+        }
          $variable = $flags_frame->where('id', $this->flag_id)->first();
          return $variable['placeholder'];
      }
