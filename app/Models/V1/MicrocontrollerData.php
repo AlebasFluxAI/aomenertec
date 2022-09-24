@@ -262,26 +262,48 @@ class MicrocontrollerData extends Model
 
     private function calculateValueAlert($flag_id, $energy_month, $energy_hour)
     {
-        if ($flag_id == 47) {
-            $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
-        } elseif ($flag_id == 48) {
-            $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
-        } elseif ($flag_id == 49) {
-            $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
-        } elseif ($flag_id == 50) {
-            $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
-        } elseif ($flag_id == 51) {
-            $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
-        } elseif ($flag_id == 52) {
-            $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
-        } else {
-            if ($this->interval_real_consumption != 0) {
-                $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
+        if ($this->client_id == 1 or $this->client_id == 4) {
+            if ($flag_id == 47) {
+                $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
+            } elseif ($flag_id == 48) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 49) {
+                $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
+            } elseif ($flag_id == 50) {
+                $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
+            } elseif ($flag_id == 51) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 52) {
+                $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
             } else {
-                $value = 0;
+                if ($this->interval_real_consumption != 0) {
+                    $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
+                } else {
+                    $value = 0;
+                }
+            }
+            return $value;
+        } else{
+            if ($flag_id == 50) {
+                $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
+            } elseif ($flag_id == 51) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 52) {
+                $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
+            } elseif ($flag_id == 53) {
+                $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
+            } elseif ($flag_id == 54) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 55) {
+                $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
+            } else {
+                if ($this->interval_real_consumption != 0) {
+                    $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
+                } else {
+                    $value = 0;
+                }
             }
         }
-        return $value;
     }
 
     private function createAlert($value, $type, $alert)

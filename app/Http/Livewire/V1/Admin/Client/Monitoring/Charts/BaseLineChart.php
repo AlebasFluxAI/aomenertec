@@ -44,15 +44,15 @@ class BaseLineChart extends Component
         $this->time_id_baseline = 2;
         //$this->data_chart_result = $this->client->hourlyMicrocontrollerData()->limit(24)->get();;
         $first_day = Carbon::now();
-        $this->data_chart_result = $data_chart;
-        $this->end_result = $data_chart->first()->microcontrollerData->source_timestamp;
-        $this->start_result = $data_chart->last()->microcontrollerData->source_timestamp;
+        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->limit(24)->get();;
+        $this->end_result =$this->data_chart_result->first()->microcontrollerData->source_timestamp;
+        $this->start_result =$this->data_chart_result->last()->microcontrollerData->source_timestamp;
         $this->date_range_result = $this->start_result . " - " . $this->end_result;
 
         $end_reference = Carbon::create($this->end_result);
-        $this->end_reference = $end_reference->subDays(6);
+        $this->end_reference = $end_reference->subDays(2);
         $start_reference = Carbon::create($this->start_result);
-        $this->start_reference = $start_reference->subDays(6);
+        $this->start_reference = $start_reference->subDays(2);
         $this->date_range_reference = $this->start_reference . " - " . $this->end_reference;
         $this->chartRender(true);
     }
@@ -70,9 +70,9 @@ class BaseLineChart extends Component
         $this->start_result = $this->data_chart_result->last()->microcontrollerData->source_timestamp;
         $this->date_range_result = $this->start_result . " - " . $this->end_result;
         $end_reference = Carbon::create($this->end_result);
-        $this->end_reference = $end_reference->subDays(6);
+        $this->end_reference = $end_reference->subDays(2);
         $start_reference = Carbon::create($this->start_result);
-        $this->start_reference = $start_reference->subDays(6);
+        $this->start_reference = $start_reference->subDays(2);
         $this->date_range_reference = $this->start_reference . " - " . $this->end_reference;
         $this->chartRender(true);
     }
