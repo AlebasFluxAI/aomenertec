@@ -49,31 +49,33 @@ class UpdateDataConsumption extends Command
         if ($data) {
             $data_frame1 = config('data-frame-v1.data_frame');
             $data_frame2 = config('data-frame.data_frame');
+            $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data as $item) {
                 $last_data = null;
                 $decode = bin2hex(base64_decode($item->raw_json));
                 $split = substr($decode, (16), (16));
                 $bin = hex2bin($split);
-                $equipment_serial = unpack('Q', $bin)[1];
+                $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
                 $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                     ->first();
                 if ($equipment) {
                     $client = $equipment->clients()->first();
+                    echo $client->name."\n";
                     if ($client) {
-                        $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
-                        if ($client->id ==1 or $client->id == 4){
+                        if ($client->id == 1 or $client->id == 4 or $client->id == 57 or $client->id == 54){
                             $data_frame = $data_frame1;
                             $limit1=440;
                         } else{
                             $data_frame = $data_frame2;
                             $limit1=464;
                         }
+                        $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                     } else{
-                        $data->delete();
+                        continue;
                     }
                 } else{
-                    $data->delete();
+                    continue;
                 }
                 if ($last_data) {
                     $last_raw_json = json_decode($last_data->raw_json, true);
@@ -91,10 +93,13 @@ class UpdateDataConsumption extends Command
                                 if ($data['variable_name'] == "flags") {
                                     $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                 } else {
-                                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                    if ($data['variable_name'] == "equipment_id"){
+                                        $json[$data['variable_name']] =  $equipment_serial;
+                                    }else {
+                                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                    }
                                 }
                             }
-                            echo $data['variable_name'].':'.$json[$data['variable_name']]."\n";
                             if ($data['start'] >= 72) {
                                 if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
                                     if (!$data['default']) {
