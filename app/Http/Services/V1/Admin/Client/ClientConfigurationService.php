@@ -380,7 +380,11 @@ class ClientConfigurationService extends Singleton
 
     private function setRemoteConfigurationFrame(Component $component)
     {
-        $alert_config_frame = config('data-frame.alert_config_frame');
+        if ($component->client->id == 1 or $component->client->id == 4) {
+            $alert_config_frame = config('data-frame-v1.alert_config_frame');
+        }else{
+            $alert_config_frame = config('data-frame.alert_config_frame');
+        }
         $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/" . $equipment->serial;
         $binary_data = [];
