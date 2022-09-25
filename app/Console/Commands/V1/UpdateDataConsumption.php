@@ -47,8 +47,6 @@ class UpdateDataConsumption extends Command
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
         if ($data) {
-            $data_frame1 = config('data-frame-v1.data_frame');
-            $data_frame2 = config('data-frame.data_frame');
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data as $item) {
@@ -63,13 +61,6 @@ class UpdateDataConsumption extends Command
                     $client = $equipment->clients()->first();
                     echo $client->name."\n";
                     if ($client) {
-                        if ($client->id == 1 or $client->id == 4 or $client->id == 57 or $client->id == 54){
-                            $data_frame = $data_frame1;
-                            $limit1=440;
-                        } else{
-                            $data_frame = $data_frame2;
-                            $limit1=464;
-                        }
                         $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                     } else{
                         continue;
@@ -86,7 +77,7 @@ class UpdateDataConsumption extends Command
                         try {
                             $split = substr($decode, ($data['start']), ($data['lenght']));
                             $bin = hex2bin($split);
-                            if ($data['start'] >= $limit1) {
+                            if ($data['start'] >= 464) {
                                 $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                                 $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                             } else {

@@ -43,15 +43,14 @@ class SaveAlertDataJob implements ShouldQueue
     }
 
     private function alertVariableEvent(){
-        $flags_frame_1 = config('data-frame-v1.flags_frame');
-        $flags_frame_2 = config('data-frame.flags_frame');
+        $flags_frame = config('data-frame.flags_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
         $microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
 
-        $flag = $this->calculateValueAlert(5, $decode, 464);
+        $flag = $this->calculateValueAlert(5, $decode);
         $binary_flags = sprintf("%064b", ($flag));
 
-        $equipment_serial = $this->calculateValueAlert(2, $decode, 464);
+        $equipment_serial = $this->calculateValueAlert(2, $decode);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment == null) {
@@ -61,25 +60,12 @@ class SaveAlertDataJob implements ShouldQueue
         if ($client == null) {
             return;
         }
-        if ($client->id == 1 or $client->id == 4){
-            $flags_frame = $flags_frame_1;
-            $limit1=14;
-            $limit2=46;
-            $limit3=440;
-        } else{
-            $flags_frame = $flags_frame_2;
-            $limit1=14;
-            $limit2=49;
-            $limit3=464;
-        }
-
-
-        $timestamp = $this->calculateValueAlert(6, 464);
+        $timestamp = $this->calculateValueAlert(6, $decode);
 
         $this->source_timestamp->setTimestamp($timestamp);
         $value = 0;
         foreach ($flags_frame as $item) {
-            if ($item['id'] >= $limit1 and $item['id'] <= $limit2) {
+            if ($item['id'] >= 14 and $item['id'] <= 49) {
                 $type = "";
                 $split = substr($binary_flags, $item['bit'], 1);
                 if ($split == "1") {
@@ -87,7 +73,7 @@ class SaveAlertDataJob implements ShouldQueue
                         $value = 1;
                         $type = ClientAlert::ALERT;
                     } else {
-                        $value = $this->calculateValueAlert($item['variable_id'], $decode, $limit3);
+                        $value = $this->calculateValueAlert($item['variable_id'], $decode);
                         $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
                         if ($alert->active_control) {
                             if ($alert->min_alert != 0) {
@@ -141,12 +127,12 @@ class SaveAlertDataJob implements ShouldQueue
         }
     }
 
-    private function calculateValueAlert($variable_id, $decode, $limit3){
+    private function calculateValueAlert($variable_id, $decode){
         $data_frame = collect(config('data-frame.data_frame'));
         $variable = $data_frame->where('id', $variable_id)->first();
         $split = substr($decode, ($variable['start']), ($variable['lenght']));
         $bin = hex2bin($split);
-        if ($variable['start'] >= $limit3) {
+        if ($variable['start'] >= 464) {
             $value = (unpack($variable['type'], $bin)[1]) / 1000;
         } else {
             if ($variable['variable_name'] == "flags") {

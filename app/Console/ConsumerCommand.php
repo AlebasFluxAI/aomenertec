@@ -7,6 +7,7 @@ use App\Http\Resources\V1\NotificationTypes;
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SaveAlertDataJob;
+use App\Jobs\V1\SetConfigJob;
 use FlixTech\AvroSerializer\Objects\RecordSerializer;
 use FlixTech\SchemaRegistryApi\Registry\BlockingRegistry;
 use FlixTech\SchemaRegistryApi\Registry\Cache\AvroObjectCacheAdapter;
@@ -45,6 +46,17 @@ ConsumerCommand extends Command
     public function handle()
     {
         $mqtt = MQTT::connection();
+        $mqtt->subscribe('mc/real_time/v1', function (string $topic, string $message) {
+            dispatch(new PushRealTimeMicrocontrollerDataJob($message));
+        }, 0);
+        $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
+            dispatch(new SaveMicrocontrollerDataJob($message));
+
+        }, 1);
+        $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
+            dispatch(new SaveMicrocontrollerDataJob($message));
+            dispatch(new SaveAlertDataJob($message));
+        }, 0);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
             dispatch(new PushRealTimeMicrocontrollerDataJob($message));
@@ -56,6 +68,10 @@ ConsumerCommand extends Command
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message));
             dispatch(new SaveAlertDataJob($message));
+        }, 0);
+        $mqtt->subscribe('mc/get_config', function (string $topic, string $message) {
+
+            dispatch(new SetConfigJob($message));
         }, 1);
         $mqtt->loop();
 

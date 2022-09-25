@@ -215,9 +215,9 @@ class MicrocontrollerData extends Model
         $current_time_aux->setTimestamp($unix_time);
         $current_time->subHour();
         $current_time_aux->subMonth();
-        $energy_alerts = $client->clientAlertConfiguration()->where('flag_id', '>=', 47)
+        $energy_alerts = $client->clientAlertConfiguration()->where('flag_id', '>=', 50)
             ->where('max_alert', '>', 0)->get();
-        $energy_control = $client->clientAlertConfiguration()->where('flag_id', '>=', 47)
+        $energy_control = $client->clientAlertConfiguration()->where('flag_id', '>=', 50)
             ->where('active_control', true)->where('max_control', '>', 0)->get();
         $alerts = $energy_alerts->merge($energy_control);
         $energy_hour = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time->format('Y-m-d H:00:00'),$current_time->format('Y-m-d H:59:59')])
@@ -262,28 +262,6 @@ class MicrocontrollerData extends Model
 
     private function calculateValueAlert($flag_id, $energy_month, $energy_hour)
     {
-        if ($this->client_id == 1 or $this->client_id == 4) {
-            if ($flag_id == 47) {
-                $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
-            } elseif ($flag_id == 48) {
-                $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
-            } elseif ($flag_id == 49) {
-                $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
-            } elseif ($flag_id == 50) {
-                $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
-            } elseif ($flag_id == 51) {
-                $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
-            } elseif ($flag_id == 52) {
-                $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
-            } else {
-                if ($this->interval_real_consumption != 0) {
-                    $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
-                } else {
-                    $value = 0;
-                }
-            }
-            return $value;
-        } else{
             if ($flag_id == 50) {
                 $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
             } elseif ($flag_id == 51) {
@@ -303,12 +281,11 @@ class MicrocontrollerData extends Model
                     $value = 0;
                 }
             }
-        }
     }
 
     private function createAlert($value, $type, $alert)
     {
-        if ($alert->flag_id == 53){
+        if ($alert->flag_id == 56){
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
                 $query->whereBetween("source_timestamp", [$this->source_timestamp->copy()->subMinutes(10)->format('Y-m-d H:i:s'), $this->source_timestamp->format('Y-m-d H:i:s')]);
             })->exists()) {
@@ -321,9 +298,9 @@ class MicrocontrollerData extends Model
                 ]);
             }
         }
-        elseif ($alert->flag_id == 47
-            || $alert->flag_id == 48
-            || $alert->flag_id == 49) {
+        elseif ($alert->flag_id == 50
+            || $alert->flag_id == 51
+            || $alert->flag_id == 52) {
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
                 $query->whereBetween("source_timestamp", [$this->source_timestamp->format('Y-m-1 00:00:00'), $this->source_timestamp->format('Y-m-t 23:59:59')]);
             })->exists()) {
