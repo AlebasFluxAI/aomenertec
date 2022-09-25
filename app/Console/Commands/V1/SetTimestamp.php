@@ -39,7 +39,7 @@ class SetTimestamp extends Command
      */
     public function handle()
     {
-        $topic = 'mc/config/timestamp';
+        $topic = 'mc/config';
         $date = Carbon::now()->timestamp;
         MQTT::publish($topic, $date);
         MQTT::disconnect();
