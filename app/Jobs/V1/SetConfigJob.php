@@ -45,11 +45,7 @@ class SetConfigJob implements ShouldQueue
         if (!$client->clientAlertConfiguration()->exists()){
             return;
         }
-        if ($client->id == 1 or $client->id == 4) {
-            $alert_config_frame = config('data-frame-v1.alert_config_frame');
-        }else{
-            $alert_config_frame = config('data-frame.alert_config_frame');
-        }
+        $alert_config_frame = config('data-frame.alert_config_frame');
         $topic = "mc/config/" . $this->equipment_serial;
         $binary_data = [];
         $data = "";

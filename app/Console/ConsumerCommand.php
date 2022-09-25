@@ -56,7 +56,7 @@ ConsumerCommand extends Command
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message));
             dispatch(new SaveAlertDataJob($message));
-        }, 1);
+        }, 0);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
             dispatch(new PushRealTimeMicrocontrollerDataJob($message));
@@ -68,7 +68,7 @@ ConsumerCommand extends Command
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message));
             dispatch(new SaveAlertDataJob($message));
-        }, 1);
+        }, 0);
         $mqtt->subscribe('mc/get_config', function (string $topic, string $message) {
 
             dispatch(new SetConfigJob($message));
