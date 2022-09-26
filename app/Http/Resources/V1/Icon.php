@@ -33,9 +33,12 @@ class Icon extends Singleton
 
     public static function getUserIconUser($user)
     {
-        if ($admin = $user->getAdmin()) {
-            return $admin->icon->url;
+        try {
+            if ($admin = $user->getAdmin()) {
+                return $admin->icon->url;
+            }
+        } catch (Throwable $e) {
+            return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
         }
-        return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
     }
 }
