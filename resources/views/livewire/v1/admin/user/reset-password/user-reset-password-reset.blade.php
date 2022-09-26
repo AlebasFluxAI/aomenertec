@@ -14,7 +14,7 @@
     @else
 
         <div class="contenedor-grande col-md-12 p-5" style="background-color: #f2f2f2">
-            <div class="col-md-6 offset-3">
+            <div class="col-md-6 offset-3 bg-secondary p-5" style="border-radius: 10px">
                 <form wire:submit.prevent="submitForm">
                     <p for="email">Reestablecer contraseña</p>
                     <br>
