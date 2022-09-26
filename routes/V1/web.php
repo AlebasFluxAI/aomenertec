@@ -44,6 +44,12 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::prefix("clientes/invitados/recargas")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent::class)->name("guest.add-purchase");
     });
+
+    Route::prefix("reestablecer-cuenta")->group(function () {
+        Route::get('/', Livewire\V1\Admin\User\ResetPassword\ResetPassword::class)->name("subdomain.password.reset.form");
+        Route::get('/{otp}', Livewire\V1\Admin\User\ResetPassword\ResetPasswordReset::class)->name("subdomain.password.reset.reset");
+    });
+
 });
 
 Route::prefix("reestablecer-cuenta")->group(function () {
