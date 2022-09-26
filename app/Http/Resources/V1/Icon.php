@@ -30,4 +30,12 @@ class Icon extends Singleton
         }
         return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
     }
+
+    public static function getUserIconUser($user)
+    {
+        if ($admin = $user->getAdmin()) {
+            return $admin->icon->url;
+        }
+        return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
+    }
 }

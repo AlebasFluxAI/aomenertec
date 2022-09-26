@@ -124,6 +124,11 @@ class User extends Authenticatable implements JWTSubject
         return $model;
     }
 
+    public function otpUsers()
+    {
+        return $this->hasMany(OtpUser::class);
+    }
+
     public function networkOperator()
     {
         return $this->hasOne(NetworkOperator::class);

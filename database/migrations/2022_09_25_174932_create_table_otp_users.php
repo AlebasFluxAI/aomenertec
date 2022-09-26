@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropUniqueEmailFromClient extends Migration
+class CreateTableOtpUsers extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,12 @@ class DropUniqueEmailFromClient extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropUnique("clients_identification_unique");
+        Schema::create('otp_users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId("user_id")->constrained();
+            $table->string("otp")->unique();
+            $table->boolean("enabled")->default(true);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ class DropUniqueEmailFromClient extends Migration
      */
     public function down()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('otp_users');
     }
 }

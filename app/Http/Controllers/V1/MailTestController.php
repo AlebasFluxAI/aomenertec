@@ -5,46 +5,49 @@ namespace App\Http\Controllers\V1;
 use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
 use App\Mail\User\UserCratedMail;
+use App\Mail\User\UserResetPasswordMail;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\User;
 use App\Notifications\Alert\AlertNotification;
 use App\Notifications\User\UserCreatedNotification;
+use App\Notifications\User\UserResetPasswordNotification;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class MailTestController
 {
-    public function userCreatedNotification(Request $request)
+    public function userCreatedNotification()
     {
-        $user = User::find(2);
-        $user->notify(new AlertNotification());
+        $user = User::find(15);
+        $user->notify(new UserResetPasswordNotification());
+        return (new UserResetPasswordMail($user, "12"))->render();
     }
 
     public function whatsappNotification()
     {
         $clientAlert = ClientAlert::find(3);
-        $client =Client::find($clientAlert->client_id);
+        $client = Client::find($clientAlert->client_id);
         $technicians = $client->clientTechnician;
         $supervisors = $client->supervisors;
         $flag = true;
         $network_operator = null;
-        foreach ($technicians as $user){
+        foreach ($technicians as $user) {
             $network_operator = $user->networkOperator->user;
             event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
             $user->user->notify(new AlertNotification($clientAlert));
         }
-        foreach ($supervisors as $user){
-            if ($user->user->phone == $client->phone){
+        foreach ($supervisors as $user) {
+            if ($user->user->phone == $client->phone) {
                 $flag = false;
             }
             event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
             $user->user->notify(new AlertNotification($clientAlert));
         }
-        if ($flag){
+        if ($flag) {
             $client->notify(new AlertNotification($clientAlert));
         }
-        if ($network_operator){
+        if ($network_operator) {
             event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $network_operator->id));
         }
     }

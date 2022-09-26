@@ -32,22 +32,6 @@ use App\Http\Resources\V1\PermissionsRouteWard;
 Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 
-    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-        ->middleware(['guest:' . config('fortify.guard')])
-        ->name('password.request');
-
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->middleware(['guest:' . config('fortify.guard')]);
-
-
-    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-        ->middleware(['guest:' . config('fortify.guard')])
-        ->name('password.reset');
-
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])
-        ->middleware(['guest:' . config('fortify.guard')])
-        ->name('password.update');
-
 
     Route::prefix("clientes/invitados/pqr")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Pqr\AddPqrGuestClientComponent::class)->name("guest.add-pqr");
@@ -62,9 +46,10 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     });
 });
 
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware(['guest:' . config('fortify.guard')]);
-
+Route::prefix("reestablecer-cuenta")->group(function () {
+    Route::get('/', Livewire\V1\Admin\User\ResetPassword\ResetPassword::class)->name("password.reset.form");
+    Route::get('/{otp}', Livewire\V1\Admin\User\ResetPassword\ResetPasswordReset::class)->name("password.reset.reset");
+});
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware(['guest:' . config('fortify.guard')])

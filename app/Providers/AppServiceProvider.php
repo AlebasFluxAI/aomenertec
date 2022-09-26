@@ -16,6 +16,7 @@ use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Notification;
+use App\Models\V1\OtpUser;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrLog;
 use App\Models\V1\PqrMessage;
@@ -33,6 +34,7 @@ use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
 use App\Observers\HereMapObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
+use App\Observers\OtpUser\OtpUserObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
 use App\Observers\Pqr\PqrObserver;
@@ -83,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
                 $model::observe(ChangeObserver::class);
             }
         });
-        
+
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
         MicrocontrollerData::observe(MicrocontrollerDataObserver::class);
@@ -130,5 +132,7 @@ class AppServiceProvider extends ServiceProvider
         PqrLog::observe(ActionByObserve::class);
         ClientRecharge::observe(ActionByObserve::class);
         HistoricalClientEquipment::observe(ActionByObserve::class);
+
+        OtpUser::observe(OtpUserObserver::class);
     }
 }
