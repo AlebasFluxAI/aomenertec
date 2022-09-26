@@ -143,11 +143,10 @@
                                         <tbody>
                                         <tr>
                                             <td>
-                                                <a href="https://tul.com.co" target="_blank">
-                                                    <img
+                                                <img
 
-                                                        src="{{$logo_url}}"
-                                                        style="
+                                                    src="{{$logo_url}}"
+                                                    style="
                                       border: 0;
                                       display: block;
                                       outline: none;
@@ -156,10 +155,8 @@
                                       height: 20px;
                                       font-size: 13px;
                                     "
-                                                        width="75"
-                                                    />
-
-                                                </a>
+                                                    width="75"
+                                                />
 
 
                                             </td>
