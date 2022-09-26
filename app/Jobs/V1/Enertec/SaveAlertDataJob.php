@@ -60,13 +60,12 @@ class SaveAlertDataJob implements ShouldQueue
         if ($client == null) {
             return;
         }
-
         $timestamp = $this->calculateValueAlert(6, $decode);
 
         $this->source_timestamp->setTimestamp($timestamp);
         $value = 0;
         foreach ($flags_frame as $item) {
-            if ($item['id'] >= 14 and $item['id'] <= 46) {
+            if ($item['id'] >= 14 and $item['id'] <= 49) {
                 $type = "";
                 $split = substr($binary_flags, $item['bit'], 1);
                 if ($split == "1") {
@@ -133,7 +132,7 @@ class SaveAlertDataJob implements ShouldQueue
         $variable = $data_frame->where('id', $variable_id)->first();
         $split = substr($decode, ($variable['start']), ($variable['lenght']));
         $bin = hex2bin($split);
-        if ($variable['start'] >= 440) {
+        if ($variable['start'] >= 464) {
             $value = (unpack($variable['type'], $bin)[1]) / 1000;
         } else {
             if ($variable['variable_name'] == "flags") {

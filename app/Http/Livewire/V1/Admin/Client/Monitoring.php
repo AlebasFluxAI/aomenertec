@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Models\V1\Client;
+use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,6 @@ class Monitoring extends Component
 
     public function mount(Client $client)
     {
-        $this->client = $client;
         $this->clientAlerts = $this->client->clientAlerts;
         foreach ($this->clientAlerts as &$alert){
             $alert->name = $alert->clientAlertConfiguration->getVariableName();

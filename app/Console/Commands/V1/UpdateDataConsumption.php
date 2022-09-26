@@ -54,14 +54,19 @@ class UpdateDataConsumption extends Command
                 $decode = bin2hex(base64_decode($item->raw_json));
                 $split = substr($decode, (16), (16));
                 $bin = hex2bin($split);
-                $equipment_serial = unpack('Q', $bin)[1];
+                $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
                 $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                     ->first();
                 if ($equipment) {
                     $client = $equipment->clients()->first();
+                    echo $client->name."\n";
                     if ($client) {
                         $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                    } else{
+                        continue;
                     }
+                } else{
+                    continue;
                 }
                 if ($last_data) {
                     $last_raw_json = json_decode($last_data->raw_json, true);
@@ -72,14 +77,18 @@ class UpdateDataConsumption extends Command
                         try {
                             $split = substr($decode, ($data['start']), ($data['lenght']));
                             $bin = hex2bin($split);
-                            if ($data['start'] >= 440) {
+                            if ($data['start'] >= 464) {
                                 $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                                 $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                             } else {
                                 if ($data['variable_name'] == "flags") {
                                     $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                 } else {
-                                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                    if ($data['variable_name'] == "equipment_id"){
+                                        $json[$data['variable_name']] =  $equipment_serial;
+                                    }else {
+                                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                    }
                                 }
                             }
                             if ($data['start'] >= 72) {
