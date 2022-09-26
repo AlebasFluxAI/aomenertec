@@ -617,7 +617,7 @@ dialog {
 
 .service_list_item {
     background-color: whitesmoke;
-    margin-top: 20px;
+    margin-top: 5px;
     padding: 5px;
     border-radius: 0px 50px 50px 5px;
 }
