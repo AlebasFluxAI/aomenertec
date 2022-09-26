@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateTimestampDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
         $schedule->command(UpdateDataConsumption::class)->everyFiveMinutes()->withoutOverlapping();
         $schedule->command(SetTimestamp::class)->twiceDailyAt(10,22, 3);
+        $schedule->command(SetTimestamp::class)->twiceDailyAt(4,16, 3);
 
 
         ////accumulated daily consumption
