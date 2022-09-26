@@ -50,7 +50,6 @@ class UpdateDataConsumption extends Command
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data as $item) {
-                $flag = false;
                 $last_data = null;
                 $decode = bin2hex(base64_decode($item->raw_json));
                 $split = substr($decode, (16), (16));
@@ -60,7 +59,6 @@ class UpdateDataConsumption extends Command
                     ->first();
                 if ($equipment) {
                     $client = $equipment->clients()->first();
-                    echo $client->name."\n";
                     if ($client) {
                         $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                     } else{
@@ -97,7 +95,6 @@ class UpdateDataConsumption extends Command
                                     if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
                                         if (!$data['default']) {
                                             $json[$data['variable_name']] = $data['default'];
-
                                         } else {
                                             if ($last_data) {
                                                 if (isset($last_raw_json[$data['variable_name']])) {
@@ -123,7 +120,6 @@ class UpdateDataConsumption extends Command
                                 if ($data['start'] >= 72) {
                                     if (!$data['default']) {
                                         $json[$data['variable_name']] = $data['default'];
-
                                     } else {
                                         if ($last_data) {
                                             if (isset($last_raw_json[$data['variable_name']])) {
