@@ -163,13 +163,25 @@ class DataChart extends Component
                 foreach ($array_aux as $item) {
                     if ($this->time_id == 3 || $this->time_id == 4) {
                         $raw_json = json_decode($item->raw_json, true);
-                        array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                        if (isset($raw_json[$data['variable_name']])){
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                        } else{
+                            array_push($data_aux[$index], null);
+                        }
                     } elseif ($this->time_id == 2) {
                         $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                        array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                        if (isset($raw_json[$data['variable_name']])){
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                        } else{
+                            array_push($data_aux[$index], null);
+                        }
                     } else {
                         $raw_json = json_decode($item->raw_json, true);
-                        array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                        if (isset($raw_json[$data['variable_name']])){
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                        } else{
+                            array_push($data_aux[$index], null);
+                        }
                     }
                     if ($index == 0) {
                         if ($this->time_id == 1) {
