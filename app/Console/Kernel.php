@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-
+use App\Console\Commands\V1\SetTimestamp;
 use App\Console\Commands\V1\RecordDailyConsumption;
 use App\Console\Commands\V1\RecordMonthlyConsumption;
 use App\Console\Commands\V1\UpdateDailyConsumption;
@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
         ////unpack data
         $schedule->command(UpdateTimestampDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
         $schedule->command(UpdateDataConsumption::class)->everyFiveMinutes()->withoutOverlapping();
-        $schedule->command(SetTimestamp::class)->twiceDailyAt(1,13, 3);
+        $schedule->command(SetTimestamp::class)->twiceDailyAt(10,22, 3);
 
 
         ////accumulated daily consumption
