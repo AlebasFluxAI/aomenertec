@@ -79,12 +79,10 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña </label>
-                    @if (Route::has('password.request'))
-                        <a class="login-forgot-pass" href="
-                                    {{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"coenergia"]) }}
-                                    ">
-                            ¿La olvidaste?</a>
-                    @endif
+                    <a class="login-forgot-pass" href="
+                                    {{route('password.reset.form')}}
+                            ">
+                        ¿La olvidaste?</a>
                     <input type="password"
                            class="form-control @error('password') is-invalid @enderror"
                            name="password" autocomplete="current-password" required>
