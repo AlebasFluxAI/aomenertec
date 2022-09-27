@@ -52,6 +52,20 @@ class Admin extends Model
         "state",
     ];
 
+    public function tabPermissions()
+    {
+        return $this->hasMany(TabPermissionAdmin::class);
+    }
+
+    public function tabPermissionsName()
+    {
+        $permissions = [];
+        foreach ($this->whereEnabled(true)->get() as $permission) {
+            array_push($permissions, $permission->permission);
+
+        }
+        return $permissions;
+    }
 
     public static function getRole()
     {
