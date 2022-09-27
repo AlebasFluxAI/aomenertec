@@ -44,7 +44,7 @@ class AddClientEquipmentService extends Singleton
         $component->fill([
             'client' => $model,
             'serials' => collect([]),
-            'technician' => $model->technician()->first()->technician
+            'technician' => $model->technician()->first() ? $model->technician()->first()->technician : null
         ]);
         $component->equipment = [];
         $component->equipment_types = $model->clientType->equipmentTypes;
