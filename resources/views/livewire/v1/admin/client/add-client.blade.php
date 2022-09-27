@@ -80,7 +80,41 @@
                                     "col_with"=>8,
                                     "input_type"=>"email",
                            ])
+
+                            @include("partials.v1.form.form_list",[
+                              "col_with"=>8,
+                              "input_label"=>"Seleccione el tipo de persona",
+                              "input_type"=>"text",
+                              "list_model" => "client_person_type",
+                              "list_default" => "Tipo de persona ...",
+                              "list_options" => $person_types,
+                              "list_option_value"=>"value",
+                              "list_option_view"=>"key",
+                              "list_option_title"=>"",
+                     ])
+                            @include("partials.v1.form.form_list",[
+                                  "col_with"=>8,
+                                  "input_type"=>"text",
+                                  "input_label"=>"Seleccione el tipo de indentificación de cliente",
+                                  "list_model" => "client_identification_type",
+                                  "list_default" => "Tipo de identificación cliente",
+                                  "list_options" => $identification_types,
+                                  "list_option_value"=>"value",
+                                  "list_option_view"=>"key",
+                                  "list_option_title"=>"",
+                         ])
+                            @include("partials.v1.form.form_input_icon",[
+                                   "input_label"=>"Numero de identificación de cliente",
+                                   "input_model"=>"client_identification",
+                                  "updated_input"=>"lazy",
+                                   "icon_class"=>"fas fa-barcode",
+                                   "placeholder"=>"identificación",
+                                   "col_with"=>8,
+                                   "input_type"=>"text",
+                                   "required"=>true
+                          ])
                         </div>
+
 
                         @include("partials.v1.divider_title",[
                                 "title"=>"Datos de facturacion"
@@ -112,7 +146,7 @@
                                     "list_option_title"=>"",
                            ])
                             @include("partials.v1.form.form_input_icon",[
-                                    "input_label"=>"Numero de identificación de cliente",
+                                    "input_label"=>"Numero de identificación para facturacion",
                                     "input_model"=>"identification",
                                    "updated_input"=>"lazy",
                                     "icon_class"=>"fas fa-barcode",
