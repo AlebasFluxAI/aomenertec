@@ -49,8 +49,8 @@ class EditClientService extends Singleton
             'contribution' => $client->contribution,
             'public_lighting_tax' => $client->public_lighting_tax,
             'active_client' => $client->active_client,
-            'network_operator_id' => $client->networkOperator->id,
-            'network_operator' => $client->networkOperator->user->identification,
+            'network_operator_id' => $client->networkOperator ? $client->networkOperator->id : null,
+            'network_operator' => $client->networkOperator ? $client->networkOperator->user->identification : null,
             "network_topologies" => $this->topologies(),
             "network_topology" => $client->network_topology,
             'serials' => collect([]),
@@ -159,7 +159,7 @@ class EditClientService extends Singleton
             $component->client->fill($this->mapper($component));
             $component->client->update();
             $this->linkTechnician($component, $component->client);
-            $this->linkAddress($component, $component->client);
+            //$this->linkAddress($component, $component->client);
             $this->linkBillingInformation($component, $component->client);
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
         });

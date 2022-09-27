@@ -312,7 +312,7 @@
                                         "list_option_value"=>"value",
                                         "list_option_view"=>"key",
                                         "list_option_title"=>"",
-                                         "required"=>true
+                                         "required"=>false
                                ])
                                 @error('network_operator') <span class="error">{{ $message }}</span> @enderror
 

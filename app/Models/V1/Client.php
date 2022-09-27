@@ -55,12 +55,18 @@ class Client extends Model
         'network_topology',
         "person_type",
         "identification_type",
-        "has_telemetry"
+        "has_telemetry",
+        "admin_id"
     ];
 
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 
     public function clientConfiguration(): HasOne

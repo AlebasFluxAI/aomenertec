@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Resources\V1\Icon;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
@@ -391,10 +392,7 @@ class AddClientService extends Singleton
             $component->addError('client_type', 'Seleccione un tipo de cliente');
             return;
         }
-        if (!is_numeric($component->network_operator_id)) {
-            $component->addError('network_operator', 'Seleccione un operador de red');
-            return;
-        }
+        
         DB::transaction(function () use ($component) {
             $client = $this->createClient($component);
             $this->linkAddress($component, $client);
@@ -434,6 +432,7 @@ class AddClientService extends Singleton
             'identification_type' => $component->client_identification_type,
             'person_type' => $component->client_person_type,
             "has_telemetry" => $component->has_telemetry,
+            "admin_id" => Auth::user()->getAdmin() ? Auth::user()->getAdmin()->id : null,
         ]);
     }
 

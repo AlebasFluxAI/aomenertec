@@ -141,28 +141,6 @@
 
                     </div>
 
-                    @include("partials.v1.divider_title",[
-                            "title"=>"Ubicación del cliente"
-                    ]
-                   )
-                    @include("partials.v1.addUserTemplate.user-add-location-form")
-
-                    @include("partials.v1.divider_title",[
-                        "title"=>"Tipo de red / Contribuciones"
-                        ]
-                       )
-                    <div class="row pl-5 pr-3">
-                        @include("partials.v1.form.form_list",[
-                                "col_with"=>8,
-                                "list_model" => "stratum_id",
-                                "input_label"=>"Estrado de cliente",
-                                "list_default" => "Estrato...",
-                                "list_options" => $strata,
-                                "list_option_value"=>"id",
-                                "list_option_view"=>"acronym",
-                                "list_option_title"=>"",
-                       ])
-                    </div>
 
                     <div class="row pl-5 pr-3">
                         @if(\App\Http\Resources\V1\Menu::getUserModel()::class==\App\Models\V1\Admin::class)
