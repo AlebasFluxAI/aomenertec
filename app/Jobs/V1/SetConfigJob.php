@@ -24,7 +24,7 @@ class SetConfigJob implements ShouldQueue
     public $config;
     public function __construct($config)
     {
-        $this->config =json_decode($config);
+        $this->config = $config;
     }
 
     /**
@@ -34,6 +34,7 @@ class SetConfigJob implements ShouldQueue
      */
     public function handle()
     {
+        $this->config = json_decode($this->config);
         $equipment_serial = str_pad($this->config->did, 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
