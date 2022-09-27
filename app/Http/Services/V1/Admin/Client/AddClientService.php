@@ -60,6 +60,10 @@ class AddClientService extends Singleton
 
             "identification_type" => Client::IDENTIFICATION_TYPE_CC,
             "person_type" => Client::PERSON_TYPE_NATURAL,
+
+            "client_identification_type" => Client::IDENTIFICATION_TYPE_CC,
+            "client_person_type" => Client::PERSON_TYPE_NATURAL,
+
             "identification_types" => $this->identificationTypes(),
             'person_types' => [
                 ["key" => "Persona natural", "value" => Client::PERSON_TYPE_NATURAL,],
@@ -410,13 +414,14 @@ class AddClientService extends Singleton
                 break;
             }
         }
+
         return Client::create([
             'name' => $component->name,
             'last_name' => $component->last_name,
             'email' => $component->email,
             'code' => $code,
             'phone' => $component->phone,
-            'identification' => $component->identification,
+            'identification' => $component->client_identification,
             'network_topology' => $component->network_topology,
             'active' => $component->active,
             'contribution' => $component->contribution,
@@ -426,8 +431,8 @@ class AddClientService extends Singleton
             'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,
             'stratum_id' => $component->stratum_id,
-            'identification_type' => $component->identification_type,
-            'person_type' => $component->person_type,
+            'identification_type' => $component->client_identification_type,
+            'person_type' => $component->client_person_type,
             "has_telemetry" => $component->has_telemetry,
         ]);
     }
