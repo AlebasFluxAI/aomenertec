@@ -69,7 +69,7 @@ ConsumerCommand extends Command
             dispatch(new SaveMicrocontrollerDataJob($message));
             dispatch(new SaveAlertDataJob($message));
         }, 0);
-        $mqtt->subscribe('mc/get_config', function (string $topic, string $message) {
+        $mqtt->subscribe('mc/ack', function (string $topic, string $message) {
             dispatch(new SetConfigJob($message));
         }, 2);
         $mqtt->loop();
