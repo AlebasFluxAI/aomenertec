@@ -120,7 +120,11 @@ class HeatMapChart extends Component
                     if ($data['variable_id'] == $this->variable_heat_map_id) {
                         foreach ($array_aux as $index => $item) {
                             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                            $value = round($raw_json[$data['variable_name']], 2);
+                            if (isset($raw_json[$data['variable_name']])){
+                                $value = round($raw_json[$data['variable_name']], 2);
+                            } else{
+                                $value = null;
+                            }
                             $data_aux[intval($item->hour)] = $value;
                             if ($value > $max_value) {
                                 $max_value = $value;
