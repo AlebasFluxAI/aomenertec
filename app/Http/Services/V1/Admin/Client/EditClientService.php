@@ -184,7 +184,6 @@ class EditClientService extends Singleton
             'last_name' => $component->last_name,
             'phone' => $component->phone,
             'identification' => $component->identification,
-            'direction' => $component->direction,
             'network_topology' => $component->network_topology,
             'active_client' => $component->active_client,
             'contribution' => $component->contribution,
