@@ -36,9 +36,9 @@
                                            [
                                                "title"=>"Notificaciones",
                                            ],
-
-
-
+                                            [
+                                               "title"=>"Permisos de pestañas",
+                                           ],
                                       ],
 
                        "tab_contents"=>[
@@ -166,9 +166,14 @@
 
                                                                                 ]
                                                                     ]
-                                           ]                                ,
+                                           ],
                                            [
                                                                         "view_name"=>"livewire.v1.admin.user.admin.channels-admin",
+                                                                        "view_values"=>  [
+                                                                        ]
+                                           ],
+                                           [
+                                                                        "view_name"=>"livewire.v1.admin.user.admin.tab-permissions-admin",
                                                                         "view_values"=>  [
                                                                         ]
                                            ]

@@ -18,6 +18,7 @@ class PriceAdmin extends Component
     public $admin_notification_types;
     public $model;
     public $channels;
+    public $tab_permissions;
 
     private $priceAdminService;
 
@@ -53,6 +54,11 @@ class PriceAdmin extends Component
     public function blinkChannel($channel)
     {
         $this->priceAdminService->blinkChannel($this, $channel);
+    }
+
+    public function blinkTabPermission($tabPermission)
+    {
+        $this->priceAdminService->blinkTabPermission($this, $tabPermission);
     }
 
     public function render()
