@@ -46,7 +46,7 @@ class SetConfigJob implements ShouldQueue
         if ($client == null) {
             return;
         }
-        if (isset($this->config->config_get)){
+        if ($this->config->config_get){
             $alert_config_frame = config('data-frame.alert_config_frame');
             if (!$client->clientAlertConfiguration()->exists()) {
                 $flags_frame = collect(config('data-frame.flags_frame'));

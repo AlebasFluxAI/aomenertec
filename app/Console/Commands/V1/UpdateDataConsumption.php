@@ -42,14 +42,14 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-        $data = MicrocontrollerData::whereNull('client_id')
+        $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
-        if ($data) {
+        if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
-            foreach ($data as $item) {
+            foreach ($data_pack as $item) {
                 if (json_decode($item->raw_json, true) == null) {
                     if (strlen($item->raw_json) > 20) {
                         $last_data = null;
@@ -99,11 +99,7 @@ class UpdateDataConsumption extends Command
                                                     $json[$data['variable_name']] = $data['default'];
                                                 } else {
                                                     if ($last_data) {
-                                                        if (isset($last_raw_json[$data['variable_name']])) {
-                                                            $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                                        } else {
-                                                            $json[$data['variable_name']] = 0;
-                                                        }
+                                                        $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                     } else {
                                                         $json[$data['variable_name']] = 0;
                                                     }
@@ -119,7 +115,7 @@ class UpdateDataConsumption extends Command
                                             break;
                                         }
                                     } else {
-                                        if ($data['start'] >= 72) {
+                                        /*if ($data['start'] >= 72) {
                                             if (!$data['default']) {
                                                 $json[$data['variable_name']] = $data['default'];
                                             } else {
@@ -129,7 +125,9 @@ class UpdateDataConsumption extends Command
                                                     $json[$data['variable_name']] = 0;
                                                 }
                                             }
-                                        }
+                                        }*/
+                                        $item->delete();
+                                        break;
                                     }
                                 } catch (Exception $e) {
                                     echo 'Excepción capturada: ', $e->getMessage(), "\n";
