@@ -50,105 +50,108 @@ class UpdateDataConsumption extends Command
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data as $item) {
-                $last_data = null;
-                $decode = bin2hex(base64_decode($item->raw_json));
-                $split = substr($decode, (16), (16));
-                $bin = hex2bin($split);
-                $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-                $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                    ->first();
-                if ($equipment) {
-                    $client = $equipment->clients()->first();
-                    if ($client) {
-                        $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
-                    } else{
-                        continue;
-                    }
-                } else{
-                    continue;
-                }
-                if ($last_data) {
-                    $last_raw_json = json_decode($last_data->raw_json, true);
-                }
-                $source_timestamp = Carbon::create($item->source_timestamp);
-                if ($date->diffInDays($source_timestamp) <= 365) {
-                    foreach ($data_frame as $data) {
-                        try {
-                            $split = substr($decode, ($data['start']), ($data['lenght']));
-                            $bin = hex2bin($split);
-                            if (strlen($bin) == ($data['lenght']/2)) {
-                                if ($data['start'] >= 464) {
-                                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                    $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                } else {
-                                    if ($data['variable_name'] == "flags") {
-                                        $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
-                                    } else {
-                                        if ($data['variable_name'] == "equipment_id") {
-                                            $json[$data['variable_name']] = $equipment_serial;
+                if (json_decode($item->raw_json, true) == null) {
+                    if (strlen($item->raw_json) > 20) {
+                        $last_data = null;
+                        $decode = bin2hex(base64_decode($item->raw_json));
+                        $split = substr($decode, (16), (16));
+                        $bin = hex2bin($split);
+                        $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+                        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                            ->first();
+                        if ($equipment) {
+                            $client = $equipment->clients()->first();
+                            if ($client) {
+                                $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                            } else {
+                                continue;
+                            }
+                        } else {
+                            continue;
+                        }
+                        if ($last_data) {
+                            $last_raw_json = json_decode($last_data->raw_json, true);
+                        }
+                        $source_timestamp = Carbon::create($item->source_timestamp);
+                        if ($date->diffInDays($source_timestamp) <= 365) {
+                            foreach ($data_frame as $data) {
+                                try {
+                                    $split = substr($decode, ($data['start']), ($data['lenght']));
+                                    $bin = hex2bin($split);
+                                    if (strlen($bin) == ($data['lenght'] / 2)) {
+                                        if ($data['start'] >= 464) {
+                                            $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                            $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                                         } else {
-                                            $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                            if ($data['variable_name'] == "flags") {
+                                                $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                            } else {
+                                                if ($data['variable_name'] == "equipment_id") {
+                                                    $json[$data['variable_name']] = $equipment_serial;
+                                                } else {
+                                                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                                }
+                                            }
                                         }
-                                    }
-                                }
-                                if ($data['start'] >= 72) {
-                                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
-                                        if (!$data['default']) {
-                                            $json[$data['variable_name']] = $data['default'];
-                                        } else {
-                                            if ($last_data) {
-                                                if (isset($last_raw_json[$data['variable_name']])) {
+                                        if ($data['start'] >= 72) {
+                                            if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
+                                                if (!$data['default']) {
+                                                    $json[$data['variable_name']] = $data['default'];
+                                                } else {
+                                                    if ($last_data) {
+                                                        if (isset($last_raw_json[$data['variable_name']])) {
+                                                            $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                                        } else {
+                                                            $json[$data['variable_name']] = 0;
+                                                        }
+                                                    } else {
+                                                        $json[$data['variable_name']] = 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        if (is_nan($json[$data['variable_name']])) {
+                                            $json[$data['variable_name']] = null;
+                                        }
+
+                                        if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                            break;
+                                        }
+                                    } else {
+                                        if ($data['start'] >= 72) {
+                                            if (!$data['default']) {
+                                                $json[$data['variable_name']] = $data['default'];
+                                            } else {
+                                                if ($last_data) {
                                                     $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                 } else {
                                                     $json[$data['variable_name']] = 0;
                                                 }
-                                            } else {
-                                                $json[$data['variable_name']] = 0;
                                             }
                                         }
                                     }
-                                }
-
-                                if (is_nan($json[$data['variable_name']])) {
-                                    $json[$data['variable_name']] = null;
-                                }
-
-                                if ($data['variable_name'] == "ph3_varLh_acumm") {
-                                    break;
-                                }
-                            }else{
-                                if ($data['start'] >= 72) {
-                                    if (!$data['default']) {
-                                        $json[$data['variable_name']] = $data['default'];
-                                    } else {
-                                        if ($last_data) {
-                                            if (isset($last_raw_json[$data['variable_name']])) {
-                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                            } else {
-                                                $json[$data['variable_name']] = 0;
-                                            }
-                                        } else {
-                                            $json[$data['variable_name']] = 0;
-                                        }
-                                    }
+                                } catch (Exception $e) {
+                                    echo 'Excepción capturada: ', $e->getMessage(), "\n";
                                 }
                             }
-                        } catch (Exception $e) {
-                            echo 'Excepción capturada: ', $e->getMessage(), "\n";
+                            $item->raw_json = $json;
+
+                            if ($json['import_wh'] <= 0) {
+                                $item->updateQuietly();
+                                $item->delete();
+                                continue;
+                            }
+                            $item->save();
+                        } else {
+                            $item->delete();
                         }
-                    }
-                    $item->raw_json = $json;
-
-                    if ($json['import_wh'] <= 0) {
-                        $item->updateQuietly();
+                    } else{
                         $item->delete();
-                        continue;
                     }
+                } else {
                     $item->save();
-                } else{
-                    $item->delete();
                 }
-
             }
         }
     }

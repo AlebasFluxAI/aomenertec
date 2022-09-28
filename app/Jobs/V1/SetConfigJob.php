@@ -4,6 +4,7 @@ namespace App\Jobs\V1;
 
 use App\Models\V1\ClientAlertConfiguration;
 use App\Models\V1\EquipmentType;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -83,6 +84,13 @@ class SetConfigJob implements ShouldQueue
             $message = base64_encode(implode($binary_data));
             MQTT::publish($topic, $message);
             MQTT::disconnect();
+            sleep(20);
+            $topic = 'mc/config';
+            $date = Carbon::now()->timestamp;
+            MQTT::publish($topic, $date);
+            MQTT::disconnect();
+
+
         }
 
     }
