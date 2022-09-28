@@ -48,6 +48,7 @@ class AddClientEquipmentService extends Singleton
         ]);
         $component->equipment = [];
         $component->equipment_types = $model->clientType->equipmentTypes;
+
         foreach ($model->clientType->equipmentTypes as $index => $type) {
             array_push($component->equipment, [
                 "index" => $index,
@@ -113,10 +114,6 @@ class AddClientEquipmentService extends Singleton
                 $component->equipment[$id]['post'] == "No registrado";
                 $type_id = $component->equipment[$id]['type_id'];
                 if (strlen($value) >= 2) {
-                    if (!$component->technician->id) {
-                        ToastEvent::launchToast($component, "show", "error", "Debes seleccionar un tecnico", ["duration" => "2s"]);
-                        return;
-                    }
                     $component->serials = Equipment::where([
                         ["serial", "like", '%' . $value . "%"],
                     ])->take(3)->get();
