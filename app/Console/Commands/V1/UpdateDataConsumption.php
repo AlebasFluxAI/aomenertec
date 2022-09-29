@@ -99,12 +99,19 @@ class UpdateDataConsumption extends Command
                                                     $json[$data['variable_name']] = $data['default'];
                                                 } else {
                                                     if ($last_data) {
-                                                        $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                                        if (isset($last_raw_json[$data['variable_name']])) {
+                                                            $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                                        } else {
+                                                            $json[$data['variable_name']] = 0;
+                                                        }
                                                     } else {
-                                                        $json[$data['variable_name']] = 0;
+                                                        $json[$data['variable_name']] = null;
                                                     }
                                                 }
                                             }
+                                        }
+                                        if ($json[$data['variable_name']] == 0){
+                                            $json[$data['variable_name']] = null;
                                         }
 
                                         if (is_nan($json[$data['variable_name']])) {
@@ -115,19 +122,21 @@ class UpdateDataConsumption extends Command
                                             break;
                                         }
                                     } else {
-                                        /*if ($data['start'] >= 72) {
+                                        if ($data['start'] >= 72) {
                                             if (!$data['default']) {
                                                 $json[$data['variable_name']] = $data['default'];
                                             } else {
                                                 if ($last_data) {
-                                                    $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                                    if (isset($last_raw_json[$data['variable_name']])) {
+                                                        $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                                    } else {
+                                                        $json[$data['variable_name']] = null;
+                                                    }
                                                 } else {
-                                                    $json[$data['variable_name']] = 0;
+                                                    $json[$data['variable_name']] = null;
                                                 }
                                             }
-                                        }*/
-                                        $item->delete();
-                                        break;
+                                        }
                                     }
                                 } catch (Exception $e) {
                                     echo 'Excepción capturada: ', $e->getMessage(), "\n";
