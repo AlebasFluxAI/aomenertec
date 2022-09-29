@@ -35,6 +35,9 @@ class SetConfigJob implements ShouldQueue
      */
     public function handle()
     {
+        echo str_replace(" ", "", $this->config);
+        $aux = str_replace(" ", "", $this->config);
+        dd(json_decode($aux));
         $this->config = json_decode($this->config);
         $equipment_serial = str_pad($this->config->did, 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
