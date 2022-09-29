@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -45,6 +46,7 @@ class DataChart extends Component
             $this->start = $data_chart->last()->source_timestamp;
         } else {
             $this->end = $data_chart->first()->microcontrollerData->source_timestamp;
+
             $this->start = $data_chart->last()->microcontrollerData->source_timestamp;
         }
         $this->date_range = $this->start . " - " . $this->end;

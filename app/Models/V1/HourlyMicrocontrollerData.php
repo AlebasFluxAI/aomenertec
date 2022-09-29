@@ -18,7 +18,6 @@ class HourlyMicrocontrollerData extends Model
         'month',
         'day',
         'hour',
-        'minute',
         'client_id',
         'microcontroller_data_id',
         "interval_real_consumption",

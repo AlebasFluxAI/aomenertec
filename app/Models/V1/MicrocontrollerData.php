@@ -52,7 +52,14 @@ class MicrocontrollerData extends Model
     public function dailyMicrocontrollerData()
     {
         return $this->hasOne(DailyMicrocontrollerData::class);
-
+    }
+    public function hourlyMicrocontrollerData()
+    {
+        return $this->hasOne(HourlyMicrocontrollerData::class);
+    }
+    public function annualMicrocontrollerData()
+    {
+        return $this->hasOne(AnnualMicrocontrollerData::class);
     }
 
     public function jsonEdit()
