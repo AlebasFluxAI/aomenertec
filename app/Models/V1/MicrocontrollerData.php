@@ -61,6 +61,10 @@ class MicrocontrollerData extends Model
     {
         return $this->hasOne(AnnualMicrocontrollerData::class);
     }
+    public function clientAlert()
+    {
+        return $this->hasOne(ClientAlert::class);
+    }
 
     public function jsonEdit()
     {
