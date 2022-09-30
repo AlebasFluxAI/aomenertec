@@ -79,7 +79,7 @@ class UpdateDataConsumption extends Command
                                     $split = substr($decode, ($data['start']), ($data['lenght']));
                                     $bin = hex2bin($split);
                                     if (strlen($bin) == ($data['lenght'] / 2)) {
-                                        if ($data['start'] >= 456) {
+                                        if ($data['start'] >= 450) {
                                             $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                                             $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                                         } else {
@@ -100,7 +100,7 @@ class UpdateDataConsumption extends Command
                                                 } else {
 
                                                     if ($last_data) {
-                                                        if ($data['start'] >= 456) {
+                                                        if ($data['start'] >= 450) {
                                                             $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
                                                         } else {
                                                             if (isset($last_raw_json[$data['variable_name']])) {
