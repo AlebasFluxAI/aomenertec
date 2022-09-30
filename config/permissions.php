@@ -52,7 +52,6 @@ return [
         Permissions::CLIENT_CREATE,
         Permissions::CLIENT_EDIT,
         Permissions::CLIENT_SHOW,
-        Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_SHOW_MONITORING,
 
         Permissions::SUPPORT_CREATE,

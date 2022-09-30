@@ -12,7 +12,7 @@ class AddClient extends Component
 
     public $model;
     protected $rules = [
-        'identification' => 'required|min:6|unique:users,identification|unique:clients,identification',
+        'identification' => 'required|min:6',
         'name' => 'required|min:8',
         'network_operator' => 'required|min:2',
         'aux_network_operator' => 'required|min:2',

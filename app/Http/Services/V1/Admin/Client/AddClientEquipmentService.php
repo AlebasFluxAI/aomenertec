@@ -47,9 +47,8 @@ class AddClientEquipmentService extends Singleton
             'technician' => $model->technician()->first() ? $model->technician()->first()->technician : null
         ]);
         $component->equipment = [];
-        $component->equipment_types = $model->clientType->equipmentTypes;
-
-        foreach ($model->clientType->equipmentTypes as $index => $type) {
+        $component->equipment_types = $model->admin ? EquipmentType::whereIn("id", $model->admin->adminEquipmentTypes()->pluck("equipment_type_id"))->get() : [];
+        foreach ($component->equipment_types as $index => $type) {
             array_push($component->equipment, [
                 "index" => $index,
                 "id" => "",
@@ -61,7 +60,6 @@ class AddClientEquipmentService extends Singleton
                 "disable" => true,
             ]);
         }
-
     }
 
 
@@ -76,7 +74,7 @@ class AddClientEquipmentService extends Singleton
 
     public function addInputEquipment(Component $component)
     {
-        $component->equipment_types = EquipmentType::whereSerialized(true)->get();
+        $component->equipment_types = $component->client->admin ? EquipmentType::whereIn("id", $component->client->admin->adminEquipmentTypes()->pluck("equipment_type_id"))->get() : [];
         array_push($component->equipment, [
             "index" => count($component->equipment),
             "id" => "",
