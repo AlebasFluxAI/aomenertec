@@ -109,7 +109,7 @@ class User extends Authenticatable implements JWTSubject
     public static function getUserModel()
     {
         $user = Auth::user();
-        $userRole = $user->roles->first()->name;
+        $userRole = $roles = $user->roles->sortBy('id')->first()->name;
         $model = match ($userRole) {
             User::TYPE_NETWORK_OPERATOR => $user->networkOperator,
             User::TYPE_SUPER_ADMIN => $user->superAdmin,
