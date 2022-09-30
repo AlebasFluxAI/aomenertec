@@ -40,14 +40,13 @@ class DataChart extends Component
         $this->chart_title = $aux['display_name'];
         $this->chart_type = $aux['chart_type'];
         $this->time_id = $time;
-        $this->data_chart = $data_chart;
+        $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
         if ($time == 1){
-            $this->end = $data_chart->first()->source_timestamp;
-            $this->start = $data_chart->last()->source_timestamp;
+            $this->end = $this->data_chart->first()->source_timestamp;
+            $this->start = $this->data_chart->last()->source_timestamp;
         } else {
-            $this->end = $data_chart->first()->microcontrollerData->source_timestamp;
-
-            $this->start = $data_chart->last()->microcontrollerData->source_timestamp;
+            $this->start = $this->data_chart->first()->microcontrollerData->source_timestamp;
+            $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
         }
         $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
