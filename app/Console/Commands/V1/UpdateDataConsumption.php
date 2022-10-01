@@ -102,17 +102,14 @@ class UpdateDataConsumption extends Command
                                                             if (isset($last_raw_json[$data['variable_name']])) {
                                                                 $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                             } else {
-                                                                $json[$data['variable_name']] = null;
+                                                                $json[$data['variable_name']] = 0;
                                                             }
                                                         }
                                                     } else {
-                                                        $json[$data['variable_name']] = null;
+                                                        $json[$data['variable_name']] = 0;
                                                     }
                                                 }
                                             }
-                                        }
-                                        if ($json[$data['variable_name']] == 0){
-                                            $json[$data['variable_name']] = null;
                                         }
 
                                         if (is_nan($json[$data['variable_name']])) {
