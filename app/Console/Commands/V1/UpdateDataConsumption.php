@@ -63,11 +63,7 @@ class UpdateDataConsumption extends Command
                             $client = $equipment->clients()->first();
                             if ($client) {
                                 $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
-                            } else {
-                                continue;
                             }
-                        } else {
-                            continue;
                         }
                         if ($last_data) {
                             $last_raw_json = json_decode($last_data->raw_json, true);
@@ -135,10 +131,10 @@ class UpdateDataConsumption extends Command
                                                     if (isset($last_raw_json[$data['variable_name']])) {
                                                         $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                     } else {
-                                                        $json[$data['variable_name']] = null;
+                                                        $json[$data['variable_name']] = 0;
                                                     }
                                                 } else {
-                                                    $json[$data['variable_name']] = null;
+                                                    $json[$data['variable_name']] = 0;
                                                 }
                                             }
                                         }
@@ -150,9 +146,13 @@ class UpdateDataConsumption extends Command
                             $item->raw_json = $json;
 
                             if ($json['import_wh'] <= 0) {
-                                $item->updateQuietly();
-                                $item->delete();
-                                continue;
+                                if ($last_data) {
+                                    if($last_raw_json['import_wh']>0) {
+                                        $item->updateQuietly();
+                                        $item->delete();
+                                        continue;
+                                    }
+                                }
                             }
                             $item->save();
                         } else {
