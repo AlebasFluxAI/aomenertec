@@ -221,46 +221,26 @@ class ReactiveChart extends Component
                 foreach ($array_aux as $item) {
                     if ($this->penalizable) {
                         if ($data['variable_name'] == "kwh_interval") {
-                            if (isset($raw_json[$data['variable_name']])){
-                                array_push($data_aux[$index], round($item->interval_real_consumption, 2));
-                            } else{
-                                array_push($data_aux[$index], null);
-                            }
+                            array_push($data_aux[$index], round($item->interval_real_consumption, 2));
+
                         } elseif ($data['variable_name'] == "varLh_interval") {
-                            if (isset($raw_json[$data['variable_name']])){
-                                array_push($data_aux[$index], round($item->penalizable_reactive_inductive_consumption, 2));
-                            } else{
-                                array_push($data_aux[$index], null);
-                            }
+                            array_push($data_aux[$index], round($item->penalizable_reactive_inductive_consumption, 2));
                         } else {
-                            if (isset($raw_json[$data['variable_name']])){
-                                array_push($data_aux[$index], round($item->penalizable_reactive_capacitive_consumption, 2));
-                            } else{
-                                array_push($data_aux[$index], null);
-                            }
+                            array_push($data_aux[$index], round($item->penalizable_reactive_capacitive_consumption, 2));
+
                         }
                     } else {
                         if ($this->time_reactive_id == 3 || $this->time_reactive_id == 4) {
                             $raw_json = json_decode($item->raw_json, true);
-                            if (isset($raw_json[$data['variable_name']])){
-                                array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                            } else{
-                                array_push($data_aux[$index], null);
-                            }
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
                         } elseif ($this->time_reactive_id == 2){
                             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                            if (isset($raw_json[$data['variable_name']])){
-                                array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                            } else{
-                                array_push($data_aux[$index], null);
-                            }
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+
                         } else {
                             $raw_json = json_decode($item->raw_json, true);
-                            if (isset($raw_json[$data['variable_name']])){
-                                array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                            } else{
-                                array_push($data_aux[$index], null);
-                            }
+                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+
                         }
                     }
                     if ($index == 0) {
