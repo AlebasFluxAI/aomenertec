@@ -53,6 +53,7 @@ return [
         Permissions::CLIENT_EDIT,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SETTINGS,
 
         Permissions::SUPPORT_CREATE,
         Permissions::SUPPORT_EDIT,
