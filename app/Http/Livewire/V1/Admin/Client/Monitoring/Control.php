@@ -31,9 +31,9 @@ class Control extends Component
         $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/".$equipment->serial;
         if ($this->coils[$index]['status']) {
-            $message = "{'did':" . $equipment->serial . ",'coil" . $this->coils[$index]['number'] . "':false}";
+            $message = "{'coil" . $this->coils[$index]['number'] . "':false}";
         } else {
-            $message = "{'did':" . $equipment->serial . ",'coil" . $this->coils[$index]['number'] . "':true}";
+            $message = "{'coil" . $this->coils[$index]['number'] . "':true}";
         }
         $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
         $coil->status = $this->coils[$index]['status'];

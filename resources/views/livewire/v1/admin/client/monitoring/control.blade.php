@@ -4,7 +4,7 @@
         @foreach($coils as $index=>$coil)
             <div  wire:key="coil-{{ $coil->id }}" class="d-flex justify-content-center">
                 <div class="justify-content-end form-group mb-0 mt-0 col-5">
-                    <span wire:ignore class="input_check" id="{{ $coil->id }}">
+                    <span wire:ignore class="input_check" id="{{ $coil->number }}">
                          <input  wire:model="coils.{{ $index }}.status" id="coils_{{ $coil->id }}"  type="checkbox" checked data-toggle="toggle" data-width="90" data-on="<i class='fas fa-lightbulb'></i>  ON" data-off="<i class='far fa-lightbulb'></i>  OFF" data-onstyle="success" data-offstyle="danger" />
                     </span>
                 </div>
@@ -31,7 +31,7 @@
                             </div>
                             <div class="modal-footer">
                                 <a onclick="$('#confirmModal_'+{{ $coil->number }}).modal('hide');" type = "button" class = "btn btn-default" data-despeds = "modal"> Cancelar </a>
-                                <a onclick="confirm({{ $coil->id }})"wire:click="confirmAction('{{ $index }}')" type = "button" class = "btn btn-primary"> Confirmar </a>
+                                <a onclick="$('#confirmModal_'+{{ $coil->number }}).modal('hide');confirm({{ $coil->id }});"wire:click="confirmAction('{{ $index }}')" type = "button" class = "btn btn-primary"> Confirmar </a>
                             </div>
                         </div>
                     </div>
@@ -46,6 +46,7 @@
            for (let check of checks){
                $('#'+check.id).click(function(e){
                    e.stopPropagation();
+                   console.log(check.id)
                    $('#confirmModal_'+check.id).modal('show');
                });
            }
