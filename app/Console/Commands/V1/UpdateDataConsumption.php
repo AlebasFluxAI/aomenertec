@@ -99,11 +99,7 @@ class UpdateDataConsumption extends Command
                                                         if ($data['start'] >= 450) {
                                                             $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
                                                         } else {
-                                                            if (isset($last_raw_json[$data['variable_name']])) {
-                                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                                            } else {
-                                                                $json[$data['variable_name']] = 0;
-                                                            }
+                                                            $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                         }
                                                     } else {
                                                         $json[$data['variable_name']] = 0;

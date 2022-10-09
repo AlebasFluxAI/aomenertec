@@ -41,7 +41,7 @@ class EditDataReceived extends Command
      */
     public function handle()
     {
-        /*$delete = MicrocontrollerData::where('source_timestamp','>', '2022-09-28 00:00:00')->get();
+        $delete = MicrocontrollerData::where('source_timestamp','>', '2022-10-09 12:00:00')->get();
         foreach ($delete as $item){
             if ($item->hourlyMicrocontrollerData){
                 $item->hourlyMicrocontrollerData->delete();
@@ -54,13 +54,13 @@ class EditDataReceived extends Command
             }
             $item->delete();
         }
-        $data = AuxData::where('created_at','>', '2022-09-27 00:00:00')->get();
+        $data = AuxData::where('created_at','>', '2022-10-09 12:00:00')->get();
         foreach ($data as $datum){
             MicrocontrollerData::create([
                 "raw_json" => $datum->data,
             ]);
-        }*/
-        $clients = Client::find([91,102,100,99,94,80,]);
+        }
+        /*$clients = Client::find([91,102,100,99,94,80,]);
         $i = 0;
         while (true){
             foreach ($clients as $client){
@@ -77,7 +77,8 @@ class EditDataReceived extends Command
             if ($i==100){
                 break;
             }
-        }
+        }*/
+
 
 
     }
