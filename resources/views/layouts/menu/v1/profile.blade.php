@@ -6,7 +6,6 @@
         </li>
         <li class="nav-item dropdown">
             <a class="btn btn-lg badge badge-light rounded-full"
-
                data-toggle="tooltip" data-placement="{{$tooltip_position??"top"}}" title="Mi    Perfil"
 
                href="{{ route('administrar.v1.perfil') }}">

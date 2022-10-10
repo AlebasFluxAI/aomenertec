@@ -32,23 +32,22 @@
 }
 
 .login-button {
-    background-color: white;
-    border: solid var(--style_primary) 1px;
+    color: white;
     padding: 6px 12px;
     margin: 3px;
-    color: var(--style_primary);
+    background-color: var(--style_primary);
     transition: 0.4s;
     font-size: 0.9rem;
 }
 
 .login-button:hover {
-    background-color: var(--style_primary);
-    border: solid var(--style_primary) 1px;
+    background-color: white;
     padding: 6px 12px;
     margin: 3px;
-    color: white;
+    color: var(--style_primary);
     transition: 0.4s;
     font-size: 0.9rem;
+    border: var(--style_primary) 1px solid;
 }
 
 .login-title {
@@ -187,8 +186,8 @@
 
 /*------- HEADER ----*/
 .navbar-custom {
-    background-color: var(--style_header_color);
-    border-bottom-color: var(--style_orange);
+    background-color: white;
+    border-bottom-color: var(--style_primary);
     border-bottom-width: .2rem;
 
 }
@@ -204,9 +203,16 @@
 }
 
 .btn-redirect:hover {
-    background-color: var(--style_primary);;
+    background-color: var(--style_primary);
     color: white;
     transition: 500ms;
+}
+.btn-redirect:hover i {
+    color: white !important;
+}
+
+.btn-redirect:hover span{
+    color: white !important;
 }
 
 /*______ESTILOS SUB MENU_____*/
@@ -222,6 +228,8 @@
     color: var(--style_primary);
     transition: .3s;
     height: 2.5rem;
+    display: flex;
+    align-items: center;
 }
 
 .contenedor-grande .nav-item ul li :hover {
@@ -278,6 +286,10 @@
     font-weight: 300;
 }
 
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover{
+    color: var(--style_orange);
+    border: 1px var(--style_primary) solid;
+}
 
 #custom-tab button:hover {
     color: var(--style_orange);
@@ -554,6 +566,10 @@ dialog {
     border-radius: 13px;
     font-size: 0.9rem;
 }
+#add:hover {
+    background-color: var(--style_primary);
+    color: white;
+}
 
 .contenedor-grande button {
     background-color: white;
@@ -593,12 +609,7 @@ dialog {
 }
 
 .slide-login {
-    -webkit-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
     background-color: #364d69;
-    border-right-color: var(--style_primary);
-    border-right-width: 4px;
 }
 
 .service_list {
@@ -624,17 +635,15 @@ dialog {
 
 .login-container {
     background-color: #f2f2f2;
-    padding: 3%;
-    border-radius: 2%;
-    margin-top: 15%;
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: 30px;
     -webkit-box-shadow: 5px 5px 14px 5px rgba(0, 0, 0, 0.23);
     box-shadow: 5px 5px 14px 5px rgba(0, 0, 0, 0.23);
 }
 
 .imagen-logo-login {
-    width: 80%;
-    object-fit: contain;
-    margin: 10%;
+    margin: 20px 0;
 }
 
 .imagen-logo {
@@ -643,6 +652,27 @@ dialog {
     object-fit: contain;
     margin: 5px;
 }
+
+.imagen-logo:hover {
+    -webkit-box-shadow: 0px 0px 32px -3px rgba(143,255,249,1);
+    -moz-box-shadow: 0px 0px 32px -3px rgba(143,255,249,1);
+    box-shadow: 0px 0px 32px -3px rgba(143,255,249,1);
+}
+
+a.btn.btn-lg.badge.badge-light.rounded-full{
+    background-color: white; 
+    border-color: #009599;
+    color: #009299;
+}
+
+a.btn.btn-lg.badge.badge-light.rounded-full:hover{
+    background-color: #009299;
+}
+a.btn.btn-lg.badge.badge-light.rounded-full:hover i{
+    color: white !important;
+}
+
+
 
 .contenedor-grande .fecha-to {
     display: flex;
@@ -698,20 +728,18 @@ dialog {
 }
 
 li.nav-item a {
-    color: whitesmoke;
+    color: var(--style_primary);
     align-content: flex-start;
 }
 
 .contenedor-grande .menu-option {
     background-color: transparent;
     border-color: transparent;
-    color: var(--style_header_button);
 }
 
 .contenedor-grande .menu-option-a {
     background-color: transparent;
     border-color: transparent;
-    color: whitesmoke;
     text-align: left;
 }
 

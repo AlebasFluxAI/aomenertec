@@ -5,7 +5,7 @@
             <thead style="position: sticky;top: 0;z-index: 2">
             @foreach($table_info  as $info)
                 <tr>
-                    <th>{{$info["key"]}}</th>
+                    <th class="font-[2000] uppercase" style="color:#009299;">{{$info["key"]}}</th>
                     @isset($info["type"])
                         @if($info["type"]=="text")
 

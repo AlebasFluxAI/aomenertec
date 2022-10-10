@@ -1,4 +1,4 @@
-<div style="position: fixed">
+<div style="position: relative">
     <script>  var MessageBirdChatWidgetSettings = {
             widgetId: 'b8f109fa-6b36-4fec-920b-0826df0fac9a',
             initializeOnLoad: true,
