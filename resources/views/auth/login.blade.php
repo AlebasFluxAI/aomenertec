@@ -97,7 +97,6 @@
         </div>
     </div>
 </div>
-@include("partials.v1.whatsapp-button")
 
 
 
