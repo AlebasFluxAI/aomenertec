@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
@@ -164,7 +164,6 @@ class AddClientEquipmentService extends Singleton
 
     private function linkEquipments(Component $component, Client $client)
     {
-
         foreach ($component->equipment as $item) {
             if (!$item["id"]) {
                 continue;
@@ -185,5 +184,4 @@ class AddClientEquipmentService extends Singleton
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
         });
     }
-
 }

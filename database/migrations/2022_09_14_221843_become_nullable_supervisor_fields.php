@@ -13,7 +13,6 @@ class BecomeNullableSupervisorFields extends Migration
      */
     public function up()
     {
-
         Schema::table('supervisors', function (Blueprint $table) {
             $table->dropUnique("supervisors_email_unique");
             $table->dropUnique("supervisors_identification_unique");
@@ -25,7 +24,6 @@ class BecomeNullableSupervisorFields extends Migration
             $table->string('phone')->nullable()->change();
             $table->string('email')->nullable()->change();
         });
-
     }
 
     /**

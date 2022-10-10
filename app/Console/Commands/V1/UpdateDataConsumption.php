@@ -94,7 +94,6 @@ class UpdateDataConsumption extends Command
                                                 if (!$data['default']) {
                                                     $json[$data['variable_name']] = $data['default'];
                                                 } else {
-
                                                     if ($last_data) {
                                                         if ($data['start'] >= 450) {
                                                             $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
@@ -140,7 +139,7 @@ class UpdateDataConsumption extends Command
 
                             if ($json['import_wh'] <= 0) {
                                 if ($last_data) {
-                                    if($last_raw_json['import_wh']>0) {
+                                    if ($last_raw_json['import_wh']>0) {
                                         $item->updateQuietly();
                                         $item->delete();
                                         continue;
@@ -151,7 +150,7 @@ class UpdateDataConsumption extends Command
                         } else {
                             $item->delete();
                         }
-                    } else{
+                    } else {
                         $item->delete();
                     }
                 } else {

@@ -146,7 +146,8 @@ class ProfileUser extends Component
         return $this->profileUserService->getEnabledAuxSupervisor($this, $id);
     }
 
-    public function conditionalDeleteEquipment($id){
+    public function conditionalDeleteEquipment($id)
+    {
         return $this->profileUserService->conditionalDeleteEquipment($this, $id);
     }
     public function deleteEquipment($id)

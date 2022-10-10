@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Observers\WorkOrder;
+
+use App\Models\V1\User;
+use App\Models\V1\WorkOrder;
+use App\Notifications\Alert\WorkOrderCreatedNotification;
+use App\Notifications\Alert\WorkOrderUpdatedNotification;
+
+class WorkOrderObserver
+{
+    public function creating(WorkOrder $workOrder)
+    {
+        $userModel = User::getUserModel();
+        $workOrder->status = WorkOrder::WORK_ORDER_STATUS_OPEN;
+        if (!$workOrder->created_by_id) {
+            $workOrder->created_by_type = User::class;
+            $workOrder->created_by_id = $userModel->user_id;
+        }
+    }
+
+    public function created(WorkOrder $workOrder)
+    {
+        $workOrder->technician->user->notify(new WorkOrderCreatedNotification($workOrder));
+    }
+
+    public function updated(WorkOrder $workOrder)
+    {
+        if ($workOrder->isDirty("status")) {
+            if ($workOrder->status == WorkOrder::WORK_ORDER_STATUS_OPEN) {
+                return;
+            }
+            User::find($workOrder->created_by_id)->notify(new WorkOrderUpdatedNotification($workOrder));
+        }
+    }
+}

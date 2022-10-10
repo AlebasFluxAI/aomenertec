@@ -26,7 +26,7 @@ class TechnicianDetailsService extends Singleton
         $model = User::getUserModel();
         if ($model::class == SuperAdmin::class) {
             return Equipment::find($id)->has_admin;
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return Equipment::find($id)->has_network_operator;
         }
         return false;
@@ -37,15 +37,16 @@ class TechnicianDetailsService extends Singleton
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
         $component->reset();
     }
-    public function conditionalRemoveEquipmentTechnician(Component $component, $id){
-
+    public function conditionalRemoveEquipmentTechnician(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_technician;
         }
     }
-    public function removeEquipmentTechnician(Component $component, $id){
+    public function removeEquipmentTechnician(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;

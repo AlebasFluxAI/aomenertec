@@ -78,14 +78,16 @@ class DetailClient extends Component
         return $this->detailClientService->getEnabledAuxSupervisor($this, $id);
     }
 
-    public function conditionalDeleteEquipment($id){
+    public function conditionalDeleteEquipment($id)
+    {
         return $this->detailClientService->conditionalDeleteEquipment($this, $id);
     }
     public function deleteEquipment($id)
     {
         $this->detailClientService->deleteEquipment($this, $id);
     }
-    public function conditionalRemoveEquipmentAdmin($id){
+    public function conditionalRemoveEquipmentAdmin($id)
+    {
         return $this->detailClientService->conditionalRemoveEquipmentAdmin($this, $id);
     }
     public function removeEquipmentAdmin($id)

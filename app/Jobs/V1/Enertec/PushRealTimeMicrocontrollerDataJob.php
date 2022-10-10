@@ -42,7 +42,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     public function handle()
     {
         $data = $this->unpackData();
-        if ($data){
+        if ($data) {
             event(new RealTimeMonitoringEvent($data));
         }
     }
@@ -87,7 +87,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
         $current_time = Carbon::now()->format('Y-m-d H:i:s');
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($json['equipment_id'])
             ->first();
-        if ($equipment){
+        if ($equipment) {
             $client = $equipment->clients()->first();
             $client_id = $client->id;
             $json['timestamp'] = $current_time;
@@ -95,6 +95,5 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
             return $json;
         }
         return false;
-
     }
 }

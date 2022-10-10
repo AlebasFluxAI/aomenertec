@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
+namespace App\Http\Services\V1\Admin\Client\Monitoring;
 
 use App\Exports\V1\MultipleSheetsMonitoringData;
 use App\Models\V1\Client;

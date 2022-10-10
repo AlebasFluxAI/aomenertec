@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
+namespace App\Http\Services\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
@@ -120,9 +120,9 @@ class HeatMapChart extends Component
                     if ($data['variable_id'] == $this->variable_heat_map_id) {
                         foreach ($array_aux as $index => $item) {
                             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                            if (isset($raw_json[$data['variable_name']])){
+                            if (isset($raw_json[$data['variable_name']])) {
                                 $value = round($raw_json[$data['variable_name']], 2);
-                            } else{
+                            } else {
                                 $value = null;
                             }
                             $data_aux[intval($item->hour)] = $value;

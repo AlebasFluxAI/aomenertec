@@ -23,21 +23,20 @@ class ClientAlertObserver
         $technicians = $client->clientTechnician;
         $supervisors = $client->supervisors;
         $flag = true;
-        foreach ($technicians as $user){
+        foreach ($technicians as $user) {
             event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
             $user->user->notify(new AlertNotification($clientAlert));
         }
-        foreach ($supervisors as $user){
-            if ($user->user->phone == $client->phone){
+        foreach ($supervisors as $user) {
+            if ($user->user->phone == $client->phone) {
                 $flag = false;
             }
             event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
             $user->user->notify(new AlertNotification($clientAlert));
         }
-        if ($flag){
+        if ($flag) {
             $client->notify(new AlertNotification($clientAlert));
         }
-
     }
 
     /**

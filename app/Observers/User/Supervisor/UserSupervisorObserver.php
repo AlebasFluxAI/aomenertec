@@ -10,7 +10,6 @@ class UserSupervisorObserver
 {
     public function creating(Supervisor $supervisor)
     {
-
         $this->setHereMapJson($supervisor);
         $this->setInformation($supervisor);
         $user = $supervisor->user;

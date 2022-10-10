@@ -29,7 +29,7 @@ class Monitoring extends Component
     public function mount(Client $client)
     {
         $this->clientAlerts = $this->client->clientAlerts;
-        foreach ($this->clientAlerts as &$alert){
+        foreach ($this->clientAlerts as &$alert) {
             $alert->name = $alert->clientAlertConfiguration->getVariableName();
         }
         $this->data_frame = collect(config('data-frame.data_frame'));

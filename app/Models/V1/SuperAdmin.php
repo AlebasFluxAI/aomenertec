@@ -87,8 +87,8 @@ class SuperAdmin extends Model
                                 "route" => "v1.admin.client.list.client",
                                 "submenu" => [
 
-                                ]
-                            ]
+                                ],
+                            ],
                         ]
 
                     ],
@@ -119,6 +119,20 @@ class SuperAdmin extends Model
 
                                 ]
                             ]
+                        ]
+
+                    ],
+                    [
+                        "title" => "Ordenes de servicio",
+                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Ordenes de servicio",
+                                "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],

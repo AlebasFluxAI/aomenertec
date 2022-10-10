@@ -19,7 +19,6 @@ class PriceAdminService extends Singleton
 {
     public function mount(Component $component, Admin $model)
     {
-
         $component->channels = $model->channels;
         if (!$model->priceAdmin()->exists()) {
             if ($model->adminClientTypes()->exists()) {

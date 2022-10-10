@@ -24,7 +24,6 @@ class ResetPassword extends Component
 
     public function resetPassword()
     {
-
         $this->resetPasswordService->resetPassword($this);
     }
 

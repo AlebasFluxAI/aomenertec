@@ -45,7 +45,7 @@ class ConfigurationClient extends Component
     {
         return $this->configurationClientService->rules($this);
     }
- 
+
     public function outputRelation($id)
     {
         $this->configurationClientService->outputRelation($this, $id);

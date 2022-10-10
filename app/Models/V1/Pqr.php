@@ -72,6 +72,11 @@ class Pqr extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function workOrder()
+    {
+        return $this->hasOne(WorkOrder::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

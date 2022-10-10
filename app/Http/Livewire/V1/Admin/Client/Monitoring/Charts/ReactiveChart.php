@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
+namespace App\Http\Services\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
@@ -111,7 +111,7 @@ class ReactiveChart extends Component
             if ($this->time_reactive_id == 1) {
                 $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
                 $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
-            } else{
+            } else {
                 $this->end_reactive = $this->data_chart_reactive->first()->microcontrollerData->source_timestamp;
                 $this->start_reactive = $this->data_chart_reactive->last()->microcontrollerData->source_timestamp;
             }
@@ -180,7 +180,7 @@ class ReactiveChart extends Component
         if ($this->time_reactive_id == 1) {
             $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
             $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
-        } else{
+        } else {
             $this->end_reactive = $this->data_chart_reactive->first()->microcontrollerData->source_timestamp;
             $this->start_reactive = $this->data_chart_reactive->last()->microcontrollerData->source_timestamp;
         }
@@ -222,25 +222,21 @@ class ReactiveChart extends Component
                     if ($this->penalizable) {
                         if ($data['variable_name'] == "kwh_interval") {
                             array_push($data_aux[$index], round($item->interval_real_consumption, 2));
-
                         } elseif ($data['variable_name'] == "varLh_interval") {
                             array_push($data_aux[$index], round($item->penalizable_reactive_inductive_consumption, 2));
                         } else {
                             array_push($data_aux[$index], round($item->penalizable_reactive_capacitive_consumption, 2));
-
                         }
                     } else {
                         if ($this->time_reactive_id == 3 || $this->time_reactive_id == 4) {
                             $raw_json = json_decode($item->raw_json, true);
                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                        } elseif ($this->time_reactive_id == 2){
+                        } elseif ($this->time_reactive_id == 2) {
                             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-
                         } else {
                             $raw_json = json_decode($item->raw_json, true);
-                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
                         }
                     }
                     if ($index == 0) {

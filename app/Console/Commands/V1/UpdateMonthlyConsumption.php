@@ -57,12 +57,12 @@ class UpdateMonthlyConsumption extends Command
                 ->get();
             if (count($month_data) > 0) {
                 foreach ($month_data as $monthly_data) {
-                    if ($monthly_data->month == 1){
+                    if ($monthly_data->month == 1) {
                         $month_aux = 12;
                         $year_aux = $monthly_data->year - 1;
                     } else {
                         $month_aux = $monthly_data->month - 1;
-                        if ($month_aux<10){
+                        if ($month_aux<10) {
                             $month_aux = '0'.$month_aux;
                         }
                         $year_aux = $monthly_data->year;
@@ -77,13 +77,13 @@ class UpdateMonthlyConsumption extends Command
                         ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'),$end_date->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp')
                         ->first();
-                    if ($end_data){
+                    if ($end_data) {
                         $reference_data = $end_data->dailyMicrocontrollerData;
                         if ($monthly_data->microcontoller_data_id != $end_data->id) {
                             $data_aux = $client->dailyMicrocontrollerData()
                                 ->where('year', $year_aux)
                                 ->where('month', ($month_aux))
-                                ->whereBetween('day', [($billing_day + 1), $start_date->format('t')] );
+                                ->whereBetween('day', [($billing_day + 1), $start_date->format('t')]);
                             $data_month = $client->dailyMicrocontrollerData()
                                 ->where('year', $monthly_data->year)
                                 ->where('month', $monthly_data->month)

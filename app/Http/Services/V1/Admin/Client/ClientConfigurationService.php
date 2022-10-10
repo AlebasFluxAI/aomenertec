@@ -3,7 +3,7 @@
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Channels\WhatsAppChannel;
-use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
 use App\Models\V1\AdminConfiguration;
 use App\Models\V1\AdminPrice;
@@ -176,7 +176,6 @@ class ClientConfigurationService extends Singleton
 
     public function updated(Component $component, $propertyName, $value)
     {
-
         $property = explode(".", $propertyName);
         if ($property[0] == "client_config_alert") {
             $component->validate([
@@ -299,7 +298,6 @@ class ClientConfigurationService extends Singleton
         /*foreach ($component->client_notification_types as $notification_channel) {
             AvailableChannel::find($component->client->refresh()->channels()->whereChannel($notification_channel)->first())->enable();
         }*/
-
     }
 
 

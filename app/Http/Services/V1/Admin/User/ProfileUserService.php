@@ -33,24 +33,16 @@ class ProfileUserService extends Singleton
 
     public function mount(Component $component)
     {
-
         $component->model = $this->getModelByUser();
-        if (Auth::user()->hasRole(User::TYPE_SUPER_ADMIN))
-        {
-
+        if (Auth::user()->hasRole(User::TYPE_SUPER_ADMIN)) {
             $component->admins = Admin::get();
             $component->network_operators = NetworkOperator::get();
             $component->equipment = Equipment::get();
-        }elseif (Auth::user()->hasRole(User::TYPE_ADMIN))
-        {
+        } elseif (Auth::user()->hasRole(User::TYPE_ADMIN)) {
             $component->supervisors = [];
-
-        }elseif (Auth::user()->hasRole(User::TYPE_NETWORK_OPERATOR))
-        {
-
+        } elseif (Auth::user()->hasRole(User::TYPE_NETWORK_OPERATOR)) {
             $supervisors_id = ClientSupervisor::whereIn('client_id', $component->model->clients()->pluck('id'))->get()->pluck('supervisor_id');
             $component->supervisors = Supervisor::find($supervisors_id);
-
         }
     }
 
@@ -116,15 +108,16 @@ class ProfileUserService extends Singleton
         }
         return true;
     }
-    public function conditionalRemoveEquipmentAdmin(Component $component, $id){
-
+    public function conditionalRemoveEquipmentAdmin(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_admin;
         }
     }
-    public function removeEquipmentAdmin(Component $component, $id){
+    public function removeEquipmentAdmin(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -184,15 +177,16 @@ class ProfileUserService extends Singleton
     {
         return Technician::find($modelId)->clientTechnicians()->exists();
     }
-    public function conditionalRemoveEquipmentNetworkOperator(Component $component, $id){
-
+    public function conditionalRemoveEquipmentNetworkOperator(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_network_operator;
         }
     }
-    public function removeEquipmentNetworkOperator(Component $component, $id){
+    public function removeEquipmentNetworkOperator(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -246,22 +240,22 @@ class ProfileUserService extends Singleton
     {
         return !Technician::find($modelId)->networkOperator->clients()->exists();
     }
-    public function conditionalRemoveEquipmentTechnician(Component $component, $id){
-
+    public function conditionalRemoveEquipmentTechnician(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_technician;
         }
     }
-    public function removeEquipmentTechnician(Component $component, $id){
+    public function removeEquipmentTechnician(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
         $equipment->technician_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-
     }
 
     public function conditionalDeleteSupervisor(Component $component, $modelId)
@@ -308,7 +302,7 @@ class ProfileUserService extends Singleton
         $model = User::getUserModel();
         if ($model::class == SuperAdmin::class) {
             return Equipment::find($id)->has_admin;
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return Equipment::find($id)->has_network_operator;
         }
         return false;

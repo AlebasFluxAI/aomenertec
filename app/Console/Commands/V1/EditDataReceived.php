@@ -41,21 +41,21 @@ class EditDataReceived extends Command
      */
     public function handle()
     {
-        $delete = MicrocontrollerData::where('source_timestamp','>', '2022-10-09 12:00:00')->get();
-        foreach ($delete as $item){
-            if ($item->hourlyMicrocontrollerData){
+        $delete = MicrocontrollerData::where('source_timestamp', '>', '2022-10-09 12:00:00')->get();
+        foreach ($delete as $item) {
+            if ($item->hourlyMicrocontrollerData) {
                 $item->hourlyMicrocontrollerData->delete();
             }
-            if ($item->dailyMicrocontrollerData){
+            if ($item->dailyMicrocontrollerData) {
                 $item->dailyMicrocontrollerData->delete();
             }
-            if ($item->clientAlert){
+            if ($item->clientAlert) {
                 $item->clientAlert->delete();
             }
             $item->delete();
         }
-        $data = AuxData::where('created_at','>', '2022-10-09 12:00:00')->get();
-        foreach ($data as $datum){
+        $data = AuxData::where('created_at', '>', '2022-10-09 12:00:00')->get();
+        foreach ($data as $datum) {
             MicrocontrollerData::create([
                 "raw_json" => $datum->data,
             ]);
@@ -78,7 +78,6 @@ class EditDataReceived extends Command
                 break;
             }
         }*/
-
 
 
     }

@@ -148,7 +148,6 @@ trait PqrTypesTrait
             }
         }
         return true;
-
     }
 
     public function closePqr(Component $component, $pqr)

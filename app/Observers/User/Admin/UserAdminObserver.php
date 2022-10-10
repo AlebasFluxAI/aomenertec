@@ -22,7 +22,7 @@ class UserAdminObserver
         if (!$user) {
             return;
         }
-        
+
         $admin->email = $user->email;
         $admin->name = $user->name;
         $admin->last_name = $user->last_name;

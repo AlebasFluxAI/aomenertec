@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
+namespace App\Http\Services\V1\Admin\Client\Monitoring\Charts;
 
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\Client;
@@ -11,7 +11,8 @@ use Livewire\Component;
 use PhpMqtt\Client\Facades\MQTT;
 
 class BaseLineChart extends Component
-{public $client;
+{
+    public $client;
     public $variables;
     public $variables_selected;
     public $data_frame;
@@ -32,7 +33,6 @@ class BaseLineChart extends Component
     protected $listeners = ['changeDateRangeReference', 'changeDateRangeResult', 'selectHistory'];
     public function mount(Client $client, $variables, $data_frame, $data_chart, $time)
     {
-
         $this->client = $client;
         $this->variables = $variables;
         $this->data_frame = $data_frame;
@@ -44,7 +44,8 @@ class BaseLineChart extends Component
         $this->time_id_baseline = 2;
         //$this->data_chart_result = $this->client->hourlyMicrocontrollerData()->limit(24)->get();;
         $first_day = Carbon::now();
-        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->limit(24)->get();;
+        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
+        ;
         $this->end_result =$this->data_chart_result->first()->microcontrollerData->source_timestamp;
         $this->start_result =$this->data_chart_result->last()->microcontrollerData->source_timestamp;
         $this->date_range_result = $this->start_result . " - " . $this->end_result;
@@ -133,7 +134,6 @@ class BaseLineChart extends Component
         if ($flag) {
             $data_chart_result = $this->data_chart_result;
         } else {
-
             if ($this->time_id_baseline == 2) {
                 $data_chart_result = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
@@ -187,10 +187,10 @@ class BaseLineChart extends Component
                     $item_date = Carbon::create($item->year, $item->month, $item->day)->subDays($diff_days);
                     if ($this->time_id_baseline == 2) {
                         $data_2 = $this->client->hourlyMicrocontrollerData()
-                            ->where('year', $item_date->format('Y'),)
-                            ->where('month', $item_date->format('m'),)
-                            ->where('day', $item_date->format('d'),)
-                            ->where('hour', $item->hour,)
+                            ->where('year', $item_date->format('Y'), )
+                            ->where('month', $item_date->format('m'), )
+                            ->where('day', $item_date->format('d'), )
+                            ->where('hour', $item->hour, )
                             ->first();
                     } elseif ($this->time_id_baseline == 3) {
                         $data_2 = $this->client->dailyMicrocontrollerData()
@@ -200,8 +200,8 @@ class BaseLineChart extends Component
                             ->first();
                     } else {
                         $data_2 = $this->client->monthlyMicrocontrollerData()
-                            ->where('year', $item_date->format('Y'),)
-                            ->where('month', $item_date->format('m'),)
+                            ->where('year', $item_date->format('Y'), )
+                            ->where('month', $item_date->format('m'), )
                             ->first();
                     }
 
@@ -213,65 +213,60 @@ class BaseLineChart extends Component
                     } else {
                         array_push($data_aux[$index], round($item->interval_reactive_capacitive_consumption, 2));
                     }
-                   if ($data_2){
-                       if ($data['variable_name'] == "kwh_interval") {
-                           array_push($data_aux_2[$index], round($data_2->interval_real_consumption, 2));
-                           if ($data_2->microcontrollerData) {
-                               if ($index_aux == 0) {
-                                   $data_2_accumulated[0] = round($data_2->microcontrollerData->accumulated_real_consumption, 2);
-                                   $index_aux++;
-                               }
-                               $data_2_accumulated[1] = round($data_2->microcontrollerData->accumulated_real_consumption, 2);
-                           }
-                       } elseif ($data['variable_name'] == "varLh_interval") {
-                           array_push($data_aux_2[$index], round($data_2->interval_reactive_inductive_consumption, 2));
-                           if ($data_2->microcontrollerData) {
-                               if ($index_aux == 0) {
-                                   $data_2_accumulated[0] = round($data_2->microcontrollerData->accumulated_reactive_inductive_consumption, 2);
-                                   $index_aux++;
-                               }
-                               $data_2_accumulated[1] = round($data_2->microcontrollerData->accumulated_reactive_inductive_consumption, 2);
-                           }
-                       } else {
-                           array_push($data_aux_2[$index], round($data_2->interval_reactive_capacitive_consumption, 2));
-                           if ($data_2->microcontrollerData) {
-                               if ($index_aux == 0) {
-                                   $data_2_accumulated[0] = round($data_2->microcontrollerData->accumulated_reactive_capacitive_consumption, 2);
-                                   $index_aux++;
-                               }
-                               $data_2_accumulated[1] = round($data_2->microcontrollerData->accumulated_reactive_capacitive_consumption, 2);
-
-                           }
-                       }
-                    } else{
+                    if ($data_2) {
+                        if ($data['variable_name'] == "kwh_interval") {
+                            array_push($data_aux_2[$index], round($data_2->interval_real_consumption, 2));
+                            if ($data_2->microcontrollerData) {
+                                if ($index_aux == 0) {
+                                    $data_2_accumulated[0] = round($data_2->microcontrollerData->accumulated_real_consumption, 2);
+                                    $index_aux++;
+                                }
+                                $data_2_accumulated[1] = round($data_2->microcontrollerData->accumulated_real_consumption, 2);
+                            }
+                        } elseif ($data['variable_name'] == "varLh_interval") {
+                            array_push($data_aux_2[$index], round($data_2->interval_reactive_inductive_consumption, 2));
+                            if ($data_2->microcontrollerData) {
+                                if ($index_aux == 0) {
+                                    $data_2_accumulated[0] = round($data_2->microcontrollerData->accumulated_reactive_inductive_consumption, 2);
+                                    $index_aux++;
+                                }
+                                $data_2_accumulated[1] = round($data_2->microcontrollerData->accumulated_reactive_inductive_consumption, 2);
+                            }
+                        } else {
+                            array_push($data_aux_2[$index], round($data_2->interval_reactive_capacitive_consumption, 2));
+                            if ($data_2->microcontrollerData) {
+                                if ($index_aux == 0) {
+                                    $data_2_accumulated[0] = round($data_2->microcontrollerData->accumulated_reactive_capacitive_consumption, 2);
+                                    $index_aux++;
+                                }
+                                $data_2_accumulated[1] = round($data_2->microcontrollerData->accumulated_reactive_capacitive_consumption, 2);
+                            }
+                        }
+                    } else {
                         array_push($data_aux_2[$index], null);
                     }
 
                     if ($index == 0) {
-
                         if ($this->time_id_baseline == 2) {
-                            if ($data_2){
-                                if ($item->month == $data_2->month){
+                            if ($data_2) {
+                                if ($item->month == $data_2->month) {
                                     $x = $data_2->day ." - ". Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
-                                } else{
+                                } else {
                                     $x = Carbon::create($data_2->year, $data_2->month, $data_2->day, $data_2->hour)->format('d F') . " - ".Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00') ;
                                 }
-                            }else{
+                            } else {
                                 $x = Carbon::create($item->year, $item->month, $item->day, $item->hour)->format('d F H:00');
                             }
-
                         } elseif ($this->time_id_baseline == 3) {
-
-                            if ($data_2){
-                                if ($item->month == $data_2->month){
+                            if ($data_2) {
+                                if ($item->month == $data_2->month) {
                                     $x = $data_2->day ." - ". Carbon::create($item->year, $item->month, $item->day)->format('d F');
-                                } else{
+                                } else {
                                     $x = Carbon::create($data_2->year, $data_2->month, $data_2->day)->format('d F') . " - ".Carbon::create($item->year, $item->month, $item->day)->format('d F') ;
                                 }
-                            }else{
+                            } else {
                                 $x = Carbon::create($item->year, $item->month, $item->day)->format('d F');
                             }
-
                         } else {
                             $x = Carbon::create($item->year, $item->month, $item->day)->format('Y-F');
                         }

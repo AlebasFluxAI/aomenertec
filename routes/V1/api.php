@@ -35,7 +35,4 @@ Route::group([
         Route::post('job-list', 'joblist');
         Route::post('me', 'me');
     });
-
-
-
 });

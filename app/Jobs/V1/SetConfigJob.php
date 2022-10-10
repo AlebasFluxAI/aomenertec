@@ -15,7 +15,10 @@ use PhpMqtt\Client\Facades\MQTT;
 
 class SetConfigJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -48,7 +51,7 @@ class SetConfigJob implements ShouldQueue
         if ($client == null) {
             return;
         }
-        if ($this->config->config_get){
+        if ($this->config->config_get) {
             $alert_config_frame = config('data-frame.alert_config_frame');
             if (!$client->clientAlertConfiguration()->exists()) {
                 $flags_frame = collect(config('data-frame.flags_frame'));
@@ -91,9 +94,6 @@ class SetConfigJob implements ShouldQueue
             $date = Carbon::now()->timestamp;
             MQTT::publish($topic, $date);
             MQTT::disconnect();
-
-
         }
-
     }
 }

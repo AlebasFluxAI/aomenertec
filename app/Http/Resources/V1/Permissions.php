@@ -28,6 +28,7 @@ class Permissions
     public const ADMIN_MONITORING = "admin.monitoring";
     public const ADMIN_SETTING_CLIENT = "admin.setting_client";
     public const CLIENT_ADD_EQUIPMENT = "client_add_equipment";
+    public const CLIENT_WORK_ORDER = "client_work_order";
 
     public const EQUIPMENT_CREATE = "equipment.create";
     public const EQUIPMENT_EDIT = "equipment.edit";
@@ -102,4 +103,13 @@ class Permissions
     public const PQR_EQUIPMENT_CHANGE_MANAGE = "pqr_equipment_change_manage";
 
     public const NETWORK_OPERATOR_PRICE_CONFIGURATION = "network_operator_price_configuration";
+
+    public const WORK_ORDER_CREATE = "work_order_create";
+    public const WORK_ORDER_SHOW = "work_order_show";
+    public const WORK_ORDER_EDIT = "work_order_edit";
+    public const WORK_ORDER_DETAILS = "work_order_details";
+    public const WORK_ORDER_INDEX = "work_order_index";
+    public const WORK_ORDER_SOLVE = "work_order_solve";
+    public const WORK_ORDER_IN_PROGRESS = "work_order_in_progress";
+    public const WORK_ORDER_STOP = "work_order_stop";
 }

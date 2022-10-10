@@ -30,13 +30,18 @@ class TechnicianAddService extends Singleton
             "admins" => (Auth::user()->superAdmin) ? Auth::user()->superAdmin->adminsAsKeyValue() : ((Auth::user()->admin) ? [] : []),
             "admin_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? Auth::user()->admin->id : Auth::user()->networkOperator->admin->id),
             "network_operators" => (Auth::user()->superAdmin) ? [] : ((Auth::user()->admin) ? Auth::user()->admin->networkOperatorsAsKeyValue() : []),
-            "model.network_operator_id" => (Auth::user()->superAdmin) ? "" : ((Auth::user()->admin) ? "" : Auth::user()->networkOperator->id),
+            "model.network_operator_id" => $this->getNetworkOperator(),
             'model.person_type' => User::PERSON_TYPE_NATURAL,
             "model.identification_type" => User::IDENTIFICATION_TYPE_CC,
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
         ]);
+    }
+
+    private function getNetworkOperator()
+    {
+        return Auth::user()->networkOperator ? Auth::user()->networkOperator->id : "";
     }
 
     public function updatedAdminId(Component $component)

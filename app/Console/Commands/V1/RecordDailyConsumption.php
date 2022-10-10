@@ -96,13 +96,12 @@ class RecordDailyConsumption extends Command
         $null_data = DailyMicrocontrollerData::whereNull('microcontroller_data_id')
             ->whereDate('created_at', '<', $aux_date->format('Y-m-d'))
             ->get();
-        foreach ($null_data as $data){
+        foreach ($null_data as $data) {
             $data->delete();
         }
         $i = 0;
         $reference_date->subDay();
         foreach ($clients as $client) {
-
             $data_day = $client->hourlyMicrocontrollerData()
                 ->where('year', $reference_date->format('Y'))
                 ->where('month', $reference_date->format('m'))
@@ -148,8 +147,7 @@ class RecordDailyConsumption extends Command
                     'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
                     'raw_json' => json_encode($json),
                 ]);
-
-            } else{
+            } else {
                 DailyMicrocontrollerData::create([
                     'year' => $reference_date->format('Y'),
                     'month' => $reference_date->format('m'),
@@ -158,6 +156,5 @@ class RecordDailyConsumption extends Command
                 ]);
             }
         }
-
     }
 }

@@ -34,8 +34,8 @@ class Kernel extends ConsoleKernel
         ////unpack data
         $schedule->command(UpdateTimestampDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
         $schedule->command(UpdateDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
-        $schedule->command(SetTimestamp::class)->twiceDailyAt(10,22, 3);
-        $schedule->command(SetTimestamp::class)->twiceDailyAt(4,16, 3);
+        $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
+        $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
 
         ////accumulated daily consumption
@@ -51,8 +51,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateMonthlyConsumption::class)->dailyAt('00:30');
 
         ///Generar facturacion....
-
-
     }
 
     /**

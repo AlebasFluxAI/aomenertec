@@ -41,7 +41,6 @@ class ResetPasswordResetService extends Singleton
             $component->addError("password_error", "La contraseña debe tener al menos 8 caracteres");
             return;
         }
-
     }
 
     public function submitForm(Component $component)

@@ -16,7 +16,10 @@ use Illuminate\Queue\SerializesModels;
 
 class SaveAlertDataJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -42,7 +45,8 @@ class SaveAlertDataJob implements ShouldQueue
         $this->alertVariableEvent();
     }
 
-    private function alertVariableEvent(){
+    private function alertVariableEvent()
+    {
         $flags_frame = config('data-frame.flags_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
         $microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
@@ -111,8 +115,8 @@ class SaveAlertDataJob implements ShouldQueue
                     }
                     if ($type != "") {
                         if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
-                                $query->whereBetween("source_timestamp", [$this->source_timestamp->format('Y-m-d H:00:00'), $this->source_timestamp->format('Y-m-d H:59:59')]);
-                                })->where('type', $type)->exists()) {
+                            $query->whereBetween("source_timestamp", [$this->source_timestamp->format('Y-m-d H:00:00'), $this->source_timestamp->format('Y-m-d H:59:59')]);
+                        })->where('type', $type)->exists()) {
                             ClientAlert::create([
                                 'client_id' => $client->id,
                                 'microcontroller_data_id' => $microcontroller_data->id,
@@ -127,7 +131,8 @@ class SaveAlertDataJob implements ShouldQueue
         }
     }
 
-    private function calculateValueAlert($variable_id, $decode){
+    private function calculateValueAlert($variable_id, $decode)
+    {
         $data_frame = collect(config('data-frame.data_frame'));
         $variable = $data_frame->where('id', $variable_id)->first();
         $split = substr($decode, ($variable['start']), ($variable['lenght']));
@@ -143,5 +148,4 @@ class SaveAlertDataJob implements ShouldQueue
         }
         return $value;
     }
-
 }

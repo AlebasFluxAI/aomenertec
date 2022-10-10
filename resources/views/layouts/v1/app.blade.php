@@ -122,8 +122,8 @@
         $('[data-toggle="tooltip"]').tooltip();
     })
 </script>
-@include("partials.v1.whatsapp-button")
 
 </body>
+@include("partials.v1.whatsapp-button")
 
 </html>

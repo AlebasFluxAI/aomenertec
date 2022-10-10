@@ -79,6 +79,12 @@ return [
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::CLIENT_ADD_EQUIPMENT,
+
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_CREATE,
+        Permissions::WORK_ORDER_EDIT,
     ],
 
     // Super admin
@@ -132,6 +138,7 @@ return [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
         Permissions::CLIENT_SETTINGS,
+        Permissions::CLIENT_WORK_ORDER,
 
         Permissions::SUPERVISOR_CREATE,
         Permissions::SUPERVISOR_EDIT,
@@ -161,6 +168,11 @@ return [
         Permissions::PQR_EQUIPMENT_CHANGE,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
 
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_CREATE,
+        Permissions::WORK_ORDER_EDIT,
     ],
     // Operador de red
     NetworkOperator::class => [
@@ -213,18 +225,29 @@ return [
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::PQR_CHANGE_LEVEL,
 
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_CREATE,
+        Permissions::WORK_ORDER_EDIT,
+
     ],
     // Tecnico
     Technician::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
-
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE,
-        Permissions::PQR_CLOSE
+        Permissions::PQR_CLOSE,
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_SOLVE,
+        Permissions::WORK_ORDER_IN_PROGRESS,
+        Permissions::WORK_ORDER_STOP,
+        Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
     ],
     // Soporte
     Support::class => [

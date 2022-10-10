@@ -20,8 +20,7 @@ use Junges\Kafka\Contracts\KafkaConsumerMessage;
 use Junges\Kafka\Facades\Kafka;
 use PhpMqtt\Client\Facades\MQTT;
 
-class
-ConsumerCommand extends Command
+class ConsumerCommand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -51,7 +50,6 @@ ConsumerCommand extends Command
         }, 0);
         $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message));
-
         }, 1);
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message));
@@ -63,7 +61,6 @@ ConsumerCommand extends Command
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message));
-
         }, 1);
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message));
@@ -73,8 +70,5 @@ ConsumerCommand extends Command
             dispatch(new SetConfigJob($message));
         }, 2);
         $mqtt->loop();
-
     }
-
-
 }

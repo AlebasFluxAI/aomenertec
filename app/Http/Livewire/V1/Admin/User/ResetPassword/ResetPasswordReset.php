@@ -40,13 +40,11 @@ class ResetPasswordReset extends Component
     public function updatedPassword()
     {
         $this->resetResetPasswordService->validatePassword($this);
-
     }
 
     public function updatedPasswordReply()
     {
         $this->resetResetPasswordService->validatePassword($this);
-
     }
 
     public function render()

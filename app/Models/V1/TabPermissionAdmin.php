@@ -33,5 +33,4 @@ class TabPermissionAdmin extends Model
             "enabled" => !$this->enabled,
         ]);
     }
-
 }

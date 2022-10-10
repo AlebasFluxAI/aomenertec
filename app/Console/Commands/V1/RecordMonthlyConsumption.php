@@ -44,9 +44,9 @@ class RecordMonthlyConsumption extends Command
         $data_frame = collect(config('data-frame.data_frame'));
         $accum_variable = $data_frame->where('bolean_accum', true);
         $null_data = MonthlyMicrocontrollerData::whereNull('microcontroller_data_id')->get();
-        foreach ($null_data as $data){
+        foreach ($null_data as $data) {
             $billing_day = $data->client->clientConfiguration->billing_day;
-            if ($data->month == 1){
+            if ($data->month == 1) {
                 $month_aux = 12;
                 $year_aux = $data->year - 1;
             } else {
@@ -57,7 +57,7 @@ class RecordMonthlyConsumption extends Command
             $data_aux = $data->client->dailyMicrocontrollerData()
                 ->where('year', $year_aux)
                 ->where('month', ($month_aux))
-                ->whereBetween('day', [($billing_day + 1), $aux_date->format('t')] );
+                ->whereBetween('day', [($billing_day + 1), $aux_date->format('t')]);
             $data_month = $data->client->dailyMicrocontrollerData()
                 ->where('year', $data->year)
                 ->where('month', $data->month)
@@ -109,7 +109,7 @@ class RecordMonthlyConsumption extends Command
             ->whereYear('created_at', '<', $aux_date->format('Y'))
             ->whereMonth('created_at', '<', $aux_date->format('m'))
             ->get();
-        foreach ($null_data as $data){
+        foreach ($null_data as $data) {
             $data->delete();
         }
         $reference_date->subDay();
@@ -125,7 +125,7 @@ class RecordMonthlyConsumption extends Command
                     $year_aux = $reference_date->format('Y') - 1;
                 } else {
                     $month_aux = $reference_date->format('m') - 1;
-                    if ($month_aux<10){
+                    if ($month_aux<10) {
                         $month_aux = '0'.$month_aux;
                     }
                     $year_aux = $reference_date->format('Y');
@@ -159,7 +159,8 @@ class RecordMonthlyConsumption extends Command
                         $reference_data = $end_data->dailyMicrocontrollerData;
                         $json = json_decode($reference_data->raw_json, true);
                         $penalizable_inductive_month = 0;
-                        $penalizable_capacitive_month = 0;$interval_active_month = $end_data->accumulated_real_consumption - $start_data->accumulated_real_consumption;
+                        $penalizable_capacitive_month = 0;
+                        $interval_active_month = $end_data->accumulated_real_consumption - $start_data->accumulated_real_consumption;
                         $interval_capacitive_month = $end_data->accumulated_reactive_capacitive_consumption - $start_data->accumulated_reactive_capacitive_consumption;
                         $interval_inductive_month = $end_data->accumulated_reactive_inductive_consumption - $start_data->accumulated_reactive_inductive_consumption;
                         foreach ($data_month as $item) {
@@ -186,8 +187,6 @@ class RecordMonthlyConsumption extends Command
                             'raw_json' => json_encode($json),
                         ]);
                     }
-
-
                 } else {
                     MonthlyMicrocontrollerData::create([
                         'year' => $reference_date->format('Y'),
@@ -198,6 +197,5 @@ class RecordMonthlyConsumption extends Command
                 }
             }
         }
-
     }
 }

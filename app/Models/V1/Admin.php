@@ -60,9 +60,8 @@ class Admin extends Model
     public function tabPermissionsName()
     {
         $permissions = [];
-        foreach ($this->whereEnabled(true)->get() as $permission) {
+        foreach ($this->tabPermissions()->whereEnabled(true)->get() as $permission) {
             array_push($permissions, $permission->permission);
-
         }
         return $permissions;
     }
@@ -149,6 +148,20 @@ class Admin extends Model
 
                                 ]
                             ]
+                        ]
+
+                    ],
+                    [
+                        "title" => "Ordenes de servicio",
+                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Ordenes de servicio",
+                                "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],
@@ -390,6 +403,4 @@ class Admin extends Model
             }))->toArray()
         ));
     }
-
-
 }

@@ -30,7 +30,6 @@ class CreateTabPermissions extends Migration
                 "tab_permission_id" => $permission->id,
             ]);
         }
-
     }
 
     /**

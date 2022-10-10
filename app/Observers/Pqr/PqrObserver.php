@@ -32,7 +32,6 @@ class PqrObserver
             }
             $pqr->network_operator_id = $pqr->client->network_operator_id;
         }
-
     }
 
 
@@ -125,7 +124,6 @@ class PqrObserver
             return $pqr->client->technician->first()->technician->user_id;
         }
         return $pqr->client->networkOperator->user_id;
-
     }
 
     private function getSenderType($pqr)

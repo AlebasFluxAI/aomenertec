@@ -110,6 +110,21 @@ class NetworkOperator extends Model
                         ]
 
                     ],
+                    [
+                        "title" => "Ordenes de servicio",
+                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Ordenes de servicio",
+                                "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
+                        ]
+
+                    ],
+
                 ]
         ];
     }

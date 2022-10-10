@@ -29,6 +29,5 @@ class ResetPasswordService extends Singleton
         $user->notifyNow(new UserResetPasswordNotification($otp));
         $component->reset();
         ToastEvent::launchToast($component, "show", "success", "Enlace enviado exitosamente");
-
     }
 }

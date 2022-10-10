@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\EquipmentClient;
@@ -133,7 +133,7 @@ class DetailClientService extends Singleton
         $model = User::getUserModel();
         if ($model::class == SuperAdmin::class) {
             return Equipment::find($id)->has_admin;
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return Equipment::find($id)->has_network_operator;
         }
         return false;
@@ -144,15 +144,16 @@ class DetailClientService extends Singleton
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
         $component->reset();
     }
-    public function conditionalRemoveEquipmentAdmin(Component $component, $id){
-
+    public function conditionalRemoveEquipmentAdmin(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_admin;
         }
     }
-    public function removeEquipmentAdmin(Component $component, $id){
+    public function removeEquipmentAdmin(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;

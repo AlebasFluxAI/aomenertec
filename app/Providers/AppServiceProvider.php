@@ -27,6 +27,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Models\V1\WorkOrder;
 use App\Observers\ActionBy\ActionByObserve;
 use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
@@ -51,12 +52,12 @@ use App\Models\V1\ClientAlert;
 use App\Observers\V1\Change\ChangeObserver;
 use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
+use App\Observers\WorkOrder\WorkOrderObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\PersonalAccessToken;
-
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -77,7 +78,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         Event::listen(['eloquent.deleting:*', 'eloquent.updating:*', 'eloquent.creating:*'], function ($model) {
             $model = trim(explode(':', $model)[1]);
             if (is_subclass_of($model, Model::class) and
@@ -134,5 +134,7 @@ class AppServiceProvider extends ServiceProvider
         HistoricalClientEquipment::observe(ActionByObserve::class);
 
         OtpUser::observe(OtpUserObserver::class);
+
+        WorkOrder::observe(WorkOrderObserver::class);
     }
 }

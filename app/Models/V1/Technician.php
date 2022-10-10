@@ -39,6 +39,10 @@ class Technician extends Model
         "state",
     ];
 
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
 
     public static function menu()
     {
@@ -72,6 +76,20 @@ class Technician extends Model
 
                                 ]
                             ]
+                        ]
+
+                    ],
+                    [
+                        "title" => "Ordenes de servicio",
+                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Ordenes de servicio",
+                                "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],

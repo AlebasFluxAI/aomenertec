@@ -69,9 +69,9 @@ class MicrocontrollerData extends Model
     public function jsonEdit()
     {
         $date = new Carbon();
-        if (is_string($this->raw_json)){
+        if (is_string($this->raw_json)) {
             $json = json_decode($this->raw_json, true);
-        } elseif (is_array($this->raw_json)){
+        } elseif (is_array($this->raw_json)) {
             $json = $this->raw_json;
         }
 
@@ -274,30 +274,30 @@ class MicrocontrollerData extends Model
 
     private function calculateValueAlert($flag_id, $energy_month, $energy_hour)
     {
-            if ($flag_id == 50) {
-                $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
-            } elseif ($flag_id == 51) {
-                $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
-            } elseif ($flag_id == 52) {
-                $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
-            } elseif ($flag_id == 53) {
-                $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
-            } elseif ($flag_id == 54) {
-                $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
-            } elseif ($flag_id == 55) {
-                $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
+        if ($flag_id == 50) {
+            $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
+        } elseif ($flag_id == 51) {
+            $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
+        } elseif ($flag_id == 52) {
+            $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
+        } elseif ($flag_id == 53) {
+            $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
+        } elseif ($flag_id == 54) {
+            $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
+        } elseif ($flag_id == 55) {
+            $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
+        } else {
+            if ($this->interval_real_consumption != 0) {
+                $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
             } else {
-                if ($this->interval_real_consumption != 0) {
-                    $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
-                } else {
-                    $value = 0;
-                }
+                $value = 0;
             }
+        }
     }
 
     private function createAlert($value, $type, $alert)
     {
-        if ($alert->flag_id == 56){
+        if ($alert->flag_id == 56) {
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
                 $query->whereBetween("source_timestamp", [$this->source_timestamp->copy()->subMinutes(10)->format('Y-m-d H:i:s'), $this->source_timestamp->format('Y-m-d H:i:s')]);
             })->exists()) {
@@ -309,8 +309,7 @@ class MicrocontrollerData extends Model
                     'type' => $type
                 ]);
             }
-        }
-        elseif ($alert->flag_id == 50
+        } elseif ($alert->flag_id == 50
             || $alert->flag_id == 51
             || $alert->flag_id == 52) {
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {

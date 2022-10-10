@@ -57,7 +57,8 @@ class DetailsAdmin extends Component
         return $this->adminDetailService->conditionalRemoveEquipmentAdmin($this, $id);
     }
 
-    public function conditionalDeleteEquipment($id){
+    public function conditionalDeleteEquipment($id)
+    {
         return $this->adminDetailService->conditionalDeleteEquipment($this, $id);
     }
     public function deleteEquipment($id)

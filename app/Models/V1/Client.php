@@ -64,6 +64,11 @@ class Client extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
+
     public function admin()
     {
         return $this->belongsTo(Admin::class);
@@ -209,6 +214,4 @@ class Client extends Model
     {
         return $this->hasMany(ClientAlert::class);
     }
-
-
 }

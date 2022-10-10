@@ -53,11 +53,12 @@ class PurchaseCreateService extends Singleton
     }
 
 
-    public function Generar(Component $component, $key, $cantidad, $cons){
+    public function Generar(Component $component, $key, $cantidad, $cons)
+    {
         $kw = $this->byteArray($component->kwh_quantity*100);
         $consecutivo = $this->byteArray1($cons);
         $crcin = [$consecutivo[1],$consecutivo[0],$kw[3],$kw[2],$kw[1],$kw[0]];
-        $crc = Crc16::XMODEM(implode("",$crcin));
+        $crc = Crc16::XMODEM(implode("", $crcin));
         $aux = dechex($crc);
         $crc4 = str_pad($aux, 4, "0", STR_PAD_LEFT);
         $intcrc1 = hexdec((str_split($crc4, 2)[0]));
@@ -67,17 +68,18 @@ class PurchaseCreateService extends Singleton
         $crckey4 = str_pad($aux2, 4, "0", STR_PAD_LEFT);
         $intcrck1 = hexdec((str_split($crckey4, 2)[0]));
         $intcrck2 = hexdec((str_split($crckey4, 2)[1]));
-        array_push($crcin,  $intcrc1, $intcrc2, $intcrck1, $intcrck2);
-        for ($index = 0; $index<10; $index++){
+        array_push($crcin, $intcrc1, $intcrc2, $intcrck1, $intcrck2);
+        for ($index = 0; $index<10; $index++) {
             $hex = dechex($crcin[$index]);
             $crcin[$index] = str_pad($hex, 2, "0", STR_PAD_LEFT);
         }
-        $encrypt = implode("",$crcin);
+        $encrypt = implode("", $crcin);
         $f=str_replace("f", "#", $encrypt);
         $e=str_replace("e", "*", $f);
         return strtoupper($e);
     }
-    public function byteArray($val){
+    public function byteArray($val)
+    {
         $byteArr =[0,0,0,0];
         for ($index = 0; $index < 4; $index++) {
             $byte = $val & 0xff;
@@ -86,7 +88,8 @@ class PurchaseCreateService extends Singleton
         }
         return $byteArr;
     }
-    public function byteArray1($val){
+    public function byteArray1($val)
+    {
         $byteArr1 =[0,0];
         for ($index = 0; $index < 2; $index++) {
             $byte = $val & 0xff;

@@ -4,6 +4,12 @@
         <table class="table table-bordered">
             <thead style="position: sticky;top: 0;z-index: 2">
             @foreach($table_info  as $info)
+                @isset($info["show_column"])
+
+                    @if($info["show_column"]==false)
+                        @continue
+                    @endif
+                @endisset
                 <tr>
                     <th>{{$info["key"]}}</th>
                     @isset($info["type"])
@@ -13,11 +19,21 @@
                         @elseif($info["type"]=="image")
 
                             <td>
-                                <img src='{{$info["value"]}}' class="rounded img-fluid" alt="Logo" width="150px"
-                                     height="150px">
+                                @include("partials.v1.image",[
+                                               "image_url"=>$info["value"]
+                                          ]);
+                            </td>
+
+                        @elseif($info["type"]=="image_multiple")
+                            <td>
+                                @foreach($info["value"] as $image)
+
+                                    @include("partials.v1.image",[
+                                                "image_url"=>$image->url
+                                           ]);
+                                @endforeach
                             </td>
                         @endif
-
                     @else
                         @if(isset($info["translate"]))
                             <td>{{__($info["translate"].".".$info["value"])}}</td>

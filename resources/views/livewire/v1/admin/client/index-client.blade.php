@@ -124,6 +124,15 @@
                                                         "tooltip_title"=>"Agregar equipos",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_ADD_EQUIPMENT],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.work_orders",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-hammer",
+                                                        "tooltip_title"=>"Ordenes de trabajo",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_WORK_ORDER],
+                                                ],
                                     ]
                                     ],
 

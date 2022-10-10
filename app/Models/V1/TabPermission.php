@@ -14,6 +14,4 @@ class TabPermission extends Model
     protected $fillable = [
         "permission",
     ];
-
-
 }

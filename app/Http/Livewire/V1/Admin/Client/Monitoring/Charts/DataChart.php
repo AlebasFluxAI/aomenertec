@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
+namespace App\Http\Services\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
@@ -41,7 +41,7 @@ class DataChart extends Component
         $this->chart_type = $aux['chart_type'];
         $this->time_id = $time;
         $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
-        if ($time == 1){
+        if ($time == 1) {
             $this->end = $this->data_chart->first()->source_timestamp;
             $this->start = $this->data_chart->last()->source_timestamp;
         } else {
@@ -63,7 +63,7 @@ class DataChart extends Component
         } else {
             $this->data_chart = $this->client->monthlyMicrocontrollerData()->limit(12)->get();
         }
-        if ($this->time_id == 1){
+        if ($this->time_id == 1) {
             $this->end = $this->data_chart->first()->source_timestamp;
             $this->start = $this->data_chart->last()->source_timestamp;
         } else {
@@ -146,7 +146,7 @@ class DataChart extends Component
             $this->data_chart = $data_chart;
         }
         if (count($data_chart)>0) {
-            if ($this->time_id == 1){
+            if ($this->time_id == 1) {
                 $this->end = $this->data_chart->first()->source_timestamp;
                 $this->start = $this->data_chart->last()->source_timestamp;
             } else {
@@ -164,23 +164,23 @@ class DataChart extends Component
                 foreach ($array_aux as $item) {
                     if ($this->time_id == 3 || $this->time_id == 4) {
                         $raw_json = json_decode($item->raw_json, true);
-                        if (isset($raw_json[$data['variable_name']])){
+                        if (isset($raw_json[$data['variable_name']])) {
                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                        } else{
+                        } else {
                             array_push($data_aux[$index], null);
                         }
                     } elseif ($this->time_id == 2) {
                         $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                        if (isset($raw_json[$data['variable_name']])){
+                        if (isset($raw_json[$data['variable_name']])) {
                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                        } else{
+                        } else {
                             array_push($data_aux[$index], null);
                         }
                     } else {
                         $raw_json = json_decode($item->raw_json, true);
-                        if (isset($raw_json[$data['variable_name']])){
+                        if (isset($raw_json[$data['variable_name']])) {
                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
-                        } else{
+                        } else {
                             array_push($data_aux[$index], null);
                         }
                     }
