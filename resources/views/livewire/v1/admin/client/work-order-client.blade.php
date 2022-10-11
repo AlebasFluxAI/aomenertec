@@ -48,8 +48,8 @@
              ],
              [
                  "col_name" =>"Estado",
-                 "col_translate"=>"status",
-                 "col_data" =>"work_order",
+                 "col_translate"=>"work_order",
+                 "col_data" =>"status",
                  "col_filter"=>false
              ],
              [

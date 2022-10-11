@@ -95,7 +95,7 @@
 
             @include("partials.v1.form.form_submit_button",[
                                   "button_align"=>"right" ,
-                                  "button_content"=>"Crear orden de trabajo"
+                                  "button_content"=>"Cerrar orden de trabajo"
                       ])
 
         </form>

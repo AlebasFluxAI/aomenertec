@@ -3,9 +3,11 @@
 namespace App\Http\Services\V1\Admin\WorkOrder;
 
 use App\Http\Services\Singleton;
+use App\Models\V1\Admin;
 use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\RealTimeListener;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
@@ -46,6 +48,9 @@ class WorkOrderIndexService extends Singleton
         if (!($workOrder->type == WorkOrder::WORK_ORDER_TYPE_REPLACE)) {
             return true;
         }
+        if (!($workOrder->pqr_id)) {
+            return true;
+        }
         return (!($workOrder->status == WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS));
     }
 
@@ -55,6 +60,17 @@ class WorkOrderIndexService extends Singleton
         $userModel = User::getUserModel();
         if ($userModel::class == Technician::class) {
             return $userModel->workOrders;
+        }
+
+        if ($userModel::class == NetworkOperator::class) {
+            $clientId = Client::whereAdminId($userModel->admin_id)
+                ->pluck("id");
+            return WorkOrder::whereIn("client_id", $clientId)->paginate();
+        }
+        if ($userModel::class == Admin::class) {
+            $clientId = Client::whereAdminId($userModel->id)
+                ->pluck("id");
+            return WorkOrder::whereIn("client_id", $clientId)->paginate();
         }
         return WorkOrder::paginate();
     }

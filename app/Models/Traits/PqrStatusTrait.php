@@ -49,7 +49,7 @@ trait PqrStatusTrait
                 ["change_equipment" => true]
             );
             if ($pqr->technician_id) {
-                dispatch(new CreateWorkOrderJob($pqr, Auth::user()->id));
+                dispatch(new CreateWorkOrderJob($pqr, Auth::user()->id))->onConnection("sync");
             }
         });
     }
