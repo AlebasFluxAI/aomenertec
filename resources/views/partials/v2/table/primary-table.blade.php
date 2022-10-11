@@ -23,7 +23,7 @@
                         <div class="container">
                             <div class="row">
 
-                                <div class="col-md-8">
+                                <div class="col-md-8 text-bold text-center" style="color: #009599;">
                                     {{$table_header["col_name"]}}
                                 </div>
                                 <div class="col-md-2">
@@ -40,7 +40,7 @@
                     </th>
                 @endforeach
                 @isset($table_actions)
-                    <th>Acciones</th>
+                    <th style="color: #009599; text-align: center; font-weight: bold;">Acciones</th>
                 @endisset
             </tr>
             </thead>
