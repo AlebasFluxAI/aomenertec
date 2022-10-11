@@ -46,6 +46,7 @@
 
                             ">
                             ¿La olvidaste?</a>
+                        @endif
 
                         <input type="password"
                                class="form-control @error('password') is-invalid @enderror"
