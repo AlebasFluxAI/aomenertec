@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\V1\Admin\Client\Monitoring\Charts;
+namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
