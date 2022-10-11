@@ -63,9 +63,7 @@ class WorkOrderIndexService extends Singleton
         }
 
         if ($userModel::class == NetworkOperator::class) {
-            $clientId = Client::whereAdminId($userModel->admin_id)
-                ->pluck("id");
-            return WorkOrder::whereIn("client_id", $clientId)->paginate();
+            return WorkOrder::whereIn("client_id", $userModel->clients->pluck("id"))->paginate();
         }
         if ($userModel::class == Admin::class) {
             $clientId = Client::whereAdminId($userModel->id)
