@@ -1,6 +1,6 @@
-<div class=" mt-{{ $mt??0 }} mb-{{ $mb??0 }}">
+<div class=" mt-{{ $mt??0 }} mb-{{ $mb??0 }} flex justify-center">
     <br>
-    <nav class=" navbar justify-content-end" style="text-align: center;">
+    <nav class="col-md-8 col-sm-12 navbar justify-content-end" style="text-align: center;">
         <ul class="navbar-nav" style=" display: inline-block;	list-style: none;  list-style-type: none;">
             @foreach($nav_options as $option)
                 @if(isset($option["permission"]) and !array_intersect($option["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
