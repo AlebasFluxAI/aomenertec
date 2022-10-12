@@ -60,7 +60,7 @@ class Equipment extends Model
 
     public function clients()
     {
-        return $this->belongsToMany(Client::class, 'equipment_clients')
+        return $this->belongsToMany(Client::class, 'equipment_clients', 'equipment_id', 'client_id')
             ->withPivot('current_assigned')
             ->whereNull("equipment_clients.deleted_at");
     }

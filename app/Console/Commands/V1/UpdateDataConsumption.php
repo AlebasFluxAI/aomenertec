@@ -154,6 +154,7 @@ class UpdateDataConsumption extends Command
                         $item->delete();
                     }
                 } else {
+                    $item->accumulated_real_consumption = 0;
                     $item->save();
                 }
             }

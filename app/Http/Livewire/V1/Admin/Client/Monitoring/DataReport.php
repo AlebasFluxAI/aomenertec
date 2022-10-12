@@ -45,7 +45,7 @@ class DataReport extends Component
         $this->date_range_report = $start->format('Y-m-d') . " - " . $end->format('Y-m-d');
         $index = 0;
         $this->variables->push(
-            ['id' => 29, 'display_name' => 'Matriz de reactivos']
+            ['id' => 33, 'display_name' => 'Matriz de reactivos']
         );
     }
 
@@ -96,7 +96,7 @@ class DataReport extends Component
         }
         if (count($data_report) > 0) {
             foreach ($this->variables_selected as $variable) {
-                if ($variable != 29) {
+                if ($variable != 33) {
                     $variables_name = $this->data_frame->where('variable_id', $variable);
                     foreach ($variables_name as $name) {
                         array_push($array_title, $name['display_name']);
@@ -119,7 +119,7 @@ class DataReport extends Component
                     $raw_json = json_decode($data->raw_json, true);
                 }
                 foreach ($this->variables_selected as $variable) {
-                    if ($variable != 29) {
+                    if ($variable != 33) {
                         $variables_name = $this->data_frame->where('variable_id', $variable);
                         foreach ($variables_name as $name) {
                             array_push($array[$index], round($raw_json[$name['variable_name']], 2));
@@ -129,7 +129,7 @@ class DataReport extends Component
             }
             array_unshift($array, $array_title);
             $array_report = [$array];
-            if (in_array(29, $this->variables_selected)) {
+            if (in_array(33, $this->variables_selected)) {
                 $array_penalizable = $this->arrayCreateReactive();
                 foreach ($array_penalizable as $item) {
                     array_push($array_report, $item);
