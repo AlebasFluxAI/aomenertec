@@ -85,6 +85,8 @@ return [
         Permissions::WORK_ORDER_INDEX,
         Permissions::WORK_ORDER_CREATE,
         Permissions::WORK_ORDER_EDIT,
+        Permissions::CLIENT_WORK_ORDER,
+
     ],
 
     // Super admin
@@ -230,6 +232,8 @@ return [
         Permissions::WORK_ORDER_INDEX,
         Permissions::WORK_ORDER_CREATE,
         Permissions::WORK_ORDER_EDIT,
+        Permissions::CLIENT_WORK_ORDER,
+
 
     ],
     // Tecnico
