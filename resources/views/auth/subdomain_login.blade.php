@@ -93,7 +93,7 @@
                     @enderror
                 </div>
                 <div class="text-right">
-                    <button class="login-button" type="submit">Ingresar</button>
+                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" type="submit">Ingresar</button>
                 </div>
 
                 @include("auth.support_button")
