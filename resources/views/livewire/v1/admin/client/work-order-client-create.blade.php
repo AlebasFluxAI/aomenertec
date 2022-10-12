@@ -41,7 +41,7 @@
                   "input_type"=>"text",
                   "input_rows"=>6,
                   "required"=>true
-         ])
+            ])
 
 
             @include("partials.v1.form.form_list",[
@@ -56,7 +56,31 @@
                                  "list_option_title"=>"",
                         ])
 
+            @include("partials.v1.divider_title",[
+                                     "title"=>"Materiales y herramientas a utilizar"
+                             ]
+                            )
+            @include("partials.v1.form.form_input_icon",[
+                  "input_model"=>"tools",
+                  "input_label"=>"Agregar herramientas a utilizar (separadas por comas)",
+                  "icon_class"=>"fas fa-screwdriver-wrench",
+                  "placeholder"=>"Ingrese las herramientas necesarias",
+                  "col_with"=>12,
+                  "input_type"=>"text",
+                  "input_rows"=>2,
+                  "required"=>true
+         ])
 
+            @include("partials.v1.form.form_input_icon",[
+                 "input_model"=>"materials",
+                 "input_label"=>"Agregar materiales a utilizar (separadas por comas)",
+                 "icon_class"=>"fas fa-trowel-bricks",
+                 "placeholder"=>"Ingrese los materiales necesarios",
+                 "col_with"=>12,
+                 "input_type"=>"text",
+                 "input_rows"=>2,
+                 "required"=>true
+        ])
 
             @include("partials.v1.divider_title",[
                             "title"=>"Puede agregar imagenes si es necesario"
@@ -87,8 +111,66 @@
              "list_option_value"=>"value",
              "list_option_view"=>"key",
              "list_option_title"=>"",
+             "required"=>true,
              "disabled"=>$technician_select_disabled
     ])
+
+
+            @include("partials.v1.divider_title",[
+                            "title"=>"Selecciona el equipo a intervenir (Opcional)"
+                    ])
+
+            @include("partials.v1.form.form_list",[
+                  "col_with"=>8,
+                  "input_type"=>"text",
+                  "input_label"=>"Equipo a intervenir",
+                  "list_model" => "equipment_id",
+                  "list_default" => "Equipo...",
+                  "list_options" => $equipmentsBachelor,
+                  "list_option_value"=>"value",
+                  "list_option_view"=>"key",
+                  "list_option_title"=>"",
+                  "not_selection"=>"No registrar equipo",
+                  "required"=>false,
+            ])
+
+            @include("partials.v1.divider_title",[
+                           "title"=>"Ingrese la estimación de tiempo ¿ Cuanto tiempo debe ser invertido para esta orden de trabajo?"
+                   ])
+
+            <div class="col-md-4"
+                 style="margin: auto;background-color: #f2f2f2;border-radius: 15px;padding: 40px">
+
+                <div class="row">
+
+                    @include("partials.v1.form.form_input_icon",[
+                               "input_model"=>"days",
+                               "input_label"=>"Dias",
+                               "placeholder"=>"",
+                               "col_with"=>4,
+                               "input_type"=>"number",
+                               "required"=>false
+                         ])
+                    @include("partials.v1.form.form_input_icon",[
+                               "input_model"=>"hours",
+                               "input_label"=>"Horas",
+                               "placeholder"=>"",
+                               "col_with"=>4,
+                               "input_type"=>"number",
+                               "required"=>false
+                         ])
+
+                    @include("partials.v1.form.form_input_icon",[
+                               "input_model"=>"minutes",
+                               "input_label"=>"Minutos",
+                               "placeholder"=>"",
+                               "col_with"=>4,
+                               "input_type"=>"number",
+                               "required"=>false
+                         ])
+
+                </div>
+            </div>
             @include("partials.v1.form.form_submit_button",[
                                   "button_align"=>"right" ,
                                   "button_content"=>"Crear orden de trabajo"

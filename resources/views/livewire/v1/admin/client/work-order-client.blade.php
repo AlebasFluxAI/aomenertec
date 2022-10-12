@@ -24,40 +24,7 @@
     ])
 
 @include("partials.v2.table.primary-table",[
-         "table_headers"=>[
-              [
-                 "col_name" =>"ID",
-                 "col_data" =>"id",
-                 "col_filter"=>false
-             ],
-             [
-                 "col_name" =>"Cliente",
-                 "col_data" =>"client.name",
-                 "col_filter"=>false
-             ],
-             [
-                 "col_name" =>"Tecnico asignado",
-                 "col_data" =>"technician.name",
-                 "col_filter"=>false
-             ],
-             [
-                 "col_name" =>"Tipo",
-                 "col_translate"=>"work_order",
-                 "col_data" =>"type",
-                 "col_filter"=>false
-             ],
-             [
-                 "col_name" =>"Estado",
-                 "col_translate"=>"work_order",
-                 "col_data" =>"status",
-                 "col_filter"=>false
-             ],
-             [
-                 "col_name" =>"Descripción",
-                 "col_data" =>"description",
-                 "col_filter"=>false
-             ],
-          ],
+            "table_headers"=>\App\Models\V1\WorkOrder::indexTableHeaders(),
            "table_actions"=>[
 
                               "customs"=>[
