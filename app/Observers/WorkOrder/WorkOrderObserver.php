@@ -24,6 +24,13 @@ class WorkOrderObserver
         $workOrder->technician->user->notify(new WorkOrderCreatedNotification($workOrder));
     }
 
+    public function updating(WorkOrder $workOrder)
+    {
+        if ($workOrder->isDirty("status")) {
+            $workOrder->{$workOrder->status . "_at"} = now();
+        }
+    }
+
     public function updated(WorkOrder $workOrder)
     {
         if ($workOrder->isDirty("status")) {

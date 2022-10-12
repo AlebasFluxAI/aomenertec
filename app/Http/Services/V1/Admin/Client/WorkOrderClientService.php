@@ -24,6 +24,7 @@ class WorkOrderClientService extends Singleton
     {
         $component->fill([
             "model" => $client,
+            "equipmentsBachelor" => $client->equipmentsAsKeyValue(),
             "types" => WorkOrder::getTypeAsKeyValue(),
             "type" => WorkOrder::WORK_ORDER_TYPE_REPLACE,
             "technicians" => $this->getTechnicians($component),
@@ -54,8 +55,18 @@ class WorkOrderClientService extends Singleton
             foreach ($component->photos as $photo) {
                 $workOrder->saveImageOnModelWithMorphMany($photo, "images");
             }
+            $this->relateEquipment($component, $workOrder);
             $component->redirectRoute("administrar.v1.ordenes_de_servicio.detalle", ["workOrder" => $workOrder->id]);
         });
+    }
+
+    private function relateEquipment(Component $component, WorkOrder $workOrder)
+    {
+        if ($component->equipment_id) {
+            $workOrder->equipments()->create([
+                "equipment_id" => $component->equipment_id
+            ]);
+        }
     }
 
     private function mapper(Component $component)
@@ -64,6 +75,11 @@ class WorkOrderClientService extends Singleton
             "description" => $component->description,
             "type" => $component->type,
             "technician_id" => $component->technician_id,
+            "materials" => $component->materials,
+            "tools" => $component->tools,
+            "days" => $component->days,
+            "hours" => $component->hours,
+            "minutes" => $component->minutes,
         ];
     }
 

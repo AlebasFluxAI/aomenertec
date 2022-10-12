@@ -59,6 +59,22 @@
                                                                              "redirect_value"=>$model->technician_id
                                                                      ],
                                                                      [
+                                                                          "key"=>"Herramientas",
+                                                                          "value"=>$model->tools
+                                                                     ],
+                                                                     [
+                                                                          "key"=>"Materiales",
+                                                                          "value"=>$model->materials
+                                                                     ],
+                                                                     [
+                                                                          "key"=>"Equipo a intervenir",
+                                                                          "value"=>$model->equipments->first()?$model->equipments->first()->equipment->id." - ".$model->equipments->first()->equipment->serial:""
+                                                                     ],
+                                                                     [
+                                                                          "key"=>"Tiempo estimado",
+                                                                          "value"=>($model->days??"0")." Dias ".($model->hours??"0")." Horas ".($model->minutes??"0")." Minutos"
+                                                                     ],
+                                                                     [
                                                                           "key"=>"Estado",
                                                                           "value"=>__("work_order.".$model->status)
                                                                      ],

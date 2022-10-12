@@ -16,6 +16,9 @@
     <select wire:model.lazy="{{$list_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
             {{($required??false)?"required":""}} @if($disabled??false)disabled @endif>
         <option disabled value="0"> {{$list_default??""}} </option>
+        @if($not_selection??false)
+            <option value=""> {{$not_selection??"Sin seleccion"}} </option>
+        @endif
         @foreach($list_options as $option)
             <option @if($list_option_title != "")title="{{ $option[$list_option_title] }}"
                     @endif value="{{ $option[$list_option_value] }}">{{ $option[$list_option_view] }}</option>
