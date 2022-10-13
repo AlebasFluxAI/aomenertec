@@ -112,8 +112,25 @@
              "list_option_view"=>"key",
              "list_option_title"=>"",
              "required"=>true,
-             "disabled"=>$technician_select_disabled
-    ])
+             "disabled"=>$technician_select_disabled,
+             "not_selection"=>"No seleccionar tecnico"
+            ])
+            @if(\App\Models\V1\User::getUserModel()::class==\App\Models\V1\SuperAdmin::class)
+                @include("partials.v1.form.form_list",[
+                        "col_with"=>8,
+                        "input_type"=>"text",
+                        "input_label"=>"Usuario de soporte",
+                        "list_model" => "support_id",
+                        "list_default" => "Usuario de soporte...",
+                        "list_options" => $supports,
+                        "list_option_value"=>"value",
+                        "list_option_view"=>"key",
+                        "list_option_title"=>"",
+                        "required"=>true,
+                        "disabled"=>$support_select_disabled,
+                        "not_selection"=>"No seleccionar usuario de soporte"
+                ])
+            @endif
 
 
             @include("partials.v1.divider_title",[

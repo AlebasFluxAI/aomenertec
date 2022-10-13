@@ -42,6 +42,7 @@ class WorkOrder extends Model
         "open_at",
         "in_progress_at",
         "closed_at",
+        "support_id"
     ];
 
     protected static function booted()
@@ -54,6 +55,12 @@ class WorkOrder extends Model
         $this->update([
             "status" => WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS
         ]);
+    }
+
+
+    public function support()
+    {
+        return $this->belongsTo(Support::class);
     }
 
     public function equipments()
@@ -72,11 +79,6 @@ class WorkOrder extends Model
             [
                 "col_name" => "Cliente",
                 "col_data" => "client.name",
-                "col_filter" => false
-            ],
-            [
-                "col_name" => "Tecnico asignado",
-                "col_data" => "technician.name",
                 "col_filter" => false
             ],
             [

@@ -21,7 +21,16 @@ class WorkOrderObserver
 
     public function created(WorkOrder $workOrder)
     {
-        $workOrder->technician->user->notify(new WorkOrderCreatedNotification($workOrder));
+        if ($workOrder->technician) {
+            $user = $workOrder->technician->user;
+        }
+        if ($workOrder->support) {
+            $user = $workOrder->support->user;
+        }
+        if (!$user) {
+            return;
+        }
+        $user->notify(new WorkOrderCreatedNotification($workOrder));
     }
 
     public function updating(WorkOrder $workOrder)

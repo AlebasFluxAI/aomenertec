@@ -21,17 +21,6 @@ class EditSupport extends Component
     public $identification_types;
     private $editSupportService;
 
-    protected $rules = [
-        'model.name' => 'required|min:6',
-        'model.last_name' => 'required|min:6',
-        'model.address_details' => 'required',
-        'model.latitude' => 'required',
-        'model.longitude' => 'required',
-        'model.billing_name' => 'required',
-        'model.billing_address' => 'required',
-        'model.person_type' => 'required',
-        'model.identification_type' => 'required',
-    ];
 
     public function __construct($id = null)
     {

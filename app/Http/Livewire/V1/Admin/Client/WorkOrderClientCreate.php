@@ -28,6 +28,10 @@ class WorkOrderClientCreate extends Component
     public $technicians;
     public $technician_id;
     public $technician_select_disabled;
+
+    public $supports;
+    public $support_id;
+    public $support_select_disabled;
     public $photos = [];
     public $tools;
     public $materials;

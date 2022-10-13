@@ -9,6 +9,7 @@ use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\RealTimeListener;
+use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
@@ -58,7 +59,7 @@ class WorkOrderIndexService extends Singleton
     public function getData()
     {
         $userModel = User::getUserModel();
-        if ($userModel::class == Technician::class) {
+        if ($userModel::class == Technician::class || $userModel::class == Support::class) {
             return $userModel->workOrders;
         }
 
