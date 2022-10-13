@@ -25,10 +25,10 @@ class SetConfigJob implements ShouldQueue
      *
      * @return void
      */
-    public $config;
-    public function __construct($config)
+    public $json;
+    public function __construct($json)
     {
-        $this->config = $config;
+        $this->json = $json;
     }
 
     /**
@@ -38,62 +38,57 @@ class SetConfigJob implements ShouldQueue
      */
     public function handle()
     {
-
-
-        $this->config = json_decode($this->config);
-        $equipment_serial = str_pad($this->config->did, 6, "0", STR_PAD_LEFT);
+        $equipment_serial = str_pad($this->json->did, 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
-        if ($equipment == null) {
-            return;
-        }
-        $client = $equipment->clients()->first();
-        if ($client == null) {
-            return;
-        }
-        if ($this->config->config_get) {
-            $alert_config_frame = config('data-frame.alert_config_frame');
-            if (!$client->clientAlertConfiguration()->exists()) {
-                $flags_frame = collect(config('data-frame.flags_frame'));
-                $alerts = $flags_frame->where('id', '>=', 16)->all();
-                foreach ($alerts as $item) {
-                    ClientAlertConfiguration::create([
-                        "client_id" => $client->id,
-                        "flag_id" => $item['id'],
-                        "min_alert" => 0,
-                        "max_alert" => 0,
-                        "min_control" => 0,
-                        "max_control" => 0,
-                        "active_control" => false,
-                    ]);
+        if ($equipment) {
+            $client = $equipment->clients()->first();
+            if ($client) {
+                if ($this->json->config_get){
+                    $alert_config_frame = config('data-frame.alert_config_frame');
+                    if (!$client->clientAlertConfiguration()->exists()) {
+                        $flags_frame = collect(config('data-frame.flags_frame'));
+                        $alerts = $flags_frame->where('id', '>=', 16)->all();
+                        foreach ($alerts as $item) {
+                            ClientAlertConfiguration::create([
+                                "client_id" => $client->id,
+                                "flag_id" => $item['id'],
+                                "min_alert" => 0,
+                                "max_alert" => 0,
+                                "min_control" => 0,
+                                "max_control" => 0,
+                                "active_control" => false,
+                            ]);
+                        }
+                    }
+                    $topic = "mc/config/" . $equipment_serial;
+                    $binary_data = [];
+                    $data = "";
+                    foreach ($alert_config_frame as $item) {
+                        if ($item['variable_name'] == 'network_operator_id') {
+                            $data = $client->networkOperator->identification;
+                        } elseif ($item['variable_name'] == 'equipment_id') {
+                            $data = $equipment->serial;
+                        } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                            $data = $client->networkOperator->identification;
+                        } elseif ($item['variable_name'] == 'equipment_new_id') {
+                            $data = $equipment->serial;
+                        } else {
+                            $aux_variable = $client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
+                            $data = $aux_variable->{$item['limit']};
+                        }
+                        array_push($binary_data, pack($item['type'], $data));
+                    }
+                    $message = base64_encode(implode($binary_data));
+                    MQTT::publish($topic, $message);
+                    MQTT::disconnect();
+                    sleep(30);
+                    $topic = 'mc/config';
+                    $date = Carbon::now()->timestamp;
+                    MQTT::publish($topic, $date);
+                    MQTT::disconnect();
                 }
             }
-            $topic = "mc/config/" . $equipment_serial;
-            $binary_data = [];
-            $data = "";
-            foreach ($alert_config_frame as $item) {
-                if ($item['variable_name'] == 'network_operator_id') {
-                    $data = $client->networkOperator->identification;
-                } elseif ($item['variable_name'] == 'equipment_id') {
-                    $data = $equipment->serial;
-                } elseif ($item['variable_name'] == 'network_operator_new_id') {
-                    $data = $client->networkOperator->identification;
-                } elseif ($item['variable_name'] == 'equipment_new_id') {
-                    $data = $equipment->serial;
-                } else {
-                    $aux_variable = $client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
-                    $data = $aux_variable->{$item['limit']};
-                }
-                array_push($binary_data, pack($item['type'], $data));
-            }
-            $message = base64_encode(implode($binary_data));
-            MQTT::publish($topic, $message);
-            MQTT::disconnect();
-            sleep(20);
-            $topic = 'mc/config';
-            $date = Carbon::now()->timestamp;
-            MQTT::publish($topic, $date);
-            MQTT::disconnect();
         }
     }
 }

@@ -92,8 +92,9 @@ class MicrocontrollerData extends Model
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             $this->delete();
-
-
+            return;
+        }
+        if ($client->stopUnpackClient()->exists()){
             return;
         }
 
