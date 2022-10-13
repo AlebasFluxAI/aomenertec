@@ -42,6 +42,9 @@ class WorkOrder extends Model
         "open_at",
         "in_progress_at",
         "closed_at",
+        "open_by",
+        "in_progress_by",
+        "closed_by",
         "support_id"
     ];
 

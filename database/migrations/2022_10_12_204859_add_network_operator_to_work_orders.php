@@ -15,7 +15,7 @@ class AddNetworkOperatorToWorkOrders extends Migration
     {
         Schema::table('work_orders', function (Blueprint $table) {
             $table->foreignId("support_id")->nullable()->constrained();
-            $table->foreignId("technician_id")->nullable()->change();q
+            $table->foreignId("technician_id")->nullable()->change();
         });
     }
 

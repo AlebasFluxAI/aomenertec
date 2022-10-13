@@ -6,6 +6,7 @@ use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
 use App\Notifications\Alert\WorkOrderCreatedNotification;
 use App\Notifications\Alert\WorkOrderUpdatedNotification;
+use Illuminate\Support\Facades\Auth;
 
 class WorkOrderObserver
 {
@@ -37,6 +38,7 @@ class WorkOrderObserver
     {
         if ($workOrder->isDirty("status")) {
             $workOrder->{$workOrder->status . "_at"} = now();
+            $workOrder->{$workOrder->status . "_by"} = Auth::user()->id;
         }
     }
 
