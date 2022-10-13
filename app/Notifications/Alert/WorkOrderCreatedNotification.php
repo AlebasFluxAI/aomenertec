@@ -31,7 +31,7 @@ class WorkOrderCreatedNotification extends Notification
 
     public function toDatabase()
     {
-        if ($this->workOrder->technician) {
+        if ($this->workOrder->technician || $this->workOrder->support) {
             return new UserNotificationPayload(
                 "Tienes una nueva orden de trabajo - Orden de trabajo " . $this->workOrder->id,
                 "administrar.v1.ordenes_de_servicio.detalle",

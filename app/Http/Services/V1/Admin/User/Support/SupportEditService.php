@@ -72,20 +72,6 @@ class SupportEditService extends Singleton
         DB::transaction(function () use ($component) {
             $component->model->latitude = $component->latitude;
             $component->model->longitude = $component->longitude;
-            $component->validate([
-                'model.identification' => 'required|min:6',
-                'model.name' => 'required|min:6',
-                'model.last_name' => 'required|min:6',
-                'model.phone' => 'min:7',
-                'model.email' => 'required|email',
-                'model.address_details' => 'required',
-                'model.latitude' => 'required',
-                'model.longitude' => 'required',
-                'model.billing_name' => 'required',
-                'model.billing_address' => 'required',
-                'model.person_type' => 'required',
-                'model.identification_type' => 'required',
-            ]);
             $component->model->update();
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$component->model->name} actualizado"]);
             $component->redirectRoute("administrar.v1.usuarios.soporte.detalles", ["support" => $component->model->id]);

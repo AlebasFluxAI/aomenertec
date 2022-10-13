@@ -246,6 +246,7 @@ return [
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE,
         Permissions::PQR_CLOSE,
+
         Permissions::WORK_ORDER_DETAILS,
         Permissions::WORK_ORDER_INDEX,
         Permissions::WORK_ORDER_SOLVE,
@@ -262,6 +263,15 @@ return [
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
+
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_SOLVE,
+        Permissions::WORK_ORDER_IN_PROGRESS,
+        Permissions::WORK_ORDER_STOP,
+        Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
+
 
     ],
     // Vendedor

@@ -76,8 +76,27 @@ class Support extends Model
                         ]
 
                     ],
+                    [
+                        "title" => "Ordenes de servicio",
+                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Ordenes de servicio",
+                                "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
+                        ]
+
+                    ],
                 ]
         ];
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
     }
 
     public static function getRole()

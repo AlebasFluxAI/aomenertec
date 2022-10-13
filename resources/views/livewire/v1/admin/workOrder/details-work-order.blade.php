@@ -59,6 +59,13 @@
                                                                              "redirect_value"=>$model->technician_id
                                                                      ],
                                                                      [
+                                                                             "key"=>"Usuario de soporte asignado",
+                                                                             "value"=>$model->support?$model->support->name." ".$model->support->last_name."-".$model->support->identification:"",
+                                                                             "redirect_route"=>"administrar.v1.usuarios.soporte.detalles",
+                                                                             "redirect_binding"=>"support",
+                                                                             "redirect_value"=>$model->support_id
+                                                                     ],
+                                                                     [
                                                                           "key"=>"Herramientas",
                                                                           "value"=>$model->tools
                                                                      ],
