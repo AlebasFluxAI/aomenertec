@@ -82,11 +82,6 @@ class SetConfigJob implements ShouldQueue
                     $message = base64_encode(implode($binary_data));
                     MQTT::publish($topic, $message);
                     MQTT::disconnect();
-                    sleep(30);
-                    $topic = 'mc/config';
-                    $date = Carbon::now()->timestamp;
-                    MQTT::publish($topic, $date);
-                    MQTT::disconnect();
                 }
             }
         }
