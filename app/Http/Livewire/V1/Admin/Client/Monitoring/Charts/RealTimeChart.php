@@ -116,20 +116,28 @@ class RealTimeChart extends Component
 
     public function selectRealTime()
     {
-        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-        RealTimeListener::whereUserId(Auth::user()->id)
-            ->whereEquipmentId(
-                $equipment->id
-            )->delete();
-        RealTimeListener::create([
-            "user_id" => Auth::user()->id,
-            "equipment_id" => $equipment->id
-        ]);
-
-        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
-        $topic = 'mc/config/'.$equipment->serial;
-        MQTT::publish($topic, $message);
-        MQTT::disconnect();
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+            if ($this->client->clientConfiguration()->first()->real_time_flag) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (!RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    $new = RealTimeListener::create([
+                        "user_id" => Auth::user()->id,
+                        "equipment_id" => $equipment->id
+                    ]);
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        MQTT::publish($topic, $message);
+                        MQTT::disconnect();
+                    }
+                }
+            } else{
+                $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data'=> 'El dispositivo no cuenta con conexión wifi...']);
+            }
+        }else{
+            $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data'=> 'El dispositivo no cuenta con conexión wifi...']);
+        }
     }
 
     public function addPoint($data)
@@ -161,7 +169,7 @@ class RealTimeChart extends Component
             }
             $this->cards_real_time[$index]["variables_selected"] = $aux;
         }
-        $this->emit('addPointRealTime', ['series' => $this->series_real_time, 'title' => $this->chart_title]);
+        $this->emit('addPointRealTime', ['series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data'=> 'No hay datos']);
         $this->emit('animatedRealTime');
     }
 

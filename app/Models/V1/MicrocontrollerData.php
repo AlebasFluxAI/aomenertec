@@ -217,9 +217,15 @@ class MicrocontrollerData extends Model
         $binary_flags = sprintf("%064b", ($this->raw_json['flags']));
         $this->source_timestamp = new Carbon($this->source_timestamp);
         $is_wifi = substr($binary_flags, 2, 1);
-
         $client = Client::find($this->client_id);
-
+        if($is_wifi == 1){
+            $is_wifi = true;
+        } else {
+            $is_wifi = false;
+        }
+        $real_time_flag = $client->clientConfiguration()->first();
+        $real_time_flag->real_time_flag = $is_wifi;
+        $real_time_flag->save();
         $value = 0;
         $unix_time = $this->raw_json["timestamp"];
         $current_time = new Carbon();
