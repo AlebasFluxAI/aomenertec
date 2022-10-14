@@ -4,6 +4,8 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
 use App\Models\V1\Client;
 use App\Models\V1\ClientDigitalOutput;
+use App\Models\V1\RealTimeListener;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use PhpMqtt\Client\Facades\MQTT;
 
@@ -19,6 +21,7 @@ class Control extends Component
         'coils.*.status' => 'required',
         'coils.*.control_type' => 'required',
     ];
+    protected $listeners = ['selectControl'];
     public function mount(Client $client)
     {
         $this->client = $client;
@@ -51,6 +54,27 @@ class Control extends Component
             $coil->name = $value;
             $coil->save();
             $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Nombre actualizado"]);
+        }
+    }
+    public function selectControl()
+    {
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+            if ($this->client->clientConfiguration()->first()->real_time_flag) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    RealTimeListener::whereUserId(Auth::user()->id)
+                        ->whereEquipmentId(
+                            $equipment->id
+                        )->delete();
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        MQTT::publish($topic, $message);
+                        MQTT::disconnect();
+                    }
+                }
+            }
         }
     }
 

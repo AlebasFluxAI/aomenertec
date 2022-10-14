@@ -95,7 +95,10 @@
                     series: e.series,
                     title:{
                         text:e.title,
-                    }
+                    },
+                    noData: {
+                        text: e.no_data
+                    },
                 }, true)
 
             })

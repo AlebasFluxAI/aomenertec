@@ -38,13 +38,13 @@ class SetConfigJob implements ShouldQueue
      */
     public function handle()
     {
-        $equipment_serial = str_pad($this->json->did, 6, "0", STR_PAD_LEFT);
+        $equipment_serial = str_pad($this->json['did'], 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment) {
             $client = $equipment->clients()->first();
             if ($client) {
-                if ($this->json->config_get){
+                if ($this->json['config_get']){
                     $alert_config_frame = config('data-frame.alert_config_frame');
                     if (!$client->clientAlertConfiguration()->exists()) {
                         $flags_frame = collect(config('data-frame.flags_frame'));
