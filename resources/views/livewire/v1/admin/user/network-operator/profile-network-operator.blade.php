@@ -26,10 +26,6 @@
                                                    "title"=>"Mis Vendedores",
 
                                                ],
-                                               [
-                                                   "title"=>"Mis Supervisores",
-
-                                               ],
                                                 [
                                                    "title"=>"Mis tecnicos",
 
@@ -97,17 +93,6 @@
                                                                        "view_header"=>false,
                                                                        "is_filtered"=>false,
                                                                        "col_filter"=>false,
-                                                                  ]
-                                               ],
-                                               [
-                                                  "view_name"=>"livewire.v1.admin.user.supervisor.index-supervisor",
-                                                   "view_values"=>[
-                                                                       "data"=>$supervisors,
-                                                                       "table_class_container"=>"",
-                                                                       "view_header"=>false,
-                                                                       "is_filtered"=>false,
-                                                                       "col_filter"=>false,
-                                                                       "network_operator_conditional_delete"=>"conditionalDeleteSupervisor",
                                                                   ]
                                                ],
                                                [

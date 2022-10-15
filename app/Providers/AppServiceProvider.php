@@ -89,6 +89,7 @@ class AppServiceProvider extends ServiceProvider
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
         MicrocontrollerData::observe(MicrocontrollerDataObserver::class);
+
         Admin::observe(UserAdminObserver::class);
         NetworkOperator::observe(UserNetworkOperatorObserver::class);
         Seller::observe(UserSellerObserver::class);
@@ -96,6 +97,7 @@ class AppServiceProvider extends ServiceProvider
         Supervisor::observe(UserSupervisorObserver::class);
         Technician::observe(UserTechnicianObserver::class);
         Support::observe(UserSupportObserver::class);
+
         User::observe(UserObserver::class);
         //ClientAlertConfiguration::observe(ClientAlertConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);

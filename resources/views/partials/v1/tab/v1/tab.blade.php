@@ -79,18 +79,7 @@
                  role="tabpanel"
                  aria-labelledby="nav-{{$index}}-tab">
                 @include($tab_content["view_name"],$tab_content["view_values"])
-                @if($logout_button??false)
-                    @include("partials.v1.table_nav",
-                            ["mt"=>2,"nav_options"=>[
-                             ["button_align"=>"right",
-                             "click_action"=>"",
-                             "button_content"=>"Cerrar sesión",
-                             "button_icon"=>"fa-solid fa-right-from-bracket",
-                             "target_route"=>"logout",
-                             ],
-                         ]
-                    ])
-                @endif
+
             </div>
         @endif
     @endforeach
