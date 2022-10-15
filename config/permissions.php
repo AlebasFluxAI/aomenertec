@@ -91,6 +91,7 @@ return [
 
     // Super admin
     SuperAdmin::class => [
+        Permissions::EQUIPMENT_CONFIG,
         Permissions::ADMIN_CREATE,
         Permissions::ADMIN_LINK_EQUIPMENT,
         Permissions::ADMIN_REMOVE_EQUIPMENT,
