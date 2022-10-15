@@ -77,6 +77,11 @@ Route::get("mail/test/user_created", (MailTestController::class) . "@userCreated
 Route::get("mail/test/whatsapp_created", (MailTestController::class) . "@whatsappNotification");
 
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], function () {
+    
+    Route::get('/seleccionar_rol', Livewire\V1\Admin\User\SelectRoleUser::class)->name("administrar.v1.seleccionar_role");
+});
+
+Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_selection"]], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::prefix("v1")->group(function () {
         Route::get('/inicio', Livewire\V1\Admin\User\ProfileUser::class)->name("administrar.v1.perfil");

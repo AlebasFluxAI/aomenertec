@@ -13,6 +13,20 @@
     --style_header_button: #f5b042;
 }
 
+.select-rol-container {
+    background-color: #f2f2f2;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px auto;
+    transition: 1s;
+}
+
+.select-rol-container:hover {
+    background-color: var(--style_primary);
+    color: var(--style_header_color);
+    transition: 1s;
+}
+
 .login-asside {
     background-color: #f2f2f2;
 }
@@ -207,11 +221,12 @@
     color: white;
     transition: 500ms;
 }
+
 .btn-redirect:hover i {
     color: white !important;
 }
 
-.btn-redirect:hover span{
+.btn-redirect:hover span {
     color: white !important;
 }
 
@@ -286,7 +301,7 @@
     font-weight: 300;
 }
 
-.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover{
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
     color: var(--style_orange);
     border: 1px var(--style_primary) solid;
 }
@@ -566,6 +581,7 @@ dialog {
     border-radius: 13px;
     font-size: 0.9rem;
 }
+
 #add:hover {
     background-color: var(--style_primary);
     color: white;
@@ -654,24 +670,24 @@ dialog {
 }
 
 .imagen-logo:hover {
-    -webkit-box-shadow: 0px 0px 32px -3px rgba(143,255,249,1);
-    -moz-box-shadow: 0px 0px 32px -3px rgba(143,255,249,1);
-    box-shadow: 0px 0px 32px -3px rgba(143,255,249,1);
+    -webkit-box-shadow: 0px 0px 32px -3px rgba(143, 255, 249, 1);
+    -moz-box-shadow: 0px 0px 32px -3px rgba(143, 255, 249, 1);
+    box-shadow: 0px 0px 32px -3px rgba(143, 255, 249, 1);
 }
 
-a.btn.btn-lg.badge.badge-light.rounded-full{
-    background-color: white; 
+a.btn.btn-lg.badge.badge-light.rounded-full {
+    background-color: white;
     border-color: #009599;
     color: #009299;
 }
 
-a.btn.btn-lg.badge.badge-light.rounded-full:hover{
+a.btn.btn-lg.badge.badge-light.rounded-full:hover {
     background-color: #009299;
 }
-a.btn.btn-lg.badge.badge-light.rounded-full:hover i{
+
+a.btn.btn-lg.badge.badge-light.rounded-full:hover i {
     color: white !important;
 }
-
 
 
 .contenedor-grande .fecha-to {

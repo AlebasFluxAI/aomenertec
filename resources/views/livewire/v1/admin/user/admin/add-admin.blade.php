@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
 
     @include("partials.v1.title",[
@@ -24,6 +25,8 @@
     <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
         @include("partials.v1.addUserTemplate.user-add-form",
                     [
+                      "add_user_type_technician"=>true,
+                      "add_user_type_network_operator"=>true,
                       "custom_input"=>[
 
                            [
@@ -62,6 +65,7 @@
                         ]
 
           ])
+
     </form>
 
 </div>

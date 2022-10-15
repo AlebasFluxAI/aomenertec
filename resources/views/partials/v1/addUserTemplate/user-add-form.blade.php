@@ -127,6 +127,19 @@
                 @endforeach
                 @error('address_error') <span class="error">{{ $message }}</span> @enderror
 
+                @if($add_user_type_network_operator??false)
+                    @include("partials.v1.divider_title",["title"=>"Agregar tipos de usuarios"])
+                    @include("partials.v1.form.radio_button",[
+                          "input_model"=>"user_type_network_operator",
+                          "input_label"=>"Operador de red"
+                      ])
+                @endif
+                @if($add_user_type_technician??false)
+                    @include("partials.v1.form.radio_button",[
+                          "input_model"=>"user_type_technician",
+                         "input_label"=>"Tecnico"
+                      ])
+                @endif
                 @include("partials.v1.divider_title")
 
                 @include("partials.v1.form.form_submit_button",[
