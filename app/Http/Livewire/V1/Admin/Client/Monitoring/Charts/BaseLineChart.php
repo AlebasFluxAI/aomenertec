@@ -30,7 +30,7 @@ class BaseLineChart extends Component
     public $end_result;
     public $start_result;
     public $chart_title;
-    protected $listeners = ['changeDateRangeReference', 'changeDateRangeResult', 'selectHistory'];
+    protected $listeners = ['changeDateRangeReference', 'changeDateRangeResult', 'selectBaseLine'];
     public function mount(Client $client, $variables, $data_frame, $data_chart, $time)
     {
         $this->client = $client;
@@ -78,21 +78,25 @@ class BaseLineChart extends Component
         $this->chartRender(true);
     }
 
-    public function selectHistory()
+    public function selectBaseLine()
     {
-        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
-        RealTimeListener::whereUserId(Auth::user()->id)
-            ->whereEquipmentId(
-                $equipment->id
-            )->delete();
-
-        if (!RealTimeListener::whereEquipmentId(
-            $equipment->id
-        )->exists()) {
-            $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            $topic = 'mc/config/'.$equipment->serial;
-            MQTT::publish($topic, $message);
-            MQTT::disconnect();
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+            if ($this->client->clientConfiguration()->first()->real_time_flag) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    RealTimeListener::whereUserId(Auth::user()->id)
+                        ->whereEquipmentId(
+                            $equipment->id
+                        )->delete();
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        MQTT::publish($topic, $message);
+                        MQTT::disconnect();
+                    }
+                }
+            }
         }
         $this->restartDateRange();
     }

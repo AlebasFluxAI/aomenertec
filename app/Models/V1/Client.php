@@ -214,4 +214,7 @@ class Client extends Model
     {
         return $this->hasMany(ClientAlert::class);
     }
+    public function stopUnpackClient(){
+        return $this->hasOne(StopUnpackDataClient::class);
+    }
 }
