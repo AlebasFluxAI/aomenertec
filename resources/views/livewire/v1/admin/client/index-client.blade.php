@@ -27,8 +27,8 @@
               ])
 
         @include("partials.v2.table.primary-table",[
-        "class_container"=>$table_class_container??null,
-                       "table_pageable"=>$table_pageable??true,
+                "class_container"=>$table_class_container??null,
+               "table_pageable"=>$table_pageable??true,
                "table_headers"=>[
               [
                    "col_name" =>"ID",

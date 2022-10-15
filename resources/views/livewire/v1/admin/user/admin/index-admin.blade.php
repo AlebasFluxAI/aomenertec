@@ -92,7 +92,8 @@
                                                   ],
                                                 "icon"=>"fas fa-gear",
                                                 "tooltip_title"=>"Configuración",
-                                                                                                ],
+                                                "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_CONFIG],
+                                            ],
                                             [
                                                "redirect"=>[
                                                            "route"=>"administrar.v1.usuarios.admin.agregar_tipos_equipo",
@@ -102,7 +103,7 @@
                                                    "tooltip_title"=>"Asociar tipos de equipos",
                                                    "permission"=>[\App\Http\Resources\V1\Permissions::ADMIN_LINK_EQUIPMENT_TYPE],
                                              ],
-                                                [
+                                             [
                                                "redirect"=>[
                                                            "route"=>"administrar.v1.usuarios.admin.agregar_equipos",
                                                            "binding"=>"admin"
@@ -117,15 +118,15 @@
                                                         "function"=>"disableAdmin",
                                                         "icon"=>"fa-solid fa-user-xmark",
                                                         "tooltip_title"=>"Desactivar"
-                                                    ],
-                                                    [
+                                              ],
+                                              [
                                                         "permission" => [\App\Http\Resources\V1\Permissions::ADMIN_ENABLED],
                                                         "conditional" => "getEnabledAuxAdmin",
                                                         "function"=>"disableAdmin",
                                                         "icon"=>"fa-solid fa-user-check",
                                                         "tooltip_title"=>"Activar"
-                                                    ],
-                                            [
+                                              ],
+                                                      [
                                                     "function"=>"deleteAdmin",
                                                     "conditional"=>"conditionalDeleteAdmin",
                                                     "icon"=>"fas fa-trash",
