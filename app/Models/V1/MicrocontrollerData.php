@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use PhpMqtt\Client\Facades\MQTT;
 use App\Models\V1\Equipment;
+use App\Models\V1\ClientConfiguration;
 
 use Illuminate\Support\Facades\Config;
 use PhpOption\None;
@@ -222,6 +223,24 @@ class MicrocontrollerData extends Model
             $is_wifi = true;
         } else {
             $is_wifi = false;
+        }
+        if (!$client->clientConfiguration()->exists()) {
+            ClientConfiguration::create([
+                "client_id" => $client->id,
+                "ssid" => "",
+                "wifi_password" => "",
+                "mqtt_host" => "3.12.98.178",
+                "mqtt_port" => "1883",
+                "mqtt_user" => "enertec",
+                "mqtt_password" => "enertec2020**",
+                "real_time_latency" => 30,
+                "active_real_time" => false,
+                "storage_latency" => 1,
+                "storage_type_latency" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY,
+                "frame_type" => ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES,
+                "digital_outputs" => 0,
+
+            ]);
         }
         $real_time_flag = $client->clientConfiguration()->first();
         $real_time_flag->real_time_flag = $is_wifi;
