@@ -1,17 +1,17 @@
 @extends('layouts.v1.app')
 @section("footer")
 @endsection
-<div class="row d-flex justify-content-between" style="background-color: #f2f2f2">
+<div class="row d-flex justify-content-between" style="background-color: #f2f2f2; height: 100%;">
 
     <div class="col-12 slide-login flex justify-center">
-        <a class="navbar-brand col-md-4 col-sm-12" href="/">
+        <a class="navbar-brand col-md-2 col-sm-12" href="/">
             <img class="img-fluid imagen-logo-login"
                  src="{{\App\Http\Resources\V1\Subdomain::getHeaderIcon()}}"
                  alt="">
         </a>
     </div>
     <div class="col-12 d-flex justify-content-center">
-        <div class="col-sm-10 col-md-4 login-container">
+        <div class="col-sm-10 col-md-6 login-container">
             @if (session('status'))
                 <div>
                     {{ session('status') }}
@@ -38,16 +38,13 @@
                         @enderror
                     </div>
                     <div class="form-group">
-
                         <label class="block text-sm text-slate-400" for="password">Contraseña </label>
                         @if (Route::has('password.request'))
                             <a class="login-forgot-pass text-sm" href="
                                     {{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"enertec"]) }}
-
                             ">
-                            ¿La olvidaste?</a>
+                                ¿La olvidaste?</a>
                         @endif
-
                         <input type="password"
                                class="form-control @error('password') is-invalid @enderror"
                                name="password" autocomplete="current-password" required>
@@ -65,12 +62,12 @@
             </div>
         </div>
     </div>
-    <div class="container">
-    <div class="row pb-5">
+    <div class="container"> 
+    <div class="row pb-2">
         <div class="col-12">
-            <h1 class="text-center pt-5 text-bold" style="color: #1c9599;">Servicios</h1>
+            <h1 class="text-center pt-4 text-bold" style="color: #1c9599;">Servicios</h1>
         </div>
-        <div class="col-12 d-flex flex-wrap">
+        <div class="row">
             @foreach([
                         [
                             "text"=>"Pagar factura",
@@ -99,9 +96,8 @@
                     ] as $item)
                 @include("auth.service_item",$item)
             @endforeach
-
+    
         </div>
     </div>
 </div>
 </div>
-
