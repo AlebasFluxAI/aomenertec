@@ -202,7 +202,12 @@
     transition: 500ms;
 }
 
-.btn-redirect:hover {
+.btn-redirect i {
+    color: #009299 !important;
+}
+
+.btn-redirect:hover,
+.btn-redirect i:hover {
     background-color: var(--style_primary);
     color: white;
     transition: 500ms;
@@ -635,7 +640,7 @@ dialog {
 
 .login-container {
     background-color: #f2f2f2;
-    padding: 20px;
+    padding: 20px 20px 0 20px;
     border-radius: 20px;
     margin-top: 30px;
     -webkit-box-shadow: 5px 5px 14px 5px rgba(0, 0, 0, 0.23);
@@ -2403,3 +2408,6 @@ justify-content-end
     }
 }
 
+a.btn.btn-redirect.btn-sm{
+    color
+}
