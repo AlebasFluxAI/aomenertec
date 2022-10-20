@@ -133,6 +133,16 @@
                                                         "tooltip_title"=>"Ordenes de trabajo",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_WORK_ORDER],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.change_equipment.historical",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-server",
+                                                        "tooltip_title"=>"Historial de cambios de equipo",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
+                                                ],
+
                                     ]
                                     ],
 
