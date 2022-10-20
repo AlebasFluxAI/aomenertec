@@ -54,7 +54,7 @@ class SaveAlertDataJob implements ShouldQueue
         $flag = $this->calculateValueAlert(5, $decode);
         $binary_flags = sprintf("%064b", ($flag));
 
-        $equipment_serial = $this->calculateValueAlert(2, $decode);
+        $equipment_serial = str_pad($this->calculateValueAlert(2, $decode), 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment == null) {
