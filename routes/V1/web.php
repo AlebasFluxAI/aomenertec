@@ -77,7 +77,7 @@ Route::get("mail/test/user_created", (MailTestController::class) . "@userCreated
 Route::get("mail/test/whatsapp_created", (MailTestController::class) . "@whatsappNotification");
 
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], function () {
-    
+
     Route::get('/seleccionar_rol', Livewire\V1\Admin\User\SelectRoleUser::class)->name("administrar.v1.seleccionar_role");
 });
 
@@ -303,6 +303,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                     Route::get('ordenes_de_trabajo/{client}/crear', Livewire\V1\Admin\Client\WorkOrderClientCreate::class)
                         ->name("v1.admin.client.work_orders.create")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::WORK_ORDER_CREATE));
+
+                    Route::get('historico_cambio_equipo/{client}', Livewire\V1\Admin\Client\ClientEquipmentChangeHistorical::class)
+                        ->name("v1.admin.client.change_equipment.historical")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW));
                 });
 
                 Route::prefix("ordenes_de_servicio")->group(function () {

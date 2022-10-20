@@ -109,7 +109,7 @@
 
 
 <script src="{{ asset('js/app.js') }}"></script>
-
+@include("partials.v1.whatsapp-button")
 <!-- Template Main JS File -->
 <script>
     var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
@@ -124,6 +124,4 @@
 </script>
 
 </body>
-@include("partials.v1.whatsapp-button")
-
 </html>

@@ -2,10 +2,10 @@
      class="rounded img-fluid" alt="Imagen adjunta"
      width="150px"
      height="150px">
-<div style="z-index: 10000; position: fixed" class="modal fade" id="exampleModal.{{$image_url}}" tabindex="2"
+<div class="modal fade" id="exampleModal.{{$image_url}}" tabindex="-1"
      role="dialog"
      aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
+     aria-hidden="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

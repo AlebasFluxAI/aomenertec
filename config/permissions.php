@@ -272,6 +272,7 @@ return [
         Permissions::WORK_ORDER_IN_PROGRESS,
         Permissions::WORK_ORDER_STOP,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
+        Permissions::PQR_EQUIPMENT_CHANGE,
 
 
     ],

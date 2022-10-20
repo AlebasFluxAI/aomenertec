@@ -64,6 +64,11 @@ class Client extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function equipmentChangeHistorical()
+    {
+        return $this->hasMany(HistoricalClientEquipment::class);
+    }
+
     public function workOrders()
     {
         return $this->hasMany(WorkOrder::class);
@@ -214,7 +219,9 @@ class Client extends Model
     {
         return $this->hasMany(ClientAlert::class);
     }
-    public function stopUnpackClient(){
+
+    public function stopUnpackClient()
+    {
         return $this->hasOne(StopUnpackDataClient::class);
     }
 }
