@@ -173,7 +173,7 @@
                                                                         ]
                                            ],
                                            [
-                                                                        "view_name"=>"livewire.v1.admin.user.admin.tab-permissions-admin",
+                                                                        "view_name"=>"livewire.v1.admin.user.tab-permissions-admin",
                                                                         "view_values"=>  [
                                                                         ]
                                            ]
