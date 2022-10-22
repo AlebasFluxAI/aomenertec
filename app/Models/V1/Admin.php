@@ -8,6 +8,7 @@ use App\Http\Resources\V1\Permissions;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\AvailableChannelTrait;
 use App\Models\Traits\PermissionTrait;
+use App\Models\Traits\UserPermissionableTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdScope;
@@ -25,6 +26,7 @@ class Admin extends Model
     use SoftDeletes;
     use AuditableTrait;
     use AvailableChannelTrait;
+    use UserPermissionableTrait;
 
 
     use PermissionTrait;
@@ -52,19 +54,6 @@ class Admin extends Model
         "state",
     ];
 
-    public function tabPermissions()
-    {
-        return $this->hasMany(TabPermissionAdmin::class);
-    }
-
-    public function tabPermissionsName()
-    {
-        $permissions = [];
-        foreach ($this->tabPermissions()->whereEnabled(true)->get() as $permission) {
-            array_push($permissions, $permission->tabPermission->permission);
-        }
-        return $permissions;
-    }
 
     public static function getRole()
     {

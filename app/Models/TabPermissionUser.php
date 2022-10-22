@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Models\V1;
+namespace App\Models;
 
+use App\Models\V1\TabPermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TabPermissionAdmin extends Model
+class TabPermissionUser extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         "tab_permission_id",
-        "admin_id",
-        "enabled"
     ];
 
-    public function admin()
+    public function permissionable()
     {
-        return $this->belongsTo(Admin::class);
+        return $this->morphTo();
     }
 
     public function tabPermission()
@@ -26,10 +24,5 @@ class TabPermissionAdmin extends Model
         return $this->belongsTo(TabPermission::class);
     }
 
-    public function blinkPermission()
-    {
-        $this->update([
-            "enabled" => !$this->enabled,
-        ]);
-    }
+
 }

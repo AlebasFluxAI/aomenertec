@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
     Route::prefix("v1")->group(function () {
         Route::get('/inicio', Livewire\V1\Admin\User\ProfileUser::class)->name("administrar.v1.perfil");
         Route::get('/notificaciones', Livewire\V1\Admin\User\Notification\NotificationComponent::class)->name("administrar.v1.notificaciones");
+        Route::get('/persmisos/tabs', Livewire\V1\Admin\User\TabPermission::class)->name("administrar.v1.permisos.pestanas");
         Route::prefix("administrar")->group(function () {
             Route::middleware([])->group(function () {
                 Route::prefix("usuarios")->group(function () {
