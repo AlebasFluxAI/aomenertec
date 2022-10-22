@@ -31,6 +31,7 @@ class Menu extends Singleton
 
     public static function getMenuV3()
     {
+        
         if (Auth::user() == null) {
             return [];
         }
@@ -40,7 +41,7 @@ class Menu extends Singleton
         }
 
         $userRole = Request::session()->get(User::SESSION_ROLE_SELECTED);
-        
+
         return (new User)->{$userRole . "_menu"}();
     }
 

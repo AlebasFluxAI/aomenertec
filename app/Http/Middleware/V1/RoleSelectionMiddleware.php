@@ -20,6 +20,7 @@ class RoleSelectionMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+
         if ($request->session()->get(User::SESSION_SINGLE_ROLE)) {
             return $next($request);
         }
