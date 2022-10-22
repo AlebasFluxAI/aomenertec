@@ -4,6 +4,7 @@ namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PermissionTrait;
+use App\Models\Traits\UserPermissionableTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ class Technician extends Model
     use SoftDeletes;
     use PermissionTrait;
     use AuditableTrait;
+    use UserPermissionableTrait;
 
 
     protected $fillable = ['identification',
