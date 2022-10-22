@@ -87,6 +87,6 @@ class Equipment extends Model
 
     public function getNameSerial()
     {
-        return $this->serial . " - " . $this->namess;
+        return $this->serial . " - " . $this->equipmentType->type;
     }
 }
