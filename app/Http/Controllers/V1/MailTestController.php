@@ -6,9 +6,11 @@ use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
 use App\Mail\User\UserCratedMail;
 use App\Mail\User\UserResetPasswordMail;
+use App\Mail\WorkOrder\WorkOrderUpdatedMail;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\User;
+use App\Models\V1\WorkOrder;
 use App\Notifications\Alert\AlertNotification;
 use App\Notifications\User\UserCreatedNotification;
 use App\Notifications\User\UserResetPasswordNotification;
@@ -19,9 +21,8 @@ class MailTestController
 {
     public function userCreatedNotification()
     {
-        $user = User::find(15);
-        $user->notify(new UserResetPasswordNotification());
-        return (new UserResetPasswordMail($user, "12"))->render();
+
+        return (new WorkOrderUpdatedMail(WorkOrder::find(29)))->render();
     }
 
     public function whatsappNotification()

@@ -53,6 +53,11 @@ class WorkOrder extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function createdBy()
+    {
+        return User::find($this->created_by_id);
+    }
+
     public function setInProgress()
     {
         $this->update([

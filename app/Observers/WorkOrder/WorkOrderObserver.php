@@ -44,11 +44,14 @@ class WorkOrderObserver
 
     public function updated(WorkOrder $workOrder)
     {
+
         if ($workOrder->isDirty("status")) {
+
             if ($workOrder->status == WorkOrder::WORK_ORDER_STATUS_OPEN) {
                 return;
             }
-            User::find($workOrder->created_by_id)->notify(new WorkOrderUpdatedNotification($workOrder));
+
+            $workOrder->createdBy()->notify(new WorkOrderUpdatedNotification($workOrder));
         }
     }
 }

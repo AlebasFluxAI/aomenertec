@@ -274,7 +274,12 @@
                           "
                                     >
                                         <p>
-                                            Crea tu nueva contraseña y continúa disfrutando de nuestros servicios
+                                            La orden de servicio <b>"{{$workOrder->id}} {{$workOrder->description}}"</b>
+                                            ha
+                                            cambiado de
+                                            estado
+                                            <br><br>
+                                            <b>Su nuevo estado es: {{__("work_order." . $workOrder->status)}}</b>
                                         </p>
                                         <br/>
                                         <div style="text-align: center;
@@ -289,17 +294,14 @@
                           margin:auto
                           ">
                                             <div style="margin:auto;">
-                                                <a style=" color:white;  text-decoration: none" href="{{$url_recover}}">
-                                                    Recuperar contraseña
-                                                    <span style=" font-weight:bold;">&#8594;</span>
+                                                <a style=" color:white;  text-decoration: none" href="{{$url_details}}">
+                                                    Ver detalles <span style=" font-weight:bold;">&#8594;</span>
                                                 </a>
                                             </div>
                                         </div>
                                         <br/>
                                         <p style="
                           ">
-                                            Si no solicitaste el cambio de contraseña, ignora este correo. Tu contraseña
-                                            continuará siendo la misma.
 
                                         </p>
                                         <br/>
