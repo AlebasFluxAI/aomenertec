@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -60,10 +61,10 @@
                                                     "action" => "emit('selectControl')"
 
                                                 ],
-                                                [
-                                                    "title"=>"Alertas",
-                                                    "action" => "emit('selectAlert')"
-                                                ],
+                                               // [
+                                               //     "title"=>"Alertas",
+                                               //     "action" => "emit('selectAlert')"
+                                               // ],
 
                                            ],
 
@@ -140,25 +141,25 @@
                                                                         "client"=>$client,
                                                                      ]
                                                 ],
-                                                [
-                                                    "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>  [
-                                                                        "table_pageable"=>false,
-                                                                        "table_headers"=>[
-                                                                                            "ID"=>'id',
-                                                                                            "Variable"=>'name',
-                                                                                            "Limite min" => "clientAlertConfiguration.min_alert",
-                                                                                            "Limite max" => "clientAlertConfiguration.max_alert",
-                                                                                            "Valor alerta"=>'value',
-                                                                                            "Tipo" => "type",
-                                                                                            "Actualizacion limites"=>'clientAlertConfiguration.updated_at',
-                                                                                            "Fecha"=>'created_at'
+                                             //  [
+                                             //      "view_name"=>"partials.v1.table.primary-table",
+                                             //      "view_values"=>  [
+                                             //                          "table_pageable"=>false,
+                                             //                          "table_headers"=>[
+                                             //                                              "ID"=>'id',
+                                             //                                              "Variable"=>'name',
+                                             //                                              "Limite min" => "clientAlertConfiguration.min_alert",
+                                             //                                              "Limite max" => "clientAlertConfiguration.max_alert",
+                                             //                                              "Valor alerta"=>'value',
+                                             //                                              "Tipo" => "type",
+                                             //                                              "Actualizacion limites"=>'clientAlertConfiguration.updated_at',
+                                             //                                              "Fecha"=>'created_at'
 
-                                                                                        ],
-                                                                        "table_rows"=> $clientAlerts
+                                             //                                          ],
+                                             //                          "table_rows"=> $clientAlerts
 
-                                                                     ]
-                                                ],
+                                             //                       ]
+                                             //  ],
 
                                             ],
 
@@ -172,9 +173,9 @@
         window.onfocus = function() {
             console.log("vuelve")
         }*/
-        window.onbeforeunload = function(e) {
+        window.onbeforeunload = function (e) {
             console.log("exit");
-            @this.emit('tabChange')
+        @this.emit('tabChange')
         };
     </script>
 </div>
