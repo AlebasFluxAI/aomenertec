@@ -12,6 +12,18 @@
           ])
         @endif
 
+        @include("partials.v1.table_nav",
+                     ["mt"=>2,"nav_options"=>[
+                                ["button_align"=>"right",
+                                "click_action"=>"",
+                                "button_icon"=>"fas fa-list",
+                                "button_content"=>"Ver listado",
+                                "target_route"=>"v1.admin.client.list.client",
+                                ],
+
+                            ]
+                    ])
+
 
         @include("partials.v2.table.primary-table",[
                 "class_container"=>$table_class_container??null,
@@ -29,7 +41,7 @@
                ],
                [
                    "col_name" =>"Limite min",
-                   "col_data" =>"clientAlertConfiguration.min_aler",
+                   "col_data" =>"clientAlertConfiguration.min_alert",
                    "col_filter"=>true
                ],
                [
@@ -59,7 +71,6 @@
                ],
 
                 ],
-               "table_actions"=>[],
                "table_rows"=>$data
            ])
         @if($view_header??true)

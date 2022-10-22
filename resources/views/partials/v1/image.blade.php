@@ -1,7 +1,7 @@
-<img id="myImg" src="{{$image_url}}" style="width:100%;max-width:300px">
+<img class="myImg" id="myImg.{{$image_url}}" src="{{$image_url}}" style="width:100%;max-width:300px">
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="myModal" class="modal myImg">
     <span class="close">&times;</span>
     <img class="modal-content" id="img01">
     <div id="caption"></div>
@@ -11,7 +11,7 @@
     var modal = document.getElementById("myModal");
 
     // Get the image and insert it inside the modal - use its "alt" text as a caption
-    var img = document.getElementById("myImg");
+    var img = document.getElementById("myImg.{{$image_url}}");
     var modalImg = document.getElementById("img01");
     var captionText = document.getElementById("caption");
     img.onclick = function () {
@@ -29,13 +29,13 @@
     }
 </script>
 <style>
-    #myImg {
+    .myImg {
         border-radius: 5px;
         cursor: pointer;
         transition: 0.3s;
     }
 
-    #myImg:hover {
+    .myImg:hover {
         opacity: 0.7;
     }
 
