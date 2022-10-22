@@ -53,6 +53,7 @@ return [
         Permissions::CLIENT_EDIT,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
 
         Permissions::SUPPORT_CREATE,
@@ -140,6 +141,7 @@ return [
         Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_WORK_ORDER,
 
@@ -207,6 +209,7 @@ return [
         Permissions::CLIENT_EDIT,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
 
         Permissions::SUPPORT_CREATE,
@@ -241,6 +244,7 @@ return [
     Technician::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
@@ -259,6 +263,7 @@ return [
     Support::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
 
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
@@ -280,6 +285,7 @@ return [
     Seller::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::SELLER_MANAGE_PURCHASE,
         Permissions::SELLER_MANAGE_PURCHASE_CREATE,
     ],
@@ -287,6 +293,7 @@ return [
     Supervisor::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::PQR_CREATE,
         Permissions::PQR_SHOW,
         Permissions::PQR_REPLY,

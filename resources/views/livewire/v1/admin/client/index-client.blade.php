@@ -142,6 +142,15 @@
                                                         "tooltip_title"=>"Historial de cambios de equipo",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.add.alerts",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-bell",
+                                                        "tooltip_title"=>"Alertas",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_ALERTS],
+                                                ],
 
                                     ]
                                     ],
