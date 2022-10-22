@@ -290,7 +290,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
 
                     Route::get('alertas/{client}', Livewire\V1\Admin\Client\ClientAlertIndex::class)
                         ->name("v1.admin.client.add.alerts")
-                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_ADD_EQUIPMENT));
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW_ALERTS));
 
                     Route::get('monitoreo/{client}', Livewire\V1\Admin\Client\Monitoring::class)
                         ->name("v1.admin.client.monitoring")
