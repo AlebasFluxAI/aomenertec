@@ -61,7 +61,7 @@ class Admin extends Model
     {
         $permissions = [];
         foreach ($this->tabPermissions()->whereEnabled(true)->get() as $permission) {
-            array_push($permissions, $permission->permission);
+            array_push($permissions, $permission->tabPermission->permission);
         }
         return $permissions;
     }
