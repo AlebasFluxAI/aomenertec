@@ -14,7 +14,7 @@
                 <span class="fas fa-bars"></span>
             </button>
 
-            <div class=" collapse navbar-collapse" id="navbarSupportedContent">
+            <div class=" collapse navbar-collapse" id="navbarSupportedContent" style="visibility: inherit !important;">
                 <ul class="navbar-nav mr-auto">
 
                     <li class="nav-item">
