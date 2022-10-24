@@ -83,6 +83,11 @@
                                                 ],
                                                 [
                                                     "view_name"=>"partials.v1.chart.client_monitoring",
+                                                       "permissions"=>[
+                                                        \App\Models\V1\Admin::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
+                                                        \App\Models\V1\NetworkOperator::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
+                                                        \App\Models\V1\Technician::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
+                                                        ],
                                                     "view_values"=>  [
                                                                         "type" => "real_time_data",
                                                                         "variables"=>$variables,
