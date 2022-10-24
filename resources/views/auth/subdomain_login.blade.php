@@ -1,10 +1,9 @@
 @extends('layouts.v1.app')
 
 @section('header')
-    <section class="top-info">
+    <section class="top-info" style="background-color: #f2f2f2; height: 100%;">
         <div class="flex-column">
-            <nav class="navbar navbar-expand-lg"
-                 style="{{\App\Http\Resources\V1\Subdomain::getHeaderColor()}}">
+            <nav class="navbar navbar-expand-lg" style="{{\App\Http\Resources\V1\Subdomain::getHeaderColor()}}">
                 <a class="navbar-brand" href="/">
                     <img class="img-fluid imagen-logo"
                          src="{{\App\Http\Resources\V1\Subdomain::getHeaderIcon()}}"
@@ -15,7 +14,8 @@
                     <span class="fas fa-bars"></span>
                 </button>
 
-                <div class=" collapse navbar-collapse" id="navbarSupportedContent">
+                <div class=" collapse navbar-collapse" id="navbarSupportedContent"
+                     style="visibility: inherit !important;">
                     <ul class="navbar-nav mr-auto">
 
                         <li class="nav-item">
@@ -57,7 +57,7 @@
         @endif
 
         <div class="col-md-7 mb-2">
-            <p class="login-title"> Conectate</p>
+            <p class="login-title text-lg pb-4 text-center" style="color: #1c9599;">Conectate</p>
         </div>
         <div class="col-md-12 mb-3">
             <p class="login-subtitle"> Usa el correo electronico y contraseña que te proporcionaron al
@@ -92,11 +92,12 @@
                                     </span>
                     @enderror
                 </div>
-                <div class="text-right">
-                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" type="submit">Ingresar</button>
+                <div class="flex justify-between">
+                    @include("auth.support_button")
+                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" type="submit">Ingresar
+                    </button>
                 </div>
 
-                @include("auth.support_button")
             </form>
         </div>
     </div>
