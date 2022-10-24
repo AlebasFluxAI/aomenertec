@@ -36,9 +36,9 @@
                                            [
                                                "title"=>"Notificaciones",
                                            ],
-                                            [
-                                               "title"=>"Permisos de pestañas",
-                                           ],
+                                          // [
+                                          //    "title"=>"Permisos de pestañas",
+                                          //],
                                       ],
 
                        "tab_contents"=>[
