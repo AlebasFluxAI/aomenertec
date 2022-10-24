@@ -7,12 +7,10 @@
             @endphp
             @foreach($tab_title["permissions"]??[] as $model=>$permission)
                 @if(\App\Models\V1\User::getUserModel()::class==$model)
-                    @if(\App\Models\V1\User::getUserModel()::class==\App\Models\V1\Admin::class)
-                        @if(!in_array($permission,\App\Models\V1\User::getUserModel()->tabPermissionsName()))
-                            @php
-                                $permission_failed[$index] = true
-                            @endphp
-                        @endif
+                    @if(!in_array($permission,\App\Models\V1\User::getUserModel()->tabPermissionsName()))
+                        @php
+                            $permission_failed[$index] = true
+                        @endphp
                     @endif
                 @endif
             @endforeach
