@@ -33,7 +33,7 @@ trait UserMenuHomeTrait
 
     public function admin_menu()
     {
-        return SuperAdmin::menu();
+        return Admin::menu();
     }
 
     public function seller_menu()
