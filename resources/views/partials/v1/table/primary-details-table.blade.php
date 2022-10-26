@@ -1,5 +1,5 @@
 <div class="mb-1">
-    <div class="detail-table">
+    <div class="detail-table table-responsive">
 
         <table class="table table-bordered">
             <thead style="position: sticky;top: 0;z-index: 2">

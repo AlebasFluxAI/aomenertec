@@ -55,7 +55,7 @@
             </div>
         @endif
 
-        <div class="col-md-7 mb-2">
+        <div class="col-12 mb-2">
             <p class="login-title text-lg pb-4 text-center" style="color: #1c9599;">Conectate</p>
         </div>
         <div class="col-md-12 mb-3">
