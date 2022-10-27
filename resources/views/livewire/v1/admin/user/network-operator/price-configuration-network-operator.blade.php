@@ -19,7 +19,7 @@
                 actualizara el valor de dato cambiado.</b>
         </p>
         <br>
-        <div class="primary-content">
+        <div class="primary-content table-responsive">
             <table class="table table-bordered">
                 <thead style="position: sticky;top: 0;z-index: 2">
                 <tr>
