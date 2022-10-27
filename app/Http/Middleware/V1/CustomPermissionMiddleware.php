@@ -20,7 +20,6 @@ class CustomPermissionMiddleware
      */
     public function handle(Request $request, Closure $next, $permission)
     {
-
         if (!array_intersect([$permission], User::getUserModel()->getPermissions())) {
             abort(403);
         }

@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Request;
 
 trait ImageableManyTrait
 {
-    public function buildManyImage(array $image_names)
+    public function buildManyImage(array $image_names, $images)
     {
         foreach ($image_names as $type) {
             $image = new Image();
-            $image->id = time().mt_rand(0, 9999999);
+            $image->id = time() . mt_rand(0, 9999999);
             $image->type = $type;
             $image->name = 'no_found.jpg';
             $image->file_name = 'no_found.jpg';

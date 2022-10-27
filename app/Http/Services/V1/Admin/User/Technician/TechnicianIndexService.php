@@ -90,6 +90,9 @@ class TechnicianIndexService extends Singleton
 
     public function conditionalLinkEquipmentTechnician(Component $component, $modelId)
     {
+        if (!Technician::find($modelId)->networkOperator) {
+            return true;
+        }
         return !Technician::find($modelId)->networkOperator->equipments()->exists();
     }
 

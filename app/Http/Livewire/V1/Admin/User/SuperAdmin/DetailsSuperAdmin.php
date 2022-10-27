@@ -92,7 +92,8 @@ class DetailsSuperAdmin extends Component
         return $this->superAdminDetailService->conditionalRemoveEquipmentNetworkOperator($this, $id);
     }
 
-    public function conditionalDeleteEquipment($id){
+    public function conditionalDeleteEquipment($id)
+    {
         return $this->superAdminDetailService->conditionalDeleteEquipment($this, $id);
     }
     public function deleteEquipment($id)

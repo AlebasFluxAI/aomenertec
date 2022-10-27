@@ -7,10 +7,10 @@ use App\Http\Livewire;
 use App\Http\Livewire\Index;
 use App\Http\Livewire\V1\Admin\User\AddUser;
 use App\Http\Livewire\V1\Admin\User\EditUser;
-use App\Http\Livewire\V1\Admin\Client\AddClient;
-use App\Http\Livewire\V1\Admin\Client\EditClient;
-use App\Http\Livewire\V1\Admin\Client\IndexClient;
-use App\Http\Livewire\V1\Admin\Client\DetailClient;
+use App\Http\Services\V1\Admin\Client\AddClient;
+use App\Http\Services\V1\Admin\Client\EditClient;
+use App\Http\Services\V1\Admin\Client\IndexClient;
+use App\Http\Services\V1\Admin\Client\DetailClient;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
@@ -32,22 +32,6 @@ use App\Http\Resources\V1\PermissionsRouteWard;
 Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 
-    Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
-        ->middleware(['guest:' . config('fortify.guard')])
-        ->name('password.request');
-
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
-        ->middleware(['guest:' . config('fortify.guard')]);
-
-
-    Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
-        ->middleware(['guest:' . config('fortify.guard')])
-        ->name('password.reset');
-
-    Route::post('/reset-password', [NewPasswordController::class, 'store'])
-        ->middleware(['guest:' . config('fortify.guard')])
-        ->name('password.update');
-
 
     Route::prefix("clientes/invitados/pqr")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Pqr\AddPqrGuestClientComponent::class)->name("guest.add-pqr");
@@ -60,11 +44,17 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::prefix("clientes/invitados/recargas")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent::class)->name("guest.add-purchase");
     });
+
+    Route::prefix("reestablecer-cuenta")->group(function () {
+        Route::get('/', Livewire\V1\Admin\User\ResetPassword\ResetPassword::class)->name("subdomain.password.reset.form");
+        Route::get('/{otp}', Livewire\V1\Admin\User\ResetPassword\ResetPasswordReset::class)->name("subdomain.password.reset.reset");
+    });
 });
 
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
-    ->middleware(['guest:' . config('fortify.guard')]);
-
+Route::prefix("reestablecer-cuenta")->group(function () {
+    Route::get('/', Livewire\V1\Admin\User\ResetPassword\ResetPassword::class)->name("password.reset.form");
+    Route::get('/{otp}', Livewire\V1\Admin\User\ResetPassword\ResetPasswordReset::class)->name("password.reset.reset");
+});
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware(['guest:' . config('fortify.guard')])
@@ -87,10 +77,16 @@ Route::get("mail/test/user_created", (MailTestController::class) . "@userCreated
 Route::get("mail/test/whatsapp_created", (MailTestController::class) . "@whatsappNotification");
 
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], function () {
+
+    Route::get('/seleccionar_rol', Livewire\V1\Admin\User\SelectRoleUser::class)->name("administrar.v1.seleccionar_role");
+});
+
+Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_selection"]], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::prefix("v1")->group(function () {
         Route::get('/inicio', Livewire\V1\Admin\User\ProfileUser::class)->name("administrar.v1.perfil");
         Route::get('/notificaciones', Livewire\V1\Admin\User\Notification\NotificationComponent::class)->name("administrar.v1.notificaciones");
+        Route::get('/persmisos/tabs', Livewire\V1\Admin\User\TabPermission::class)->name("administrar.v1.permisos.pestanas");
         Route::prefix("administrar")->group(function () {
             Route::middleware([])->group(function () {
                 Route::prefix("usuarios")->group(function () {
@@ -273,25 +269,29 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], func
                     });
                 });
                 Route::prefix("clientes")->group(function () {
-                    Route::get('agregar', AddClient::class)
+                    Route::get('agregar', Livewire\V1\Admin\Client\AddClient::class)
                         ->name('v1.admin.client.add.client')
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_CREATE));
 
-                    Route::get('listado', IndexClient::class)
+                    Route::get('listado', Livewire\V1\Admin\Client\IndexClient::class)
                         ->name("v1.admin.client.list.client")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW));
 
-                    Route::get('detalle/{client}', DetailClient::class)
+                    Route::get('detalle/{client}', Livewire\V1\Admin\Client\DetailClient::class)
                         ->name("v1.admin.client.detail.client")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW));
 
-                    Route::get('editar/{client}', EditClient::class)
+                    Route::get('editar/{client}', Livewire\V1\Admin\Client\EditClient::class)
                         ->name("v1.admin.client.edit.client")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_EDIT));
 
                     Route::get('equipos/{client}', Livewire\V1\Admin\Client\AddEquipmentToClient::class)
                         ->name("v1.admin.client.add.equipment")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_ADD_EQUIPMENT));
+
+                    Route::get('alertas/{client}', Livewire\V1\Admin\Client\ClientAlertIndex::class)
+                        ->name("v1.admin.client.add.alerts")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW_ALERTS));
 
                     Route::get('monitoreo/{client}', Livewire\V1\Admin\Client\Monitoring::class)
                         ->name("v1.admin.client.monitoring")
@@ -300,9 +300,37 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], func
                     Route::get('configuraciones/{client}', Livewire\V1\Admin\Client\ConfigurationClient::class)
                         ->name("v1.admin.client.settings")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SETTINGS));
+
+                    Route::get('ordenes_de_trabajo/{client}', Livewire\V1\Admin\Client\WorkOrderClient::class)
+                        ->name("v1.admin.client.work_orders")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::WORK_ORDER_SHOW));
+
+                    Route::get('ordenes_de_trabajo/{client}/crear', Livewire\V1\Admin\Client\WorkOrderClientCreate::class)
+                        ->name("v1.admin.client.work_orders.create")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::WORK_ORDER_CREATE));
+
+                    Route::get('historico_cambio_equipo/{client}', Livewire\V1\Admin\Client\ClientEquipmentChangeHistorical::class)
+                        ->name("v1.admin.client.change_equipment.historical")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW));
                 });
 
+                Route::prefix("ordenes_de_servicio")->group(function () {
+                    Route::get('', Livewire\V1\Admin\WorkOrder\WorkOrderIndex::class)
+                        ->name("administrar.v1.ordenes_de_servicio.listado")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::WORK_ORDER_INDEX));
 
+                    Route::get('detalle/{workOrder}', Livewire\V1\Admin\WorkOrder\WorkOrderDetails::class)
+                        ->name("administrar.v1.ordenes_de_servicio.detalle")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::WORK_ORDER_DETAILS));
+
+                    Route::get('editar/{workOrder}', Livewire\V1\Admin\WorkOrder\WorkOrderEdit::class)
+                        ->name("administrar.v1.ordenes_de_servicio.editar")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::WORK_ORDER_EDIT));
+
+                    Route::get('administrar/{workOrder}', Livewire\V1\Admin\WorkOrder\WorkOrderSolver::class)
+                        ->name("administrar.v1.ordenes_de_servicio.administrar")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::WORK_ORDER_SOLVE));
+                });
                 Route::prefix("equipos")->group(function () {
                     Route::get('agregar', Livewire\V1\Admin\Equipment\AddEquipment::class)
                         ->name("administrar.v1.equipos.agregar")

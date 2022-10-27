@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\DB;
 
 class ChangeRegisterJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -60,7 +63,6 @@ class ChangeRegisterJob implements ShouldQueue
             default:
                 break;
         }
-
     }
 
     private function createChange($model, $before, $after, $type, $changes)
@@ -75,5 +77,4 @@ class ChangeRegisterJob implements ShouldQueue
             "model_type" => $model::class,
         ]);
     }
-
 }

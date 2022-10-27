@@ -4,6 +4,7 @@ namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PermissionTrait;
+use App\Models\Traits\UserPermissionableTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,7 @@ class NetworkOperator extends Model
     use HasFactory;
     use SoftDeletes;
     use PermissionTrait;
+    use UserPermissionableTrait;
     use AuditableTrait;
 
     protected $fillable = [
@@ -110,6 +112,21 @@ class NetworkOperator extends Model
                         ]
 
                     ],
+                    [
+                        "title" => "Ordenes de servicio",
+                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Ordenes de servicio",
+                                "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
+                        ]
+
+                    ],
+
                 ]
         ];
     }

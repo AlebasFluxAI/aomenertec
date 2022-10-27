@@ -14,7 +14,8 @@
                     <span class="fas fa-bars"></span>
                 </button>
 
-                <div class=" collapse navbar-collapse" id="navbarSupportedContent" style="visibility: inherit !important;">
+                <div class=" collapse navbar-collapse" id="navbarSupportedContent"
+                     style="visibility: inherit !important;">
                     <ul class="navbar-nav mr-auto">
 
                         <li class="nav-item">
@@ -55,7 +56,7 @@
             </div>
         @endif
 
-        <div class="col-12 mb-2">
+        <div class="col-md-7 mb-2">
             <p class="login-title text-lg pb-4 text-center" style="color: #1c9599;">Conectate</p>
         </div>
         <div class="col-md-12 mb-3">
@@ -78,12 +79,10 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña </label>
-                    @if (Route::has('password.request'))
-                        <a class="login-forgot-pass" href="
-                                    {{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"coenergia"]) }}
-                                    ">
-                            ¿La olvidaste?</a>
-                    @endif
+                    <a class="login-forgot-pass" href="
+                                    {{route('password.reset.form')}}
+                            ">
+                        ¿La olvidaste?</a>
                     <input type="password"
                            class="form-control @error('password') is-invalid @enderror"
                            name="password" autocomplete="current-password" required>
@@ -95,7 +94,8 @@
                 </div>
                 <div class="flex justify-between">
                     @include("auth.support_button")
-                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" type="submit">Ingresar</button>
+                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" type="submit">Ingresar
+                    </button>
                 </div>
 
             </form>

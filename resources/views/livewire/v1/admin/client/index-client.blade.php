@@ -27,8 +27,8 @@
               ])
 
         @include("partials.v2.table.primary-table",[
-        "class_container"=>$table_class_container??null,
-                       "table_pageable"=>$table_pageable??true,
+                "class_container"=>$table_class_container??null,
+               "table_pageable"=>$table_pageable??true,
                "table_headers"=>[
               [
                    "col_name" =>"ID",
@@ -124,6 +124,34 @@
                                                         "tooltip_title"=>"Agregar equipos",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_ADD_EQUIPMENT],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.work_orders",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-hammer",
+                                                        "tooltip_title"=>"Ordenes de trabajo",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_WORK_ORDER],
+                                                ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.change_equipment.historical",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-server",
+                                                        "tooltip_title"=>"Historial de cambios de equipo",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
+                                                ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.add.alerts",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-bell",
+                                                        "tooltip_title"=>"Alertas",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_ALERTS],
+                                                ],
+
                                     ]
                                     ],
 

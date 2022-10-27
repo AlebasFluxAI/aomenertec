@@ -52,8 +52,9 @@ return [
         Permissions::CLIENT_CREATE,
         Permissions::CLIENT_EDIT,
         Permissions::CLIENT_SHOW,
-        Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
+        Permissions::CLIENT_SETTINGS,
 
         Permissions::SUPPORT_CREATE,
         Permissions::SUPPORT_EDIT,
@@ -79,10 +80,19 @@ return [
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::CLIENT_ADD_EQUIPMENT,
+
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_CREATE,
+        Permissions::WORK_ORDER_EDIT,
+        Permissions::CLIENT_WORK_ORDER,
+
     ],
 
     // Super admin
     SuperAdmin::class => [
+        Permissions::EQUIPMENT_CONFIG,
         Permissions::ADMIN_CREATE,
         Permissions::ADMIN_LINK_EQUIPMENT,
         Permissions::ADMIN_REMOVE_EQUIPMENT,
@@ -131,7 +141,9 @@ return [
         Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
+        Permissions::CLIENT_WORK_ORDER,
 
         Permissions::SUPERVISOR_CREATE,
         Permissions::SUPERVISOR_EDIT,
@@ -161,6 +173,11 @@ return [
         Permissions::PQR_EQUIPMENT_CHANGE,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
 
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_CREATE,
+        Permissions::WORK_ORDER_EDIT,
     ],
     // Operador de red
     NetworkOperator::class => [
@@ -192,6 +209,7 @@ return [
         Permissions::CLIENT_EDIT,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
 
         Permissions::SUPPORT_CREATE,
@@ -210,35 +228,64 @@ return [
         Permissions::PQR_REPLY,
         Permissions::PQR_CREATE_NETWORK_OPERATOR,
         Permissions::PQR_CLOSE,
+        Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
+        Permissions::PQR_CHANGE_LEVEL,
+
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_CREATE,
+        Permissions::WORK_ORDER_EDIT,
+        Permissions::CLIENT_WORK_ORDER,
+
 
     ],
     // Tecnico
     Technician::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
-
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE,
-        Permissions::PQR_CLOSE
+        Permissions::PQR_CLOSE,
+
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_SOLVE,
+        Permissions::WORK_ORDER_IN_PROGRESS,
+        Permissions::WORK_ORDER_STOP,
+        Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
     ],
     // Soporte
     Support::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
 
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
+
+        Permissions::WORK_ORDER_DETAILS,
+        Permissions::WORK_ORDER_SHOW,
+        Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_SOLVE,
+        Permissions::WORK_ORDER_IN_PROGRESS,
+        Permissions::WORK_ORDER_STOP,
+        Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
+        Permissions::PQR_EQUIPMENT_CHANGE,
+
 
     ],
     // Vendedor
     Seller::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::SELLER_MANAGE_PURCHASE,
         Permissions::SELLER_MANAGE_PURCHASE_CREATE,
     ],
@@ -246,6 +293,7 @@ return [
     Supervisor::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
+        Permissions::CLIENT_SHOW_ALERTS,
         Permissions::PQR_CREATE,
         Permissions::PQR_SHOW,
         Permissions::PQR_REPLY,

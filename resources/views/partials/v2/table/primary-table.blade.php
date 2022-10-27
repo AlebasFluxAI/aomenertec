@@ -75,8 +75,6 @@
 
                             <td style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}"
                             >
-
-
                                 @if(str_contains($table_header["col_data"],".") and !str_contains($table_header["col_data"],"*") and $table_row->{explode(".",$table_header["col_data"])[0]})
                                     @if(isset($table_header["col_data_function"]))
                                         @include("partials.v2.table.primary-table-column",[
@@ -92,7 +90,13 @@
                                               ])
                                     @endif
                                 @else
-                                    @if(isset($table_header["col_data_function"]))
+                                    @if(isset($table_header["col_data_component_function"]))
+                                        @include("partials.v2.table.primary-table-column",[
+                                               "col_data"=>$this->{$table_header["col_data"]}($table_row->{$table_headers[0]["col_data"]}),
+                                               "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
+                                               "col_translate"=>$table_header["col_translate"]??null,
+                                           ])
+                                    @elseif(isset($table_header["col_data_function"]))
                                         @include("partials.v2.table.primary-table-column",[
                                       "col_data"=>$table_row->{$table_header["col_data"]}(),
                                       "col_array_data"=>$table_header["col_array_data"]??"",
@@ -167,7 +171,8 @@
                                                     @if(array_key_exists("redirect",$custom))
                                                         @include("partials.v1.table.table-redirect-button",[
                                                                  "button_route"=>$custom["redirect"]["route"],
-                                                                 "button_binding"=>$custom["redirect"]["binding"],
+                                                                 "button_binding"=>array_key_exists("binding",$custom["redirect"])?$custom["redirect"]["binding"]:"",
+                                                                 "redirect_values"=>array_key_exists("extra_params",$custom["redirect"])?$custom["redirect"]["extra_params"]:[],
                                                                  "icon_color"=>"secondary",
                                                                  "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
                                                                     $table_row->{$table_headers[0]["col_data"]},

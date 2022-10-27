@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Models\V1\AuxData;
 
 class SaveMicrocontrollerDataJob implements ShouldQueue
 {
@@ -36,8 +37,11 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->data = MicrocontrollerData::create([
+        $data = MicrocontrollerData::create([
             "raw_json" => $this->raw_json,
+        ]);
+        AuxData::create([
+          'data' => $this->raw_json
         ]);
     }
 }

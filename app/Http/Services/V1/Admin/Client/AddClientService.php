@@ -2,7 +2,8 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Services\V1\Admin\Client\AddClient;
+use App\Http\Resources\V1\Icon;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
@@ -60,6 +61,10 @@ class AddClientService extends Singleton
 
             "identification_type" => Client::IDENTIFICATION_TYPE_CC,
             "person_type" => Client::PERSON_TYPE_NATURAL,
+
+            "client_identification_type" => Client::IDENTIFICATION_TYPE_CC,
+            "client_person_type" => Client::PERSON_TYPE_NATURAL,
+
             "identification_types" => $this->identificationTypes(),
             'person_types' => [
                 ["key" => "Persona natural", "value" => Client::PERSON_TYPE_NATURAL,],
@@ -94,7 +99,6 @@ class AddClientService extends Singleton
 
     private function getClientTypes($component)
     {
-
         return ClientType::clientTypesAsKeyValue();
     }
 
@@ -210,6 +214,9 @@ class AddClientService extends Singleton
 
     public function updatedNetworkOperatorId(Component $component)
     {
+        if (!$component->network_operator_id) {
+            return;
+        }
         $component->technician_select_disabled = false;
         $component->technicians = NetworkOperator::find($component->network_operator_id)->techniciansAsKeyValue();
         $component->technician_id = null;
@@ -379,11 +386,11 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
-
         if (!$component->client_type_id) {
             $component->addError('client_type', 'Seleccione un tipo de cliente');
             return;
         }
+
         DB::transaction(function () use ($component) {
             $client = $this->createClient($component);
             $this->linkAddress($component, $client);
@@ -403,13 +410,14 @@ class AddClientService extends Singleton
                 break;
             }
         }
+
         return Client::create([
             'name' => $component->name,
             'last_name' => $component->last_name,
             'email' => $component->email,
             'code' => $code,
             'phone' => $component->phone,
-            'identification' => $component->identification,
+            'identification' => $component->client_identification,
             'network_topology' => $component->network_topology,
             'active' => $component->active,
             'contribution' => $component->contribution,
@@ -419,9 +427,10 @@ class AddClientService extends Singleton
             'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,
             'stratum_id' => $component->stratum_id,
-            'identification_type' => $component->identification_type,
-            'person_type' => $component->person_type,
-            "has_telemetry" => $component->has_telemetry
+            'identification_type' => $component->client_identification_type,
+            'person_type' => $component->client_person_type,
+            "has_telemetry" => $component->has_telemetry,
+            "admin_id" => Auth::user()->getAdmin() ? Auth::user()->getAdmin()->id : null,
         ]);
     }
 
@@ -447,6 +456,9 @@ class AddClientService extends Singleton
 
     private function linkTechnician(Component $component, Client $client)
     {
+        if (!$component->technician_id) {
+            return;
+        }
         $client->technician()->create([
             "technician_id" => $component->technician_id
         ]);

@@ -16,6 +16,7 @@ use App\Models\V1\Image;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Notification;
+use App\Models\V1\OtpUser;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrLog;
 use App\Models\V1\PqrMessage;
@@ -26,6 +27,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Models\V1\WorkOrder;
 use App\Observers\ActionBy\ActionByObserve;
 use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
@@ -33,6 +35,7 @@ use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
 use App\Observers\HereMapObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
+use App\Observers\OtpUser\OtpUserObserver;
 use App\Observers\Pqr\PqrMessageObserver;
 use App\Observers\Image\ImageObserver;
 use App\Observers\Pqr\PqrObserver;
@@ -49,12 +52,12 @@ use App\Models\V1\ClientAlert;
 use App\Observers\V1\Change\ChangeObserver;
 use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
+use App\Observers\WorkOrder\WorkOrderObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\PersonalAccessToken;
-
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -75,7 +78,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         Event::listen(['eloquent.deleting:*', 'eloquent.updating:*', 'eloquent.creating:*'], function ($model) {
             $model = trim(explode(':', $model)[1]);
             if (is_subclass_of($model, Model::class) and
@@ -83,10 +85,11 @@ class AppServiceProvider extends ServiceProvider
                 $model::observe(ChangeObserver::class);
             }
         });
-        
+
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
         MicrocontrollerData::observe(MicrocontrollerDataObserver::class);
+
         Admin::observe(UserAdminObserver::class);
         NetworkOperator::observe(UserNetworkOperatorObserver::class);
         Seller::observe(UserSellerObserver::class);
@@ -94,6 +97,7 @@ class AppServiceProvider extends ServiceProvider
         Supervisor::observe(UserSupervisorObserver::class);
         Technician::observe(UserTechnicianObserver::class);
         Support::observe(UserSupportObserver::class);
+
         User::observe(UserObserver::class);
         //ClientAlertConfiguration::observe(ClientAlertConfigurationObserver::class);
         Equipment::observe(EquipmentObserver::class);
@@ -130,5 +134,9 @@ class AppServiceProvider extends ServiceProvider
         PqrLog::observe(ActionByObserve::class);
         ClientRecharge::observe(ActionByObserve::class);
         HistoricalClientEquipment::observe(ActionByObserve::class);
+
+        OtpUser::observe(OtpUserObserver::class);
+
+        WorkOrder::observe(WorkOrderObserver::class);
     }
 }

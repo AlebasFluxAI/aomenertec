@@ -20,15 +20,16 @@ class EquipmentIndexService extends Singleton
         return Equipment::with("equipmentType")->paginate(15);
     }
 
-    public function conditionalRemoveEquipmentAdmin(Component $component, $id){
-
+    public function conditionalRemoveEquipmentAdmin(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_admin;
         }
     }
-    public function removeEquipmentAdmin(Component $component, $id){
+    public function removeEquipmentAdmin(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -42,15 +43,16 @@ class EquipmentIndexService extends Singleton
         $component->reset();
     }
 
-    public function conditionalRemoveEquipmentNetworkOperator(Component $component, $id){
-
+    public function conditionalRemoveEquipmentNetworkOperator(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_network_operator;
         }
     }
-    public function removeEquipmentNetworkOperator(Component $component, $id){
+    public function removeEquipmentNetworkOperator(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -62,15 +64,16 @@ class EquipmentIndexService extends Singleton
         $component->reset();
     }
 
-    public function conditionalRemoveEquipmentTechnician(Component $component, $id){
-
+    public function conditionalRemoveEquipmentTechnician(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_technician;
         }
     }
-    public function removeEquipmentTechnician(Component $component, $id){
+    public function removeEquipmentTechnician(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -85,7 +88,7 @@ class EquipmentIndexService extends Singleton
         $model = User::getUserModel();
         if ($model::class == SuperAdmin::class) {
             return Equipment::find($id)->has_admin;
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return Equipment::find($id)->has_network_operator;
         }
         return false;
@@ -97,51 +100,50 @@ class EquipmentIndexService extends Singleton
         $component->reset();
     }
 
-    public function getPermission(){
+    public function getPermission()
+    {
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
             return [\App\Http\Resources\V1\Permissions::TECHNICIAN_REMOVE_EQUIPMENT];
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return [\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_REMOVE_EQUIPMENT];
-
-        } elseif ($model::class == SuperAdmin::class){
+        } elseif ($model::class == SuperAdmin::class) {
             return [\App\Http\Resources\V1\Permissions::ADMIN_REMOVE_EQUIPMENT];
         }
         return [\App\Http\Resources\V1\Permissions::TECHNICIAN_REMOVE_EQUIPMENT];
-
     }
-    public function getFunctionRemoveEquipment(){
+    public function getFunctionRemoveEquipment()
+    {
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
             return "removeEquipmentTechnician";
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return "removeEquipmentNetworkoperator";
-
-        } elseif ($model::class == SuperAdmin::class){
+        } elseif ($model::class == SuperAdmin::class) {
             return "removeEquipmentAdmin";
         }
         return "removeEquipmentTechnician";
     }
-    public function getConditionalRemoveEquipment(){
+    public function getConditionalRemoveEquipment()
+    {
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
             return "conditionalRemoveEquipmentTechnician";
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return "conditionalRemoveEquipmentNetworkoperator";
-
-        } elseif ($model::class == SuperAdmin::class){
+        } elseif ($model::class == SuperAdmin::class) {
             return "conditionalRemoveEquipmentAdmin";
         }
         return "conditionalRemoveEquipmentTechnician";
     }
-    public function getAvailableFlag(){
+    public function getAvailableFlag()
+    {
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
             return "has_technician";
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return "has_network_operator";
-
-        } elseif ($model::class == SuperAdmin::class){
+        } elseif ($model::class == SuperAdmin::class) {
             return "has_admin";
         }
         return "has_technician";
@@ -155,10 +157,10 @@ class EquipmentIndexService extends Singleton
                 return Equipment::whereNetworkOperatorId($model->id)
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
                     ->paginate(15);
-            } elseif ($model::class == Admin::class){
+            } elseif ($model::class == Admin::class) {
                 return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')
                     ->paginate(15);
-            } elseif ($model::class == Technician::class){
+            } elseif ($model::class == Technician::class) {
                 return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')
                     ->paginate(15);
             }
@@ -168,10 +170,10 @@ class EquipmentIndexService extends Singleton
         if ($model::class == NetworkOperator::class) {
             return Equipment::whereNetworkOperatorId($model->id)
                 ->paginate(15);
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return Equipment::whereAdminId($model->id)
                 ->paginate(15);
-        } elseif ($model::class == Technician::class){
+        } elseif ($model::class == Technician::class) {
             return Equipment::whereTechnicianId($model->id)
                 ->paginate(15);
         }

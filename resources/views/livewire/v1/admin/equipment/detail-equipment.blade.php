@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -24,18 +25,6 @@
                             "tab_titles"=>[
                                                 [
                                                     "title"=>"Detalles",
-
-                                                ],
-                                                [
-                                                    "title"=>"Administrador",
-
-                                                ],
-                                                [
-                                                    "title"=>"Operador",
-
-                                                ],
-                                                [
-                                                    "title"=>"Tecnico",
 
                                                 ],
                                                 [
@@ -70,50 +59,63 @@
                                                                              "key"=>"Tipo de equipo",
                                                                              "value"=>$equipment->equipmentType->type
                                                                          ],
+                                                                         [
+                                                                             "key"=>"Administrador",
+                                                                             "value"=>$equipment->admin->id ." - ".$equipment->admin->name
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Operador de red",
+                                                                             "value"=>$equipment->networkOperator->id ." - ".$equipment->networkOperator->name
+                                                                         ],
 
 
                                                                      ]
                                                             ]
                                                 ],
-                                                [
-                                                  "view_name"=>"livewire.v1.admin.user.admin.index-admin",
-                                                  "view_values"=>[
-                                                      "data"=>$equipment->admin()->get(),
-                                                      "table_pageable"=>false,
-                                                      "table_class_container"=>"",
-                                                      "view_header"=>false,
-                                                      "col_filter"=>false
-                                                   ],
-                                               ],
                                                [
-                                                  "view_name"=>"livewire.v1.admin.user.network-operator.index-network-operator",
+                                                  "view_name"=>"partials.v2.table.primary-table",
                                                   "view_values"=>[
-                                                      "data"=>$equipment->networkOperator()->get(),
-                                                      "table_pageable"=>false,
-                                                      "table_class_container"=>"",
-                                                      "view_header"=>false,
-                                                      "col_filter"=>false
-                                                   ],
-                                               ],
-                                               [
-                                                  "view_name"=>"livewire.v1.admin.user.technician.index-technician",
-                                                   "view_values"=>[
-                                                                       "data"=>$equipment->technicians()->get(),
-                                                                       "table_class_container"=>"",
-                                                                       "view_header"=>false,
-                                                                       "is_filtered"=>false,
-                                                                       "col_filter"=>false,
-                                                                       "network_operator_conditional_delete"=>"conditionalDeleteTechnician",
-                                                                  ]
-                                               ],
-                                               [
-                                                  "view_name"=>"livewire.v1.admin.client.index-client",
-                                                  "view_values"=>[
-                                                      "data"=>$equipment->clients()->get(),
-                                                      "table_pageable"=>false,
-                                                      "table_class_container"=>"",
-                                                      "view_header"=>false,
-                                                      "col_filter"=>false
+                                                             "class_container"=>null,
+                                                                "table_pageable"=>true,
+                                                                "table_rows"=>$equipment->clients,
+                                                                "table_headers"=>[
+                                                                          [
+                                                                               "col_name" =>"ID",
+                                                                               "col_data" =>"id",
+                                                                               "col_filter"=>true
+                                                                           ],
+                                                                           [
+                                                                               "col_name" =>"Codigo",
+                                                                               "col_data" =>"code",
+                                                                               "col_filter"=>true
+                                                                           ],
+                                                                           [
+                                                                               "col_name" =>"Nombre",
+                                                                               "col_data" =>"name",
+                                                                               "col_filter"=>true
+                                                                           ],
+                                                                           [
+                                                                               "col_name" =>"Apellido",
+                                                                               "col_data" =>"last_name",
+                                                                               "col_filter"=>true
+                                                                           ],
+                                                                           [
+                                                                               "col_name" =>"Correo electronico",
+                                                                               "col_data" =>"email",
+                                                                               "col_filter"=>true
+                                                                           ],
+                                                                           [
+                                                                               "col_name" =>"Telefono",
+                                                                               "col_data" =>"phone",
+                                                                               "col_filter"=>true
+                                                                           ],
+                                                                            [
+                                                                                   "col_name" =>"Operador de red",
+                                                                                   "col_data" =>"networkOperator.name",
+                                                                                   "col_filter"=>false
+                                                                               ],
+
+                                                                            ],
                                                    ],
                                                ],
 

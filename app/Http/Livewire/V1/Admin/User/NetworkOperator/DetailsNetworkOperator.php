@@ -89,7 +89,8 @@ class DetailsNetworkOperator extends Component
         return $this->detailsNetworkOperatorService->getEnabledAuxSupervisor($this, $id);
     }
 
-    public function conditionalDeleteEquipment($id){
+    public function conditionalDeleteEquipment($id)
+    {
         return $this->detailsNetworkOperatorService->conditionalDeleteEquipment($this, $id);
     }
     public function deleteEquipment($id)

@@ -42,7 +42,9 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     public function handle()
     {
         $data = $this->unpackData();
-        event(new RealTimeMonitoringEvent($data));
+        if ($data) {
+            event(new RealTimeMonitoringEvent($data));
+        }
     }
     private function unpackData()
     {
@@ -59,9 +61,21 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                 } else {
                     $json[$data['variable_name']] = round(unpack($data['type'], $bin)[1], 3);
                 }
+
                 if ($data['start'] >= 432) {
                     break;
                 }
+
+                if ($data['start'] >= 72) {
+                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
+                        if (!$data['default']) {
+                            $json[$data['variable_name']] = $data['default'];
+                        } else {
+                            $json[$data['variable_name']] = 0;
+                        }
+                    }
+                }
+
                 if (is_nan($json[$data['variable_name']])) {
                     $json[$data['variable_name']] = null;
                 }
@@ -73,10 +87,13 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
         $current_time = Carbon::now()->format('Y-m-d H:i:s');
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($json['equipment_id'])
             ->first();
-        $client = $equipment->clients()->first();
-        $client_id = $client->id;
-        $json['timestamp'] = $current_time;
-        $json['client_id'] = $client_id;
-        return $json;
+        if ($equipment) {
+            $client = $equipment->clients()->first();
+            $client_id = $client->id;
+            $json['timestamp'] = $current_time;
+            $json['client_id'] = $client_id;
+            return $json;
+        }
+        return false;
     }
 }

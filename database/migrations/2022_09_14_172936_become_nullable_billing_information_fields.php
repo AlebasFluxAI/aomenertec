@@ -19,7 +19,6 @@ class BecomeNullableBillingInformationFields extends Migration
             $table->string("phone")->nullable()->change();
             $table->string("name")->nullable()->change();
             $table->string("identification_type")->nullable()->change();
-
         });
     }
 

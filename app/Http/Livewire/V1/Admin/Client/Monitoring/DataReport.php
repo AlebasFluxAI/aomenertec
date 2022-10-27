@@ -45,7 +45,7 @@ class DataReport extends Component
         $this->date_range_report = $start->format('Y-m-d') . " - " . $end->format('Y-m-d');
         $index = 0;
         $this->variables->push(
-            ['id' => 29, 'display_name' => 'Matriz de reactivos']
+            ['id' => 33, 'display_name' => 'Matriz de reactivos']
         );
     }
 
@@ -71,25 +71,24 @@ class DataReport extends Component
     private function arrayCreate()
     {
         if ($this->time_report_id == 1) {
-            $data_report = $this->client->hourlyMicrocontrollerData()
-                ->whereHas('microcontrollerData', function ($query) {
-                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
-                })->limit(1440)->get();
+            $data_report = $this->client->microcontrollerData()
+                ->whereBetween("source_timestamp", [$this->start_report, $this->end_report])
+                ->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA", "MINUTO"];
         } elseif ($this->time_report_id == 2) {
-            $data_report = $this->client->dailyMicrocontrollerData()
+            $data_report = $this->client->hourlyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
                 })->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA"];
         } elseif ($this->time_report_id == 3) {
-            $data_report = $this->client->monthlyMicrocontrollerData()
+            $data_report = $this->client->dailyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
                 })->limit(720)->get();
             $array_title = ["ANIO", "MES", "DIA"];
         } else {
-            $data_report = $this->client->annualMicrocontrollerData()
+            $data_report = $this->client->monthlyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
                 })->limit(24)->get();
@@ -97,7 +96,7 @@ class DataReport extends Component
         }
         if (count($data_report) > 0) {
             foreach ($this->variables_selected as $variable) {
-                if ($variable != 29) {
+                if ($variable != 33) {
                     $variables_name = $this->data_frame->where('variable_id', $variable);
                     foreach ($variables_name as $name) {
                         array_push($array_title, $name['display_name']);
@@ -106,20 +105,21 @@ class DataReport extends Component
             }
             foreach ($data_report as $index => $data) {
                 if ($this->time_report_id == 1) {
-                    $array[$index] = [$data->year, $data->month, $data->day, $data->hour, $data->minute];
-                    $raw_json = json_decode($data->microcontrollerData->raw_json, true);
+                    $date = Carbon::create($data->source_timestamp);
+                    $array[$index] = [intval($date->format('Y')), intval($date->format('m')), intval($date->format('d')), intval($date->format('H')), intval($date->format('i'))];
+                    $raw_json = json_decode($data->raw_json, true);
                 } elseif ($this->time_report_id == 2) {
-                    $array[$index] = [$data->year, $data->month, $data->day, $data->hour];
+                    $array[$index] = [intval($data->year), intval($data->month), intval($data->day), intval($data->hour)];
                     $raw_json = json_decode($data->microcontrollerData->raw_json, true);
                 } elseif ($this->time_report_id == 3) {
-                    $array[$index] = [$data->year, $data->month, $data->day];
+                    $array[$index] = [intval($data->year), intval($data->month), intval($data->day)];
                     $raw_json = json_decode($data->raw_json, true);
                 } else {
-                    $array[$index] = [$data->year, $data->month];
+                    $array[$index] = [intval($data->year), intval($data->month)];
                     $raw_json = json_decode($data->raw_json, true);
                 }
                 foreach ($this->variables_selected as $variable) {
-                    if ($variable != 29) {
+                    if ($variable != 33) {
                         $variables_name = $this->data_frame->where('variable_id', $variable);
                         foreach ($variables_name as $name) {
                             array_push($array[$index], round($raw_json[$name['variable_name']], 2));
@@ -129,7 +129,7 @@ class DataReport extends Component
             }
             array_unshift($array, $array_title);
             $array_report = [$array];
-            if (in_array(29, $this->variables_selected)) {
+            if (in_array(33, $this->variables_selected)) {
                 $array_penalizable = $this->arrayCreateReactive();
                 foreach ($array_penalizable as $item) {
                     array_push($array_report, $item);
@@ -153,12 +153,12 @@ class DataReport extends Component
         $days = $aux_day->diffInDays($start_day);
         for ($i = 0; $i <= $days; $i++) {
             if ($i == 0) {
-                $data_report = $this->client->dailyMicrocontrollerData()
+                $data_report = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate('source_timestamp', $this->end_day->format('Y-m-d'));
                     })->get();
             } else {
-                $data_report = $this->client->dailyMicrocontrollerData()
+                $data_report = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate('source_timestamp', $this->end_day->subDay(1)->format('Y-m-d'));
                     })->get();
@@ -212,19 +212,23 @@ class DataReport extends Component
 
     public function selectReport()
     {
-        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-        RealTimeListener::whereUserId(Auth::user()->id)
-            ->whereEquipmentId(
-                $equipment->id
-            )->delete();
-
-        if (!RealTimeListener::whereEquipmentId(
-            $equipment->id
-        )->exists()) {
-            $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            $topic = 'mc/config/'.$equipment->serial;
-            MQTT::publish($topic, $message);
-            MQTT::disconnect();
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+            if ($this->client->clientConfiguration()->first()->real_time_flag) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    RealTimeListener::whereUserId(Auth::user()->id)
+                        ->whereEquipmentId(
+                            $equipment->id
+                        )->delete();
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        MQTT::publish($topic, $message);
+                        MQTT::disconnect();
+                    }
+                }
+            }
         }
     }
 

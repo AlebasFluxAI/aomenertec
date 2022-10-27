@@ -77,7 +77,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Operador de red",
-                                                                             "value"=>$client->networkOperator->id. "- ". $client->networkOperator->name
+                                                                             "value"=>$client->networkOperator?($client->networkOperator->id. "- ". $client->networkOperator->name):""
                                                                          ],
 
 

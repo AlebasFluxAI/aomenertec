@@ -11,7 +11,7 @@ class ClientDigitalOutputAlertConfiguration extends Model
 {
     use HasFactory;
     use AuditableTrait;
-    
+
     protected $fillable = [
         'client_alert_configuration_id',
         'client_digital_output_id'

@@ -1,5 +1,5 @@
 <div>
-    <div style="background-color: #f2f2f2;padding: 15px;border-radius: 15px">
+    <div style="background-color: #f2f2f2;padding: 15px;border-radius: 15px;margin-bottom: 5%">
         @include("layouts.menu.v1.header_menu_password")
         <br>
         @include("partials.v1.primary_navigator",

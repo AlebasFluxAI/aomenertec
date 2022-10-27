@@ -75,15 +75,16 @@ class SuperAdminDetailsService extends Singleton
         }
         return true;
     }
-    public function conditionalRemoveEquipmentAdmin(Component $component, $id){
-
+    public function conditionalRemoveEquipmentAdmin(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_admin;
         }
     }
-    public function removeEquipmentAdmin(Component $component, $id){
+    public function removeEquipmentAdmin(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -143,15 +144,16 @@ class SuperAdminDetailsService extends Singleton
     {
         return Technician::find($modelId)->clientTechnicians()->exists();
     }
-    public function conditionalRemoveEquipmentNetworkOperator(Component $component, $id){
-
+    public function conditionalRemoveEquipmentNetworkOperator(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_network_operator;
         }
     }
-    public function removeEquipmentNetworkOperator(Component $component, $id){
+    public function removeEquipmentNetworkOperator(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -167,7 +169,7 @@ class SuperAdminDetailsService extends Singleton
         $model = User::getUserModel();
         if ($model::class == SuperAdmin::class) {
             return Equipment::find($id)->has_admin;
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return Equipment::find($id)->has_network_operator;
         }
         return false;
@@ -178,5 +180,4 @@ class SuperAdminDetailsService extends Singleton
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
         $component->reset();
     }
-
 }

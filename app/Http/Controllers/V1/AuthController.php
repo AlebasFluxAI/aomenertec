@@ -83,8 +83,8 @@ class AuthController extends Controller
     {
         $user = auth("api")->user();
 
-            $pass = "jghsdjfg626FFDS5266s";
-            $pass1 = "jkdhjk54858DDS55";
+        $pass = "jghsdjfg626FFDS5266s";
+        $pass1 = "jkdhjk54858DDS55";
 
         $respuesta = [['uid'=>"123456789", 'did'=>'999999', 'ssid'=>'wifi_123456789',
             'password'=>"00000000", 'nombre'=>'cliente 1', 'direccion'=>'direccion cliente 1', 'departamento'=>'meta',

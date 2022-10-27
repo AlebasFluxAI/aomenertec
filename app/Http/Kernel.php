@@ -9,6 +9,7 @@ use App\Http\Middleware\V1\EncryptCookies;
 use App\Http\Middleware\V1\PermissionMiddleware;
 use App\Http\Middleware\V1\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\V1\RedirectIfAuthenticated;
+use App\Http\Middleware\V1\RoleSelectionMiddleware;
 use App\Http\Middleware\V1\TrimStrings;
 use App\Http\Middleware\V1\TrustProxies;
 use App\Http\Middleware\V1\VerifyCsrfToken;
@@ -90,6 +91,7 @@ class Kernel extends HttpKernel
         'verified' => EnsureEmailIsVerified::class,
         'permission' => PermissionMiddleware::class,
         'custom_permissions' => CustomPermissionMiddleware::class,
-        'enable_user' => CheckEnableUser::class
+        'enable_user' => CheckEnableUser::class,
+        "role_selection" => RoleSelectionMiddleware::class
     ];
 }

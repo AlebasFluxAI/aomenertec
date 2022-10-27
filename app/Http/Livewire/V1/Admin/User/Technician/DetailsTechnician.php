@@ -23,14 +23,16 @@ class DetailsTechnician extends Component
         $this->detailsTechnicianService->mount($this, $technician);
     }
 
-    public function conditionalDeleteEquipment($id){
+    public function conditionalDeleteEquipment($id)
+    {
         return $this->detailsTechnicianService->conditionalDeleteEquipment($this, $id);
     }
     public function deleteEquipment($id)
     {
         $this->detailsTechnicianService->deleteEquipment($this, $id);
     }
-    public function conditionalRemoveEquipmentTechnician($id){
+    public function conditionalRemoveEquipmentTechnician($id)
+    {
         return $this->detailsTechnicianService->conditionalRemoveEquipmentTechnician($this, $id);
     }
     public function removeEquipmentTechnician($id)

@@ -26,6 +26,11 @@
                             "tab_titles"=>[
                                                 [
                                                     "title"=>"Conexión",
+                                                    "permissions"=>[
+                                                        \App\Models\V1\Admin::class=>\App\Models\V1\TabPermission::CLIENT_CONFIG_CONNECTION,
+                                                        \App\Models\V1\NetworkOperator::class=>\App\Models\V1\TabPermission::CLIENT_CONFIG_CONNECTION,
+                                                        \App\Models\V1\Technician::class=>\App\Models\V1\TabPermission::CLIENT_CONFIG_CONNECTION,
+                                                        ]
 
                                                 ],
                                                 [

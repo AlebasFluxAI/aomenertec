@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "df444fd2dfec3e1696a1111e95447053",
+    "content-hash": "5aca7b0ea9d661a412b58ae2e5e3a786",
     "packages": [
         {
             "name": "asantibanez/livewire-charts",
@@ -9016,6 +9016,72 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "bdelespierre/laravel-blade-linter",
+            "version": "v1.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bdelespierre/laravel-blade-linter.git",
+                "reference": "c7b1f5342b0118bc14672fb006a2770282abcb70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bdelespierre/laravel-blade-linter/zipball/c7b1f5342b0118bc14672fb006a2770282abcb70",
+                "reference": "c7b1f5342b0118bc14672fb006a2770282abcb70",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^8.0",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.4",
+                "phpstan/phpstan": "^0.12.83",
+                "phpunit/phpunit": "^9.3"
+            },
+            "bin": [
+                "bin/blade-linter"
+            ],
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bdelespierre\\LaravelBladeLinter\\BladeLinterServiceProvider"
+                    ],
+                    "aliases": {
+                        "LaravelBladeLinter": "Bdelespierre\\LaravelBladeLinter\\BladeLinterFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tests\\": "tests/",
+                    "Bdelespierre\\LaravelBladeLinter\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Delespierre",
+                    "email": "benjamin.delespierre@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple Blade template syntax checker for Laravel",
+            "homepage": "https://github.com/bdelespierre/laravel-blade-linter",
+            "keywords": [
+                "bdelespierre",
+                "laravel-blade-linter"
+            ],
+            "support": {
+                "issues": "https://github.com/bdelespierre/laravel-blade-linter/issues",
+                "source": "https://github.com/bdelespierre/laravel-blade-linter/tree/v1.6.0"
+            },
+            "time": "2021-04-22T08:03:07+00:00"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.4.1",

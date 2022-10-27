@@ -2,11 +2,14 @@
 
 namespace App\Models\Traits;
 
+use App\Jobs\CreateWorkOrderJob;
 use App\Models\V1\Image;
 use App\Models\V1\Pqr;
+use App\Models\V1\WorkOrder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
@@ -40,9 +43,15 @@ trait PqrStatusTrait
 
     public function requestEquipment(Component $component, $id)
     {
-        Pqr::find($id)->update(
-            ["change_equipment" => true]
-        );
+        DB::transaction(function () use ($id) {
+            $pqr = Pqr::find($id);
+            $pqr->update(
+                ["change_equipment" => true]
+            );
+            if ($pqr->technician_id) {
+                dispatch(new CreateWorkOrderJob($pqr, Auth::user()->id))->onConnection("sync");
+            }
+        });
     }
 
     public function equipmentRequest(Component $component, $id)
@@ -51,12 +60,18 @@ trait PqrStatusTrait
         if ($pqr->has_equipment_changed) {
             return true;
         }
+        if (!$pqr->technician_id) {
+            return true;
+        }
         return !($this->equipmentNotRequest($component, $id));
     }
 
     public function equipmentNotRequest(Component $component, $id)
     {
         $pqr = Pqr::find($id);
+        if (!$pqr->technician_id) {
+            return true;
+        }
         if ($pqr->status == Pqr::STATUS_CLOSED) {
             return true;
         }

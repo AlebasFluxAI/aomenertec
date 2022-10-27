@@ -9,9 +9,9 @@ class Change extends Model
 {
     use HasFactory;
 
-    const CHANGE_TYPE_CREATED = "created";
-    const CHANGE_TYPE_UPDATED = "updated";
-    const CHANGE_TYPE_DELETED = "deleted";
+    public const CHANGE_TYPE_CREATED = "created";
+    public const CHANGE_TYPE_UPDATED = "updated";
+    public const CHANGE_TYPE_DELETED = "deleted";
 
     protected $fillable = [
         "before",

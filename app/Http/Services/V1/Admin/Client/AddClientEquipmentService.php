@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Http\Livewire\V1\Admin\Client\AddClient;
+use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
@@ -44,11 +44,11 @@ class AddClientEquipmentService extends Singleton
         $component->fill([
             'client' => $model,
             'serials' => collect([]),
-            'technician' => $model->technician()->first()->technician
+            'technician' => $model->technician()->first() ? $model->technician()->first()->technician : null
         ]);
         $component->equipment = [];
-        $component->equipment_types = $model->clientType->equipmentTypes;
-        foreach ($model->clientType->equipmentTypes as $index => $type) {
+        $component->equipment_types = $model->admin ? EquipmentType::whereIn("id", $model->admin->adminEquipmentTypes()->pluck("equipment_type_id"))->get() : [];
+        foreach ($component->equipment_types as $index => $type) {
             array_push($component->equipment, [
                 "index" => $index,
                 "id" => "",
@@ -60,7 +60,6 @@ class AddClientEquipmentService extends Singleton
                 "disable" => true,
             ]);
         }
-
     }
 
 
@@ -75,7 +74,7 @@ class AddClientEquipmentService extends Singleton
 
     public function addInputEquipment(Component $component)
     {
-        $component->equipment_types = EquipmentType::whereSerialized(true)->get();
+        $component->equipment_types = $component->client->admin ? EquipmentType::whereIn("id", $component->client->admin->adminEquipmentTypes()->pluck("equipment_type_id"))->get() : [];
         array_push($component->equipment, [
             "index" => count($component->equipment),
             "id" => "",
@@ -113,10 +112,6 @@ class AddClientEquipmentService extends Singleton
                 $component->equipment[$id]['post'] == "No registrado";
                 $type_id = $component->equipment[$id]['type_id'];
                 if (strlen($value) >= 2) {
-                    if (!$component->technician->id) {
-                        ToastEvent::launchToast($component, "show", "error", "Debes seleccionar un tecnico", ["duration" => "2s"]);
-                        return;
-                    }
                     $component->serials = Equipment::where([
                         ["serial", "like", '%' . $value . "%"],
                     ])->take(3)->get();
@@ -169,7 +164,6 @@ class AddClientEquipmentService extends Singleton
 
     private function linkEquipments(Component $component, Client $client)
     {
-
         foreach ($component->equipment as $item) {
             if (!$item["id"]) {
                 continue;
@@ -190,5 +184,4 @@ class AddClientEquipmentService extends Singleton
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
         });
     }
-
 }

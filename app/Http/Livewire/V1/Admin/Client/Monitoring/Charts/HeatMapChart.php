@@ -71,19 +71,23 @@ class HeatMapChart extends Component
 
     public function selectHeatMap()
     {
-        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
-        RealTimeListener::whereUserId(Auth::user()->id)
-            ->whereEquipmentId(
-                $equipment->id
-            )->delete();
-
-        if (!RealTimeListener::whereEquipmentId(
-            $equipment->id
-        )->exists()) {
-            $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            $topic = 'mc/config/'.$equipment->serial;
-            MQTT::publish($topic, $message);
-            MQTT::disconnect();
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+            if ($this->client->clientConfiguration()->first()->real_time_flag) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    RealTimeListener::whereUserId(Auth::user()->id)
+                        ->whereEquipmentId(
+                            $equipment->id
+                        )->delete();
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        MQTT::publish($topic, $message);
+                        MQTT::disconnect();
+                    }
+                }
+            }
         }
         $this->end_day = new Carbon();
         $this->end_heat_map = $this->end_day->format('Y-m-d');
@@ -120,7 +124,11 @@ class HeatMapChart extends Component
                     if ($data['variable_id'] == $this->variable_heat_map_id) {
                         foreach ($array_aux as $index => $item) {
                             $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                            $value = round($raw_json[$data['variable_name']], 2);
+                            if (isset($raw_json[$data['variable_name']])) {
+                                $value = round($raw_json[$data['variable_name']], 2);
+                            } else {
+                                $value = null;
+                            }
                             $data_aux[intval($item->hour)] = $value;
                             if ($value > $max_value) {
                                 $max_value = $value;

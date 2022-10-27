@@ -17,9 +17,9 @@ class MicrocontrollerDataObserver
      */
     public function created(MicrocontrollerData $microcontrollerData)
     {
-        AuxData::create([
-            'data' => $microcontrollerData->raw_json
-        ]);
+        //AuxData::create([
+          //  'data' => $microcontrollerData->raw_json
+        //]);
     }
 
     public function updated(MicrocontrollerData $microcontrollerData)

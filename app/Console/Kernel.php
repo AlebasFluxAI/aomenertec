@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-
+use App\Console\Commands\V1\SetTimestamp;
 use App\Console\Commands\V1\RecordDailyConsumption;
 use App\Console\Commands\V1\RecordMonthlyConsumption;
 use App\Console\Commands\V1\UpdateDailyConsumption;
@@ -32,8 +32,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
-        $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
-        $schedule->command(UpdateDataConsumption::class)->everyFiveMinutes()->withoutOverlapping();
+        $schedule->command(UpdateTimestampDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
+        $schedule->command(UpdateDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
+        $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
+        $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
+
 
         ////accumulated daily consumption
         $schedule->command(RecordDailyConsumption::class)->dailyAt('00:10');
@@ -48,8 +51,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateMonthlyConsumption::class)->dailyAt('00:30');
 
         ///Generar facturacion....
-
-
     }
 
     /**

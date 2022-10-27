@@ -33,7 +33,6 @@ class PqrChangeEquipmentManageService extends Singleton
 
     public function updatedSelectedRows(Component $component)
     {
-
         $equipments = $component->equipmentToChange = Equipment::whereIn("id", $component->selectedRows)
             ->where("status", "!=", Equipment::STATUS_REPAIR_PENDING)
             ->whereIn("id", $component->model->client->technician->first()->technician->equipments->pluck("id"))

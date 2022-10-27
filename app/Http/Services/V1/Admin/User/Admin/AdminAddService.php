@@ -6,6 +6,7 @@ use App\Http\Services\Singleton;
 use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
+use App\Models\V1\Technician;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -17,6 +18,7 @@ class AdminAddService extends Singleton
     public function mount(Component $component)
     {
         $component->fill([
+            "personTypes" => [],
             "styles" => Admin::styles(),
             "decodedAddress" => "",
             "identification_types" => $this->identificationTypes(User::PERSON_TYPE_NATURAL),
@@ -48,11 +50,19 @@ class AdminAddService extends Singleton
             $admin->update([
                 "user_id" => $user->id
             ]);
-            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} creado"]);
 
+            if ($component->user_type_network_operator) {
+                $networkOperator = $component->createNetworkOperator($user->id, $component, $admin->id);
+            }
+            if ($component->user_type_technician) {
+                $component->createTechnician($user->id, $component, $admin->id, $networkOperator->id);
+            }
+            
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} creado"]);
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $admin->id]);
         });
     }
+
 
     private function mapper($component)
     {

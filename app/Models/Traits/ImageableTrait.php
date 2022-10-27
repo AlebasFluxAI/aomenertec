@@ -11,6 +11,25 @@ use Illuminate\Support\Facades\Request;
 
 trait ImageableTrait
 {
+    public function saveImageOnModelWithMorphMany($file, $image_relation)
+    {
+        $image = new Image();
+        $image->id = time() . mt_rand(0, 9999999);
+        $image->type = $image_relation;
+        $image->name = 'no_found.png';
+        $image->file_name = 'no_found.png';
+        $no_found_path = '/img/no_found.png';
+        $image->size = '40400';
+        $image->mime_type = 'image/png';
+        $image->path = $no_found_path;
+        $image->url = $no_found_path;
+        $imageSaved = $this->{$image_relation}()->save($image);
+
+        $imageSaved->setDataImage($file);
+        $imageSaved->name = $file->getClientOriginalName();
+        $imageSaved->update();
+    }
+
     public function buildOneImageFromFile($image_name, $imageInput)
     {
         $image = new Image();

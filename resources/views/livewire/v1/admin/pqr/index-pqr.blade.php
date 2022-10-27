@@ -129,6 +129,17 @@
                                                 ],
                                                 [
 
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE_MANAGE],
+                                                        "redirect"=>[
+                                                                "route"=>"administrar.v1.peticiones.cambio-equipo-historico",
+                                                                "binding"=>"pqr"
+                                                          ],
+                                                        "icon"=>"fa fa-server",
+                                                        "tooltip_title"=>"Historial de cambios de equipo",
+                                                        "conditional"=>"closedTicked"
+                                                ],
+                                                [
+
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE],
                                                         "function"=>"requestEquipment",
                                                         "icon"=>"fas fa-computer",

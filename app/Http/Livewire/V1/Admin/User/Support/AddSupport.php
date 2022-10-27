@@ -11,7 +11,6 @@ use Livewire\WithFileUploads;
 
 class AddSupport extends Component
 {
-
     use PassTrait;
 
     public $message;

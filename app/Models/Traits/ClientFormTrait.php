@@ -83,4 +83,7 @@ trait ClientFormTrait
     public $alerts;
     public $billing_types;
     public $billing_type;
+    public $client_person_type;
+    public $client_identification;
+    public $client_identification_type;
 }

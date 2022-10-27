@@ -45,12 +45,14 @@ class UpdateTimestampDataConsumption extends Command
             ->orderBy('id')->get();
         if ($data) {
             foreach ($data as $item) {
-                $decode = bin2hex(base64_decode($item->raw_json));
-                $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
-                $date = new Carbon();
-                $date->setTimestamp($timestamp);
-                $item->source_timestamp = $date->format("Y-m-d H:i:s");
-                $item->saveQuietly();
+                if (json_decode($item->raw_json, true) == null) {
+                    $decode = bin2hex(base64_decode($item->raw_json));
+                    $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
+                    $date = new Carbon();
+                    $date->setTimestamp($timestamp);
+                    $item->source_timestamp = $date->format("Y-m-d H:i:s");
+                    $item->saveQuietly();
+                }
             }
         }
     }

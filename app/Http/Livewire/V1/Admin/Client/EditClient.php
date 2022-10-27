@@ -32,6 +32,10 @@ class EditClient extends Component
         $this->editClientService->mount($this, $client);
     }
 
+    public function updatedNetworkOperatorId()
+    {
+        $this->editClientService->updatedNetworkOperatorId($this);
+    }
 
     public function updatedLocationTypeId()
     {

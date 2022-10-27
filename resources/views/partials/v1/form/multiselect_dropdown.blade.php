@@ -4,7 +4,7 @@
     <select  wire:model.defer="{{$model_select}}" class="selectpicker" name="{{$name_select}}" data-container="#for-picker_{{$name_select}}" multiple>
         @if($optgroup)
             @foreach($options_list as $index => $option)
-                @if($option[$option_value] === 29)
+                @if($option[$option_value] === 33)
                     <optgroup label="">
                         <option value="{{ $option[$option_value] }}">{{ $option[$option_view] }}</option>
                     </optgroup>
@@ -13,7 +13,7 @@
             @endforeach
             <optgroup label="">
             @foreach($options_list as $index => $option)
-                @if($option[$option_value] != '29')
+                @if($option[$option_value] != '33')
                     <option value="{{ $option[$option_value] }}">{{ $option[$option_view] }}</option>
                 @endif
             @endforeach

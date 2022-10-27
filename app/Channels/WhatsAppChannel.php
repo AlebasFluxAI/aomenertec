@@ -57,8 +57,6 @@ class WhatsAppChannel
                 'https://conversations.messagebird.com/v1/conversations/start',
                 $body
             );
-
-
         } catch (Throwable $e) {
         }
     }

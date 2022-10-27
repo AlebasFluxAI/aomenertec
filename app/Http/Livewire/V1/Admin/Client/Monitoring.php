@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Models\V1\Client;
+use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -22,13 +23,13 @@ class Monitoring extends Component
     public $real_time_variables;
     public $time;
     public $clientAlerts;
+    public $data_chart_result;
 
 
     public function mount(Client $client)
     {
-        $this->client = $client;
         $this->clientAlerts = $this->client->clientAlerts;
-        foreach ($this->clientAlerts as &$alert){
+        foreach ($this->clientAlerts as &$alert) {
             $alert->name = $alert->clientAlertConfiguration->getVariableName();
         }
         $this->data_frame = collect(config('data-frame.data_frame'));
@@ -36,6 +37,12 @@ class Monitoring extends Component
         $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
         $this->real_time_variables = $this->variables->where('real_time', true);
         $this->time = 2;
+        $first_day = Carbon::now();
+        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()
+            ->where('year', $first_day->format('Y'))
+            ->where('month', $first_day->format('m'))
+            ->where('day', 01)
+            ->get();
         $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
         if (count($this->data_chart)==0) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
@@ -45,19 +52,23 @@ class Monitoring extends Component
 
     public function tabChange()
     {
-        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
-        RealTimeListener::whereUserId(Auth::user()->id)
-            ->whereEquipmentId(
-                $equipment->id
-            )->delete();
-
-        if (!RealTimeListener::whereEquipmentId(
-            $equipment->id
-        )->exists()) {
-            $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-            $topic = 'mc/config/'.$equipment->serial;
-            MQTT::publish($topic, $message);
-            MQTT::disconnect();
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+            if ($this->client->clientConfiguration()->first()->real_time_flag) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    RealTimeListener::whereUserId(Auth::user()->id)
+                        ->whereEquipmentId(
+                            $equipment->id
+                        )->delete();
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        MQTT::publish($topic, $message);
+                        MQTT::disconnect();
+                    }
+                }
+            }
         }
     }
 

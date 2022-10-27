@@ -46,5 +46,4 @@ class AvailableChannel extends Model
     {
         static::addGlobalScope(new OrderIdScope());
     }
-
 }

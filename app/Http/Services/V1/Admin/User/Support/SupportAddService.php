@@ -13,7 +13,6 @@ use Livewire\Component;
 
 class SupportAddService extends Singleton
 {
-
     use AddUserFormTrait;
 
     public function mount(Component $component)

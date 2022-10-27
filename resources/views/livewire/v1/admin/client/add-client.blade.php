@@ -51,6 +51,16 @@
                          ])
 
                             @include("partials.v1.form.form_input_icon",[
+                                "input_model"=>"last_name",
+                                "updated_input"=> "defer",
+                                "input_label"=>"Apellido del cliente",
+                                "icon_class"=>"fas fa-user",
+                                "placeholder"=>"Apellido del cliente",
+                                "col_with"=>8,
+                                "input_type"=>"text",
+                                "required"=>true
+                       ])
+                            @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Telefono del cliente (Sin indicativo)",
                                     "input_model"=>"phone",
                                    "updated_input"=>"defer",
@@ -70,7 +80,41 @@
                                     "col_with"=>8,
                                     "input_type"=>"email",
                            ])
+
+                            @include("partials.v1.form.form_list",[
+                              "col_with"=>8,
+                              "input_label"=>"Seleccione el tipo de persona",
+                              "input_type"=>"text",
+                              "list_model" => "client_person_type",
+                              "list_default" => "Tipo de persona ...",
+                              "list_options" => $person_types,
+                              "list_option_value"=>"value",
+                              "list_option_view"=>"key",
+                              "list_option_title"=>"",
+                     ])
+                            @include("partials.v1.form.form_list",[
+                                  "col_with"=>8,
+                                  "input_type"=>"text",
+                                  "input_label"=>"Seleccione el tipo de indentificación de cliente",
+                                  "list_model" => "client_identification_type",
+                                  "list_default" => "Tipo de identificación cliente",
+                                  "list_options" => $identification_types,
+                                  "list_option_value"=>"value",
+                                  "list_option_view"=>"key",
+                                  "list_option_title"=>"",
+                         ])
+                            @include("partials.v1.form.form_input_icon",[
+                                   "input_label"=>"Numero de identificación de cliente",
+                                   "input_model"=>"client_identification",
+                                  "updated_input"=>"lazy",
+                                   "icon_class"=>"fas fa-barcode",
+                                   "placeholder"=>"identificación",
+                                   "col_with"=>8,
+                                   "input_type"=>"text",
+                                   "required"=>true
+                          ])
                         </div>
+
 
                         @include("partials.v1.divider_title",[
                                 "title"=>"Datos de facturacion"
@@ -102,7 +146,7 @@
                                     "list_option_title"=>"",
                            ])
                             @include("partials.v1.form.form_input_icon",[
-                                    "input_label"=>"Numero de identificación de cliente",
+                                    "input_label"=>"Numero de identificación para facturacion",
                                     "input_model"=>"identification",
                                    "updated_input"=>"lazy",
                                     "icon_class"=>"fas fa-barcode",
@@ -257,7 +301,7 @@
                           ]
                          )
                         <div class="row pl-5 pr-3">
-                            @if(\App\Http\Resources\V1\Menu::getUserModel()::class==\App\Models\V1\Admin::class)
+                            @if(\App\Models\V1\User::getUserModel() == \App\Models\V1\Admin::class)
                                 @include("partials.v1.form.form_list",[
                                         "col_with"=>8,
                                         "input_type"=>"text",
@@ -268,7 +312,9 @@
                                         "list_option_value"=>"value",
                                         "list_option_view"=>"key",
                                         "list_option_title"=>"",
+                                         "required"=>false
                                ])
+                                @error('network_operator') <span class="error">{{ $message }}</span> @enderror
 
                             @endif
                             @include("partials.v1.form.form_list",[
@@ -289,8 +335,7 @@
                         @include("partials.v1.equipment_to_client_association")
 
                         <div class="text-right">
-                            <button id="add" type="submit" class="mb-2 py-2 px-4"
-                                    @if(!$technician_id) disabled="true" @endif>
+                            <button id="add" type="submit" class="mb-2 py-2 px-4">
                                 <b>
                                     Guardar cliente
                                 </b>

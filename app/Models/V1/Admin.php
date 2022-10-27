@@ -8,6 +8,7 @@ use App\Http\Resources\V1\Permissions;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\AvailableChannelTrait;
 use App\Models\Traits\PermissionTrait;
+use App\Models\Traits\UserPermissionableTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdScope;
@@ -25,6 +26,7 @@ class Admin extends Model
     use SoftDeletes;
     use AuditableTrait;
     use AvailableChannelTrait;
+    use UserPermissionableTrait;
 
 
     use PermissionTrait;
@@ -135,6 +137,20 @@ class Admin extends Model
 
                                 ]
                             ]
+                        ]
+
+                    ],
+                    [
+                        "title" => "Ordenes de servicio",
+                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Ordenes de servicio",
+                                "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],
@@ -376,6 +392,4 @@ class Admin extends Model
             }))->toArray()
         ));
     }
-
-
 }

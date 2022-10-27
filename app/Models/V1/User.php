@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\UserMenuHomeTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Request;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -26,6 +28,7 @@ class User extends Authenticatable implements JWTSubject
     use HasRoles;
     use SoftDeletes;
     use AuditableTrait;
+    use UserMenuHomeTrait;
 
     public const TYPE_SUPER_ADMIN = "super_administrator";
     public const TYPE_ADMIN = "administrator";
@@ -45,6 +48,10 @@ class User extends Authenticatable implements JWTSubject
     public const IDENTIFICATION_TYPE_PP = 'PP';
     public const IDENTIFICATION_TYPE_NIT = 'NIT';
     public const IDENTIFICATION_TYPE_OTHER = 'OTHER';
+
+    public const SESSION_ROLE_SELECTED = "role_selected";
+    public const SESSION_SINGLE_ROLE = "single_role";
+    public const SESSION_MULTI_ROLE = "multio_role";
     /**
      * The attributes that are mass assignable.
      *
@@ -106,22 +113,43 @@ class User extends Authenticatable implements JWTSubject
         $this->attributes['email'] = strtolower($value);
     }
 
+    public static function getUserRoles()
+    {
+        $user = Auth::user();
+        $roles = [];
+
+        foreach (["superAdmin",
+                     "admin",
+                     "networkOperator",
+                     "seller",
+                     "supervisor",
+                     "support",
+                     "technician"] as $role) {
+            if ($user->{$role}) {
+                $roles[] = [
+                    "rol" => $role,
+                    "name" => __("roles." . $role),
+                    "icon" => __("roles." . $role . "_icon")
+                ];
+
+            }
+        }
+
+        return $roles;
+
+    }
+
     public static function getUserModel()
     {
         $user = Auth::user();
-        $userRole = $user->roles->first()->name;
-        $model = match ($userRole) {
-            User::TYPE_NETWORK_OPERATOR => $user->networkOperator,
-            User::TYPE_SUPER_ADMIN => $user->superAdmin,
-            User::TYPE_ADMIN => $user->admin,
-            User::TYPE_SELLER => $user->seller,
-            User::TYPE_SUPERVISOR => $user->supervisor,
-            User::TYPE_SUPPORT => $user->support,
-            User::TYPE_TECHNICIAN => $user->technician,
-            default => [],
-        };
+        $userRole = Request::session()->get(User::SESSION_ROLE_SELECTED) ?? User::getUserRoles()[0]["rol"];
+        return $user->{$userRole};
 
-        return $model;
+    }
+
+    public function otpUsers()
+    {
+        return $this->hasMany(OtpUser::class);
     }
 
     public function networkOperator()
@@ -207,4 +235,6 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(PqrUser::class);
     }
+
+
 }

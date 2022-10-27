@@ -65,15 +65,16 @@ class AdminDetailsService extends Singleton
     {
         return !NetworkOperator::find($modelId)->admin->equipments()->exists();
     }
-    public function conditionalRemoveEquipmentAdmin(Component $component, $id){
-
+    public function conditionalRemoveEquipmentAdmin(Component $component, $id)
+    {
         if (Equipment::find($id)->has_clients) {
             return Equipment::find($id)->has_clients;
-        } else{
+        } else {
             return !Equipment::find($id)->has_admin;
         }
     }
-    public function removeEquipmentAdmin(Component $component, $id){
+    public function removeEquipmentAdmin(Component $component, $id)
+    {
         $model = User::getUserModel();
         $equipment = Equipment::find($id);
         $equipment->has_technician = false;
@@ -91,7 +92,7 @@ class AdminDetailsService extends Singleton
         $model = User::getUserModel();
         if ($model::class == SuperAdmin::class) {
             return Equipment::find($id)->has_admin;
-        } elseif ($model::class == Admin::class){
+        } elseif ($model::class == Admin::class) {
             return Equipment::find($id)->has_network_operator;
         }
         return false;
@@ -117,5 +118,4 @@ class AdminDetailsService extends Singleton
     {
         return MicrocontrollerData::whereClientId($modelId)->exists();
     }
-
 }

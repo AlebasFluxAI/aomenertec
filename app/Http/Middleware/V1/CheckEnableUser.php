@@ -23,7 +23,6 @@ class CheckEnableUser
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
-        
         if (!$request->user()->enabled) {
             abort(403);
         }

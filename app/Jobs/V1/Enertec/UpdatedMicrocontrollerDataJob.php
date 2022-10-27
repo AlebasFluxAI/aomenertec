@@ -30,7 +30,7 @@ class UpdatedMicrocontrollerDataJob implements ShouldQueue
 
     public function __construct(MicrocontrollerData $model)
     {
-        $this->model = $model->withoutRelations();
+        $this->model = $model;
     }
 
     /**
@@ -40,7 +40,6 @@ class UpdatedMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-
         $current_time = new Carbon($this->model->source_timestamp);
         $year = $current_time->format('Y');
         $month = $current_time->format('m');

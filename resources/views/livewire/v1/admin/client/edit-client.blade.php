@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -140,27 +141,35 @@
 
                     </div>
 
-                    @include("partials.v1.divider_title",[
-                            "title"=>"Ubicación del cliente"
-                    ]
-                   )
-                    @include("partials.v1.addUserTemplate.user-add-location-form")
 
-                    @include("partials.v1.divider_title",[
-                        "title"=>"Tipo de red / Contribuciones"
-                        ]
-                       )
                     <div class="row pl-5 pr-3">
+                        @if(\App\Models\V1\User::getUserModel() == \App\Models\V1\Admin::class)
+                            @include("partials.v1.form.form_list",[
+                                    "col_with"=>8,
+                                    "input_type"=>"text",
+                                    "input_label"=>"Operador de red",
+                                    "list_model" => "network_operator_id",
+                                    "list_default" => "Operador de red...",
+                                    "list_options" => $network_operators,
+                                    "list_option_value"=>"value",
+                                    "list_option_view"=>"key",
+                                    "list_option_title"=>"",
+                           ])
+
+                        @endif
                         @include("partials.v1.form.form_list",[
-                                "col_with"=>8,
-                                "list_model" => "stratum_id",
-                                "input_label"=>"Estrado de cliente",
-                                "list_default" => "Estrato...",
-                                "list_options" => $strata,
-                                "list_option_value"=>"id",
-                                "list_option_view"=>"acronym",
-                                "list_option_title"=>"",
-                       ])
+                                  "col_with"=>8,
+                                  "input_type"=>"text",
+                                  "input_label"=>"Tecnico",
+                                  "list_model" => "technician_id",
+                                  "list_default" => "Tecnico...",
+                                  "list_options" => $technicians,
+                                  "list_option_value"=>"value",
+                                  "list_option_view"=>"key",
+                                  "list_option_title"=>"",
+                                  "disabled"=>$technician_select_disabled
+                         ])
+
                     </div>
 
                     <div class="text-right">

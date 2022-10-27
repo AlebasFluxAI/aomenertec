@@ -37,7 +37,6 @@ class IndexClient extends Component
 
     public function conditionalDeleteClient($id)
     {
-   
         return $this->indexClientService->conditionalDeleteClient($this, $id);
     }
 

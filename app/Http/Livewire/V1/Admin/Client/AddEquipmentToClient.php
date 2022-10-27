@@ -27,7 +27,6 @@ class AddEquipmentToClient extends Component
     public function updated($property_name, $value)
     {
         $this->addClientEquipmentService->updated($this, $property_name, $value);
-
     }
 
     public function updatedNetworkOperatorId()

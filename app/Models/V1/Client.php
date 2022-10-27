@@ -55,12 +55,28 @@ class Client extends Model
         'network_topology',
         "person_type",
         "identification_type",
-        "has_telemetry"
+        "has_telemetry",
+        "admin_id"
     ];
 
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function equipmentChangeHistorical()
+    {
+        return $this->hasMany(HistoricalClientEquipment::class);
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
+
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class);
     }
 
     public function clientConfiguration(): HasOne
@@ -165,7 +181,7 @@ class Client extends Model
         return (($this->equipments()
             ->get()->map(function ($data) {
                 return [
-                    "key" => $data->id . "-" . $data->name,
+                    "key" => $data->id . "-" . ($data->name ?: " Sin nombre ") . "-" . $data->serial,
                     "value" => $data->id,
                 ];
             }))->toArray()
@@ -204,5 +220,8 @@ class Client extends Model
         return $this->hasMany(ClientAlert::class);
     }
 
-
+    public function stopUnpackClient()
+    {
+        return $this->hasOne(StopUnpackDataClient::class);
+    }
 }

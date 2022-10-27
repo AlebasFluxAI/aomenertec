@@ -10,6 +10,7 @@ use App\Models\V1\AdminConfiguration;
 use App\Models\V1\AdminPrice;
 use App\Models\V1\AvailableChannel;
 use App\Models\V1\ClientType;
+use App\Models\V1\TabPermissionAdmin;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Livewire\Component;
@@ -18,7 +19,6 @@ class PriceAdminService extends Singleton
 {
     public function mount(Component $component, Admin $model)
     {
-
         $component->channels = $model->channels;
         if (!$model->priceAdmin()->exists()) {
             if ($model->adminClientTypes()->exists()) {
@@ -53,6 +53,7 @@ class PriceAdminService extends Singleton
                 ["key" => "WhatsApp", "value" => 2],
                 ["key" => "Email", "value" => 3]
             ],
+            "tab_permissions" => $model->tabPermissions,
             "admin_client_types" => $model->adminClientTypes->pluck('client_type_id')->toArray()
         ]);
     }
@@ -71,6 +72,14 @@ class PriceAdminService extends Singleton
     {
         AvailableChannel::find($channel)->blink();
         $component->channels = $component->model->refresh()->channels;
+    }
+
+
+    public function blinkTabPermission(Component $component, $tabPermission)
+    {
+        $tabPermissionAdmin = TabPermissionAdmin::find($tabPermission);
+        $tabPermissionAdmin->blinkPermission();
+        $component->tab_permissions = $component->model->refresh()->tabPermissions;
     }
 
     public function submitFormConfiguration(Component $component)

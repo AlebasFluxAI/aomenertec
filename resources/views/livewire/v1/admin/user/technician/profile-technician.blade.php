@@ -51,6 +51,11 @@
                                                                             "value"=>$model->last_name
                                                                         ],
                                                                         [
+                                                                            "key"=>"Identificacion",
+
+                                                                            "value"=>$model->identification
+                                                                        ],
+                                                                        [
                                                                             "key"=>"Correo electronico",
 
                                                                             "value"=>$model->email

@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -46,6 +47,11 @@
 
                                                 ],
                                                 [
+                                                    "title"=>"BaseLine",
+                                                    "action" => "emit('selectBaseLine')"
+
+                                                ],
+                                                [
                                                     "title"=>"Reportes",
                                                     "action" => "emit('selectReport')"
 
@@ -55,10 +61,10 @@
                                                     "action" => "emit('selectControl')"
 
                                                 ],
-                                                [
-                                                    "title"=>"Alertas",
-                                                    "action" => "emit('selectAlert')"
-                                                ],
+                                               // [
+                                               //     "title"=>"Alertas",
+                                               //     "action" => "emit('selectAlert')"
+                                               // ],
 
                                            ],
 
@@ -77,6 +83,11 @@
                                                 ],
                                                 [
                                                     "view_name"=>"partials.v1.chart.client_monitoring",
+                                                       "permissions"=>[
+                                                        \App\Models\V1\Admin::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
+                                                        \App\Models\V1\NetworkOperator::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
+                                                        \App\Models\V1\Technician::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
+                                                        ],
                                                     "view_values"=>  [
                                                                         "type" => "real_time_data",
                                                                         "variables"=>$variables,
@@ -109,6 +120,18 @@
                                                 [
                                                     "view_name"=>"partials.v1.chart.client_monitoring",
                                                     "view_values"=>  [
+                                                                        "type" => "baseline_data",
+                                                                        "variables"=>$variables,
+                                                                        "client"=>$client,
+                                                                        "data_frame"=>$data_frame,
+                                                                        "data_chart" => $data_chart,
+                                                                        "time" => $time
+
+                                                                     ]
+                                                ],
+                                                [
+                                                    "view_name"=>"partials.v1.chart.client_monitoring",
+                                                    "view_values"=>  [
                                                                         "type" => "report_data",
                                                                         "variables"=>$variables,
                                                                         "client"=>$client,
@@ -123,25 +146,25 @@
                                                                         "client"=>$client,
                                                                      ]
                                                 ],
-                                                [
-                                                    "view_name"=>"partials.v1.table.primary-table",
-                                                    "view_values"=>  [
-                                                                        "table_pageable"=>false,
-                                                                        "table_headers"=>[
-                                                                                            "ID"=>'id',
-                                                                                            "Variable"=>'name',
-                                                                                            "Limite min" => "clientAlertConfiguration.min_alert",
-                                                                                            "Limite max" => "clientAlertConfiguration.max_alert",
-                                                                                            "Valor alerta"=>'value',
-                                                                                            "Tipo" => "type",
-                                                                                            "Actualizacion limites"=>'clientAlertConfiguration.updated_at',
-                                                                                            "Fecha"=>'created_at'
+                                             //  [
+                                             //      "view_name"=>"partials.v1.table.primary-table",
+                                             //      "view_values"=>  [
+                                             //                          "table_pageable"=>false,
+                                             //                          "table_headers"=>[
+                                             //                                              "ID"=>'id',
+                                             //                                              "Variable"=>'name',
+                                             //                                              "Limite min" => "clientAlertConfiguration.min_alert",
+                                             //                                              "Limite max" => "clientAlertConfiguration.max_alert",
+                                             //                                              "Valor alerta"=>'value',
+                                             //                                              "Tipo" => "type",
+                                             //                                              "Actualizacion limites"=>'clientAlertConfiguration.updated_at',
+                                             //                                              "Fecha"=>'created_at'
 
-                                                                                        ],
-                                                                        "table_rows"=> $clientAlerts
+                                             //                                          ],
+                                             //                          "table_rows"=> $clientAlerts
 
-                                                                     ]
-                                                ],
+                                             //                       ]
+                                             //  ],
 
                                             ],
 
@@ -155,9 +178,9 @@
         window.onfocus = function() {
             console.log("vuelve")
         }*/
-        window.onbeforeunload = function(e) {
+        window.onbeforeunload = function (e) {
             console.log("exit");
-            @this.emit('tabChange')
+        @this.emit('tabChange')
         };
     </script>
 </div>
