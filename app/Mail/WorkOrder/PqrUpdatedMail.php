@@ -42,7 +42,7 @@ class PqrUpdatedMail extends Mailable
             "pqr" => $this->pqr,
             "user" => $this->notifiable,
             "logo_url" => Icon::getUserIconUser($this->notifiable),
-            "url_details" => route("administrar.v1.ordenes_de_servicio.detalle", $this->pqr->id)
+            "url_details" => route("administrar.v1.peticiones.detalles", $this->pqr->id)
         ])->subject("Cambio en PQRS")
             ->to($this->notifiable->email);
     }
