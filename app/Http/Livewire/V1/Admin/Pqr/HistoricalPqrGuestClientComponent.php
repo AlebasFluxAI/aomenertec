@@ -9,12 +9,14 @@ use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertIndexService;
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrGuestClientService;
 use App\Http\Services\V1\Admin\Pqr\AdminPqrGuestClientService;
+use App\Http\Services\V1\Admin\Pqr\HistoricalPqrGuestClientService;
 use App\Models\Traits\PassTrait;
 use App\Models\V1\AlertType;
 use App\Models\V1\Equipment;
 
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
+use App\Models\V1\Pqr;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -25,39 +27,39 @@ class HistoricalPqrGuestClientComponent extends Component
     use PassTrait;
     use WithFileUploads;
 
-    public $pqr_code;
+    public $model;
     public $client_code;
 
     protected $rules = [
         'client_code' => 'required|exists:clients,code',
         'pqr_code' => 'required|exists:pqrs,code',
     ];
-    private $adminPqrGuestClientService;
+    private $historicalPqrGuestClientService;
 
     public function __construct($id = null)
     {
-        $this->adminPqrGuestClientService = AdminPqrGuestClientService::getInstance();
+        $this->historicalPqrGuestClientService = HistoricalPqrGuestClientService::getInstance();
         parent::__construct($id);
     }
 
     public function closePqr($pqr)
     {
-        $this->adminPqrGuestClientService->closePqr($this, $pqr);
+        $this->historicalPqrGuestClientService->closePqr($this, $pqr);
     }
 
     public function updatedPqrType()
     {
-        $this->adminPqrGuestClientService->updateType($this);
+        $this->historicalPqrGuestClientService->updateType($this);
     }
 
     public function submitForm()
     {
-        $this->adminPqrGuestClientService->submitForm($this);
+        $this->historicalPqrGuestClientService->submitForm($this);
     }
 
-    public function mount()
+    public function mount(Pqr $pqr)
     {
-        $this->adminPqrGuestClientService->mount($this);
+        $this->historicalPqrGuestClientService->mount($this, $pqr);
     }
 
     public function render()

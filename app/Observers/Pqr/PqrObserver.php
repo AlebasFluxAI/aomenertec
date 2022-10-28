@@ -4,14 +4,17 @@ namespace App\Observers\Pqr;
 
 use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
+use App\Http\Resources\V1\UserNotificationPayload;
 use App\Models\V1\Client;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrMessage;
 use App\Models\V1\PqrUser;
+use App\Models\V1\SuperAdmin;
 use App\Models\V1\Support;
 use App\Models\V1\User;
 use App\Notifications\Alert\AlertNotification;
 use App\Notifications\Alert\PqrNotification;
+use App\Notifications\Alert\PqrUpdatedNotification;
 use Illuminate\Support\Facades\Auth;
 use function Psy\debug;
 
@@ -55,6 +58,22 @@ class PqrObserver
         if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
             $this->createPqrUser($pqr, $this->getSupportUser());
         }
+        $this->sendChangeNotification($pqr);
+    }
+
+    private function sendChangeNotification(Pqr $pqr)
+    {
+        if ($pqr->isDirty("status")) {
+            if ($pqr->support) {
+                foreach (SuperAdmin::get() as $superAdmin) {
+                    $superAdmin->user->notify(new PqrUpdatedNotification($pqr));
+                }
+            }
+            if ($pqr->technician) {
+                $pqr->technician->networkOperator->user->notity(new PqrUpdatedNotification($pqr));
+            }
+        }
+
     }
 
     private function createPqrUser($pqr, $user_id)

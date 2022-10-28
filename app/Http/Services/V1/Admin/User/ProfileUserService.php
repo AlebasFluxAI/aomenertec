@@ -38,12 +38,8 @@ class ProfileUserService extends Singleton
             $component->admins = Admin::get();
             $component->network_operators = NetworkOperator::get();
             $component->equipment = Equipment::get();
-        } elseif (Auth::user()->hasRole(User::TYPE_ADMIN)) {
-            $component->supervisors = [];
-        } elseif (Auth::user()->hasRole(User::TYPE_NETWORK_OPERATOR)) {
-            $supervisors_id = ClientSupervisor::whereIn('client_id', $component->model->clients()->pluck('id'))->get()->pluck('supervisor_id');
-            $component->supervisors = Supervisor::find($supervisors_id);
         }
+        $component->supervisors = [];
     }
 
     private function getModelByUser()

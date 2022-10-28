@@ -7,7 +7,8 @@ use App\Http\Resources\V1\UserNotificationPayload;
 use App\Notifications\WhatsAppMessage;
 use Illuminate\Notifications\Notification;
 
-class PqrNotification extends Notification
+class
+PqrNotification extends Notification
 {
     /**
      * Get the notification's delivery channels.
