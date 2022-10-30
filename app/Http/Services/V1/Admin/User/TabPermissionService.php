@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\User;
 use App\Http\Services\Singleton;
 use App\Http\Services\V1\Admin\User\EditUserService;
 use App\Http\Services\V1\Admin\User\ProfileUserService;
+use App\Models\V1\Client;
 use App\Models\V1\TabPermission;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
@@ -38,4 +39,12 @@ class TabPermissionService extends Singleton
         $component->model->refresh();
     }
 
+    public function clients(Component $component, $tabPermissionId)
+    {
+        return (Client::whereIn("id", $component->model
+            ->tabPermissions()
+            ->whereTabPermissionId($tabPermissionId)
+            ->whereConditionableType(Client::class)
+            ->pluck("conditionable_id"))->pluck("identification"));
+    }
 }
