@@ -29,6 +29,11 @@ class TabPermission extends Component
         $this->tabPermissionService->mount($this);
     }
 
+    public function clients($tabPermissionId)
+    {
+        return $this->tabPermissionService->clients($this, $tabPermissionId);
+    }
+
     public function enabled($tabPermissionId)
     {
         return $this->tabPermissionService->enabled($this, $tabPermissionId);

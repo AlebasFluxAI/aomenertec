@@ -2,20 +2,31 @@
 
 namespace App\Models\Traits;
 
-use App\Http\Livewire\V1\Admin\User\TabPermission;
+
 use App\Models\TabPermissionUser;
-use App\Models\V1\Admin;
-use App\Models\V1\Image;
-use App\Models\V1\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
-use Livewire\Component;
+use App\Models\V1\TabPermission;
 
 trait UserPermissionableTrait
 {
+    public function addTabPermissionPlusConditional($tabPermissionId, $conditionalModel)
+    {
+        $this->tabPermissions()->create([
+            "tab_permission_id" => $tabPermissionId,
+            "conditionable_type" => $conditionalModel::class,
+            "conditionable_id" => $conditionalModel->id,
+        ]);
+    }
+
+
+    public function removeTabPermissionPlusConditional($tabPermissionId, $conditionalModel)
+    {
+        $this->tabPermissions()->where([
+            "tab_permission_id" => $tabPermissionId,
+            "conditionable_type" => $conditionalModel::class,
+            "conditionable_id" => $conditionalModel->id,
+        ])->delete();
+    }
+
     public function tabPermissions()
     {
         return $this->morphMany(TabPermissionUser::class, "permissionable");
@@ -32,14 +43,20 @@ trait UserPermissionableTrait
         ]);
     }
 
-    public function tabPermissionsName()
+    public function tabPermissionExist($permissionName)
     {
-        $permissions = [];
-        foreach ($this->tabPermissions as $permission) {
-            array_push($permissions, $permission->tabPermission->permission);
-        }
-        return $permissions;
+        $tabPermission = TabPermission::wherePermission($permissionName)->first()->id;
+        return $this->tabPermissions()->whereTabPermissionId($tabPermission)->exists();
     }
 
+    public function tabPermissionConditionableExist($permissionName, $model)
+    {
+        $tabPermission = TabPermission::wherePermission($permissionName)->first()->id;
+
+        return $this->tabPermissions()
+            ->whereConditionableId($model->id)
+            ->whereConditionableType($model::class)
+            ->whereTabPermissionId($tabPermission)->exists();
+    }
 
 }

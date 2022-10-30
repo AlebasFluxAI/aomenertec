@@ -5,13 +5,21 @@
             @php
                 $permission_failed[$index] = false
             @endphp
-            @foreach($tab_title["permissions"]??[] as $model=>$permission)
-                @if(\App\Models\V1\User::getUserModel()::class==$model)
+            @foreach($tab_title["permissions"]??[] as $modelPermission=>$permission)
+                @if(\App\Models\V1\User::getUserModel()::class==$modelPermission)
 
-                    @if(!in_array($permission,\App\Models\V1\User::getUserModel()->tabPermissionsName()))
+                    @if(!($tab_title["conditionable"]??false) and !(\App\Models\V1\User::getUserModel()->tabPermissionExist($permission)))
+
                         @php
                             $permission_failed[$index] = true
                         @endphp
+                    @endif
+                    @if($tab_title["conditionable"]??false)
+                        @if(!(\App\Models\V1\User::getUserModel()->tabPermissionConditionableExist($permission,$model)))
+                            @php
+                                $permission_failed[$index] = true
+                            @endphp
+                        @endif
                     @endif
                 @endif
             @endforeach

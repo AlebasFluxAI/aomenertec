@@ -7,6 +7,7 @@ use App\Models\V1\Admin;
 use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientAlertConfiguration;
+use App\Models\V1\ClientConfiguration;
 use App\Models\V1\ClientRecharge;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentClient;
@@ -50,6 +51,7 @@ use App\Observers\User\UserObserver;
 use App\Observers\ClientAlert\ClientAlertObserver;
 use App\Models\V1\ClientAlert;
 use App\Observers\V1\Change\ChangeObserver;
+use App\Observers\V1\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
 use App\Observers\WorkOrder\WorkOrderObserver;
@@ -138,5 +140,7 @@ class AppServiceProvider extends ServiceProvider
         OtpUser::observe(OtpUserObserver::class);
 
         WorkOrder::observe(WorkOrderObserver::class);
+
+        ClientConfiguration::observe(ClientConfigurationObserver::class);
     }
 }
