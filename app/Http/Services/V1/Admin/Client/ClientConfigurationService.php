@@ -41,6 +41,7 @@ class ClientConfigurationService extends Singleton
     public function mount(Component $component, Client $client)
     {
         $component->channels = $client->channels;
+        $component->model = $client;
         $flags_frame = collect(config('data-frame.flags_frame'));
         $alerts = $flags_frame->where('id', '>=', 16)->all();
         $component->placeholders = [];

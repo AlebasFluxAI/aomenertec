@@ -30,6 +30,12 @@
                       "col_filter"=>false,
                       "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN
                   ],
+                  [
+                      "col_name" =>"Clientes",
+                      "col_data_component_function"=>true,
+                      "col_data" =>"clients",
+                      "col_filter"=>false,
+                  ],
 
                ],
                 "table_actions"=>[

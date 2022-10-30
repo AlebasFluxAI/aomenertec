@@ -12,9 +12,16 @@ class TabPermissionUser extends Model
 
     protected $fillable = [
         "tab_permission_id",
+        "conditionable_type",
+        "conditionable_id",
     ];
 
     public function permissionable()
+    {
+        return $this->morphTo();
+    }
+
+    public function conditionable()
     {
         return $this->morphTo();
     }

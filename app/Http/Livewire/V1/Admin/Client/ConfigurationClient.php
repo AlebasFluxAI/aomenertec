@@ -25,6 +25,7 @@ class ConfigurationClient extends Component
     public $notification_types;
     public $channels;
     public $outputs_selected;
+    public $model;
 
 
     private $configurationClientService;
