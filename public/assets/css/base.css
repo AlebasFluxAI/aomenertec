@@ -220,7 +220,7 @@
 }
 
 .btn-redirect i {
-    color: #009299 !important;
+    color: var(--style_primary) !important;
 }
 
 .btn-redirect:hover,
@@ -2422,6 +2422,20 @@ justify-content-end .textClientes p {
 
 .card-services {
     width: calc(100%/6);
+}
+
+.tb-headers{
+    color: var(--style_primary);
+}
+
+.th-acciones{
+    color: var(--style_primary);
+}
+
+.page-item button{
+    border-radius: 3px;
+    margin: 0;
+    padding: 9px 15px;
 }
 
 .loader-page {
