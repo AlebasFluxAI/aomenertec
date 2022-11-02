@@ -15,4 +15,6 @@
     --style_header_button: #ffffff;
 }
 
-
+.tb-headers{
+    color: var(--style_primary);
+}
