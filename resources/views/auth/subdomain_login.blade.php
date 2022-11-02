@@ -3,7 +3,7 @@
 @section('header')
     <section class="top-info" style="background-color: #f2f2f2; height: 100%;">
         <div class="flex-column">
-            <nav class="navbar navbar-expand-lg" style="{{\App\Http\Resources\V1\Subdomain::getHeaderColor()}}">
+            <nav class="navbar navbar-expand-lg d-flex justify-content-center" style="{{\App\Http\Resources\V1\Subdomain::getHeaderColor()}}">
                 <a class="navbar-brand" href="/">
                     <img class="img-fluid imagen-logo"
                          src="{{\App\Http\Resources\V1\Subdomain::getHeaderIcon()}}"
@@ -14,8 +14,8 @@
                     <span class="fas fa-bars"></span>
                 </button>
 
-                <div class=" collapse navbar-collapse" id="navbarSupportedContent"
-                     style="visibility: inherit !important;">
+                <!-- <div class=" collapse navbar-collapse" id="navbarSupportedContent"
+                     style="width: 0px;">
                     <ul class="navbar-nav mr-auto">
 
                         <li class="nav-item">
@@ -43,24 +43,24 @@
 
                         @endauth
                     </div>
-                </div>
+                </div> -->
             </nav>
         </div>
     </section>
 @endsection
 @section('content')
-    <div class="col-md-4 offset-4 login-class">
+    <div class="col-md-4 offset-4 login-class" style="background-color: #f2f2f2; -webkit-box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%); box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%);">
         @if (session('status'))
             <div>
                 {{ session('status') }}
             </div>
         @endif
 
-        <div class="col-md-7 mb-2">
-            <p class="login-title text-lg pb-4 text-center" style="color: #1c9599;">Conectate</p>
+        <div class="col-12 mb-2">
+            <h3 class="login-title text-lg pb-4 text-center font-weight-bold" style="color: #1c9599;">Conectate</h3>
         </div>
         <div class="col-md-12 mb-3">
-            <p class="login-subtitle"> Usa el correo electronico y contraseña que te proporcionaron al
+            <p class="login-subtitle leading-tight text-slate-500 text-base"> Usa el correo electronico y contraseña que te proporcionaron al
                 crear tu cuenta, si olvidaste tu
                 contraseña puedes reestablecerla usando tu correo.</p>
         </div>
@@ -68,7 +68,7 @@
             <form action="{{ route('login') }}" method="post" role="form">
                 @csrf
                 <div class="form-group">
-                    <label for="email">Correo electrónico</label>
+                    <label class="block text-sm text-slate-400" for="email">Correo electrónico</label>
                     <input type="email" class="form-control @error('email') is-invalid @enderror"
                            name="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
                     @error('email')
@@ -78,8 +78,8 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="password">Contraseña </label>
-                    <a class="login-forgot-pass" href="
+                    <label class="block text-sm text-slate-400" for="password">Contraseña </label>
+                    <a class="login-forgot-pass" style="font-size: 12px; margin-left: 10px;" href="
                                     {{route('password.reset.form')}}
                             ">
                         ¿La olvidaste?</a>
@@ -94,7 +94,7 @@
                 </div>
                 <div class="flex justify-between">
                     @include("auth.support_button")
-                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" type="submit">Ingresar
+                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" style="color: white; padding: 6px 12px; margin: 3px; background-color: var(--style_primary); transition: 0.4s; font-size: 0.9rem;" type="submit">Ingresar
                     </button>
                 </div>
 
