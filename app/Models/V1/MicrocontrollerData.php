@@ -92,6 +92,7 @@ class MicrocontrollerData extends Model
         }
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
+
             $this->delete();
             return;
         }
@@ -208,8 +209,8 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_capacitive_consumption = $json['varCh_interval'];
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
-        dispatch(new UpdatedMicrocontrollerDataJob($this));
         $this->saveQuietly();
+        dispatch(new UpdatedMicrocontrollerDataJob($this));
         $this->alertEnergyEvent();
     }
 
