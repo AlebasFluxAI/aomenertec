@@ -2,6 +2,7 @@
 @section("footer")
 @endsection
 <!-- Agregar este div en la pagina que se desea la sección de carga -->
+<!-- Agregar texto -->
 <div class="loader-page"></div>
 <div class="row d-flex justify-content-between">
 
