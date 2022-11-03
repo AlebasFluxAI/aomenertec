@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AuxData;
 use App\Models\V1\EquipmentType;
@@ -45,33 +46,28 @@ class UpdateDataConsumption extends Command
         $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
-            ->limit(200)
             ->get();
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             $i=0;
             foreach ($data_pack as $item) {
-                $i++;
-                if ($i>200){
-                    break;
-                }
                 $raw_json = json_decode($item->raw_json, true);
+                $last_data = null;
+                $decode = bin2hex(base64_decode($item->raw_json));
+                $split = substr($decode, (16), (16));
+                $bin = hex2bin($split);
+                $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+                $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                    ->first();
+                if ($equipment) {
+                    $client = $equipment->clients()->first();
+                    if ($client) {
+                        $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                    }
+                }
                 if ($raw_json == null) {
                     if (strlen($item->raw_json) > 20) {
-                        $last_data = null;
-                        $decode = bin2hex(base64_decode($item->raw_json));
-                        $split = substr($decode, (16), (16));
-                        $bin = hex2bin($split);
-                        $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-                        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                            ->first();
-                        if ($equipment) {
-                            $client = $equipment->clients()->first();
-                            if ($client) {
-                                $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
-                            }
-                        }
                         if ($last_data) {
                             $last_raw_json = json_decode($last_data->raw_json, true);
                         }
@@ -154,6 +150,10 @@ class UpdateDataConsumption extends Command
                                 }
                             }
                             $item->save();
+                            if (!$client->stopUnpackClient()->exists()){
+                                dispatch(new SerializeMicrocontrollerDataJob($item));
+                            }
+
                         } else {
                             $item->delete();
                         }
@@ -161,8 +161,6 @@ class UpdateDataConsumption extends Command
                         $item->delete();
                     }
                 } else {
-
-                    echo $i."- ".$item->id."\n";
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -171,6 +169,9 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = $raw_json;
                     $item->save();
+                    if (!$client->stopUnpackClient()->exists()){
+                        dispatch(new SerializeMicrocontrollerDataJob($item));
+                    }
                 }
             }
         }
