@@ -3,6 +3,7 @@
 namespace App\Observers\MicrocontrollerData;
 
 use App\Events\NewPointDataMonitoringEvent;
+use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
@@ -24,6 +25,8 @@ class MicrocontrollerDataObserver
 
     public function updated(MicrocontrollerData $microcontrollerData)
     {
-        $microcontrollerData->jsonEdit();
+        dispatch(new SerializeMicrocontrollerDataJob($microcontrollerData));
+
+        //$microcontrollerData->jsonEdit();
     }
 }
