@@ -44,7 +44,9 @@ class ReorderDataClient extends Command
         $client = Client::find($id_client);
         $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
         $search = "\"equipment_id\":\"". $equipment->serial."\"";
-        MicrocontrollerData::withTrashed()->where('raw_json', 'like', '%' .$search. '%')
+        $search_1 = "\"equipment_id\":". $equipment->serial;
+        MicrocontrollerData::withTrashed()->where('raw_json', 'like', '%' .$search. '%')->orWhere('raw_json', 'like', '%' .$search_1. '%')
+        //MicrocontrollerData::where('client_id', $id_client)
         ->chunk(200, function ($data) {
             foreach ($data as $datum) {
                 $datum->client_id = null;

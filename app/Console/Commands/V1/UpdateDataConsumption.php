@@ -42,11 +42,10 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-        $data_pack = MicrocontrollerData::whereNull('client_id')
+        MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
-            ->get();
-        if ($data_pack) {
+            ->chunk(200, function ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data_pack as $item) {
@@ -165,6 +164,6 @@ class UpdateDataConsumption extends Command
                     $item->save();
                 }
             }
-        }
+        });
     }
 }
