@@ -42,14 +42,22 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-        MicrocontrollerData::whereNull('client_id')
+        $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
-            ->chunk(200, function ($data_pack) {
+            ->limit(200)
+            ->get();
+        if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
+            $i=0;
             foreach ($data_pack as $item) {
-                if (json_decode($item->raw_json, true) == null) {
+                $i++;
+                if ($i>200){
+                    break;
+                }
+                $raw_json = json_decode($item->raw_json, true);
+                if ($raw_json == null) {
                     if (strlen($item->raw_json) > 20) {
                         $last_data = null;
                         $decode = bin2hex(base64_decode($item->raw_json));
@@ -153,7 +161,8 @@ class UpdateDataConsumption extends Command
                         $item->delete();
                     }
                 } else {
-                    $raw_json = json_decode($item->raw_json, true);
+
+                    echo $i."- ".$item->id."\n";
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -164,6 +173,6 @@ class UpdateDataConsumption extends Command
                     $item->save();
                 }
             }
-        });
+        }
     }
 }
