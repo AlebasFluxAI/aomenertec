@@ -42,7 +42,7 @@ class ReorderDataClient extends Command
      */
     public function handle()
     {
-        $start_date = '2022-10-14 17:34:00';
+        $start_date = '2022-09-14 07:15:00';
         $id_client = $this->argument('client');
         $client = Client::find($id_client);
         if (!$client->stopUnpackClient()->exists()) {
