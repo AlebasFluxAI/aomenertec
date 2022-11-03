@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 use App\Models\V1\Client;
 use App\Models\V1\MicrocontrollerData;
+use App\Models\V1\StopUnpackDataClient;
 use Illuminate\Console\Command;
 
 class ReorderDataClient extends Command
@@ -40,13 +42,21 @@ class ReorderDataClient extends Command
      */
     public function handle()
     {
+        $start_date = '2022-10-14 17:34:00';
         $id_client = $this->argument('client');
         $client = Client::find($id_client);
+        if (!$client->stopUnpackClient()->exists()) {
+            StopUnpackDataClient::create(['client_id' => $client->id]);
+        }
         $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
         $search = "\"equipment_id\":\"". $equipment->serial."\"";
         $search_1 = "\"equipment_id\":". $equipment->serial;
-        MicrocontrollerData::withTrashed()->where('raw_json', 'like', '%' .$search. '%')->orWhere('raw_json', 'like', '%' .$search_1. '%')
-        //MicrocontrollerData::where('client_id', $id_client)
+        MicrocontrollerData::withTrashed()
+            ->where('source_timestamp', '>', $start_date)
+            ->where('client_id', $id_client)
+            ->where('raw_json', 'like', '%' .$search. '%')
+            ->orWhere('raw_json', 'like', '%' .$search_1. '%')
+
         ->chunk(200, function ($data) {
             foreach ($data as $datum) {
                 $datum->client_id = null;
@@ -64,5 +74,25 @@ class ReorderDataClient extends Command
                 }
             }
         });
+        $data_pack = MicrocontrollerData::whereNull('client_id')
+                                    ->whereNotNull('source_timestamp')
+                                    ->where('raw_json', 'like', '%' .$search. '%')
+                                    ->orWhere('raw_json', 'like', '%' .$search_1. '%')
+                                    ->orderBy('source_timestamp')->orderBy('created_at')
+                                    ->get();
+        if ($data_pack) {
+            foreach ($data_pack as $item) {
+                $raw_json = json_decode($item->raw_json, true);
+                $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
+                $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
+                $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
+                $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'] ;
+                $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
+                $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
+                $item->raw_json = $raw_json;
+                $item->save();
+                dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ class MicrocontrollerDataObserver
 
     public function updated(MicrocontrollerData $microcontrollerData)
     {
-        dispatch(new SerializeMicrocontrollerDataJob($microcontrollerData));
+        //dispatch(new SerializeMicrocontrollerDataJob($microcontrollerData))->onQueue('emails');
 
         //$microcontrollerData->jsonEdit();
     }

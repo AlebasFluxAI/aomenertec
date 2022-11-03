@@ -28,7 +28,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
     public $model;
     public function __construct(MicrocontrollerData $model)
     {
-        $this->model = $model;
+        $this->model = $model->withoutRelations();
     }
 
     /**
@@ -38,7 +38,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        //
+        $this->jsonEdit();
     }
 
     public function jsonEdit()
@@ -68,9 +68,6 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
 
             $this->model->delete();
-            return;
-        }
-        if ($client->stopUnpackClient()->exists()){
             return;
         }
 

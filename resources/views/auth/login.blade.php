@@ -3,7 +3,7 @@
 @endsection
 <!-- Agregar este div en la pagina que se desea la sección de carga -->
 <div class="loader-page">
-    <h2 style="margin-top: 150px;">Texto editable aquí</h2>
+    <h2 style="margin-top: 150px;"></h2>
 </div>
 <!-- Agregar este div en la pagina que se desea la sección de carga -->
 <div class="row d-flex justify-content-between">
@@ -67,7 +67,7 @@
             </div>
         </div>
     </div>
-    <div class="container"> 
+    <div class="container">
     <div class="row mb-5 pb-5">
         <div class="col-12">
             <h1 class="text-center pt-4 text-bold" style="color: #1c9599;">Servicios</h1>
@@ -101,7 +101,7 @@
                     ] as $item)
                 @include("auth.service_item",$item)
             @endforeach
-    
+
         </div>
     </div>
 </div>
