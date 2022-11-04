@@ -45,8 +45,8 @@ class UpdateDataConsumption extends Command
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
-            ->whereBetween("source_timestamp", ['2022-11-02 00:00:00', '2022-11-05 00:00:00'])
-            ->orderBy('source_timestamp')->orderBy('created_at')->limit(10)
+            ->whereBetween("source_timestamp", ['2022-11-04 00:00:00', '2022-11-05 00:00:00'])
+            ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
@@ -154,13 +154,14 @@ class UpdateDataConsumption extends Command
                                     }
                                 }
                             }
-                            $item->save();
 
                             if ($client) {
                                 if (!$client->stopUnpackClient()->exists()) {
                                     if ($client->id != 4) {
                                         $i++;
-                                        dispatch(new SerializeMicrocontrollerDataJob($item));
+                                        $item->save();
+                                    } else{
+                                        $item->saveQuietly();
                                     }
                                 }
                             }
@@ -170,7 +171,7 @@ class UpdateDataConsumption extends Command
                     } else {
                         $item->delete();
                     }
-                } else {
+                }else {
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -178,7 +179,6 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = json_encode($raw_json);
-                    $item->save();
                     $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
                     if ($equipment) {
@@ -187,7 +187,9 @@ class UpdateDataConsumption extends Command
                             if (!$client->stopUnpackClient()->exists()) {
                                 if ($client->id != 4) {
                                     $i++;
-                                    dispatch(new SerializeMicrocontrollerDataJob($item));
+                                    $item->save();
+                                } else{
+                                    $item->saveQuietly();
                                 }
                             }
                         }

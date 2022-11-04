@@ -90,7 +90,7 @@ class ReorderDataClient extends Command
                 $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
                 $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                 $item->raw_json = $raw_json;
-                $item->save();
+                $item->saveQuietly();
                 dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
             }
         }
