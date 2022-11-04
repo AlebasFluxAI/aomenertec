@@ -166,10 +166,10 @@ class UpdateDataConsumption extends Command
                                 }
                             }
                         } else {
-                            $item->delete();
+                            $item->forceDelete();
                         }
                     } else {
-                        $item->delete();
+                        $item->forceDelete();
                     }
                 }else {
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
