@@ -1,5 +1,4 @@
 import time
-
 import paho.mqtt.client as paho
 broker =  "3.12.98.178"
 port = 1883
