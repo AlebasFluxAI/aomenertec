@@ -32,6 +32,7 @@
                                                 [
                                                     "title"=>"Tiempo Real",
                                                     "action" => "emit('selectRealTime')",
+                                                    "conditionable"=>true,
                                                     "permissions"=>[
                                                         \App\Models\V1\Admin::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
                                                         \App\Models\V1\NetworkOperator::class=>\App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
