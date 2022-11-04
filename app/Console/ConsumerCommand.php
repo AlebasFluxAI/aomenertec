@@ -68,8 +68,8 @@ class ConsumerCommand extends Command
             dispatch(new SaveAlertDataJob($message));
         }, 0);
         $mqtt->subscribe('mc/ack', function (string $topic, string $message) {
-            echo $message."\n";
-            $json = json_decode( $message, true);
+            echo $message . "\n";
+            $json = json_decode($message, true);
             if ($json != null) {
                 if (array_key_exists('config_get', $json)) {
                     dispatch(new SetConfigJob($json));

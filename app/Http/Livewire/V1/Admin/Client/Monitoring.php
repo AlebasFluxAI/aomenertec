@@ -14,6 +14,7 @@ use PhpMqtt\Client\Facades\MQTT;
 class Monitoring extends Component
 {
     use WithPagination;
+
     protected $listeners = ['tabChange'];
     public $data_chart;
     public $data_frame;
@@ -24,10 +25,12 @@ class Monitoring extends Component
     public $time;
     public $clientAlerts;
     public $data_chart_result;
+    public $model;
 
 
     public function mount(Client $client)
     {
+        $this->model = $client;
         $this->clientAlerts = $this->client->clientAlerts;
         foreach ($this->clientAlerts as &$alert) {
             $alert->name = $alert->clientAlertConfiguration->getVariableName();
@@ -44,7 +47,7 @@ class Monitoring extends Component
             ->where('day', 01)
             ->get();
         $this->data_chart = $this->client->hourlyMicrocontrollerData()->limit(24)->get();
-        if (count($this->data_chart)==0) {
+        if (count($this->data_chart) == 0) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
             $this->time = 1;
         }
@@ -52,7 +55,7 @@ class Monitoring extends Component
 
     public function tabChange()
     {
-        if($this->client->clientConfiguration()->first()->active_real_time) {
+        if ($this->client->clientConfiguration()->first()->active_real_time) {
             if ($this->client->clientConfiguration()->first()->real_time_flag) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
                 if (RealTimeListener::whereUserId(Auth::user()->id)

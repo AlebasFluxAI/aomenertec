@@ -39,9 +39,8 @@ class NetworkOperatorIndexService extends Singleton
     public function deleteNetworkOperator(Component $component, $networkOperatorId)
     {
         $operator = NetworkOperator::find($networkOperatorId);
-        $operator->user->enabled = false;
         foreach ($operator->equipments()->get() as $type) {
-            $type->network_operator_id = "";
+            $type->network_operator_id = null;
             $type->save();
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operator->name} eliminado"]);
