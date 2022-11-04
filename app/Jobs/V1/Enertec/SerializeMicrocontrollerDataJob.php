@@ -29,7 +29,6 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
     public function __construct(MicrocontrollerData $model)
     {
         $this->model = $model->withoutRelations();
-
     }
 
     /**
@@ -39,7 +38,6 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        dd("ok");
         $this->jsonEdit();
     }
 

@@ -45,7 +45,8 @@ class UpdateDataConsumption extends Command
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
-            ->orderBy('source_timestamp')->orderBy('created_at')
+            ->whereBetween("source_timestamp", ['2022-11-02 00:00:00', '2022-11-05 00:00:00'])
+            ->orderBy('source_timestamp')->orderBy('created_at')->limit(10)
             ->get();
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
