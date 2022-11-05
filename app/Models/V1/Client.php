@@ -56,7 +56,8 @@ class Client extends Model
         "person_type",
         "identification_type",
         "has_telemetry",
-        "admin_id"
+        "admin_id",
+        "alias"
     ];
 
     protected static function booted()

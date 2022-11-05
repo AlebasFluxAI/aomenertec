@@ -28,6 +28,7 @@ class EquipmentIndexService extends Singleton
             return !Equipment::find($id)->has_admin;
         }
     }
+
     public function removeEquipmentAdmin(Component $component, $id)
     {
         $model = User::getUserModel();
@@ -51,6 +52,7 @@ class EquipmentIndexService extends Singleton
             return !Equipment::find($id)->has_network_operator;
         }
     }
+
     public function removeEquipmentNetworkOperator(Component $component, $id)
     {
         $model = User::getUserModel();
@@ -72,6 +74,7 @@ class EquipmentIndexService extends Singleton
             return !Equipment::find($id)->has_technician;
         }
     }
+
     public function removeEquipmentTechnician(Component $component, $id)
     {
         $model = User::getUserModel();
@@ -93,6 +96,7 @@ class EquipmentIndexService extends Singleton
         }
         return false;
     }
+
     public function deleteEquipment(Component $component, $equipmentId)
     {
         Equipment::find($equipmentId)->delete();
@@ -112,6 +116,7 @@ class EquipmentIndexService extends Singleton
         }
         return [\App\Http\Resources\V1\Permissions::TECHNICIAN_REMOVE_EQUIPMENT];
     }
+
     public function getFunctionRemoveEquipment()
     {
         $model = User::getUserModel();
@@ -124,6 +129,7 @@ class EquipmentIndexService extends Singleton
         }
         return "removeEquipmentTechnician";
     }
+
     public function getConditionalRemoveEquipment()
     {
         $model = User::getUserModel();
@@ -135,18 +141,6 @@ class EquipmentIndexService extends Singleton
             return "conditionalRemoveEquipmentAdmin";
         }
         return "conditionalRemoveEquipmentTechnician";
-    }
-    public function getAvailableFlag()
-    {
-        $model = User::getUserModel();
-        if ($model::class == NetworkOperator::class) {
-            return "has_technician";
-        } elseif ($model::class == Admin::class) {
-            return "has_network_operator";
-        } elseif ($model::class == SuperAdmin::class) {
-            return "has_admin";
-        }
-        return "has_technician";
     }
 
     public function getData(Component $component)
@@ -179,4 +173,30 @@ class EquipmentIndexService extends Singleton
         }
         return Equipment::paginate(15);
     }
+
+
+    public function conditionalEquipmentRepaired($id)
+    {
+        $equipment = Equipment::find($id);
+        return !($equipment->status == Equipment::STATUS_REPAIR_PENDING or $equipment->status == Equipment::STATUS_REPAIR);
+    }
+
+    public function repairEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->repair();
+    }
+
+    public function conditionalEquipmentDeprecate($id)
+    {
+        $equipment = Equipment::find($id);
+        return !$equipment->canDeprecate();
+    }
+
+    public function deprecateEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->deprecate();
+    }
+
 }

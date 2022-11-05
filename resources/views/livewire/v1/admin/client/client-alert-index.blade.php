@@ -7,7 +7,7 @@
 
 
         @include("partials.v1.title",[
-              "second_title"=>"de alertas cliente $model->name",
+              "second_title"=>"de alertas cliente ".($model->alias??$model->name),
               "first_title"=>"Listado"
           ])
         @endif

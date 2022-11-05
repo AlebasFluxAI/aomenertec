@@ -56,16 +56,20 @@
                                                                              "value"=>$equipment->serial
                                                                          ],
                                                                          [
+                                                                             "key"=>"Estado",
+                                                                             "value"=>__("equipment.".$equipment->status)
+                                                                         ],
+                                                                         [
                                                                              "key"=>"Tipo de equipo",
                                                                              "value"=>$equipment->equipmentType->type
                                                                          ],
                                                                          [
                                                                              "key"=>"Administrador",
-                                                                             "value"=>$equipment->admin->id ." - ".$equipment->admin->name
+                                                                             "value"=>($equipment->admin?$equipment->admin->id:"") ." - ".($equipment->admin?$equipment->admin->name:"")
                                                                          ],
                                                                          [
                                                                              "key"=>"Operador de red",
-                                                                             "value"=>$equipment->networkOperator->id ." - ".$equipment->networkOperator->name
+                                                                             "value"=>($equipment->networkOperator?$equipment->networkOperator->id:"") ." - ".($equipment->networkOperator?$equipment->networkOperator->name:"")
                                                                          ],
 
 

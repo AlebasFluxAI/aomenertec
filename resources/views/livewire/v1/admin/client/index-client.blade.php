@@ -51,6 +51,11 @@
                    "col_filter"=>true
                ],
                [
+                   "col_name" =>"Alias",
+                   "col_data" =>"alias",
+                   "col_filter"=>true
+               ],
+               [
                    "col_name" =>"Correo electronico",
                    "col_data" =>"email",
                    "col_filter"=>true

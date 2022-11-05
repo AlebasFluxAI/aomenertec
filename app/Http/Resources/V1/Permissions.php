@@ -34,6 +34,7 @@ class Permissions
     public const EQUIPMENT_CREATE = "equipment.create";
     public const EQUIPMENT_EDIT = "equipment.edit";
     public const EQUIPMENT_DELETE = "equipment.delete";
+    public const EQUIPMENT_REPAIR = "equipment.repair";
     public const EQUIPMENT_SHOW = "equipment.show";
     public const EQUIPMENT_CONFIG = "equipment.config";
 
