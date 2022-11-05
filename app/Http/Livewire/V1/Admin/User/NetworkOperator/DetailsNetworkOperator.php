@@ -15,7 +15,6 @@ class DetailsNetworkOperator extends Component
     private $detailsNetworkOperatorService;
 
 
-
     public function __construct($id = null)
     {
         $this->detailsNetworkOperatorService = NetworkOperatorDetailsService::getInstance();
@@ -31,34 +30,42 @@ class DetailsNetworkOperator extends Component
     {
         return $this->detailsNetworkOperatorService->conditionalDeleteTechnician($this, $id);
     }
+
     public function deleteTechnician($id)
     {
         $this->detailsNetworkOperatorService->deleteTechnician($this, $id);
     }
+
     public function disableTechnician($id)
     {
         $this->detailsNetworkOperatorService->disableTechnician($this, $id);
     }
+
     public function getEnabledTechnician($id)
     {
         return $this->detailsNetworkOperatorService->getEnabledTechnician($this, $id);
     }
+
     public function getEnabledAuxTechnician($id)
     {
         return $this->detailsNetworkOperatorService->getEnabledAuxTechnician($this, $id);
     }
+
     public function conditionalLinkEquipmentTechnician($id)
     {
         return $this->detailsNetworkOperatorService->conditionalLinkEquipmentTechnician($this, $id);
     }
+
     public function conditionalLinkClientsTechnician($id)
     {
         return $this->detailsNetworkOperatorService->conditionalLinkClientsTechnician($this, $id);
     }
+
     public function removeEquipmentNetworkOperator($id)
     {
         $this->detailsNetworkOperatorService->removeEquipmentNetworkOperator($this, $id);
     }
+
     public function conditionalRemoveEquipmentNetworkOperator($id)
     {
         return $this->detailsNetworkOperatorService->conditionalRemoveEquipmentNetworkOperator($this, $id);
@@ -68,22 +75,27 @@ class DetailsNetworkOperator extends Component
     {
         return $this->detailsNetworkOperatorService->conditionalDeleteSupervisor($this, $id);
     }
+
     public function deleteSupervisor($id)
     {
         $this->detailsNetworkOperatorService->deleteSupervisor($this, $id);
     }
+
     public function disableSupervisor($id)
     {
         $this->detailsNetworkOperatorService->disableSupervisor($this, $id);
     }
+
     public function conditionalLinkClientsSupervisor($id)
     {
         return $this->detailsNetworkOperatorService->conditionalLinkClientsSupervisor($this, $id);
     }
+
     public function getEnabledSupervisor($id)
     {
         return $this->detailsNetworkOperatorService->getEnabledSupervisor($this, $id);
     }
+
     public function getEnabledAuxSupervisor($id)
     {
         return $this->detailsNetworkOperatorService->getEnabledAuxSupervisor($this, $id);
@@ -93,6 +105,7 @@ class DetailsNetworkOperator extends Component
     {
         return $this->detailsNetworkOperatorService->conditionalDeleteEquipment($this, $id);
     }
+
     public function deleteEquipment($id)
     {
         $this->detailsNetworkOperatorService->deleteEquipment($this, $id);
@@ -102,10 +115,12 @@ class DetailsNetworkOperator extends Component
     {
         return $this->detailsNetworkOperatorService->conditionalMonitoring($this, $id);
     }
+
     public function conditionalDeleteClient($id)
     {
         return $this->detailsNetworkOperatorService->conditionalDeleteClient($this, $id);
     }
+
     public function deleteClient($id)
     {
         $this->detailsNetworkOperatorService->deleteclient($this, $id);
@@ -116,29 +131,58 @@ class DetailsNetworkOperator extends Component
     {
         return $this->detailsNetworkOperatorService->changeLevel($this, $id);
     }
+
     public function equipmentNotRequest($id)
     {
         return $this->detailsNetworkOperatorService->equipmentNotRequest($this, $id);
     }
+
     public function equipmentRequest($id)
     {
         return $this->detailsNetworkOperatorService->equipmentRequest($this, $id);
     }
+
     public function closePqr($id)
     {
         return $this->detailsNetworkOperatorService->closePqr($this, $id);
     }
+
     public function requestEquipment($id)
     {
         $this->detailsNetworkOperatorService->requestEquipment($this, $id);
     }
+
     public function openTicked($id)
     {
         return $this->detailsNetworkOperatorService->openTicked($this, $id);
     }
+
     public function closedTicked($id)
     {
         return $this->detailsNetworkOperatorService->closedTicked($this, $id);
+    }
+
+
+    public function deprecateEquipment($id)
+    {
+        return $this->detailsNetworkOperatorService->deprecateEquipment($id);
+    }
+
+    public function conditionalEquipmentDeprecate($id)
+    {
+
+        return $this->detailsNetworkOperatorService->conditionalEquipmentDeprecate($id);
+    }
+
+
+    public function conditionalEquipmentRepaired($id)
+    {
+        return $this->detailsNetworkOperatorService->conditionalEquipmentRepaired($id);
+    }
+
+    public function repairEquipment($id)
+    {
+        return $this->detailsNetworkOperatorService->repairEquipment($id);
     }
 
 

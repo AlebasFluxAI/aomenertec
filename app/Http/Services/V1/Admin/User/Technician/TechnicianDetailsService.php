@@ -31,12 +31,14 @@ class TechnicianDetailsService extends Singleton
         }
         return false;
     }
+
     public function deleteEquipment(Component $component, $equipmentId)
     {
         Equipment::find($equipmentId)->delete();
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
         $component->reset();
     }
+
     public function conditionalRemoveEquipmentTechnician(Component $component, $id)
     {
         if (Equipment::find($id)->has_clients) {
@@ -45,6 +47,7 @@ class TechnicianDetailsService extends Singleton
             return !Equipment::find($id)->has_technician;
         }
     }
+
     public function removeEquipmentTechnician(Component $component, $id)
     {
         $model = User::getUserModel();
@@ -61,12 +64,39 @@ class TechnicianDetailsService extends Singleton
         $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
         $component->reset();
     }
+
     public function conditionalMonitoring(Component $component, $modelId)
     {
         return !MicrocontrollerData::whereClientId($modelId)->exists();
     }
+
     public function conditionalDeleteClient(Component $component, $modelId)
     {
         return MicrocontrollerData::whereClientId($modelId)->exists();
+    }
+
+
+    public function conditionalEquipmentRepaired($id)
+    {
+        $equipment = Equipment::find($id);
+        return !($equipment->status == Equipment::STATUS_REPAIR_PENDING or $equipment->status == Equipment::STATUS_REPAIR);
+    }
+
+    public function repairEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->repair();
+    }
+
+    public function conditionalEquipmentDeprecate($id)
+    {
+        $equipment = Equipment::find($id);
+        return !$equipment->canDeprecate();
+    }
+
+    public function deprecateEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->deprecate();
     }
 }

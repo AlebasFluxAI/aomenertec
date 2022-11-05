@@ -27,14 +27,17 @@ class DetailsTechnician extends Component
     {
         return $this->detailsTechnicianService->conditionalDeleteEquipment($this, $id);
     }
+
     public function deleteEquipment($id)
     {
         $this->detailsTechnicianService->deleteEquipment($this, $id);
     }
+
     public function conditionalRemoveEquipmentTechnician($id)
     {
         return $this->detailsTechnicianService->conditionalRemoveEquipmentTechnician($this, $id);
     }
+
     public function removeEquipmentTechnician($id)
     {
         $this->detailsTechnicianService->removeEquipmentTechnician($this, $id);
@@ -44,14 +47,39 @@ class DetailsTechnician extends Component
     {
         return $this->detailsTechnicianService->conditionalMonitoring($this, $id);
     }
+
     public function conditionalDeleteClient($id)
     {
         return $this->detailsTechnicianService->conditionalDeleteClient($this, $id);
     }
+
     public function deleteClient($id)
     {
         $this->detailsTechnicianService->deleteclient($this, $id);
     }
+
+    public function deprecateEquipment($id)
+    {
+        return $this->detailsTechnicianService->deprecateEquipment($id);
+    }
+
+    public function conditionalEquipmentDeprecate($id)
+    {
+
+        return $this->detailsTechnicianService->conditionalEquipmentDeprecate($id);
+    }
+
+
+    public function conditionalEquipmentRepaired($id)
+    {
+        return $this->detailsTechnicianService->conditionalEquipmentRepaired($id);
+    }
+
+    public function repairEquipment($id)
+    {
+        return $this->detailsTechnicianService->repairEquipment($id);
+    }
+
 
     public function render()
     {
