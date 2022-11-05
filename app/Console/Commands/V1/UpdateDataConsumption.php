@@ -171,7 +171,7 @@ class UpdateDataConsumption extends Command
                     } else {
                         $item->forceDelete();
                     }
-                }else {
+                }/*else {
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -196,7 +196,7 @@ class UpdateDataConsumption extends Command
                     }
 
 
-                }
+                }*/
             }
             echo $i."\n";
         }
