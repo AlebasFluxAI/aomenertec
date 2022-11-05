@@ -142,7 +142,7 @@ class NetworkOperatorDetailsService extends Singleton
 
     public function conditionalLinkClientsSupervisor(Component $component, $modelId)
     {
-        return !Supervisor::find($modelId)->networkOperator->clients()->exists();
+        return !(Supervisor::find($modelId)->networkOperator ? Supervisor::find($modelId)->networkOperator->clients()->exists() : true);
     }
 
     public function getEnabledSupervisor(Component $component, $modelId)
