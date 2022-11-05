@@ -36,15 +36,17 @@ class DetailClientService extends Singleton
     {
         $component->fill([
             'client' => $model,
-            ]);
-        foreach ($model->equipments as $index=>$item) {
-            $component->equipment[$index] =["key"=>$item->equipmentType->type, "value" => $item->serial." - ".$item->description];
+        ]);
+        foreach ($model->equipments as $index => $item) {
+            $component->equipment[$index] = ["key" => $item->equipmentType->type, "value" => $item->serial . " - " . $item->description];
         }
     }
+
     public function conditionalDeleteTechnician(Component $component, $modelId)
     {
         return Technician::find($modelId)->clientTechnicians()->exists();
     }
+
     public function deleteTechnician(Component $component, $technicianId)
     {
         $technician = Technician::find($technicianId);
@@ -57,6 +59,7 @@ class DetailClientService extends Singleton
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$technician->name} eliminado"]);
         $technician->delete();
     }
+
     public function disableTechnician(Component $component, $modelId)
     {
         $technician = Technician::find($modelId);
@@ -69,6 +72,7 @@ class DetailClientService extends Singleton
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
         }
     }
+
     public function getEnabledAuxTechnician(Component $component, $modelId)
     {
         if (!Technician::find($modelId)->enabled) {
@@ -76,14 +80,17 @@ class DetailClientService extends Singleton
         }
         return true;
     }
+
     public function getEnabledTechnician(Component $component, $modelId)
     {
         return !Technician::find($modelId)->enabled;
     }
+
     public function conditionalLinkEquipmentTechnician(Component $component, $modelId)
     {
         return !Technician::find($modelId)->networkOperator->equipments()->exists();
     }
+
     public function conditionalLinkClientsTechnician(Component $component, $modelId)
     {
         return !Technician::find($modelId)->networkOperator->clients()->exists();
@@ -93,6 +100,7 @@ class DetailClientService extends Singleton
     {
         return Supervisor::find($modelId)->clientSupervisors()->exists();
     }
+
     public function deleteSupervisor(Component $component, $supervisorId)
     {
         $supervisor = Supervisor::find($supervisorId);
@@ -100,6 +108,7 @@ class DetailClientService extends Singleton
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$supervisor->name} eliminado"]);
         $supervisor->delete();
     }
+
     public function disableSupervisor(Component $component, $modelId)
     {
         $supervisor = Supervisor::find($modelId);
@@ -112,14 +121,17 @@ class DetailClientService extends Singleton
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
         }
     }
+
     public function conditionalLinkClientsSupervisor(Component $component, $modelId)
     {
         return !Supervisor::find($modelId)->networkOperator->clients()->exists();
     }
+
     public function getEnabledSupervisor(Component $component, $modelId)
     {
         return !Supervisor::find($modelId)->enabled;
     }
+
     public function getEnabledAuxSupervisor(Component $component, $modelId)
     {
         if (!Supervisor::find($modelId)->enabled) {
@@ -138,12 +150,14 @@ class DetailClientService extends Singleton
         }
         return false;
     }
+
     public function deleteEquipment(Component $component, $equipmentId)
     {
         Equipment::find($equipmentId)->delete();
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
         $component->reset();
     }
+
     public function conditionalRemoveEquipmentAdmin(Component $component, $id)
     {
         if (Equipment::find($id)->has_clients) {
@@ -152,6 +166,7 @@ class DetailClientService extends Singleton
             return !Equipment::find($id)->has_admin;
         }
     }
+
     public function removeEquipmentAdmin(Component $component, $id)
     {
         $model = User::getUserModel();
@@ -165,5 +180,29 @@ class DetailClientService extends Singleton
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
         $component->reset();
+    }
+
+    public function conditionalEquipmentRepaired($id)
+    {
+        $equipment = Equipment::find($id);
+        return !($equipment->status == Equipment::STATUS_REPAIR_PENDING or $equipment->status == Equipment::STATUS_REPAIR);
+    }
+
+    public function repairEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->repair();
+    }
+
+    public function conditionalEquipmentDeprecate($id)
+    {
+        $equipment = Equipment::find($id);
+        return !$equipment->canDeprecate();
+    }
+
+    public function deprecateEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->deprecate();
     }
 }
