@@ -415,6 +415,7 @@ class AddClientService extends Singleton
             'name' => $component->name,
             'last_name' => $component->last_name,
             'email' => $component->email,
+            'alias' => $component->alias,
             'code' => $code,
             'phone' => $component->phone,
             'identification' => $component->client_identification,

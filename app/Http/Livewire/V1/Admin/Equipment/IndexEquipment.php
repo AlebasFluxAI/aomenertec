@@ -48,6 +48,7 @@ class IndexEquipment extends Component
     {
         $this->indexEquipmentService->removeEquipmentAdmin($this, $id);
     }
+
     public function conditionalRemoveEquipmentAdmin($id)
     {
         return $this->indexEquipmentService->conditionalRemoveEquipmentAdmin($this, $id);
@@ -57,15 +58,39 @@ class IndexEquipment extends Component
     {
         $this->indexEquipmentService->removeEquipmentNetworkOperator($this, $id);
     }
+
     public function conditionalRemoveEquipmentNetworkOperator($id)
     {
         return $this->indexEquipmentService->conditionalRemoveEquipmentNetworkOperator($this, $id);
+    }
+
+    public function deprecateEquipment($id)
+    {
+        return $this->indexEquipmentService->deprecateEquipment($id);
+    }
+
+    public function conditionalEquipmentDeprecate($id)
+    {
+
+        return $this->indexEquipmentService->conditionalEquipmentDeprecate($id);
+    }
+
+
+    public function conditionalEquipmentRepaired($id)
+    {
+        return $this->indexEquipmentService->conditionalEquipmentRepaired($id);
+    }
+
+    public function repairEquipment($id)
+    {
+        return $this->indexEquipmentService->repairEquipment($id);
     }
 
     public function removeEquipmentTechnician($id)
     {
         $this->indexEquipmentService->removeEquipmentTechnician($this, $id);
     }
+
     public function conditionalRemoveEquipmentTechnician($id)
     {
         return $this->indexEquipmentService->conditionalRemoveEquipmentTechnician($this, $id);
@@ -80,28 +105,27 @@ class IndexEquipment extends Component
                 "permissionRemove" => $this->getPermission(),
                 "functionRemoveEquipment" => $this->getFunctionRemoveEquipment(),
                 "conditionalRemoveEquipment" => $this->getConditionalRemoveEquipment(),
-                "availableFlag" => $this->getAvailableFlag(),
 
             ]
         )->extends('layouts.v1.app');
     }
 
-    public function getAvailableFlag()
-    {
-        return $this->indexEquipmentService->getAvailableFlag($this);
-    }
+
     public function getPermission()
     {
         return $this->indexEquipmentService->getPermission($this);
     }
+
     public function getFunctionRemoveEquipment()
     {
         return $this->indexEquipmentService->getFunctionRemoveEquipment($this);
     }
+
     public function getConditionalRemoveEquipment()
     {
         return $this->indexEquipmentService->getConditionalRemoveEquipment($this);
     }
+
     public function getData()
     {
         return $this->indexEquipmentService->getData($this);

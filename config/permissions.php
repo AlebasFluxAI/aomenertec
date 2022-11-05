@@ -15,6 +15,7 @@ return [
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
         Permissions::EQUIPMENT_DELETE,
+        Permissions::EQUIPMENT_REPAIR,
         Permissions::EQUIPMENT_SHOW,
 
         Permissions::EQUIPMENT_TYPE_CREATE,
@@ -111,6 +112,7 @@ return [
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
         Permissions::EQUIPMENT_DELETE,
+        Permissions::EQUIPMENT_REPAIR,
         Permissions::EQUIPMENT_SHOW,
 
         Permissions::NETWORK_OPERATOR_CREATE,

@@ -57,9 +57,9 @@
                                ],
                                [
                                    "col_name" =>"Disponible",
-                                   "col_data" =>$availableFlag,
+                                   "col_data" =>"available",
                                    "col_filter"=>$col_filter??true,
-                                   "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN_INVERSE
+                                   "col_type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_BOOLEAN
                                ],
                                [
                                    "col_name" =>"Estado del equipo",
@@ -102,9 +102,21 @@
                                                         "icon"=>"fas fa-trash",
                                                         "tooltip_title"=>"Eliminar",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_DELETE],
-                                                ],
-
-
+                                                      ],
+                                                      [
+                                                            "function"=>"deprecateEquipment",
+                                                            "conditional"=>"conditionalEquipmentDeprecate",
+                                                            "icon"=>"fas fa-link-slash",
+                                                            "tooltip_title"=>"Dar de baja",
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_DELETE],
+                                                      ],
+                                                        [
+                                                            "function"=>"repairEquipment",
+                                                            "conditional"=>"conditionalEquipmentRepaired",
+                                                            "icon"=>"fas fa-clipboard-check",
+                                                            "tooltip_title"=>"Marcar como reparado",
+                                                            "permission"=>[\App\Http\Resources\V1\Permissions::EQUIPMENT_REPAIR],
+                                                      ]
                                                 ],
                                             ],
 

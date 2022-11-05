@@ -54,7 +54,7 @@ PqrNotification extends Notification
         }
         if ($this->pqr->client) {
             return new UserNotificationPayload(
-                "Cliente " . $this->pqr->client->name . " " . $this->pqr->client->last_name . " a levantado un nuevo PQR",
+                "Cliente " . ($this->pqr->client->alias ?? ($this->pqr->client->name . " " . $this->pqr->client->last_name)) . " a levantado un nuevo PQR",
                 "administrar.v1.peticiones.detalles",
                 "interna",
                 $this->pqr->id,

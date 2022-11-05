@@ -346,4 +346,30 @@ class ProfileUserService extends Singleton
     {
         return Support::find($supportId)->blinkPqrAvailability();
     }
+
+
+    public function conditionalEquipmentDeprecate($id)
+    {
+        $equipment = Equipment::find($id);
+        return !$equipment->canDeprecate();
+    }
+
+    public function deprecateEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->deprecate();
+    }
+
+    public function conditionalEquipmentRepaired($id)
+    {
+        $equipment = Equipment::find($id);
+        return !($equipment->status == Equipment::STATUS_REPAIR_PENDING or $equipment->status == Equipment::STATUS_REPAIR);
+    }
+
+    public function repairEquipment($id)
+    {
+        $equipment = Equipment::find($id);
+        $equipment->repair();
+    }
+
 }
