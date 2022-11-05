@@ -143,7 +143,7 @@ class ProfileUserService extends Singleton
 
         $operator->push();
         foreach ($operator->equipments()->get() as $type) {
-            $type->network_operator_id = "";
+            $type->network_operator_id = null;
             $type->save();
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operator->name} eliminado"]);

@@ -26,18 +26,20 @@ class AdminDetailsService extends Singleton
     {
         return Client::whereNetworkOperatorId($modelId)->exists();
     }
+
     public function deleteNetworkOperator(Component $component, $networkOperatorId)
     {
         $operator = NetworkOperator::find($networkOperatorId);
         $operator->user->enabled = false;
         $operator->push();
         foreach ($operator->equipments()->get() as $type) {
-            $type->network_operator_id = "";
+            $type->network_operator_id = null;
             $type->save();
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$operator->name} eliminado"]);
         $operator->delete();
     }
+
     public function disableNetworkOperator(Component $component, $modelId)
     {
         $operator = NetworkOperator::find($modelId);
@@ -50,10 +52,12 @@ class AdminDetailsService extends Singleton
             $component->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Usuario activado"]);
         }
     }
+
     public function getEnabledNetworkOperator(Component $component, $modelId)
     {
         return !NetworkOperator::find($modelId)->enabled;
     }
+
     public function getEnabledAuxNetworkOperator(Component $component, $modelId)
     {
         if (!NetworkOperator::find($modelId)->enabled) {
@@ -61,10 +65,12 @@ class AdminDetailsService extends Singleton
         }
         return true;
     }
+
     public function conditionalLinkEquipmentNetworkOperator(Component $component, $modelId)
     {
         return !NetworkOperator::find($modelId)->admin->equipments()->exists();
     }
+
     public function conditionalRemoveEquipmentAdmin(Component $component, $id)
     {
         if (Equipment::find($id)->has_clients) {
@@ -73,6 +79,7 @@ class AdminDetailsService extends Singleton
             return !Equipment::find($id)->has_admin;
         }
     }
+
     public function removeEquipmentAdmin(Component $component, $id)
     {
         $model = User::getUserModel();
@@ -97,6 +104,7 @@ class AdminDetailsService extends Singleton
         }
         return false;
     }
+
     public function deleteEquipment(Component $component, $equipmentId)
     {
         Equipment::find($equipmentId)->delete();
@@ -110,10 +118,12 @@ class AdminDetailsService extends Singleton
         $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
         $component->reset();
     }
+
     public function conditionalMonitoring(Component $component, $modelId)
     {
         return !MicrocontrollerData::whereClientId($modelId)->exists();
     }
+
     public function conditionalDeleteClient(Component $component, $modelId)
     {
         return MicrocontrollerData::whereClientId($modelId)->exists();
