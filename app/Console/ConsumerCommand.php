@@ -47,34 +47,34 @@ class ConsumerCommand extends Command
     {
         $mqtt = MQTT::connection();
         $mqtt->subscribe('mc/real_time/v1', function (string $topic, string $message) {
-            dispatch(new PushRealTimeMicrocontrollerDataJob($message));
+            dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
         }, 0);
         $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
-            dispatch(new SaveMicrocontrollerDataJob($message));
+            dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
         }, 1);
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
-            dispatch(new SaveMicrocontrollerDataJob($message));
-            dispatch(new SaveAlertDataJob($message));
+            dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
+            dispatch(new SaveAlertDataJob($message))->onQueue('default');
         }, 0);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
-            dispatch(new PushRealTimeMicrocontrollerDataJob($message));
+            dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) {
-            dispatch(new SaveMicrocontrollerDataJob($message));
+            dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
         }, 1);
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
-            dispatch(new SaveMicrocontrollerDataJob($message));
-            dispatch(new SaveAlertDataJob($message));
+            dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
+            dispatch(new SaveAlertDataJob($message))->onQueue('default');
         }, 0);
         $mqtt->subscribe('mc/ack', function (string $topic, string $message) {
             echo $message . "\n";
             $json = json_decode($message, true);
             if ($json != null) {
                 if (array_key_exists('config_get', $json)) {
-                    dispatch(new SetConfigJob($json));
+                    dispatch(new SetConfigJob($json))->onQueue('default');
                 } elseif (array_key_exists('frame_save', $json)) {
-                    dispatch(new SetClientStopUnpackDataJob($json));
+                    dispatch(new SetClientStopUnpackDataJob($json))->onQueue('default');
                 }
             }
         }, 2);
