@@ -20,8 +20,32 @@ class EquipmentEditService extends Singleton
             'equipmentSerial' => $equipment->serial,
             'equipmentTypeId' => $equipment->equipmentType->id,
             'equipmentTypes' => [],
+            'equipment_status' => $this->getStatus(),
+            'status' => $equipment->status,
             'picked' => false,
         ]);
+    }
+
+    public function getStatus()
+    {
+        return [
+            [
+                "key" => __("equipment." . Equipment::STATUS_NEW),
+                "value" => Equipment::STATUS_NEW
+            ],
+            [
+                "key" => __("equipment." . Equipment::STATUS_REPAIR_PENDING),
+                "value" => Equipment::STATUS_REPAIR_PENDING
+            ],
+            [
+                "key" => __("equipment." . Equipment::STATUS_REPAIR),
+                "value" => Equipment::STATUS_REPAIR
+            ],
+            [
+                "key" => __("equipment." . Equipment::STATUS_DISREPAIR),
+                "value" => Equipment::STATUS_DISREPAIR
+            ],
+        ];
     }
 
     public function loadEquipmentType(Component $component)
@@ -45,6 +69,7 @@ class EquipmentEditService extends Singleton
             "name" => $component->equipmentName,
             "description" => $component->equipmentDescription,
             "equipment_type_id" => $component->equipmentTypeId,
+            "status" => $component->status,
         ];
     }
 

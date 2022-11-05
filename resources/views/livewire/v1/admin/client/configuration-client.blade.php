@@ -4,7 +4,7 @@
 <div class="login">
     @include("partials.v1.title",[
             "first_title"=>"Configurar",
-            "second_title"=>"equipo de cliente"
+            "second_title"=>"equipo de cliente ".($model->alias??$model->name),
         ])
 
     {{--optiones de cabecera de formulario--}}

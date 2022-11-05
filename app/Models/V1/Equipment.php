@@ -19,7 +19,7 @@ class Equipment extends Model
     public const STATUS_REPAIRED = 'repaired'; //  Reparado.
     public const STATUS_REPAIR = 'repair'; // En reparacion.
     public const STATUS_DISREPAIR = 'disrepair'; // Para dar de baja.
-    public const STATUS_REPAIR_PENDING = 'repair_pending'; // Para dar de baja.
+    public const STATUS_REPAIR_PENDING = 'repair_pending'; // Pendiente de reparacion
     protected $fillable = [
         'id',
         "name",
@@ -63,6 +63,40 @@ class Equipment extends Model
         return $this->belongsToMany(Client::class, 'equipment_clients', 'equipment_id', 'client_id')
             ->withPivot('current_assigned')
             ->whereNull("equipment_clients.deleted_at");
+    }
+
+    public function canDeprecate()
+    {
+        return ($this->status == self::STATUS_REPAIR_PENDING and !$this->has_client);
+    }
+
+    public function getHasClientAttribute()
+    {
+        return EquipmentClient::whereEquipmentId($this->id)->exists();
+    }
+
+    public function getAvailableAttribute()
+    {
+        if ($this->status == self::STATUS_DISREPAIR) {
+            return false;
+        }
+
+        return !$this->has_client;
+
+    }
+
+    public function repair()
+    {
+        $this->update([
+            "status" => self::STATUS_REPAIRED
+        ]);
+    }
+
+    public function deprecate()
+    {
+        $this->update([
+            "status" => self::STATUS_DISREPAIR
+        ]);
     }
 
     public function equipmentType()

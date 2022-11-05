@@ -52,6 +52,7 @@ class User extends Authenticatable implements JWTSubject
     public const SESSION_ROLE_SELECTED = "role_selected";
     public const SESSION_SINGLE_ROLE = "single_role";
     public const SESSION_MULTI_ROLE = "multio_role";
+    public const SESSION_USER_AUTH = "user_auth";
     /**
      * The attributes that are mass assignable.
      *
@@ -141,7 +142,10 @@ class User extends Authenticatable implements JWTSubject
 
     public static function getUserModel()
     {
-        $user = Auth::user();
+        $user = Request::session()->get(User::SESSION_USER_AUTH) ?? Auth::user();
+        if (!Request::session()->get(User::SESSION_USER_AUTH)) {
+            Request::session()->put(User::SESSION_USER_AUTH, $user);
+        }
         $userRole = Request::session()->get(User::SESSION_ROLE_SELECTED) ?? User::getUserRoles()[0]["rol"];
         return $user->{$userRole};
 

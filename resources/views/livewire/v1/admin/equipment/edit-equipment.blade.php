@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[
@@ -20,40 +21,54 @@
                 ]
         ])
     {{----------------------------------Formulario--------------------------}}
-    @include("partials.v1.form.primary_form",[
-            "form_toast"=>false,
-            "session_message"=>"message",
-            "form_submit_action"=>"submitForm",
-            "form_inputs"=>[
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"equipmentName",
-                                        "icon_class"=>"fas fa-user",
-                                        "placeholder"=>"Nombre del equipo",
-                                        "col_with"=>12,
-                                        "required"=>true
-                            ],
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"equipmentSerial",
-                                        "icon_class"=>"fas fa-barcode",
-                                        "placeholder"=>"Serial del equipo",
-                                        "col_with"=>12,
-                                        "required"=>true
-                            ],
-                            [
-                                        "input_type"=>"text",
-                                        "input_model"=>"equipmentDescription",
-                                        "icon_class"=>"fas fa-file",
-                                         "placeholder"=>"Descripcion del equipo",
-                                        "col_with"=>12,
-                                        "input_rows"=>3,
-                                        "required"=>false,
+    <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
+        <div class="contenedor-grande">
+            <div class="row content p-5">
 
-                             ],
+                @include("partials.v1.form.form_input_icon",[
+                                "input_label"=>"Nombre del equipo",
+                                "input_model"=>"equipmentName",
+                                "icon_class"=>"fas fa-computer",
+                                "placeholder"=>"Nombre del equipo",
+                                "col_with"=>8,
+                                "input_type"=>"text",
+                       ])
+                @include("partials.v1.form.form_input_icon",[
+                             "input_label"=>"Serial del equipo",
+                             "input_model"=>"equipmentSerial",
+                             "icon_class"=>"fas fa-barcode",
+                             "placeholder"=>"Serial del equipo",
+                             "col_with"=>8,
+                             "input_type"=>"text",
+                    ])
+                @include("partials.v1.form.form_input_icon",[
+                         "input_label"=>"Descripcion del equipo",
+                         "input_model"=>"equipmentDescription",
+                         "icon_class"=>"fas fa-edit",
+                         "placeholder"=>"Descripcion del equipo",
+                         "col_with"=>8,
+                         "input_rows"=>3,
+                         "input_type"=>"text",
+                ])
 
-                         ]
-                 ])
+                @include("partials.v1.form.form_list",[
+                               "col_with"=>8,
+                               "input_label"=>"Seleccione el estado del equipo",
+                               "input_type"=>"text",
+                               "list_model" => "status",
+                               "list_default" => "Estado de equipo ...",
+                               "list_options" => $equipment_status??[],
+                               "list_option_value"=>"value",
+                               "list_option_view"=>"key",
+                               "list_option_title"=>"",
+                      ])
 
+                @include("partials.v1.form.form_submit_button",[
+                                 "button_align"=>"right" ,
+                                 "button_content"=>$form_submit_action_text??"Guardar"
+                     ])
+            </div>
+        </div>
+    </form>
 
 </div>

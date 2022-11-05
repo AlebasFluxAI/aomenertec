@@ -64,6 +64,10 @@
                                                                              "value"=>$client->name
                                                                          ],
                                                                          [
+                                                                             "key"=>"Alias de cliente",
+                                                                             "value"=>$client->alias
+                                                                         ],
+                                                                         [
                                                                              "key"=>"Email",
                                                                              "value"=>$client->email
                                                                          ],

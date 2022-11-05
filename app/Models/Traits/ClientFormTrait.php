@@ -86,4 +86,5 @@ trait ClientFormTrait
     public $client_person_type;
     public $client_identification;
     public $client_identification_type;
+    public $alias;
 }

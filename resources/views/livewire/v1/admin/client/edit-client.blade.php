@@ -58,6 +58,19 @@
                                             ])
 
                         @include("partials.v1.form.form_input_icon",[
+                                     "input_model"=>"alias",
+                                     "input_label"=>"Alias del cliente",
+                                     "tooltip_title"=>"Nombre personalizado para el cliente. Este alias se presentara dentro del monitoreo y las notificaciones asociadas al cliente (si no se asigna alias se presentara el nombre y apellido del cliente)",
+                                     "updated_input"=>"defer",
+                                     "icon_class"=>"fas fa-user",
+                                     "placeholder"=>"Alias de cliente",
+                                     "col_with"=>8,
+                                     "input_type"=>"text",
+                                     "required"=>true
+                            ])
+
+
+                        @include("partials.v1.form.form_input_icon",[
                                 "input_label"=>"Telefono del cliente (Sin indicativo)",
                                 "input_model"=>"phone",
                                "updated_input"=>"defer",
