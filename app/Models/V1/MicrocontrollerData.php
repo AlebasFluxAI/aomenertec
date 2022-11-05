@@ -100,7 +100,7 @@ class MicrocontrollerData extends Model
             return;
         }
 
-        if (!$client->microcontrollerData()->exists()) {
+        if (!MicrocontrollerData::whereClientId($client->id)->exists()) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
             $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
