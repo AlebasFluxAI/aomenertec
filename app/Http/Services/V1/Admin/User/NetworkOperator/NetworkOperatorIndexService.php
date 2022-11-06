@@ -7,6 +7,7 @@ use App\Http\Services\Singleton;
 use App\Models\V1\Client;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
+use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -26,14 +27,14 @@ class NetworkOperatorIndexService extends Singleton
         $admin = $user->admin;
         if ($admin) {
             if ($component->filter) {
-                return $admin->networkOperators()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                return $admin->networkOperators()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return $admin->networkOperators()->paginate(15);
+            return $admin->networkOperators()->pagination();
         }
         if ($component->filter) {
-            return NetworkOperator::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return NetworkOperator::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
-        return NetworkOperator::paginate(15);
+        return NetworkOperator::pagination();
     }
 
     public function deleteNetworkOperator(Component $component, $networkOperatorId)

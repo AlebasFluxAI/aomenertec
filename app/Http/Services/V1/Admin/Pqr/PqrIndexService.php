@@ -17,6 +17,7 @@ use App\Models\V1\PqrUser;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
+use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -34,26 +35,26 @@ class PqrIndexService extends Singleton
     {
         $model = Menu::getUserModel();
         if ($model::class == SuperAdmin::class) {
-            return Pqr::paginate();
+            return Pqr::pagination();
         }
         if ($model::class == NetworkOperator::class) {
             $techniciansUserId = Technician::whereNetworkOperatorId($model->id)
                 ->pluck("id");
-            return Pqr::whereIn("technician_id", $techniciansUserId)->orWhere("network_operator_id", $model->id)->paginate();
+            return Pqr::whereIn("technician_id", $techniciansUserId)->orWhere("network_operator_id", $model->id)->pagination();
         }
         if ($model::class == Admin::class) {
             $techniciansUserId = Technician::whereIn("network_operator_id", $model->networkOperators()->pluck("id"))
                 ->pluck("id");
-            return Pqr::whereIn("technician_id", $techniciansUserId)->paginate();
+            return Pqr::whereIn("technician_id", $techniciansUserId)->pagination();
         }
         if ($model::class == Supervisor::class) {
             $clientsUserId = Client::whereIn("id", $model->clients->pluck("id"))
                 ->pluck("id");
-            return Pqr::whereIn("client_id", $clientsUserId)->paginate();
+            return Pqr::whereIn("client_id", $clientsUserId)->pagination();
         }
 
         $user = Auth::user();
-        return Pqr::whereIn("id", $user->pqrUsers()->pluck("pqr_id"))->paginate();
+        return Pqr::whereIn("id", $user->pqrUsers()->pluck("pqr_id"))->pagination();
     }
 
 

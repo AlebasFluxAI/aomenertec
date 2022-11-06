@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\UserMenuHomeTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,6 +30,8 @@ class User extends Authenticatable implements JWTSubject
     use SoftDeletes;
     use AuditableTrait;
     use UserMenuHomeTrait;
+    use PaginatorTrait;
+
 
     public const TYPE_SUPER_ADMIN = "super_administrator";
     public const TYPE_ADMIN = "administrator";

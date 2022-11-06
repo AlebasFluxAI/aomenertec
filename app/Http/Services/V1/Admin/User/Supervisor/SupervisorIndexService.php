@@ -23,24 +23,24 @@ class SupervisorIndexService extends Singleton
         $user = Auth::user();
         if ($networkOperator = $user->networkOperator) {
             if ($component->filter) {
-                return $networkOperator->supervisors()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                return $networkOperator->supervisors()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return $networkOperator->supervisors()->paginate(15);
+            return $networkOperator->supervisors()->pagination();
         }
 
         if ($admin = $user->admin) {
             if ($component->filter) {
                 return Supervisor::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return Supervisor::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->paginate(15);
+            return Supervisor::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->pagination();
         }
 
 
         if ($component->filter) {
-            return Supervisor::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return Supervisor::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
-        return Supervisor::paginate(15);
+        return Supervisor::pagination();
     }
 
     public function deleteSupervisor(Component $component, $supervisorId)

@@ -22,6 +22,7 @@ use App\Models\V1\Client;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -34,7 +35,7 @@ class IndexClientService extends Singleton
 {
     public function getClients()
     {
-        return Client::get()->paginate(15);
+        return Client::get()->pagination();
     }
 
     public function delete(Component $component, $clientId)
@@ -65,17 +66,17 @@ class IndexClientService extends Singleton
         $user = Auth::user();
         if ($networkOperator = $user->networkOperator) {
             if ($component->filter) {
-                return $networkOperator->clients()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                return $networkOperator->clients()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return $networkOperator->clients()->paginate(15);
+            return $networkOperator->clients()->pagination();
         }
 
         if ($supervisor = $user->supervisor) {
             if ($component->filter) {
                 return Client::whereIn('id', $supervisor->clients->pluck('id'))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return Client::whereIn('id', $supervisor->clients->pluck('id'))->paginate(15);
+            return Client::whereIn('id', $supervisor->clients->pluck('id'))->pagination();
         }
 
         if ($admin = $user->admin) {
@@ -83,27 +84,27 @@ class IndexClientService extends Singleton
                 return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
                     ->orWhere("admin_id", Auth::user()->getAdmin()->id)
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
-                    ->paginate(15);
+                    ->pagination();
             }
             return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
                 ->orWhere("admin_id", Auth::user()->getAdmin()->id)
-                ->paginate(15);
+                ->pagination();
         }
 
 
         if ($technician = $user->technician) {
             if ($component->filter) {
                 return Client::whereIn('id', $technician->clients->pluck("id"))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return Client::whereIn('id', $technician->clients->pluck("id"))->paginate(15);
+            return Client::whereIn('id', $technician->clients->pluck("id"))->pagination();
         }
 
 
         if ($component->filter) {
-            return Client::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return Client::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
 
-        return Client::paginate(15);
+        return Client::pagination();
     }
 }

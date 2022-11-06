@@ -10,6 +10,7 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentAlert;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
+use App\Scope\PaginationScope;
 use Livewire\Component;
 use Livewire\WithPagination;
 use function view;
@@ -45,7 +46,7 @@ class IndexEquipmentAlert extends Component
     public function render()
     {
         return view('livewire.administrar.v1.equipmentAlert.index-equipment-alert', [
-            "equipmentAlerts" => EquipmentAlert::paginate(15)
+            "equipmentAlerts" => EquipmentAlert::pagination()
         ])->extends('layouts.v1.app');
     }
 }

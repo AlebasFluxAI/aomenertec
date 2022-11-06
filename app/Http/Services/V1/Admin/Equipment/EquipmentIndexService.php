@@ -11,13 +11,14 @@ use App\Models\V1\NetworkOperator;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use App\Scope\PaginationScope;
 use Livewire\Component;
 
 class EquipmentIndexService extends Singleton
 {
     public function getEquipments()
     {
-        return Equipment::with("equipmentType")->paginate(15);
+        return Equipment::with("equipmentType")->pagination();
     }
 
     public function conditionalRemoveEquipmentAdmin(Component $component, $id)
@@ -150,28 +151,28 @@ class EquipmentIndexService extends Singleton
             if ($model::class == NetworkOperator::class) {
                 return Equipment::whereNetworkOperatorId($model->id)
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
-                    ->paginate(15);
+                    ->pagination();
             } elseif ($model::class == Admin::class) {
                 return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')
-                    ->paginate(15);
+                    ->pagination();
             } elseif ($model::class == Technician::class) {
                 return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')
-                    ->paginate(15);
+                    ->pagination();
             }
-            return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
 
         if ($model::class == NetworkOperator::class) {
             return Equipment::whereNetworkOperatorId($model->id)
-                ->paginate(15);
+                ->pagination();
         } elseif ($model::class == Admin::class) {
             return Equipment::whereAdminId($model->id)
-                ->paginate(15);
+                ->pagination();
         } elseif ($model::class == Technician::class) {
             return Equipment::whereTechnicianId($model->id)
-                ->paginate(15);
+                ->pagination();
         }
-        return Equipment::paginate(15);
+        return Equipment::pagination();
     }
 
 
