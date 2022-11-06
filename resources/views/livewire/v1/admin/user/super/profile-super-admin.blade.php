@@ -1,11 +1,12 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
 
-        @include("partials.v1.title",[
-                "first_title"=>"Super administrador",
-                "second_title"=>$model->name
-            ])
+    @include("partials.v1.title",[
+            "first_title"=>"Super administrador",
+            "second_title"=>$model->name
+        ])
 
 
     {{----------------------------------Formulario--------------------------}}
@@ -22,9 +23,6 @@
                                                ],
                                                 [
                                                    "title"=>"Operadores de red",
-                                               ],
-                                                [
-                                                   "title"=>"Equipos",
                                                ],
 
                                           ],
@@ -86,26 +84,10 @@
                                                       "col_filter"=>false
                                                    ],
                                                ],
-                                               [
-                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
-                                                  "view_values"=>[
-                                                      "data"=>$equipment,
-                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::ADMIN_REMOVE_EQUIPMENT],
-                                                      "functionRemoveEquipment" => "removeEquipmentAdmin",
-                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentAdmin",
-                                                      "availableFlag" => "has_admin",
-                                                      "table_pageable"=>false,
-                                                      "table_class_container"=>"",
-                                                      "view_header"=>false,
-                                                      "col_filter"=>false
-                                                   ],
-                                               ],
                                    ],
 
                             "logout_button" => true,
         ])
-
-
 
 
 </div>

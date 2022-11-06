@@ -22,10 +22,6 @@
 
                                                ],
                                                [
-                                                    "title"=>"Mis Equipos",
-
-                                                ],
-                                               [
                                                    "title"=>"Clientes de mis operadores",
                                                ],
 
@@ -111,20 +107,6 @@
                                                                        "col_filter"=>false,
                                                                        "network_operator_conditional_delete"=>"conditionalDeleteNetworkOperator",
                                                                   ]
-                                               ],
-                                                [
-                                                  "view_name"=>"livewire.v1.admin.equipment.index-equipment",
-                                                  "view_values"=>[
-                                                      "data"=>$model->equipments()->get(),
-                                                      "permissionRemove" => [\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_REMOVE_EQUIPMENT],
-                                                      "functionRemoveEquipment" => "removeEquipmentNetworkOperator",
-                                                      "conditionalRemoveEquipment" => "conditionalRemoveEquipmentNetworkOperator",
-                                                      "availableFlag" => "has_network_operator",
-                                                      "table_pageable"=>false,
-                                                      "table_class_container"=>"",
-                                                      "view_header"=>false,
-                                                      "col_filter"=>false
-                                                   ],
                                                ],
                                                 [
                                                   "view_name"=>"livewire.v1.admin.client.index-client",
