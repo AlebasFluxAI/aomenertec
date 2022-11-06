@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,8 @@ class ClientTechnician extends Model
 {
     use HasFactory;
     use AuditableTrait;
+    use PaginatorTrait;
+
 
     protected $fillable = [
         'client_id',

@@ -31,6 +31,6 @@ class PurchaseHistoricalService extends Singleton
 
     public function getData(Component $component)
     {
-        return $component->model->clientRecharges()->paginate(15);
+        return $component->model->clientRecharges()->pagination();
     }
 }

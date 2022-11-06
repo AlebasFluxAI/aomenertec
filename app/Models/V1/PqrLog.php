@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,8 @@ class PqrLog extends Model
     use HasFactory;
     use SoftDeletes;
     use AuditableTrait;
+    use PaginatorTrait;
+
 
     public const ACTIVITY_TYPE_CHANGE_LEVEL = "change_level";
     public const ACTIVITY_TYPE_CLOSE_TICKET = "close_ticket";

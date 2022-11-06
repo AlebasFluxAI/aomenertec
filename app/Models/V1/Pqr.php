@@ -4,6 +4,7 @@ namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\ImageableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ class Pqr extends Model
     use ImageableTrait;
     use SoftDeletes;
     use AuditableTrait;
+    use PaginatorTrait;
 
     public const STATUS_CREATED = 'created';
     public const STATUS_PROCESSING = 'processing';

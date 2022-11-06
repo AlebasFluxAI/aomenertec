@@ -25,24 +25,24 @@ class TechnicianIndexService extends Singleton
 
         if ($networkOperator = $user->networkOperator) {
             if ($component->filter) {
-                return $networkOperator->technicians()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                return $networkOperator->technicians()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return $networkOperator->technicians()->paginate(15);
+            return $networkOperator->technicians()->pagination();
         }
 
         if ($admin = $user->admin) {
             if ($component->filter) {
                 return Technician::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return Technician::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->paginate(15);
+            return Technician::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->pagination();
         }
 
 
         if ($component->filter) {
-            return Technician::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return Technician::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
-        return Technician::paginate(15);
+        return Technician::pagination();
     }
 
     public function deleteTechnician(Component $component, $technicianId)
