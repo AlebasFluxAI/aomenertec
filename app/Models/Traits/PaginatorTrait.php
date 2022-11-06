@@ -7,8 +7,8 @@ use App\Scope\PaginationScope;
 
 trait PaginatorTrait
 {
-    public function scopePagination()
+    public function scopePagination($query)
     {
-        return parent::paginate(PaginationScope::PAGE_SIZE);
+        return $query->paginate(PaginationScope::PAGE_SIZE);
     }
 }

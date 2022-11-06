@@ -229,3 +229,6 @@ class SuperAdmin extends Model
         return Equipment::query();
     }
 }
+
+
+ 
