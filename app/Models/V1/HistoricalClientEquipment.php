@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\PaginatorTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,8 @@ class HistoricalClientEquipment extends Model
     use HasFactory;
     use SoftDeletes;
     use AuditableTrait;
+    use PaginatorTrait;
+
 
     protected $table = "historical_client_equipments";
     protected $fillable = [

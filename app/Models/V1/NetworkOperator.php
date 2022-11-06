@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\UserPermissionableTrait;
 use App\Scope\OrderIdScope;
@@ -18,6 +19,8 @@ class NetworkOperator extends Model
     use PermissionTrait;
     use UserPermissionableTrait;
     use AuditableTrait;
+    use PaginatorTrait;
+
 
     protected $fillable = [
         'user_id',

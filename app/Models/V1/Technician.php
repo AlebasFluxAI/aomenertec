@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\UserPermissionableTrait;
 use App\Scope\OrderIdScope;
@@ -17,6 +18,7 @@ class Technician extends Model
     use PermissionTrait;
     use AuditableTrait;
     use UserPermissionableTrait;
+    use PaginatorTrait;
 
 
     protected $fillable = ['identification',

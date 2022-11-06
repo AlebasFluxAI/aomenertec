@@ -8,6 +8,7 @@ use App\Models\V1\AlertType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentAlert;
 use App\Models\V1\EquipmentType;
+use App\Scope\PaginationScope;
 use Livewire\Component;
 
 class EquipmentAlertAddService extends Singleton
@@ -33,7 +34,7 @@ class EquipmentAlertAddService extends Singleton
 
     public function loadEquipmentType(Component $component)
     {
-        $component->equipment_types = EquipmentType::paginate();
+        $component->equipment_types = EquipmentType::pagination();
     }
 
     public function submitForm(Component $component)
@@ -53,7 +54,7 @@ class EquipmentAlertAddService extends Singleton
 
     public function updatingSearch(Component $component)
     {
-        $component->equipments = Equipment::whereId($component->equipment_id)->paginate(15);
+        $component->equipments = Equipment::whereId($component->equipment_id)->pagination();
     }
 
     public function updatedEquipmentId(Component $component)

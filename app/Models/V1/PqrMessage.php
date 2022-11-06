@@ -4,6 +4,7 @@ namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\ImageableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Scope\OrderIdAscScope;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,8 @@ class PqrMessage extends Model
     use HasFactory;
     use SoftDeletes;
     use AuditableTrait;
+    use PaginatorTrait;
+
 
     public const SENDER_TYPE_USER = "user";
     public const SENDER_TYPE_NETWORK_OPERATOR = "network_operator";

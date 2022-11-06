@@ -2,12 +2,15 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\PaginatorTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Image extends Model
 {
     use SoftDeletes;
+    use PaginatorTrait;
+
 
     public const URL_BASE = 'images/';
 
@@ -65,8 +68,7 @@ class Image extends Model
 
         static::addGlobalScope('order', function ($builder) {
             $builder->orderBy('order', 'ASC')
-                ->orderBy('name', 'ASC')
-            ;
+                ->orderBy('name', 'ASC');
         });
     }
 }

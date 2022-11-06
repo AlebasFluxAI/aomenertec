@@ -38,24 +38,24 @@ class SellerIndexService extends Singleton
         $user = Auth::user();
         if ($networkOperator = $user->networkOperator) {
             if ($component->filter) {
-                return $networkOperator->sellers()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                return $networkOperator->sellers()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return $networkOperator->sellers()->paginate(15);
+            return $networkOperator->sellers()->pagination();
         }
 
         if ($admin = $user->admin) {
             if ($component->filter) {
                 return Seller::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return Seller::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->paginate(15);
+            return Seller::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))->pagination();
         }
 
 
         if ($component->filter) {
-            return Seller::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return Seller::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
 
-        return Seller::paginate(15);
+        return Seller::pagination();
     }
 }

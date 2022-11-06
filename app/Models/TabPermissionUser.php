@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\PaginatorTrait;
 use App\Models\V1\TabPermission;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 class TabPermissionUser extends Model
 {
     use HasFactory;
+    use PaginatorTrait;
+
 
     protected $fillable = [
         "tab_permission_id",

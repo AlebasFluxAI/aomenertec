@@ -64,14 +64,14 @@ class WorkOrderIndexService extends Singleton
         }
 
         if ($userModel::class == NetworkOperator::class) {
-            return WorkOrder::whereIn("client_id", $userModel->clients->pluck("id"))->paginate();
+            return WorkOrder::whereIn("client_id", $userModel->clients->pluck("id"))->pagination();
         }
         if ($userModel::class == Admin::class) {
             $clientId = Client::whereAdminId($userModel->id)
                 ->pluck("id");
-            return WorkOrder::whereIn("client_id", $clientId)->paginate();
+            return WorkOrder::whereIn("client_id", $clientId)->pagination();
         }
-        return WorkOrder::paginate();
+        return WorkOrder::pagination();
     }
 
     public function setInProgress($workOrderId)

@@ -33,7 +33,7 @@ class NotificationComponentService extends Singleton
 
     public function getData(Component $component)
     {
-        return $component->user->notifications()->whereNull("deleted_at")->paginate(10);
+        return $component->user->notifications()->whereNull("deleted_at")->paginate();
     }
 
     public function markAsRead(Component $component, $model)

@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\User\Admin;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
+use App\Scope\PaginationScope;
 use Livewire\Component;
 
 class AdminIndexService extends Singleton
@@ -76,9 +77,9 @@ class AdminIndexService extends Singleton
     public function getData(Component $component)
     {
         if ($component->filter) {
-            return Admin::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return Admin::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
-        return Admin::paginate(15);
+        return Admin::pagination();
     }
 
     public function conditionalDeleteAdmin(Component $component, $modelId)

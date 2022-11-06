@@ -13,6 +13,7 @@ use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
+use App\Scope\PaginationScope;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -109,6 +110,6 @@ class WorkOrderClientService extends Singleton
 
     public function getData(Component $component)
     {
-        return $component->model->workOrders()->paginate();
+        return $component->model->workOrders()->pagination();
     }
 }
