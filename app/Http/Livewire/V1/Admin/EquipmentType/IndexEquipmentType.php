@@ -12,6 +12,7 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentAlert;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
+use App\Scope\PaginationScope;
 use Livewire\Component;
 use Livewire\WithPagination;
 use function view;
@@ -55,7 +56,7 @@ class IndexEquipmentType extends Component
         return view(
             'livewire.v1.admin.equipmentType.index-equipment-type',
             [
-                "data" => EquipmentType::paginate(15)
+                "data" => EquipmentType::pagination()
             ]
         )->extends('layouts.v1.app');
     }

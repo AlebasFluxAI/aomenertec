@@ -4,6 +4,7 @@ namespace App\Models\V1;
 
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
+use App\Models\Traits\PaginatorTrait;
 use App\Models\V1\AlertHistory;
 use App\Models\V1\Client;
 use Carbon\Carbon;
@@ -23,6 +24,8 @@ class MicrocontrollerData extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use PaginatorTrait;
+
 
     protected $fillable = [
         "id",
@@ -54,14 +57,17 @@ class MicrocontrollerData extends Model
     {
         return $this->hasOne(DailyMicrocontrollerData::class);
     }
+
     public function hourlyMicrocontrollerData()
     {
         return $this->hasOne(HourlyMicrocontrollerData::class);
     }
+
     public function annualMicrocontrollerData()
     {
         return $this->hasOne(AnnualMicrocontrollerData::class);
     }
+
     public function clientAlert()
     {
         return $this->hasOne(ClientAlert::class);
@@ -96,7 +102,7 @@ class MicrocontrollerData extends Model
             $this->delete();
             return;
         }
-        if ($client->stopUnpackClient()->exists()){
+        if ($client->stopUnpackClient()->exists()) {
             return;
         }
 
@@ -220,7 +226,7 @@ class MicrocontrollerData extends Model
         $this->source_timestamp = new Carbon($this->source_timestamp);
         $is_wifi = substr($binary_flags, 2, 1);
         $client = Client::find($this->client_id);
-        if($is_wifi == 1){
+        if ($is_wifi == 1) {
             $is_wifi = true;
         } else {
             $is_wifi = false;
@@ -259,27 +265,27 @@ class MicrocontrollerData extends Model
         $energy_control = $client->clientAlertConfiguration()->where('flag_id', '>=', 50)
             ->where('active_control', true)->where('max_control', '>', 0)->get();
         $alerts = $energy_alerts->merge($energy_control);
-        $energy_hour = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time->format('Y-m-d H:00:00'),$current_time->format('Y-m-d H:59:59')])
+        $energy_hour = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time->format('Y-m-d H:00:00'), $current_time->format('Y-m-d H:59:59')])
             ->orderBy('source_timestamp', 'desc')->first();
-        $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time_aux->format('Y-m-1 00:00:00'),$current_time_aux->format('Y-m-t 23:59:59')])
+        $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time_aux->format('Y-m-1 00:00:00'), $current_time_aux->format('Y-m-t 23:59:59')])
             ->orderBy('source_timestamp', 'desc')->first();
 
         if (!$energy_hour) {
             $energy_hour = $client->microcontrollerData()
-                ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-d H:00:00'),$this->source_timestamp->format('Y-m-d H:59:59')])
+                ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-d H:00:00'), $this->source_timestamp->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp')
                 ->first();
         }
         if (!$energy_month) {
             $energy_month = $client->microcontrollerData()
-                ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-1 00:00:00'),$this->source_timestamp->format('Y-m-t 23:59:59')])
+                ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-1 00:00:00'), $this->source_timestamp->format('Y-m-t 23:59:59')])
                 ->orderBy('source_timestamp')
                 ->first();
         }
         foreach ($alerts as $alert) {
             $value = $this->calculateValueAlert($alert->flag_id, $energy_month, $energy_hour);
             if ($alert->active_control) {
-                if ($alert->max_alert >= $value  and $alert->max_control >= $value) {
+                if ($alert->max_alert >= $value and $alert->max_control >= $value) {
                     continue;
                 } else {
                     if ($alert->max_alert < $value) {

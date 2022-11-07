@@ -2,12 +2,15 @@
 
 namespace App\Models\V1;
 
+use App\Models\Traits\PaginatorTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Change extends Model
 {
     use HasFactory;
+    use PaginatorTrait;
+
 
     public const CHANGE_TYPE_CREATED = "created";
     public const CHANGE_TYPE_UPDATED = "updated";

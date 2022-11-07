@@ -5,6 +5,7 @@ namespace App\Models\V1;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\ImageableManyTrait;
 use App\Models\Traits\ImageableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,8 @@ class WorkOrder extends Model
     use HasFactory;
     use AuditableTrait;
     use ImageableTrait;
+    use PaginatorTrait;
+
 
     public const WORK_ORDER_TYPE_INSTALLATION = "installation";
     public const WORK_ORDER_TYPE_REPLACE = "replace";

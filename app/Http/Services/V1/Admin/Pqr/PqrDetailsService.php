@@ -19,7 +19,7 @@ class PqrDetailsService extends Singleton
     {
         $user = Auth::user();
 
-        return Pqr::whereIn("id", $user->pqrUsers()->pluck("pqr_id"))->paginate();
+        return Pqr::whereIn("id", $user->pqrUsers()->pluck("pqr_id"))->pagination();
     }
 
     public function changeLevel(Component $component, $id)

@@ -35,9 +35,9 @@ class SupportIndexService extends Singleton
     public function getData(Component $component)
     {
         if ($component->filter) {
-            return Support::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return Support::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
-        return Support::paginate(15);
+        return Support::pagination();
     }
 
     public function supportPqrDisabled(Component $component, $support)

@@ -7,6 +7,7 @@ use App\Http\Resources\V1\PermissionInterface;
 use App\Http\Resources\V1\Permissions;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\AvailableChannelTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\UserPermissionableTrait;
 use App\Models\Traits\ValidateUserFormTrait;
@@ -27,6 +28,7 @@ class Admin extends Model
     use AuditableTrait;
     use AvailableChannelTrait;
     use UserPermissionableTrait;
+    use PaginatorTrait;
 
 
     use PermissionTrait;

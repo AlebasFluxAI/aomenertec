@@ -30,8 +30,8 @@ class SuperAdminIndexService extends Singleton
     public function getData(Component $component)
     {
         if ($component->filter) {
-            return SuperAdmin::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->paginate(15);
+            return SuperAdmin::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
-        return SuperAdmin::paginate(15);
+        return SuperAdmin::pagination();
     }
 }
