@@ -123,7 +123,7 @@ class ReorderDataClient extends Command
         $search_1 = "\"equipment_id\":". $equipment->serial;
         $data = MicrocontrollerData::withTrashed()
             //->where('source_timestamp', '>', $start_date)
-            ->where('client_id', $id_client)
+            //->where('client_id', $id_client)
             ->where('raw_json', 'like', '%' .$search. '%')
             ->orWhere('raw_json', 'like', '%' .$search_1. '%')
             ->get();
@@ -143,10 +143,29 @@ class ReorderDataClient extends Command
             if ($datum->trashed()){
                 $datum->restore();
             }
+        }$data = MicrocontrollerData::
+            //->where('source_timestamp', '>', $start_date)
+            where('client_id', $id_client)
+            ->get();
+
+        echo count($data)."\n";
+        foreach ($data as $i => $datum) {
+            $datum->client_id = null;
+            $datum->accumulated_real_consumption = null;
+            $datum->interval_real_consumption = null;
+            $datum->accumulated_reactive_consumption = null;
+            $datum->interval_reactive_consumption = null;
+            $datum->accumulated_reactive_capacitive_consumption = null;
+            $datum->interval_reactive_capacitive_consumption = null;
+            $datum->accumulated_reactive_inductive_consumption = null;
+            $datum->interval_reactive_inductive_consumption = null;
+            $datum->saveQuietly();
+            if ($datum->trashed()){
+                $datum->restore();
+            }
         }
-        $data_pack = MicrocontrollerData::whereNull('client_id')
-                                    ->whereNotNull('source_timestamp')
-                                    ->where('raw_json', 'like', '%' .$search. '%')
+        $data_pack = MicrocontrollerData::
+                                    where('raw_json', 'like', '%' .$search. '%')
                                     ->orWhere('raw_json', 'like', '%' .$search_1. '%')
                                     ->orderBy('source_timestamp')->orderBy('created_at')
                                     ->get();
@@ -163,7 +182,7 @@ class ReorderDataClient extends Command
                 $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                 $item->raw_json = $raw_json;
                 $item->saveQuietly();
-                dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
+                dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('default');
             }
         }
     }
