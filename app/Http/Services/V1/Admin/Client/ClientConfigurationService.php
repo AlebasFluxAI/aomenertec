@@ -310,7 +310,6 @@ class ClientConfigurationService extends Singleton
 
     public function submitFormAlert(Component $component)
     {
-        $component->validate();
         foreach ($component->client_config_alert as $index => $item) {
             if ($index == "client_notification_type") {
                 continue;

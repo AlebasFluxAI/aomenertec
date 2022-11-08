@@ -8,6 +8,7 @@ use App\Models\V1\AuxData;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
+use http\Client;
 use Illuminate\Console\Command;
 
 class UpdateDataConsumption extends Command
@@ -45,7 +46,7 @@ class UpdateDataConsumption extends Command
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
-            ->whereBetween("source_timestamp", ['2022-11-04 00:00:00', '2023-11-05 00:00:00'])
+            ->whereBetween("source_timestamp", ['2022-11-03 23:00:00', '2023-11-05 00:00:00'])
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
         if ($data_pack) {
@@ -157,12 +158,15 @@ class UpdateDataConsumption extends Command
 
                             if ($client) {
                                 if (!$client->stopUnpackClient()->exists()) {
-                                    if ($client->id != 4) {
+                                    $item->save();
+
+                                    /*if ($client->id != 1
+                                    ) {
                                         $i++;
                                         $item->save();
                                     } else{
                                         $item->saveQuietly();
-                                    }
+                                    }*/
                                 }
                             }
                         } else {
