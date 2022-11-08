@@ -63,9 +63,9 @@ class MicrocontrollerData extends Model
         return $this->hasOne(HourlyMicrocontrollerData::class);
     }
 
-    public function annualMicrocontrollerData()
+    public function monthlyMicrocontrollerData()
     {
-        return $this->hasOne(AnnualMicrocontrollerData::class);
+        return $this->hasOne(MonthlyMicrocontrollerData::class);
     }
 
     public function clientAlert()
@@ -225,11 +225,26 @@ class MicrocontrollerData extends Model
         $binary_flags = sprintf("%064b", ($this->raw_json['flags']));
         $this->source_timestamp = new Carbon($this->source_timestamp);
         $is_wifi = substr($binary_flags, 2, 1);
+
         $client = Client::find($this->client_id);
         if ($is_wifi == 1) {
             $is_wifi = true;
         } else {
             $is_wifi = false;
+        }
+        $offset_outputs = [0,3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        if ($client->digitalOutputs()->exists()) {
+            $client_outputs = $client->digitalOutputs()->get();
+            foreach ($client_outputs as $output) {
+                $status = substr($binary_flags, $offset_outputs[$output->number], 1);
+                if ($status == 1) {
+                    $status = true;
+                } else {
+                    $status = false;
+                }
+                $output->status = $status;
+                $output->save();
+            }
         }
         if (!$client->clientConfiguration()->exists()) {
             ClientConfiguration::create([

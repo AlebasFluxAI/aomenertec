@@ -44,7 +44,7 @@ class ReorderDataClient extends Command
      */
     public function handle()
     {
-        /*$data_pack = MicrocontrollerData::whereNull('client_id')
+       $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->whereBetween("source_timestamp", ['2021-11-04 00:00:00', '2022-11-04 00:00:00'])
             ->orderBy('source_timestamp')->orderBy('created_at')
@@ -54,12 +54,10 @@ class ReorderDataClient extends Command
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             $j=0;
-            foreach ($data_pack as $i=>$item) {
+            foreach ($data_pack as $i=>&$item) {
                 echo $i."\n";
                 $raw_json = json_decode($item->raw_json, true);
                 if ($raw_json == null) {
-                    echo "j= ".$j."\n";
-                    $j++;
                     if (strlen($item->raw_json) > 20) {
                         $decode = bin2hex(base64_decode($item->raw_json));
                         $split = substr($decode, (16), (16));
@@ -100,6 +98,7 @@ class ReorderDataClient extends Command
                                 }
                             }
                             $item->raw_json = $json;
+
                             $item->saveQuietly();
                         } else {
                             $item->forceDelete();
@@ -107,12 +106,37 @@ class ReorderDataClient extends Command
                     } else {
                         $item->forceDelete();
                     }
+                } else{
+                    $flag =false;
+                    if ($item->hourlyMicrocontrollerData()->exists() ){
+                        $item->hourlyMicrocontrollerData->delete();
+                        $flag = true;
+                    }
+                    if ($item->dailyMicrocontrollerData()->exists()){
+                        $item->dailyMicrocontrollerData->delete();
+                        $flag = true;
+                    }
+                    if ($item->monthlyMicrocontrollerData()->exists()){
+                        $item->monthlyMicrocontrollerData->delete();
+                        $flag = true;
+                    }
+                    if ($item->clientAlert()->exists()){
+                        $item->clientAlert->delete();
+                        $flag = true;
+                    }
+                    if ($flag){
+                        echo "j= ".$j."\n";
+                        $j++;
+                        $item->delete();
+                    }
                 }
             }
             echo $i."\n";
-        }*/
+            echo "j= ".$j."\n";
+            $j++;
+        }
 
-        $start_date = '2022-10-15 16:36:00';
+       /* $start_date = '2022-10-15 16:36:00';
         $id_client = $this->argument('client');
         $client = Client::find($id_client);
         if (!$client->stopUnpackClient()->exists()) {
@@ -130,6 +154,7 @@ class ReorderDataClient extends Command
 
         echo count($data)."\n";
         foreach ($data as $i => $datum) {
+            $datum->restore();
             $datum->client_id = null;
             $datum->accumulated_real_consumption = null;
             $datum->interval_real_consumption = null;
@@ -140,9 +165,7 @@ class ReorderDataClient extends Command
             $datum->accumulated_reactive_inductive_consumption = null;
             $datum->interval_reactive_inductive_consumption = null;
             $datum->saveQuietly();
-            if ($datum->trashed()){
-                $datum->restore();
-            }
+
         }$data = MicrocontrollerData::
             //->where('source_timestamp', '>', $start_date)
             where('client_id', $id_client)
@@ -160,9 +183,6 @@ class ReorderDataClient extends Command
             $datum->accumulated_reactive_inductive_consumption = null;
             $datum->interval_reactive_inductive_consumption = null;
             $datum->saveQuietly();
-            if ($datum->trashed()){
-                $datum->restore();
-            }
         }
         $data_pack = MicrocontrollerData::
                                     where('raw_json', 'like', '%' .$search. '%')
@@ -182,8 +202,8 @@ class ReorderDataClient extends Command
                 $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                 $item->raw_json = $raw_json;
                 $item->saveQuietly();
-                dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('default');
+                dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
             }
-        }
+        }*/
     }
 }

@@ -12,7 +12,6 @@ class ClientDigitalOutput extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    use AuditableTrait;
     use PaginatorTrait;
 
 
