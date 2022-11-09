@@ -35,14 +35,17 @@ class PqrObserver
             }
             $pqr->network_operator_id = $pqr->client->network_operator_id;
         }
+
     }
 
 
     private function getClient(Pqr $pqr)
     {
+
         if ($client_code = $pqr->client_code) {
             return Client::whereCode($client_code)->first();
         }
+
         return Client::whereIdentification($pqr->identification)->first();
     }
 
