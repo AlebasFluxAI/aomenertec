@@ -13,11 +13,19 @@
                         @php
                             $permission_failed[$index] = true
                         @endphp
+                    @else
+                        @php
+                            $permission_failed[$index] = false
+                        @endphp
                     @endif
                     @if($tab_title["conditionable"]??false)
                         @if(!(\App\Models\V1\User::getUserModel()->tabPermissionConditionableExist($permission,$model)))
                             @php
                                 $permission_failed[$index] = true
+                            @endphp
+                        @else
+                            @php
+                                $permission_failed[$index] = false
                             @endphp
                         @endif
                     @endif
@@ -26,7 +34,7 @@
             @if($permission_failed[$index])
                 @continue
             @endif
-            @if($index==0)
+            @if($index == array_search(false, $permission_failed))
 
                 <button wire:ignore
                         @if($tab_title["action"]??"" != "") wire:click="${{$tab_title["action"]}}" @endif
@@ -35,7 +43,7 @@
                         data-bs-target="#tab-{{$index}}"
                         type="button"
                         role="tab" aria-controls="tab-{{$index}}"
-                        aria-selected={{$index==0?"true":"false"}}>{{$tab_title["title"]}}
+                        aria-selected={{$index == array_search(false, $permission_failed)?"true":"false"}}>{{$tab_title["title"]}}
                 </button>
 
             @else
@@ -62,7 +70,7 @@
         @if($permission_failed[$index])
             @continue
         @endif
-        @if($index==0)
+        @if($index == array_search(false, $permission_failed))
 
             <div wire:ignore.self class="tab-pane contenedor-grande fade show active" id="tab-{{$index}}"
                  role="tabpanel"
