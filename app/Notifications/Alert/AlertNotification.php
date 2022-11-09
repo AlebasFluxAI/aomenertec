@@ -37,7 +37,7 @@ class AlertNotification extends Notification
             "Se ha presentado una variable fuera de rango en el dispositivo de usuario " . ($this->client->alias ?? $this->client->name),
             "v1.admin.client.add.alerts",
             "interna",
-            1,
+            $this->client->id,
             "client"
         );
     }

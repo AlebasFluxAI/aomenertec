@@ -41,10 +41,9 @@ class DeleteStopUnpackData extends Command
     {
         $stop_clients = StopUnpackDataClient::get();
         $now = new Carbon();
-
         foreach ($stop_clients as $item){
             $create_date = Carbon::create($item->created_at);
-            if ($now->diffInHours($create_date)>=1){
+            if ($now->diffInHours($create_date) >= 1){
                 $item->delete();
             }
         }
