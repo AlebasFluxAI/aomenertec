@@ -8,6 +8,7 @@ use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertIndexService;
 use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrGuestClientService;
+use App\Models\Traits\ConvertEmptyStringsToNull;
 use App\Models\Traits\PassTrait;
 use App\Models\V1\AlertType;
 use App\Models\V1\Equipment;
@@ -23,6 +24,7 @@ class AddPqrGuestClientComponent extends Component
 {
     use PassTrait;
     use WithFileUploads;
+
 
     public $invoice_radio_button;
     public $platform_radio_button;

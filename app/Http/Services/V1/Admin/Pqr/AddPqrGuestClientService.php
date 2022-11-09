@@ -38,7 +38,9 @@ class AddPqrGuestClientService extends Singleton
 
     public function mapper(Component $component)
     {
-        return [
+        return array_map(function ($value) {
+            return trim($value);
+        }, [
             'subject' => $component->subject,
             'client_code' => $component->client_code,
             'description' => $component->description,
@@ -51,7 +53,7 @@ class AddPqrGuestClientService extends Singleton
             'contact_email' => $component->contact_email,
             'contact_phone' => $component->contact_phone,
             'contact_identification' => $component->contact_identification
-        ];
+        ]);
     }
 
     public function mount(Component $component)
