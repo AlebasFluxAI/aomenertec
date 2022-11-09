@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\V1\DeleteStopUnpackData;
 use App\Console\Commands\V1\SetTimestamp;
 use App\Console\Commands\V1\RecordDailyConsumption;
 use App\Console\Commands\V1\RecordMonthlyConsumption;
@@ -36,6 +37,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
         $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
         $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
+
+        $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
 
 
         ////accumulated daily consumption
