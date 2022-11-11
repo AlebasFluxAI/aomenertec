@@ -14,7 +14,7 @@ class ReorderDataClientDay extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'command:enertec:v1:reorder_daily_data_client';
 
     /**
      * The console command description.
@@ -44,10 +44,8 @@ class ReorderDataClientDay extends Command
         $data_frame = collect(config('data-frame.data_frame'));
         $accum_variable = $data_frame->where('bolean_accum', true);
         $reference_date = new Carbon();
+        $end_date= Carbon::create(2022,07,16);
         for ($i=0; $i<300; $i++) {
-            if ($i > 130){
-                break;
-            }
             $reference_date->subDay();
             echo $reference_date->format('Y-m-d')."\n";
             foreach ($clients as $client) {
@@ -61,10 +59,19 @@ class ReorderDataClientDay extends Command
                         ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
-                    $reference_data_first = $client->microcontrollerData()
-                        ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
-                        ->orderBy('source_timestamp')
-                        ->first();
+
+                    if ($client->microcontrollerData()
+                        ->whereDate('source_timestamp', $reference_date->copy()->subDay()->format('Y-m-d'))->exists()){
+                        $reference_data_first = $client->microcontrollerData()
+                            ->whereDate('source_timestamp', $reference_date->copy()->subDay()->format('Y-m-d'))
+                            ->orderBy('source_timestamp', 'desc')
+                            ->first();
+                    } else{
+                        $reference_data_first = $client->microcontrollerData()
+                            ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
+                            ->orderBy('source_timestamp')
+                            ->first();
+                    }
                     $json = json_decode($reference_data->raw_json, true);
                     $penalizable_inductive_day = 0;
                     $penalizable_capacitive_day = 0;
@@ -104,6 +111,9 @@ class ReorderDataClientDay extends Command
                         'client_id' => $client->id
                     ]);
                 }
+            }
+            if ($reference_date->diffInDays($end_date)==0){
+                break;
             }
         }
     }
