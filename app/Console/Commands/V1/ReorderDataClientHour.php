@@ -45,23 +45,22 @@ class ReorderDataClientHour extends Command
         $data_frame = collect(config('data-frame.data_frame'));
         $accum_variable = $data_frame->where('bolean_accum', true);
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2022,07,16, 12);
+        $end_date= Carbon::create(2022,07,16, 11);
         while (true) {
-            $reference_date->subHour();
-            echo $reference_date->format('Y-m-d H')."\n";
+            $end_date->addHour();
+            echo $end_date->format('Y-m-d H')."\n";
             foreach ($clients as $client) {
-                $data_hour = $client->microcontrollerData()
-                    ->whereBetween("source_timestamp", [$reference_date->format('Y-m-d H:00:00'), $reference_date->format('Y-m-d H:59:59')])->get();
-                $year =  $reference_date->format('Y');
-                $month = $reference_date->format('m');
-                $day =   $reference_date->format('d');
-                $hour =  $reference_date->format('H');
-                if (count($data_hour) > 0) {
+                $year =  $end_date->format('Y');
+                $month = $end_date->format('m');
+                $day =   $end_date->format('d');
+                $hour =  $end_date->format('H');
+                if ($client->microcontrollerData()
+                    ->whereBetween("source_timestamp", [$end_date->format('Y-m-d H:00:00'), $end_date->format('Y-m-d H:59:59')])->exists()) {
                     $reference_data = $client->microcontrollerData()
-                        ->whereBetween("source_timestamp", [$reference_date->format('Y-m-d H:00:00'), $reference_date->format('Y-m-d H:59:59')])
+                        ->whereBetween("source_timestamp", [$end_date->format('Y-m-d H:00:00'), $end_date->format('Y-m-d H:59:59')])
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
-                    $json = json_decode($reference_data->raw_json, true);
+
 
                     if ($reference_data->interval_real_consumption == 0) {
                         $penalizable_inductive = $reference_data->interval_reactive_inductive_consumption;
@@ -87,28 +86,30 @@ class ReorderDataClientHour extends Command
                             'penalizable_reactive_inductive_consumption' => $penalizable_inductive]
                     );
                 } else {
-                    $last_hour = $reference_date->copy()->subHour();
+                    $last_hour = $end_date->copy()->subHour();
                     $last_data = $client->hourlyMicrocontrollerData()
                                                         ->whereYear($last_hour->format('Y'))
                                                         ->whereMonth($last_hour->format('m'))
                                                         ->whereDay($last_hour->format('d'))
                                                         ->whereHour($last_hour->format('H'))->first();
-                    HourlyMicrocontrollerData::updateOrCreate(
-                        ['year' => $year,
-                            'month' => $month,
-                            'day' => $day,
-                            'hour' => $hour,
-                            'client_id' => $client->id],
-                        ['microcontroller_data_id' => $last_data->id,
-                            'interval_real_consumption' => 0,
-                            'interval_reactive_capacitive_consumption' => 0,
-                            'interval_reactive_inductive_consumption' => 0,
-                            'penalizable_reactive_capacitive_consumption' => 0,
-                            'penalizable_reactive_inductive_consumption' => 0]
-                    );
+                    if ($last_data) {
+                        HourlyMicrocontrollerData::updateOrCreate(
+                            ['year' => $year,
+                                'month' => $month,
+                                'day' => $day,
+                                'hour' => $hour,
+                                'client_id' => $client->id],
+                            ['microcontroller_data_id' => $last_data->id,
+                                'interval_real_consumption' => 0,
+                                'interval_reactive_capacitive_consumption' => 0,
+                                'interval_reactive_inductive_consumption' => 0,
+                                'penalizable_reactive_capacitive_consumption' => 0,
+                                'penalizable_reactive_inductive_consumption' => 0]
+                        );
+                    }
                 }
             }
-            if ($reference_date->diffInHours($end_date)==0){
+            if ($end_date->diffInHours($reference_date)==0){
                 break;
             }
         }
