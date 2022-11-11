@@ -15,7 +15,7 @@ class ReorderDataClientHour extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'command:enertec:v1:reorder_hourly_data_client';
 
     /**
      * The console command description.
@@ -42,10 +42,8 @@ class ReorderDataClientHour extends Command
     public function handle()
     {
         $clients = Client::whereHasTelemetry(true)->get();
-        $data_frame = collect(config('data-frame.data_frame'));
-        $accum_variable = $data_frame->where('bolean_accum', true);
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2022,07,16, 11);
+        $end_date= Carbon::create(2022,07,16, 11,0,0);
         while (true) {
             $end_date->addHour();
             echo $end_date->format('Y-m-d H')."\n";
@@ -88,10 +86,10 @@ class ReorderDataClientHour extends Command
                 } else {
                     $last_hour = $end_date->copy()->subHour();
                     $last_data = $client->hourlyMicrocontrollerData()
-                                                        ->whereYear($last_hour->format('Y'))
-                                                        ->whereMonth($last_hour->format('m'))
-                                                        ->whereDay($last_hour->format('d'))
-                                                        ->whereHour($last_hour->format('H'))->first();
+                                                        ->where('year', $last_hour->format('Y'))
+                                                        ->where('month', $last_hour->format('m'))
+                                                        ->where('day', $last_hour->format('d'))
+                                                        ->where('hour', $last_hour->format('H'))->first();
                     if ($last_data) {
                         HourlyMicrocontrollerData::updateOrCreate(
                             ['year' => $year,
@@ -99,7 +97,7 @@ class ReorderDataClientHour extends Command
                                 'day' => $day,
                                 'hour' => $hour,
                                 'client_id' => $client->id],
-                            ['microcontroller_data_id' => $last_data->id,
+                            ['microcontroller_data_id' => $last_data->microcontroller_data_id,
                                 'interval_real_consumption' => 0,
                                 'interval_reactive_capacitive_consumption' => 0,
                                 'interval_reactive_inductive_consumption' => 0,

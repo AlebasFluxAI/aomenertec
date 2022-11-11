@@ -92,8 +92,16 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+            $last_data = $client->microcontrollerData()->whereDate('source_timestamp','<',$current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
             $last_raw_json = json_decode($last_data->raw_json, true);
+            if ($json['import_wh'] <= 0) {
+                if ($last_data) {
+                    if ($last_raw_json['import_wh']>0) {
+                        $this->model->forceDelete();
+                        return;
+                    }
+                }
+            }
 
             $reference_hour = new Carbon();
             $reference_hour->setTimestamp($timestamp_unix);
@@ -182,7 +190,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         $this->model->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->model->raw_json = $json;
         $this->model->saveQuietly();
-        $this->updateHourlyData();
+        //$this->updateHourlyData();
     }
 
     public function updateHourlyData()

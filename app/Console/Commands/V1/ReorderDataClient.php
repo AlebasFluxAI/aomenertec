@@ -113,73 +113,60 @@ class ReorderDataClient extends Command
             $j++;
         }*/
 
-       $start_date = '2022-10-15 16:36:00';
-        $id_client = $this->argument('client');
-        $client = Client::find($id_client);
-        if (!$client->stopUnpackClient()->exists()) {
+       //$start_date = '2022-10-15 16:36:00';
+        //$id_client = $this->argument('client');
+        //$client = Client::find($id_client);
+        /*if (!$client->stopUnpackClient()->exists()) {
             StopUnpackDataClient::create(['client_id' => $client->id]);
-        }
-        $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
-        $search = "\"equipment_id\":\"". $equipment->serial."\"";
-        $search_1 = "\"equipment_id\":". $equipment->serial;
-        $data = MicrocontrollerData::withTrashed()
+        }*/
+        $clients = Client::whereHasTelemetry(true)->get();
+        foreach ($clients as $client) {
+            $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
+            $search = "\"equipment_id\":\"" . $equipment->serial . "\"";
+            $search_1 = "\"equipment_id\":" . $equipment->serial;
+            $data = MicrocontrollerData::withTrashed()
+                //->where('source_timestamp', '>', $start_date)
+                //->where('client_id', $id_client)
+                ->where('raw_json', 'like', '%' . $search . '%')
+                ->orWhere('raw_json', 'like', '%' . $search_1 . '%')
+                ->get();
+
+            echo count($data) . "\n";
+            foreach ($data as $datum) {
+                $datum->restore();
+                $datum->client_id = null;
+                $datum->saveQuietly();
+
+            }
+            $data = MicrocontrollerData::
             //->where('source_timestamp', '>', $start_date)
-            //->where('client_id', $id_client)
-            ->where('raw_json', 'like', '%' .$search. '%')
-            ->orWhere('raw_json', 'like', '%' .$search_1. '%')
-            ->get();
+            where('client_id', $client->id)
+                ->get();
 
-        echo count($data)."\n";
-        foreach ($data as $i => $datum) {
-            $datum->restore();
-            $datum->client_id = null;
-            $datum->accumulated_real_consumption = null;
-            $datum->interval_real_consumption = null;
-            $datum->accumulated_reactive_consumption = null;
-            $datum->interval_reactive_consumption = null;
-            $datum->accumulated_reactive_capacitive_consumption = null;
-            $datum->interval_reactive_capacitive_consumption = null;
-            $datum->accumulated_reactive_inductive_consumption = null;
-            $datum->interval_reactive_inductive_consumption = null;
-            $datum->saveQuietly();
-
-        }$data = MicrocontrollerData::
-            //->where('source_timestamp', '>', $start_date)
-            where('client_id', $id_client)
-            ->get();
-
-        echo count($data)."\n";
-        foreach ($data as $i => $datum) {
-            $datum->client_id = null;
-            $datum->accumulated_real_consumption = null;
-            $datum->interval_real_consumption = null;
-            $datum->accumulated_reactive_consumption = null;
-            $datum->interval_reactive_consumption = null;
-            $datum->accumulated_reactive_capacitive_consumption = null;
-            $datum->interval_reactive_capacitive_consumption = null;
-            $datum->accumulated_reactive_inductive_consumption = null;
-            $datum->interval_reactive_inductive_consumption = null;
-            $datum->saveQuietly();
-        }
-        $data_pack = MicrocontrollerData::
-                                    where('raw_json', 'like', '%' .$search. '%')
-                                    ->orWhere('raw_json', 'like', '%' .$search_1. '%')
-                                    ->orderBy('source_timestamp')->orderBy('created_at')
-                                    ->get();
-        echo count($data_pack)."\n";
-        if ($data_pack) {
-            foreach ($data_pack as $i => $item) {
-                echo $i."\n";
-                $raw_json = json_decode($item->raw_json, true);
-                $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
-                $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
-                $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
-                $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'] ;
-                $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
-                $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
-                $item->raw_json = $raw_json;
-                $item->saveQuietly();
-                dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
+            echo count($data) . "\n";
+            foreach ($data as $i => $datum) {
+                $datum->client_id = null;
+                $datum->saveQuietly();
+            }
+            $data_pack = MicrocontrollerData::
+            where('raw_json', 'like', '%' . $search . '%')
+                ->orWhere('raw_json', 'like', '%' . $search_1 . '%')
+                ->orderBy('source_timestamp')->orderBy('created_at')
+                ->get();
+            echo count($data_pack) . "\n";
+            if ($data_pack) {
+                foreach ($data_pack as $i => $item) {
+                    $raw_json = json_decode($item->raw_json, true);
+                    $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
+                    $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
+                    $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'];
+                    $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'];
+                    $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'];
+                    $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
+                    $item->raw_json = $raw_json;
+                    $item->saveQuietly();
+                    dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
+                }
             }
         }
     }
