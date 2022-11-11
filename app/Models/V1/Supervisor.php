@@ -5,6 +5,7 @@ namespace App\Models\V1;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
+use App\Models\Traits\UserPermissionableTrait;
 use App\Scope\OrderIdScope;
 use Database\Seeders\ClientsTableSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,7 @@ class Supervisor extends Model
     use PermissionTrait;
     use AuditableTrait;
     use PaginatorTrait;
+    use UserPermissionableTrait;
 
 
     protected $fillable = [

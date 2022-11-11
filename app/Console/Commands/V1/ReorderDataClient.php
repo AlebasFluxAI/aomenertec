@@ -44,7 +44,7 @@ class ReorderDataClient extends Command
      */
     public function handle()
     {
-       $data_pack = MicrocontrollerData::whereNull('client_id')
+       /*$data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
             ->whereBetween("source_timestamp", ['2021-11-04 00:00:00', '2022-11-04 00:00:00'])
             ->orderBy('source_timestamp')->orderBy('created_at')
@@ -106,37 +106,14 @@ class ReorderDataClient extends Command
                     } else {
                         $item->forceDelete();
                     }
-                } else{
-                    $flag =false;
-                    if ($item->hourlyMicrocontrollerData()->exists() ){
-                        $item->hourlyMicrocontrollerData->delete();
-                        $flag = true;
-                    }
-                    if ($item->dailyMicrocontrollerData()->exists()){
-                        $item->dailyMicrocontrollerData->delete();
-                        $flag = true;
-                    }
-                    if ($item->monthlyMicrocontrollerData()->exists()){
-                        $item->monthlyMicrocontrollerData->delete();
-                        $flag = true;
-                    }
-                    if ($item->clientAlert()->exists()){
-                        $item->clientAlert->delete();
-                        $flag = true;
-                    }
-                    if ($flag){
-                        echo "j= ".$j."\n";
-                        $j++;
-                        $item->delete();
-                    }
                 }
             }
             echo $i."\n";
             echo "j= ".$j."\n";
             $j++;
-        }
+        }*/
 
-       /* $start_date = '2022-10-15 16:36:00';
+       $start_date = '2022-10-15 16:36:00';
         $id_client = $this->argument('client');
         $client = Client::find($id_client);
         if (!$client->stopUnpackClient()->exists()) {
@@ -204,6 +181,6 @@ class ReorderDataClient extends Command
                 $item->saveQuietly();
                 dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
             }
-        }*/
+        }
     }
 }
