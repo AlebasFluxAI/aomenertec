@@ -22,6 +22,7 @@ class Control extends Component
         'coils.*.control_type' => 'required',
     ];
     protected $listeners = ['selectControl'];
+
     public function mount(Client $client)
     {
         $this->client = $client;
@@ -30,9 +31,9 @@ class Control extends Component
 
     public function confirmAction($index)
     {
-        $this->coils[$index]['status']=!$this->coils[$index]['status'];
-        $equipment =$this->client->equipments()->whereEquipmentTypeId(1)->first();
-        $topic = "mc/config/".$equipment->serial;
+        $this->coils[$index]['status'] = !$this->coils[$index]['status'];
+        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $topic = "mc/config/" . $equipment->serial;
         if ($this->coils[$index]['status']) {
             $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
         } else {
@@ -46,6 +47,7 @@ class Control extends Component
         MQTT::disconnect();
         //$this->coils = $this->client->coils;
     }
+
     public function updatedCoils($value, $key)
     {
         $variable = explode(".", $key);
@@ -56,9 +58,10 @@ class Control extends Component
             $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Nombre actualizado"]);
         }
     }
+
     public function selectControl()
     {
-        if($this->client->clientConfiguration()->first()->active_real_time) {
+        if ($this->client->clientConfiguration()->first()->active_real_time) {
             if ($this->client->clientConfiguration()->first()->real_time_flag) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
                 if (RealTimeListener::whereUserId(Auth::user()->id)
@@ -80,6 +83,7 @@ class Control extends Component
 
     public function render()
     {
-        return view('livewire.v1.admin.client.monitoring.control');
+        return view('livewire.v1.admin.client.monitoring.control')
+            ->extends('layouts.v1.app');
     }
 }
