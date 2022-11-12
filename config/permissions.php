@@ -213,6 +213,7 @@ return [
         Permissions::CLIENT_SHOW_MONITORING,
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
+        Permissions::CLIENT_ADD_EQUIPMENT,
 
         Permissions::SUPPORT_CREATE,
         Permissions::SUPPORT_EDIT,

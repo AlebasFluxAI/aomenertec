@@ -44,6 +44,9 @@ class CreateWorkOrderJob implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->pqr->workOrders()->exists()) {
+            return;
+        }
         $this->pqr->client->workOrders()->create([
             "description" => $this->pqr->detail,
             "technician_id" => $this->pqr->technician_id,
