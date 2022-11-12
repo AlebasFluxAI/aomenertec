@@ -102,6 +102,15 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                     }
                 }
             }
+            if ($last_data) {
+                if ($json['import_wh'] < $last_raw_json['import_wh']) {
+                    $json['import_wh'] = $last_raw_json['import_wh'];
+                }
+                if ($json['import_VArh'] < $last_raw_json['import_VArh']) {
+                    $json['import_VArh'] = $last_raw_json['import_VArh'];
+                }
+            }
+
 
             $reference_hour = new Carbon();
             $reference_hour->setTimestamp($timestamp_unix);
@@ -190,7 +199,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         $this->model->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->model->raw_json = $json;
         $this->model->saveQuietly();
-        //$this->updateHourlyData();
+        $this->updateHourlyData();
     }
 
     public function updateHourlyData()
