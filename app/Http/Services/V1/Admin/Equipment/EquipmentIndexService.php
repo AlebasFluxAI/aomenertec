@@ -124,7 +124,7 @@ class EquipmentIndexService extends Singleton
         if ($model::class == NetworkOperator::class) {
             return "removeEquipmentTechnician";
         } elseif ($model::class == Admin::class) {
-            return "removeEquipmentNetworkoperator";
+            return "removeEquipmentAdmin";
         } elseif ($model::class == SuperAdmin::class) {
             return "removeEquipmentAdmin";
         }

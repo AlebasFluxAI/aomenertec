@@ -67,11 +67,11 @@
                                                                         ],
                                                                         [
                                                                             "key"=>"Mi operador de red",
-                                                                            "value"=>$model->networkOperator->name." ".$model->networkOperator->last_name
+                                                                            "value"=>($model->networkOperator?$model->networkOperator->name." ".$model->networkOperator->last_name:"")
                                                                         ],
                                                                         [
                                                                             "key"=>"Correo de mi operador de red",
-                                                                            "value"=>$model->networkOperator->email
+                                                                            "value"=>($model->networkOperator?$model->networkOperator->email:"")
                                                                         ],
 
                                                                     ]

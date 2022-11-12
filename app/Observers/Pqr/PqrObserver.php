@@ -67,13 +67,8 @@ class PqrObserver
     private function sendChangeNotification(Pqr $pqr)
     {
         if ($pqr->isDirty("status")) {
-            if ($pqr->support) {
-                foreach (SuperAdmin::get() as $superAdmin) {
-                    $superAdmin->user->notify(new PqrUpdatedNotification($pqr));
-                }
-            }
-            if ($pqr->technician) {
-                $pqr->technician->networkOperator->user->notity(new PqrUpdatedNotification($pqr));
+            if ($pqr->client) {
+                $pqr->client->networkOperator->user->notify(new PqrUpdatedNotification($pqr));
             }
         }
 
