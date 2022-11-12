@@ -156,6 +156,16 @@
                                                         "tooltip_title"=>"Alertas",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_ALERTS],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.monitoring.control",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-toggle-on",
+                                                        "tooltip_title"=>"On/Off",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_MONITORING_CONTROL],
+                                                ],
+
 
                                     ]
                                     ],
