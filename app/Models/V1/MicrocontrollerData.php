@@ -128,14 +128,14 @@ class MicrocontrollerData extends Model
         } else {
             $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
             $last_raw_json = json_decode($last_data->raw_json, true);
-            if ($json['import_wh'] <= 0) {
-                if ($last_data) {
-                    if ($last_raw_json['import_wh']>0) {
-                        $this->model->forceDelete();
-                        return;
-                    }
-                }
-            }
+            //if ($json['import_wh'] <= 0) {
+              //  if ($last_data) {
+                //    if ($last_raw_json['import_wh']>0) {
+                  //      $this->model->forceDelete();
+                    //    return;
+                    //}
+                //}
+            //}
 
             $reference_hour = new Carbon();
             $reference_hour->setTimestamp($timestamp_unix);
