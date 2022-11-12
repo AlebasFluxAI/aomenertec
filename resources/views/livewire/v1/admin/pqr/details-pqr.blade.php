@@ -113,8 +113,8 @@
 
                                                                           [
                                                                              "key"=>"Imagen adjunta",
-                                                                             "type"=>"image",
-                                                                             "value"=>$model->attach?$model->attach->url:"https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png"
+                                                                             "type"=>$model->attach?"image":"text",
+                                                                             "value"=>$model->attach?$model->attach->url:"Sin adjunto"
                                                                          ],
 
                                                                      ]

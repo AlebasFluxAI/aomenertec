@@ -73,7 +73,7 @@ class PqrObserver
                 }
             }
             if ($pqr->technician) {
-                $pqr->technician->networkOperator->user->notity(new PqrUpdatedNotification($pqr));
+                $pqr->technician->networkOperator->user->notify(new PqrUpdatedNotification($pqr));
             }
         }
 
