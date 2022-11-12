@@ -62,11 +62,11 @@
                                                     "action" => "emit('selectReport')"
 
                                                 ],
-                                                [
-                                                    "title"=>"ON/OFF",
-                                                    "action" => "emit('selectControl')"
+                                            //    [
+                                            //          "title"=>"ON/OFF",
+                                            //        "action" => "emit('selectControl')"
 
-                                                ],
+                                             //   ],
                                                // [
                                                //     "title"=>"Alertas",
                                                //     "action" => "emit('selectAlert')"
@@ -140,13 +140,13 @@
 
                                                                      ]
                                                 ],
-                                                [
-                                                    "view_name"=>"partials.v1.chart.client_monitoring",
-                                                    "view_values"=>  [
-                                                                        "type" => "control_data",
-                                                                        "client"=>$client,
-                                                                     ]
-                                                ],
+                                             //   [
+                                             //       "view_name"=>"partials.v1.chart.client_monitoring",
+                                             //       "view_values"=>  [
+                                             //                          "type" => "control_data",
+                                             //                           "client"=>$client,
+                                             //                        ]
+                                             //  ],
                                              //  [
                                              //      "view_name"=>"partials.v1.table.primary-table",
                                              //      "view_values"=>  [
