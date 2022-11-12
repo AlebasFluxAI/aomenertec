@@ -46,7 +46,6 @@ class UpdateDataConsumption extends Command
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
-            ->whereBetween("source_timestamp", ['2022-11-03 23:00:00', '2023-11-05 00:00:00'])
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
         if ($data_pack) {
@@ -73,8 +72,7 @@ class UpdateDataConsumption extends Command
                             $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                         }
                     }
-                    if ($client){
-                        if ($client->id == 113  or $client->id == 114 or $client->id == 115 or $client->id == 116 or $client->id == 117){
+
                             if (strlen($item->raw_json) > 20) {
                                 if ($last_data) {
                                     $last_raw_json = json_decode($last_data->raw_json, true);
@@ -177,10 +175,9 @@ class UpdateDataConsumption extends Command
                             } else {
                                 $item->forceDelete();
                             }
-                        }
-                    }
 
-                }/*else {
+
+                }else {
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -188,7 +185,8 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = json_encode($raw_json);
-                    $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
+                    $item->save();
+                    /*$equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
                     if ($equipment) {
                         $client = $equipment->clients()->first();
@@ -196,16 +194,15 @@ class UpdateDataConsumption extends Command
                             if (!$client->stopUnpackClient()->exists()) {
                                 if ($client->id != 4) {
                                     $i++;
-                                    $item->save();
                                 } else{
                                     $item->saveQuietly();
                                 }
                             }
                         }
-                    }
+                    }*/
 
 
-                }*/
+                }
             }
             echo $i."\n";
         }

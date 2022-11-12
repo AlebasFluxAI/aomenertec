@@ -43,7 +43,7 @@ class ReorderDataClientHour extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2022,07,16, 11,0,0);
+        $end_date= Carbon::create(2022,11,12, 03,0,0);
         while (true) {
             $end_date->addHour();
             echo $end_date->format('Y-m-d H')."\n";
