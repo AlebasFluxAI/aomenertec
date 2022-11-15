@@ -73,108 +73,110 @@ class UpdateDataConsumption extends Command
                         }
                     }
 
-                            if (strlen($item->raw_json) > 20) {
-                                if ($last_data) {
-                                    $last_raw_json = json_decode($last_data->raw_json, true);
-                                }
-                                $source_timestamp = Carbon::create($item->source_timestamp);
-                                if ($date->diffInDays($source_timestamp) <= 365) {
-                                    foreach ($data_frame as $data) {
-                                        try {
-                                            $split = substr($decode, ($data['start']), ($data['lenght']));
-                                            $bin = hex2bin($split);
-                                            if (strlen($bin) == ($data['lenght'] / 2)) {
-                                                if ($data['start'] >= 450) {
-                                                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                                    $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                                } else {
-                                                    if ($data['variable_name'] == "flags") {
-                                                        $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
-                                                    } else {
-                                                        if ($data['variable_name'] == "equipment_id") {
-                                                            $json[$data['variable_name']] = $equipment_serial;
-                                                        } else {
-                                                            $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                                                        }
-                                                    }
-                                                }
-                                                if ($data['start'] >= 72) {
-                                                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
-                                                        if (!$data['default']) {
-                                                            $json[$data['variable_name']] = $data['default'];
-                                                        } else {
-                                                            if ($last_data) {
-                                                                if ($data['start'] >= 450) {
-                                                                    $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
-                                                                } else {
-                                                                    $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                                                }
-                                                            } else {
-                                                                $json[$data['variable_name']] = 0;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-
-                                                if (is_nan($json[$data['variable_name']])) {
-                                                    $json[$data['variable_name']] = null;
-                                                }
-
-                                                if ($data['variable_name'] == "ph3_varLh_acumm") {
-                                                    break;
-                                                }
+                    if (strlen($item->raw_json) > 20) {
+                        if ($last_data) {
+                            $last_raw_json = json_decode($last_data->raw_json, true);
+                        }
+                        $source_timestamp = Carbon::create($item->source_timestamp);
+                        if ($date->diffInDays($source_timestamp) <= 365) {
+                            foreach ($data_frame as $data) {
+                                try {
+                                    $split = substr($decode, ($data['start']), ($data['lenght']));
+                                    $bin = hex2bin($split);
+                                    if (strlen($bin) == ($data['lenght'] / 2)) {
+                                        if ($data['start'] >= 450) {
+                                            $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                            $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                        } else {
+                                            if ($data['variable_name'] == "flags") {
+                                                $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                             } else {
-                                                if ($data['start'] >= 72) {
-                                                    if (!$data['default']) {
-                                                        $json[$data['variable_name']] = $data['default'];
-                                                    } else {
-                                                        if ($last_data) {
-                                                            if (isset($last_raw_json[$data['variable_name']])) {
-                                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                                            } else {
-                                                                $json[$data['variable_name']] = 0;
-                                                            }
+                                                if ($data['variable_name'] == "equipment_id") {
+                                                    $json[$data['variable_name']] = $equipment_serial;
+                                                } else {
+                                                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                                }
+                                            }
+                                        }
+                                        if ($data['start'] >= 72) {
+                                            if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
+                                                if (!$data['default']) {
+                                                    $json[$data['variable_name']] = $data['default'];
+                                                } else {
+                                                    if ($last_data) {
+                                                        if ($data['start'] >= 450) {
+                                                            $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
                                                         } else {
-                                                            $json[$data['variable_name']] = 0;
+                                                            $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                         }
+                                                    } else {
+                                                        $json[$data['variable_name']] = 0;
                                                     }
                                                 }
                                             }
-                                        } catch (Exception $e) {
-                                            echo 'Excepción capturada: ', $e->getMessage(), "\n";
                                         }
-                                    }
-                                    $item->raw_json = $json;
 
-                                    if ($json['import_wh'] <= 0) {
-                                        if ($last_data) {
-                                            if ($last_raw_json['import_wh']>0) {
-                                                $item->updateQuietly();
-                                                $item->delete();
-                                                continue;
+                                        if (is_nan($json[$data['variable_name']])) {
+                                            $json[$data['variable_name']] = null;
+                                        }
+
+                                        if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                            break;
+                                        }
+                                    } else {
+                                        if ($data['start'] >= 72) {
+                                            if (!$data['default']) {
+                                                $json[$data['variable_name']] = $data['default'];
+                                            } else {
+                                                if ($last_data) {
+                                                    if (isset($last_raw_json[$data['variable_name']])) {
+                                                        $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                                    } else {
+                                                        $json[$data['variable_name']] = 0;
+                                                    }
+                                                } else {
+                                                    $json[$data['variable_name']] = 0;
+                                                }
                                             }
                                         }
                                     }
-
-                                    if ($client) {
-                                        if (!$client->stopUnpackClient()->exists()) {
-                                            $item->save();
-
-                                            /*if ($client->id != 1
-                                            ) {
-                                                $i++;
-                                                $item->save();
-                                            } else{
-                                                $item->saveQuietly();
-                                            }*/
-                                        }
-                                    }
-                                } else {
-                                    $item->forceDelete();
+                                } catch (Exception $e) {
+                                    echo 'Excepción capturada: ', $e->getMessage(), "\n";
                                 }
-                            } else {
-                                $item->forceDelete();
                             }
+                            $item->raw_json = $json;
+
+                            if ($json['import_wh'] <= 0) {
+                                if ($last_data) {
+                                    if ($last_raw_json['import_wh']>0) {
+                                        $item->updateQuietly();
+                                        $item->delete();
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            if ($client) {
+                                if (!$client->stopUnpackClient()->exists()) {
+                                    $item->save();
+
+                                    /*if ($client->id != 1
+                                    ) {
+                                        $i++;
+                                        $item->save();
+                                    } else{
+                                        $item->saveQuietly();
+                                    }*/
+                                }
+                            } else{
+                                $item->save();
+                            }
+                        } else {
+                            $item->forceDelete();
+                        }
+                    } else {
+                        $item->forceDelete();
+                    }
 
 
                 }else {

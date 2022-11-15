@@ -198,8 +198,8 @@ class ReorderDataClient extends Command
         if (!MicrocontrollerData::whereClientId($client->id)->exists()) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
-            $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-            $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
+            $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
+            $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
             $json['ph1_varCh_interval'] = 0;
             $json['ph1_varLh_interval'] = 0;
             $json['ph2_varCh_interval'] = 0;
@@ -215,17 +215,19 @@ class ReorderDataClient extends Command
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
-            $last_raw_json = json_decode($last_data->raw_json, true);
-            if ($json['import_wh'] <= 0) {
-                if ($last_data) {
+            $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
+
+            if ($last_data) {
+                $last_raw_json = json_decode($last_data->raw_json, true);
+                if ($json['import_wh'] <= 0) {
+
                     if ($last_raw_json['import_wh']>0) {
                         $data->forceDelete();
                         return;
                     }
+
                 }
-            }
-            if ($last_data) {
+
                 if ($json['import_wh'] < $last_raw_json['import_wh']) {
                     $json['import_wh'] = $last_raw_json['import_wh'];
                 }
@@ -255,59 +257,59 @@ class ReorderDataClient extends Command
                 if ($last_data != null) {
                     $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
                     $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
-                    $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-                    $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
-                    $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
-                    $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
-                    $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
-                    $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
-                    $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
-                    $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
-                    $json['varCh_acumm'] = $json['varCh_acumm'] + $last_raw_json['varCh_acumm'];
-                    $json['varLh_acumm'] = $json['varLh_acumm'] + $last_raw_json['varLh_acumm'];
-                    $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $last_raw_json['ph1_varCh_acumm'];
-                    $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $last_raw_json['ph1_varLh_acumm'];
-                    $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $last_raw_json['ph2_varCh_acumm'];
-                    $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $last_raw_json['ph2_varLh_acumm'];
-                    $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $last_raw_json['ph3_varCh_acumm'];
-                    $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $last_raw_json['ph3_varLh_acumm'];
+                    $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
+                    $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
+                    $json['ph1_varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($last_raw_json['ph1_varCh_acumm']);
+                    $json['ph1_varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($last_raw_json['ph1_varLh_acumm']);
+                    $json['ph2_varCh_acumm'] = floatval($json['ph2_varCh_acumm']) + floatval($last_raw_json['ph2_varCh_acumm']);
+                    $json['ph2_varLh_acumm'] = floatval($json['ph2_varLh_acumm']) + floatval($last_raw_json['ph2_varLh_acumm']);
+                    $json['ph3_varCh_acumm'] = floatval($json['ph3_varCh_acumm']) + floatval($last_raw_json['ph3_varCh_acumm']);
+                    $json['ph3_varLh_acumm'] = floatval($json['ph3_varLh_acumm']) + floatval($last_raw_json['ph3_varLh_acumm']);
+                    $json['varCh_acumm'] = floatval($json['varCh_acumm']) + floatval($last_raw_json['varCh_acumm']);
+                    $json['varLh_acumm'] = floatval($json['varLh_acumm']) + floatval($last_raw_json['varLh_acumm']);
+                    $json['ph1_varCh_interval'] = floatval($json['ph1_varCh_acumm']) - floatval($last_raw_json['ph1_varCh_acumm']);
+                    $json['ph1_varLh_interval'] = floatval($json['ph1_varLh_acumm']) - floatval($last_raw_json['ph1_varLh_acumm']);
+                    $json['ph2_varCh_interval'] = floatval($json['ph2_varCh_acumm']) - floatval($last_raw_json['ph2_varCh_acumm']);
+                    $json['ph2_varLh_interval'] = floatval($json['ph2_varLh_acumm']) - floatval($last_raw_json['ph2_varLh_acumm']);
+                    $json['ph3_varCh_interval'] = floatval($json['ph3_varCh_acumm']) - floatval($last_raw_json['ph3_varCh_acumm']);
+                    $json['ph3_varLh_interval'] = floatval($json['ph3_varLh_acumm']) - floatval($last_raw_json['ph3_varLh_acumm']);
                     $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $last_raw_json['ph1_import_kwh'];
                     $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $last_raw_json['ph2_import_kwh'];
                     $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $last_raw_json['ph3_import_kwh'];
                     $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $last_raw_json['ph1_import_kvarh'];
                     $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $last_raw_json['ph2_import_kvarh'];
                     $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $last_raw_json['ph3_import_kvarh'];
-                    $json['varCh_interval'] = $json['varCh_acumm'] - $last_raw_json['varCh_acumm'];
-                    $json['varLh_interval'] = $json['varLh_acumm'] - $last_raw_json['varLh_acumm'];
+                    $json['varCh_interval'] = floatval($json['varCh_acumm']) - floatval($last_raw_json['varCh_acumm']);
+                    $json['varLh_interval'] = floatval($json['varLh_acumm']) - floatval($last_raw_json['varLh_acumm']);
                 }
             } else {
                 $reference_data_json = json_decode($reference_data->raw_json, true);
                 $json['kwh_interval'] = $json['import_wh'] - $reference_data_json['import_wh'];
                 $json['varh_interval'] = $json['import_VArh'] - $reference_data_json['import_VArh'];
-                $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-                $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
-                $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
-                $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
-                $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
-                $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
-                $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
-                $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
-                $json['varCh_acumm'] = $json['varCh_acumm'] + $last_raw_json['varCh_acumm'];
-                $json['varLh_acumm'] = $json['varLh_acumm'] + $last_raw_json['varLh_acumm'];
-                $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $reference_data_json['ph1_varCh_acumm'];
-                $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $reference_data_json['ph1_varLh_acumm'];
-                $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $reference_data_json['ph2_varCh_acumm'];
-                $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $reference_data_json['ph2_varLh_acumm'];
-                $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $reference_data_json['ph3_varCh_acumm'];
-                $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $reference_data_json['ph3_varLh_acumm'];
+                $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
+                $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
+                $json['ph1_varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($reference_data_json['ph1_varCh_acumm']);
+                $json['ph1_varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($reference_data_json['ph1_varLh_acumm']);
+                $json['ph2_varCh_acumm'] = floatval($json['ph2_varCh_acumm']) + floatval($reference_data_json['ph2_varCh_acumm']);
+                $json['ph2_varLh_acumm'] = floatval($json['ph2_varLh_acumm']) + floatval($reference_data_json['ph2_varLh_acumm']);
+                $json['ph3_varCh_acumm'] = floatval($json['ph3_varCh_acumm']) + floatval($reference_data_json['ph3_varCh_acumm']);
+                $json['ph3_varLh_acumm'] = floatval($json['ph3_varLh_acumm']) + floatval($reference_data_json['ph3_varLh_acumm']);
+                $json['varCh_acumm'] = floatval($json['varCh_acumm']) + floatval($reference_data_json['varCh_acumm']);
+                $json['varLh_acumm'] = floatval($json['varLh_acumm']) + floatval($reference_data_json['varLh_acumm']);
+                $json['ph1_varCh_interval'] = floatval($json['ph1_varCh_acumm']) - floatval($reference_data_json['ph1_varCh_acumm']);
+                $json['ph1_varLh_interval'] = floatval($json['ph1_varLh_acumm']) - floatval($reference_data_json['ph1_varLh_acumm']);
+                $json['ph2_varCh_interval'] = floatval($json['ph2_varCh_acumm']) - floatval($reference_data_json['ph2_varCh_acumm']);
+                $json['ph2_varLh_interval'] = floatval($json['ph2_varLh_acumm']) - floatval($reference_data_json['ph2_varLh_acumm']);
+                $json['ph3_varCh_interval'] = floatval($json['ph3_varCh_acumm']) - floatval($reference_data_json['ph3_varCh_acumm']);
+                $json['ph3_varLh_interval'] = floatval($json['ph3_varLh_acumm']) - floatval($reference_data_json['ph3_varLh_acumm']);
                 $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $reference_data_json['ph1_import_kwh'];
                 $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $reference_data_json['ph2_import_kwh'];
                 $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $reference_data_json['ph3_import_kwh'];
                 $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $reference_data_json['ph1_import_kvarh'];
                 $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $reference_data_json['ph2_import_kvarh'];
                 $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $reference_data_json['ph3_import_kvarh'];
-                $json['varCh_interval'] = $json['varCh_acumm'] - $reference_data_json['varCh_acumm'];
-                $json['varLh_interval'] = $json['varLh_acumm'] - $reference_data_json['varLh_acumm'];
+                $json['varCh_interval'] = floatval($json['varCh_acumm']) - floatval($reference_data_json['varCh_acumm']);
+                $json['varLh_interval'] = floatval($json['varLh_acumm']) - floatval($reference_data_json['varLh_acumm']);
             }
         }
 
