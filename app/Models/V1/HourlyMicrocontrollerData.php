@@ -28,6 +28,8 @@ class HourlyMicrocontrollerData extends Model
         "interval_reactive_inductive_consumption",
         "penalizable_reactive_capacitive_consumption",
         "penalizable_reactive_inductive_consumption",
+        "raw_json",
+        "source_timestamp",
     ];
 
     public function microcontrollerData()

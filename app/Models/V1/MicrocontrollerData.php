@@ -152,12 +152,12 @@ class MicrocontrollerData extends Model
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
 
-            if (!$reference_data) {
+            /*if (!$reference_data) {
                 $reference_data = $client->microcontrollerData()
                     ->whereBetween('source_timestamp', [$current_time->format('Y-m-d H:00:00'), $current_time->format('Y-m-d H:59:59')])
                     ->orderBy('source_timestamp')
                     ->first();
-            }
+            }*/
 
             if (empty($reference_data)) {
                 if ($last_data != null) {
@@ -194,14 +194,14 @@ class MicrocontrollerData extends Model
                 $json['varh_interval'] = $json['import_VArh'] - $reference_data_json['import_VArh'];
                 $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
                 $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
-                $json['ph1_varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($reference_data_json['ph1_varCh_acumm']);
-                $json['ph1_varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($reference_data_json['ph1_varLh_acumm']);
-                $json['ph2_varCh_acumm'] = floatval($json['ph2_varCh_acumm']) + floatval($reference_data_json['ph2_varCh_acumm']);
-                $json['ph2_varLh_acumm'] = floatval($json['ph2_varLh_acumm']) + floatval($reference_data_json['ph2_varLh_acumm']);
-                $json['ph3_varCh_acumm'] = floatval($json['ph3_varCh_acumm']) + floatval($reference_data_json['ph3_varCh_acumm']);
-                $json['ph3_varLh_acumm'] = floatval($json['ph3_varLh_acumm']) + floatval($reference_data_json['ph3_varLh_acumm']);
-                $json['varCh_acumm'] = $json['varCh_acumm'] + floatval($reference_data_json['varCh_acumm']);
-                $json['varLh_acumm'] = $json['varLh_acumm'] + floatval($reference_data_json['varLh_acumm']);
+                $json['ph1_varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($last_raw_json['ph1_varCh_acumm']);
+                $json['ph1_varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($last_raw_json['ph1_varLh_acumm']);
+                $json['ph2_varCh_acumm'] = floatval($json['ph2_varCh_acumm']) + floatval($last_raw_json['ph2_varCh_acumm']);
+                $json['ph2_varLh_acumm'] = floatval($json['ph2_varLh_acumm']) + floatval($last_raw_json['ph2_varLh_acumm']);
+                $json['ph3_varCh_acumm'] = floatval($json['ph3_varCh_acumm']) + floatval($last_raw_json['ph3_varCh_acumm']);
+                $json['ph3_varLh_acumm'] = floatval($json['ph3_varLh_acumm']) + floatval($last_raw_json['ph3_varLh_acumm']);
+                $json['varCh_acumm'] = $json['varCh_acumm'] + floatval($last_raw_json['varCh_acumm']);
+                $json['varLh_acumm'] = $json['varLh_acumm'] + floatval($last_raw_json['varLh_acumm']);
                 $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - floatval($reference_data_json['ph1_varCh_acumm']);
                 $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - floatval($reference_data_json['ph1_varLh_acumm']);
                 $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - floatval($reference_data_json['ph2_varCh_acumm']);

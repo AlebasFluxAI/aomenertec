@@ -40,7 +40,8 @@ class ReorderDataClientDay extends Command
      */
     public function handle()
     {
-        $clients = Client::whereHasTelemetry(true)->get();
+        //$clients = Client::whereHasTelemetry(true)->get();
+        $clients = Client::find([66,67]);
         $data_frame = collect(config('data-frame.data_frame'));
         $accum_variable = $data_frame->where('bolean_accum', true);
         $reference_date = new Carbon();

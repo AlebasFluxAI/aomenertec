@@ -26,6 +26,8 @@ class CreateHourlyMicrocontrollerDataTable extends Migration
             $table->double("interval_reactive_inductive_consumption")->nullable();
             $table->double("penalizable_reactive_capacitive_consumption")->nullable();
             $table->double("penalizable_reactive_inductive_consumption")->nullable();
+            $table->text("raw_json");
+            $table->dateTime("source_timestamp")->nullable();
             $table->foreign("microcontroller_data_id")
                 ->references("id")
                 ->on("microcontroller_data");
