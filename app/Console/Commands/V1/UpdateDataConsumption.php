@@ -160,7 +160,7 @@ class UpdateDataConsumption extends Command
                                 if (!$client->stopUnpackClient()->exists()) {
                                     $item->save();
 
-                                    /*if ($client->id != 1
+                                    /*if ($client->id != 66
                                     ) {
                                         $i++;
                                         $item->save();
@@ -194,7 +194,7 @@ class UpdateDataConsumption extends Command
                         $client = $equipment->clients()->first();
                         if ($client) {
                             if (!$client->stopUnpackClient()->exists()) {
-                                if ($client->id != 4) {
+                                if ($client->id != 66) {
                                     $i++;
                                 } else{
                                     $item->saveQuietly();
