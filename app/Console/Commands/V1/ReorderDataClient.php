@@ -45,10 +45,79 @@ class ReorderDataClient extends Command
      */
     public function handle()
     {
+        /*$data_pack = MicrocontrollerData::whereNull('client_id')
+    ->whereNotNull('source_timestamp')
+    ->whereBetween("source_timestamp", ['2021-11-04 00:00:00', '2023-11-04 00:00:00'])
+    ->orderBy('source_timestamp')->orderBy('created_at')
+    ->get();
+echo count($data_pack)."\n";
+if ($data_pack) {
+    $data_frame = config('data-frame.data_frame');
+    $date = Carbon::now();
+    $j=0;
+    foreach ($data_pack as $i=>&$item) {
+        echo $i."\n";
+        $raw_json = json_decode($item->raw_json, true);
+        if ($raw_json == null) {
+            if (strlen($item->raw_json) > 20) {
+                $decode = bin2hex(base64_decode($item->raw_json));
+                $split = substr($decode, (16), (16));
+                $bin = hex2bin($split);
+                $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+                $source_timestamp = Carbon::create($item->source_timestamp);
+                if ($date->diffInDays($source_timestamp) <= 365) {
+                    foreach ($data_frame as $data) {
+                        try {
+                            $split = substr($decode, ($data['start']), ($data['lenght']));
+                            $bin = hex2bin($split);
+                            if (strlen($bin) == ($data['lenght'] / 2)) {
+                                if ($data['start'] >= 450) {
+                                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                } else {
+                                    if ($data['variable_name'] == "flags") {
+                                        $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                    } else {
+                                        if ($data['variable_name'] == "equipment_id") {
+                                            $json[$data['variable_name']] = $equipment_serial;
+                                        } else {
+                                            $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                        }
+                                    }
+                                }
+
+                                if (is_nan($json[$data['variable_name']])) {
+                                    $json[$data['variable_name']] = null;
+                                }
+
+                                if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                    break;
+                                }
+                            }
+                        } catch (Exception $e) {
+                            echo 'Excepción capturada: ', $e->getMessage(), "\n";
+                        }
+                    }
+                    $item->raw_json = $json;
+
+                    $item->saveQuietly();
+                } else {
+                    $item->forceDelete();
+                }
+            } else {
+                $item->forceDelete();
+            }
+        }
+    }
+    echo $i."\n";
+    echo "j= ".$j."\n";
+    $j++;
+}*/
+
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
         //$client = Client::find($id_client);
-        $clients = Client::whereMotIn('id', [1,4]);
+        $clients = Client::whereNotIn('id', [1,4,117,116,115])->get();
         foreach ($clients as $client) {
             echo $client->id."\n";
             /*if (!$client->stopUnpackClient()->exists()) {
@@ -112,6 +181,9 @@ class ReorderDataClient extends Command
         }
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
+            if ($data->hourlyMicrocontrollerData()->exists()){
+                $data->hourlyMicrocontrollerData()->forceDelete();
+            }
             $data->forceDelete();
             return;
         }
@@ -152,6 +224,9 @@ class ReorderDataClient extends Command
                 if ($json['import_VArh'] < $last_raw_json['import_VArh']) {
                     $json['import_VArh'] = $last_raw_json['import_VArh'];
                 }
+            } else{
+                $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                $last_raw_json = json_decode($last_data->raw_json, true);
             }
             $reference_hour = $current_time->copy()->subHour();
             $reference_data = $client->microcontrollerData()
@@ -160,7 +235,7 @@ class ReorderDataClient extends Command
                 ->first();
 
             if (empty($reference_data)) {
-                if ($last_data != null) {
+
                     $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
                     $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
                     $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
@@ -187,9 +262,9 @@ class ReorderDataClient extends Command
                     $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $last_raw_json['ph3_import_kvarh'];
                     $json['varCh_interval'] = $json['varCh_acumm'] - floatval($last_raw_json['varCh_acumm']);
                     $json['varLh_interval'] = $json['varLh_acumm'] - floatval($last_raw_json['varLh_acumm']);
-                }
+
             } else {
-                if ($last_data != null) {
+
                     $reference_data_json = json_decode($reference_data->raw_json, true);
                     $json['kwh_interval'] = $json['import_wh'] - $reference_data_json['import_wh'];
                     $json['varh_interval'] = $json['import_VArh'] - $reference_data_json['import_VArh'];
@@ -217,7 +292,7 @@ class ReorderDataClient extends Command
                     $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $reference_data_json['ph3_import_kvarh'];
                     $json['varCh_interval'] = $json['varCh_acumm'] - floatval($reference_data_json['varCh_acumm']);
                     $json['varLh_interval'] = $json['varLh_acumm'] - floatval($reference_data_json['varLh_acumm']);
-                }
+
             }
         }
 
