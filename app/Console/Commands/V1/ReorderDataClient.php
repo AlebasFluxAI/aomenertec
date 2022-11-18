@@ -48,12 +48,12 @@ class ReorderDataClient extends Command
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
         //$client = Client::find($id_client);
-        $clients = Client::find( [1,4]);
+        $clients = Client::whereMotIn('id', [1,4]);
         foreach ($clients as $client) {
             echo $client->id."\n";
-            if (!$client->stopUnpackClient()->exists()) {
+            /*if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
-            }
+            }*/
             $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
             $search = "\"equipment_id\":\"" . $equipment->serial . "\"";
             $search_1 = "\"equipment_id\":" . $equipment->serial;
@@ -136,7 +136,7 @@ class ReorderDataClient extends Command
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
+            $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:00:00'))->orderBy('source_timestamp', 'desc')->first();
             if ($last_data) {
                 $last_raw_json = json_decode($last_data->raw_json, true);
                 if ($json['import_wh'] <= 0) {
@@ -232,7 +232,7 @@ class ReorderDataClient extends Command
         $data->interval_reactive_inductive_consumption = floatval($json['varLh_interval']);
         $data->raw_json = $json;
         $data->saveQuietly();
-        /*if ($data->interval_real_consumption == 0) {
+        if ($data->interval_real_consumption == 0) {
             $penalizable_inductive = $data->interval_reactive_inductive_consumption;
         } else {
             $percent_penalizable_inductive = ($data->interval_reactive_inductive_consumption * 100) / $data->interval_real_consumption;
@@ -257,6 +257,6 @@ class ReorderDataClient extends Command
                 'source_timestamp' => $data->source_timestamp,
                 'raw_json' => $data->raw_json,
             ]
-        );*/
+        );
     }
 }

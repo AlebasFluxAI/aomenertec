@@ -107,14 +107,14 @@ class HeatMapChart extends Component
         for ($i=0; $i<=$days; $i++) {
             if ($i == 0) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereDate("source_timestamp", $this->end_day->format('Y-m-d'));
-                    })->get();
+                    ->whereDate("source_timestamp", $this->end_day->format('Y-m-d'))
+                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereDate("source_timestamp", $this->end_day->subDay(1)->format('Y-m-d'));
-                    })->get();
+                    ->whereDate("source_timestamp", $this->end_day->subDay(1)->format('Y-m-d'))
+                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->get();
             }
             if (count($data_chart)>0) {
                 $array_aux = $data_chart;
