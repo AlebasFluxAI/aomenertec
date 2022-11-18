@@ -150,7 +150,7 @@ class UpdateDataConsumption extends Command
                                 if ($last_data) {
                                     if ($last_raw_json['import_wh']>0) {
                                         $item->updateQuietly();
-                                        $item->delete();
+                                        $item->forceDelete();
                                         continue;
                                     }
                                 }
