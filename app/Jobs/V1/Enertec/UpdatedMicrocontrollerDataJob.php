@@ -70,19 +70,5 @@ class UpdatedMicrocontrollerDataJob implements ShouldQueue
                 'source_timestamp' => $this->model->source_timestamp,
                 'raw_json' => $this->model->raw_json]
         );
-        $last_hour = $current_time->copy()->addHour();
-        HourlyMicrocontrollerData::updateOrCreate(
-            ['year' => $last_hour->format('Y'),
-                'month' => $last_hour->format('m'),
-                'day' => $last_hour->format('d'),
-                'hour' => $last_hour->format('H'),
-                'client_id' => $this->model->client_id],
-            ['microcontroller_data_id' => $this->model->id,
-                'interval_real_consumption' => 0,
-                'interval_reactive_capacitive_consumption' => 0,
-                'interval_reactive_inductive_consumption' => 0,
-                'penalizable_reactive_capacitive_consumption' => 0,
-                'penalizable_reactive_inductive_consumption' => 0]
-        );
     }
 }
