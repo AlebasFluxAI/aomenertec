@@ -117,7 +117,7 @@ if ($data_pack) {
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
         //$client = Client::find($id_client);
-        $clients = Client::whereNotIn('id', [1,4,117,116,115])->get();
+        $clients = Client::whereNotIn('id', [1,4,117,116,115,114,113,112,111,109,108,107,106,105,104,103,102,101,100,99,98,97,96])->get();
         foreach ($clients as $client) {
             echo $client->id."\n";
             /*if (!$client->stopUnpackClient()->exists()) {
@@ -183,6 +183,9 @@ if ($data_pack) {
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             if ($data->hourlyMicrocontrollerData()->exists()){
                 $data->hourlyMicrocontrollerData()->forceDelete();
+            }
+            if ($data->dailyMicrocontrollerData()->exists()){
+                $data->dailyMicrocontrollerData()->forceDelete();
             }
             $data->forceDelete();
             return;
@@ -307,7 +310,7 @@ if ($data_pack) {
         $data->interval_reactive_inductive_consumption = floatval($json['varLh_interval']);
         $data->raw_json = $json;
         $data->saveQuietly();
-        if ($data->interval_real_consumption == 0) {
+        /*if ($data->interval_real_consumption == 0) {
             $penalizable_inductive = $data->interval_reactive_inductive_consumption;
         } else {
             $percent_penalizable_inductive = ($data->interval_reactive_inductive_consumption * 100) / $data->interval_real_consumption;
@@ -330,8 +333,8 @@ if ($data_pack) {
                 'penalizable_reactive_capacitive_consumption' => $data->interval_reactive_capacitive_consumption,
                 'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
                 'source_timestamp' => $data->source_timestamp,
-                'raw_json' => $data->raw_json,
+                'raw_json' => json_encode($data->raw_json),
             ]
-        );
+        );*/
     }
 }

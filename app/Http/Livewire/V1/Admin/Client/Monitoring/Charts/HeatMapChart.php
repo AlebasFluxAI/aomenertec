@@ -108,12 +108,12 @@ class HeatMapChart extends Component
             if ($i == 0) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereDate("source_timestamp", $this->end_day->format('Y-m-d'))
-                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
                     ->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereDate("source_timestamp", $this->end_day->subDay(1)->format('Y-m-d'))
-                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
                     ->get();
             }
             if (count($data_chart)>0) {
