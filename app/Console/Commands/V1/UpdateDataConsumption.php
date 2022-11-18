@@ -157,7 +157,7 @@ class UpdateDataConsumption extends Command
                             }
 
                             if ($client) {
-                                if (!$client->stopUnpackClient()->exists()) {
+                               // if (!$client->stopUnpackClient()->exists()) {
                                     $item->save();
 
                                     /*if ($client->id != 66
@@ -167,9 +167,9 @@ class UpdateDataConsumption extends Command
                                     } else{
                                         $item->saveQuietly();
                                     }*/
-                                }
+                                //}
                             } else{
-                                $item->save();
+                                $item->forceDelete();
                             }
                         } else {
                             $item->forceDelete();
