@@ -48,7 +48,7 @@ class ReorderDataClient extends Command
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
         //$client = Client::find($id_client);
-        $clients = Client::whereNotIn('id', [66,67,70])->get();
+        $clients = Client::find( [1,4]);
         foreach ($clients as $client) {
             echo $client->id."\n";
             if (!$client->stopUnpackClient()->exists()) {

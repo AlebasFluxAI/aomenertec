@@ -5,6 +5,7 @@ namespace App\Console\Commands\V1;
 use App\Models\V1\Client;
 use App\Models\V1\DailyMicrocontrollerData;
 use App\Models\V1\HourlyMicrocontrollerData;
+use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -43,7 +44,8 @@ class ReorderDataClientHour extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2022,11,12, 03,0,0);
+        $end_date= Carbon::create(2022,07,16, 11,0,0);
+        $data_frame = config('data-frame.data_frame');
         while (true) {
             $end_date->addHour();
             echo $end_date->format('Y-m-d H')."\n";
@@ -81,7 +83,9 @@ class ReorderDataClientHour extends Command
                             'interval_reactive_capacitive_consumption' => $reference_data->interval_reactive_capacitive_consumption,
                             'interval_reactive_inductive_consumption' => $reference_data->interval_reactive_inductive_consumption,
                             'penalizable_reactive_capacitive_consumption' => $reference_data->interval_reactive_capacitive_consumption,
-                            'penalizable_reactive_inductive_consumption' => $penalizable_inductive]
+                            'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
+                            'source_timestamp' => $reference_data->source_timestamp,
+                            'raw_json' => $reference_data->raw_json]
                     );
                 } else {
                     $last_hour = $end_date->copy()->subHour();
@@ -91,6 +95,31 @@ class ReorderDataClientHour extends Command
                                                         ->where('day', $last_hour->format('d'))
                                                         ->where('hour', $last_hour->format('H'))->first();
                     if ($last_data) {
+                        $raw_json = json_decode($last_data->raw_json, true);
+                        foreach ($data_frame as $item){
+                            if ($item['start'] >= 72) {
+                                if ($item['variable_name'] != 'Wh_calc') {
+                                    if ($item['variable_name'] != 'import_wh' and $item['variable_name'] != 'export_wh' and $item['variable_name'] != 'import_VArh' and $item['variable_name'] != 'export_VArh'
+                                        and $item['variable_name'] != 'ph1_import_kwh' and $item['variable_name'] != 'ph2_import_kwh' and $item['variable_name'] != 'ph3_import_kwh' and $item['variable_name'] != 'ph1_import_kvarh'
+                                        and $item['variable_name'] != 'ph2_import_kvarh' and $item['variable_name'] != 'ph3_import_kvarh' and $item['variable_name'] != 'ph1_varCh_acumm' and $item['variable_name'] != 'ph2_varCh_acumm'
+                                        and $item['variable_name'] != 'ph3_varCh_acumm' and $item['variable_name'] != 'ph1_varLh_acumm' and $item['variable_name'] != 'ph2_varLh_acumm' and $item['variable_name'] != 'ph3_varLh_acumm'
+                                        and $item['variable_name'] != 'varLh_acumm' and $item['variable_name'] != 'varCh_acumm'
+                                    ) {
+                                        if (array_key_exists($item['variable_name'], $raw_json)) {
+                                            if ($raw_json[$item['variable_name']] != null) {
+                                                $raw_json[$item['variable_name']] = 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $raw_json['data_ph1_varCh_acumm'] = 0;
+                        $raw_json['data_ph2_varCh_acumm'] = 0;
+                        $raw_json['data_ph3_varCh_acumm'] = 0;
+                        $raw_json['data_ph1_varLh_acumm'] = 0;
+                        $raw_json['data_ph2_varLh_acumm'] = 0;
+                        $raw_json['data_ph3_varLh_acumm'] = 0;
                         HourlyMicrocontrollerData::updateOrCreate(
                             ['year' => $year,
                                 'month' => $month,
@@ -102,7 +131,10 @@ class ReorderDataClientHour extends Command
                                 'interval_reactive_capacitive_consumption' => 0,
                                 'interval_reactive_inductive_consumption' => 0,
                                 'penalizable_reactive_capacitive_consumption' => 0,
-                                'penalizable_reactive_inductive_consumption' => 0]
+                                'penalizable_reactive_inductive_consumption' => 0,
+                                'source_timestamp' => $last_data->source_timestamp,
+                                'raw_json' => json_encode($raw_json),
+                            ]
                         );
                     }
                 }

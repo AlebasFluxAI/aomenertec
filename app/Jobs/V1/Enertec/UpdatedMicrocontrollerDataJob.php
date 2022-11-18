@@ -66,7 +66,9 @@ class UpdatedMicrocontrollerDataJob implements ShouldQueue
                 'interval_reactive_capacitive_consumption' => $this->model->interval_reactive_capacitive_consumption,
                 'interval_reactive_inductive_consumption' => $this->model->interval_reactive_inductive_consumption,
                 'penalizable_reactive_capacitive_consumption' => $this->model->interval_reactive_capacitive_consumption,
-                'penalizable_reactive_inductive_consumption' => $penalizable_inductive]
+                'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
+                'source_timestamp' => $this->model->source_timestamp,
+                'raw_json' => $this->model->raw_json]
         );
         $last_hour = $current_time->copy()->addHour();
         HourlyMicrocontrollerData::updateOrCreate(
