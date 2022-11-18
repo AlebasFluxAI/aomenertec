@@ -147,22 +147,22 @@ class Client extends Model
 
     public function hourlyMicrocontrollerData()
     {
-        return $this->hasMany(HourlyMicrocontrollerData::class)->orderBy('microcontroller_data_id', 'desc');
+        return $this->hasMany(HourlyMicrocontrollerData::class);
     }
 
     public function dailyMicrocontrollerData()
     {
-        return $this->hasMany(DailyMicrocontrollerData::class)->orderBy('microcontroller_data_id', 'desc');
+        return $this->hasMany(DailyMicrocontrollerData::class);
     }
 
     public function monthlyMicrocontrollerData()
     {
-        return $this->hasMany(MonthlyMicrocontrollerData::class)->orderBy('microcontroller_data_id', 'desc');
+        return $this->hasMany(MonthlyMicrocontrollerData::class);
     }
 
     public function annualMicrocontrollerData()
     {
-        return $this->hasMany(AnnualMicrocontrollerData::class)->orderBy('microcontroller_data_id', 'desc');
+        return $this->hasMany(AnnualMicrocontrollerData::class);
     }
 
     public function technician()

@@ -54,19 +54,17 @@ class ReactiveChart extends Component
         } elseif ($this->time_reactive_id == 2) {
             if ($this->penalizable) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
-                    })
+                    ->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive])
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
+                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
                     ->limit(60)->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
-                    ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive]);
-                    })
+                    ->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive])
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
+                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
                     ->limit(60)->get();
             }
         } elseif ($this->time_reactive_id == 3) {
@@ -147,11 +145,13 @@ class ReactiveChart extends Component
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
+                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
                     ->limit(24)->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
+                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
                     ->limit(24)->get();
             }
         } elseif ($this->time_reactive_id == 3) {
