@@ -40,7 +40,7 @@ class DataChart extends Component
         $this->chart_title = $aux['display_name'];
         $this->chart_type = $aux['chart_type'];
         $this->time_id = $time;
-        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('hour')->limit(24)->get();
+        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')->limit(24)->get();
         if ($time == 1) {
             $this->end = $this->data_chart->first()->source_timestamp;
             $this->start = $this->data_chart->last()->source_timestamp;
@@ -57,7 +57,7 @@ class DataChart extends Component
         if ($this->time_id == 1) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
         } elseif ($this->time_id == 2) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('hour')->limit(24)->get();
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')->limit(24)->get();
         } elseif ($this->time_id == 3) {
             $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(31)->get();
         } else {
@@ -134,7 +134,7 @@ class DataChart extends Component
             } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereBetween("source_timestamp", [$this->start, $this->end])
-                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
                     ->limit(250)->get();
             } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->dailyMicrocontrollerData()

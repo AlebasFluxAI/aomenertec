@@ -3,6 +3,7 @@
 namespace App\Console\Commands\V1;
 
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
+use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\HourlyMicrocontrollerData;
@@ -10,6 +11,7 @@ use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
 
 class ReorderDataClient extends Command
 {
@@ -50,22 +52,22 @@ class ReorderDataClient extends Command
     ->whereBetween("source_timestamp", ['2021-11-04 00:00:00', '2023-11-04 00:00:00'])
     ->orderBy('source_timestamp')->orderBy('created_at')
     ->get();
-echo count($data_pack)."\n";
-if ($data_pack) {
-    $data_frame = config('data-frame.data_frame');
-    $date = Carbon::now();
-    $j=0;
-    foreach ($data_pack as $i=>&$item) {
-        echo $i."\n";
+    //echo count($data_pack)."\n";
+    if ($data_pack) {
+        $data_frame = config('data-frame.data_frame');
+        $date = Carbon::now();
+        $j=0;
+        foreach ($data_pack as $i=>&$item) {
+        //echo $i."\n";
         $raw_json = json_decode($item->raw_json, true);
-        if ($raw_json == null) {
-            if (strlen($item->raw_json) > 20) {
+            if ($raw_json == null) {
+                if (strlen($item->raw_json) > 20) {
                 $decode = bin2hex(base64_decode($item->raw_json));
                 $split = substr($decode, (16), (16));
                 $bin = hex2bin($split);
                 $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
                 $source_timestamp = Carbon::create($item->source_timestamp);
-                if ($date->diffInDays($source_timestamp) <= 365) {
+                    if ($date->diffInDays($source_timestamp) <= 365) {
                     foreach ($data_frame as $data) {
                         try {
                             $split = substr($decode, ($data['start']), ($data['lenght']));
@@ -102,24 +104,24 @@ if ($data_pack) {
 
                     $item->saveQuietly();
                 } else {
-                    $item->forceDelete();
-                }
+                        $item->forceDelete();
+                    }
             } else {
                 $item->forceDelete();
-            }
+                }
         }
     }
-    echo $i."\n";
+    /*echo $i."\n";
     echo "j= ".$j."\n";
     $j++;
 }*/
 
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
-        //$client = Client::find($id_client);
-        $clients = Client::whereNotIn('id', [1,4,117,116,115])->get();
+        $clients = Client::find([89,88]);
+        //$clients = Client::whereNotIn('id', [1,4,117,116,115,114,113,112,111,110,109,108,107,106,105,104,103,102,101,100,99,98,97,96,95,94,93,92,91,90])->get();
         foreach ($clients as $client) {
-            echo $client->id."\n";
+            echo "cliente = ".$client->id."\n\n";
             /*if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }*/
@@ -145,8 +147,10 @@ if ($data_pack) {
                 ->orWhere('raw_json', 'like', '%' . $search_1 . '%')
                 ->orderBy('source_timestamp')
                 ->get();
+            echo count($data_pack)."\n";
+            $itemArray = [];
             if ($data_pack) {
-                foreach ($data_pack as  $item) {
+                foreach ($data_pack as $i => $item) {
                     $raw_json = json_decode($item->raw_json, true);
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
@@ -156,9 +160,15 @@ if ($data_pack) {
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
                     $item->raw_json = $raw_json;
                     $item->saveQuietly();
-                    $this->jsonEdit($item);
-
+                    array_push($itemArray, new SerializeMicrocontrollerDataJob($item));
+                    echo $i."\n";
+                    //$this->jsonEdit($item);
                 }
+                Bus::batch(
+                    $itemArray
+                )->then(function (Batch $batch) {
+                    // All jobs completed successfully...
+                })->onQueue('reorder_data')->dispatch();
             }
         }
     }
@@ -183,6 +193,9 @@ if ($data_pack) {
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             if ($data->hourlyMicrocontrollerData()->exists()){
                 $data->hourlyMicrocontrollerData()->forceDelete();
+            }
+            if ($data->dailyMicrocontrollerData()->exists()){
+                $data->dailyMicrocontrollerData()->forceDelete();
             }
             $data->forceDelete();
             return;
@@ -307,7 +320,7 @@ if ($data_pack) {
         $data->interval_reactive_inductive_consumption = floatval($json['varLh_interval']);
         $data->raw_json = $json;
         $data->saveQuietly();
-        if ($data->interval_real_consumption == 0) {
+        /*if ($data->interval_real_consumption == 0) {
             $penalizable_inductive = $data->interval_reactive_inductive_consumption;
         } else {
             $percent_penalizable_inductive = ($data->interval_reactive_inductive_consumption * 100) / $data->interval_real_consumption;
@@ -330,8 +343,8 @@ if ($data_pack) {
                 'penalizable_reactive_capacitive_consumption' => $data->interval_reactive_capacitive_consumption,
                 'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
                 'source_timestamp' => $data->source_timestamp,
-                'raw_json' => $data->raw_json,
+                'raw_json' => json_encode($data->raw_json),
             ]
-        );
+        );*/
     }
 }

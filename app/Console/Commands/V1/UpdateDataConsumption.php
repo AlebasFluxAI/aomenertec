@@ -45,9 +45,11 @@ class UpdateDataConsumption extends Command
     public function handle()
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
+            ->whereBetween('source_timestamp', ['2022-11-17 12:00:00', '2023-11-18 05:00:00'])
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
+        echo count($data_pack)."\n";
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
@@ -159,6 +161,7 @@ class UpdateDataConsumption extends Command
                             if ($client) {
                                // if (!$client->stopUnpackClient()->exists()) {
                                     $item->save();
+                                $i++;
 
                                     /*if ($client->id != 66
                                     ) {
@@ -188,6 +191,7 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = json_encode($raw_json);
                     $item->save();
+                    $i++;
                     /*$equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
                     if ($equipment) {

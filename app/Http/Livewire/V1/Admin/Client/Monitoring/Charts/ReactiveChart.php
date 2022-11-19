@@ -57,14 +57,14 @@ class ReactiveChart extends Component
                     ->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive])
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
                     ->limit(60)->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive])
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
                     ->limit(60)->get();
             }
         } elseif ($this->time_reactive_id == 3) {
@@ -145,13 +145,13 @@ class ReactiveChart extends Component
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
                     ->limit(24)->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('hour')
+                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
                     ->limit(24)->get();
             }
         } elseif ($this->time_reactive_id == 3) {

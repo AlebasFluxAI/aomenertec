@@ -120,6 +120,7 @@ class ReorderDataClientHour extends Command
                         $raw_json['data_ph1_varLh_acumm'] = 0;
                         $raw_json['data_ph2_varLh_acumm'] = 0;
                         $raw_json['data_ph3_varLh_acumm'] = 0;
+                        $source_timestamp = new Carbon($last_data->source_timestamp);
                         HourlyMicrocontrollerData::updateOrCreate(
                             ['year' => $year,
                                 'month' => $month,
@@ -132,7 +133,7 @@ class ReorderDataClientHour extends Command
                                 'interval_reactive_inductive_consumption' => 0,
                                 'penalizable_reactive_capacitive_consumption' => 0,
                                 'penalizable_reactive_inductive_consumption' => 0,
-                                'source_timestamp' => $last_data->source_timestamp,
+                                'source_timestamp' => $source_timestamp->addHour(),
                                 'raw_json' => json_encode($raw_json),
                             ]
                         );

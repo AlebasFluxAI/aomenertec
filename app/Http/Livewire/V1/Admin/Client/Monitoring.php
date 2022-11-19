@@ -46,7 +46,7 @@ class Monitoring extends Component
             ->where('month', $first_day->format('m'))
             ->where('day', 01)
             ->get();
-        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('hour')->limit(24)->get();
+        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')->limit(24)->get();
         if (count($this->data_chart) == 0) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
             $this->time = 1;
