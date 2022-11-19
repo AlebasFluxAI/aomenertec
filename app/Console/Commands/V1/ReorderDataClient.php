@@ -11,6 +11,7 @@ use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
 
 class ReorderDataClient extends Command
 {
@@ -117,9 +118,8 @@ class ReorderDataClient extends Command
 
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
-        //$client = Client::find($id_client);
-        //$clients = Client::whereNotIn('id', [1,4,117,116,115,114,113,112,111,110,109,108,107,106,105,104,103,102,101,100,99,98,97,96,95,94,93,92,91,90])->get();
         $clients = Client::find([89,88]);
+        //$clients = Client::whereNotIn('id', [1,4,117,116,115,114,113,112,111,110,109,108,107,106,105,104,103,102,101,100,99,98,97,96,95,94,93,92,91,90])->get();
         foreach ($clients as $client) {
             echo "cliente = ".$client->id."\n\n";
             /*if (!$client->stopUnpackClient()->exists()) {
@@ -148,6 +148,7 @@ class ReorderDataClient extends Command
                 ->orderBy('source_timestamp')
                 ->get();
             echo count($data_pack)."\n";
+            $itemArray = [];
             if ($data_pack) {
                 foreach ($data_pack as $i => $item) {
                     $raw_json = json_decode($item->raw_json, true);
@@ -159,11 +160,15 @@ class ReorderDataClient extends Command
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
                     $item->raw_json = $raw_json;
                     $item->saveQuietly();
+                    array_push($itemArray, new SerializeMicrocontrollerDataJob($item));
                     echo $i."\n";
-                    dispatch(new SerializeMicrocontrollerDataJob($item))->onQueue('reorder_data');
-                    usleep(300000);
                     //$this->jsonEdit($item);
                 }
+                Bus::batch(
+                    $itemArray
+                )->then(function (Batch $batch) {
+                    // All jobs completed successfully...
+                })->onQueue('reorder_data')->dispatch();
             }
         }
     }
