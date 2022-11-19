@@ -8,6 +8,7 @@ use App\Models\V1\ClientConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
+use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -65,6 +66,9 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
             if ($client == null) {
                 $this->model->forceDelete();
                 return;
+            }
+            if (!$client->stopUnpackClient()->exists()) {
+                StopUnpackDataClient::create(['client_id' => $client->id]);
             }
 
             if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
