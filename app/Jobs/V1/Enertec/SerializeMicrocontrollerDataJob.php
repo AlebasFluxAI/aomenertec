@@ -8,7 +8,9 @@ use App\Models\V1\ClientConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
+use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -19,7 +21,7 @@ use PHPUnit\Exception;
 
 class SerializeMicrocontrollerDataJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Batchable,Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -64,6 +66,9 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
             if ($client == null) {
                 $this->model->forceDelete();
                 return;
+            }
+            if (!$client->stopUnpackClient()->exists()) {
+                StopUnpackDataClient::create(['client_id' => $client->id]);
             }
 
             if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
