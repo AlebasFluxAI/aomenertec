@@ -43,16 +43,8 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
 
     public function jsonEdit()
     {
-        $date = new Carbon();
-        if (is_string($this->model->raw_json)) {
-            $json = json_decode($this->model->raw_json, true);
-        } elseif (is_array($this->model->raw_json)) {
-            $json = $this->model->raw_json;
-        }
-
-
-        $timestamp_unix = $json['timestamp'];
-        $current_time = $date->setTimestamp($timestamp_unix);
+        $json = $this->model->raw_json;
+        $current_time = new Carbon($this->model->source_timestamp);
         $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
@@ -68,6 +60,12 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         }
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
+            if ($this->model->hourlyMicrocontrollerData()->exists()){
+                $this->model->hourlyMicrocontrollerData()->forceDelete();
+            }
+            if ($this->model->dailyMicrocontrollerData()->exists()){
+                $this->model->dailyMicrocontrollerData()->forceDelete();
+            }
             $this->model->forceDelete();
             return;
         }
@@ -75,8 +73,8 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         if (!MicrocontrollerData::whereClientId($client->id)->exists()) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
-            $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-            $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
+            $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
+            $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
             $json['ph1_varCh_interval'] = 0;
             $json['ph1_varLh_interval'] = 0;
             $json['ph2_varCh_interval'] = 0;
@@ -92,145 +90,130 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            $last_data = $client->microcontrollerData()->whereDate('source_timestamp','<',$current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
-            $last_raw_json = json_decode($last_data->raw_json, true);
-            if ($json['import_wh'] <= 0) {
-                if ($last_data) {
+            $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:00:00'))->orderBy('source_timestamp', 'desc')->first();
+            if ($last_data) {
+                $last_raw_json = json_decode($last_data->raw_json, true);
+                if ($json['import_wh'] <= 0) {
+
                     if ($last_raw_json['import_wh']>0) {
                         $this->model->forceDelete();
                         return;
                     }
                 }
-            }
-            if ($last_data) {
                 if ($json['import_wh'] < $last_raw_json['import_wh']) {
                     $json['import_wh'] = $last_raw_json['import_wh'];
                 }
                 if ($json['import_VArh'] < $last_raw_json['import_VArh']) {
                     $json['import_VArh'] = $last_raw_json['import_VArh'];
                 }
+            } else{
+                $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                $last_raw_json = json_decode($last_data->raw_json, true);
             }
-
-
-            $reference_hour = new Carbon();
-            $reference_hour->setTimestamp($timestamp_unix);
-            $reference_hour->subHour();
-
+            $reference_hour = $current_time->copy()->subHour();
             $reference_data = $client->microcontrollerData()
                 ->whereBetween('source_timestamp', [$reference_hour->format('Y-m-d H:00:00'), $reference_hour->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
 
-            if (!$reference_data) {
-                $reference_data = $client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$current_time->format('Y-m-d H:00:00'), $current_time->format('Y-m-d H:59:59')])
-                    ->orderBy('source_timestamp')
-                    ->first();
-            }
-
             if (empty($reference_data)) {
-                if ($last_data != null) {
-                    $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
-                    $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
-                    $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-                    $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
-                    $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
-                    $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
-                    $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
-                    $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
-                    $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
-                    $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
-                    $json['varCh_acumm'] = $json['varCh_acumm'] + $last_raw_json['varCh_acumm'];
-                    $json['varLh_acumm'] = $json['varLh_acumm'] + $last_raw_json['varLh_acumm'];
-                    $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $last_raw_json['ph1_varCh_acumm'];
-                    $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $last_raw_json['ph1_varLh_acumm'];
-                    $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $last_raw_json['ph2_varCh_acumm'];
-                    $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $last_raw_json['ph2_varLh_acumm'];
-                    $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $last_raw_json['ph3_varCh_acumm'];
-                    $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $last_raw_json['ph3_varLh_acumm'];
-                    $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $last_raw_json['ph1_import_kwh'];
-                    $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $last_raw_json['ph2_import_kwh'];
-                    $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $last_raw_json['ph3_import_kwh'];
-                    $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $last_raw_json['ph1_import_kvarh'];
-                    $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $last_raw_json['ph2_import_kvarh'];
-                    $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $last_raw_json['ph3_import_kvarh'];
-                    $json['varCh_interval'] = $json['varCh_acumm'] - $last_raw_json['varCh_acumm'];
-                    $json['varLh_interval'] = $json['varLh_acumm'] - $last_raw_json['varLh_acumm'];
-                }
+
+                $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
+                $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
+                $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
+                $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
+                $json['ph1_varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($last_raw_json['ph1_varCh_acumm']);
+                $json['ph1_varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($last_raw_json['ph1_varLh_acumm']);
+                $json['ph2_varCh_acumm'] = floatval($json['ph2_varCh_acumm']) + floatval($last_raw_json['ph2_varCh_acumm']);
+                $json['ph2_varLh_acumm'] = floatval($json['ph2_varLh_acumm']) + floatval($last_raw_json['ph2_varLh_acumm']);
+                $json['ph3_varCh_acumm'] = floatval($json['ph3_varCh_acumm']) + floatval($last_raw_json['ph3_varCh_acumm']);
+                $json['ph3_varLh_acumm'] = floatval($json['ph3_varLh_acumm']) + floatval($last_raw_json['ph3_varLh_acumm']);
+                $json['varCh_acumm'] = $json['varCh_acumm'] + floatval($last_raw_json['varCh_acumm']);
+                $json['varLh_acumm'] = $json['varLh_acumm'] + floatval($last_raw_json['varLh_acumm']);
+                $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - floatval($last_raw_json['ph1_varCh_acumm']);
+                $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - floatval($last_raw_json['ph1_varLh_acumm']);
+                $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - floatval($last_raw_json['ph2_varCh_acumm']);
+                $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - floatval($last_raw_json['ph2_varLh_acumm']);
+                $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - floatval($last_raw_json['ph3_varCh_acumm']);
+                $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - floatval($last_raw_json['ph3_varLh_acumm']);
+                $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $last_raw_json['ph1_import_kwh'];
+                $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $last_raw_json['ph2_import_kwh'];
+                $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $last_raw_json['ph3_import_kwh'];
+                $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $last_raw_json['ph1_import_kvarh'];
+                $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $last_raw_json['ph2_import_kvarh'];
+                $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $last_raw_json['ph3_import_kvarh'];
+                $json['varCh_interval'] = $json['varCh_acumm'] - floatval($last_raw_json['varCh_acumm']);
+                $json['varLh_interval'] = $json['varLh_acumm'] - floatval($last_raw_json['varLh_acumm']);
+
             } else {
+
                 $reference_data_json = json_decode($reference_data->raw_json, true);
                 $json['kwh_interval'] = $json['import_wh'] - $reference_data_json['import_wh'];
                 $json['varh_interval'] = $json['import_VArh'] - $reference_data_json['import_VArh'];
-                $json['varCh_acumm'] = $json['ph1_varCh_acumm'] + $json['ph2_varCh_acumm'] + $json['ph3_varCh_acumm'];
-                $json['varLh_acumm'] = $json['ph1_varLh_acumm'] + $json['ph2_varLh_acumm'] + $json['ph3_varLh_acumm'];
-                $json['ph1_varCh_acumm'] = $json['ph1_varCh_acumm'] + $last_raw_json['ph1_varCh_acumm'];
-                $json['ph1_varLh_acumm'] = $json['ph1_varLh_acumm'] + $last_raw_json['ph1_varLh_acumm'];
-                $json['ph2_varCh_acumm'] = $json['ph2_varCh_acumm'] + $last_raw_json['ph2_varCh_acumm'];
-                $json['ph2_varLh_acumm'] = $json['ph2_varLh_acumm'] + $last_raw_json['ph2_varLh_acumm'];
-                $json['ph3_varCh_acumm'] = $json['ph3_varCh_acumm'] + $last_raw_json['ph3_varCh_acumm'];
-                $json['ph3_varLh_acumm'] = $json['ph3_varLh_acumm'] + $last_raw_json['ph3_varLh_acumm'];
-                $json['varCh_acumm'] = $json['varCh_acumm'] + $last_raw_json['varCh_acumm'];
-                $json['varLh_acumm'] = $json['varLh_acumm'] + $last_raw_json['varLh_acumm'];
-                $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $reference_data_json['ph1_varCh_acumm'];
-                $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $reference_data_json['ph1_varLh_acumm'];
-                $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $reference_data_json['ph2_varCh_acumm'];
-                $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $reference_data_json['ph2_varLh_acumm'];
-                $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $reference_data_json['ph3_varCh_acumm'];
-                $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $reference_data_json['ph3_varLh_acumm'];
+                $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
+                $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
+                $json['ph1_varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($last_raw_json['ph1_varCh_acumm']);
+                $json['ph1_varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($last_raw_json['ph1_varLh_acumm']);
+                $json['ph2_varCh_acumm'] = floatval($json['ph2_varCh_acumm']) + floatval($last_raw_json['ph2_varCh_acumm']);
+                $json['ph2_varLh_acumm'] = floatval($json['ph2_varLh_acumm']) + floatval($last_raw_json['ph2_varLh_acumm']);
+                $json['ph3_varCh_acumm'] = floatval($json['ph3_varCh_acumm']) + floatval($last_raw_json['ph3_varCh_acumm']);
+                $json['ph3_varLh_acumm'] = floatval($json['ph3_varLh_acumm']) + floatval($last_raw_json['ph3_varLh_acumm']);
+                $json['varCh_acumm'] = $json['varCh_acumm'] + floatval($last_raw_json['varCh_acumm']);
+                $json['varLh_acumm'] = $json['varLh_acumm'] + floatval($last_raw_json['varLh_acumm']);
+                $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - floatval($reference_data_json['ph1_varCh_acumm']);
+                $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - floatval($reference_data_json['ph1_varLh_acumm']);
+                $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - floatval($reference_data_json['ph2_varCh_acumm']);
+                $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - floatval($reference_data_json['ph2_varLh_acumm']);
+                $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - floatval($reference_data_json['ph3_varCh_acumm']);
+                $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - floatval($reference_data_json['ph3_varLh_acumm']);
                 $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $reference_data_json['ph1_import_kwh'];
                 $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $reference_data_json['ph2_import_kwh'];
                 $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $reference_data_json['ph3_import_kwh'];
                 $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $reference_data_json['ph1_import_kvarh'];
                 $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $reference_data_json['ph2_import_kvarh'];
                 $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $reference_data_json['ph3_import_kvarh'];
-                $json['varCh_interval'] = $json['varCh_acumm'] - $reference_data_json['varCh_acumm'];
-                $json['varLh_interval'] = $json['varLh_acumm'] - $reference_data_json['varLh_acumm'];
+                $json['varCh_interval'] = $json['varCh_acumm'] - floatval($reference_data_json['varCh_acumm']);
+                $json['varLh_interval'] = $json['varLh_acumm'] - floatval($reference_data_json['varLh_acumm']);
+
             }
         }
 
         $this->model->client_id = $client->id;
-        $this->model->accumulated_real_consumption = $json['import_wh'];
-        $this->model->interval_real_consumption = $json['kwh_interval'];
-        $this->model->accumulated_reactive_consumption = $json['import_VArh'];
-        $this->model->interval_reactive_consumption = $json['varh_interval'];
+        $this->model->accumulated_real_consumption = floatval($json['import_wh']);
+        $this->model->interval_real_consumption = floatval($json['kwh_interval']);
+        $this->model->accumulated_reactive_consumption = floatval($json['import_VArh']);
+        $this->model->interval_reactive_consumption = floatval($json['varh_interval']);
         $this->model->accumulated_reactive_capacitive_consumption = $json['varCh_acumm'];
         $this->model->accumulated_reactive_inductive_consumption = $json['varLh_acumm'];
-        $this->model->interval_reactive_capacitive_consumption = $json['varCh_interval'];
-        $this->model->interval_reactive_inductive_consumption = $json['varLh_interval'];
+        $this->model->interval_reactive_capacitive_consumption = floatval($json['varCh_interval']);
+        $this->model->interval_reactive_inductive_consumption = floatval($json['varLh_interval']);
         $this->model->raw_json = $json;
         $this->model->saveQuietly();
-        $this->updateHourlyData();
-    }
-
-    public function updateHourlyData()
-    {
-        $current_time = new Carbon($this->model->source_timestamp);
-        $year = $current_time->format('Y');
-        $month = $current_time->format('m');
-        $day = $current_time->format('d');
-        $hour = $current_time->format('H');
-        if ($this->model->interval_real_consumption == 0) {
-            $penalizable_inductive = $this->model->interval_reactive_inductive_consumption;
+        /*if ($this->>model->interval_real_consumption == 0) {
+            $penalizable_inductive = $this->>model->interval_reactive_inductive_consumption;
         } else {
-            $percent_penalizable_inductive = ($this->model->interval_reactive_inductive_consumption * 100) / $this->model->interval_real_consumption;
+            $percent_penalizable_inductive = ($this->>model->interval_reactive_inductive_consumption * 100) / $this->>model->interval_real_consumption;
             if ($percent_penalizable_inductive >= 50) {
-                $penalizable_inductive = ($this->model->interval_real_consumption * $percent_penalizable_inductive / 100) - ($this->model->interval_real_consumption * 0.5);
+                $penalizable_inductive = ($this->>model->interval_real_consumption * $percent_penalizable_inductive / 100) - ($this->>model->interval_real_consumption * 0.5);
             } else {
                 $penalizable_inductive = 0;
             }
         }
         HourlyMicrocontrollerData::updateOrCreate(
-            ['year' => $year,
-                'month' => $month,
-                'day' => $day,
-                'hour' => $hour,
-                'client_id' => $this->model->client_id],
-            ['microcontroller_data_id' => $this->model->id,
-                'interval_real_consumption' => $this->model->interval_real_consumption,
-                'interval_reactive_capacitive_consumption' => $this->model->interval_reactive_capacitive_consumption,
-                'interval_reactive_inductive_consumption' => $this->model->interval_reactive_inductive_consumption,
-                'penalizable_reactive_capacitive_consumption' => $this->model->interval_reactive_capacitive_consumption,
-                'penalizable_reactive_inductive_consumption' => $penalizable_inductive]
-        );
+            ['year' => $current_time->format('Y'),
+                'month' => $current_time->format('m'),
+                'day' => $current_time->format('d'),
+                'hour' => $current_time->format('H'),
+                'client_id' => $this->>model->client_id],
+            ['microcontroller_data_id' => $this->>model->id,
+                'interval_real_consumption' => $this->>model->interval_real_consumption,
+                'interval_reactive_capacitive_consumption' => $this->>model->interval_reactive_capacitive_consumption,
+                'interval_reactive_inductive_consumption' => $this->>model->interval_reactive_inductive_consumption,
+                'penalizable_reactive_capacitive_consumption' => $this->>model->interval_reactive_capacitive_consumption,
+                'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
+                'source_timestamp' => $this->>model->source_timestamp,
+                'raw_json' => json_encode($this->>model->raw_json),
+            ]
+        );*/
     }
 }

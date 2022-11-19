@@ -45,7 +45,7 @@ class UpdateDataConsumption extends Command
     public function handle()
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
-            ->whereBetween('source_timestamp', ['2022-11-18 05:00:00', '2023-11-18 05:00:00'])
+            ->whereBetween('source_timestamp', ['2022-11-17 12:00:00', '2023-11-18 05:00:00'])
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
