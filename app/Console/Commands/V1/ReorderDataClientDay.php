@@ -40,13 +40,13 @@ class ReorderDataClientDay extends Command
      */
     public function handle()
     {
-        //$clients = Client::whereHasTelemetry(true)->get();
-        $clients = Client::find([66,67]);
+        $clients = Client::whereHasTelemetry(true)->get();
+        //$clients = Client::find([66,67]);
         $data_frame = collect(config('data-frame.data_frame'));
         $accum_variable = $data_frame->where('bolean_accum', true);
         $reference_date = new Carbon();
         $end_date= Carbon::create(2022,07,16);
-        for ($i=0; $i<300; $i++) {
+        while (true) {
             $reference_date->subDay();
             echo $reference_date->format('Y-m-d')."\n";
             foreach ($clients as $client) {

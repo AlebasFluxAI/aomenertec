@@ -118,8 +118,8 @@ class ReorderDataClient extends Command
 
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
-        $clients = Client::find([89,88]);
-        //$clients = Client::whereNotIn('id', [1,4,117,116,115,114,113,112,111,110,109,108,107,106,105,104,103,102,101,100,99,98,97,96,95,94,93,92,91,90])->get();
+        //$clients = Client::find([89,88]);
+        $clients = Client::whereNotIn('id', [1,4,117,116,115,114,113,112,111,110,109,108,107,106,105,104,103,102,101,100,99,98,97,96,95,94,93,92,91,90,89,88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,72,71])->get();
         foreach ($clients as $client) {
             echo "cliente = ".$client->id."\n\n";
             /*if (!$client->stopUnpackClient()->exists()) {
@@ -160,15 +160,15 @@ class ReorderDataClient extends Command
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
                     $item->raw_json = $raw_json;
                     $item->saveQuietly();
-                    array_push($itemArray, new SerializeMicrocontrollerDataJob($item));
+                   // array_push($itemArray, new SerializeMicrocontrollerDataJob($item));
                     echo $i."\n";
-                    //$this->jsonEdit($item);
+                    $this->jsonEdit($item);
                 }
-                Bus::batch(
+                /*Bus::batch(
                     $itemArray
                 )->then(function (Batch $batch) {
                     // All jobs completed successfully...
-                })->onQueue('reorder_data')->dispatch();
+                })->onQueue('reorder_data')->dispatch();*/
             }
         }
     }

@@ -45,7 +45,7 @@ class UpdateDataConsumption extends Command
     public function handle()
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
-            ->whereBetween('source_timestamp', ['2022-11-17 12:00:00', '2023-11-18 05:00:00'])
+            //->whereBetween('source_timestamp', ['2022-11-18 10:00:00', '2023-11-18 05:00:00'])
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
@@ -56,6 +56,8 @@ class UpdateDataConsumption extends Command
             $i=0;
             $j=0;
             foreach ($data_pack as $item) {
+                echo $i."\n";
+                $i++;
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
@@ -161,7 +163,7 @@ class UpdateDataConsumption extends Command
                             if ($client) {
                                // if (!$client->stopUnpackClient()->exists()) {
                                     $item->save();
-                                $i++;
+
 
                                     /*if ($client->id != 66
                                     ) {
@@ -182,7 +184,7 @@ class UpdateDataConsumption extends Command
                     }
 
 
-                }else {
+                }/*else {
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -192,7 +194,7 @@ class UpdateDataConsumption extends Command
                     $item->raw_json = json_encode($raw_json);
                     $item->save();
                     $i++;
-                    /*$equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
+                    $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
                     if ($equipment) {
                         $client = $equipment->clients()->first();
@@ -205,10 +207,10 @@ class UpdateDataConsumption extends Command
                                 }
                             }
                         }
-                    }*/
+                    }
 
 
-                }
+                }*/
             }
             echo $i."\n";
         }
