@@ -76,7 +76,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Telefono",
-                                                                             "value"=>$model->phone
+                                                                             "value"=>$model->phonePlusIndicative
                                                                          ],
                                                                           [
                                                                              "key"=>"Identificacion",

@@ -23,6 +23,8 @@ class AddAdmin extends Component
     public $styles;
     public $person_types;
     public $identification_types;
+    public $indicatives;
+    public $indicative;
 
 
     private $adminAddService;
@@ -63,7 +65,7 @@ class AddAdmin extends Component
     {
         $this->adminAddService->updatedLatitude($this);
     }
-    
+
 
     public function updatedLongitude()
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Seller;
 
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\Traits\AddUserFormTrait;
@@ -38,6 +39,8 @@ class SellerAddService extends Singleton
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+
         ]);
     }
 
@@ -63,6 +66,7 @@ class SellerAddService extends Singleton
             "last_name" => $component->model['last_name'],
             "email" => $component->model['email'],
             "phone" => $component->model['phone'],
+            "indicative" => $component->model['indicative'],
             "identification" => $component->model['identification'],
             "type" => User::TYPE_SELLER
         ];

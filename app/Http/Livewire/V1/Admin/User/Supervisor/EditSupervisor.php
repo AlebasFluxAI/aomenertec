@@ -19,6 +19,8 @@ class EditSupervisor extends Component
     public $person_types;
     public $identification_types;
     private $supervisorEditService;
+    public $indicatives;
+    public $indicative;
 
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
@@ -33,6 +35,8 @@ class EditSupervisor extends Component
         'model.billing_address' => 'required',
         'model.person_type' => 'required',
         'model.identification_type' => 'required',
+        'model.indicative' => '',
+
     ];
 
     public function __construct($id = null)

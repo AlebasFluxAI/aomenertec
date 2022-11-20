@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Resources\V1\Icon;
 use App\Http\Resources\V1\ToastEvent;
@@ -77,7 +78,9 @@ class AddClientService extends Singleton
             'picked_network_operator' => false, 'message_network_operator' => 'Digite identificación del operador de red',
             'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red',
             'aux_network_operators' => [],
-            "billing_types" => $this->getBillingType($component)
+            "billing_types" => $this->getBillingType($component),
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+
         ]);
     }
 
@@ -418,6 +421,7 @@ class AddClientService extends Singleton
             'alias' => $component->alias,
             'code' => $code,
             'phone' => $component->phone,
+            'indicative' => $component->indicative,
             'identification' => $component->client_identification,
             'network_topology' => $component->network_topology,
             'active' => $component->active,

@@ -41,6 +41,7 @@ class Technician extends Model
         "country",
         "city",
         "state",
+        "indicative"
     ];
 
     public function workOrders()
@@ -99,6 +100,11 @@ class Technician extends Model
                     ],
                 ]
         ];
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
     }
 
     public static function getHome()

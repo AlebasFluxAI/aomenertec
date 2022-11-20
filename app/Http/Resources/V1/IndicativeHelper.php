@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Http\Resources\V1;
+
+use App\Http\Services\Singleton;
+use App\Models\V1\Admin;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\Seller;
+use App\Models\V1\SuperAdmin;
+use App\Models\V1\Supervisor;
+use App\Models\V1\User;
+use Illuminate\Support\Facades\Auth;
+use Throwable;
+
+class IndicativeHelper extends Singleton
+{
+    public const COLOMBIA = "+57";
+    public const REPUBLICA_DOMINICANA = "+809";
+    public const BRASIL = "+55";
+    public const ARGENTINA = "+54";
+    public const BOLIVIA = "+591";
+    public const ECUADOR = "+593";
+    public const PARAGUAY = "+595";
+    public const PERU = "+51";
+    public const EEUU = "+1";
+    public const MEXICO = "+52";
+    public const NICARAGUA = "+505";
+    public const COSTA_RICA = "+506";
+    public const GUATEMALA = "+502";
+
+    public static function getIndicativesKeyValue()
+    {
+        $indicatives = [];
+        foreach (self::numericalIndicatives() as $indicative) {
+            $indicatives[] = [
+                "key" => __("indicatives." . $indicative),
+                "value" => $indicative
+            ];
+        }
+        return $indicatives;
+    }
+
+    private static function numericalIndicatives()
+    {
+        return [
+            self::COLOMBIA,
+            self::REPUBLICA_DOMINICANA,
+            self::BRASIL,
+            self::ARGENTINA,
+            self::BOLIVIA,
+            self::ECUADOR,
+            self::PARAGUAY,
+            self::PERU,
+            self::EEUU,
+            self::MEXICO,
+            self::NICARAGUA,
+            self::COSTA_RICA,
+            self::GUATEMALA,
+        ];
+    }
+}
