@@ -91,8 +91,8 @@ class AddClientService extends Singleton
 
     private function getNetworkOperators($component)
     {
-        if (Auth::user()->networkOperator) {
-            $component->network_operator_id = Auth::user()->networkOperator->id;
+        if (User::getUserModel()::class == NetworkOperator::class) {
+            $component->network_operator_id = User::getUserModel()->id;
             return [];
         }
         $admin = User::getUserModel();
