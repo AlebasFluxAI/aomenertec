@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Seller;
 
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Services\Singleton;
 use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
@@ -17,7 +18,10 @@ class SellerEditService extends Singleton
             'last_name' => $model->last_name,
             'phone' => $model->phone,
             'email' => $model->email,
+            'indicative' => $model->indicative,
             'identification' => $model->identification,
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+
         ]);
     }
 

@@ -60,13 +60,20 @@ class Client extends Model
         "identification_type",
         "has_telemetry",
         "admin_id",
-        "alias"
+        "alias",
+        "indicative"
     ];
 
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
     }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
+    }
+
 
     public function equipmentChangeHistorical()
     {

@@ -36,7 +36,7 @@ class WhatsAppChannel
 
         try {
             $body = [
-                'to' => "57" . $notifiable->phone,
+                'to' => (int)$notifiable->indicative . $notifiable->phone,
                 'channelId' => config('whatsapp.channel_id'),
                 'type' => 'hsm',
                 'content' => [

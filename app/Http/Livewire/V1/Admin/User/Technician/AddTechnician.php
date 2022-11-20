@@ -21,6 +21,8 @@ class AddTechnician extends Component
     public $admins;
     public $admin_id;
     public $network_operators;
+    public $indicatives;
+    public $indicative;
 
 
     private $technicianAddService;

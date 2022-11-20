@@ -71,16 +71,30 @@
                                     "input_type"=>"text",
                                     "required"=>true
                            ])
+                            @include("partials.v1.divider_title",[
+                                      "title"=>"Datos de contacto"
+                              ]
+                             )
+                            @include("partials.v1.form.form_list",[
+                               "col_with"=>2,
+                               "input_label"=>"Indicativo",
+                               "input_type"=>"text",
+                               "list_model" => "indicative",
+                               "list_default" => "Indicativo ...",
+                               "list_options" => $indicatives,
+                               "list_option_value"=>"value",
+                               "list_option_view"=>"key",
+                                "list_option_title"=>"",
+                               ])
                             @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Telefono del cliente (Sin indicativo)",
                                     "input_model"=>"phone",
                                    "updated_input"=>"defer",
                                     "icon_class"=>"fas fa-barcode",
                                     "placeholder"=>"Telefono",
-                                    "col_with"=>8,
+                                    "col_with"=>6,
                                     "input_type"=>"text",
                            ])
-
 
                             @include("partials.v1.form.form_input_icon",[
                                     "input_label"=>"Correo electronico de cliente",

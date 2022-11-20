@@ -39,7 +39,8 @@ class Support extends Model
         "country",
         "city",
         "state",
-        "pqr_available"
+        "pqr_available",
+        "indicative"
     ];
 
 
@@ -95,6 +96,11 @@ class Support extends Model
                     ],
                 ]
         ];
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
     }
 
     public function workOrders()

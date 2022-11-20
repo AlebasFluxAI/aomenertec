@@ -69,7 +69,8 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'enabled',
-        'type'
+        'type',
+        "indicative"
     ];
 
     /**
@@ -106,6 +107,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->getKey();
     }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
+    }
+
 
     public function getJWTCustomClaims()
     {
