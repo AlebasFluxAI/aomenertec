@@ -18,6 +18,8 @@ class EditNetworkOperator extends Component
     public $message;
     public $person_types;
     public $identification_types;
+    public $indicatives;
+    public $indicative;
 
     private $editNetworkOperatorService;
 
@@ -35,6 +37,7 @@ class EditNetworkOperator extends Component
         'model.person_type' => 'required',
         'model.identification_type' => 'required',
         'model.admin_id' => 'required',
+        'model.indicative' => '',
     ];
 
     public function __construct($id = null)

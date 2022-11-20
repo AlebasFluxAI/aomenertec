@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Technician;
 
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\Traits\AddUserFormTrait;
@@ -36,6 +37,8 @@ class TechnicianAddService extends Singleton
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+
         ]);
     }
 

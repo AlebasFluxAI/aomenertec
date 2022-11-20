@@ -85,6 +85,11 @@ class Supervisor extends Model
         ];
     }
 
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
+    }
+
     public static function getHome()
     {
         return "livewire.v1.admin.user.supervisor.profile-supervisor";

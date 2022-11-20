@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Support;
 
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
 use App\Models\V1\Support;
@@ -23,6 +24,8 @@ class SupportEditService extends Singleton
             "model" => $model,
             "latitude" => $model->latitude,
             "longitude" => $model->longitude,
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+
         ]);
     }
 

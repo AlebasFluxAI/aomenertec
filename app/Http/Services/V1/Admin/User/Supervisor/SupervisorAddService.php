@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Supervisor;
 
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\Traits\AddUserFormTrait;
@@ -37,6 +38,8 @@ class SupervisorAddService extends Singleton
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+
         ]);
     }
 

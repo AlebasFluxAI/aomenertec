@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\User\EditUser;
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
 use App\Models\V1\Client;
@@ -41,6 +42,8 @@ class EditClientService extends Singleton
             'identification' => $client->identification,
             'name' => $client->name,
             'last_name' => $client->last_name,
+            'alias' => $client->alias,
+            'indicative' => $client->indicative,
             'email' => $client->email,
             'phone' => $client->phone,
             'direction' => $client->direction,
@@ -81,6 +84,7 @@ class EditClientService extends Singleton
             "billing_address" => $billingInformation ? $billingInformation->address : "",
             "addressDetails" => $clientAddress ? $clientAddress->details : "",
             "decodedAddress" => $clientAddress ? $clientAddress->address : "",
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
         ]);
     }
 
@@ -183,6 +187,7 @@ class EditClientService extends Singleton
             'email' => $component->email,
             'last_name' => $component->last_name,
             'alias' => $component->alias,
+            'indicative' => $component->indicative,
             'phone' => $component->phone,
             'identification' => $component->identification,
             'network_topology' => $component->network_topology,

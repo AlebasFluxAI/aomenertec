@@ -20,6 +20,8 @@ class EditSupport extends Component
     public $person_types;
     public $identification_types;
     private $editSupportService;
+    public $indicatives;
+    public $indicative;
 
 
     public function __construct($id = null)

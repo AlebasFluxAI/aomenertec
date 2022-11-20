@@ -43,6 +43,7 @@ class NetworkOperator extends Model
         "country",
         "city",
         "state",
+        "indicative"
     ];
 
     public static function menu()
@@ -133,6 +134,11 @@ class NetworkOperator extends Model
 
                 ]
         ];
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
     }
 
     public function photovoltaicPrice()

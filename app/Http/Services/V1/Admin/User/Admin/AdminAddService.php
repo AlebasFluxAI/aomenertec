@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\Admin;
 
+use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Services\Singleton;
 use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Admin;
@@ -31,6 +32,7 @@ class AdminAddService extends Singleton
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
         ]);
     }
 
@@ -57,7 +59,7 @@ class AdminAddService extends Singleton
             if ($component->user_type_technician) {
                 $component->createTechnician($user->id, $component, $admin->id, $networkOperator->id);
             }
-            
+
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$admin->name} creado"]);
             $component->redirectRoute("administrar.v1.usuarios.admin.detalles", ["admin" => $admin->id]);
         });
@@ -71,6 +73,7 @@ class AdminAddService extends Singleton
             "last_name" => $component->model['last_name'],
             "email" => $component->model['email'],
             "phone" => $component->model['phone'],
+            "indicative" => $component->model['indicative'],
             "identification" => $component->model['identification'],
             "type" => User::TYPE_ADMIN
         ];

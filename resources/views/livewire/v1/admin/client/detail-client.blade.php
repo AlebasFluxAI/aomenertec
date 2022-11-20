@@ -73,7 +73,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Telefono",
-                                                                             "value"=>$client->phone
+                                                                             "value"=>$client->phonePlusIndicative
                                                                          ],
                                                                          [
                                                                              "key"=>"Identificación",

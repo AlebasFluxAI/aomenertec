@@ -51,7 +51,7 @@
                        ],
                        [
                            "col_name" =>"Telefono",
-                           "col_data" =>"phone",
+                           "col_data" =>"phonePlusIndicative",
                            "col_filter"=>$col_filter??true
                        ],
                        [

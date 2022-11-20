@@ -23,6 +23,8 @@ class AddSupport extends Component
     public $longitude;
     public $form_title;
     public $model;
+    public $indicatives;
+    public $indicative;
 
     public $person_types;
     public $identification_types;

@@ -77,7 +77,7 @@
                                                                          [
                                                                              "key"=>"Telefono",
 
-                                                                             "value"=>$admin->phone
+                                                                             "value"=>$admin->phonePlusIndicative
                                                                          ],
                                                                           [
                                                                              "key"=>"Direccion",

@@ -40,6 +40,7 @@ class Seller extends Model
         "country",
         "city",
         "state",
+        "indicative"
     ];
 
 

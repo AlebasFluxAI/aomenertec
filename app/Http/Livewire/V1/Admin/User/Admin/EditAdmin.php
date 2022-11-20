@@ -25,6 +25,8 @@ class EditAdmin extends Component
     public $styles;
     public $person_types;
     public $identification_types;
+    public $indicatives;
+    public $indicative;
 
     private $editAdminService;
 
@@ -36,6 +38,7 @@ class EditAdmin extends Component
         'model.email' => 'required|email|unique:users,email',
         'model.css_file' => 'required',
         'model.address_details' => 'required',
+        'model.indicative' => 'required',
         'model.latitude' => 'required',
         'model.longitude' => 'required',
         'model.billing_name' => 'required',

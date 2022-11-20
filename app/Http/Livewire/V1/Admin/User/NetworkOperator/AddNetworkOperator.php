@@ -21,6 +21,8 @@ class AddNetworkOperator extends Component
     public $person_types;
     public $identification_types;
     public $admins;
+    public $indicatives;
+    public $indicative;
 
 
     private $networkOperatorAddService;
