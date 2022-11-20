@@ -224,9 +224,9 @@ class EditClientService extends Singleton
         if ($billingInformation = $client->billingInformation()->first()) {
             $billingInformation->update([
                 "address" => $component->billing_address,
-                "phone" => $client->phone,
-                "identification" => $client->identification,
-                "identification_type" => $client->identification_type,
+                "phone" => $component->phone,
+                "identification" => $component->identification,
+                "identification_type" => $component->identification_type,
                 "name" => $component->billing_name,
                 "default" => true
             ]);
