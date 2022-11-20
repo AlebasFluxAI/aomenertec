@@ -326,7 +326,7 @@
                           ]
                          )
                         <div class="row pl-5 pr-3">
-                            @if(\App\Models\V1\User::getUserModel() == \App\Models\V1\Admin::class)
+                            @if(\App\Models\V1\User::getUserModel()::class == \App\Models\V1\Admin::class)
                                 @include("partials.v1.form.form_list",[
                                         "col_with"=>8,
                                         "input_type"=>"text",
