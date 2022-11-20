@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
+use App\Models\V1\Admin;
 use App\Models\V1\ClientTechnician;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
@@ -19,6 +20,7 @@ use App\Models\V1\Seller;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\Client;
+use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
@@ -63,15 +65,16 @@ class IndexClientService extends Singleton
 
     public function getData(Component $component)
     {
-        $user = Auth::user();
-        if ($networkOperator = $user->networkOperator) {
+        if (User::getUserModel()::class == NetworkOperator::class) {
+            $networkOperator = User::getUserModel();
             if ($component->filter) {
                 return $networkOperator->clients()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
             return $networkOperator->clients()->pagination();
         }
 
-        if ($supervisor = $user->supervisor) {
+        if (User::getUserModel()::class == Supervisor::class) {
+            $supervisor = User::getUserModel();
             if ($component->filter) {
                 return Client::whereIn('id', $supervisor->clients->pluck('id'))
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
@@ -79,7 +82,8 @@ class IndexClientService extends Singleton
             return Client::whereIn('id', $supervisor->clients->pluck('id'))->pagination();
         }
 
-        if ($admin = $user->admin) {
+        if (User::getUserModel()::class == Admin::class) {
+            $admin = User::getUserModel();
             if ($component->filter) {
                 return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
                     ->orWhere("admin_id", Auth::user()->getAdmin()->id)
@@ -92,7 +96,8 @@ class IndexClientService extends Singleton
         }
 
 
-        if ($technician = $user->technician) {
+        if (User::getUserModel()::class == Technician::class) {
+            $technician = User::getUserModel();
             if ($component->filter) {
                 return Client::whereIn('id', $technician->clients->pluck("id"))
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
