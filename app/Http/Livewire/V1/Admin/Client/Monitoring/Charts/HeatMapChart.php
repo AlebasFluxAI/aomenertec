@@ -108,12 +108,12 @@ class HeatMapChart extends Component
             if ($i == 0) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereDate("source_timestamp", $this->end_day->format('Y-m-d'))
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereDate("source_timestamp", $this->end_day->subDay(1)->format('Y-m-d'))
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->get();
             }
             if (count($data_chart)>0) {
@@ -123,7 +123,7 @@ class HeatMapChart extends Component
                 foreach ($this->reactive_variables as $data) {
                     if ($data['variable_id'] == $this->variable_heat_map_id) {
                         foreach ($array_aux as $index => $item) {
-                            $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                            $raw_json = json_decode($item->raw_json, true);
                             if (isset($raw_json[$data['variable_name']])) {
                                 $value = round($raw_json[$data['variable_name']], 2);
                             } else {
@@ -134,7 +134,7 @@ class HeatMapChart extends Component
                                 $max_value = $value;
                             }
                             if ($index == 0) {
-                                $name = new Carbon($item->microcontrollerData->source_timestamp);
+                                $name = new Carbon($item->source_timestamp);
                             }
                         }
                         $this->series_heat_map[$aux] = ["name" => $name->toFormattedDateString(), "data" => $data_aux];

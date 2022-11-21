@@ -44,12 +44,12 @@ class BaseLineChart extends Component
         $this->time_id_baseline = 2;
         //$this->data_chart_result = $this->client->hourlyMicrocontrollerData()->limit(24)->get();;
         $first_day = Carbon::now();
-        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')->limit(24)->get();
-        ;
-        $this->end_result =$this->data_chart_result->first()->microcontrollerData->source_timestamp;
-        $this->start_result =$this->data_chart_result->last()->microcontrollerData->source_timestamp;
-        $this->date_range_result = $this->start_result . " - " . $this->end_result;
-
+        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
+        if (count($this->data_chart_result)>0 ) {
+            $this->end_result = $this->data_chart_result->first()->source_timestamp;
+            $this->start_result = $this->data_chart_result->last()->source_timestamp;
+            $this->date_range_result = $this->start_result . " - " . $this->end_result;
+        }
         $end_reference = Carbon::create($this->end_result);
         $this->end_reference = $end_reference->subDays(2);
         $start_reference = Carbon::create($this->start_result);
@@ -61,15 +61,17 @@ class BaseLineChart extends Component
     public function restartDateRange()
     {
         if ($this->time_id_baseline == 2) {
-            $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')->limit(24)->get();
+            $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
         } elseif ($this->time_id_baseline == 3) {
             $this->data_chart_result = $this->client->dailyMicrocontrollerData()->limit(31)->get();
         } else {
             $this->data_chart_result = $this->client->monthlyMicrocontrollerData()->limit(12)->get();
         }
-        $this->end_result = $this->data_chart_result->first()->microcontrollerData->source_timestamp;
-        $this->start_result = $this->data_chart_result->last()->microcontrollerData->source_timestamp;
-        $this->date_range_result = $this->start_result . " - " . $this->end_result;
+        if (count($this->data_chart_result)>0) {
+            $this->end_result = $this->data_chart_result->first()->microcontrollerData->source_timestamp;
+            $this->start_result = $this->data_chart_result->last()->microcontrollerData->source_timestamp;
+            $this->date_range_result = $this->start_result . " - " . $this->end_result;
+        }
         $end_reference = Carbon::create($this->end_result);
         $this->end_reference = $end_reference->subDays(2);
         $start_reference = Carbon::create($this->start_result);
@@ -141,7 +143,7 @@ class BaseLineChart extends Component
             if ($this->time_id_baseline == 2) {
                 $data_chart_result = $this->client->hourlyMicrocontrollerData()
                     ->whereBetween("source_timestamp", [$this->start_result, $this->end_result])
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(600)->get();
             } elseif ($this->time_id_baseline == 3) {
                 $data_chart_result = $this->client->dailyMicrocontrollerData()
