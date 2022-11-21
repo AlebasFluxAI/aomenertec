@@ -49,20 +49,14 @@ class UpdateDataConsumption extends Command
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
-        echo count($data_pack)."\n";
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
-            $i=0;
-            $j=0;
+            ;
             foreach ($data_pack as $item) {
-                echo $i."\n";
-                $i++;
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
-
-
                 if ($raw_json == null) {
                     $decode = bin2hex(base64_decode($item->raw_json));
                     $split = substr($decode, (16), (16));
@@ -161,7 +155,7 @@ class UpdateDataConsumption extends Command
                             }
 
                             if ($client) {
-                               // if (!$client->stopUnpackClient()->exists()) {
+                                if (!$client->stopUnpackClient()->exists()) {
                                     $item->save();
 
 
@@ -172,7 +166,7 @@ class UpdateDataConsumption extends Command
                                     } else{
                                         $item->saveQuietly();
                                     }*/
-                                //}
+                                }
                             } else{
                                 $item->forceDelete();
                             }
@@ -212,7 +206,6 @@ class UpdateDataConsumption extends Command
 
                 }*/
             }
-            echo $i."\n";
         }
     }
 }
