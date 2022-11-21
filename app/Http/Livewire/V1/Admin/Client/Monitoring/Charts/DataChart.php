@@ -40,15 +40,17 @@ class DataChart extends Component
         $this->chart_title = $aux['display_name'];
         $this->chart_type = $aux['chart_type'];
         $this->time_id = $time;
-        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')->limit(24)->get();
-        if ($time == 1) {
-            $this->end = $this->data_chart->first()->source_timestamp;
-            $this->start = $this->data_chart->last()->source_timestamp;
-        } else {
-            $this->start = $this->data_chart->first()->microcontrollerData->source_timestamp;
-            $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
+        if (count($this->data_chart)>0) {
+            if ($time == 1 or $time == 2) {
+                $this->end = $this->data_chart->first()->source_timestamp;
+                $this->start = $this->data_chart->last()->source_timestamp;
+            } else {
+                $this->start = $this->data_chart->first()->microcontrollerData->source_timestamp;
+                $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
+            }
+            $this->date_range = $this->start . " - " . $this->end;
         }
-        $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
     }
 
@@ -57,7 +59,7 @@ class DataChart extends Component
         if ($this->time_id == 1) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
         } elseif ($this->time_id == 2) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')->limit(24)->get();
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
         } elseif ($this->time_id == 3) {
             $this->data_chart = $this->client->dailyMicrocontrollerData()->limit(31)->get();
         } else {
@@ -134,7 +136,7 @@ class DataChart extends Component
             } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereBetween("source_timestamp", [$this->start, $this->end])
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(250)->get();
             } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
@@ -144,13 +146,13 @@ class DataChart extends Component
             } else {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                        $query->whereBetween("source_timestamp", [$this->start, $this->end])->orderBy('source_timestamp', 'desc');
                     })->limit(250)->get();
             }
             $this->data_chart = $data_chart;
         }
         if (count($data_chart)>0) {
-            if ($this->time_id == 1) {
+            if ($this->time_id == 1 or $this->time_id == 2) {
                 $this->end = $this->data_chart->first()->source_timestamp;
                 $this->start = $this->data_chart->last()->source_timestamp;
             } else {
@@ -174,7 +176,7 @@ class DataChart extends Component
                             array_push($data_aux[$index], null);
                         }
                     } elseif ($this->time_id == 2) {
-                        $raw_json = json_decode($item->microcontrollerData->raw_json, true);
+                        $raw_json = json_decode($item->raw_json, true);
                         if (isset($raw_json[$data['variable_name']])) {
                             array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
                         } else {

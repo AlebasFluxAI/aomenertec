@@ -119,7 +119,8 @@ class ReorderDataClient extends Command
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
         //$clients = Client::find([89,88]);
-        $clients = Client::whereNotIn('id', [1,4,117,116,115,114,113,112,111,110,109,108,107,106,105,104,103,102,101,100,99,98,97,96,95,94,93,92,91,90,89,88,87,86,85,84,83,82,81,80,79,78,77,76,75,74,73,72,71])->get();
+        $clients = Client::whereNotIn('id', [1,4])->get();
+        //$clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
             echo "cliente = ".$client->id."\n\n";
             /*if (!$client->stopUnpackClient()->exists()) {
@@ -128,16 +129,19 @@ class ReorderDataClient extends Command
             $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
             $search = "\"equipment_id\":\"" . $equipment->serial . "\"";
             $search_1 = "\"equipment_id\":" . $equipment->serial;
-            $data = MicrocontrollerData::withTrashed()
+            MicrocontrollerData::withTrashed()
                 //->where('source_timestamp', '>', $start_date)
                 //->where('client_id', $id_client)
                 ->where('raw_json', 'like', '%' . $search . '%')
                 ->orWhere('raw_json', 'like', '%' . $search_1 . '%')
+                ->restore();
+            $data = MicrocontrollerData::
+                //->where('source_timestamp', '>', $start_date)
+                //->where('client_id', $id_client)
+                where('raw_json', 'like', '%' . $search . '%')
+                ->orWhere('raw_json', 'like', '%' . $search_1 . '%')
                 ->get();
-
-
             foreach ($data as $datum) {
-                $datum->restore();
                 $datum->client_id = null;
                 $datum->saveQuietly();
             }
@@ -160,15 +164,9 @@ class ReorderDataClient extends Command
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
                     $item->raw_json = $raw_json;
                     $item->saveQuietly();
-                   // array_push($itemArray, new SerializeMicrocontrollerDataJob($item));
                     echo $i."\n";
                     $this->jsonEdit($item);
                 }
-                /*Bus::batch(
-                    $itemArray
-                )->then(function (Batch $batch) {
-                    // All jobs completed successfully...
-                })->onQueue('reorder_data')->dispatch();*/
             }
         }
     }
@@ -221,7 +219,8 @@ class ReorderDataClient extends Command
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:00:00'))->orderBy('source_timestamp', 'desc')->first();
+            $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
+            $last_raw_json = json_decode($last_data->raw_json, true);
             if ($last_data) {
                 $last_raw_json = json_decode($last_data->raw_json, true);
                 if ($json['import_wh'] <= 0) {
@@ -237,9 +236,6 @@ class ReorderDataClient extends Command
                 if ($json['import_VArh'] < $last_raw_json['import_VArh']) {
                     $json['import_VArh'] = $last_raw_json['import_VArh'];
                 }
-            } else{
-                $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
-                $last_raw_json = json_decode($last_data->raw_json, true);
             }
             $reference_hour = $current_time->copy()->subHour();
             $reference_data = $client->microcontrollerData()
@@ -248,7 +244,6 @@ class ReorderDataClient extends Command
                 ->first();
 
             if (empty($reference_data)) {
-
                     $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
                     $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
                     $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
@@ -320,7 +315,7 @@ class ReorderDataClient extends Command
         $data->interval_reactive_inductive_consumption = floatval($json['varLh_interval']);
         $data->raw_json = $json;
         $data->saveQuietly();
-        /*if ($data->interval_real_consumption == 0) {
+        if ($data->interval_real_consumption == 0) {
             $penalizable_inductive = $data->interval_reactive_inductive_consumption;
         } else {
             $percent_penalizable_inductive = ($data->interval_reactive_inductive_consumption * 100) / $data->interval_real_consumption;
@@ -345,6 +340,6 @@ class ReorderDataClient extends Command
                 'source_timestamp' => $data->source_timestamp,
                 'raw_json' => json_encode($data->raw_json),
             ]
-        );*/
+        );
     }
 }

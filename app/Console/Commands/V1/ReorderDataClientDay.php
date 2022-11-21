@@ -93,19 +93,20 @@ class ReorderDataClientDay extends Command
                                 $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
                             }
                         }
-                        DailyMicrocontrollerData::create([
+                        DailyMicrocontrollerData::updateOrCreate(
+                            [
                             'year' => $reference_date->format('Y'),
                             'month' => $reference_date->format('m'),
                             'day' => $reference_date->format('d'),
-                            'client_id' => $client->id,
-                            'microcontroller_data_id' => $reference_data->id,
+                            'client_id' => $client->id],
+                            ['microcontroller_data_id' => $reference_data->id,
                             'interval_real_consumption' => $interval_active_day,
                             'interval_reactive_capacitive_consumption' => $interval_capacitive_day,
                             'interval_reactive_inductive_consumption' => $interval_inductive_day,
                             'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_day,
                             'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
-                            'raw_json' => json_encode($json),
-                        ]);
+                            'raw_json' => json_encode($json)
+                            ]);
                     }
                 }
             }

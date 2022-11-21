@@ -57,14 +57,14 @@ class ReactiveChart extends Component
                     ->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive])
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(60)->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereBetween("source_timestamp", [$this->start_reactive, $this->end_reactive])
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(60)->get();
             }
         } elseif ($this->time_reactive_id == 3) {
@@ -106,7 +106,7 @@ class ReactiveChart extends Component
         }
         if (count($data_chart)>0) {
             $this->data_chart_reactive = $data_chart;
-            if ($this->time_reactive_id == 1) {
+            if ($this->time_reactive_id == 1 or $this->time_reactive_id == 2) {
                 $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
                 $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
             } else {
@@ -145,13 +145,13 @@ class ReactiveChart extends Component
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->where('penalizable_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('penalizable_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(24)->get();
             } else {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->where('interval_reactive_inductive_consumption', '>=', $this->inductive_filter)
                     ->where('interval_reactive_capacitive_consumption', '>=', $this->capacitive_filter)
-                    ->orderBy('source_timestamp', 'desc')->orderBy('id', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(24)->get();
             }
         } elseif ($this->time_reactive_id == 3) {
@@ -181,14 +181,17 @@ class ReactiveChart extends Component
         }
 
         $this->data_chart_reactive = $data_chart;
-        if ($this->time_reactive_id == 1) {
-            $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
-            $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
-        } else {
-            $this->end_reactive = $this->data_chart_reactive->first()->microcontrollerData->source_timestamp;
-            $this->start_reactive = $this->data_chart_reactive->last()->microcontrollerData->source_timestamp;
+        if (count($this->data_chart_reactive) > 0)
+        {
+            if ($this->time_reactive_id == 1) {
+                $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
+                $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
+            } else {
+                $this->end_reactive = $this->data_chart_reactive->first()->microcontrollerData->source_timestamp;
+                $this->start_reactive = $this->data_chart_reactive->last()->microcontrollerData->source_timestamp;
+            }
+            $this->date_range_reactive = $this->start_reactive . " - " . $this->end_reactive;
         }
-        $this->date_range_reactive = $this->start_reactive . " - " . $this->end_reactive;
         $this->chartRender(true);
     }
 
