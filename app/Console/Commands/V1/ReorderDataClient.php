@@ -238,7 +238,7 @@ class ReorderDataClient extends Command
                     $json['import_VArh'] = $last_raw_json['import_VArh'];
                 }
             } else{
-                $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
                 $last_raw_json = json_decode($last_data->raw_json, true);
             }
             $reference_hour = $current_time->copy()->subHour();
