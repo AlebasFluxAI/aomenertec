@@ -178,7 +178,7 @@ class UpdateDataConsumption extends Command
                     }
 
 
-                }/*else {
+                }else {
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -186,25 +186,23 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = json_encode($raw_json);
-                    $item->save();
-                    $i++;
+                    //$item->save();
                     $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
                     if ($equipment) {
                         $client = $equipment->clients()->first();
                         if ($client) {
                             if (!$client->stopUnpackClient()->exists()) {
-                                if ($client->id != 66) {
+                                $item->save();
+                                /*if ($client->id != 66) {
                                     $i++;
                                 } else{
                                     $item->saveQuietly();
-                                }
+                                }*/
                             }
                         }
                     }
-
-
-                }*/
+                }
             }
         }
     }
