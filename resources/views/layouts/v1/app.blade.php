@@ -12,7 +12,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
 
-    <script src="//worker.enerteclatam.com:8443/socket.io/socket.io.js"></script>
+    <script src="//{{ Request::getHost() }}:8443/socket.io/socket.io.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400&display=swap" rel="stylesheet">
@@ -77,7 +77,7 @@
 </head>
 
 <body>
-
+    
 <div>
     @auth
         @include("layouts.menu.v1.header_menu")
@@ -105,7 +105,7 @@
 <script>
     $(window).on('load', function () {
         setTimeout(function () {
-            $(".loader-page").css({visibility: "hidden", opacity: "0"})
+            $(".loader-page").css({visibility:"hidden",opacity:"0"})
         }, 2000);
     });
 </script>
