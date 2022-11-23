@@ -49,11 +49,12 @@ class UpdateDataConsumption extends Command
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
+        echo count($data_pack)."\n";
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
-            ;
-            foreach ($data_pack as $item) {
+            foreach ($data_pack as $i => $item) {
+                echo $i."\n";
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
@@ -156,16 +157,15 @@ class UpdateDataConsumption extends Command
 
                             if ($client) {
                                 if (!$client->stopUnpackClient()->exists()) {
-                                    $item->save();
+                                    //$item->save();
 
 
-                                    /*if ($client->id != 66
+                                    if ($client->id != 0
                                     ) {
-                                        $i++;
                                         $item->save();
                                     } else{
                                         $item->saveQuietly();
-                                    }*/
+                                    }
                                 }
                             } else{
                                 $item->forceDelete();
@@ -194,11 +194,11 @@ class UpdateDataConsumption extends Command
                         if ($client) {
                             if (!$client->stopUnpackClient()->exists()) {
                                 $item->save();
-                                /*if ($client->id != 66) {
-                                    $i++;
+                                if ($client->id != 0) {
+                                    $item->save();
                                 } else{
                                     $item->saveQuietly();
-                                }*/
+                                }
                             }
                         }
                     }
