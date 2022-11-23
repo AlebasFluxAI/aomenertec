@@ -52,8 +52,7 @@ class UpdateDataConsumption extends Command
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
-            ;
-            foreach ($data_pack as $item) {
+            foreach ($data_pack as $i => $item) {
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
@@ -156,16 +155,15 @@ class UpdateDataConsumption extends Command
 
                             if ($client) {
                                 if (!$client->stopUnpackClient()->exists()) {
-                                    $item->save();
+                                    //$item->save();
 
 
-                                    /*if ($client->id != 66
+                                    if ($client->id != 0
                                     ) {
-                                        $i++;
                                         $item->save();
                                     } else{
                                         $item->saveQuietly();
-                                    }*/
+                                    }
                                 }
                             } else{
                                 $item->forceDelete();
@@ -178,7 +176,7 @@ class UpdateDataConsumption extends Command
                     }
 
 
-                }/*else {
+                }else {
                     $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
                     $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
                     $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
@@ -186,25 +184,23 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = json_encode($raw_json);
-                    $item->save();
-                    $i++;
+                    //$item->save();
                     $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
                     if ($equipment) {
                         $client = $equipment->clients()->first();
                         if ($client) {
                             if (!$client->stopUnpackClient()->exists()) {
-                                if ($client->id != 66) {
-                                    $i++;
+                                $item->save();
+                                if ($client->id != 0) {
+                                    $item->save();
                                 } else{
                                     $item->saveQuietly();
                                 }
                             }
                         }
                     }
-
-
-                }*/
+                }
             }
         }
     }
