@@ -73,25 +73,29 @@ class DataReport extends Component
         if ($this->time_report_id == 1) {
             $data_report = $this->client->microcontrollerData()
                 ->whereBetween("source_timestamp", [$this->start_report, $this->end_report])
+                ->orderBy('source_timestamp')
                 ->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA", "MINUTO"];
         } elseif ($this->time_report_id == 2) {
             $data_report = $this->client->hourlyMicrocontrollerData()
-                ->whereHas('microcontrollerData', function ($query) {
-                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
-                })->limit(1440)->get();
+                ->whereBetween("source_timestamp", [$this->start_report, $this->end_report])
+                ->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA"];
         } elseif ($this->time_report_id == 3) {
             $data_report = $this->client->dailyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
                     $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
-                })->limit(720)->get();
+                })
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(720)->get();
             $array_title = ["ANIO", "MES", "DIA"];
         } else {
             $data_report = $this->client->monthlyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
-                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
-                })->limit(24)->get();
+                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report])->orderBy('source_timestamp');
+                })
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(24)->get();
             $array_title = ["ANIO", "MES"];
         }
         if (count($data_report) > 0) {
@@ -110,7 +114,7 @@ class DataReport extends Component
                     $raw_json = json_decode($data->raw_json, true);
                 } elseif ($this->time_report_id == 2) {
                     $array[$index] = [intval($data->year), intval($data->month), intval($data->day), intval($data->hour)];
-                    $raw_json = json_decode($data->microcontrollerData->raw_json, true);
+                    $raw_json = json_decode($data->raw_json, true);
                 } elseif ($this->time_report_id == 3) {
                     $array[$index] = [intval($data->year), intval($data->month), intval($data->day)];
                     $raw_json = json_decode($data->raw_json, true);
@@ -156,12 +160,16 @@ class DataReport extends Component
                 $data_report = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate('source_timestamp', $this->end_day->format('Y-m-d'));
-                    })->get();
+                    })
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                    ->get();
             } else {
                 $data_report = $this->client->hourlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereDate('source_timestamp', $this->end_day->subDay(1)->format('Y-m-d'));
-                    })->get();
+                    })
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                    ->get();
             }
             if (count($data_report) > 0) {
                 $aux_active = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
