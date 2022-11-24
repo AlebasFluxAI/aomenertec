@@ -63,9 +63,13 @@ class BaseLineChart extends Component
         if ($this->time_id_baseline == 2) {
             $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
         } elseif ($this->time_id_baseline == 3) {
-            $this->data_chart_result = $this->client->dailyMicrocontrollerData()->limit(31)->get();
+            $this->data_chart_result = $this->client->dailyMicrocontrollerData()
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(31)->get();
         } else {
-            $this->data_chart_result = $this->client->monthlyMicrocontrollerData()->limit(12)->get();
+            $this->data_chart_result = $this->client->monthlyMicrocontrollerData()
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(12)->get();
         }
         if (count($this->data_chart_result)>0) {
             $this->end_result = $this->data_chart_result->first()->microcontrollerData->source_timestamp;
@@ -149,12 +153,16 @@ class BaseLineChart extends Component
                 $data_chart_result = $this->client->dailyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_result, $this->end_result]);
-                    })->limit(600)->get();
+                    })
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                    ->limit(600)->get();
             } else {
                 $data_chart_result = $this->client->monthlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start_result, $this->end_result]);
-                    })->limit(600)->get();
+                    })
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                    ->limit(600)->get();
             }
             $this->data_chart_result = $data_chart_result;
         }
