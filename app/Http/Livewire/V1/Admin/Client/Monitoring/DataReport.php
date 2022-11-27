@@ -79,6 +79,7 @@ class DataReport extends Component
         } elseif ($this->time_report_id == 2) {
             $data_report = $this->client->hourlyMicrocontrollerData()
                 ->whereBetween("source_timestamp", [$this->start_report, $this->end_report])
+                ->orderBy('source_timestamp')
                 ->limit(1440)->get();
             $array_title = ["ANIO", "MES", "DIA", "HORA"];
         } elseif ($this->time_report_id == 3) {
@@ -92,7 +93,7 @@ class DataReport extends Component
         } else {
             $data_report = $this->client->monthlyMicrocontrollerData()
                 ->whereHas('microcontrollerData', function ($query) {
-                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report])->orderBy('source_timestamp');
+                    $query->whereBetween("source_timestamp", [$this->start_report, $this->end_report]);
                 })
                 ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
                 ->limit(24)->get();

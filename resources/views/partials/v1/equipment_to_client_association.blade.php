@@ -5,10 +5,9 @@
 <div class="row pl-5 pr-3">
 
 
-    <div class="col-12 text-left"> &nbsp;&nbsp; <strong> Seriales de componentes</strong>
+    <div class="col-12 text-left">
     </div>
     @foreach($equipment??[] as $index => $item)
-
         <div wire:key="equipment-field-{{ $index }}"
              class="form-group mb-2 align-content-start col-md-3 col-sm-12">
             @include("partials.v1.form.form_list",[
@@ -32,8 +31,8 @@
                       "picked_variable" => $item['picked'],
                       "message_variable" => $item['post'],
                       "variable_2" => $index??0,
-                      "dropdown_results" => $serials,
-                      "count_bool" => $serials->contains('equipment_type_id', $item['type_id']),
+                      "dropdown_results" => $serials_array[$index],
+                      "count_bool" => is_array($serials_array[$index])?false:$serials_array[$index]->contains('equipment_type_id', $item['type_id']),
                       "selected_value_function" => "assignEquipment",
                       "dropdown_result_id" => "id",
                       "dropdown_result_value" => "serial",
