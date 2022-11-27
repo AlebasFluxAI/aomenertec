@@ -51,6 +51,7 @@ trait ClientFormTrait
     public $message_network_operator;
     public $equipment;
     public $serials;
+    public $serials_array;
     public $pickeds;
     public $posts;
     public $equipment_id;

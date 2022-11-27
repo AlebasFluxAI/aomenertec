@@ -26,8 +26,8 @@ class AddEquipment extends Component
 
 
     protected $rules = [
-        'equipmentName' => 'required|min:2',
-        'equipmentSerial' => 'unique:equipment,serial'
+        'name' => 'required|min:2',
+        'serial' => 'unique:equipment,serial'
     ];
     private $addEquipmentService;
 

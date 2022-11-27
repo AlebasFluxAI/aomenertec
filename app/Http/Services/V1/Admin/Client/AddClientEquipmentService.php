@@ -47,6 +47,7 @@ class AddClientEquipmentService extends Singleton
             'technician' => $model->technician()->first() ? $model->technician()->first()->technician : null
         ]);
         $component->equipment = [];
+        $component->serials_array = [];
         $component->equipment_types = $model->admin ? EquipmentType::whereIn("id", $model->admin->adminEquipmentTypes()->pluck("equipment_type_id"))->get() : [];
         foreach ($component->equipment_types as $index => $type) {
             array_push($component->equipment, [
@@ -59,6 +60,8 @@ class AddClientEquipmentService extends Singleton
                 "post" => "Digite serial de " . $type->type,
                 "disable" => true,
             ]);
+
+            array_push($component->serials_array, collect([]));
         }
     }
 
@@ -112,10 +115,11 @@ class AddClientEquipmentService extends Singleton
                 $component->equipment[$id]['post'] == "No registrado";
                 $type_id = $component->equipment[$id]['type_id'];
                 if (strlen($value) >= 2) {
-                    $component->serials = Equipment::where([
+                    $component->serials_array[$id] = Equipment::where([
                         ["serial", "like", '%' . $value . "%"],
+                        ["equipment_type_id", $type_id]
                     ])->take(3)->get();
-                    if (count($component->serials) == 0) {
+                    if (count($component->serials_array[$id]) == 0) {
                         $component->equipment[$id]['post'] = "No registrado";
                     }
                 }
@@ -137,6 +141,7 @@ class AddClientEquipmentService extends Singleton
                 $component->equipment[$id]['post'] = "Seleccione tipo de equipo";
             }
         }
+
     }
 
 
