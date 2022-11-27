@@ -43,6 +43,7 @@ class EquipmentAddService extends Singleton
 
     public function submitForm(Component $component)
     {
+       
         $component->validate();
         $equipment = Equipment::create($this->mapper($component));
         $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipment->id]);
