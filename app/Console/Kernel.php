@@ -34,11 +34,11 @@ class Kernel extends ConsoleKernel
     {
         ////unpack data
         $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
-        $schedule->command(UpdateDataConsumption::class)->everyThreeMinutes()->withoutOverlapping();
+        //$schedule->command(UpdateDataConsumption::class)->everyThreeMinutes()->withoutOverlapping();
         $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
         $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
-        //$schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
+        $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
 
 
         ////accumulated daily consumption
