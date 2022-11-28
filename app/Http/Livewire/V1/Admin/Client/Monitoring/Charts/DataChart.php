@@ -141,13 +141,17 @@ class DataChart extends Component
             } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->dailyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereBetween("source_timestamp", [$this->start, $this->end])->orderBy('source_timestamp', 'desc');
-                    })->limit(250)->get();
+                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                    })
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                    ->limit(250)->get();
             } else {
                 $data_chart = $this->client->monthlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
-                        $query->whereBetween("source_timestamp", [$this->start, $this->end])->orderBy('source_timestamp', 'desc');
-                    })->limit(250)->get();
+                        $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                    })
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                    ->limit(250)->get();
             }
             $this->data_chart = $data_chart;
         }

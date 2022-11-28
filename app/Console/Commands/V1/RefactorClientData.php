@@ -53,11 +53,11 @@ class RefactorClientData extends Command
         $this->unpackData();
         $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $all_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->get();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -66,7 +66,7 @@ class RefactorClientData extends Command
             if ($this->start_date->diffInMinutes($this->current_time) == 0){
                 break;
             }
-            echo $this->start_date->format('Y-m-d H:i:s')."\n";
+            //echo $this->start_date->format('Y-m-d H:i:s')."\n";
             $minute_data = $all_data->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
                 ->sortBy('source_timestamp')
                 ->all();
@@ -86,27 +86,23 @@ class RefactorClientData extends Command
             $minute_data = [];
         }
         $clients = Client::whereHasTelemetry(true)->get();
-        /*while (true) {
-
-            echo $this->current_time->format('Y-m-d H')."\n";
+        while (true) {
+            $this->current_time->subHour();
             foreach ($clients as $client) {
                 $year =  $this->current_time->format('Y');
                 $month = $this->current_time->format('m');
                 $day =   $this->current_time->format('d');
                 $hour =  $this->current_time->format('H');
                 $hour_data =$client->hourlyMicrocontrollerdata()
-                    ->whereYear($year)
-                    ->whereMonth($month)
-                    ->whereDay($day)
-                    ->whereHour($hour)
+                    ->where('year', $year)
+                    ->where('month',$month)
+                    ->where('day', $day)
+                    ->where('hour', $hour)
                     ->first();
-                $last_raw_json = json_decode($hour_data->raw_json, true);
                 if ($hour_data) {
+                    $last_raw_json = json_decode($hour_data->raw_json, true);
                     $previous_hour_data = $client->hourlyMicrocontrollerdata()
-                        ->whereYear($start_date_copy->copy()->subHour()->format('Y'))
-                        ->whereMonth($start_date_copy->copy()->subHour()->format('m'))
-                        ->whereDay($start_date_copy->copy()->subHour()->format('d'))
-                        ->whereHour($start_date_copy->copy()->subHour()->format('h'))
+                        ->whereBetween('source_timestamp', [$this->current_time->copy()->subHour()->format('Y-m-d H:00:00'), $this->current_time->copy()->subHour()->format('Y-m-d H:59:59')])
                         ->first();
                     if ($previous_hour_data){
                         if ($previous_hour_data->interval_real_consumption == 0){
@@ -143,7 +139,7 @@ class RefactorClientData extends Command
                                         $raw_json['ph2_varh_interval'] = $average_accumulated_reactive_consumption_ph2;
                                         $raw_json['ph3_varh_interval'] = $average_accumulated_reactive_consumption_ph3;
                                         $datum->raw_json = json_encode($raw_json);
-                                        $datum->interval_real_cunsumption = $raw_json['kwh_interval'];
+                                        $datum->interval_real_consumption = $raw_json['kwh_interval'];
                                         $datum->save();
                                     }
                                     $i++;
@@ -157,7 +153,7 @@ class RefactorClientData extends Command
                                 $last_raw_json['ph2_varh_interval'] = $average_accumulated_reactive_consumption_ph2;
                                 $last_raw_json['ph3_varh_interval'] = $average_accumulated_reactive_consumption_ph3;
                                 $hour_data->raw_json = json_encode($raw_json);
-                                $hour_data->interval_real_cunsumption = $raw_json['kwh_interval'];
+                                $hour_data->interval_real_consumption = $raw_json['kwh_interval'];
                                 $hour_data->save();
                             }
                         }
@@ -167,9 +163,7 @@ class RefactorClientData extends Command
             if ($start_date_copy->diffInHours($this->current_time)==0){
                 break;
             }
-            $this->current_time->subHour();
-        }*/
-
+        }
     }
     private function unpackData(){
         $data_pack = MicrocontrollerData::whereNull('client_id')
@@ -237,11 +231,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
             ->get();
         if ($data) {
             foreach ($data as $i=>&$item) {
@@ -425,7 +419,6 @@ class RefactorClientData extends Command
             if ($last_data) {
                 $last_raw_json = json_decode($last_data->raw_json, true);
                 if ($json['import_wh'] <= 0) {
-
                     if ($last_raw_json['import_wh']>0) {
                         $data->forceDelete();
                         return;
@@ -445,7 +438,6 @@ class RefactorClientData extends Command
                 ->first();
 
             if (empty($reference_data)) {
-
                 $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
                 $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
                 $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
@@ -472,9 +464,7 @@ class RefactorClientData extends Command
                 $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $last_raw_json['ph3_import_kvarh'];
                 $json['varCh_interval'] = $json['varCh_acumm'] - floatval($last_raw_json['varCh_acumm']);
                 $json['varLh_interval'] = $json['varLh_acumm'] - floatval($last_raw_json['varLh_acumm']);
-
             } else {
-
                 $reference_data_json = json_decode($reference_data->raw_json, true);
                 $json['kwh_interval'] = $json['import_wh'] - $reference_data_json['import_wh'];
                 $json['varh_interval'] = $json['import_VArh'] - $reference_data_json['import_VArh'];
@@ -502,10 +492,8 @@ class RefactorClientData extends Command
                 $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $reference_data_json['ph3_import_kvarh'];
                 $json['varCh_interval'] = $json['varCh_acumm'] - floatval($reference_data_json['varCh_acumm']);
                 $json['varLh_interval'] = $json['varLh_acumm'] - floatval($reference_data_json['varLh_acumm']);
-
             }
         }
-
         $data->client_id = $client->id;
         $data->accumulated_real_consumption = floatval($json['import_wh']);
         $data->interval_real_consumption = floatval($json['kwh_interval']);
@@ -517,31 +505,6 @@ class RefactorClientData extends Command
         $data->interval_reactive_inductive_consumption = floatval($json['varLh_interval']);
         $data->raw_json = $json;
         $data->saveQuietly();
-        /*if ($data->interval_real_consumption == 0) {
-            $penalizable_inductive = $data->interval_reactive_inductive_consumption;
-        } else {
-            $percent_penalizable_inductive = ($data->interval_reactive_inductive_consumption * 100) / $data->interval_real_consumption;
-            if ($percent_penalizable_inductive >= 50) {
-                $penalizable_inductive = ($data->interval_real_consumption * $percent_penalizable_inductive / 100) - ($data->interval_real_consumption * 0.5);
-            } else {
-                $penalizable_inductive = 0;
-            }
-        }
-        HourlyMicrocontrollerData::updateOrCreate(
-            ['year' => $current_time->format('Y'),
-                'month' => $current_time->format('m'),
-                'day' => $current_time->format('d'),
-                'hour' => $current_time->format('H'),
-                'client_id' => $data->client_id],
-            ['microcontroller_data_id' => $data->id,
-                'interval_real_consumption' => $data->interval_real_consumption,
-                'interval_reactive_capacitive_consumption' => $data->interval_reactive_capacitive_consumption,
-                'interval_reactive_inductive_consumption' => $data->interval_reactive_inductive_consumption,
-                'penalizable_reactive_capacitive_consumption' => $data->interval_reactive_capacitive_consumption,
-                'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
-                'source_timestamp' => $data->source_timestamp,
-                'raw_json' => json_encode($data->raw_json),
-            ]
-        );*/
+
     }
 }
