@@ -244,14 +244,29 @@ class ReactiveChart extends Component
                         }
                     } else {
                         if ($this->time_reactive_id == 3 || $this->time_reactive_id == 4) {
-                            $raw_json = json_decode($item->raw_json, true);
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                            if ($data['variable_name'] == "kwh_interval") {
+                                array_push($data_aux[$index], round($item->interval_real_consumption, 2));
+                            } elseif ($data['variable_name'] == "varLh_interval") {
+                                array_push($data_aux[$index], round($item->interval_reactive_inductive_consumption, 2));
+                            } else {
+                                array_push($data_aux[$index], round($item->interval_reactive_capacitive_consumption, 2));
+                            }
                         } elseif ($this->time_reactive_id == 2) {
-                            $raw_json = json_decode($item->microcontrollerData->raw_json, true);
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                            if ($data['variable_name'] == "kwh_interval") {
+                                array_push($data_aux[$index], round($item->interval_real_consumption, 2));
+                            } elseif ($data['variable_name'] == "varLh_interval") {
+                                array_push($data_aux[$index], round($item->interval_reactive_inductive_consumption, 2));
+                            } else {
+                                array_push($data_aux[$index], round($item->interval_reactive_capacitive_consumption, 2));
+                            }
                         } else {
-                            $raw_json = json_decode($item->raw_json, true);
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                            if ($data['variable_name'] == "kwh_interval") {
+                                array_push($data_aux[$index], round($item->interval_real_consumption, 2));
+                            } elseif ($data['variable_name'] == "varLh_interval") {
+                                array_push($data_aux[$index], round($item->interval_reactive_inductive_consumption, 2));
+                            } else {
+                                array_push($data_aux[$index], round($item->interval_reactive_capacitive_consumption, 2));
+                            }
                         }
                     }
                     if ($index == 0) {
