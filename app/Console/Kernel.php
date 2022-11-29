@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\V1\DeleteStopUnpackData;
 use App\Console\Commands\V1\RefactorClientData;
+use App\Console\Commands\V1\ReorderDataClientHour;
 use App\Console\Commands\V1\SetTimestamp;
 use App\Console\Commands\V1\RecordDailyConsumption;
 use App\Console\Commands\V1\RecordMonthlyConsumption;
@@ -39,7 +40,8 @@ class Kernel extends ConsoleKernel
         $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
         $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
-        $schedule->command(RefactorClientData::class)->dailyAt('20:10')->withoutOverlapping();
+        $schedule->command(RefactorClientData::class)->dailyAt('02:20')->withoutOverlapping();
+        $schedule->command(ReorderDataClientHour::class)->dailyAt('14:40')->withoutOverlapping();
 
 
         $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();

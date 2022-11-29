@@ -66,6 +66,7 @@ class RefactorClientData extends Command
             if ($this->start_date->diffInMinutes($this->current_time) == 0){
                 break;
             }
+            echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
                 ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
@@ -75,18 +76,18 @@ class RefactorClientData extends Command
                 foreach ($minute_data as $datum){
                     $this->jsonEdit($datum);
                 }
+                /*if ($this->start_date->format('i') == '59'){
+                    $this->calculateConsumptionHourly($this->start_date);
+                }*/
+            }/*else{
                 if ($this->start_date->format('i') == '59'){
                     $this->calculateConsumptionHourly($this->start_date);
                 }
-            }else{
-                if ($this->start_date->format('i') == '59'){
-                    $this->calculateConsumptionHourly($this->start_date);
-                }
-            }
+            }*/
             $this->start_date->addMinute();
             $minute_data = [];
         }
-        $clients = Client::whereHasTelemetry(true)->get();
+       /* $clients = Client::whereHasTelemetry(true)->get();
         while (true) {
             $this->current_time->subHour();
             foreach ($clients as $client) {
@@ -164,7 +165,7 @@ class RefactorClientData extends Command
             if ($start_date_copy->diffInHours($this->current_time)==0){
                 break;
             }
-        }
+        }*/
     }
     private function unpackData(){
         $data_pack = MicrocontrollerData::whereNull('client_id')
