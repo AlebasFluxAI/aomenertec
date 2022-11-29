@@ -56,20 +56,21 @@ class RefactorClientData extends Command
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
-        $all_data = MicrocontrollerData::whereNotNull('source_timestamp')
+        /*$all_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
-            ->get();
+            ->get();*/
         $this->start_date = new Carbon($first_data->source_timestamp);
         $start_date_copy = $this->start_date->copy();
         while (true){
             if ($this->start_date->diffInMinutes($this->current_time) == 0){
                 break;
             }
-            //echo $this->start_date->format('Y-m-d H:i:s')."\n";
-            $minute_data = $all_data->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
-                ->sortBy('source_timestamp')
-                ->all();
+            $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
+                ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+                ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
+                ->orderBy('source_timestamp')
+                ->get();
             if (count($minute_data)>0){
                 foreach ($minute_data as $datum){
                     $this->jsonEdit($datum);
@@ -171,11 +172,14 @@ class RefactorClientData extends Command
            // ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
+        echo count($data_pack)."\n";
 
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data_pack as $i=>&$item) {
+                echo $i."\n";
+
                 $raw_json = json_decode($item->raw_json, true);
                 if ($raw_json == null) {
                     if (strlen($item->raw_json) > 20) {
@@ -237,8 +241,12 @@ class RefactorClientData extends Command
             whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
             ->get();
+        echo count($data)."\n";
+
         if ($data) {
             foreach ($data as $i=>&$item) {
+                echo $i."\n";
+
                 $item->client_id = null;
                 if (is_string($item->raw_json)) {
                     $raw_json = json_decode($item->raw_json, true);
@@ -419,6 +427,7 @@ class RefactorClientData extends Command
             if ($last_data) {
                 $last_raw_json = json_decode($last_data->raw_json, true);
                 if ($json['import_wh'] <= 0) {
+
                     if ($last_raw_json['import_wh']>0) {
                         $data->forceDelete();
                         return;
