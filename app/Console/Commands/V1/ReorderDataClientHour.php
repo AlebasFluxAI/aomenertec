@@ -45,6 +45,7 @@ class ReorderDataClientHour extends Command
         $clients = Client::whereHasTelemetry(true)->get();
         $reference_date = new Carbon();
         $end_date= Carbon::create(2022,07,16, 11,0,0);
+        $end_date_copy = $end_date->copy();
         $data_frame = config('data-frame.data_frame');
         while (true) {
             $end_date->addHour();
@@ -54,6 +55,18 @@ class ReorderDataClientHour extends Command
                 $month = $end_date->format('m');
                 $day =   $end_date->format('d');
                 $hour =  $end_date->format('H');
+                $hour_data_client = $client->hourlyMicrocontrollerData()
+                                    ->where([
+                                        ['year', '=', $year],
+                                        ['month', '=', $month],
+                                        ['day', '=', $day],
+                                        ['hour', '=', $hour],
+                                    ])->get();
+                if (count($hour_data_client)>0){
+                    foreach ($hour_data_client as $datum){
+                        $datum->forceDelete();
+                    }
+                }
                 if ($client->microcontrollerData()
                     ->whereBetween("source_timestamp", [$end_date->format('Y-m-d H:00:00'), $end_date->format('Y-m-d H:59:59')])->exists()) {
                     $reference_data = $client->microcontrollerData()
@@ -141,6 +154,84 @@ class ReorderDataClientHour extends Command
                 }
             }
             if ($end_date->diffInHours($reference_date)==0){
+                break;
+            }
+        }
+        while (true) {
+            $reference_date->subHour();
+            foreach ($clients as $client) {
+                $year =  $reference_date->format('Y');
+                $month = $reference_date->format('m');
+                $day =   $reference_date->format('d');
+                $hour =  $reference_date->format('H');
+                $hour_data =$client->hourlyMicrocontrollerdata()
+                    ->where('year', $year)
+                    ->where('month',$month)
+                    ->where('day', $day)
+                    ->where('hour', $hour)
+                    ->first();
+                if ($hour_data) {
+                    $last_raw_json = json_decode($hour_data->raw_json, true);
+                    $previous_hour_data = $client->hourlyMicrocontrollerdata()
+                        ->whereBetween('source_timestamp', [$reference_date->copy()->subHour()->format('Y-m-d H:00:00'), $reference_date->copy()->subHour()->format('Y-m-d H:59:59')])
+                        ->first();
+                    if ($previous_hour_data){
+                        if ($previous_hour_data->interval_real_consumption == 0){
+                            $data = HourlyMicrocontrollerData::whereMicrocontrollerDataId($previous_hour_data->microcontroller_data_id)->orderBy('source_timestamp')->get();
+                            if (count($data) > 1){
+                                $i=0;
+                                foreach ($data as $datum){
+                                    if ($i == 0){
+                                        $first_raw_json = json_decode($datum->raw_json, true);
+                                        $average_accumulated_real_consumption = ($last_raw_json['import_wh'] - $first_raw_json['import_wh'])/count($data);
+                                        $average_accumulated_real_consumption_ph1 = ($last_raw_json['ph1_import_kwh'] - $first_raw_json['ph1_import_kwh'])/count($data);
+                                        $average_accumulated_real_consumption_ph2 = ($last_raw_json['ph2_import_kwh'] - $first_raw_json['ph2_import_kwh'])/count($data);
+                                        $average_accumulated_real_consumption_ph3 = ($last_raw_json['ph3_import_kwh'] - $first_raw_json['ph3_import_kwh'])/count($data);
+                                        $average_accumulated_reactive_consumption = ($last_raw_json['import_VArh'] - $first_raw_json['import_VArh'])/count($data);
+                                        $average_accumulated_reactive_consumption_ph1 = ($last_raw_json['ph1_import_kvarh'] - $first_raw_json['ph1_import_kvarh'])/count($data);
+                                        $average_accumulated_reactive_consumption_ph2 = ($last_raw_json['ph2_import_kvarh'] - $first_raw_json['ph2_import_kvarh'])/count($data);
+                                        $average_accumulated_reactive_consumption_ph3 = ($last_raw_json['ph3_import_kvarh'] - $first_raw_json['ph3_import_kvarh'])/count($data);
+                                    } else{
+                                        $raw_json = json_decode($datum->raw_json, true);
+                                        $raw_json['import_wh'] = $first_raw_json['import_wh'] + ($average_accumulated_real_consumption * $i);
+                                        $raw_json['kwh_interval'] = $average_accumulated_real_consumption;
+                                        $raw_json['ph1_import_kwh'] = $first_raw_json['ph1_import_kwh'] + ($average_accumulated_real_consumption_ph1 * $i);
+                                        $raw_json['ph2_import_kwh'] = $first_raw_json['ph2_import_kwh'] + ($average_accumulated_real_consumption_ph2 * $i);
+                                        $raw_json['ph3_import_kwh'] = $first_raw_json['ph3_import_kwh'] + ($average_accumulated_real_consumption_ph3 * $i);
+                                        $raw_json['ph1_kwh_interval'] = $average_accumulated_real_consumption_ph1;
+                                        $raw_json['ph2_kwh_interval'] = $average_accumulated_real_consumption_ph2;
+                                        $raw_json['ph3_kwh_interval'] = $average_accumulated_real_consumption_ph3;
+                                        $raw_json['import_VArh'] = $first_raw_json['import_VArh'] + ($average_accumulated_reactive_consumption * $i);
+                                        $raw_json['varh_interval'] = $average_accumulated_reactive_consumption;
+                                        $raw_json['ph1_import_kvarh'] = $first_raw_json['ph1_import_kvarh'] + ($average_accumulated_reactive_consumption_ph1 * $i);
+                                        $raw_json['ph2_import_kvarh'] = $first_raw_json['ph2_import_kvarh'] + ($average_accumulated_reactive_consumption_ph2 * $i);
+                                        $raw_json['ph3_import_kvarh'] = $first_raw_json['ph3_import_kvarh'] + ($average_accumulated_reactive_consumption_ph3 * $i);
+                                        $raw_json['ph1_varh_interval'] = $average_accumulated_reactive_consumption_ph1;
+                                        $raw_json['ph2_varh_interval'] = $average_accumulated_reactive_consumption_ph2;
+                                        $raw_json['ph3_varh_interval'] = $average_accumulated_reactive_consumption_ph3;
+                                        $datum->raw_json = json_encode($raw_json);
+                                        $datum->interval_real_consumption = $raw_json['kwh_interval'];
+                                        $datum->save();
+                                    }
+                                    $i++;
+                                }
+                                $last_raw_json['kwh_interval'] = $average_accumulated_real_consumption;
+                                $last_raw_json['ph1_kwh_interval'] = $average_accumulated_real_consumption_ph1;
+                                $last_raw_json['ph2_kwh_interval'] = $average_accumulated_real_consumption_ph2;
+                                $last_raw_json['ph3_kwh_interval'] = $average_accumulated_real_consumption_ph3;
+                                $last_raw_json['varh_interval'] = $average_accumulated_reactive_consumption;
+                                $last_raw_json['ph1_varh_interval'] = $average_accumulated_reactive_consumption_ph1;
+                                $last_raw_json['ph2_varh_interval'] = $average_accumulated_reactive_consumption_ph2;
+                                $last_raw_json['ph3_varh_interval'] = $average_accumulated_reactive_consumption_ph3;
+                                $hour_data->raw_json = json_encode($raw_json);
+                                $hour_data->interval_real_consumption = $raw_json['kwh_interval'];
+                                $hour_data->save();
+                            }
+                        }
+                    }
+                }
+            }
+            if ($end_date_copy->diffInHours($reference_date)==0){
                 break;
             }
         }

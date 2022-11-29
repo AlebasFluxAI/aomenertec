@@ -49,12 +49,12 @@ class UpdateDataConsumption extends Command
             ->whereNotNull('source_timestamp')
             ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
-        echo count($data_pack);
         if ($data_pack) {
+            echo count($data_pack);
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data_pack as $i => $item) {
-                echo $i."\n";
+                echo $item->id."\n";
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
