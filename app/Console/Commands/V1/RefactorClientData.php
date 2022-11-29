@@ -53,11 +53,11 @@ class RefactorClientData extends Command
         $this->unpackData();
         $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         /*$all_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDay(->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->get();*/
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -67,7 +67,7 @@ class RefactorClientData extends Command
                 break;
             }
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
-                ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+                ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
                 ->orderBy('source_timestamp')
                 ->get();
@@ -235,11 +235,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(28)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
             ->get();
         echo count($data)."\n";
 
