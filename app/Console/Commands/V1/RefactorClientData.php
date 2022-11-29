@@ -169,17 +169,12 @@ class RefactorClientData extends Command
     private function unpackData(){
         $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
-           // ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
-            ->orderBy('source_timestamp')->orderBy('created_at')
+           ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
-        echo count($data_pack)."\n";
-
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data_pack as $i=>&$item) {
-                echo $i."\n";
-
                 $raw_json = json_decode($item->raw_json, true);
                 if ($raw_json == null) {
                     if (strlen($item->raw_json) > 20) {
@@ -241,12 +236,8 @@ class RefactorClientData extends Command
             whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDay()->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
             ->get();
-        echo count($data)."\n";
-
         if ($data) {
             foreach ($data as $i=>&$item) {
-                echo $i."\n";
-
                 $item->client_id = null;
                 if (is_string($item->raw_json)) {
                     $raw_json = json_decode($item->raw_json, true);
@@ -445,7 +436,6 @@ class RefactorClientData extends Command
                 ->whereBetween('source_timestamp', [$reference_hour->format('Y-m-d H:00:00'), $reference_hour->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
-
             if (empty($reference_data)) {
                 $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
                 $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];

@@ -41,14 +41,12 @@ class ReorderDataClientDay extends Command
     public function handle()
     {
         $clients = Client::whereHasTelemetry(true)->get();
-        //$clients = Client::find([66,67]);
         $data_frame = collect(config('data-frame.data_frame'));
         $accum_variable = $data_frame->where('bolean_accum', true);
         $reference_date = new Carbon();
         $end_date= Carbon::create(2022,07,16);
         while (true) {
             $reference_date->subDay();
-            echo $reference_date->format('Y-m-d')."\n";
             foreach ($clients as $client) {
                 $data_day = $client->hourlyMicrocontrollerData()
                     ->where('year', $reference_date->format('Y'))
@@ -69,11 +67,10 @@ class ReorderDataClientDay extends Command
                             ->first();
                     } else{
                         $reference_data_first = $client->microcontrollerData()
-                            ->whereDate('source_timestamp', $reference_date->format('Y-m-d'))
+                            ->whereBetween('source_timestamp', [$reference_date->format('Y-m-d 00:00:00'), $reference_date->format('Y-m-d 23:59:59')])
                             ->orderBy('source_timestamp')
                             ->first();
                     }
-                    echo $client->id."\n";
                     if ($reference_data) {
                         $json = json_decode($reference_data->raw_json, true);
                         $penalizable_inductive_day = 0;
@@ -82,11 +79,8 @@ class ReorderDataClientDay extends Command
                         $interval_capacitive_day = $reference_data->accumulated_reactive_capacitive_consumption - $reference_data_first->accumulated_reactive_capacitive_consumption;
                         $interval_inductive_day = $reference_data->accumulated_reactive_inductive_consumption - $reference_data_first->accumulated_reactive_inductive_consumption;
                         foreach ($data_day as $item) {
-                            if ($item->microcontrollerData) {
-
-                                $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
-                                $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
-                            }
+                            $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
+                            $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
                         }
                         $json_first = json_decode($reference_data_first->raw_json, true);
                         $json['kwh_interval'] = $json['import_wh'] - $json_first['import_wh'];
