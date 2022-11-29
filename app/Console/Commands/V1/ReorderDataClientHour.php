@@ -67,14 +67,11 @@ class ReorderDataClientHour extends Command
                         $datum->forceDelete();
                     }
                 }
-                if ($client->microcontrollerData()
-                    ->whereBetween("source_timestamp", [$end_date->format('Y-m-d H:00:00'), $end_date->format('Y-m-d H:59:59')])->exists()) {
-                    $reference_data = $client->microcontrollerData()
-                        ->whereBetween("source_timestamp", [$end_date->format('Y-m-d H:00:00'), $end_date->format('Y-m-d H:59:59')])
-                        ->orderBy('source_timestamp', 'desc')
-                        ->first();
-
-
+                $reference_data = $client->microcontrollerData()
+                    ->whereBetween("source_timestamp", [$end_date->format('Y-m-d H:00:00'), $end_date->format('Y-m-d H:59:59')])
+                    ->orderBy('source_timestamp', 'desc')
+                    ->first();
+                if ($reference_data) {
                     if ($reference_data->interval_real_consumption == 0) {
                         $penalizable_inductive = $reference_data->interval_reactive_inductive_consumption;
                     } else {
