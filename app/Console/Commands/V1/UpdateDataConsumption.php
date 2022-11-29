@@ -54,7 +54,6 @@ class UpdateDataConsumption extends Command
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data_pack as $i => $item) {
-                echo $item->id."\n";
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
