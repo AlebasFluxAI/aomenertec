@@ -65,14 +65,16 @@ class DataChart extends Component
         } else {
             $this->data_chart = $this->client->monthlyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(12)->get();
         }
-        if ($this->time_id == 1) {
-            $this->end = $this->data_chart->first()->source_timestamp;
-            $this->start = $this->data_chart->last()->source_timestamp;
-        } else {
-            $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-            $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        if (count($this->data_chart)>0) {
+            if ($this->time_id == 1) {
+                $this->end = $this->data_chart->first()->source_timestamp;
+                $this->start = $this->data_chart->last()->source_timestamp;
+            } else {
+                $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+                $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+            }
+            $this->date_range = $this->start . " - " . $this->end;
         }
-        $this->date_range = $this->start . " - " . $this->end;
         $this->chartRender(true);
     }
 
