@@ -76,18 +76,18 @@ class RefactorClientData extends Command
                 foreach ($minute_data as $datum){
                     $this->jsonEdit($datum);
                 }
-                /*if ($this->start_date->format('i') == '59'){
-                    $this->calculateConsumptionHourly($this->start_date);
-                }*/
-            }/*else{
                 if ($this->start_date->format('i') == '59'){
                     $this->calculateConsumptionHourly($this->start_date);
                 }
-            }*/
+            }else{
+                if ($this->start_date->format('i') == '59'){
+                    $this->calculateConsumptionHourly($this->start_date);
+                }
+            }
             $this->start_date->addMinute();
             $minute_data = [];
         }
-       /* $clients = Client::whereHasTelemetry(true)->get();
+        $clients = Client::whereHasTelemetry(true)->get();
         while (true) {
             $this->current_time->subHour();
             foreach ($clients as $client) {
@@ -165,7 +165,7 @@ class RefactorClientData extends Command
             if ($start_date_copy->diffInHours($this->current_time)==0){
                 break;
             }
-        }*/
+        }
     }
     private function unpackData(){
         $data_pack = MicrocontrollerData::whereNull('client_id')
