@@ -47,7 +47,7 @@ class ReorderDataClientMonth extends Command
         $data_frame = collect(config('data-frame.data_frame'));
         $accum_variable = $data_frame->where('bolean_accum', true);
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2022,07,16);
+        $end_date_first= Carbon::create(2022,07,16);
         while (true) {
             $reference_date->subDay();
             $billing_day = $reference_date->format('d');
@@ -126,7 +126,7 @@ class ReorderDataClientMonth extends Command
                                 'month' => $reference_date->format('m'),
                                 'day' => $billing_day,
                                 'client_id' => $client->id,
-                                'microcontroller_data_id' => $reference_data->microcontroller_data_id,
+                                'microcontroller_data_id' => $end_data->id,
                                 'interval_real_consumption' => $interval_active_month,
                                 'interval_reactive_capacitive_consumption' => $interval_capacitive_month,
                                 'interval_reactive_inductive_consumption' => $interval_inductive_month,
@@ -138,10 +138,9 @@ class ReorderDataClientMonth extends Command
                     }
                 }
             }
-            if ($reference_date->diffInDays($end_date)==0){
+            if ($reference_date->diffInDays($end_date_first)==0){
                 break;
             }
-
         }
     }
 }
