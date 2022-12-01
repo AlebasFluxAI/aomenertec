@@ -252,6 +252,7 @@ return [
         Permissions::CLIENT_SHOW_MONITORING,
         Permissions::CLIENT_MONITORING_CONTROL,
         Permissions::CLIENT_SHOW_ALERTS,
+
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
@@ -277,6 +278,9 @@ return [
         Permissions::PQR_CHANGE_LEVEL,
         Permissions::PQR_REPLY,
         Permissions::PQR_REQUEST_CLOSE,
+        Permissions::PQR_CLOSE,
+        Permissions::PQR_CHANGE_LEVEL,
+
 
         Permissions::WORK_ORDER_DETAILS,
         Permissions::WORK_ORDER_SHOW,
