@@ -53,14 +53,14 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        $this->unpackData();
-        $this->deleteClientRelationship();
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
+        $this->unpackData();
+        $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
@@ -558,11 +558,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:00:00')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
         if ($data) {
             foreach ($data as $i=>&$item) {
