@@ -42,7 +42,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
         $schedule->command(RefactorClientData::class)->dailyAt('02:20')->withoutOverlapping();
-        $schedule->command(ReorderDataClientDay::class)->dailyAt('11:45')->withoutOverlapping();
+        $schedule->command(ReorderDataClientDay::class)->dailyAt('23:25')->withoutOverlapping();
 
 
         $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();

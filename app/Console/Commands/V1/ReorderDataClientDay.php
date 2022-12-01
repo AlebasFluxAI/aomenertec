@@ -50,11 +50,13 @@ class ReorderDataClientDay extends Command
             $end_date->addDay();
             echo $end_date->format('Y-m-d')."\n";
             foreach ($clients as $client) {
-                $data_day = $client->hourlyMicrocontrollerData()
-                    ->where('year', $end_date->format('Y'))
-                    ->where('month', $end_date->format('m'))
-                    ->where('day', $end_date->format('d'))->get();
-                if (count($data_day) > 0) {
+
+                if ($client->microcontrollerData()
+                    ->whereBetween('source_timestamp', [$end_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])->exists()) {
+                    $data_day = $client->hourlyMicrocontrollerData()
+                        ->where('year', $end_date->format('Y'))
+                        ->where('month', $end_date->format('m'))
+                        ->where('day', $end_date->format('d'))->get();
                     $reference_data = $client->microcontrollerData()
                         ->whereBetween('source_timestamp', [$end_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp', 'desc')
