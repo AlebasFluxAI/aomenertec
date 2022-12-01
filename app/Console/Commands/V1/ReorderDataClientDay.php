@@ -46,7 +46,7 @@ class ReorderDataClientDay extends Command
         $end_date= Carbon::create(2022,07,15);
         $end_date_copy = Carbon::create(2022,07,15);
         $data_frame = config('data-frame.data_frame');
-        /*while (true) {
+        while (true) {
             $end_date->addDay();
             echo $end_date->format('Y-m-d')."\n";
             foreach ($clients as $client) {
@@ -63,22 +63,24 @@ class ReorderDataClientDay extends Command
                         ->first();
 
                     if ($client->microcontrollerData()
-                        ->whereDate('source_timestamp', $end_date->copy()->subDay()->format('Y-m-d'))->exists()){
+                        ->whereBetween('source_timestamp', [$end_date->copy()->subDay()->format('Y-m-d 00:00:00'), $end_date->copy()->subDay()->format('Y-m-d 23:59:59')])->exists()){
                         $reference_data_first = $client->microcontrollerData()
                             ->whereBetween('source_timestamp', [$end_date->copy()->subDay()->format('Y-m-d 00:00:00'), $end_date->copy()->subDay()->format('Y-m-d 23:59:59')])
                             ->orderBy('source_timestamp', 'desc')
                             ->first();
                     } else{
-                        $reference_data_first = $client->microcontrollerData()
-                            ->where('source_timestamp', '<=', $end_date->format('Y-m-d 00:00:00'))
-                            ->orderBy('source_timestamp', 'desc')
-                            ->first();
-                    }
-                    if ($reference_data_first == null){
-                        $reference_data_first = $client->microcontrollerData()
-                            ->whereBetween('source_timestamp', [$end_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
-                            ->orderBy('source_timestamp')
-                            ->first();
+                        if($client->microcontrollerData()
+                            ->where('source_timestamp', '<=', $end_date->format('Y-m-d 00:00:00'))->exists()) {
+                            $reference_data_first = $client->microcontrollerData()
+                                ->where('source_timestamp', '<=', $end_date->format('Y-m-d 00:00:00'))
+                                ->orderBy('source_timestamp', 'desc')
+                                ->first();
+                        } else{
+                            $reference_data_first = $client->microcontrollerData()
+                                ->whereBetween('source_timestamp', [$end_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
+                                ->orderBy('source_timestamp')
+                                ->first();
+                        }
                     }
                     if ($reference_data) {
                         $json = json_decode($reference_data->raw_json, true);
@@ -177,7 +179,7 @@ class ReorderDataClientDay extends Command
             if ($end_date->diffInDays($reference_date)==2){
                 break;
             }
-        }*/
+        }
         while (true) {
             $reference_date->subDay();
             echo $reference_date->format('Y-m-d')."\n";
