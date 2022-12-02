@@ -19,7 +19,7 @@
 		// unit styles.
 		// colors from
 		phaseStyles: [
-			{ name: "1", style: { color: "#FFF000" } },
+			{ name: "1", style: { color: '#FFF000' } },
 			{ name: "2", style: { color: "#000FFF" } },
 			{ name: "3", style: { color: "#FF0000" } },
 			{ name: "4", style: { color: "#93A9D0" } },
