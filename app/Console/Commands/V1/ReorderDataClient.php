@@ -118,14 +118,14 @@ class ReorderDataClient extends Command
 
         //$start_date = '2022-11-06 16:35:00';
         //$id_client = $this->argument('client');
-        //$clients = Client::find([89,88]);
-        $clients = Client::whereNotIn('id', [1,4])->get();
+        $clients = Client::find([106,82,78,87]);
+        //$clients = Client::whereNotIn('id', [1,4])->get();
         //$clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
             echo "cliente = ".$client->id."\n\n";
-            /*if (!$client->stopUnpackClient()->exists()) {
+            if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
-            }*/
+            }
             $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
             $search = "\"equipment_id\":\"" . $equipment->serial . "\"";
             $search_1 = "\"equipment_id\":" . $equipment->serial;
