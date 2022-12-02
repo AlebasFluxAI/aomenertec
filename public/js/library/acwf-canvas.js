@@ -101,7 +101,7 @@
 
 	//=========================================================
 	// Draws shapes that comprise phasors onto a canvas.
-	// The minimum dimension of the canvas element is used to 
+	// The minimum dimension of the canvas element is used to
 	// determine the maximum size of the  phasor lines. A minimum
 	// size of 300 pixels is set as smaller plots aren't very legible.
 	// Use the PhasorEngine to generate the shapes.
@@ -259,7 +259,7 @@
 
 		this.drawText = function () {
 			if (this.isItemType('text')) {
-				context.font = "10px sans-serif";
+				context.font = "13px sans-serif";
 				var style = new ACWF.PlotStyle().store(context);
 				context.fillStyle = "black";
 				context.textAlign = currentShape.align;
@@ -283,7 +283,7 @@
 		function getAxesStyle() {
 			var style = new ACWF.PlotStyle()
 				.setColor("gray")
-				.setWidth(1)
+				.setWidth(2)
 				.setDashed(false);
 			return style;
 

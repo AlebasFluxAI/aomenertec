@@ -11,17 +11,17 @@
 		// Defines unit styles. These options are used to set line
 		// styles for units shown on the plots.
 		unitStyles: [
-			{ name: "Voltage", style: { width: 2, isDashed: false } },
-			{ name: "Current", style: { width: 2, isDashed: true } }
+			{ name: "Voltage", style: { width: 4, isDashed: false } },
+			{ name: "Current", style: { width: 4, isDashed: true } }
 		],
 		// Defines style variations for phases. Each phase is shown
 		// in a different color. These colors are "added" to the
 		// unit styles.
-		// colors from 
+		// colors from
 		phaseStyles: [
-			{ name: "1", style: { color: "#AA4644" } },
-			{ name: "2", style: { color: "#89A54E" } },
-			{ name: "3", style: { color: "#4573A7" } },
+			{ name: "1", style: { color: "#FFF000" } },
+			{ name: "2", style: { color: "#000FFF" } },
+			{ name: "3", style: { color: "#FF0000" } },
 			{ name: "4", style: { color: "#93A9D0" } },
 			{ name: "5", style: { color: "#D09392" } }
 		],
@@ -639,7 +639,7 @@
 		var rmsSeries = [];
 		for (var i = 0; i < samples.length; i++) {
 			if (i >= lastCycleStart) {
-				// append nulls to the values so the number of 
+				// append nulls to the values so the number of
 				// samples remains the same
 				rmsSeries.push(null);
 				continue;

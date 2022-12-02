@@ -29,7 +29,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-
+    <!-- DSP library -->
+    <script type="text/javascript" src="{{asset('js/library/acwf-core.js')}}"></script>
+    <!-- ACWF core analysis library -->
+    <script type="text/javascript" src="{{asset('js/library/acwf-canvas.js')}}"></script>
+    <!-- ACWF canvas plotting library -->
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{\App\Http\Resources\V1\Subdomain::getIcon()}}">
@@ -70,6 +74,8 @@
     <script src="https://kit.fontawesome.com/277123ced7.js" crossorigin="anonymous"></script>
 
 
+
+
     @livewireStyles
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
@@ -77,7 +83,7 @@
 </head>
 
 <body>
-    
+
 <div>
     @auth
         @include("layouts.menu.v1.header_menu")

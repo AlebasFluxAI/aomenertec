@@ -55,7 +55,30 @@
                  </div>
              </div>
          </div>
-        <script>
+
+    <div wire:ignore.self class="modal fade" id="modal_phasor" tabindex="-1" role="dialog"
+         aria-labelledby="ModalLabel_phasor" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel_phasor">Diagrama Fasorial</h5>
+
+                </div>
+                <div class="modal-body">
+                    <div class="box shadow mt-4">
+                        <div class="p-4" id="phasor" style="width:400px;height:400px"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
 
         $(function() {
             $('input[name="datetimes"]').daterangepicker({
@@ -70,6 +93,7 @@
 
 
         document.addEventListener('livewire:load', function () {
+
             var options = {
                 chart: {
                     id: 'line_chart',
@@ -87,13 +111,19 @@
                             enabled: true,
                             speed: 350
                         }
-                    }
+                    },
+                    events: {
+                        click: function(event, chartContext, config) {
+                            // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
+                            $('#modal_phasor').modal('show');
 
+                        }
+                    }
                 },
                 colors:[function({ value, seriesIndex, w }) {
                     if ((w.config.series).length>1) {
                         if (seriesIndex == 0) {
-                            return '#FFFB00';
+                            return '#FFF000';
                         } else if (seriesIndex ==1) {
                             return '#000FFF';
                         } else {
@@ -137,6 +167,61 @@
                     },
                 },
             });
+
+            var sampleData = {
+                title: "Sample Data",
+                lineFrequency: 100,
+                samplesPerCycle: 132,
+                data: [
+                    {
+                        label: "V1",
+                        unit: "Voltage",
+                        phase: "1",
+                        angle: (0 * Math.PI) / 180,
+                        magnitude: 238.44,
+                    },
+                    {
+                        label: "V2",
+                        unit: "Voltage",
+                        phase: "2",
+                        angle: (240 * Math.PI) / 180,
+                        magnitude: 238.33,
+                    },
+                    {
+                        label: "V3",
+                        unit: "Voltage",
+                        phase: "3",
+                        angle: (120 * Math.PI) / 180,
+                        magnitude: 237.44,
+                    },
+                    {
+                        label: "I1",
+                        unit: "Current",
+                        phase: "1",
+                        angle: (14.44 * Math.PI) / 180,
+                        magnitude: 56.74,
+                    },
+                    {
+                        label: "I2",
+                        unit: "Current",
+                        phase: "2",
+                        angle: (260.9 * Math.PI) / 180,
+                        magnitude: 45.82,
+                    },
+                    {
+                        label: "I3",
+                        unit: "Current",
+                        phase: "3",
+                        angle: (125.03 * Math.PI) / 180,
+                        magnitude: 48.10,
+                    }
+                ]
+            };
+
+
+            var wfSet = ACWF.WaveformSet.create(sampleData);
+            var phasor = new ACWF.PhasorDiagram("phasor");
+            phasor.plotWaveformSet(wfSet, 0);
         @this.on('changeAxis',(e) =>{
 
             ApexCharts.exec('line_chart', "updateOptions", {
