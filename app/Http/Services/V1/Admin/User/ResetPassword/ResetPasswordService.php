@@ -24,7 +24,9 @@ class ResetPasswordService extends Singleton
         if (!$user = User::whereEmail($component->email)->first()) {
             $component->addError('reset_error', 'Correo electronico no registrado');
         }
-
+        if ($user == null) {
+            $component->addError('reset_error', 'Correo electronico no registrado');
+        }
         $otp = $user->otpUsers()->create();
         $user->notifyNow(new UserResetPasswordNotification($otp));
         $component->reset();
