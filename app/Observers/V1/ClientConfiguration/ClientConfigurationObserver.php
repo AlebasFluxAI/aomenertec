@@ -38,7 +38,7 @@ class ClientConfigurationObserver
                     , $clientConfiguration->client);
                 foreach ($clientConfiguration->client->supervisors as $supervisor) {
                     $supervisor->removeTabPermissionPlusConditional(
-                        TabPermission::wherePermission(T abPermission::CLIENT_MONITORING_REAL_TIME)->first()->id
+                        TabPermission::wherePermission(TabPermission::CLIENT_MONITORING_REAL_TIME)->first()->id
                         , $clientConfiguration->client);
                 }
 
