@@ -58,15 +58,6 @@ return [
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
 
-        Permissions::SUPPORT_CREATE,
-        Permissions::SUPPORT_EDIT,
-        Permissions::SUPPORT_DELETE,
-        Permissions::SUPPORT_SHOW,
-
-        Permissions::SUPPORT_CREATE,
-        Permissions::SUPPORT_EDIT,
-        Permissions::SUPPORT_DELETE,
-        Permissions::SUPPORT_SHOW,
         Permissions::SUPPORT_LINK_CLIENT,
 
         Permissions::SUPERVISOR_CREATE,
@@ -291,6 +282,8 @@ return [
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::PQR_EQUIPMENT_CHANGE,
 
+        Permissions::CLIENT_SETTINGS
+
 
     ],
     // Vendedor
@@ -301,6 +294,13 @@ return [
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::SELLER_MANAGE_PURCHASE,
         Permissions::SELLER_MANAGE_PURCHASE_CREATE,
+
+        Permissions::PQR_SHOW,
+        Permissions::PQR_CHANGE_LEVEL,
+        Permissions::PQR_REPLY,
+        Permissions::PQR_REQUEST_CLOSE,
+        Permissions::PQR_CLOSE,
+        Permissions::PQR_CHANGE_LEVEL,
     ],
     // Supervisor
     Supervisor::class => [

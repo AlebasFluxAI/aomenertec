@@ -66,7 +66,15 @@ class Pqr extends Model
         "code",
         "supervisor_id",
         "change_equipment",
-        "has_equipment_changed"
+        "has_equipment_changed",
+        "status_" . self::STATUS_CREATED . "_at",
+        "status_" . self::STATUS_PROCESSING . "_at",
+        "status_" . self::STATUS_RESOLVED . "_at",
+        "status_" . self::STATUS_CLOSED . "_at",
+        "status_" . self::STATUS_CREATED . "_by",
+        "status_" . self::STATUS_PROCESSING . "_by",
+        "status_" . self::STATUS_RESOLVED . "_by",
+        "status_" . self::STATUS_CLOSED . "_by",
     ];
 
     protected static function booted()
@@ -112,7 +120,12 @@ class Pqr extends Model
 
     public function messages()
     {
-        return $this->hasMany(PqrMessage::class);
+        return $this->hasMany(PqrMessage::class)->whereType(PqrMessage::MESSAGE_TYPE_REGULAR);
+    }
+
+    public function closeMessage()
+    {
+        return $this->hasOne(PqrMessage::class)->whereType(PqrMessage::MESSAGE_TYPE_CLOSER);
     }
 
     public function pqrLogs()

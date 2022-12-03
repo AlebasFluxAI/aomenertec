@@ -396,6 +396,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                         ->name("administrar.v1.peticiones.respuesta")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_REPLY));
 
+
+                    Route::get("cerrar/{pqr}", Livewire\V1\Admin\Pqr\PqrCloseComponent::class)
+                        ->name("administrar.v1.peticiones.cierre")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_CLOSE));
+
                     Route::get("historial/{pqr}", Livewire\V1\Admin\Pqr\HistoricalPqrComponent::class)
                         ->name("administrar.v1.peticiones.historial-mensajes")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_REPLY));

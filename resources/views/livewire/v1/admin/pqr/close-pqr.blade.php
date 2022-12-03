@@ -12,7 +12,7 @@
 
     @include("partials.v1.title",[
           "second_title"=>"",
-          "first_title"=>"Historico PQR ".$model->code,
+          "first_title"=>"CERRAR        PQR ".$model->code,
       ])
 
     @auth
@@ -44,7 +44,6 @@
                             ]
            ])
 
-    @include("partials.v1.divider_title",["title"=>"Mensajes intercambiados"])
 
     <div
         style="overflow-y: scroll;height:500px;border-color: #f2f2f2;border-width: 3px;padding: 5px;border-radius: 15px">
@@ -54,7 +53,7 @@
                 <p class="empty-table-text">{{$table_empty_text??"No existen Mensajes para esta petición"}}</p>
             </div>
         @else
-            @foreach($model->messages as$message)
+            @foreach($model->messages as $message)
                 <ul id="{{$message->sender_type==\App\Models\V1\PqrMessage::SENDER_TYPE_USER?"message-box-left":"message-box-right"}}">
                     <p class="text-right">{{\Carbon\Carbon::parse($message->created_at)->format('d/m/Y H:i:s')}} </p>
                     <p class="text-right">Enviado por {{$message->sender()?$message->sender()->name:''}} </p>
@@ -72,29 +71,38 @@
             @endforeach
         @endif
     </div>
-    @if($model->closeMessage)
-        @include("partials.v1.divider_title",["title"=>"Solución de la petición"])
-        <div
-        >
-            <ul id="message-closer-box">
-                <p style="color: teal"><b>Evidencias de cierre de la peticion:</b></p>
-                <br>
-                <p class="text-right">{{\Carbon\Carbon::parse($model->closeMessage->created_at)->format('d/m/Y H:i:s')}} </p>
-                <p class="text-right">Cerrado
-                    por {{$model->closeMessage->sender()?$model->closeMessage->sender()->name:''}} </p>
-                <hr class="mx-5 my-2">
-                <ul style="margin-left: 10px">
-                    {{$model->closeMessage->message}}
-                </ul>
-                <hr class="mx-5 my-2">
-                @if($model->closeMessage->attach and $model->closeMessage->attach->name!="no_found.png")
-                    @include("partials.v1.image",[
-                        "image_url"=>$model->closeMessage->attach->url
-                      ])
-                @endif
-            </ul>
 
-        </div>
-    @endif
+    @include("partials.v1.divider_title",[
+                                           "title"=>"Agregar respuesta de cierre a la petición"
+                                   ]
+                                  )
+    <form wire:submit.prevent="submitCloserMessage" id="formulario" class="needs-validation" role="form">
+        @include("partials.v1.form.form_input_icon",[
+                          "input_label"=>"Respuesta de cierre",
+                          "input_model"=>"description",
+                          "input_rows"=>8,
+                          "tooltip_title"=>"Agrege una respuesta final para darle cierre a la peticion, puedes agregar una imagen o texto",
+                          "placeholder"=>"Agregar mensaje",
+                          "col_with"=>12,
+                          "input_type"=>"text",
+                          "required"=>true
+                                       ])
+
+
+        @include("partials.v1.form.form_input_file",[
+                            "input_type"=>"file",
+                                                "input_model"=>"attach",
+                                                "icon_class"=>"fas fa-file",
+                                                "placeholder"=>"Puedes cargar una imagen",
+                                                "col_with"=>12,
+                                                "required"=>false,
+                                           ])
+        @include("partials.v1.form.form_submit_button",[
+                                            "button_align"=>"right" ,
+                                            "button_content"=>"Cerrar petición"
+                                ])
+
+    </form>
+
 </div>
 

@@ -72,6 +72,20 @@ class Seller extends Model
 
                     ],
                     [
+                        "title" => "PQRS",
+                        "route" => "administrar.v1.peticiones.listado",
+                        "submenu" => [
+                            [
+                                "title" => "PQRS",
+                                "route" => "administrar.v1.peticiones.listado",
+                                "submenu" => [
+
+                                ]
+                            ]
+                        ]
+
+                    ],
+                    [
                         "title" => "Recargas",
                         "route" => "administrar.v1.usuarios.vendedores.recargas.crear",
                         "binding" => "seller",
