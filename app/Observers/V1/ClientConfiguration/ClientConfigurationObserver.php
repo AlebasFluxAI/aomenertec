@@ -18,7 +18,7 @@ class ClientConfigurationObserver
                 $clientConfiguration->client->networkOperator->addTabPermissionPlusConditional(
                     TabPermission::wherePermission(TabPermission::CLIENT_MONITORING_REAL_TIME)->first()->id
                     , $clientConfiguration->client);
-                $clientConfiguration->client->technician->addTabPermissionPlusConditional(
+                $clientConfiguration->client->technician()->first()->technician->addTabPermissionPlusConditional(
                     TabPermission::wherePermission(TabPermission::CLIENT_MONITORING_REAL_TIME)->first()->id
                     , $clientConfiguration->client);
                 foreach ($clientConfiguration->client->supervisors as $supervisor) {
@@ -33,7 +33,7 @@ class ClientConfigurationObserver
                 $clientConfiguration->client->networkOperator->removeTabPermissionPlusConditional(
                     TabPermission::wherePermission(TabPermission::CLIENT_MONITORING_REAL_TIME)->first()->id
                     , $clientConfiguration->client);
-                $clientConfiguration->client->technician()->first()->removeTabPermissionPlusConditional(
+                $clientConfiguration->client->technician()->first()->technician->removeTabPermissionPlusConditional(
                     TabPermission::wherePermission(TabPermission::CLIENT_MONITORING_REAL_TIME)->first()->id
                     , $clientConfiguration->client);
                 foreach ($clientConfiguration->client->supervisors as $supervisor) {
