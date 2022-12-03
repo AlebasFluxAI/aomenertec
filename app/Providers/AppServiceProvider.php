@@ -30,6 +30,7 @@ use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
 use App\Observers\ActionBy\ActionByObserve;
+use App\Observers\AuditoryStatus\AuditoryStatusObserver;
 use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
 use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
@@ -142,5 +143,8 @@ class AppServiceProvider extends ServiceProvider
         WorkOrder::observe(WorkOrderObserver::class);
 
         ClientConfiguration::observe(ClientConfigurationObserver::class);
+
+
+        Pqr::observe(AuditoryStatusObserver::class);
     }
 }

@@ -44,7 +44,7 @@ class CreateWorkOrderJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->pqr->workOrders()->exists()) {
+        if ($this->pqr->workOrder()->exists()) {
             return;
         }
         $this->pqr->client->workOrders()->create([

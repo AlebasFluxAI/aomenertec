@@ -8,6 +8,7 @@ use App\Mail\WorkOrder\PqrUpdatedMail;
 use App\Mail\WorkOrder\WorkOrderUpdatedMail;
 use App\Notifications\WhatsAppMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Request;
 
 class PqrUpdatedNotification extends Notification
 {
@@ -42,7 +43,7 @@ class PqrUpdatedNotification extends Notification
             ->template_name($template)
             ->params([$this->pqr->description,
                 __("pqr." . $this->pqr->status),
-                route("administrar.v1.peticiones.detalles", $this->pqr->id)
+                Request::getHost() . "/v1/administrar/peticiones/detalles/" . $this->pqr->id
             ]);
     }
 }

@@ -14,7 +14,7 @@
           ])
 
         @include("partials.v1.divider_title",[
-                    "title"=> "Equipos ". $model->client->name
+                    "title"=> "Equipos ". ($model->client?$model->client->name:"")
         ])
 
         <p>A continuación se presentara un listado con los equipos actualmente relacionados al cliente:</p>
@@ -54,7 +54,7 @@
                                     "col_filter"=>false
                                 ],
                          ],
-                        "table_rows"=>$model->client->equipments
+                        "table_rows"=>($model->client?$model->client->equipments:[])
 
                     ])
         <p><b>Cuando seleccione el equipo a ser reemplazado se desplegara un listado con los equipos candidatos</b></p>

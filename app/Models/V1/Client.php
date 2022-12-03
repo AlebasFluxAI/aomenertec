@@ -85,6 +85,12 @@ class Client extends Model
         return $this->hasMany(WorkOrder::class);
     }
 
+
+    public function clientSellers()
+    {
+        return $this->hasMany(ClientSeller::class);
+    }
+
     public function admin()
     {
         return $this->belongsTo(Admin::class);

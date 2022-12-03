@@ -25,11 +25,15 @@ class PqrMessage extends Model
     public const SENDER_TYPE_SUPERVISOR = "supervisor";
     public const SENDER_TYPE_CLIENT = "cient";
 
+    public const MESSAGE_TYPE_REGULAR = "regular";
+    public const MESSAGE_TYPE_CLOSER = "closer";
+
     protected $fillable = [
         "message",
         "sender_type",
         "sent_by",
-        "pqr_id"
+        "pqr_id",
+        "type"
     ];
 
     protected static function booted()

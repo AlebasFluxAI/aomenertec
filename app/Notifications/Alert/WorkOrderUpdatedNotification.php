@@ -9,6 +9,7 @@ use App\Mail\WorkOrder\WorkOrderUpdatedMail;
 use App\Models\V1\User;
 use App\Notifications\WhatsAppMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Request;
 
 class WorkOrderUpdatedNotification extends Notification
 {
@@ -58,7 +59,7 @@ class WorkOrderUpdatedNotification extends Notification
             ->template_name($template)
             ->params([$this->workOrder->id . " " . $this->workOrder->description,
                 __("work_order." . $this->workOrder->status),
-                route("administrar.v1.ordenes_de_servicio.detalle", $this->workOrder->id)
+                Request::getHost() . "/v1/administrar/ordenes_de_servicio/detalle/", $this->workOrder->id
             ]);
     }
 }
