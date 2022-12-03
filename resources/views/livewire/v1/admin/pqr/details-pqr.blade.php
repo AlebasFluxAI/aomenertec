@@ -116,8 +116,33 @@
                                                                              "type"=>$model->attach?"image":"text",
                                                                              "value"=>$model->attach?$model->attach->url:"Sin adjunto"
                                                                          ],
+                                                                         [
+                                                                              "key"=>"Descripcion de la solucion",
+                                                                              "value"=>($model->closeMessage?$model->closeMessage->message:null),
+                                                                              "show_column"=>($model->status==\App\Models\V1\Pqr::STATUS_CLOSED),
+                                                                         ],
+                                                                         [
+                                                                              "key"=>"Evidencias de solucion",
+                                                                              "type"=>"image",
+                                                                              "value"=>($model->closeMessage?($model->closeMessage->attach?$model->closeMessage->attach->url:null):null),
+                                                                              "show_column"=>($model->status==\App\Models\V1\Pqr::STATUS_CLOSED),
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Fecha de apertura",
+                                                                             "value"=>\Carbon\Carbon::parse($model->created_at)->format('d/m/Y - H:i:s'),
 
-                                                                     ]
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Fecha de cierre",
+                                                                             "value"=>\Carbon\Carbon::parse($model->status_closed_at)->format('d/m/Y - H:i:s'),
+                                                                              "show_column"=>($model->status==\App\Models\V1\Pqr::STATUS_CLOSED),
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Tiempo de solucion",
+                                                                             "value"=>\Carbon\Carbon::parse($model->status_closed_at)->diff(\Carbon\Carbon::parse($model->created_at))->format("%d Dias %h Horas  %i Minutos"),
+                                                                              "show_column"=>($model->status==\App\Models\V1\Pqr::STATUS_CLOSED),
+                                                                         ],
+                                                                         ]
                                                             ]
                                                 ],
 

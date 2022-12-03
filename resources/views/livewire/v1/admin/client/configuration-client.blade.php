@@ -34,6 +34,9 @@
 
                                                 ],
                                                 [
+                                                    "title"=>"Conexión WIFI",
+                                                ],
+                                                [
                                                     "title"=>"Alertas",
 
                                                 ],
@@ -190,6 +193,40 @@
                                                                                                 "disabled" => !$client_config->active_real_time,
                                                                                                 "required"=>false,
 
+                                                                                            ],
+
+                                                                                ]
+                                                            ]
+                                                ],
+                                                             [
+                                                    "view_name"=>"partials.v2.form.primary_form",
+                                                    "view_values"=>  [
+                                                                        "form_toast"=>true,
+                                                                        "session_message"=>"message",
+                                                                        "form_submit_action"=>"submitFormConection",
+                                                                        "form_title"=>"",
+                                                                        "form_inputs"=> [
+                                                                                            [
+                                                                                            "input_type"=>"divider",
+                                                                                            "title"=>"Configuraciones de conexion"
+                                                                                        ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.ssid",
+                                                                                                "icon_class"=>null,
+                                                                                                "placeholder"=>"Red Wifi",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "defer",
+                                                                                                "required"=>true
+                                                                                            ], [
+                                                                                                "input_type"=>"text",
+                                                                                                "input_model"=>"client_config.wifi_password",
+                                                                                                "icon_class"=>null,
+                                                                                                "placeholder"=>"Contraseña WiFi",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "defer",
+                                                                                                "required"=>true
                                                                                             ],
 
                                                                                 ]

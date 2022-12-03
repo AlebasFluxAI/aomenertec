@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Channels\WhatsAppChannel;
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
 use App\Models\V1\AdminConfiguration;
@@ -305,6 +306,7 @@ class ClientConfigurationService extends Singleton
     public function blinkChannel(Component $component, $channel)
     {
         AvailableChannel::find($channel)->blink();
+        ToastEvent::launchToast($component, "show", "success", "Canal configurado exitosamente");
         $component->channels = $component->client->refresh()->channels;
     }
 

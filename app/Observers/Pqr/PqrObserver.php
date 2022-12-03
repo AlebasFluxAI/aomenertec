@@ -5,6 +5,7 @@ namespace App\Observers\Pqr;
 use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
 use App\Http\Resources\V1\UserNotificationPayload;
+use App\Jobs\V1\Enertec\Pqr\AssignSupportUserToPqr;
 use App\Models\V1\Client;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrMessage;
@@ -52,22 +53,19 @@ class PqrObserver
     public function updating(Pqr $pqr)
     {
         if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
-            $pqr->support_id = $this->getSupport();
+            dispatch(new AssignSupportUserToPqr($pqr));
         }
     }
 
     public function updated(Pqr $pqr)
     {
-        if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
-            $this->createPqrUser($pqr, $this->getSupportUser());
-        }
         $this->sendChangeNotification($pqr);
     }
 
     private function sendChangeNotification(Pqr $pqr)
     {
         if ($pqr->isDirty("status")) {
-            if ($pqr->client) {
+            if ($pqr->client and $pqr->client->networkOperator) {
                 $pqr->client->networkOperator->user->notify(new PqrUpdatedNotification($pqr));
             }
         }
@@ -88,6 +86,16 @@ class PqrObserver
                 "user_id" => $user->id,
                 "status" => PqrUser::STATUS_ENABLED
             ]);
+        }
+        if ($pqr->type == Pqr::PQR_TYPE_BILLING) {
+            if ($pqr->client && $sellers = $pqr->client->clientSellers) {
+                foreach ($sellers as $seller) {
+                    $pqr->pqrUsers()->create([
+                        "user_id" => $seller->seller->user_id,
+                        "status" => PqrUser::STATUS_ENABLED
+                    ]);
+                }
+            }
         }
         if ($pqr->client && $supervisors = $pqr->client->supervisors) {
             foreach ($supervisors as $supervisor) {
@@ -119,9 +127,8 @@ class PqrObserver
 
     public function created(Pqr $pqr)
     {
-        if (!$user_id = $this->getUserId($pqr) and !Auth::user()) {
-            return;
-        }
+
+        $user_id = $this->getUserId($pqr);
 
         $this->createPqrUser($pqr, $user_id);
 
@@ -134,17 +141,19 @@ class PqrObserver
 
     private function getUserId(Pqr $pqr)
     {
-        if (!$pqr->client) {
+        if (!$client = $pqr->client) {
             return;
         }
+
         if ($pqr->client->technician->first()) {
             return $pqr->client->technician->first()->technician->user_id;
         }
-        return $pqr->client->networkOperator->user_id;
+        return ($pqr->client->networkOperator ? $pqr->client->networkOperator->user_id : null);
     }
 
     private function getSenderType($pqr)
     {
+
         if ($pqr->supervisor_id) {
             return PqrMessage::SENDER_TYPE_SUPERVISOR;
         }

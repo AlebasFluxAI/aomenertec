@@ -169,7 +169,10 @@
                                                 [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CLOSE],
-                                                        "function"=>"closePqr",
+                                                             "redirect"=>[
+                                                                "route"=>"administrar.v1.peticiones.cierre",
+                                                                "binding"=>"pqr"
+                                                          ],
                                                         "icon"=>"fas fa-check",
                                                         "tooltip_title"=>"Resolver ticket",
                                                         "conditional"=>"openTicked"

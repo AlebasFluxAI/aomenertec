@@ -21,7 +21,7 @@
                             <td>
                                 @include("partials.v1.image",[
                                                "image_url"=>$info["value"]
-                                          ]);
+                                          ])
                             </td>
 
                         @elseif($info["type"]=="image_multiple")
@@ -30,7 +30,7 @@
 
                                     @include("partials.v1.image",[
                                                 "image_url"=>$image->url
-                                           ]);
+                                           ])
                                 @endforeach
                             </td>
                         @endif

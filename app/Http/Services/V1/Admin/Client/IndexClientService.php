@@ -65,6 +65,15 @@ class IndexClientService extends Singleton
 
     public function getData(Component $component)
     {
+        if (User::getUserModel()::class == Seller::class) {
+            $seller = User::getUserModel();
+            if ($component->filter) {
+                return Client::whereIn('id', $seller->clientSellers()->pluck('client_id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+            }
+            return Client::whereIn('id', $seller->clientSellers()->pluck('client_id'))->pagination();
+        }
+
         if (User::getUserModel()::class == NetworkOperator::class) {
             $networkOperator = User::getUserModel();
             if ($component->filter) {
