@@ -71,6 +71,12 @@
                                 <td class="table-danger">{{ ($select_data['data'][5])['degrees'] }}</td>
                             </tr>
                             <tr>
+                                <th class="text-bold" scope="row">V1 - I1 (°)</th>
+                                <td class="table-warning">{{ ($select_data['data'][3])['relationship_degrees'] }} </td>
+                                <td class="table-primary">{{ ($select_data['data'][4])['relationship_degrees'] }}</td>
+                                <td class="table-danger">{{ ($select_data['data'][5])['relationship_degrees'] }}</td>
+                            </tr>
+                            <tr>
                                 <th class="text-bold" scope="row">TIPO SISTEMA</th>
                                 <td class="table-warning">{{ ($select_data['data'][0])['system_type'] }}</td>
                                 <td class="table-primary">{{ ($select_data['data'][1])['system_type'] }}</td>
