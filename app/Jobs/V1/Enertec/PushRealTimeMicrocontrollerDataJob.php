@@ -50,34 +50,41 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     {
         $data_frame = config('data-frame.data_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
+        $split = substr($decode, (16), (16));
+        $bin = hex2bin($split);
+        $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+            ->first();
         foreach ($data_frame as $data) {
             try {
                 $split = substr($decode, ($data['start']), ($data['lenght']));
                 $bin = hex2bin($split);
-                if ($data['variable_name'] == 'flags') {
-                    $json[$data['variable_name']] = 0;
-                } elseif ($data['variable_name'] == 'timestamp' || $data['variable_name'] == 'network_operator_id' || $data['variable_name'] == 'equipment_id') {
-                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                if ($data['start'] >= 450) {
+                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                 } else {
-                    $json[$data['variable_name']] = round(unpack($data['type'], $bin)[1], 3);
-                }
-
-                if ($data['start'] >= 496) {
-                    break;
-                }
-
-                if ($data['start'] >= 72) {
-                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
-                        if (!$data['default']) {
-                            $json[$data['variable_name']] = $data['default'];
+                    if ($data['variable_name'] == "flags") {
+                        $json[$data['variable_name']] = 0;
+                    } else {
+                        if ($data['variable_name'] == "equipment_id") {
+                            $json[$data['variable_name']] = $equipment_serial;
                         } else {
-                            $json[$data['variable_name']] = 0;
+                            $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                         }
                     }
                 }
 
+
+
+
                 if (is_nan($json[$data['variable_name']])) {
                     $json[$data['variable_name']] = null;
+
+                }
+                if ($data['variable_name'] == "ph3_varLh_acumm") {
+                    break;
+                }
+                if ($data['start'] >= 496) {
+                    break;
                 }
             } catch (Exception $e) {
                 echo 'Excepción capturada: ', $e->getMessage(), "\n";
@@ -85,8 +92,6 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
         }
 
         $current_time = Carbon::now()->format('Y-m-d H:i:s');
-        $equipment = EquipmentType::find(1)->equipment()->whereSerial($json['equipment_id'])
-            ->first();
         if ($equipment) {
             $client = $equipment->clients()->first();
             $client_id = $client->id;
