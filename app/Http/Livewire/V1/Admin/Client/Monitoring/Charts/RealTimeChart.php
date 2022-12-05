@@ -21,6 +21,7 @@ class RealTimeChart extends Component
     public $variable_chart_id;
     public $last_data;
     public $cards_real_time;
+    public $select_data;
     protected $rules = [
 
         'cards_real_time.*.color' => 'required',
@@ -32,6 +33,7 @@ class RealTimeChart extends Component
 
     public function mount(Client $client, $variables, $data_frame)
     {
+        $this->select_data = false;
         $this->client = $client;
         $this->variables_rt = $variables;
         $this->data_frame_rt = $data_frame;
@@ -169,7 +171,24 @@ class RealTimeChart extends Component
             }
             $this->cards_real_time[$index]["variables_selected"] = $aux;
         }
-        $this->emit('addPointRealTime', ['series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data'=> 'No hay datos']);
+        if ($data['data']['total_phase_angle']<0){
+            $sum_angle_2 = 120;
+            $sum_angle_3 = 240;
+        } else{
+            $sum_angle_2 = 240;
+            $sum_angle_3 = 120;
+        }
+        $this->select_data = ['tittle'=>'phasor', 'lineFrecuency'=>60, 'samplesPerCycle'=>32, 'percent_volt'=>round($data['data']['ph2_ph3_volt']/$data['data']['ph1_ph2_volt'],3), 'percent_curr'=>round($data['data']['ph2_current']/$data['data']['ph1_current'],3),
+            'data'=>[
+                ['label'=>'V1', 'unit'=>'Voltage', 'phase'=>'1', 'degrees'=>0 ,'angle'=>round((0 * pi()) / 180, 3), 'magnitude'=>round($data['data']['ph1_ph2_volt'],3), 'system_type'=>($data['data']['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'V2', 'unit'=>'Voltage', 'phase'=>'2', 'degrees'=>240 ,'angle'=>round((240 * pi()) / 180,3), 'magnitude'=>round($data['data']['ph2_ph3_volt'],3), 'system_type'=>($data['data']['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'V3', 'unit'=>'Voltage', 'phase'=>'3', 'degrees'=>120 ,'angle'=>round((120 * pi()) / 180, 3), 'magnitude'=>round($data['data']['ph3_ph1_volt'],3), 'system_type'=>($data['data']['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I1', 'unit'=>'Current', 'phase'=>'1', 'degrees'=>round($data['data']['ph1_phase_angle'],3) ,'angle'=>round(($data['data']['ph1_phase_angle'] * pi()) / 180,3), 'magnitude'=>round($data['data']['ph1_current'],3), 'system_type'=>($data['data']['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I2', 'unit'=>'Current', 'phase'=>'2', 'degrees'=>round($data['data']['ph2_phase_angle'] + $sum_angle_2, 3) ,'angle'=>round((($data['data']['ph2_phase_angle'] + $sum_angle_2) * pi()) / 180,3) , 'magnitude'=>round($data['data']['ph2_current'],3), 'system_type'=>($data['data']['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I3', 'unit'=>'Current', 'phase'=>'3', 'degrees'=>round($data['data']['ph3_phase_angle'] + $sum_angle_3, 3) ,'angle'=>round((($data['data']['ph3_phase_angle'] + $sum_angle_3) * pi()) / 180,3) , 'magnitude'=>round($data['data']['ph3_current'],3), 'system_type'=>($data['data']['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO']
+            ]
+        ];
+        $this->emit('addPointRealTime', ['data' => $this->select_data, 'series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data'=> 'No hay datos']);
         $this->emit('animatedRealTime');
     }
 
