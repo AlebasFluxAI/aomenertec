@@ -62,7 +62,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                     $json[$data['variable_name']] = round(unpack($data['type'], $bin)[1], 3);
                 }
 
-                if ($data['start'] >= 432) {
+                if ($data['start'] >= 496) {
                     break;
                 }
 

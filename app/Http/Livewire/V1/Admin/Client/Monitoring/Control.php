@@ -11,6 +11,7 @@ use PhpMqtt\Client\Facades\MQTT;
 
 class Control extends Component
 {
+
     public $client;
     public $coils;
 
@@ -31,6 +32,7 @@ class Control extends Component
 
     public function confirmAction($index)
     {
+        $this->emitTo('livewire-toast', 'show', ['type' => 'info', 'message' => "conectando con dispositivo...", 'duration'=>5000]);
         $this->coils[$index]['status'] = !$this->coils[$index]['status'];
         $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/" . $equipment->serial;
@@ -39,14 +41,23 @@ class Control extends Component
         } else {
             $message = "{\"coil" . $this->coils[$index]['number'] . "\":false}";
         }
-        $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
-        $coil->status = $this->coils[$index]['status'];
-        $coil->save();
-        $this->emitTo('livewire-toast', 'show', ['type' => 'info', 'message' => "conectando con dispositivo..."]);
+        $mqtt=MQTT::connection();
+        $mqtt->publish($topic, $message);
 
-
-        MQTT::publish($topic, $message);
+        $mqtt->subscribe('some/topic', function (string $topic, string $message) use ($index, $mqtt) {
+            echo sprintf('Received QoS level 1 message on topic [%s]: %s', $topic, $message);
+            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
+            $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
+            $coil->status = $this->coils[$index]['status'];
+            $coil->save();
+            $mqtt->interrupt();
+        }, 1);
+        $mqtt->loop(true);
         MQTT::disconnect();
+
+
+
+
         //$this->coils = $this->client->coils;
     }
 
