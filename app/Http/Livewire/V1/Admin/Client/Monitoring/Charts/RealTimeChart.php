@@ -147,6 +147,7 @@ class RealTimeChart extends Component
         if (count($this->data_real_time) == 20) {
             array_shift($this->data_real_time);
         }
+        dd($data);
         array_push($this->data_real_time, $data['data']);
         $data_aux = [];
         $this->series_real_time = [];
