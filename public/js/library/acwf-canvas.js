@@ -111,7 +111,7 @@
 		// engine sets the height to 0 which will result in no plot display.
 		var defaultHeight = 300;
 		// Phasor plot really doesn't work smaller than 200
-		var minimumSize = 200;
+		var minimumSize = 300;
 
 		var size = Math.min(element.clientWidth, element.clientHeight || defaultHeight);
 		size = Math.max(size, minimumSize);
@@ -297,7 +297,7 @@
 	// Class that generates shapes for the PhasorCanvas to draw.
 	ACWF.PhasorEngine = function (_size) {
 		var size = _size;
-		var headSize = Math.max(size / 50, 7);	// 1/50 looks nice
+		var headSize = Math.max(size / 30, 7);	// 1/50 looks nice
 		var headAngle = 2.618;	// 150 deg
 		// Allows room for phasor labels and prevent crowding.
 		var scalePadding = 1.2;

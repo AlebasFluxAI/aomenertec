@@ -1,11 +1,7 @@
 @extends('layouts.v1.app')
 @section("footer")
 @endsection
-<!-- Agregar este div en la pagina que se desea la sección de carga -->
-<div class="loader-page">
-    <h2 style="margin-top: 150px;"></h2>
-</div>
-<!-- Agregar este div en la pagina que se desea la sección de carga -->
+
 <div class="row d-flex justify-content-between">
 
     <div class="col-12 slide-login flex justify-center">

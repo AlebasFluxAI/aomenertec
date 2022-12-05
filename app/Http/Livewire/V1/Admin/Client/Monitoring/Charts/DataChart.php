@@ -28,9 +28,11 @@ class DataChart extends Component
     public $end;
     public $start;
     public $chart_title;
-    protected $listeners = ['changeDateRange', 'selectHistory'];
+    public $select_data;
+    protected $listeners = ['changeDateRange', 'selectHistory', 'setPointPhasor'];
     public function mount(Client $client, $variables, $data_frame, $data_chart, $time)
     {
+        $this->select_data = false;
         $this->client = $client;
         $this->variables = $variables;
         $this->data_frame = $data_frame;
@@ -212,10 +214,42 @@ class DataChart extends Component
                 $this->series[$index] = ["name" => $data['display_name'], "type" => $this->chart_type, "data" => $data_aux[$index]];
                 $index++;
             }
-            $this->emit('changeAxis', ['series' => $this->series, 'x_axis' => $this->x_axis, 'title' => $this->chart_title]);
+            $this->emit('changeAxis', ['series' => $this->series, 'x_axis' => $this->x_axis, 'title' => $this->chart_title, 'type'=>$this->chart_type]);
         } else {
             $this->emit('changeAxis', ['series' => [], 'x_axis' => [], 'title' => $this->chart_title]);
         }
+    }
+
+    public function setPointPhasor($point){
+        $data = $this->data_chart->reverse();
+        $i = 0;
+        foreach ($data as $datum){
+            if ($i == $point){
+                $json = json_decode($datum->raw_json, true);
+                break;
+            }
+            $i++;
+        }
+        if ($json['total_phase_angle']<0){
+            $sum_angle_2 = 120;
+            $sum_angle_3 = 240;
+        } else{
+            $sum_angle_2 = 240;
+            $sum_angle_3 = 120;
+        }
+        $this->select_data = ['tittle'=>'phasor', 'lineFrecuency'=>60, 'samplesPerCycle'=>32, 'percent_volt'=>round($json['ph2_ph3_volt']/$json['ph1_ph2_volt'],3), 'percent_curr'=>round($json['ph2_current']/$json['ph1_current'],3),
+            'data'=>[
+                ['label'=>'V1', 'unit'=>'Voltage', 'phase'=>'1', 'degrees'=>0 ,'angle'=>round((0 * pi()) / 180, 3), 'magnitude'=>round($json['ph1_ph2_volt'],3), 'system_type'=>($json['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'V2', 'unit'=>'Voltage', 'phase'=>'2', 'degrees'=>240 ,'angle'=>round((240 * pi()) / 180,3), 'magnitude'=>round($json['ph2_ph3_volt'],3), 'system_type'=>($json['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'V3', 'unit'=>'Voltage', 'phase'=>'3', 'degrees'=>120 ,'angle'=>round((120 * pi()) / 180, 3), 'magnitude'=>round($json['ph3_ph1_volt'],3), 'system_type'=>($json['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I1', 'unit'=>'Current', 'phase'=>'1', 'degrees'=>round($json['ph1_phase_angle'],3) ,'angle'=>round(($json['ph1_phase_angle'] * pi()) / 180,3), 'magnitude'=>round($json['ph1_current'],3), 'system_type'=>($json['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I2', 'unit'=>'Current', 'phase'=>'2', 'degrees'=>round($json['ph2_phase_angle'] + $sum_angle_2, 3) ,'angle'=>round((($json['ph2_phase_angle'] + $sum_angle_2) * pi()) / 180,3) , 'magnitude'=>round($json['ph2_current'],3), 'system_type'=>($json['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I3', 'unit'=>'Current', 'phase'=>'3', 'degrees'=>round($json['ph3_phase_angle'] + $sum_angle_3, 3) ,'angle'=>round((($json['ph3_phase_angle'] + $sum_angle_3) * pi()) / 180,3) , 'magnitude'=>round($json['ph3_current'],3), 'system_type'=>($json['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO']
+            ]
+        ];
+        $this->emit('chartPhasor', ['data'=>$this->select_data]);
+
+
     }
 
     public function render()

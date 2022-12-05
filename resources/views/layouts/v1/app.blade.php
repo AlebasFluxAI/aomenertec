@@ -96,6 +96,9 @@
     </section>
     <section class="top-info">
         @livewire('livewire-toast')
+        <div class="loader-page">
+            <h2 style="margin-top: 150px;"></h2>
+        </div>
         <div class="container mt-3">
             @yield('content')
         </div>
@@ -114,7 +117,7 @@
     $(window).on('load', function () {
         setTimeout(function () {
             $(".loader-page").css({visibility:"hidden",opacity:"0"})
-        }, 2000);
+        }, 10);
     });
 </script>
 @livewireScripts
@@ -128,7 +131,9 @@
 <script src="{{ asset('js/app.js') }}"></script>
 @include("partials.v1.whatsapp-button")
 <!-- Template Main JS File -->
+
 <script>
+
     var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
     var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
         return new bootstrap.Dropdown(dropdownToggleEl)

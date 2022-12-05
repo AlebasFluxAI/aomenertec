@@ -42,6 +42,8 @@ class Control extends Component
         $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
         $coil->status = $this->coils[$index]['status'];
         $coil->save();
+        $this->emitTo('livewire-toast', 'show', ['type' => 'info', 'message' => "conectando con dispositivo..."]);
+
 
         MQTT::publish($topic, $message);
         MQTT::disconnect();

@@ -50,35 +50,97 @@
                  <div wire:loading>
                      Actualizando Grafica...
                  </div>
-                 <div id="chart_line">
+                 <div wire:ignore id="chart_line">
 
                  </div>
 
              </div>
          </div>
 
-    <div class="modal fade" id="modal_phasor" tabindex="-1" role="dialog"
-         aria-labelledby="ModalLabel_phasor" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="ModalLabel_phasor">Diagrama Fasorial</h5>
 
-                </div>
-                <div class="modal-body">
-                    <div class="box shadow mt-4">
-                        <div id="phasor" style="width:400px;height:400px"></div>
+        <div wire:ignore.self class="modal fade" id="modal_phasor" tabindex="-1" role="dialog"
+             aria-labelledby="ModalLabel_phasor" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel_phasor">Diagrama Fasorial</h5>
+
+                    </div>
+                    <div class="modal-body">
+                        @if($select_data)
+                        <div class="row mt-0">
+                            <div class="col-md-4 col-sm-12 mt-0">
+                                <div class="p-4" id="phasor" ></div>
+                            </div>
+                            <div class="p-4 col-md-8 col-sm-12 mt-0 align-items-center">
+                                <table class="table table-sm text-center">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">UNIDAD</th>
+                                        <th class="table-warning" scope="col">L1</th>
+                                        <th class="table-primary" scope="col">L2</th>
+                                        <th class="table-danger" scope="col">L3</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th class="text-bold" scope="row">VOLTAJE (V)</th>
+                                        <td class="table-warning">{{ ($select_data['data'][0])['magnitude'] }}</td>
+                                        <td class="table-primary">{{ ($select_data['data'][1])['magnitude'] }}</td>
+                                        <td class="table-danger">{{ ($select_data['data'][2])['magnitude'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-bold" scope="row">ANGULO (°)</th>
+                                        <td class="table-warning">{{ ($select_data['data'][0])['degrees'] }}</td>
+                                        <td class="table-primary">{{ ($select_data['data'][1])['degrees'] }}</td>
+                                        <td class="table-danger">{{ ($select_data['data'][2])['degrees'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-bold" scope="row">CORRIENTE (A)</th>
+                                        <td class="table-warning">{{ ($select_data['data'][3])['magnitude'] }}</td>
+                                        <td class="table-primary">{{ ($select_data['data'][4])['magnitude'] }}</td>
+                                        <td class="table-danger">{{ ($select_data['data'][5])['magnitude'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-bold" scope="row">ANGULO (°)</th>
+                                        <td class="table-warning">{{ ($select_data['data'][3])['degrees'] }} </td>
+                                        <td class="table-primary">{{ ($select_data['data'][4])['degrees'] }}</td>
+                                        <td class="table-danger">{{ ($select_data['data'][5])['degrees'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-bold" scope="row">TIPO SISTEMA</th>
+                                        <td class="table-warning">{{ ($select_data['data'][0])['system_type'] }}</td>
+                                        <td class="table-primary">{{ ($select_data['data'][1])['system_type'] }}</td>
+                                        <td class="table-danger">{{ ($select_data['data'][2])['system_type']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="table-active text-bold" scope="row" colspan="4">DESEQUILIBRIO</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-bold" scope="row" colspan="2">VOLTAJE (V2/V1)</th>
+                                        <td>%</td>
+                                        <td >{{ $select_data['percent_volt'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-bold" scope="row" colspan="2">CORRIENTE (I2/I1)</th>
+                                        <td>%</td>
+                                        <td >{{ $select_data['percent_curr'] }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
 
                     </div>
                 </div>
-                <div class="modal-footer">
-
-                </div>
             </div>
         </div>
-    </div>
 
-</div>
+
+
 
     <script>
 
@@ -94,61 +156,21 @@
         });
 
 
+
         document.addEventListener('livewire:load', function () {
-            var sampleData = {
-                title: "Sample Data",
-                lineFrequency: 100,
-                samplesPerCycle: 132,
-                data: [
-                    {
-                        label: "V1",
-                        unit: "Voltage",
-                        phase: "1",
-                        angle: (0 * Math.PI) / 180,
-                        magnitude: 238.44,
-                    },
-                    {
-                        label: "V2",
-                        unit: "Voltage",
-                        phase: "2",
-                        angle: (240 * Math.PI) / 180,
-                        magnitude: 238.33,
-                    },
-                    {
-                        label: "V3",
-                        unit: "Voltage",
-                        phase: "3",
-                        angle: (120 * Math.PI) / 180,
-                        magnitude: 237.44,
-                    },
-                    {
-                        label: "I1",
-                        unit: "Current",
-                        phase: "1",
-                        angle: (30.44 * Math.PI) / 180,
-                        magnitude: 56.74,
-                    },
-                    {
-                        label: "I2",
-                        unit: "Current",
-                        phase: "2",
-                        angle: (260.9 * Math.PI) / 180,
-                        magnitude: 45.82,
-                    },
-                    {
-                        label: "I3",
-                        unit: "Current",
-                        phase: "3",
-                        angle: (125.03 * Math.PI) / 180,
-                        magnitude: 48.10,
-                    }
-                ]
-            };
+
+                @this.on('chartPhasor',(e) =>{
+                    var phasor = new ACWF.PhasorDiagram("phasor");
+                var wfSet = ACWF.WaveformSet.create(e.data);
+                phasor.plotWaveformSet(wfSet, 0);
+                    $('#modal_phasor').modal('show');
 
 
-            var wfSet = ACWF.WaveformSet.create(sampleData);
-            var phasor = new ACWF.PhasorDiagram("phasor");
-            phasor.plotWaveformSet(wfSet, 0);
+                })
+
+
+
+
 
             var options = {
                 chart: {
@@ -171,11 +193,14 @@
                     events: {
                         click: function(event, chartContext, config) {
                             // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
-                            //$('#modal_phasor').modal('show');
+                        @this.emitSelf('setPointPhasor', config.dataPointIndex)
+
 
                         }
-                    }
+                    },
+
                 },
+
                 colors:[function({ value, seriesIndex, w }) {
                     if ((w.config.series).length>1) {
                         if (seriesIndex == 0) {
@@ -222,6 +247,9 @@
                         color: '#000'
                     },
                 },
+                dataLabels: {
+                    enabled: (@js($chart_type)=='column')?true:false
+                },
             });
 
 
@@ -234,6 +262,9 @@
                 },
                 title: {
                     text: e.title,
+                },
+                dataLabels: {
+                    enabled: (e.type=='column')?true:false
                 },
             });
         })
@@ -257,7 +288,7 @@
 
 
 
-
+</div>
 
 
 

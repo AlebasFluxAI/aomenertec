@@ -20,6 +20,7 @@ return [
             'warning' => 'warning',
             'info' => 'info',
             'error' => 'danger',
+            'secondary' => 'secondary',
         ]
     ],
     //Text Color used by TailwindCss class. If using color other than white or black, provide full color like red-300.
