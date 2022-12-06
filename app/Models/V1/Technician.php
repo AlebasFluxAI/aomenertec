@@ -17,8 +17,8 @@ class Technician extends Model
     use SoftDeletes;
     use PermissionTrait;
     use AuditableTrait;
-    use UserPermissionableTrait;
     use PaginatorTrait;
+    use UserPermissionableTrait;
 
 
     protected $fillable = ['identification',
