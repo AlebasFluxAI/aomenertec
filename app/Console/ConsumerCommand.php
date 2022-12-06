@@ -46,20 +46,21 @@ class ConsumerCommand extends Command
     public function handle()
     {
         $mqtt = MQTT::connection();
+        $i=0;
         $mqtt->subscribe('mc/real_time/v1', function (string $topic, string $message) {
-           echo $message;
+           //echo "msj = ".$message."\n";
             dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
-        }, 0);
+        }, 1);
         $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
         }, 1);
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
             dispatch(new SaveAlertDataJob($message))->onQueue('default');
-        }, 0);
+        }, 1);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
-            echo $message;
+            //echo "msj = ".$message."\n";
             dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) {
