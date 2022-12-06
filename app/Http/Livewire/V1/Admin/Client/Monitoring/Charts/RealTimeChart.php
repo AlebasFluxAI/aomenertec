@@ -108,7 +108,9 @@ class RealTimeChart extends Component
             $data_aux[$index] = [];
             foreach ($this->data_real_time as $item) {
                 $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
-                array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
+                if ($variable['start']<=430) {
+                    array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
+                }
             }
             $this->series_real_time[$index] = ["name" => $variable['display_name'], "data" => $data_aux[$index]];
             $index++;
@@ -147,7 +149,6 @@ class RealTimeChart extends Component
         if (count($this->data_real_time) == 20) {
             array_shift($this->data_real_time);
         }
-        dd($data);
         array_push($this->data_real_time, $data['data']);
         $data_aux = [];
         $this->series_real_time = [];
@@ -156,8 +157,8 @@ class RealTimeChart extends Component
         foreach ($this->variables_selected_real_time as $variable) {
             $data_aux[$index] = [];
             foreach ($this->data_real_time as $item) {
-                $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
-                array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
+                    $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
+                    array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
             }
             $this->series_real_time[$index] = ["name" => $variable['display_name'], "data" => $data_aux[$index]];
             $index++;
@@ -167,29 +168,30 @@ class RealTimeChart extends Component
             $aux = [];
             $var_data_frame = $this->data_frame_rt->where('variable_id', $card['id'])->all();
             foreach ($var_data_frame as $item) {
-                $item['value'] = round($this->last_data[$item['variable_name']], 2);
-                array_push($aux, $item);
+                    $item['value'] = round($this->last_data[$item['variable_name']], 2);
+                    array_push($aux, $item);
             }
             $this->cards_real_time[$index]["variables_selected"] = $aux;
         }
         if ($data['data']['total_phase_angle']<0){
-            $sum_angle_2 = 120;
-            $sum_angle_3 = 240;
+            $sum_angle_2 = -120;
+            $sum_angle_3 = -240;
         } else{
             $sum_angle_2 = 240;
             $sum_angle_3 = 120;
         }
-        $this->select_data = ['tittle'=>'phasor', 'lineFrecuency'=>60, 'samplesPerCycle'=>32, 'percent_volt'=>($json['ph1_ph2_volt'] == 0)?0:round($json['ph2_ph3_volt']/$json['ph1_ph2_volt'],3), 'percent_curr'=>($json['ph1_current'] == 0)?0:round($json['ph2_current']/$json['ph1_current'],3),
+        $this->select_data = ['tittle'=>'phasor', 'lineFrecuency'=>60, 'samplesPerCycle'=>32, 'percent_volt'=>($data['data']['ph1_ph2_volt'] == 0)?0:round($data['data']['ph2_ph3_volt']/$data['data']['ph1_ph2_volt'],3), 'percent_curr'=>($data['data']['ph1_current'] == 0)?0:round($data['data']['ph2_current']/$data['data']['ph1_current'],3),
             'data'=>[
-                ['label'=>'V1', 'unit'=>'Voltage', 'phase'=>'1', 'relationship_degrees'=> round($json['ph1_phase_angle'],3),'degrees'=>0 ,'angle'=>round((0 * pi()) / 180, 3), 'magnitude'=>round($json['ph1_ph2_volt'],3), 'system_type'=>($json['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'V2', 'unit'=>'Voltage', 'phase'=>'2', 'relationship_degrees'=> round($json['ph2_phase_angle'],3),'degrees'=>240 ,'angle'=>round((240 * pi()) / 180,3), 'magnitude'=>round($json['ph2_ph3_volt'],3), 'system_type'=>($json['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'V3', 'unit'=>'Voltage', 'phase'=>'3', 'relationship_degrees'=> round($json['ph3_phase_angle'],3),'degrees'=>120 ,'angle'=>round((120 * pi()) / 180, 3), 'magnitude'=>round($json['ph3_ph1_volt'],3), 'system_type'=>($json['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'I1', 'unit'=>'Current', 'phase'=>'1', 'relationship_degrees'=> round($json['ph1_phase_angle'],3),'degrees'=>round($json['ph1_phase_angle'],3) ,'angle'=>round(($json['ph1_phase_angle'] * pi()) / 180,3), 'magnitude'=>round($json['ph1_current'],3), 'system_type'=>($json['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'I2', 'unit'=>'Current', 'phase'=>'2', 'relationship_degrees'=> round($json['ph2_phase_angle'],3),'degrees'=>round(abs($json['ph2_phase_angle']) + $sum_angle_2, 3) ,'angle'=>round(((abs($json['ph2_phase_angle']) + $sum_angle_2) * pi()) / 180,3) , 'magnitude'=>round($json['ph2_current'],3), 'system_type'=>($json['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'I3', 'unit'=>'Current', 'phase'=>'3', 'relationship_degrees'=> round($json['ph3_phase_angle'],3),'degrees'=>round(abs($json['ph3_phase_angle']) + $sum_angle_3, 3) ,'angle'=>round(((abs($json['ph3_phase_angle']) + $sum_angle_3) * pi()) / 180,3) , 'magnitude'=>round($json['ph3_current'],3), 'system_type'=>($json['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO']
+                ['label'=>'V1', 'unit'=>'Voltage', 'phase'=>'1', 'relationship_degrees'=> round($data['data']['ph1_phase_angle'],3),'degrees'=>0 ,'angle'=>round((0 * pi()) / 180, 3), 'magnitude'=>round($data['data']['ph1_ph2_volt'],3), 'system_type'=>($data['data']['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'V2', 'unit'=>'Voltage', 'phase'=>'2', 'relationship_degrees'=> round($data['data']['ph2_phase_angle'],3),'degrees'=>240 ,'angle'=>round((240 * pi()) / 180,3), 'magnitude'=>round($data['data']['ph2_ph3_volt'],3), 'system_type'=>($data['data']['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'V3', 'unit'=>'Voltage', 'phase'=>'3', 'relationship_degrees'=> round($data['data']['ph3_phase_angle'],3),'degrees'=>120 ,'angle'=>round((120 * pi()) / 180, 3), 'magnitude'=>round($data['data']['ph3_ph1_volt'],3), 'system_type'=>($data['data']['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I1', 'unit'=>'Current', 'phase'=>'1', 'relationship_degrees'=> round($data['data']['ph1_phase_angle'],3),'degrees'=>round($data['data']['ph1_phase_angle'],3) ,'angle'=>round(($data['data']['ph1_phase_angle'] * pi()) / 180,3), 'magnitude'=>round($data['data']['ph1_current'],3), 'system_type'=>($data['data']['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I2', 'unit'=>'Current', 'phase'=>'2', 'relationship_degrees'=> round($data['data']['ph2_phase_angle'],3),'degrees'=>round($data['data']['ph2_phase_angle'] + $sum_angle_2, 3) ,'angle'=>round((($data['data']['ph2_phase_angle'] + $sum_angle_2) * pi()) / 180,3) , 'magnitude'=>round($data['data']['ph2_current'],3), 'system_type'=>($data['data']['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
+                ['label'=>'I3', 'unit'=>'Current', 'phase'=>'3', 'relationship_degrees'=> round($data['data']['ph3_phase_angle'],3),'degrees'=>round($data['data']['ph3_phase_angle'] + $sum_angle_3, 3) ,'angle'=>round((($data['data']['ph3_phase_angle'] + $sum_angle_3) * pi()) / 180,3) , 'magnitude'=>round($data['data']['ph3_current'],3), 'system_type'=>($data['data']['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO']
             ]
         ];
         $this->emit('addPointRealTime', ['data' => $this->select_data, 'series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data'=> 'No hay datos']);
+        //$this->emit('addPointRealTime', [ 'series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data'=> 'No hay datos']);
         $this->emit('animatedRealTime');
     }
 

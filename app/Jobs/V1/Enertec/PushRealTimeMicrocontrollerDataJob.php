@@ -59,7 +59,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
             try {
                 $split = substr($decode, ($data['start']), ($data['lenght']));
                 if (!$split) {
-                    $json[$data['variable_name']] = null;
+                    $json[$data['variable_name']] = 0;
                 } else{
                     $bin = hex2bin($split);
                     if ($data['start'] >= 450) {

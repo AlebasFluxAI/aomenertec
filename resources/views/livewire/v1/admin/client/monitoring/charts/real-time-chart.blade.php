@@ -33,7 +33,7 @@
             @if($select_data)
                 <div class="row mt-0">
                     <div class="col-md-4 col-sm-12 mt-0">
-                        <div class="p-4" id="phasor" ></div>
+                     <div class="p-4" id="phasor_rt" ></div>
                     </div>
                     <div class="p-4 col-md-8 col-sm-12 mt-0 align-items-center">
                         <table class="table table-sm text-center">
@@ -113,13 +113,12 @@
                         element.classList.remove('animate__animated', 'animate__pulse', 'animate__repeat-2');
                     });
                 });
-
             })
             var options_real_time = {
-                colors:[function({ value, seriesIndex, w }) {
+                /*colors:[function({ value, seriesIndex, w }) {
                     if ((w.config.series).length>1) {
                         if (seriesIndex == 0) {
-                            return '#FFFB00';
+                            return '#FFF000';
                         } else if (seriesIndex ==1) {
                             return '#000FFF';
                         } else {
@@ -128,8 +127,7 @@
                     }else {
                         return '#2D45BD';
                     }
-
-                }],
+                }],*/
                 series: [],
                 xaxis: {
                     type: 'text'
@@ -173,7 +171,57 @@
             var chart_real_time = new ApexCharts(document.querySelector("#chart_real_time"), options_real_time);
             chart_real_time.render();
 
-
+            var phasor;
+            var wfSet;
+            var sampleData = {
+                title: "Sample Data",
+                lineFrequency: 100,
+                samplesPerCycle: 132,
+                data: [
+                    {
+                        label: "",
+                        unit: "Voltage",
+                        phase: "1",
+                        angle: 0,
+                        magnitude: 0,
+                    },
+                    {
+                        label: "",
+                        unit: "Voltage",
+                        phase: "2",
+                        angle: 0,
+                        magnitude: 0,
+                    },
+                    {
+                        label: "",
+                        unit: "Voltage",
+                        phase: "3",
+                        angle: 0,
+                        magnitude: 0,
+                    },
+                    {
+                        label: "",
+                        unit: "Current",
+                        phase: "1",
+                        angle: 0,
+                        magnitude: 0,
+                    },
+                    {
+                        label: "",
+                        unit: "Current",
+                        phase: "2",
+                        angle: 0,
+                        magnitude: 0,
+                    },
+                    {
+                        label: "",
+                        unit: "Current",
+                        phase: "3",
+                        angle: 0,
+                        magnitude: 0,
+                    }
+                ]
+            };
         @this.on('addPointRealTime',(e) =>{
             chart_real_time.updateOptions({
                     series: e.series,
@@ -184,8 +232,10 @@
                         text: e.no_data
                     },
                 }, true)
-            var phasor = new ACWF.PhasorDiagram("phasor");
-            var wfSet = ACWF.WaveformSet.create(e.data);
+            phasor = new ACWF.PhasorDiagram("phasor_rt")
+           // wfSet = ACWF.WaveformSet.create(sampleData);
+            //phasor.plotWaveformSet(wfSet, 0);
+            wfSet = ACWF.WaveformSet.create(e.data);
             phasor.plotWaveformSet(wfSet, 0);
 
             })
