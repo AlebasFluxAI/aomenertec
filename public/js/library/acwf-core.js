@@ -317,7 +317,7 @@
 		// If analyze() has not been called will return undefined.
 		this.phasor = function (index) {
 			var wf = this.waveform(index);
-			console.log(wf)
+			//console.log(wf)
 			if (wf) {
 				return new ACWF.Phasor(wf.magnitude, wf.angle, wf.label);
 			}

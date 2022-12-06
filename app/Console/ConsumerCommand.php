@@ -49,7 +49,7 @@ class ConsumerCommand extends Command
         $i=0;
         $mqtt->subscribe('mc/real_time/v1', function (string $topic, string $message) {
            //echo "msj = ".$message."\n";
-            dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
+            dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('events');
         }, 1);
         $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
@@ -60,8 +60,8 @@ class ConsumerCommand extends Command
         }, 1);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
-            //echo "msj = ".$message."\n";
-            dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
+            echo "msj = ".$message."\n";
+            dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('events');
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('default');
