@@ -348,15 +348,6 @@ body {
     padding-bottom: 6px;
 }
 
-a {
-    color: #f9b000;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #a87702;
-    text-decoration: none;
-}
 
 h1,
 h2,
@@ -609,18 +600,24 @@ dialog {
     color: white;
 }
 
-.contenedor-grande button {
+.contenedor-grande .button_class {
     background-color: white;
     border: solid var(--style_primary) 1px;
     padding: 4px 10px;
     margin: 3px;
-    color: var(--style_primary);
+    transition: 0.4s;
+    border-radius: 13px;
+    font-size: 0.9rem;
+}
+.contenedor-grande button {
+    padding: 4px 10px;
+    margin: 3px;
     transition: 0.4s;
     border-radius: 13px;
     font-size: 0.9rem;
 }
 
-.contenedor-grande button:hover {
+.contenedor-grande .button-class:hover {
     background: var(--style_primary);
     color: white;
 }
@@ -703,7 +700,7 @@ dialog {
 }
 
 a.btn.btn-lg.badge.badge-light.rounded-full {
-    background-color: white;
+
     border-color: #009599;
     color: #009299;
 }
@@ -713,7 +710,7 @@ a.btn.btn-lg.badge.badge-light.rounded-full:hover {
 }
 
 a.btn.btn-lg.badge.badge-light.rounded-full:hover i {
-    color: white !important;
+    color: white
 }
 
 
@@ -2568,6 +2565,4 @@ justify-content-end .textClientes p {
     }
 }
 
-a.btn.btn-redirect.btn-sm {
-    color
-}
+
