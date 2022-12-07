@@ -30,14 +30,13 @@
                     <div class="spinner-grow" role="status">
                     </div>
                 </div>
-                <div wire:ignore class=" justify-content-end form-group  mx-2 mb-0 mt-0 ">
-                    <label class="input_check" id="{{ $index }}">
-                         <input  wire:model="coils.{{ $index }}.status" disabled id="coils_{{ $coil->id }}" type="checkbox"
-                                checked data-toggle="toggle" data-width="90"
-                                data-on="<i class='fas fa-lightbulb'></i>  ON"
-                                data-off="<i class='far fa-lightbulb'></i>  OFF" data-onstyle="success"
-                                data-offstyle="danger"/>
-                    </label>
+                <div class=" justify-content-end form-group  mx-2 mb-0 mt-0 ">
+                    @if($coil->status)
+                        <button class="button_check btn btn-success text-white" id="{{ $index }}"><i class='fas fa-lightbulb'></i> ON</button>
+                    @else
+                        <button class="button_check btn btn-danger text-white" id="{{ $index }}"><i class='far fa-lightbulb'></i> OFF</button>
+                    @endif
+
                 </div>
                 <div class=" form-group mx-2 mb-0 mt-0 ">
                     <input wire:model.lazy="coils.{{ $index }}.name" id="input_{{ $coil->id }}"
@@ -85,7 +84,7 @@
     <script>
 
         var flag = true;
-        var checks = document.querySelectorAll(".input_check");
+        var checks = document.querySelectorAll(".button_check");
         for (let check of checks) {
             $('#' + check.id).click(function (e) {
                 console.log(flag)
@@ -98,22 +97,17 @@
 
         function confirmCheck(id) {
             flag = false
-            console.log(flag)
+            for (let check of checks) {
+                $('#' + check.id).prop('disabled', true);
+            }
         }
         document.addEventListener('livewire:load', function () {
 
             @this.on('changeCheck',(e) =>{
-                if (e.flag == true) {
-                    console.log(e)
-                    $('#coils_${e.index}').bootstrapToggle('enable')
-                    $('#coils_${e.index}').bootstrapToggle('toggle')
-                    $('#coils_${e.index}').bootstrapToggle('disable')
-
-                }else {
-                    console.log(false)
-                }
                 flag = true
-                console.log(flag)
+                for (let check of checks) {
+                    $('#' + check.id).prop('disabled', false);
+                }
 
             })
         })
