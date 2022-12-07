@@ -52,6 +52,7 @@
         document.addEventListener('livewire:load', function () {
             $(function() {
                 $('input[name="datetime_heat_map"]').daterangepicker({
+                    applyButtonClasses: 'text-primary',
                     timePicker: false,
                     maxSpan:{
                         days: 15,
