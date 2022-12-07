@@ -154,6 +154,7 @@
 
         $(function() {
             $('input[name="datetimes"]').daterangepicker({
+                applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
                 locale: {

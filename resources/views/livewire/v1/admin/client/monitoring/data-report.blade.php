@@ -82,6 +82,7 @@
         document.addEventListener('livewire:load', function () {
             $(function() {
                 $('input[name="datetime_report"]').daterangepicker({
+                    applyButtonClasses: 'text-primary',
                     timePicker: false,
                     autoUpdateInput: false,
                     locale: {

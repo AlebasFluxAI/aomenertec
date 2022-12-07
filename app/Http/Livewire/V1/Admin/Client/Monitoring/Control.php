@@ -39,9 +39,9 @@ class Control extends Component
         $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/" . $equipment->serial;
         if ($this->coils[$index]['status']) {
-            $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
-        } else {
             $message = "{\"coil" . $this->coils[$index]['number'] . "\":false}";
+        } else {
+            $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
         }
         try {
 

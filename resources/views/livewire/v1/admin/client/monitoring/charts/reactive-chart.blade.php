@@ -86,6 +86,7 @@
         document.addEventListener('livewire:load', function () {
             $(function() {
                 $('input[name="datetime_reactive"]').daterangepicker({
+                    applyButtonClasses: 'text-primary',
                     timePicker: true,
                     timePicker24Hour: true,
                     locale: {
