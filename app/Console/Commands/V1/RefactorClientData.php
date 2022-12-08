@@ -59,8 +59,8 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        //$this->unpackData();
-        //$this->deleteClientRelationship();
+        $this->unpackData();
+        $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(4)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
@@ -77,7 +77,7 @@ class RefactorClientData extends Command
             }
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
-                ->whereBetween("created_at", [$current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $current_time->format('Y-m-d H:i:s')])
+                ->whereBetween("created_at", [$current_time->copy()->subDays(4)->format('Y-m-d 00:00:00'), $current_time->format('Y-m-d H:i:s')])
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
                 ->orderBy('source_timestamp')
                 ->get();
