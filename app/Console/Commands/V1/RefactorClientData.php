@@ -62,7 +62,7 @@ class RefactorClientData extends Command
         $this->unpackData();
         $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(4)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -77,7 +77,7 @@ class RefactorClientData extends Command
             }
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
-                ->whereBetween("created_at", [$current_time->copy()->subDays(4)->format('Y-m-d 00:00:00'), $current_time->format('Y-m-d H:i:s')])
+                ->whereNull('client_id')
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
                 ->orderBy('source_timestamp')
                 ->get();
@@ -86,11 +86,11 @@ class RefactorClientData extends Command
                     $this->jsonEdit($datum);
                 }
                 if ($this->start_date->format('i') == '59'){
-                    $this->calculateConsumptionHourly($this->start_date);
+                    dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
                 }
             }else{
                 if ($this->start_date->format('i') == '59'){
-                    $this->calculateConsumptionHourly($this->start_date);
+                    dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
                 }
             }
             $this->start_date->addMinute();
@@ -560,11 +560,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(4)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(4)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
         if ($data) {
             foreach ($data as $i=>&$item) {
