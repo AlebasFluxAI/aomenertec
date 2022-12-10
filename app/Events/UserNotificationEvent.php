@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Http\Resources\V1\NotificationTypes;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\InteractsWithBroadcasting;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -17,6 +18,7 @@ class UserNotificationEvent implements ShouldBroadcast
     use Dispatchable;
     use InteractsWithSockets;
     use SerializesModels;
+    use InteractsWithBroadcasting;
 
 
     /**
@@ -29,6 +31,7 @@ class UserNotificationEvent implements ShouldBroadcast
 
     public function __construct($type, $user_id)
     {
+        $this->broadcastVia('pusher');
         $this->type = $type;
         $this->user_id = $user_id;
     }
@@ -45,6 +48,7 @@ class UserNotificationEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
+
         return $this->type;
     }
 

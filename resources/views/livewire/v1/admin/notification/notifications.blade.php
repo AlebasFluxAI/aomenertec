@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
 
     @endsection
 
@@ -46,5 +47,9 @@
                "table_rows"=>$data
 
            ])
+
+
 </div>
+
+
 
