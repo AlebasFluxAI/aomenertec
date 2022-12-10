@@ -156,6 +156,9 @@ class MicrocontrollerData extends Model
                 ->whereBetween('source_timestamp', [$reference_hour->format('Y-m-d H:00:00'), $reference_hour->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
+            if (empty($reference_data)) {
+                $reference_data = $client->microcontrollerData()->where('source_timestamp', '<', $reference_hour->format('Y-m-d H:00:00'))->orderBy('source_timestamp', 'desc')->first();
+            }
 
             if (empty($reference_data)) {
 
@@ -231,7 +234,7 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
         $this->saveQuietly();
-        dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('default');
+        dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
         $this->alertEnergyEvent();
     }
 

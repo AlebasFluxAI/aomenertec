@@ -76,6 +76,7 @@
 
         $(function() {
             $('input[name="datetimes_baseline_reference"]').daterangepicker({
+                applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
                 locale: {
@@ -86,6 +87,7 @@
         });
         $(function() {
             $('input[name="datetimes_baseline_result"]').daterangepicker({
+                applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
                 locale: {

@@ -15,7 +15,7 @@
 		var element = document.getElementById(element_id);
 		var width = element.clientWidth;
 		var height = element.clientHeight;
-		console.log("WaveformCanvas: width=" + width + "; height=" + height);
+		//console.log("WaveformCanvas: width=" + width + "; height=" + height);
 		var maxYCoord = height / 2;
 		var canvas = document.createElement("canvas");
 		canvas.width = width;
@@ -115,7 +115,7 @@
 
 		var size = Math.min(element.clientWidth, element.clientHeight || defaultHeight);
 		size = Math.max(size, minimumSize);
-		console.log("PhasorCanvas: size=" + size);
+		//console.log("PhasorCanvas: size=" + size);
 		// add spacer element used to center phasor
 		var spacer = document.createElement("div");
 		element.appendChild(spacer);
@@ -133,14 +133,14 @@
 		// size for this canvas.
 		this.getEngine = function () {
 			this.updateSize();
-			console.log("Initialize phasor engine with size: " + size);
+			//console.log("Initialize phasor engine with size: " + size);
 			return new ACWF.PhasorEngine(size);
 		};
 
 		this.updateSize = function () {
 			size = Math.min(element.clientWidth, element.clientHeight || defaultHeight);
 			size = Math.max(size, minimumSize);
-			console.log("PhasorCanvas: size=" + size);
+			//console.log("PhasorCanvas: size=" + size);
 			canvas.width = size, canvas.height = size;
 			context = canvas.getContext("2d");
 		};

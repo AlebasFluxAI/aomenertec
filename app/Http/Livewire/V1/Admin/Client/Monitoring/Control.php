@@ -4,10 +4,14 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
 use App\Models\V1\Client;
 use App\Models\V1\ClientDigitalOutput;
+use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use PhpMqtt\Client\Facades\MQTT;
+use PhpMqtt\Client\MqttClient;
+use Psr\Log\LogLevel;
+use PhpMqtt\Client\Exceptions\MqttClientException;use function PHPUnit\Framework\once;
 
 class Control extends Component
 {
@@ -32,33 +36,53 @@ class Control extends Component
 
     public function confirmAction($index)
     {
-        $this->emitTo('livewire-toast', 'show', ['type' => 'info', 'message' => "conectando con dispositivo...", 'duration'=>5000]);
-        $this->coils[$index]['status'] = !$this->coils[$index]['status'];
         $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
         $topic = "mc/config/" . $equipment->serial;
         if ($this->coils[$index]['status']) {
-            $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
-        } else {
             $message = "{\"coil" . $this->coils[$index]['number'] . "\":false}";
+        } else {
+            $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
         }
-        $mqtt=MQTT::connection();
-        $mqtt->publish($topic, $message);
+        try {
 
-        $mqtt->subscribe('some/topic', function (string $topic, string $message) use ($index, $mqtt) {
-            echo sprintf('Received QoS level 1 message on topic [%s]: %s', $topic, $message);
-            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
-            $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
-            $coil->status = $this->coils[$index]['status'];
-            $coil->save();
-            $mqtt->interrupt();
-        }, 1);
-        $mqtt->loop(true);
-        MQTT::disconnect();
+            $mqtt=MQTT::connection();
+            $mqtt->publish($topic, $message);
+            $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
+                if ($elapsedTime >= 50) {
+                    $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
+                    $mqtt->interrupt();
+                    $this->emit('changeCheck', ['index'=>$index, 'flag'=>false]);
+                } else{
+                }
+            });
+            $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($index, $mqtt, &$result) {
+                $json = json_decode($message, true);
+                if (array_key_exists('coil_ack', $json)) {
+                    $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
+                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                        ->first();
+                    if ($equipment) {
+                        $client = $equipment->clients()->first();
+                        if ($client->id == $this->client->id) {
+                            if ($json['coil_ack']) {
+                                $this->coils[$index]['status'] = !$this->coils[$index]['status'];
+                                $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
+                                $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
+                                $this->emit('changeCheck', ['index'=>$coil->id, 'flag'=>true]);
+                                $coil->status = $this->coils[$index]['status'];
+                                $coil->save();
+                                //$this->coils = $this->client->coils;
+                                $mqtt->interrupt();
+                            }
+                        }
+                    }
+                }
+            }, 1);
+            $mqtt->loop(true);
+            $mqtt->disconnect();
+        } catch (MqttClientException $e) {
 
-
-
-
-        //$this->coils = $this->client->coils;
+        }
     }
 
     public function updatedCoils($value, $key)

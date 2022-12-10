@@ -18,32 +18,38 @@
                 ]
         ])
 
+    <div class="contenedor-grande">
 
     <div class="d-flex flex-column pt-3">
 
         @foreach($coils as $index=>$coil)
-            <div wire:key="coil-{{ $coil->id }}" class="d-flex justify-content-center">
-                <div class="justify-content-end form-group mb-0 mt-0 col-5">
-                    <span wire:ignore class="input_check" id="{{ $coil->number }}">
-                         <input wire:model="coils.{{ $index }}.status" id="coils_{{ $coil->id }}" type="checkbox"
-                                checked data-toggle="toggle" data-width="90"
-                                data-on="<i class='fas fa-lightbulb'></i>  ON"
-                                data-off="<i class='far fa-lightbulb'></i>  OFF" data-onstyle="success"
-                                data-offstyle="danger"/>
-                    </span>
+            <div wire:key="coil-{{ $index }}" class="d-flex justify-content-center">
+                <div wire:loading wire:target="confirmAction('{{ $index }}')" class="justify-content-end  mx-2 form-group mb-0 mt-0 ">
+
+                    <span class="">Conectando...</span>
+                    <div class="spinner-grow" role="status">
+                    </div>
                 </div>
-                <div class="justify-content-start form-group mb-0 mt-0 col-7">
+                <div class=" justify-content-end form-group  mx-2 mb-0 mt-0 ">
+                    @if($coil->status)
+                        <button class="button_check btn btn-success text-white" id="{{ $index }}"><i class='fas fa-lightbulb'></i> ON</button>
+                    @else
+                        <button class="button_check btn btn-danger text-white" id="{{ $index }}"><i class='far fa-lightbulb'></i> OFF</button>
+                    @endif
+
+                </div>
+                <div class=" form-group mx-2 mb-0 mt-0 ">
                     <input wire:model.lazy="coils.{{ $index }}.name" id="input_{{ $coil->id }}"
                            placeholder="Salida {{ $coil->number }}">
                 </div>
-                <div class="modal fade" id="confirmModal_{{ $coil->number }}" tabindex="-1" role="dialog"
-                     aria-labelledby="confirmModalLabel_{{ $coil->number }}">
+                <div class="modal fade" id="confirmModal_{{ $index }}" tabindex="-1" role="dialog"
+                     aria-labelledby="confirmModalLabel_{{ $index }}">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="confirmModalLabel_{{ $coil->number }}"> Cuadro de
+                                <h4 class="modal-title" id="confirmModalLabel_{{ $index }}"> Cuadro de
                                     confirmación </h4>
-                                <a onclick="$('#confirmModal_'+{{ $coil->number }}).modal('hide');" type="button"
+                                <a onclick="$('#confirmModal_'+{{ $index }}).modal('hide');" type="button"
                                    class="close" data-dismiss="modal" aria-label="Close"><span
                                         aria-hidden="true">×</span></a>
                             </div>
@@ -61,9 +67,9 @@
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <a onclick="$('#confirmModal_'+{{ $coil->number }}).modal('hide');" type="button"
+                                <a onclick="$('#confirmModal_'+{{ $index }}).modal('hide');" type="button"
                                    class="btn btn-default" data-despeds="modal"> Cancelar </a>
-                                <a onclick="$('#confirmModal_'+{{ $coil->number }}).modal('hide');confirm({{ $coil->id }});"
+                                <a onclick="$('#confirmModal_'+{{ $index }}).modal('hide');confirmCheck({{ $coil->id }});"
                                    wire:click="confirmAction('{{ $index }}')" type="button" class="btn btn-primary">
                                     Confirmar </a>
                             </div>
@@ -74,21 +80,37 @@
 
         @endforeach
     </div>
+    </div>
     <script>
 
-        var checks = document.querySelectorAll(".input_check");
+        var flag = true;
+        var checks = document.querySelectorAll(".button_check");
         for (let check of checks) {
             $('#' + check.id).click(function (e) {
+                console.log(flag)
                 e.stopPropagation();
-                console.log(check.id)
-                $('#confirmModal_' + check.id).modal('show');
+                if (flag) {
+                    $('#confirmModal_' + check.id).modal('show');
+                }
             });
         }
 
-        function confirm(id) {
-            $('#confirmModal_' + id).modal('hide');
-            $('#coils_' + id).bootstrapToggle('toggle')
+        function confirmCheck(id) {
+            flag = false
+            for (let check of checks) {
+                $('#' + check.id).prop('disabled', true);
+            }
         }
+        document.addEventListener('livewire:load', function () {
+
+            @this.on('changeCheck',(e) =>{
+                flag = true
+                for (let check of checks) {
+                    $('#' + check.id).prop('disabled', false);
+                }
+
+            })
+        })
 
     </script>
 </div>

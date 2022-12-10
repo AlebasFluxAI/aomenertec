@@ -62,7 +62,7 @@ class RefactorClientData extends Command
         $this->unpackData();
         $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -77,7 +77,7 @@ class RefactorClientData extends Command
             }
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
-                ->whereBetween("created_at", [$current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $current_time->format('Y-m-d H:i:s')])
+                ->whereNull('client_id')
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
                 ->orderBy('source_timestamp')
                 ->get();
@@ -86,11 +86,11 @@ class RefactorClientData extends Command
                     $this->jsonEdit($datum);
                 }
                 if ($this->start_date->format('i') == '59'){
-                    $this->calculateConsumptionHourly($this->start_date);
+                    dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
                 }
             }else{
                 if ($this->start_date->format('i') == '59'){
-                    $this->calculateConsumptionHourly($this->start_date);
+                    dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
                 }
             }
             $this->start_date->addMinute();
@@ -98,7 +98,7 @@ class RefactorClientData extends Command
         }
         while (true) {
             $current_time->subHour();
-            echo $current_time->format('Y-m-d H-i')."\n";
+            echo "prom_hour".$current_time->format('Y-m-d H-i')."\n";
 
             foreach ($clients as $client) {
                 $year =  $current_time->format('Y');
@@ -179,8 +179,8 @@ class RefactorClientData extends Command
 
         $data_frame = config('data-frame.data_frame');
         while (true) {
-            $end_date->addDay();
-            echo $end_date->format('Y-m-d')."\n";
+
+            echo "calc day =".$end_date->format('Y-m-d')."\n";
             foreach ($clients as $client) {
 
                 if ($client->microcontrollerData()
@@ -202,9 +202,9 @@ class RefactorClientData extends Command
                             ->first();
                     } else{
                         if($client->microcontrollerData()
-                            ->where('source_timestamp', '<=', $end_date->format('Y-m-d 00:00:00'))->exists()) {
+                            ->where('source_timestamp', '<', $end_date->format('Y-m-d 00:00:00'))->exists()) {
                             $reference_data_first = $client->microcontrollerData()
-                                ->where('source_timestamp', '<=', $end_date->format('Y-m-d 00:00:00'))
+                                ->where('source_timestamp', '<', $end_date->format('Y-m-d 00:00:00'))
                                 ->orderBy('source_timestamp', 'desc')
                                 ->first();
                         } else{
@@ -311,16 +311,18 @@ class RefactorClientData extends Command
             if ($end_date->diffInDays($this->current_time)==1){
                 break;
             }
+            $end_date->addDay();
         }
+        $current_time = $this->current_time->copy();;
         while (true) {
-            $this->current_time->subDay();
-            echo $this->current_time->format('Y-m-d')."\n";
+            $current_time->subDay();
+            echo "prom day =".$current_time->format('Y-m-d')."\n";
 
             foreach ($clients as $client) {
-                $year =  $this->current_time->format('Y');
-                $month = $this->current_time->format('m');
-                $day =   $this->current_time->format('d');
-                $hour =  $this->current_time->format('H');
+                $year =  $current_time->format('Y');
+                $month = $current_time->format('m');
+                $day =   $current_time->format('d');
+                $hour =  $current_time->format('H');
                 $day_data =$client->dailyMicrocontrollerdata()
                     ->where('year', $year)
                     ->where('month',$month)
@@ -330,9 +332,9 @@ class RefactorClientData extends Command
                     if ($day_data->interval_real_consumption != 0) {
                         $last_raw_json = json_decode($day_data->raw_json, true);
                         $previous_day_data = $client->dailyMicrocontrollerdata()
-                            ->where('year', $this->current_time->copy()->subDay()->format('Y'))
-                            ->where('month', $this->current_time->copy()->subDay()->format('m'))
-                            ->where('day', $this->current_time->copy()->subDay()->format('d'))
+                            ->where('year', $current_time->copy()->subDay()->format('Y'))
+                            ->where('month', $current_time->copy()->subDay()->format('m'))
+                            ->where('day', $current_time->copy()->subDay()->format('d'))
                             ->first();
                         if ($previous_day_data) {
                             if ($previous_day_data->interval_real_consumption == 0) {
@@ -391,7 +393,7 @@ class RefactorClientData extends Command
                     }
                 }
             }
-            if ($end_date_copy->diffInDays($this->current_time)==0){
+            if ($end_date_copy->diffInDays($current_time)==0){
                 break;
             }
         }
@@ -399,6 +401,8 @@ class RefactorClientData extends Command
         $reference_date = $this->current_time->copy();
         while (true) {
             $reference_date->subDay();
+            echo "calc mes =".$reference_date->format('Y-m-d')."\n";
+
             $billing_day = $reference_date->format('d');
             $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->get()->pluck('client_id');
             $clients_aux = Client::find($billing_day_clients);
@@ -491,8 +495,6 @@ class RefactorClientData extends Command
                 break;
             }
         }
-
-
     }
     private function unpackData(){
         $data_pack = MicrocontrollerData::whereNull('client_id')
@@ -558,11 +560,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
         if ($data) {
             foreach ($data as $i=>&$item) {
@@ -764,6 +766,9 @@ class RefactorClientData extends Command
                 ->whereBetween('source_timestamp', [$reference_hour->format('Y-m-d H:00:00'), $reference_hour->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
+            if (empty($reference_data)) {
+                $reference_data = $client->microcontrollerData()->where('source_timestamp', '<', $reference_hour->format('Y-m-d H:00:00'))->orderBy('source_timestamp', 'desc')->first();
+            }
             if (empty($reference_data)) {
                 $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
                 $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];

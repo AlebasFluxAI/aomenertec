@@ -64,7 +64,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="ModalLabel_phasor">Diagrama Fasorial</h5>
-
+                        <a onclick="$('#modal_phasor').modal('hide');" type="button"
+                           class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></a>
                     </div>
                     <div class="modal-body">
                         @if($select_data)
@@ -152,6 +154,7 @@
 
         $(function() {
             $('input[name="datetimes"]').daterangepicker({
+                applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
                 locale: {
