@@ -6,6 +6,7 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -15,6 +16,8 @@ class RealTimeMonitoringEvent implements ShouldBroadcast
     use Dispatchable;
     use InteractsWithSockets;
     use SerializesModels;
+    use Queueable;
+
 
     /**
      * Create a new event instance.
@@ -35,12 +38,14 @@ class RealTimeMonitoringEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('data-monitoring.'.$this->raw_json['client_id']);
+        return new Channel('data-monitoring.' . $this->raw_json['client_id']);
     }
+
     public function broadcastAs()
     {
         return 'dataEventRealTime';
     }
+
     public function broadcastWith()
     {
         return ["data" => $this->raw_json];

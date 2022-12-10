@@ -43,9 +43,11 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     {
         $data = $this->unpackData();
         if ($data) {
-            event(new RealTimeMonitoringEvent($data));
+
+            dispatch(new RealTimeMonitoringEvent($data))->onQueue("events");
         }
     }
+
     private function unpackData()
     {
         $data_frame = config('data-frame.data_frame');
@@ -60,7 +62,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                 $split = substr($decode, ($data['start']), ($data['lenght']));
                 if (!$split) {
                     $json[$data['variable_name']] = 0;
-                } else{
+                } else {
                     $bin = hex2bin($split);
                     if ($data['start'] >= 450) {
                         $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
@@ -76,8 +78,6 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                         }
                     }
                 }
-
-
 
 
                 if (is_nan($json[$data['variable_name']])) {
