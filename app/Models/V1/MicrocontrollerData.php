@@ -73,11 +73,14 @@ class MicrocontrollerData extends Model
         return $this->hasOne(ClientAlert::class);
     }
 
-    public function jsonEdit()
+    public function jsonEdit($flag)
     {
         $date = new Carbon();
         if (is_string($this->raw_json)) {
             $json = json_decode($this->raw_json, true);
+            if ($json == null){
+                return;
+            }
         } elseif (is_array($this->raw_json)) {
             $json = $this->raw_json;
         }
@@ -96,6 +99,15 @@ class MicrocontrollerData extends Model
             $this->forceDelete();
             return;
         }
+        if ($flag) {
+            if ($client->stopUnpackClient()->exists()) {
+                return;
+            }
+        }else{
+            if (!$client->stopUnpackClient()->exists()) {
+                StopUnpackDataClient::create(['client_id' => $client->id]);
+            }
+        }
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             if ($this->hourlyMicrocontrollerData()->exists()){
@@ -104,12 +116,13 @@ class MicrocontrollerData extends Model
             if ($this->dailyMicrocontrollerData()->exists()){
                 $this->dailyMicrocontrollerData()->forceDelete();
             }
+            if ($this->clientAlert()->exists()){
+                $this->clientAlert()->forceDelete();
+            }
             $this->forceDelete();
             return;
         }
-        if ($client->stopUnpackClient()->exists()) {
-            return;
-        }
+
 
         if (!MicrocontrollerData::whereClientId($client->id)->exists()) {
             $json['kwh_interval'] = 0;
@@ -172,7 +185,6 @@ class MicrocontrollerData extends Model
                     $json['ph2_varLh_acumm'] = floatval($json['ph2_varLh_acumm']) + floatval($last_raw_json['ph2_varLh_acumm']);
                     $json['ph3_varCh_acumm'] = floatval($json['ph3_varCh_acumm']) + floatval($last_raw_json['ph3_varCh_acumm']);
                     $json['ph3_varLh_acumm'] = floatval($json['ph3_varLh_acumm']) + floatval($last_raw_json['ph3_varLh_acumm']);
-                    echo $last_data->id."\n";
                     $json['varCh_acumm'] = $json['varCh_acumm'] + floatval($last_raw_json['varCh_acumm']);
                     $json['varLh_acumm'] = $json['varLh_acumm'] + floatval($last_raw_json['varLh_acumm']);
                     $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - floatval($last_raw_json['ph1_varCh_acumm']);
@@ -234,8 +246,10 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
         $this->saveQuietly();
-        dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
-        $this->alertEnergyEvent();
+        if ($flag) {
+            dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('default');
+            $this->alertEnergyEvent();
+        }
     }
 
     public function alertEnergyEvent()

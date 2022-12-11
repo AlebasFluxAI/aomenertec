@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Jobs\V1\Enertec\JsonEdit;
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\Client;
@@ -62,7 +63,7 @@ class RefactorClientData extends Command
         $this->unpackData();
         $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -72,28 +73,22 @@ class RefactorClientData extends Command
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
         while (true){
-            if ($this->start_date->diffInMinutes($current_time) == 0){
+            if ($this->start_date->diffInHours($current_time) == 0){
                 break;
             }
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
                 ->whereNull('client_id')
-                ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:i:00'), $this->start_date->format('Y-m-d H:i:59')])
+                ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp')
                 ->get();
             if (count($minute_data)>0){
                 foreach ($minute_data as $datum){
-                    $this->jsonEdit($datum);
-                }
-                if ($this->start_date->format('i') == '59'){
-                    dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
-                }
-            }else{
-                if ($this->start_date->format('i') == '59'){
-                    dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
+                    dispatch(new JsonEdit($datum, true))->onQueue('spot');
                 }
             }
-            $this->start_date->addMinute();
+            dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
+            $this->start_date->addHour();
             $minute_data = [];
         }
         while (true) {
@@ -560,11 +555,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subHours(12)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subHours(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
         if ($data) {
             foreach ($data as $i=>&$item) {
@@ -718,6 +713,9 @@ class RefactorClientData extends Command
             }
             if ($data->dailyMicrocontrollerData()->exists()){
                 $data->dailyMicrocontrollerData()->forceDelete();
+            }
+            if ($data->clientAlert()->exists()){
+                $data->clientAlert()->forceDelete();
             }
             $data->forceDelete();
             return;
