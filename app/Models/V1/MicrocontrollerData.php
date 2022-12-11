@@ -99,15 +99,7 @@ class MicrocontrollerData extends Model
             $this->forceDelete();
             return;
         }
-        if ($flag) {
-            if ($client->stopUnpackClient()->exists()) {
-                return;
-            }
-        }else{
-            if (!$client->stopUnpackClient()->exists()) {
-                StopUnpackDataClient::create(['client_id' => $client->id]);
-            }
-        }
+
 
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             if ($this->hourlyMicrocontrollerData()->exists()){
@@ -144,9 +136,12 @@ class MicrocontrollerData extends Model
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
-            $last_raw_json = json_decode($last_data->raw_json, true);
+            $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
             if ($last_data) {
+                if (new Carbon($last_data->source_timestamp) > $current_time  ){
+                    $this->delete();
+                    return;
+                }
                 $last_raw_json = json_decode($last_data->raw_json, true);
                 if ($json['import_wh'] <= 0) {
 
@@ -164,7 +159,6 @@ class MicrocontrollerData extends Model
             }
 
             $reference_hour = $current_time->copy()->subHour();
-
             $reference_data = $client->microcontrollerData()
                 ->whereBetween('source_timestamp', [$reference_hour->format('Y-m-d H:00:00'), $reference_hour->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp', 'desc')
@@ -247,7 +241,7 @@ class MicrocontrollerData extends Model
         $this->raw_json = $json;
         $this->saveQuietly();
         if ($flag) {
-            dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('default');
+            dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
             $this->alertEnergyEvent();
         }
     }

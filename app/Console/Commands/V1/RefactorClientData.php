@@ -63,7 +63,7 @@ class RefactorClientData extends Command
         $this->unpackData();
         $this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subHours(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -87,7 +87,7 @@ class RefactorClientData extends Command
                     dispatch(new JsonEdit($datum, false))->onQueue('spot');
                 }
             }
-            dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
+            dispatch(new SerializeMicrocontrollerDataJob($this->start_date->format('Y-m-d H:00:00')))->onQueue('spot');
             $this->start_date->addHour();
             $minute_data = [];
         }
@@ -496,6 +496,8 @@ class RefactorClientData extends Command
             ->whereNotNull('source_timestamp')
            ->orderBy('source_timestamp')->orderBy('created_at')
             ->get();
+        echo count($data_pack)."\n";
+
         if ($data_pack) {
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
@@ -555,12 +557,13 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subHours(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subHours(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
+        echo count($data)."\n";
         if ($data) {
             foreach ($data as $i=>&$item) {
                 $item->client_id = null;
