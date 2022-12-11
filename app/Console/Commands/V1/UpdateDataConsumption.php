@@ -45,15 +45,15 @@ class UpdateDataConsumption extends Command
     public function handle()
     {
         $data_pack = MicrocontrollerData::whereNull('client_id')
-            //->whereBetween('source_timestamp', ['2022-11-18 10:00:00', '2023-11-18 05:00:00'])
-            ->whereNotNull('source_timestamp')
-            ->orderBy('source_timestamp')->orderBy('created_at')
+           ->whereNotNull('source_timestamp')
+            ->orderBy('source_timestamp')
             ->get();
         if ($data_pack) {
-            echo count($data_pack);
+            echo count($data_pack)."\n";
             $data_frame = config('data-frame.data_frame');
             $date = Carbon::now();
             foreach ($data_pack as $i => $item) {
+                echo $i."\n";
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
@@ -153,22 +153,8 @@ class UpdateDataConsumption extends Command
                                     }
                                 }
                             }
+                            $item->save();
 
-                            if ($client) {
-                                if (!$client->stopUnpackClient()->exists()) {
-                                    //$item->save();
-
-
-                                    if ($client->id != 0
-                                    ) {
-                                        $item->save();
-                                    } else{
-                                        $item->saveQuietly();
-                                    }
-                                }
-                            } else{
-                                $item->forceDelete();
-                            }
                         } else {
                             $item->forceDelete();
                         }
@@ -185,22 +171,8 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = json_encode($raw_json);
-                    //$item->save();
-                    $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
-                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
-                    if ($equipment) {
-                        $client = $equipment->clients()->first();
-                        if ($client) {
-                            if (!$client->stopUnpackClient()->exists()) {
-                                $item->save();
-                                if ($client->id != 0) {
-                                    $item->save();
-                                } else{
-                                    $item->saveQuietly();
-                                }
-                            }
-                        }
-                    }
+                    $item->save();
+
                 }
             }
         }
