@@ -3,6 +3,7 @@
 <head>
 
     <link rel="stylesheet" href="/css/adminlte.css">
+    <script src="https://js.pusher.com/7.0/pusher-with-encryption.min.js"></script>
 
     <!-- Vendor CSS Files -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -12,7 +13,6 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
 
-    <script src="//{{ Request::getHost() }}:8443/socket.io/socket.io.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;400&display=swap" rel="stylesheet">
@@ -70,9 +70,6 @@
     <script src="https://kit.fontawesome.com/277123ced7.js" crossorigin="anonymous"></script>
 
 
-
-
-
     @livewireStyles
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 
@@ -116,7 +113,7 @@
 <script>
     $(window).on('load', function () {
         setTimeout(function () {
-            $(".loader-page").css({visibility:"hidden",opacity:"0"})
+            $(".loader-page").css({visibility: "hidden", opacity: "0"})
         }, 10);
     });
 </script>
@@ -143,7 +140,9 @@
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
     })
+
 </script>
 
 </body>
+
 </html>
