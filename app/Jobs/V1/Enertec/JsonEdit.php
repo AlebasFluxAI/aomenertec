@@ -39,7 +39,6 @@ class JsonEdit implements ShouldQueue
      */
     public function handle()
     {
-        dd("ok");
         $this->model->jsonEdit($this->flag);
     }
 }

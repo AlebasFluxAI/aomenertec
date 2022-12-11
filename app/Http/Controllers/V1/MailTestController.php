@@ -30,8 +30,8 @@ class MailTestController
     public function whatsappNotification()
     {
         $datum = MicrocontrollerData::find(1905135);
-        $datum->jsonEdit(false);
-        //dispatch(new JsonEdit($datum, false))->onQueue('default');
+        //$datum->jsonEdit(false);
+        dispatch(new JsonEdit($datum, false))->onQueue('spot');
 
         /*$clientAlert = ClientAlert::find(3);
         $client = Client::find($clientAlert->client_id);
