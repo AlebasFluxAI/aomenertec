@@ -29,9 +29,9 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
      * @return void
      */
     public $hour_ref;
-    public function __construct(Carbon $hour_ref)
+    public function __construct($hour_ref)
     {
-        $this->hour_ref = $hour_ref;
+        $this->hour_ref = new Carbon($hour_ref);
     }
 
     /**
@@ -41,22 +41,22 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        $this->calculateConsumptionHourly($this->hour_ref);
+        $this->calculateConsumptionHourly();
 
     }
 
-    private function calculateConsumptionHourly(Carbon $hour_ref){
+    public function calculateConsumptionHourly(){
         $data_frame = config('data-frame.data_frame');
-        $year =  $hour_ref->format('Y');
-        $month = $hour_ref->format('m');
-        $day =   $hour_ref->format('d');
-        $hour =  $hour_ref->format('H');
+        $year =  $this->hour_ref->format('Y');
+        $month = $this->hour_ref->format('m');
+        $day =   $this->hour_ref->format('d');
+        $hour =  $this->hour_ref->format('H');
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
             if ($client->microcontrollerData()
-                ->whereBetween("source_timestamp", [$hour_ref->format('Y-m-d H:00:00'), $hour_ref->format('Y-m-d H:59:59')])->exists()) {
+                ->whereBetween("source_timestamp", [$this->hour_ref->format('Y-m-d H:00:00'), $this->hour_ref->format('Y-m-d H:59:59')])->exists()) {
                 $reference_data = $client->microcontrollerData()
-                    ->whereBetween("source_timestamp", [$hour_ref->format('Y-m-d H:00:00'), $hour_ref->format('Y-m-d H:59:59')])
+                    ->whereBetween("source_timestamp", [$this->hour_ref->format('Y-m-d H:00:00'), $this->hour_ref->format('Y-m-d H:59:59')])
                     ->orderBy('source_timestamp', 'desc')
                     ->first();
 
@@ -86,7 +86,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                         'raw_json' => $reference_data->raw_json]
                 );
             } else {
-                $last_hour = $hour_ref->copy()->subHour();
+                $last_hour = $this->hour_ref->copy()->subHour();
                 $last_data = $client->hourlyMicrocontrollerData()
                     ->where('year', $last_hour->format('Y'))
                     ->where('month', $last_hour->format('m'))

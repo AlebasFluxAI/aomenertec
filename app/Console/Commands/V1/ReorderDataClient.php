@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
-use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\HourlyMicrocontrollerData;

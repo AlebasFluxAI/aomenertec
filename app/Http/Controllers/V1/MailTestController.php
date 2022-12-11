@@ -4,6 +4,7 @@ namespace App\Http\Controllers\V1;
 
 use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
+use App\Jobs\V1\Enertec\JsonEdit;
 use App\Mail\User\UserCratedMail;
 use App\Mail\User\UserResetPasswordMail;
 use App\Mail\WorkOrder\WorkOrderUpdatedMail;
@@ -17,7 +18,6 @@ use App\Notifications\User\UserCreatedNotification;
 use App\Notifications\User\UserResetPasswordNotification;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 
 class MailTestController
 {
@@ -29,8 +29,9 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $datum = MicrocontrollerData::find(289590);
-        dispatch(new SerializeMicrocontrollerDataJob($datum))->onQueue('reorder_data');
+        $datum = MicrocontrollerData::find(1905135);
+        $datum->jsonEdit(false);
+        //dispatch(new JsonEdit($datum, false))->onQueue('default');
 
         /*$clientAlert = ClientAlert::find(3);
         $client = Client::find($clientAlert->client_id);
