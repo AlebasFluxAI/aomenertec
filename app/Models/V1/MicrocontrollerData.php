@@ -85,6 +85,7 @@ class MicrocontrollerData extends Model
             $json = $this->raw_json;
         }
 
+
         $timestamp_unix = $json['timestamp'];
         $current_time = $date->setTimestamp($timestamp_unix);
         $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
@@ -99,8 +100,15 @@ class MicrocontrollerData extends Model
             $this->forceDelete();
             return;
         }
-
-
+        if ($flag) {
+            if ($client->stopUnpackClient()->exists()) {
+                return;
+            }
+        }else{
+            if (!$client->stopUnpackClient()->exists()) {
+                StopUnpackDataClient::create(['client_id' => $client->id]);
+            }
+        }
         if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
             if ($this->hourlyMicrocontrollerData()->exists()){
                 $this->hourlyMicrocontrollerData()->forceDelete();
@@ -114,7 +122,6 @@ class MicrocontrollerData extends Model
             $this->forceDelete();
             return;
         }
-
 
         if (!MicrocontrollerData::whereClientId($client->id)->exists()) {
             $json['kwh_interval'] = 0;
@@ -157,7 +164,6 @@ class MicrocontrollerData extends Model
                     $json['import_VArh'] = $last_raw_json['import_VArh'];
                 }
             }
-
             $reference_hour = $current_time->copy()->subHour();
             $reference_data = $client->microcontrollerData()
                 ->whereBetween('source_timestamp', [$reference_hour->format('Y-m-d H:00:00'), $reference_hour->format('Y-m-d H:59:59')])
@@ -166,7 +172,6 @@ class MicrocontrollerData extends Model
             if (empty($reference_data)) {
                 $reference_data = $client->microcontrollerData()->where('source_timestamp', '<', $reference_hour->format('Y-m-d H:00:00'))->orderBy('source_timestamp', 'desc')->first();
             }
-
             if (empty($reference_data)) {
 
                     $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
@@ -239,7 +244,7 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_capacitive_consumption = $json['varCh_interval'];
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
-        //$this->saveQuietly();
+        $this->saveQuietly();
         if ($flag) {
             dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
             $this->alertEnergyEvent();
