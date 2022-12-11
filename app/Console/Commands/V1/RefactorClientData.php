@@ -84,7 +84,7 @@ class RefactorClientData extends Command
                 ->get();
             if (count($minute_data)>0){
                 foreach ($minute_data as $datum){
-                    dispatch(new JsonEdit($datum, true))->onQueue('spot');
+                    dispatch(new JsonEdit($datum, false))->onQueue('spot');
                 }
             }
             dispatch(new SerializeMicrocontrollerDataJob($this->start_date))->onQueue('spot');
