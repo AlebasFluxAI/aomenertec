@@ -75,8 +75,6 @@ class MicrocontrollerData extends Model
 
     public function jsonEdit($flag)
     {
-        $tiempo_inicial = microtime(true);
-
         $date = new Carbon();
         if (is_string($this->raw_json)) {
             $json = json_decode($this->raw_json, true);
@@ -241,11 +239,7 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_capacitive_consumption = $json['varCh_interval'];
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
-
-        $tiempo_final = microtime(true);
-        $tiempo = $tiempo_final - $tiempo_inicial;
-        dd($tiempo);
-        $this->saveQuietly();
+        //$this->saveQuietly();
         if ($flag) {
             dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
             $this->alertEnergyEvent();
