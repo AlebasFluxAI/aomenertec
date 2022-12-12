@@ -106,15 +106,15 @@ class RefactorClientData extends Command
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                         ->first();
                     if ($equipment == null) {
-                        $this->forceDelete();
-                        continue;
+                        $datum->forceDelete();
+                    }else{
+                        $client = $equipment->clients()->first();
+                        if ($client == null) {
+                            $datum->forceDelete();
+                        } else{
+                            dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
+                        }
                     }
-                    $client = $equipment->clients()->first();
-                    if ($client == null) {
-                        $this->forceDelete();
-                        continue;
-                    }
-                    dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
                     $i++;
                 }
             }
