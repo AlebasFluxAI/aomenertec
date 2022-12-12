@@ -97,7 +97,7 @@
             <h2 style="margin-top: 150px;"></h2>
         </div>
         <div class="container mt-3">
-            <button class="btn btn-outline-primary mb-5" type="button">
+<!--            <button class="btn btn-outline-primary mb-5" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace-fill" viewBox="0 0 16 16">
                     <path d="M15.683 3a2 2 0 0 0-2-2h-7.08a2 2 0 0 0-1.519.698L.241 7.35a1 1 0 0 0 0 1.302l4.843 5.65A2 2 0 0 0 6.603 15h7.08a2 2 0 0 0 2-2V3zM5.829 5.854a.5.5 0 1 1 .707-.708l2.147 2.147 2.146-2.147a.5.5 0 1 1 .707.708L9.39 8l2.146 2.146a.5.5 0 0 1-.707.708L8.683 8.707l-2.147 2.147a.5.5 0 0 1-.707-.708L7.976 8 5.829 5.854z"/>
                 </svg>
@@ -112,7 +112,7 @@
                 <li class="nav-item" role="presentation">
                     <button class="btn btn-outline-primary" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Agregar boton para cada función</button>
                 </li>
-            </ul>
+            </ul>-->
             <div class="tab-content" id="pills-tabContent">
                 @yield('content')
             </div>
