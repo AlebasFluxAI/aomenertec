@@ -351,7 +351,7 @@ class MicrocontrollerData extends Model
         }
     }
 
-    private function calculateValueAlert($flag_id, $energy_month, $energy_hour)
+    public function calculateValueAlert($flag_id, $energy_month, $energy_hour)
     {
         if ($flag_id == 50) {
             $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
@@ -372,6 +372,7 @@ class MicrocontrollerData extends Model
                 $value = 0;
             }
         }
+        return $value;
     }
 
     private function createAlert($value, $type, $alert)
