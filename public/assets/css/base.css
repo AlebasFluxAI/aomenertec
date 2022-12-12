@@ -2562,3 +2562,8 @@ justify-content-end .textClientes p {
 a.btn.btn-redirect.btn-sm {
     color
 }
+
+button.btn.btn-outline-primary.active {
+    background-color: #00959a !important;
+    border: 1px solid #00959a !important;
+}
