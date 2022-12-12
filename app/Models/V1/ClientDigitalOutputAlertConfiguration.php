@@ -19,4 +19,5 @@ class ClientDigitalOutputAlertConfiguration extends Model
         'client_alert_configuration_id',
         'client_digital_output_id'
     ];
+
 }

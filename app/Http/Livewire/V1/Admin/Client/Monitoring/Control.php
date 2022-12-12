@@ -52,7 +52,6 @@ class Control extends Component
                     $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
                     $mqtt->interrupt();
                     $this->emit('changeCheck', ['index'=>$index, 'flag'=>false]);
-                } else{
                 }
             });
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($index, $mqtt, &$result) {
