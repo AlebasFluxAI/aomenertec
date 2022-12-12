@@ -77,7 +77,7 @@ class RefactorClientData extends Command
                 break;
             }
             echo $this->start_date->format('Y-m-d H-i')."\n";
-            /*$minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
+            $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
                 ->whereNull('client_id')
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp')
@@ -86,7 +86,7 @@ class RefactorClientData extends Command
                 foreach ($minute_data as $datum){
                     dispatch(new JsonEdit($datum, false))->onQueue('spot');
                 }
-            }*/
+            }
             //$this->calculateConsumptionHourly($this->start_date);
             dispatch(new SerializeMicrocontrollerDataJob($this->start_date->format('Y-m-d H:00:00')))->onQueue('spot');
             $this->start_date->addHour();
