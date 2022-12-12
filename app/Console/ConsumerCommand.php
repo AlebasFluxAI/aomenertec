@@ -49,25 +49,25 @@ class ConsumerCommand extends Command
         $mqtt->subscribe('mc/real_time/v1', function (string $topic, string $message) {
             dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
         }, 1);
-      /* $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
+       $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
         }, 1);
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
             dispatch(new SaveAlertDataJob($message))->onQueue('spot');
-        }, 1);*/
+        }, 1);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
             echo "msj = ".$message."\n";
             dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
         }, 0);
-        /*$mqtt->subscribe('mc/data', function (string $topic, string $message) {
+        $mqtt->subscribe('mc/data', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
         },1);
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
             dispatch(new SaveAlertDataJob($message))->onQueue('spot');
-        }, 0);*/
+        }, 0);
         $mqtt->subscribe('mc/ack', function (string $topic, string $message) {
             echo $message . "\n";
             $json = json_decode($message, true);
