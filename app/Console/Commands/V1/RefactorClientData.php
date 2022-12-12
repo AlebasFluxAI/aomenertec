@@ -91,7 +91,7 @@ class RefactorClientData extends Command
                     }
                     $date = new Carbon();
                     if (is_string($datum->raw_json)) {
-                        $json = json_decode($this->raw_json, true);
+                        $json = json_decode($datum->raw_json, true);
                         if ($json == null){
                             continue;
                         }
