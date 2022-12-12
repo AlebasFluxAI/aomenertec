@@ -75,7 +75,7 @@ class RefactorClientData extends Command
         $end_date= new Carbon($first_data->source_timestamp);
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
-
+        $i=0;
         /*while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
