@@ -30,11 +30,11 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $datum = MicrocontrollerData::find(1905135);
+        //$datum = MicrocontrollerData::find(1905135);
         //$datum->jsonEdit(false);
-        dispatch(new SerializeMicrocontrollerDataJob('2022-12-08 08:05:00'))->onQueue('default');
+        //dispatch(new SerializeMicrocontrollerDataJob('2022-12-08 08:05:00'))->onQueue('default');
 
-        /*$clientAlert = ClientAlert::find(3);
+        $clientAlert = ClientAlert::find(3);
         $client = Client::find($clientAlert->client_id);
         $technicians = $client->clientTechnician;
         $supervisors = $client->supervisors;
@@ -57,6 +57,6 @@ class MailTestController
         }
         if ($network_operator) {
             event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $network_operator->id));
-        }*/
+        }
     }
 }
