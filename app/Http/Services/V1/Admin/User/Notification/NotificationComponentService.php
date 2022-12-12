@@ -19,6 +19,7 @@ class NotificationComponentService extends Singleton
     public function mount(Component $component)
     {
         $component->user = Auth::user();
+
     }
 
     public function notificationColor(Component $component, $notification)
