@@ -100,10 +100,10 @@ class RefactorClientData extends Command
         }*/
         while (true) {
             echo $start_date_copy->format('Y-m-d H-i')."\n";
-            dispatch(new SerializeMicrocontrollerDataJob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == (count($queues)-1)){
+            if ($i == (count($queues))){
                 $i=0;
             }
+            dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
             $i++;
             if ($start_date_copy->diffInHours($current_time)==0){
                 break;
@@ -113,10 +113,10 @@ class RefactorClientData extends Command
 
         while (true) {
             echo "calc day =".$end_date->format('Y-m-d')."\n";
-            dispatch(new SerializeMicrocontrollerDataDayjob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == (count($queues)-1)){
+            if ($i == (count($queues))){
                 $i=0;
             }
+            dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
             $i++;
             if ($end_date->diffInDays($this->current_time)==1){
                 break;
@@ -128,10 +128,10 @@ class RefactorClientData extends Command
         while (true) {
             $reference_date->subDay();
             echo "calc mes =".$reference_date->format('Y-m-d')."\n";
-            dispatch(new SerializeMicrocontrollerDataMonthJob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == (count($queues)-1)){
+            if ($i == (count($queues))){
                 $i=0;
             }
+            dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
             $i++;
             if ($reference_date->diffInDays($end_date_first)==0){
                 break;
