@@ -66,7 +66,7 @@ class RefactorClientData extends Command
         $this->deleteClientRelationship();
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(20)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -89,7 +89,27 @@ class RefactorClientData extends Command
                     if ($i == (count($queues))){
                         $i=0;
                     }
-                    dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
+                    if (is_string($datum->raw_json)) {
+                        $json = json_decode($datum->raw_json, true);
+                        if ($json == null){
+                            continue;
+                        }
+                    } elseif (is_array($datum->raw_json)) {
+                        $json = $datum->raw_json;
+                    }
+                    $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
+                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                        ->first();
+                    if ($equipment == null) {
+                        $datum->forceDelete();
+                    }else{
+                        $client = $equipment->clients()->first();
+                        if ($client == null) {
+                            $datum->forceDelete();
+                        } else{
+                            dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
+                        }
+                    }
                     $i++;
                 }
             }
@@ -197,11 +217,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(20)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(20)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
         echo count($data)."\n";
         if ($data) {
