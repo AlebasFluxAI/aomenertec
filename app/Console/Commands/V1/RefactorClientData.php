@@ -64,7 +64,7 @@ class RefactorClientData extends Command
         }
         //$this->unpackData();
         //$this->deleteClientRelationship();
-        $queues = ['spot', 'spot1', 'spot2', 'spot3', 'spot4'];
+        $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
