@@ -63,6 +63,7 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
 
 Route::post('', [testFile::class, 'upload']);
 
+Route::get('error', Livewire\V1\Admin\Error\ErrorHandler::class)->name("error.handler");
 
 Route::get('/', function () {
     if (Auth::user()) {
