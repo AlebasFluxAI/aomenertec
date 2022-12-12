@@ -104,6 +104,19 @@ class MicrocontrollerData extends Model
             if ($client->stopUnpackClient()->exists()) {
                 return;
             }
+            if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
+                if ($this->hourlyMicrocontrollerData()->exists()){
+                    $this->hourlyMicrocontrollerData()->forceDelete();
+                }
+                if ($this->dailyMicrocontrollerData()->exists()){
+                    $this->dailyMicrocontrollerData()->forceDelete();
+                }
+                if ($this->clientAlert()->exists()){
+                    $this->clientAlert()->forceDelete();
+                }
+                $this->forceDelete();
+                return;
+            }
         }else{
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
@@ -134,6 +147,8 @@ class MicrocontrollerData extends Model
             $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
             if ($last_data) {
                 if (new Carbon($last_data->source_timestamp) > $current_time  ){
+                    $this->client_id = $client->id;
+                    $this->saveQuietly();
                     $this->delete();
                     return;
                 }
@@ -232,18 +247,20 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_capacitive_consumption = $json['varCh_interval'];
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
-        if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
-            if ($this->hourlyMicrocontrollerData()->exists()){
-                $this->hourlyMicrocontrollerData()->forceDelete();
+        if (!$flag) {
+            if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
+                if ($this->hourlyMicrocontrollerData()->exists()) {
+                    $this->hourlyMicrocontrollerData()->forceDelete();
+                }
+                if ($this->dailyMicrocontrollerData()->exists()) {
+                    $this->dailyMicrocontrollerData()->forceDelete();
+                }
+                if ($this->clientAlert()->exists()) {
+                    $this->clientAlert()->forceDelete();
+                }
+                $this->forceDelete();
+                return;
             }
-            if ($this->dailyMicrocontrollerData()->exists()){
-                $this->dailyMicrocontrollerData()->forceDelete();
-            }
-            if ($this->clientAlert()->exists()){
-                $this->clientAlert()->forceDelete();
-            }
-            $this->forceDelete();
-            return;
         }
         $this->saveQuietly();
         if ($flag) {
