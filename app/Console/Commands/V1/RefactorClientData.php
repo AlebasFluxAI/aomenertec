@@ -89,6 +89,31 @@ class RefactorClientData extends Command
                     if ($i == (count($queues))){
                         $i=0;
                     }
+                    $date = new Carbon();
+                    if (is_string($datum->raw_json)) {
+                        $json = json_decode($this->raw_json, true);
+                        if ($json == null){
+                            continue;
+                        }
+                    } elseif (is_array($datum->raw_json)) {
+                        $json = $datum->raw_json;
+                    }
+
+
+                    $timestamp_unix = $json['timestamp'];
+                    $current_time = $date->setTimestamp($timestamp_unix);
+                    $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
+                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                        ->first();
+                    if ($equipment == null) {
+                        $this->forceDelete();
+                        continue;
+                    }
+                    $client = $equipment->clients()->first();
+                    if ($client == null) {
+                        $this->forceDelete();
+                        continue;
+                    }
                     dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
                     $i++;
                 }
