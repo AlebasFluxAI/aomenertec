@@ -40,19 +40,17 @@
                     </div>
                     <div class="form-group">
                         <label class="block text-sm text-slate-400" for="password">Contraseña </label>
-                        @if (Route::has('password.request'))
-                            <a class="login-forgot-pass text-sm" href="
-                                    {{ route('password.request',["subdomain"=>\Illuminate\Support\Facades\Route::input("subdomain")??"enertec"]) }}
-                            ">
-                                ¿La olvidaste?</a>
-                        @endif
+                        <a class="login-forgot-pass" style="font-size: 12px; margin-left: 10px;" href="
+                                        {{route('password.reset.form')}}
+                                ">
+                            ¿La olvidaste?</a>
                         <input type="password"
-                               class="form-control @error('password') is-invalid @enderror"
-                               name="password" autocomplete="current-password" required>
+                            class="form-control @error('password') is-invalid @enderror"
+                            name="password" autocomplete="current-password" required>
                         @error('password')
                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                            <strong>{{ $message }}</strong>
+                                        </span>
                         @enderror
                     </div>
                     <div class="flex justify-between">

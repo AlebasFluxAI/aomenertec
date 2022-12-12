@@ -62,8 +62,8 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        //$this->unpackData();
-        //$this->deleteClientRelationship();
+        $this->unpackData();
+        $this->deleteClientRelationship();
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
@@ -75,8 +75,8 @@ class RefactorClientData extends Command
         $end_date= new Carbon($first_data->source_timestamp);
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
-
-        /*while (true){
+        $i=0;
+        while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
                 ->whereNull('client_id')
@@ -86,10 +86,10 @@ class RefactorClientData extends Command
             if (count($minute_data)>0){
                 $i=0;
                 foreach ($minute_data as $datum){
-                    dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
-                    if ($i == 4){
+                    if ($i == (count($queues))){
                         $i=0;
                     }
+                    dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
                     $i++;
                 }
             }
@@ -97,14 +97,10 @@ class RefactorClientData extends Command
                 break;
             }
             $this->start_date->addHour();
-        }*/
+        }
         while (true) {
             echo $start_date_copy->format('Y-m-d H-i')."\n";
-            dispatch(new SerializeMicrocontrollerDataJob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == 4){
-                $i=0;
-            }
-            $i++;
+            dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot2');
             if ($start_date_copy->diffInHours($current_time)==0){
                 break;
             }
@@ -113,11 +109,8 @@ class RefactorClientData extends Command
 
         while (true) {
             echo "calc day =".$end_date->format('Y-m-d')."\n";
-            dispatch(new SerializeMicrocontrollerDataDayjob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == 4){
-                $i=0;
-            }
-            $i++;
+            dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot2');
+
             if ($end_date->diffInDays($this->current_time)==1){
                 break;
             }
@@ -128,10 +121,10 @@ class RefactorClientData extends Command
         while (true) {
             $reference_date->subDay();
             echo "calc mes =".$reference_date->format('Y-m-d')."\n";
-            dispatch(new SerializeMicrocontrollerDataMonthJob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == 4){
+            if ($i == (count($queues))){
                 $i=0;
             }
+            dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00')))->onQueue('spot2');
             $i++;
             if ($reference_date->diffInDays($end_date_first)==0){
                 break;

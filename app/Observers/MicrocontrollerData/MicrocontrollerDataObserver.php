@@ -24,6 +24,6 @@ class MicrocontrollerDataObserver
 
     public function updated(MicrocontrollerData $microcontrollerData)
     {
-        dispatch(new JsonEdit($microcontrollerData, true))->onQueue('spot');
+        dispatch(new JsonEdit($microcontrollerData, true))->onQueue('spot1');
     }
 }

@@ -151,8 +151,21 @@ class UpdateDataConsumption extends Command
                                     }
                                 }
                             }
-                            $item->save();
 
+                            if ($client) {
+                                if (!$client->stopUnpackClient()->exists()) {
+                                    //$item->save();
+
+
+                                    if ($client->id != 0) {
+                                        $item->save();
+                                    } else{
+                                        $item->saveQuietly();
+                                    }
+                                }
+                            } else{
+                                $item->forceDelete();
+                            }
                         } else {
                             $item->forceDelete();
                         }
@@ -169,8 +182,22 @@ class UpdateDataConsumption extends Command
                     $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
                     $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
                     $item->raw_json = json_encode($raw_json);
-                    $item->save();
-
+                    //$item->save();
+                    $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
+                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
+                    if ($equipment) {
+                        $client = $equipment->clients()->first();
+                        if ($client) {
+                            if (!$client->stopUnpackClient()->exists()) {
+                                $item->save();
+                                if ($client->id != 0) {
+                                    $item->save();
+                                } else{
+                                    $item->saveQuietly();
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
