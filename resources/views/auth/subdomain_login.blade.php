@@ -49,7 +49,7 @@
     </section>
 @endsection
 @section('content')
-    <div class="col-md-4 offset-4 login-class" style="background-color: #f2f2f2; -webkit-box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%); box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%);">
+    <div class="col-md-4 offset-4 login-class m-0" style="background-color: #f2f2f2; -webkit-box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%); box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%);">
         @if (session('status'))
             <div>
                 {{ session('status') }}
