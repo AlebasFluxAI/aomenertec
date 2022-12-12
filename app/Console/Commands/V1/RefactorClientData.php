@@ -87,7 +87,7 @@ class RefactorClientData extends Command
                 $i=0;
                 foreach ($minute_data as $datum){
                     dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
-                    if ($i == 4){
+                    if ($i == (count($queues)-1)){
                         $i=0;
                     }
                     $i++;
@@ -101,7 +101,7 @@ class RefactorClientData extends Command
         while (true) {
             echo $start_date_copy->format('Y-m-d H-i')."\n";
             dispatch(new SerializeMicrocontrollerDataJob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == 4){
+            if ($i == (count($queues)-1)){
                 $i=0;
             }
             $i++;
@@ -114,7 +114,7 @@ class RefactorClientData extends Command
         while (true) {
             echo "calc day =".$end_date->format('Y-m-d')."\n";
             dispatch(new SerializeMicrocontrollerDataDayjob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == 4){
+            if ($i == (count($queues)-1)){
                 $i=0;
             }
             $i++;
@@ -129,7 +129,7 @@ class RefactorClientData extends Command
             $reference_date->subDay();
             echo "calc mes =".$reference_date->format('Y-m-d')."\n";
             dispatch(new SerializeMicrocontrollerDataMonthJob($this->start_date->format('Y-m-d H:00:00')))->onQueue($queues[$i]);
-            if ($i == 4){
+            if ($i == (count($queues)-1)){
                 $i=0;
             }
             $i++;
