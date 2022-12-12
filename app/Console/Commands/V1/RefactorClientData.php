@@ -60,8 +60,8 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        $this->unpackData();
-        $this->deleteClientRelationship();
+        //$this->unpackData();
+        //$this->deleteClientRelationship();
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(2)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
@@ -77,7 +77,7 @@ class RefactorClientData extends Command
                 break;
             }
             echo $this->start_date->format('Y-m-d H-i')."\n";
-            $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
+            /*$minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
                 ->whereNull('client_id')
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp')
@@ -86,7 +86,8 @@ class RefactorClientData extends Command
                 foreach ($minute_data as $datum){
                     dispatch(new JsonEdit($datum, false))->onQueue('spot');
                 }
-            }
+            }*/
+            //$this->calculateConsumptionHourly($this->start_date);
             dispatch(new SerializeMicrocontrollerDataJob($this->start_date->format('Y-m-d H:00:00')))->onQueue('spot');
             $this->start_date->addHour();
             $minute_data = [];

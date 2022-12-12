@@ -132,7 +132,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                                 'interval_reactive_inductive_consumption' => 0,
                                 'penalizable_reactive_capacitive_consumption' => 0,
                                 'penalizable_reactive_inductive_consumption' => 0,
-                                'source_timestamp' => $source_timestamp->addHour(),
+                                'source_timestamp' => $source_timestamp->addHour()->format('Y-m-d H:i:s'),
                                 'raw_json' => json_encode($raw_json),
                             ]
                         );
