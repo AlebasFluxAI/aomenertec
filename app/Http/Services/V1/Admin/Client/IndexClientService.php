@@ -119,6 +119,6 @@ class IndexClientService extends Singleton
             return Client::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
 
-        return Client::paginationS();
+        return Client::pagination();
     }
 }
