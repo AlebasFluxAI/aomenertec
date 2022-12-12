@@ -42,4 +42,9 @@ class ClientAlertConfiguration extends Model
         $variable = $flags_frame->where('id', $this->flag_id)->first();
         return $variable['placeholder'];
     }
+
+    public function clientDigitalOutput()
+    {
+        return $this->belongsToMany(ClientDigitalOutput::class);
+    }
 }
