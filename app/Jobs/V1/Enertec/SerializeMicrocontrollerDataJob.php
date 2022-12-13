@@ -42,7 +42,6 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
     public function handle()
     {
         $this->calculateConsumptionHourly();
-
     }
 
     public function calculateConsumptionHourly(){
