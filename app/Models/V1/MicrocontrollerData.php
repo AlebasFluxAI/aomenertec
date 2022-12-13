@@ -40,7 +40,6 @@ class MicrocontrollerData extends Model
         "accumulated_reactive_capacitive_consumption",
         "interval_reactive_capacitive_consumption",
         "interval_reactive_inductive_consumption",
-        "type",
     ];
 
     public function client()
@@ -146,9 +145,7 @@ class MicrocontrollerData extends Model
         } else {
             $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
             if ($last_data) {
-                if (new Carbon($last_data->source_timestamp) > $current_time  ){
-                    $this->client_id = $client->id;
-                    $this->saveQuietly();
+                if (new Carbon($last_data->source_timestamp) >= $current_time  ){
                     $this->delete();
                     return;
                 }
