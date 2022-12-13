@@ -70,6 +70,7 @@ class SaveAlertDataJob implements ShouldQueue
         $value = 0;
         foreach ($flags_frame as $item) {
             if ($item['id'] >= 14 and $item['id'] <= 49) {
+                $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
                 $type = "";
                 $split = substr($binary_flags, $item['bit'], 1);
                 if ($split == "1") {
@@ -78,37 +79,39 @@ class SaveAlertDataJob implements ShouldQueue
                         $type = ClientAlert::ALERT;
                     } else {
                         $value = $this->calculateValueAlert($item['variable_id'], $decode);
-                        $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
-                        if ($alert->active_control) {
-                            if ($alert->min_alert != 0) {
-                                if ($value < $alert->min_alert) {
-                                    $type = ClientAlert::ALERT;
+
+                        if($alert) {
+                            if ($alert->active_control) {
+                                if ($alert->min_alert != 0) {
+                                    if ($value < $alert->min_alert) {
+                                        $type = ClientAlert::ALERT;
+                                    }
                                 }
-                            }
-                            if ($alert->max_alert != 0) {
-                                if ($value > $alert->max_alert) {
-                                    $type = ClientAlert::ALERT;
+                                if ($alert->max_alert != 0) {
+                                    if ($value > $alert->max_alert) {
+                                        $type = ClientAlert::ALERT;
+                                    }
                                 }
-                            }
-                            if ($alert->min_control != 0) {
-                                if ($value < $alert->min_control) {
-                                    $type = ClientAlert::CONTROL;
+                                if ($alert->min_control != 0) {
+                                    if ($value < $alert->min_control) {
+                                        $type = ClientAlert::CONTROL;
+                                    }
                                 }
-                            }
-                            if ($alert->max_control != 0) {
-                                if ($value > $alert->max_control) {
-                                    $type = ClientAlert::CONTROL;
+                                if ($alert->max_control != 0) {
+                                    if ($value > $alert->max_control) {
+                                        $type = ClientAlert::CONTROL;
+                                    }
                                 }
-                            }
-                        } else {
-                            if ($alert->min_alert != 0) {
-                                if ($value < $alert->min_alert) {
-                                    $type = ClientAlert::ALERT;
+                            } else {
+                                if ($alert->min_alert != 0) {
+                                    if ($value < $alert->min_alert) {
+                                        $type = ClientAlert::ALERT;
+                                    }
                                 }
-                            }
-                            if ($alert->max_alert != 0) {
-                                if ($value > $alert->max_alert) {
-                                    $type = ClientAlert::ALERT;
+                                if ($alert->max_alert != 0) {
+                                    if ($value > $alert->max_alert) {
+                                        $type = ClientAlert::ALERT;
+                                    }
                                 }
                             }
                         }

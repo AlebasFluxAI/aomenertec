@@ -44,7 +44,7 @@ class ClientAlertObserver
                 $client->notify(new AlertNotification($clientAlert));
             }
         }
-        if ($clientAlert->type == ClientAlert::CONTROL){
+        /*if ($clientAlert->type == ClientAlert::CONTROL){
             $client_alert_configuration = $clientAlert->clientAlertConfiguration;
             if ($client_alert_configuration->active_control){
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
@@ -124,7 +124,7 @@ class ClientAlertObserver
                 }
 
             }
-        }
+        }*/
     }
 
     /**

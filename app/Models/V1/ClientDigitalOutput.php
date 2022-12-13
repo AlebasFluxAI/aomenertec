@@ -29,8 +29,8 @@ class ClientDigitalOutput extends Model
         'status',
         'control_type',
     ];
-    public function clientAlertConfiguration()
+    /*public function clientAlertConfiguration()
     {
         return $this->belongsToMany(ClientAlertConfiguration::class);
-    }
+    }*/
 }

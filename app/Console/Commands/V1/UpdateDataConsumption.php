@@ -55,7 +55,7 @@ class UpdateDataConsumption extends Command
                 $raw_json = json_decode($item->raw_json, true);
                 $last_data = null;
                 $client = null;
-                if ($raw_json == null) {
+                if ($raw_json === null) {
                     $decode = bin2hex(base64_decode($item->raw_json));
                     $split = substr($decode, (16), (16));
                     $bin = hex2bin($split);
@@ -65,6 +65,9 @@ class UpdateDataConsumption extends Command
                     if ($equipment) {
                         $client = $equipment->clients()->first();
                         if ($client) {
+                            if ($client->stopUnpackClient()->exists()) {
+                                continue;
+                            }
                             $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                         }
                     }
@@ -154,14 +157,7 @@ class UpdateDataConsumption extends Command
 
                             if ($client) {
                                 if (!$client->stopUnpackClient()->exists()) {
-                                    //$item->save();
-
-
-                                    if ($client->id != 0) {
-                                        $item->save();
-                                    } else{
-                                        $item->saveQuietly();
-                                    }
+                                    $item->save();
                                 }
                             } else{
                                 $item->forceDelete();
@@ -190,11 +186,6 @@ class UpdateDataConsumption extends Command
                         if ($client) {
                             if (!$client->stopUnpackClient()->exists()) {
                                 $item->save();
-                                if ($client->id != 0) {
-                                    $item->save();
-                                } else{
-                                    $item->saveQuietly();
-                                }
                             }
                         }
                     }
