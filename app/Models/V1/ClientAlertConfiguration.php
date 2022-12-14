@@ -43,8 +43,8 @@ class ClientAlertConfiguration extends Model
         return $variable['placeholder'];
     }
 
-   /* public function clientDigitalOutput()
+   public function clientDigitalOutput()
     {
-        return $this->hasMany(ClientDigitalOutput::class);
-    }*/
+        return $this->belongsToMany(ClientDigitalOutput::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id');
+    }
 }

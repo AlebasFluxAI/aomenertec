@@ -7,6 +7,7 @@ use App\Models\V1\ClientAlert;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\User;
+use App\Notifications\Alert\AlertControlNotification;
 use App\Notifications\Alert\AlertNotification;
 use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
@@ -44,31 +45,33 @@ class ClientAlertObserver
                 $client->notify(new AlertNotification($clientAlert));
             }
         }
-        /*if ($clientAlert->type == ClientAlert::CONTROL){
+        if ($clientAlert->type == ClientAlert::CONTROL){
             $client_alert_configuration = $clientAlert->clientAlertConfiguration;
             if ($client_alert_configuration->active_control){
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
                 $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
                 $topic = "mc/config/" . $equipment->serial;
+
                 try {
                     $mqtt=MQTT::connection();
                     $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($client, $clientAlert) {
                         if ($elapsedTime >= 50) {
                             $technicians = $client->clientTechnician;
                             $supervisors = $client->supervisors;
+                            $flag = true;
                             foreach ($technicians as $user) {
-                                event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                $user->user->notify(new AlertNotification($clientAlert));
+                                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
                             }
                             foreach ($supervisors as $user) {
                                 if ($user->user->phone == $client->phone) {
                                     $flag = false;
                                 }
-                                event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                $user->user->notify(new AlertNotification($clientAlert));
+                                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
                             }
                             if ($flag) {
-                                $client->notify(new AlertNotification($clientAlert));
+                                $client->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
                             }
                             $mqtt->interrupt();
                         }
@@ -98,24 +101,25 @@ class ClientAlertObserver
                                         $technicians = $client->clientTechnician;
                                         $supervisors = $client->supervisors;
                                         foreach ($technicians as $user) {
-                                            event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertNotification($clientAlert));
+                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                            $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
                                         }
+                                        $flag = true;
                                         foreach ($supervisors as $user) {
                                             if ($user->user->phone == $client->phone) {
                                                 $flag = false;
                                             }
-                                            event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertNotification($clientAlert));
+                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                            $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
                                         }
                                         if ($flag) {
-                                            $client->notify(new AlertNotification($clientAlert));
+                                            $client->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
                                         }
-                                        $mqtt->interrupt();
                                     }
                                 }
                             }
                         }
+                        $mqtt->interrupt();
                     }, 1);
                     $mqtt->loop(true);
                     $mqtt->disconnect();
@@ -124,7 +128,7 @@ class ClientAlertObserver
                 }
 
             }
-        }*/
+        }
     }
 
     /**
