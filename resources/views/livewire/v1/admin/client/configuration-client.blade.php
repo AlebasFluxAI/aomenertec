@@ -51,6 +51,7 @@
                                                 [
                                                     "view_name"=>"partials.v2.form.primary_form",
                                                     "view_values"=>  [
+                                                                        "loading_state"=>true,
                                                                         "form_toast"=>true,
                                                                         "session_message"=>"message",
                                                                         "form_submit_action"=>"submitFormConection",
@@ -201,6 +202,7 @@
                                                              [
                                                     "view_name"=>"partials.v2.form.primary_form",
                                                     "view_values"=>  [
+                                                                        "loading_state"=>true,
                                                                         "form_toast"=>true,
                                                                         "session_message"=>"message",
                                                                         "form_submit_action"=>"submitFormConection",
@@ -235,6 +237,7 @@
                                                 [
                                                     "view_name"=>"partials.v2.form.primary_form",
                                                     "view_values"=>  [
+                                                                        "loading_state"=>true,
                                                                         "form_toast"=>true,
                                                                         "session_message"=>"message",
                                                                         "form_submit_action"=>"submitFormAlert",

@@ -265,6 +265,14 @@
 
                         @endif
                     @endforeach
+                    @if($loading_state??false)
+                        <div wire:loading wire:target="{{ $form_submit_action }}" class="justify-content-end  mx-2 form-group mb-0 mt-0 ">
+
+                            <span class="">Conectando...</span>
+                            <div class="spinner-grow" role="status">
+                            </div>
+                        </div>
+                    @endif
                     @include("partials.v1.form.form_submit_button",[
                                              "button_align"=>"right" ,
                                              "button_content"=>$form_submit_action_text??"Guardar"
