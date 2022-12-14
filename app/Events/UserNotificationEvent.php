@@ -31,7 +31,6 @@ class UserNotificationEvent implements ShouldBroadcast
 
     public function __construct($type, $user_id)
     {
-        $this->broadcastVia('pusher');
         $this->type = $type;
         $this->user_id = $user_id;
     }

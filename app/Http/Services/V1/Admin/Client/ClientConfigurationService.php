@@ -29,9 +29,12 @@ use App\Models\V1\Client;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use App\Notifications\Alert\AlertControlNotification;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\Facades\MQTT;
+use PhpMqtt\Client\MqttClient;
 use Spatie\Permission\Models\Role;
 use function auth;
 use function bcrypt;
@@ -289,48 +292,8 @@ class ClientConfigurationService extends Singleton
     public function submitFormConection(Component $component)
     {
         $component->validate();
-        if ($component->client_config->save()) {
-            $this->setRemoteConfiguration($component);
-            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-        }
-
-        foreach ($component->client->refresh()->channels as $channel) {
-            $channel->disable();
-        }
-        /*foreach ($component->client_notification_types as $notification_channel) {
-            AvailableChannel::find($component->client->refresh()->channels()->whereChannel($notification_channel)->first())->enable();
-        }*/
-    }
-
-
-    public function blinkChannel(Component $component, $channel)
-    {
-        AvailableChannel::find($channel)->blink();
-        ToastEvent::launchToast($component, "show", "success", "Canal configurado exitosamente");
-        $component->channels = $component->client->refresh()->channels;
-    }
-
-    public function submitFormAlert(Component $component)
-    {
-        foreach ($component->client_config_alert as $index => $item) {
-            if ($index == "client_notification_type") {
-                continue;
-            }
-            $component->validate([
-                'client_config_alert.' . $index . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_alert],
-                'client_config_alert.' . $index . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_alert],
-                'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
-                'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
-            ]);
-            $item->save();
-        }
-        $this->setRemoteConfigurationFrame($component);
-        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-    }
-
-    private function setRemoteConfiguration(Component $component)
-    {
         $flag = false;
+        $message = [];
         if ($component->client_config->wasChanged('ssid')) {
             $message['ssid'] = $component->client_config->ssid;
             $flag = true;
@@ -365,39 +328,134 @@ class ClientConfigurationService extends Singleton
             $message['real_time_latency'] = $component->client_config->real_time_latency;
             $flag = true;
         }
-        if ($flag) {
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
-            $message['did'] = $equipment->serial;
-            $topic = "mc/config/" . $equipment->serial;
-            MQTT::publish($topic, json_encode($message));
-            MQTT::disconnect();
+
+        try {
+            if ($flag) {
+                $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
+                $message['did'] = $equipment->serial;
+                $topic = "mc/config/" . $equipment->serial;
+                $mqtt=MQTT::connection();
+                $mqtt->publish($topic, json_encode($message));
+                $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
+                    if ($elapsedTime >= 50) {
+                        $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);
+                        $mqtt->interrupt();
+                    }
+                });
+                $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
+                    $json = json_decode($message, true);
+                    if (array_key_exists('config_ack', $json)) {
+                        $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
+                        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                            ->first();
+                        if ($equipment) {
+                            $client_aux = $equipment->clients()->first();
+                            if ($client_aux->id == $component->client->id) {
+                                if ($json['config_ack']) {
+                                    if ($component->client_config->save()) {
+                                        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+                                    }
+                                    foreach ($component->client->refresh()->channels as $channel) {
+                                        $channel->disable();
+                                    }
+                                    /*foreach ($component->client_notification_types as $notification_channel) {
+                                        AvailableChannel::find($component->client->refresh()->channels()->whereChannel($notification_channel)->first())->enable();
+                                    }*/
+                                    $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+                                }
+                            }
+                        }
+                    }
+                    $mqtt->interrupt();
+                }, 1);
+                $mqtt->loop(true);
+                $mqtt->disconnect();
+            }
+        } catch (MqttClientException $e) {
+
         }
     }
 
-    private function setRemoteConfigurationFrame(Component $component)
+
+    public function blinkChannel(Component $component, $channel)
     {
-        $alert_config_frame = config('data-frame.alert_config_frame');
-        $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
-        $topic = "mc/config/" . $equipment->serial;
-        $binary_data = [];
-        $data = "";
-        foreach ($alert_config_frame as $item) {
-            if ($item['variable_name'] == 'network_operator_id') {
-                $data = $component->client->networkOperator->identification;
-            } elseif ($item['variable_name'] == 'equipment_id') {
-                $data = $equipment->serial;
-            } elseif ($item['variable_name'] == 'network_operator_new_id') {
-                $data = $component->client->networkOperator->identification;
-            } elseif ($item['variable_name'] == 'equipment_new_id') {
-                $data = $equipment->serial;
-            } else {
-                $aux_variable = $component->client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
-                $data = $aux_variable->{$item['limit']};
-            }
-            array_push($binary_data, pack($item['type'], $data));
-        }
-        $message = base64_encode(implode($binary_data));
-        MQTT::publish($topic, $message);
-        MQTT::disconnect();
+        AvailableChannel::find($channel)->blink();
+        ToastEvent::launchToast($component, "show", "success", "Canal configurado exitosamente");
+        $component->channels = $component->client->refresh()->channels;
     }
+
+    public function submitFormAlert(Component $component)
+    {
+        try {
+            foreach ($component->client_config_alert as $index => $item) {
+                if ($index == "client_notification_type") {
+                    continue;
+                }
+                $component->validate([
+                    'client_config_alert.' . $index . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_alert],
+                    'client_config_alert.' . $index . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_alert],
+                    'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
+                    'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
+                ]);
+            }
+            $mqtt=MQTT::connection();
+            $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
+                if ($elapsedTime >= 50) {
+                    $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);
+                    $mqtt->interrupt();
+                }
+            });
+            $alert_config_frame = config('data-frame.alert_config_frame');
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
+            $topic = "mc/config/" . $equipment->serial;
+            $binary_data = [];
+            $data = "";
+            foreach ($alert_config_frame as $item) {
+                if ($item['variable_name'] == 'network_operator_id') {
+                    $data = $component->client->networkOperator->identification;
+                } elseif ($item['variable_name'] == 'equipment_id') {
+                    $data = $equipment->serial;
+                } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                    $data = $component->client->networkOperator->identification;
+                } elseif ($item['variable_name'] == 'equipment_new_id') {
+                    $data = $equipment->serial;
+                } else {
+                    $aux_variable = $component->client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
+                    $data = $aux_variable->{$item['limit']};
+                }
+                array_push($binary_data, pack($item['type'], $data));
+            }
+            $message = base64_encode(implode($binary_data));
+            $mqtt->publish($topic, $message);
+            $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
+                $json = json_decode($message, true);
+                if (array_key_exists('config_ack', $json)) {
+                    $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
+                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                        ->first();
+                    if ($equipment) {
+                        $client_aux = $equipment->clients()->first();
+                        if ($client_aux->id == $component->client->id) {
+                            if ($json['config_ack']) {
+                                foreach ($component->client_config_alert as $index => $item) {
+                                    if ($index == "client_notification_type") {
+                                        continue;
+                                    }
+                                    $item->save();
+                                }
+                                $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+                            }
+                        }
+                    }
+                }
+                $mqtt->interrupt();
+            }, 1);
+            $mqtt->loop(true);
+            $mqtt->disconnect();
+        } catch (MqttClientException $e) {
+
+        }
+
+    }
+
 }
