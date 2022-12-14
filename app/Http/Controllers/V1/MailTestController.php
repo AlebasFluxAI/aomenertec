@@ -39,13 +39,14 @@ class MailTestController
         //$datum = MicrocontrollerData::find(1905135);
         //$datum->jsonEdit(false);
         //dispatch(new SerializeMicrocontrollerDataJob('2022-12-08 08:05:00'))->onQueue('default');
-        $user = User::find(1);
-        event(new RealTimeMonitoringEvent("hola"));
+        //$user = User::find(1);
+        //event(new RealTimeMonitoringEvent("hola"));
         //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->id));
-        dd("ok");
-        $clientAlert = ClientAlert::find(1313);
+        $clientAlert = ClientAlert::find(1369);
         $client =$clientAlert->client;
-        $technicians = $client->clientTechnician;
+        $client->notify(new AlertControlNotification($clientAlert));
+        dd("ok");
+        /*$technicians = $client->clientTechnician;
         $supervisors = $client->supervisors;
         $flag = true;
 
@@ -131,7 +132,7 @@ class MailTestController
                }
 
            }
-       }
+       }*/
         /*$clientAlert = ClientAlert::find(3);
         $client = Client::find($clientAlert->client_id);
         $technicians = $client->clientTechnician;

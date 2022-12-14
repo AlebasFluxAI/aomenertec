@@ -294,41 +294,40 @@ class ClientConfigurationService extends Singleton
         $component->validate();
         $flag = false;
         $message = [];
-        if ($component->client_config->wasChanged('ssid')) {
+        if ($component->client_config->isDirty('ssid')) {
             $message['ssid'] = $component->client_config->ssid;
             $flag = true;
         }
-        if ($component->client_config->wasChanged('wifi_password')) {
+        if ($component->client_config->isDirty('wifi_password')) {
             $message['pass'] = $component->client_config->wifi_password;
             $flag = true;
         }
-        if ($component->client_config->wasChanged('mqtt_host')) {
+        if ($component->client_config->isDirty('mqtt_host')) {
             $message['brokerMqtt'] = $component->client_config->mqtt_host;
             $flag = true;
         }
-        if ($component->client_config->wasChanged('mqtt_port')) {
+        if ($component->client_config->isDirty('mqtt_port')) {
             $message['portMqtt'] = $component->client_config->mqtt_port;
             $flag = true;
         }
-        if ($component->client_config->wasChanged('mqtt_user')) {
+        if ($component->client_config->isDirty('mqtt_user')) {
             $message['userMqtt'] = $component->client_config->mqtt_user;
             $flag = true;
         }
-        if ($component->client_config->wasChanged('mqtt_password')) {
+        if ($component->client_config->isDirty('mqtt_password')) {
             $message['passMqtt'] = $component->client_config->mqtt_password;
             $flag = true;
         }
-        if ($component->client_config->wasChanged('storage_latency')
-            || $component->client_config->wasChanged('storage_type_latency')) {
+        if ($component->client_config->isDirty('storage_latency')
+            || $component->client_config->isDirty('storage_type_latency')) {
             $message['storage_latency'] = $component->client_config->storage_latency;
             $message['storage_latency_type'] = substr($component->client_config->storage_type_latency, 0, 1);
             $flag = true;
         }
-        if ($component->client_config->wasChanged('real_time_latency')) {
+        if ($component->client_config->isDirty('real_time_latency')) {
             $message['real_time_latency'] = $component->client_config->real_time_latency;
             $flag = true;
         }
-
         try {
             if ($flag) {
                 $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();

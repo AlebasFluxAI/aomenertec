@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ClientDigitalOutputAlertConfiguration extends Model
 {
     use HasFactory;
-    use AuditableTrait;
     use PaginatorTrait;
 
 

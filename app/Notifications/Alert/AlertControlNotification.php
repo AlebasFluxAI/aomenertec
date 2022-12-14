@@ -5,6 +5,7 @@ namespace App\Notifications\Alert;
 use App\Channels\WhatsAppChannel;
 use App\Http\Resources\V1\UserNotificationPayload;
 use App\Notifications\WhatsAppMessage;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -21,13 +22,12 @@ class AlertControlNotification extends Notification
      */
     public $clientAlert;
     public $client;
-    public $template;
-    public function __construct($clientAlert, $template)
+    //public $template;
+    public function __construct($clientAlert)
     {
         $this->clientAlert = $clientAlert;
         $this->client = $this->clientAlert->client;
         $this->code = rand(100000, 999999);
-        $this->template = $template;
     }
 
     /**
@@ -57,18 +57,20 @@ class AlertControlNotification extends Notification
     public function toWhatsApp($notifiable)
     {
         $client_alert_configuration = $this->clientAlert->clientAlertConfiguration;
-        $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
+        $digital_output = $client_alert_configuration->clientDigitalOutput;
         $name_outputs = [];
         foreach ($digital_output as $output){
             array_push($name_outputs, $output->name);
         }
         $outputs = implode(", ", $name_outputs);
+        $date = new Carbon($this->clientAlert->created_at);
+        $template ='alert_control_success';
 
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
-            ->template_name($this->template)
-            ->params([($this->client->alias ?? $this->client->name), $this->clientAlert->clientAlertConfiguration->getVariableName(),
-                $this->clientAlert->value, $this->clientAlert->created_at->format('d F H:i'), $outputs,
+            ->template_name($template)
+            ->params([($this->client->alias ?? $this->client->name), $client_alert_configuration->getVariableName(),
+                $this->clientAlert->value, $date->format('d F H:i'), $outputs,
                 "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,
             ]);
     }
