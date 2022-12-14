@@ -22,12 +22,13 @@ class AlertControlNotification extends Notification
      */
     public $clientAlert;
     public $client;
-    //public $template;
-    public function __construct($clientAlert)
+    public $template;
+    public function __construct($clientAlert, $template)
     {
         $this->clientAlert = $clientAlert;
         $this->client = $this->clientAlert->client;
         $this->code = rand(100000, 999999);
+        $this->template = $template;
     }
 
     /**
@@ -64,11 +65,9 @@ class AlertControlNotification extends Notification
         }
         $outputs = implode(", ", $name_outputs);
         $date = new Carbon($this->clientAlert->created_at);
-        $template ='alert_control_success';
-
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
-            ->template_name($template)
+            ->template_name($this->template)
             ->params([($this->client->alias ?? $this->client->name), $client_alert_configuration->getVariableName(),
                 $this->clientAlert->value, $date->format('d F H:i'), $outputs,
                 "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,

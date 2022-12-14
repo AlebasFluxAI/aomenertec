@@ -102,7 +102,7 @@ class ClientAlertObserver
                                         $supervisors = $client->supervisors;
                                         foreach ($technicians as $user) {
                                             //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
+                                            $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                         }
                                         $flag = true;
                                         foreach ($supervisors as $user) {
@@ -110,10 +110,10 @@ class ClientAlertObserver
                                                 $flag = false;
                                             }
                                             //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
+                                            $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                         }
                                         if ($flag) {
-                                            $client->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
+                                            $client->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                         }
                                     }
                                 }
