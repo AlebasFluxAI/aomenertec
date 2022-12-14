@@ -44,7 +44,7 @@ class MailTestController
         //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->id));
         $clientAlert = ClientAlert::find(1369);
         $client =$clientAlert->client;
-        $client->notify(new AlertControlNotification($clientAlert));
+        $client->notify(new AlertControlNotification($clientAlert, "control_alert_ok"));
         dd("ok");
         /*$technicians = $client->clientTechnician;
         $supervisors = $client->supervisors;
