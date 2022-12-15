@@ -47,9 +47,9 @@ class SaveAlertDataJob implements ShouldQueue
 
     private function alertVariableEvent()
     {
-        $microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
         $flags_frame = config('data-frame.flags_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
+        $microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
 
         $flag = $this->calculateValueAlert(5, $decode);
         $binary_flags = sprintf("%064b", ($flag));
@@ -117,13 +117,17 @@ class SaveAlertDataJob implements ShouldQueue
                         }
                     }
                     if ($type != "") {
-                        ClientAlert::create([
+                        if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
+                            $query->whereBetween("source_timestamp", [$this->source_timestamp->format('Y-m-d H:00:00'), $this->source_timestamp->format('Y-m-d H:59:59')]);
+                        })->where('type', $type)->exists()) {
+                            ClientAlert::create([
                                 'client_id' => $client->id,
-                                'microcontroller_data_id' => ($microcontroller_data)?$microcontroller_data->id:null,
+                                'microcontroller_data_id' => $microcontroller_data->id,
                                 'client_alert_configuration_id' => $alert->id,
                                 'value' => $value,
                                 'type' => $type
                             ]);
+                        }
                     }
                 }
             }

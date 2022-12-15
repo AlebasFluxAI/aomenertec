@@ -1,4 +1,3 @@
-
 @section("header")
     {{--extended app.blade--}}
 @endsection
@@ -22,7 +21,6 @@
     <div class="contenedor-grande">
 
     <div class="d-flex flex-column pt-3">
-
 
         @foreach($coils as $index=>$coil)
             <div wire:key="coil-{{ $index }}" class="d-flex justify-content-center">
