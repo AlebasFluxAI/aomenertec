@@ -44,9 +44,8 @@ class MailTestController
         //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->id));
         $clientAlert = ClientAlert::find(1369);
         $client =$clientAlert->client;
-        $client->notify(new AlertControlNotification($clientAlert, "control_alert_ok"));
-        dd("ok");
-        /*$technicians = $client->clientTechnician;
+
+        $technicians = $client->clientTechnician;
         $supervisors = $client->supervisors;
         $flag = true;
 
@@ -106,7 +105,7 @@ class MailTestController
                                        $supervisors = $client->supervisors;
                                        foreach ($technicians as $user) {
                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                           $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
+                                           $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                        }
                                        $flag = true;
                                        foreach ($supervisors as $user) {
@@ -114,10 +113,10 @@ class MailTestController
                                                $flag = false;
                                            }
                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                           $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
+                                           $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                        }
                                        if ($flag) {
-                                           $client->notify(new AlertControlNotification($clientAlert, 'alert_control_success'));
+                                           $client->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                        }
                                    }
                                }
@@ -132,7 +131,7 @@ class MailTestController
                }
 
            }
-       }*/
+       }
         /*$clientAlert = ClientAlert::find(3);
         $client = Client::find($clientAlert->client_id);
         $technicians = $client->clientTechnician;
