@@ -1,5 +1,5 @@
 <div >
-    <div  class="d-flex flex-column pt-3">
+    <div  class="d-flex flex-column pt-3 button-on-off">
 
         @foreach($coils as $index=>$coil)
             <div  wire:key="coil-{{ $coil->id }}" class="d-flex justify-content-center">

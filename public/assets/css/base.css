@@ -2567,3 +2567,18 @@ button.btn.btn-outline-primary.active {
     background-color: #00959a !important;
     border: 1px solid #00959a !important;
 }
+
+.tab-content{
+    display: flex;
+    justify-content: center;
+}
+
+.button-on-off .justify-content-end.form-group.mx-2.mb-0.mt-0 button, 
+.button-on-off .justify-content-end.form-group.mx-2.mb-0.mt-0 button i {
+    color: var(--style_primary) !important;
+}
+
+.button-on-off .justify-content-end.form-group.mx-2.mb-0.mt-0 button:hover, 
+.button-on-off .justify-content-end.form-group.mx-2.mb-0.mt-0 button i:hover {
+    color: white !important;
+}
