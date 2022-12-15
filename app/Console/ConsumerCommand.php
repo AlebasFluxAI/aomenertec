@@ -54,7 +54,7 @@ class ConsumerCommand extends Command
         }, 1);
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
-            dispatch(new SaveAlertDataJob($message))->onQueue('spot');
+            dispatch(new SaveAlertDataJob($message))->onQueue('default');
         }, 1);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
@@ -66,7 +66,7 @@ class ConsumerCommand extends Command
         },1);
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
-            dispatch(new SaveAlertDataJob($message))->onQueue('spot');
+            dispatch(new SaveAlertDataJob($message))->onQueue('default');
         }, 0);
         $mqtt->subscribe('mc/ack', function (string $topic, string $message) {
             echo $message . "\n";
