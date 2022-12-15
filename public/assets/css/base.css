@@ -605,7 +605,7 @@ dialog {
     border: solid var(--style_primary) 1px;
     padding: 4px 10px;
     margin: 3px;
-    color: var(--style_primary);
+    color: var(--style_primary) !important;
     transition: 0.4s;
     border-radius: 13px;
     font-size: 0.9rem;
@@ -2566,4 +2566,9 @@ a.btn.btn-redirect.btn-sm {
 button.btn.btn-outline-primary.active {
     background-color: #00959a !important;
     border: 1px solid #00959a !important;
+}
+
+.tab-content{
+    display: flex;
+    justify-content: center;
 }
