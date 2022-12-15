@@ -103,8 +103,17 @@
     border-width: 2px;
     border-radius: 5px;
     width: 50%;
+}
 
-
+#message-closer-box {
+    padding: 1rem;
+    margin: 1rem;
+    border-color: #c3c3c3;
+    background-color: #f2f2f2;
+    border-width: 2px;
+    border-radius: 5px;
+    width: 50%;
+    margin-left: 50%;
 }
 
 .click-zoom input[type=checkbox]:checked~img {
@@ -339,15 +348,6 @@ body {
     padding-bottom: 6px;
 }
 
-a {
-    color: #f9b000;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #a87702;
-    text-decoration: none;
-}
 
 h1,
 h2,
@@ -600,18 +600,24 @@ dialog {
     color: white;
 }
 
-.contenedor-grande button {
+.contenedor-grande .button_class {
     background-color: white;
     border: solid var(--style_primary) 1px;
     padding: 4px 10px;
     margin: 3px;
-    color: var(--style_primary) !important;
+    transition: 0.4s;
+    border-radius: 13px;
+    font-size: 0.9rem;
+}
+.contenedor-grande button {
+    padding: 4px 10px;
+    margin: 3px;
     transition: 0.4s;
     border-radius: 13px;
     font-size: 0.9rem;
 }
 
-.contenedor-grande button:hover {
+.contenedor-grande .button-class:hover {
     background: var(--style_primary);
     color: white;
 }
@@ -694,7 +700,7 @@ dialog {
 }
 
 a.btn.btn-lg.badge.badge-light.rounded-full {
-    background-color: white;
+
     border-color: #009599;
     color: #009299;
 }
@@ -704,7 +710,7 @@ a.btn.btn-lg.badge.badge-light.rounded-full:hover {
 }
 
 a.btn.btn-lg.badge.badge-light.rounded-full:hover i {
-    color: white !important;
+    color: white
 }
 
 
@@ -1793,15 +1799,7 @@ footer .copyright {
     /*overflow-y: auto;*/
 }
 
-.message {
-    padding: 0 !important;
-    margin: 0 !important;
-    background: url("w.jpg") no-repeat fixed center;
-    background-size: cover;
-    overflow-y: auto;
-    border: 1px solid #f7f7f7;
-    height: calc(100% - 120px);
-}
+
 
 .message-previous {
     margin: 0 !important;
@@ -2559,16 +2557,4 @@ justify-content-end .textClientes p {
     }
 }
 
-a.btn.btn-redirect.btn-sm {
-    color
-}
 
-button.btn.btn-outline-primary.active {
-    background-color: #00959a !important;
-    border: 1px solid #00959a !important;
-}
-
-.tab-content{
-    display: flex;
-    justify-content: center;
-}
