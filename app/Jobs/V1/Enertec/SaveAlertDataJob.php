@@ -116,14 +116,16 @@ class SaveAlertDataJob implements ShouldQueue
                             }
                         }
                     }
-                    if ($type != "") {
-                        ClientAlert::create([
+                    if ($alert) {
+                        if ($type != "") {
+                            ClientAlert::create([
                                 'client_id' => $client->id,
-                                'microcontroller_data_id' => ($microcontroller_data)?$microcontroller_data->id:null,
+                                'microcontroller_data_id' => ($microcontroller_data) ? $microcontroller_data->id : null,
                                 'client_alert_configuration_id' => $alert->id,
                                 'value' => $value,
                                 'type' => $type
                             ]);
+                        }
                     }
                 }
             }
