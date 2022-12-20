@@ -319,6 +319,16 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW));
                 });
 
+                Route::prefix("clientes-desactivados")->group(function () {
+                    Route::get('listado', Livewire\V1\Admin\Client\ClientDisabled\IndexClient::class)
+                        ->name("v1.admin.client-disabled.list.client")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_DISABLED_SHOW));
+
+                    Route::get('detalle/{client}', Livewire\V1\Admin\Client\ClientDisabled\DetailClient::class)
+                        ->name("v1.admin.client-disabled.detail.client")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_DISABLED_SHOW));
+                });
+
                 Route::prefix("ordenes_de_servicio")->group(function () {
                     Route::get('', Livewire\V1\Admin\WorkOrder\WorkOrderIndex::class)
                         ->name("administrar.v1.ordenes_de_servicio.listado")

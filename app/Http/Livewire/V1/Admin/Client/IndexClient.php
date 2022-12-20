@@ -45,6 +45,11 @@ class IndexClient extends Component
         $this->indexClientService->deleteClient($this, $id);
     }
 
+    public function disableClient($clientId)
+    {
+        $this->indexClientService->disableClient($this, $clientId);
+
+    }
 
     public function render()
     {

@@ -92,6 +92,13 @@ class SuperAdmin extends Model
 
                                 ],
                             ],
+                            [
+                                "title" => "Clientes desactivados",
+                                "route" => "v1.admin.client-disabled.list.client",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],
@@ -231,4 +238,4 @@ class SuperAdmin extends Model
 }
 
 
- 
+
