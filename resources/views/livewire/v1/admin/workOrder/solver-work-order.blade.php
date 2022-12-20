@@ -93,10 +93,24 @@
                                  "required"=>false,
                                                 ])
 
-            @include("partials.v1.form.form_submit_button",[
-                                  "button_align"=>"right" ,
-                                  "button_content"=>"Cerrar orden de trabajo"
-                      ])
+
+
+            @if($model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)
+                @include("partials.v1.form.form_submit_button",[
+                                      "button_align"=>"right" ,
+                                      "button_content"=>"Cerrar orden de trabajo",
+                                      "modal_content"=>"Al completar esta orden de trabajo cambiara
+                                      el estado del cliente ".$model->client->alias,
+                                      "function"=>"submitForm"
+                          ])
+            @else
+                @include("partials.v1.form.form_submit_button",[
+                                "button_align"=>"right" ,
+                                "button_content"=>"Cerrar orden de trabajo",
+                                "modal_content"=>"Cerrar orden de trabajo",
+                                "function"=>"submitForm"
+                    ])
+            @endif
 
         </form>
 

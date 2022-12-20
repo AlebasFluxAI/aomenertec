@@ -2,6 +2,7 @@
 
 namespace App\Observers\WorkOrder;
 
+use App\Models\V1\Support;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
 use App\Notifications\Alert\WorkOrderCreatedNotification;
@@ -22,6 +23,10 @@ class WorkOrderObserver
 
     public function created(WorkOrder $workOrder)
     {
+        if ($workOrder->type == WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT) {
+            $this->notifySupportUsers($workOrder);
+            return;
+        }
         if ($workOrder->technician) {
             $user = $workOrder->technician->user;
         }
@@ -32,6 +37,13 @@ class WorkOrderObserver
             return;
         }
         $user->notify(new WorkOrderCreatedNotification($workOrder));
+    }
+
+    private function notifySupportUsers(WorkOrder $workOrder)
+    {
+        foreach (Support::get() as $support) {
+            $support->user->notify(new WorkOrderCreatedNotification($workOrder));
+        }
     }
 
     public function updating(WorkOrder $workOrder)

@@ -10,4 +10,5 @@ return [
     WorkOrder::WORK_ORDER_STATUS_OPEN => "Abierta",
     WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS => "En progreso",
     WorkOrder::WORK_ORDER_STATUS_CLOSED => "Cerrada",
+    WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT => "Desactivar / Activar cliente"
 ];

@@ -118,80 +118,86 @@
                         @isset($table_actions)
 
                             <td id="table-action-cell"
-                                style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}">
+                                style="{{isset($row_color_function)?"background-color: ".$this->{$row_color_function}($table_row):''}}"
+                            >
                                 <div class="container-fluid">
                                     <div class="row">
                                         @foreach($table_actions as $action_type=>$action_value)
-                                            @if($action_type=="edit")
-                                                @include("partials.v1.table.table-action-button",[
-                                                            "button_action"=>$action_value,
-                                                            "icon_color"=>"secondary",
-                                                            "model_id"=>$table_row->{$table_headers[0]["col_data"]},
-                                                            "icon"=>"fas fa-pencil",
-                                                            "tooltip_title"=>"Editar"
+                                            <div wire:loading>
+                                                <div class="clock-loader"></div>
+                                            </div>
+                                            <div class="row" wire:loading.remove>
+                                                @if($action_type=="edit")
+                                                    @include("partials.v1.table.table-action-button",[
+                                                                "button_action"=>$action_value,
+                                                                "icon_color"=>"secondary",
+                                                                "model_id"=>$table_row->{$table_headers[0]["col_data"]},
+                                                                "icon"=>"fas fa-pencil",
+                                                                "tooltip_title"=>"Editar"
 
-                                                        ])
-                                            @elseif($action_type=="delete")
-                                                @include("partials.v1.table.table-action-button",[
-                                                         "button_action"=>$action_value,
-                                                         "icon_color"=>"secondary",
-                                                         "model_id"=>$table_row->{$table_headers[0]["col_data"]},
-                                                         "icon"=>"fas fa-trash",
-                                                         "tooltip_title"=>"Eliminar"
-                                                     ])
+                                                            ])
+                                                @elseif($action_type=="delete")
+                                                    @include("partials.v1.table.table-action-button",[
+                                                             "button_action"=>$action_value,
+                                                             "icon_color"=>"secondary",
+                                                             "model_id"=>$table_row->{$table_headers[0]["col_data"]},
+                                                             "icon"=>"fas fa-trash",
+                                                             "tooltip_title"=>"Eliminar"
+                                                         ])
 
-                                            @elseif($action_type=="details")
-                                                @include("partials.v1.table.table-action-button",[
-                                                         "button_action"=>$action_value,
-                                                         "icon_color"=>"secondary",
-                                                         "model_id"=>$table_row->{$table_headers[0]["col_data"]},
-                                                         "icon"=>"fas fa-search",
-                                                         "tooltip_title"=>"Detalles"
-                                                     ])
-                                            @elseif($action_type=="customs")
-                                                @foreach($action_value  as $custom)
+                                                @elseif($action_type=="details")
+                                                    @include("partials.v1.table.table-action-button",[
+                                                             "button_action"=>$action_value,
+                                                             "icon_color"=>"secondary",
+                                                             "model_id"=>$table_row->{$table_headers[0]["col_data"]},
+                                                             "icon"=>"fas fa-search",
+                                                             "tooltip_title"=>"Detalles"
+                                                         ])
+                                                @elseif($action_type=="customs")
+                                                    @foreach($action_value  as $custom)
 
-                                                    @if(array_key_exists("limit_roles",$custom))
-                                                        @unlessrole($custom["limit_roles"])
-                                                        @continue
-                                                        @endunlessrole
-                                                    @endif
-                                                    @if(isset($custom["permission"]) and \Illuminate\Support\Facades\Auth::hasUser() and !array_intersect($custom["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
-                                                        @continue
-                                                    @endif
+                                                        @if(array_key_exists("limit_roles",$custom))
+                                                            @unlessrole($custom["limit_roles"])
+                                                            @continue
+                                                            @endunlessrole
+                                                        @endif
+                                                        @if(isset($custom["permission"]) and \Illuminate\Support\Facades\Auth::hasUser() and !array_intersect($custom["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
+                                                            @continue
+                                                        @endif
 
-                                                    @if(array_key_exists("conditional",$custom) and $this->{$custom["conditional"]}(isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                        $table_row->{$table_headers[0]["col_data"]}))
-                                                        @continue
-                                                    @endif
-                                                    @if(array_key_exists("conditionalModel",$custom) and $this->{$custom["conditionalModel"]}($table_row))
-                                                        @continue
-                                                    @endif
+                                                        @if(array_key_exists("conditional",$custom) and $this->{$custom["conditional"]}(isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                            $table_row->{$table_headers[0]["col_data"]}))
+                                                            @continue
+                                                        @endif
+                                                        @if(array_key_exists("conditionalModel",$custom) and $this->{$custom["conditionalModel"]}($table_row))
+                                                            @continue
+                                                        @endif
 
-                                                    @if(array_key_exists("redirect",$custom))
-                                                        @include("partials.v1.table.table-redirect-button",[
-                                                                 "button_route"=>$custom["redirect"]["route"],
-                                                                 "button_binding"=>array_key_exists("binding",$custom["redirect"])?$custom["redirect"]["binding"]:"",
-                                                                 "redirect_values"=>array_key_exists("extra_params",$custom["redirect"])?$custom["redirect"]["extra_params"]:[],
-                                                                 "icon_color"=>"secondary",
-                                                                 "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                    $table_row->{$table_headers[0]["col_data"]},
-                                                                 "icon"=>$custom["icon"],
-                                                                 "tooltip_title"=>$custom["tooltip_title"] ?? '',
-                                                                 "button_subdomain"=>$custom["button_subdomain"]??null
-                                                             ])
-                                                    @else
-                                                        @include("partials.v1.table.table-action-button",[
-                                                               "button_action"=>$custom["function"],
-                                                               "icon_color"=>"secondary",
-                                                               "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                  $table_row->{$table_headers[0]["col_data"]},
-                                                               "icon"=>$custom["icon"],
-                                                               "tooltip_title"=>$custom["tooltip_title"] ?? ''
-                                                           ])
-                                                    @endif
-                                                @endforeach
-                                            @endif
+                                                        @if(array_key_exists("redirect",$custom))
+                                                            @include("partials.v1.table.table-redirect-button",[
+                                                                     "button_route"=>$custom["redirect"]["route"],
+                                                                     "button_binding"=>array_key_exists("binding",$custom["redirect"])?$custom["redirect"]["binding"]:"",
+                                                                     "redirect_values"=>array_key_exists("extra_params",$custom["redirect"])?$custom["redirect"]["extra_params"]:[],
+                                                                     "icon_color"=>"secondary",
+                                                                     "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                        $table_row->{$table_headers[0]["col_data"]},
+                                                                     "icon"=>$custom["icon"],
+                                                                     "tooltip_title"=>$custom["tooltip_title"] ?? '',
+                                                                     "button_subdomain"=>$custom["button_subdomain"]??null
+                                                                 ])
+                                                        @else
+                                                            @include("partials.v1.table.table-action-button",[
+                                                                   "button_action"=>$custom["function"],
+                                                                   "icon_color"=>"secondary",
+                                                                   "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
+                                                                      $table_row->{$table_headers[0]["col_data"]},
+                                                                   "icon"=>$custom["icon"],
+                                                                   "tooltip_title"=>$custom["tooltip_title"] ?? ''
+                                                               ])
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </div>
                                         @endforeach
                                     </div>
                                 </div>
