@@ -119,7 +119,15 @@ class Admin extends Model
                                 "submenu" => [
 
                                 ]
-                            ]
+                            ],
+                            [
+                                "title" => "Clientes desactivados",
+                                "route" => "v1.admin.client-disabled.list.client",
+                                "submenu" => [
+
+                                ],
+                            ],
+
                         ]
 
                     ],

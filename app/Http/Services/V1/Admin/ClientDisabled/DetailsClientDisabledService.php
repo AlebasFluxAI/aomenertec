@@ -23,7 +23,6 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
-use App\Scope\ClientEnabledScope;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -31,11 +30,10 @@ use function auth;
 use function bcrypt;
 use function session;
 
-class DetailClientService extends Singleton
+class DetailsClientDisabledService extends Singleton
 {
-    public function mount(Component $component, $model)
+    public function mount(Component $component, Client $model)
     {
-        $model = Client::withoutGlobalScope(ClientEnabledScope::class)->find($model);
         $component->fill([
             'client' => $model,
         ]);

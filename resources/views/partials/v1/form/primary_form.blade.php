@@ -81,7 +81,6 @@
 
                             ])
 
-
                             @elseif($form_input["input_type"]=="file")
 
                                 @include("partials.v1.form.form_input_file",[
@@ -102,12 +101,13 @@
                                             "name_select"=>$form_input["name_select"]??"",
                                             "option_value"=>$form_input["option_value"],
                                             "option_view"=>$form_input["option_view"],
+                                            "tooltip_title"=>$form_input["tooltip_title"]??null,
+                                            "tooltip_position"=>$form_input["tooltip_position"]??"top",
                                             "optgroup"=>$form_input["optgroup"]??false,
                                             "input_label"=> $form_input["input_label"]??""
 
                                    ])
                             @endif
-
 
                         @endforeach
                         @include("partials.v1.form.form_submit_button",[

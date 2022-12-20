@@ -5,7 +5,9 @@ namespace App\Models\V1;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\AvailableChannelTrait;
 use App\Models\Traits\PaginatorTrait;
+use App\Scope\ClientEnabledScope;
 use App\Scope\OrderIdScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +30,9 @@ class Client extends Model
 
     public const PERSON_TYPE_NATURAL = "natural";
     public const PERSON_TYPE_JURIDICAL = "juridical";
+
+    public const CLIENT_STATUS_ENABLED = "enabled";
+    public const CLIENT_STATUS_DISABLED = "disabled";
 
     public const IDENTIFICATION_TYPE_CC = 'CC';
     public const IDENTIFICATION_TYPE_CE = 'CE';
@@ -61,12 +66,15 @@ class Client extends Model
         "has_telemetry",
         "admin_id",
         "alias",
-        "indicative"
+        "indicative",
+        "status"
     ];
 
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+
+        static::addGlobalScope(new ClientEnabledScope());
     }
 
     public function getPhonePlusIndicativeAttribute()
@@ -74,6 +82,19 @@ class Client extends Model
         return "(" . $this->indicative . ") " . $this->phone;
     }
 
+    public function enableClient()
+    {
+        $this->update([
+            "status" => Client::CLIENT_STATUS_ENABLED
+        ]);
+    }
+
+    public function disableClient()
+    {
+        $this->update([
+            "status" => Client::CLIENT_STATUS_DISABLED
+        ]);
+    }
 
     public function equipmentChangeHistorical()
     {
@@ -241,4 +262,6 @@ class Client extends Model
     {
         return $this->hasOne(StopUnpackDataClient::class);
     }
+
+
 }
