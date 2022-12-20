@@ -60,7 +60,7 @@ class WorkOrderIndexService extends Singleton
     {
         $userModel = User::getUserModel();
         if ($userModel::class == Technician::class || $userModel::class == Support::class) {
-            return $userModel->workOrders;
+            return WorkOrder::pagination();
         }
 
         if ($userModel::class == NetworkOperator::class) {

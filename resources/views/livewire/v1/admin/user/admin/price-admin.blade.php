@@ -33,55 +33,15 @@
                                                "title"=>"Precios",
 
                                            ],
-                                           [
-                                               "title"=>"Notificaciones",
-                                           ],
-                                          // [
-                                          //    "title"=>"Permisos de pestañas",
-                                          //],
+
                                       ],
 
                        "tab_contents"=>[
 
 
                                            [
-                                                "view_name"=>"partials.v1.form.primary_form",
-                                                "view_values"=>  [
-                                                                    "form_toast"=>true,
-                                                                    "class_container"=>"",
-                                                                    "session_message"=>"message",
-                                                                    "form_submit_action"=>"submitFormConfiguration",
-                                                                    "form_title"=>"",
-                                                                    "form_inputs"=> [
-
-                                                                                     [
-                                                                                            "input_type"=>"multiselect",
-                                                                                            "input_label"=>"Asignar tipos de clientes",
-                                                                                            "mb"=>2,
-                                                                                            "options_list"=> $client_types,
-                                                                                            "model_select"=>"admin_client_types",
-                                                                                            "col_width"=>4,
-                                                                                            "name_select"=>"client_types",
-                                                                                            "option_value"=>"id",
-                                                                                            "option_view"=>"type",
-                                                                                    ],
-                                                                                     [
-                                                                                            "input_type"=>"multiselect",
-                                                                                            "input_label"=>"Asignar servicios de notificación",
-                                                                                            "mb"=>2,
-                                                                                            "options_list"=> $notification_types,
-                                                                                            "model_select"=>"admin_notification_types",
-                                                                                            "col_width"=>4,
-                                                                                            "name_select"=>"notification_types",
-                                                                                            "option_value"=>"value",
-                                                                                            "option_view"=>"key",
-                                                                                    ],
-
-
-
-
-                                                                                ]
-                                                                    ]
+                                                  "view_name"=>"livewire.v1.admin.user.admin.channels-admin",
+                                                  "view_values"=>  []
                                            ],
                                            [
                                                 "view_name"=>"partials.v2.form.primary_form",
@@ -167,11 +127,7 @@
                                                                                 ]
                                                                     ]
                                            ],
-                                           [
-                                                                        "view_name"=>"livewire.v1.admin.user.admin.channels-admin",
-                                                                        "view_values"=>  [
-                                                                        ]
-                                           ],
+
                                         //  [
                                         //                               "view_name"=>"livewire.v1.admin.user.tab-permissions-admin",
                                         //                               "view_values"=>  [

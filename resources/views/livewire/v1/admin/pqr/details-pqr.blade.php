@@ -139,7 +139,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Tiempo de solucion",
-                                                                             "value"=>\Carbon\Carbon::parse($model->status_closed_at)->diff(\Carbon\Carbon::parse($model->created_at))->format("%d Dias %h Horas  %i Minutos"),
+                                                                             "value"=>\Carbon\Carbon::parse($model->status_closed_at)->diff(\Carbon\Carbon::parse($model->created_at))->format("%a Dias %h Horas  %i Minutos"),
                                                                               "show_column"=>($model->status==\App\Models\V1\Pqr::STATUS_CLOSED),
                                                                          ],
                                                                          ]

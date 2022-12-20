@@ -6,6 +6,7 @@ use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\ImageableManyTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Models\Traits\PaginatorTrait;
+use App\Scope\ClientEnabledScope;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +23,7 @@ class WorkOrder extends Model
     public const WORK_ORDER_TYPE_REPLACE = "replace";
     public const WORK_ORDER_TYPE_CORRECTIVE_MAINTENANCE = "corrective_maintenance";
     public const WORK_ORDER_TYPE_PREVENTIVE_MAINTENANCE = "preventive_maintenance";
+    public const WORK_ORDER_TYPE_DISABLE_CLIENT = "disable_client";
 
     public const WORK_ORDER_STATUS_OPEN = "open";
     public const WORK_ORDER_STATUS_IN_PROGRESS = "in_progress";
@@ -152,7 +154,7 @@ class WorkOrder extends Model
 
     public function client()
     {
-        return $this->belongsTo(Client::class);
+        return $this->belongsTo(Client::class)->withoutGlobalScope(ClientEnabledScope::class);
     }
 
     public static function getTypeAsKeyValue()
@@ -173,6 +175,10 @@ class WorkOrder extends Model
             [
                 "value" => self::WORK_ORDER_TYPE_CORRECTIVE_MAINTENANCE,
                 "key" => __("work_order." . self::WORK_ORDER_TYPE_CORRECTIVE_MAINTENANCE)
+            ],
+            [
+                "value" => self::WORK_ORDER_TYPE_DISABLE_CLIENT,
+                "key" => __("work_order." . self::WORK_ORDER_TYPE_DISABLE_CLIENT)
             ]
         ];
     }

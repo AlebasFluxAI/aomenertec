@@ -7,7 +7,7 @@
 
 
         @include("partials.v1.title",[
-              "second_title"=>"de clientes",
+              "second_title"=>"de clientes activos",
               "first_title"=>"Listado"
           ])
         @endif
@@ -165,6 +165,13 @@
                                                         "tooltip_title"=>"On/Off",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_MONITORING_CONTROL],
                                                 ],
+                                                 [
+                                                        "function"=>"disableClient",
+                                                        "icon"=>"fas fa-user-xmark",
+                                                        "tooltip_title"=>"Desactivar cliente",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_ACTION_DISABLE],
+                                                ],
+
 
 
                                     ]
