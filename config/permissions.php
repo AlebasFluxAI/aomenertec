@@ -81,6 +81,9 @@ return [
         Permissions::WORK_ORDER_EDIT,
         Permissions::CLIENT_WORK_ORDER,
 
+        Permissions::CLIENT_DISABLED_SHOW,
+        Permissions::CLIENT_ACTION_ENABLE
+
     ],
 
     // Super admin
@@ -173,6 +176,10 @@ return [
         Permissions::WORK_ORDER_INDEX,
         Permissions::WORK_ORDER_CREATE,
         Permissions::WORK_ORDER_EDIT,
+
+        Permissions::CLIENT_DISABLED_SHOW,
+        Permissions::CLIENT_ACTION_DISABLE,
+        Permissions::CLIENT_ACTION_ENABLE
     ],
     // Operador de red
     NetworkOperator::class => [
@@ -282,8 +289,10 @@ return [
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::PQR_EQUIPMENT_CHANGE,
 
-        Permissions::CLIENT_SETTINGS
+        Permissions::CLIENT_SETTINGS,
 
+        Permissions::CLIENT_DISABLED_SHOW,
+        Permissions::CLIENT_ACTION_ENABLE,
 
     ],
     // Vendedor

@@ -1,4 +1,31 @@
 <div class="login">
+    @include("partials.v1.divider_title",["title"=>"Tipos de clientes"])
+
+    @include("partials.v1.form.primary_form",[
+                                                                    "form_toast"=>true,
+                                                                    "class_container"=>"",
+                                                                    "session_message"=>"message",
+                                                                    "form_submit_action"=>"submitFormConfiguration",
+                                                                    "form_title"=>"",
+                                                                    "form_inputs"=> [
+
+                                                                                     [
+                                                                                            "input_type"=>"multiselect",
+                                                                                            "input_label"=>"Asignar tipos de clientes",
+                                                                                            "mb"=>2,
+                                                                                            "tooltip_title"=>"Seleccione los tipos de clientes habilitados para este administrador, Pulse Guardar para confirmar.",
+                                                                                            "options_list"=> $client_types,
+                                                                                            "model_select"=>"admin_client_types",
+                                                                                            "col_width"=>4,
+                                                                                            "name_select"=>"client_types",
+                                                                                            "option_value"=>"id",
+                                                                                            "option_view"=>"type",
+                                                                                    ],
+
+                                                                                ]
+                                                                    ])
+
+    @include("partials.v1.divider_title",["title"=>"Canales de notificacion"])
     @include("partials.v2.table.primary-table",[
               "class_container"=>false,
               "table_pageable"=>false,
