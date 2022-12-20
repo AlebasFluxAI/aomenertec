@@ -42,6 +42,10 @@ class WorkOrderSolverService extends Singleton
                 "solution_description" => $component->solution_description,
                 "status" => WorkOrder::WORK_ORDER_STATUS_CLOSED
             ]);
+
+            if ($component->model->type == WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT and $component->model->client) {
+                $component->model->client->disableClient();
+            }
         });
         $component->redirectRoute("administrar.v1.ordenes_de_servicio.detalle", ["workOrder" => $component->model->id]);
     }

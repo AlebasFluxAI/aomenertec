@@ -52,6 +52,10 @@
                                                                          "redirect_value"=>$model->client_id,
                                                                      ],
                                                                      [
+                                                                         "key"=>"Tipo de orden de trabajo",
+                                                                         "value"=>__("work_order." . $model->type)
+                                                                     ],
+                                                                     [
                                                                              "key"=>"Tecnico asignado",
                                                                              "value"=>$model->technician?$model->technician->name." ".$model->technician->last_name."-".$model->technician->identification:"",
                                                                              "redirect_route"=>"administrar.v1.usuarios.tecnicos.detalles",

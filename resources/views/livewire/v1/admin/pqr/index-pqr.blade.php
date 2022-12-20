@@ -103,7 +103,8 @@
                                                         "function"=>"changeLevel",
                                                         "icon"=>"fas fa-arrow-turn-up",
                                                         "tooltip_title"=>"Escalar ticket",
-                                                        "conditional"=>"openTicked"
+                                                        "conditional"=>"openTicked",
+                                                        "modal_content"=>"Esta seguro que quiere cambiar el nivel del Pqrs ?"
                                                 ],
                                                 [
 
