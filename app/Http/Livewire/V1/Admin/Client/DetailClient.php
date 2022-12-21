@@ -21,6 +21,7 @@ class DetailClient extends Component
 
     public function mount(Client $client)
     {
+        
         $this->detailClientService->mount($this, $client);
     }
 

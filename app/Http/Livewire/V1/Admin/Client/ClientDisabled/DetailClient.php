@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\Client\ClientDisabled;
 
-use App\Http\Services\V1\Admin\Client\DetailClientService;
+use App\Http\Services\V1\Admin\ClientDisabled\DetailsClientDisabledService;
 use App\Models\V1\Client;
 use Livewire\Component;
 
@@ -16,7 +16,7 @@ class DetailClient extends Component
     public function __construct()
     {
         parent::__construct();
-        $this->detailClientService = DetailClientService::getInstance();
+        $this->detailClientService = DetailsClientDisabledService::getInstance();
     }
 
     public function mount($client)

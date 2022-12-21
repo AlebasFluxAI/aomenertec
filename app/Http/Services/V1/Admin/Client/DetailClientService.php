@@ -35,7 +35,7 @@ class DetailClientService extends Singleton
 {
     public function mount(Component $component, $model)
     {
-        $model = Client::withoutGlobalScope(ClientEnabledScope::class)->find($model);
+        
         $component->fill([
             'client' => $model,
         ]);
