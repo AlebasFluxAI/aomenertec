@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\V1\Admin\Client;
+namespace App\Http\Services\V1\Admin\ClientDisabled;
 
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
@@ -23,6 +23,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use App\Scope\ClientEnabledScope;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -32,8 +33,9 @@ use function session;
 
 class DetailsClientDisabledService extends Singleton
 {
-    public function mount(Component $component, Client $model)
+    public function mount(Component $component, $model)
     {
+        $model = Client::withoutGlobalScope(ClientEnabledScope::class)->find($model);
         $component->fill([
             'client' => $model,
         ]);
