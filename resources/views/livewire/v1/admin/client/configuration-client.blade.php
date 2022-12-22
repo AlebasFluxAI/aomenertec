@@ -40,9 +40,7 @@
                                                     "title"=>"Alertas",
 
                                                 ],
-                                                [
-                                                     "title"=>"Notificaciones",
-                                                ],
+
 
 
                                            ],
@@ -246,11 +244,7 @@
 
                                                             ]
                                                 ],
-                                                 [
-                                                                        "view_name"=>"livewire.v1.admin.user.admin.channels-admin",
-                                                                        "view_values"=>  [
-                                                                        ]
-                                                   ]
+
 
                                           ]
          ])
