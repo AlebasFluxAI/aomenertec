@@ -288,17 +288,31 @@
                                             "click_action" => "",
                                     ])
                         @endif
+                        <div class="container">
                         @foreach($digital_outputs as $index => $output)
+                            <div class="row">
                             @include("partials.v1.form.check_button",[
+                                "col_width" => 6,
                                 "mt"=>0,
                                 "mb"=>0,
-                                "col_width"=>3,
                                 "check_model"=>"checks.". $index .".output",
                                 "check_label"=>$output->name,
                                 "check_id"=>$index,
 
                                 ])
+                                @include("partials.v1.form.form_list",[
+                             "col_with"=>2,
+                             "input_type"=>"text",
+                             "list_model" => "checks.". $index .".control_status",
+                             "list_default" => "Estado de control ...",
+                             "list_options" => $control_options,
+                             "list_option_value"=>"value",
+                             "list_option_view"=>"key",
+                              "list_option_title"=>"",
+                             ])
+                            </div>
                         @endforeach
+                        </div>
 
                     </div>
                     <div class="modal-footer">

@@ -28,7 +28,8 @@ class ClientAlertConfiguration extends Model
 
     public function outputs()
     {
-        return $this->belongsToMany(ClientDigitalOutput::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id');
+        return $this->belongsToMany(ClientDigitalOutput::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id')
+            ->withPivot('control_status');;
     }
 
     public function clientAlerts()
@@ -45,6 +46,8 @@ class ClientAlertConfiguration extends Model
 
    public function clientDigitalOutput()
     {
-        return $this->belongsToMany(ClientDigitalOutput::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id');
+        return $this->belongsToMany(ClientDigitalOutput::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id')
+            ->withPivot('control_status');
     }
+
 }

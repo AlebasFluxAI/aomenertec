@@ -12,6 +12,7 @@ use App\Mail\User\UserResetPasswordMail;
 use App\Mail\WorkOrder\WorkOrderUpdatedMail;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
+use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\User;
@@ -37,10 +38,100 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        //$crc = Crc16::XMODEM("hola");
-        //dd($crc);
-        //$this->alertVariableEvent(); [0 => 'f', 1 => 'l', 2 =>'Q' ]
-        $frame = [10=> ['ssid', 'password', 'variable']];
+        $client = Client::find(4);
+        $clientAlert = ClientAlert::find(3729);
+        if ($clientAlert->type == ClientAlert::CONTROL){
+            $client_alert_configuration = $clientAlert->clientAlertConfiguration;
+            if ($client_alert_configuration->active_control){
+                $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
+                $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
+                $topic = "mc/config/" . $equipment->serial;
+
+                try {
+                    $mqtt=MQTT::connection();
+                    $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($client, $clientAlert) {
+                        if ($elapsedTime >= 50) {
+                            $technicians = $client->clientTechnician;
+                            $supervisors = $client->supervisors;
+                            $flag = true;
+                            foreach ($technicians as $user) {
+                                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                            }
+                            foreach ($supervisors as $user) {
+                                if ($user->user->phone == $client->phone) {
+                                    $flag = false;
+                                }
+                                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                            }
+                            if ($flag) {
+                                $client->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                            }
+                            $mqtt->interrupt();
+                        }
+                    });
+                    foreach ($digital_output as $output){
+                        if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
+                            if ($output->status) {
+                                $message = "{\"coil" . $output->number . "\":false}";
+                            } else {
+                                $message = "{\"coil" . $output->number . "\":true}";
+                            }
+                        } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON){
+                            $message = "{\"coil" . $output->number . "\":true}";
+                        } else{
+                            $message = "{\"coil" . $output->number . "\":false}";
+                        }
+                        $mqtt->publish($topic, $message);
+                    }
+                    $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($client, $mqtt, $digital_output, $clientAlert) {
+                        $json = json_decode($message, true);
+                        if (array_key_exists('coil_ack', $json)) {
+                            $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
+                            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                                ->first();
+                            if ($equipment) {
+                                $client_aux = $equipment->clients()->first();
+                                if ($client_aux->id == $client->id) {
+                                    if ($json['coil_ack']) {
+                                        foreach ($digital_output as $output){
+                                            $output->status = !$output->status;
+                                            $output->save();
+                                        }
+                                        $technicians = $client->clientTechnician;
+                                        $supervisors = $client->supervisors;
+                                        foreach ($technicians as $user) {
+                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                            $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
+                                        }
+                                        $flag = true;
+                                        foreach ($supervisors as $user) {
+                                            if ($user->user->phone == $client->phone) {
+                                                $flag = false;
+                                            }
+                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                            $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
+                                        }
+                                        if ($flag) {
+                                            $client->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        $mqtt->interrupt();
+                    }, 1);
+                    $mqtt->loop(true);
+                    $mqtt->disconnect();
+                } catch (MqttClientException $e) {
+
+                }
+
+            }
+        }
+
+        /*$frame = [10=> ['ssid', 'password', 'variable']];
         $raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAEgAAAAAAFAijI9j5WH1Qp9r90K/MPVCJZKOPgFuDD51y6E+++1rQX86JEGhp/NBREgJQvElh0FWQxtCuEL4waoLVcHAoMHBAY7YPpzXIT+eWEk/FUghPwVXgsKZW03C/PAawloTTcLGfl5CxK2JwpfYb0Jyg5VFAAAAALDCHURB6L9EBW9VQ59TVUMqbVRDAAAAAAAAAAAAAAAAv7riRHOOSURJHE1FAAAAAAAAAAAAAAAAINgBRX5Or0QKD6NE5TCVQ5WjKkNgBSJDYY+4PQAAAAC+MR49AAAAABr5kD0AAAAA';
         $ssid = "holaaaaaaaaaaaxxxx";
         $pass = "123456789015";
@@ -88,7 +179,7 @@ class MailTestController
             $json['msj_init']= $message;
             dd($json);
 
-        }
+        }*/
     }
     private function alertVariableEvent()
     {
