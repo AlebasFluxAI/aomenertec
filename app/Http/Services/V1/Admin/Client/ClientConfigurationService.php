@@ -44,6 +44,7 @@ class ClientConfigurationService extends Singleton
 {
     public function mount(Component $component, Client $client)
     {
+        $component->control_options = ClientDigitalOutputAlertConfiguration::CONTROL_OPTIONS;
         $component->channels = $client->channels;
         $component->model = $client;
         $flags_frame = collect(config('data-frame.flags_frame'));
@@ -106,7 +107,7 @@ class ClientConfigurationService extends Singleton
             'storage_latency_options' => ClientConfiguration::STORAGE_LATENCY_OPTIONS[$client->clientConfiguration->storage_type_latency],
         ]);
         foreach ($component->digital_outputs as $index => $output) {
-            $component->checks[$index] = ["id" => $output->id, "output" => false];
+            $component->checks[$index] = ["id" => $output->id, "output" => false, "control_status"=>ClientDigitalOutputAlertConfiguration::CHANGE];
         }
         $alert_config_frame = collect(config('data-frame.alert_config_frame'));
         $component->inputs = [
@@ -174,6 +175,7 @@ class ClientConfigurationService extends Singleton
             'client_config_alert.*.max_alert' => ['required', 'numeric'],
             'client_config_alert.*.min_control' => 'required',
             'client_config_alert.*.max_control' => 'required',
+            'client_config_alert.*.control_status' => 'required',
 
             'checks.*.output' => 'required'
         ];
@@ -240,6 +242,7 @@ class ClientConfigurationService extends Singleton
                 foreach ($component->checks as $i => $check) {
                     if ($check['id'] == $output->id) {
                         $component->checks[$i]['output'] = true;
+                        $component->checks[$i]['control_status'] = $output->pivot->control_status;
                         break;
                     }
                 }
@@ -247,6 +250,7 @@ class ClientConfigurationService extends Singleton
         } else {
             foreach ($component->checks as $i => $check) {
                 $component->checks[$i]['output'] = false;
+                $component->checks[$i]['control_status'] = ClientDigitalOutputAlertConfiguration::CHANGE;
             }
         }
     }
@@ -262,12 +266,11 @@ class ClientConfigurationService extends Singleton
         foreach ($component->checks as $check) {
             $relation = ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->first();
             if ($check['output']) {
-                if (!ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()) {
-                    ClientDigitalOutputAlertConfiguration::create([
+                ClientDigitalOutputAlertConfiguration::updateOrCreate([
                         'client_alert_configuration_id' => $id,
-                        'client_digital_output_id' => $check['id']
+                        'client_digital_output_id' => $check['id']],[
+                        'control_status' => $check['control_status']
                     ]);
-                }
                 $flag = true;
             } else {
                 if (ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()) {
@@ -283,6 +286,7 @@ class ClientConfigurationService extends Singleton
         $alert->save();
         foreach ($component->checks as $i => $check) {
             $component->checks[$i]['output'] = false;
+            $component->checks[$i]['control_status'] = ClientDigitalOutputAlertConfiguration::CHANGE;
         }
         $component->emit('closeModal', ["id" => $id]);
 

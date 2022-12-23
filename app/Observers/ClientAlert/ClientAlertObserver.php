@@ -5,6 +5,7 @@ namespace App\Observers\ClientAlert;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\ClientDigitalOutput;
+use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\User;
 use App\Notifications\Alert\AlertControlNotification;
@@ -77,10 +78,16 @@ class ClientAlertObserver
                         }
                     });
                     foreach ($digital_output as $output){
-                        if ($output->status) {
-                            $message = "{\"coil" . $output->number . "\":false}";
-                        } else {
+                        if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
+                            if ($output->status) {
+                                $message = "{\"coil" . $output->number . "\":false}";
+                            } else {
+                                $message = "{\"coil" . $output->number . "\":true}";
+                            }
+                        } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON){
                             $message = "{\"coil" . $output->number . "\":true}";
+                        } else{
+                            $message = "{\"coil" . $output->number . "\":false}";
                         }
                         $mqtt->publish($topic, $message);
                     }

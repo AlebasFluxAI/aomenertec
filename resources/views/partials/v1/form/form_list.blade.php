@@ -11,7 +11,7 @@
 --}}
 
 <div
-    class="form-group mb-{{$mb??2}} mt-{{$mt??0}}  @if($aux_class??"" != 'no-border-card') col-sm-12 col-md-{{$col_with??12}}@endif ">
+    class="form-group mb-{{$mb??2}} mt-{{$mt??0}}  @if($aux_class??"" != 'no-border-card') col-sm-8 col-md-{{$col_with??12}}@endif ">
     <label>{{$input_label??""}}</label>
     <select wire:model.lazy="{{$list_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
             {{($required??false)?"required":""}} @if($disabled??false)disabled @endif>

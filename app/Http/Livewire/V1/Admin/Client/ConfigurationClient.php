@@ -26,6 +26,7 @@ class ConfigurationClient extends Component
     public $channels;
     public $outputs_selected;
     public $model;
+    public $control_options;
 
 
     private $configurationClientService;
