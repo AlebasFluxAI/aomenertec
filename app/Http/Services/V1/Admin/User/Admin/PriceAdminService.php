@@ -38,9 +38,11 @@ class PriceAdminService extends Singleton
                 "min_clients" => 10,
             ]);
         }
+
         $component->fill([
             "client_types" => ClientType::all(),
             "model" => $model,
+            "invoicing_day" => $model->invoicing_day,
             "prices" => $model->priceAdmin,
             "config" => $model->configAdmin,
 
@@ -108,6 +110,15 @@ class PriceAdminService extends Singleton
         //$component->config->frame_type = $component->frame_type;
         $component->config->save();
         $component->prices = $component->model->priceAdmin()->get();
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+    }
+
+    public function submitFormInvoicing(Component $component)
+    {
+        $component->model->update([
+            "invoicing_day" => $component->invoicing_day
+        ]);
+        $component->model->refresh();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
     }
 }

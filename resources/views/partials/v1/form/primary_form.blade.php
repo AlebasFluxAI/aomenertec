@@ -1,5 +1,5 @@
 <div class="mb-3 flex justify-center">
-    <div class="detail-table col-md-8 col-sm-12">
+    <div class="detail-table col-md-12 col-sm-12">
         <div class="{{ $class_container??'contenedor-grande' }}">
             @if ($form_toast??false and session()->has($session_message))
                 <div class="alert alert-success">

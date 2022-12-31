@@ -47,6 +47,11 @@ class PqrIndexComponent extends Component
         return $this->pqrIndexService->equipmentRequest($this, $id);
     }
 
+    public function linkClientConditional()
+    {
+        return $this->pqrIndexService->linkClientConditional($this);
+    }
+
 
     public function closePqr($id)
     {

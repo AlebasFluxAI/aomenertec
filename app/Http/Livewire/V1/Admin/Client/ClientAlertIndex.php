@@ -30,6 +30,11 @@ class ClientAlertIndex extends Component
         $this->clientAlertIndexService->mount($this, $client);
     }
 
+    public function deleteAlert($alertId)
+    {
+        $this->clientAlertIndexService->deleteAlert($this, $alertId);
+    }
+
     public function render()
     {
         return view('livewire.v1.admin.client.client-alert-index', [

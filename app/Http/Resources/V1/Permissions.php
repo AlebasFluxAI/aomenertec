@@ -69,6 +69,7 @@ class Permissions
     public const SUPPORT_ENABLE_PQR = "support.enable_pqr";
     public const SUPPORT_ENABLED = "support.enabled";
 
+
     public const SUPERVISOR_CREATE = "supervisor.create";
     public const SUPERVISOR_EDIT = "supervisor.edit";
     public const SUPERVISOR_DELETE = "supervisor.delete";
@@ -108,6 +109,7 @@ class Permissions
     public const PQR_CLOSE = "pqr_close";
     public const PQR_EQUIPMENT_CHANGE = "pqr_equipment_change";
     public const PQR_EQUIPMENT_CHANGE_MANAGE = "pqr_equipment_change_manage";
+    public const PQR_LINK_CLIENT = "pqr_link_client";
 
     public const NETWORK_OPERATOR_PRICE_CONFIGURATION = "network_operator_price_configuration";
 
@@ -119,4 +121,19 @@ class Permissions
     public const WORK_ORDER_SOLVE = "work_order_solve";
     public const WORK_ORDER_IN_PROGRESS = "work_order_in_progress";
     public const WORK_ORDER_STOP = "work_order_stop";
+
+    public const BILLABLE_ITEMS_SHOW = "billable_items_show";
+    public const BILLABLE_ITEMS_INDEX = "billable_items_index";
+    public const BILLABLE_ITEMS_CREATE = "billable_items_create";
+    public const BILLABLE_ITEMS_EDIT = "billable_items_edit";
+
+    public const TAX_SHOW = "tax_show";
+    public const TAX_INDEX = "tax_index";
+    public const TAX_CREATE = "tax_create";
+    public const TAX_EDIT = "tax_edit";
+
+    public const INVOICE_SHOW = "invoice_show";
+    public const INVOICE_INDEX = "invoice_index";
+    public const INVOICE_PAY = "invoice_pay";
+    public const INVOICE_FILE = "invoice_file";
 }
