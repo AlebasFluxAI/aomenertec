@@ -43,7 +43,13 @@ class InvoiceGeneration extends Command
     public function handle()
     {
 
-        dispatch(new GenerateAdminInvoiceJob(Admin::whereId(1)->first()))->onQueue("spot");
+        foreach (Admin::get() as $admin) {
+            if ($admin->invoicing_day != Carbon::parse(now())->format('d')) {
+                continue;
+            }
+            dispatch(new GenerateAdminInvoiceJob($admin))->onQueue("spot");
+        }
+
 
     }
 
