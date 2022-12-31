@@ -24,6 +24,9 @@
                                                [
                                                    "title"=>"Clientes de mis operadores",
                                                ],
+                                               [
+                                                   "title"=>"Facturacion",
+                                               ],
 
 
                                           ],
@@ -117,6 +120,16 @@
                                                       "view_header"=>false,
                                                       "col_filter"=>false
                                                    ],
+                                               ],
+                                                   [
+                                                  "view_name"=>"livewire.v1.admin.invoicing.invoice.index-invoice",
+                                                   "view_values"=>[
+                                                                       "data"=>\App\Models\V1\Invoice::whereAdminId($model->id)->pagination(),
+                                                                       "table_class_container"=>"",
+                                                                       "view_header"=>false,
+                                                                       "col_filter"=>false,
+                                                                       "network_operator_conditional_delete"=>"conditionalDeleteNetworkOperator",
+                                                                  ]
                                                ],
 
 

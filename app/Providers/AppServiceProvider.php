@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Traits\AuditableTrait;
 use App\Models\V1\Admin;
+use App\Models\V1\BillableItem;
 use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientAlertConfiguration;
@@ -14,6 +15,8 @@ use App\Models\V1\EquipmentClient;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\HistoricalClientEquipment;
 use App\Models\V1\Image;
+use App\Models\V1\Invoice;
+use App\Models\V1\InvoiceItem;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Notification;
@@ -31,11 +34,14 @@ use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
 use App\Observers\ActionBy\ActionByObserve;
 use App\Observers\AuditoryStatus\AuditoryStatusObserver;
+use App\Observers\BillableItem\BillableItemObserver;
 use App\Observers\BillingInformationObserver;
 use App\Observers\AddressObserver;
 use App\Observers\ClientConfiguration\ClientAlertConfigurationObserver;
 use App\Observers\Equipment\EquipmentObserver;
 use App\Observers\HereMapObserver;
+use App\Observers\Invoice\InvoiceItemObserver;
+use App\Observers\Invoice\InvoiceObserver;
 use App\Observers\MicrocontrollerData\MicrocontrollerDataObserver;
 use App\Observers\OtpUser\OtpUserObserver;
 use App\Observers\Pqr\PqrMessageObserver;
@@ -88,6 +94,7 @@ class AppServiceProvider extends ServiceProvider
                 $model::observe(ChangeObserver::class);
             }
         });
+
 
         PqrMessage::observe(PqrMessageObserver::class);
         Image::observe(ImageObserver::class);
@@ -146,5 +153,11 @@ class AppServiceProvider extends ServiceProvider
 
 
         Pqr::observe(AuditoryStatusObserver::class);
+
+        BillableItem::observe(BillableItemObserver::class);
+        Invoice::observe(InvoiceObserver::class);
+
+        InvoiceItem::observe(InvoiceItemObserver::class);
+
     }
 }

@@ -169,6 +169,10 @@
                                                         "function"=>"disableClient",
                                                         "icon"=>"fas fa-user-xmark",
                                                         "tooltip_title"=>"Desactivar cliente",
+                                                        "modal"=>[
+                                                                "header"=>"Desactivar cliente",
+                                                                "body"=>"Esta seguro de desactivar cliente ?",
+                                                        ],
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_ACTION_DISABLE],
                                                 ],
 

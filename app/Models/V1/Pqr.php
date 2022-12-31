@@ -77,6 +77,11 @@ class Pqr extends Model
         "status_" . self::STATUS_CLOSED . "_by",
     ];
 
+    public function hasClient()
+    {
+        return $this->client != null;
+    }
+
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());

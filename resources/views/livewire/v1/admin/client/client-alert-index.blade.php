@@ -71,6 +71,15 @@
                ],
 
                 ],
+               "table_actions"=>[
+                                           "customs"=>[
+                               [
+                                     "function"=>"deleteAlert",
+                                     "icon"=>"fas fa-trash",
+                                     "tooltip_title"=>"Eliminar",
+                               ],
+                           ],
+               ],
                "table_rows"=>$data
            ])
         @if($view_header??true)

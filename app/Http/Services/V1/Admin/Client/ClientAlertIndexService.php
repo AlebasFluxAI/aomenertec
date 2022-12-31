@@ -2,8 +2,10 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
+use App\Models\V1\ClientAlert;
 use App\Models\V1\ClientTechnician;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
@@ -40,10 +42,16 @@ class ClientAlertIndexService extends Singleton
 
     public function getData(Component $component)
     {
-        $clientAlerts = $component->model->clientAlerts;
+        $clientAlerts = $component->model->clientAlerts()->pagination();
         foreach ($clientAlerts as &$alert) {
             $alert->name = $alert->clientAlertConfiguration->getVariableName();
         }
         return $clientAlerts;
+    }
+
+    public function deleteAlert(Component $component, $alertId)
+    {
+        ClientAlert::find($alertId)->delete();
+        ToastEvent::launchToast($component, "show", "success", "Alerta eliminada");
     }
 }

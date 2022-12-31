@@ -14,8 +14,13 @@
                     <th class="font-[2000] uppercase" style="color:#009299;">{{$info["key"]}}</th>
                     @isset($info["type"])
                         @if($info["type"]=="text")
+                            @isset($info["money"])
+                                <td> ${{number_format($info["value"],0)}} {{$info["currency"]??"COP"}}
+                                </td>
 
-                            <td>{{$info["value"]}}</td>
+                            @else
+                                <td>{{$info["value"]}}</td>
+                            @endisset
                         @elseif($info["type"]=="image")
 
                             <td>
@@ -44,7 +49,13 @@
                                     {{$info["value"]}}</a>
                             </td>
                         @else
-                            <td>{{$info["value"]}}</td>
+                            @isset($info["money"])
+                                <td> ${{number_format($info["value"],0)}} {{$info["currency"]??"COP"}}
+                                </td>
+
+                            @else
+                                <td>{{$info["value"]}}</td>
+                            @endisset
                         @endif
                     @endisset
                 </tr>
