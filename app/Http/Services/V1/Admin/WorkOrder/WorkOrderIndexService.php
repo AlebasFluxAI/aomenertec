@@ -60,11 +60,11 @@ class WorkOrderIndexService extends Singleton
     {
         $userModel = User::getUserModel();
         if ($userModel::class == Technician::class || $userModel::class == Support::class) {
-            return WorkOrder::pagination();
+            return WorkOrder::where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)->pagination();
         }
 
         if ($userModel::class == NetworkOperator::class) {
-            return WorkOrder::whereIn("client_id", $userModel->clients->pluck("id"))->pagination();
+            return WorkOrder::where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)->whereIn("client_id", $userModel->clients->pluck("id"))->pagination();
         }
         if ($userModel::class == Admin::class) {
             $clientId = Client::whereAdminId($userModel->id)

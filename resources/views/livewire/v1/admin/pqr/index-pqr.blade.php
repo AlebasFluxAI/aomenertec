@@ -88,15 +88,15 @@
              "table_actions"=>[
 
                                 "customs"=>[
-                                    [
-                                                       "redirect"=>[
-                                                                   "route"=>"administrar.v1.peticiones.detalles",
-                                                                   "binding"=>"pqr"
-                                                             ],
-                                                           "icon"=>"fas fa-search",
-                                                           "tooltip_title"=>"Detalles",
-                                                           "permission"=>[\App\Http\Resources\V1\Permissions::PQR_SHOW],
-                                                     ],
+                                                [
+                                                   "redirect"=>[
+                                                               "route"=>"administrar.v1.peticiones.detalles",
+                                                               "binding"=>"pqr"
+                                                         ],
+                                                       "icon"=>"fas fa-search",
+                                                       "tooltip_title"=>"Detalles",
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::PQR_SHOW],
+                                                 ],
                                                  [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CHANGE_LEVEL],
@@ -139,6 +139,16 @@
                                                         "tooltip_title"=>"Historial de cambios de equipo",
                                                         "conditional"=>"closedTicked"
                                                 ],
+                                                 [
+
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::PQR_LINK_CLIENT],
+                                                        "redirect"=>[
+                                                                "route"=>"administrar.v1.peticiones.relacionar_cliente",
+                                                                "binding"=>"pqr"
+                                                          ],
+                                                        "icon"=>"fa fa-user-plus",
+                                                        "tooltip_title"=>"Relacionar cliente",
+                                                ],
                                                 [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE],
@@ -178,8 +188,6 @@
                                                         "tooltip_title"=>"Resolver ticket",
                                                         "conditional"=>"openTicked"
                                                 ],
-
-
                                     ]
                                 ],
 

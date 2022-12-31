@@ -15,6 +15,7 @@ use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\Role;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasPermissions;
@@ -54,9 +55,16 @@ class Admin extends Model
         "country",
         "city",
         "state",
-        "indicative"
+        "indicative",
+        "invoicing_day"
     ];
 
+    public function getCurrentEnabledClients()
+    {
+
+        return Client::whereIn('network_operator_id', $this->networkOperators()->pluck('id'))
+            ->orWhere("admin_id", $this->id);
+    }
 
     public static function getRole()
     {
@@ -164,6 +172,20 @@ class Admin extends Model
                             [
                                 "title" => "Ordenes de servicio",
                                 "route" => "administrar.v1.ordenes_de_servicio.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
+                        ]
+
+                    ],
+                    [
+                        "title" => "Facturacion",
+                        "route" => "administrar.v1.facturacion.facturas.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Facturas",
+                                "route" => "administrar.v1.facturacion.facturas.listado",
                                 "submenu" => [
 
                                 ],
@@ -377,6 +399,10 @@ class Admin extends Model
         return $this->hasOne(AdminConfiguration::class);
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 
     public function networkOperatorsAsKeyValue()
     {

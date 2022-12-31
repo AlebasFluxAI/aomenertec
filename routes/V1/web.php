@@ -394,6 +394,60 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                     });
                 });
 
+                Route::prefix("facturacion")->group(function () {
+                    Route::prefix("impuestos")->group(function () {
+                        Route::get("", Livewire\V1\Admin\Invoicing\Tax\TaxIndexComponent::class)
+                            ->name("administrar.v1.facturacion.impuestos.listado")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::TAX_INDEX));
+
+                        Route::get("crear", Livewire\V1\Admin\Invoicing\Tax\TaxAddComponent::class)
+                            ->name("administrar.v1.facturacion.impuestos.crear")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::TAX_CREATE));
+
+                        Route::get("editar/{tax}", Livewire\V1\Admin\Invoicing\Tax\TaxEditComponent::class)
+                            ->name("administrar.v1.facturacion.impuestos.editar")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::TAX_EDIT));
+
+
+                        Route::get("detalles/{tax}", Livewire\V1\Admin\Invoicing\Tax\TaxDetailsComponent::class)
+                            ->name("administrar.v1.facturacion.impuestos.detalle")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::TAX_SHOW));
+                    });
+                    Route::prefix("items_facturables")->group(function () {
+                        Route::get("", Livewire\V1\Admin\Invoicing\BillableItems\BillableItemsIndexComponent::class)
+                            ->name("administrar.v1.facturacion.items.listado")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::BILLABLE_ITEMS_INDEX));
+
+                        Route::get("crear", Livewire\V1\Admin\Invoicing\BillableItems\BillableItemsAddComponent::class)
+                            ->name("administrar.v1.facturacion.items.crear")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::BILLABLE_ITEMS_CREATE));
+
+                        Route::get("editar/{billable_item}", Livewire\V1\Admin\Invoicing\BillableItems\BillableItemsEditComponent::class)
+                            ->name("administrar.v1.facturacion.items.editar")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::BILLABLE_ITEMS_EDIT));
+
+
+                        Route::get("detalles/{billable_item}", Livewire\V1\Admin\Invoicing\BillableItems\BillableItemsDetailsComponent::class)
+                            ->name("administrar.v1.facturacion.items.detalle")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::BILLABLE_ITEMS_SHOW));
+                    });
+
+                    Route::prefix("facturas")->group(function () {
+                        Route::get("", Livewire\V1\Admin\Invoicing\Invoice\InvoiceIndexComponent::class)
+                            ->name("administrar.v1.facturacion.facturas.listado")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::INVOICE_INDEX));
+
+                        Route::get("detalles/{invoice}", Livewire\V1\Admin\Invoicing\Invoice\InvoiceDetailsComponent::class)
+                            ->name("administrar.v1.facturacion.facturas.detalle")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::INVOICE_SHOW));
+
+                        Route::get("pdf/{invoice}", [Livewire\V1\Admin\Invoicing\Invoice\InvoicePdfGeneratorController::class, "getPdf"])
+                            ->name("administrar.v1.facturacion.facturas.pdf")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::INVOICE_FILE));
+                    });
+
+                });
+
                 Route::prefix("peticiones")->group(function () {
                     Route::get("listado", Livewire\V1\Admin\Pqr\PqrIndexComponent::class)
                         ->name("administrar.v1.peticiones.listado")
@@ -406,6 +460,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                     Route::get("respuesta/{pqr}", Livewire\V1\Admin\Pqr\PqrReplyComponent::class)
                         ->name("administrar.v1.peticiones.respuesta")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_REPLY));
+
+
+                    Route::get("asociar_cliente/{pqr}", Livewire\V1\Admin\Pqr\PqrAddClientComponent::class)
+                        ->name("administrar.v1.peticiones.relacionar_cliente")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::PQR_LINK_CLIENT));
 
 
                     Route::get("cerrar/{pqr}", Livewire\V1\Admin\Pqr\PqrCloseComponent::class)

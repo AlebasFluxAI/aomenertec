@@ -82,7 +82,15 @@ return [
         Permissions::CLIENT_WORK_ORDER,
 
         Permissions::CLIENT_DISABLED_SHOW,
-        Permissions::CLIENT_ACTION_ENABLE
+        Permissions::CLIENT_ACTION_ENABLE,
+
+        Permissions::INVOICE_SHOW,
+        Permissions::INVOICE_INDEX,
+        Permissions::INVOICE_FILE,
+        Permissions::INVOICE_PAY,
+
+        Permissions::PQR_LINK_CLIENT,
+
 
     ],
 
@@ -176,10 +184,28 @@ return [
         Permissions::WORK_ORDER_INDEX,
         Permissions::WORK_ORDER_CREATE,
         Permissions::WORK_ORDER_EDIT,
+        Permissions::WORK_ORDER_SOLVE,
+        Permissions::WORK_ORDER_IN_PROGRESS,
+        Permissions::WORK_ORDER_STOP,
 
         Permissions::CLIENT_DISABLED_SHOW,
         Permissions::CLIENT_ACTION_DISABLE,
-        Permissions::CLIENT_ACTION_ENABLE
+        Permissions::CLIENT_ACTION_ENABLE,
+
+        Permissions::BILLABLE_ITEMS_SHOW,
+        Permissions::BILLABLE_ITEMS_INDEX,
+        Permissions::BILLABLE_ITEMS_CREATE,
+        Permissions::BILLABLE_ITEMS_EDIT,
+
+        Permissions::INVOICE_SHOW,
+        Permissions::INVOICE_INDEX,
+
+        Permissions::TAX_SHOW,
+        Permissions::TAX_INDEX,
+        Permissions::TAX_CREATE,
+        Permissions::TAX_EDIT,
+        Permissions::INVOICE_FILE,
+
     ],
     // Operador de red
     NetworkOperator::class => [
@@ -241,6 +267,7 @@ return [
         Permissions::WORK_ORDER_CREATE,
         Permissions::WORK_ORDER_EDIT,
         Permissions::CLIENT_WORK_ORDER,
+        Permissions::PQR_LINK_CLIENT,
 
 
     ],

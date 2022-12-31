@@ -8,13 +8,13 @@ use NumberFormatter;
 
 class Formatter
 {
-    public static function currencyFormat($money)
+    public static function currencyFormat($money, $currency = "COP")
     {
         $fmt = new NumberFormatter('es_ES', NumberFormatter::CURRENCY);
         if (!$money) {
             return 0;
         }
-        return ($fmt->formatCurrency($money, "COP"));
+        return ($fmt->formatCurrency($money, $currency));
     }
 
     public static function numberFormat($money)
