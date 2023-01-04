@@ -66,7 +66,7 @@ class RefactorClientData extends Command
         //$this->deleteClientRelationship();
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(20)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(50)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -217,11 +217,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(20)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(50)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(20)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(50)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
         echo count($data)."\n";
         if ($data) {
