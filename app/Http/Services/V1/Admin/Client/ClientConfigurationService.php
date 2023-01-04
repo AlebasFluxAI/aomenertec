@@ -175,7 +175,6 @@ class ClientConfigurationService extends Singleton
             'client_config_alert.*.max_alert' => ['required', 'numeric'],
             'client_config_alert.*.min_control' => 'required',
             'client_config_alert.*.max_control' => 'required',
-            'client_config_alert.*.control_status' => 'required',
 
             'checks.*.output' => 'required'
         ];
@@ -440,6 +439,8 @@ class ClientConfigurationService extends Singleton
                         $client_aux = $equipment->clients()->first();
                         if ($client_aux->id == $component->client->id) {
                             if ($json['config_ack']) {
+
+
                                 foreach ($component->client_config_alert as $index => $item) {
                                     if ($index == "client_notification_type") {
                                         continue;
@@ -447,11 +448,12 @@ class ClientConfigurationService extends Singleton
                                     $item->save();
                                 }
                                 $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+                                $mqtt->interrupt();
                             }
                         }
                     }
                 }
-                $mqtt->interrupt();
+
             }, 1);
             $mqtt->loop(true);
             $mqtt->disconnect();

@@ -102,8 +102,16 @@ class ClientAlertObserver
                                 if ($client_aux->id == $client->id) {
                                     if ($json['coil_ack']) {
                                         foreach ($digital_output as $output){
-                                            $output->status = !$output->status;
-                                            $output->save();
+                                            if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
+                                                $output->status = !$output->status;
+                                                $output->save();
+                                            } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON){
+                                                $output->status = true;
+                                                $output->save();
+                                            } else{
+                                                $output->status = false;
+                                                $output->save();
+                                            }
                                         }
                                         $technicians = $client->clientTechnician;
                                         $supervisors = $client->supervisors;
