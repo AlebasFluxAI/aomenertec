@@ -31,6 +31,11 @@ class PqrIndexService extends Singleton
         $component->model = $model;
     }
 
+    public function linkClientConditional(Component $component)
+    {
+        return $component->model->hasClient();
+    }
+
     public function getData(Component $component)
     {
         $model = Menu::getUserModel();

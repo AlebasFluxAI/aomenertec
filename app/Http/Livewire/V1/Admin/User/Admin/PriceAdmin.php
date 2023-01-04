@@ -19,6 +19,7 @@ class PriceAdmin extends Component
     public $model;
     public $channels;
     public $tab_permissions;
+    public $invoicing_day;
 
     private $priceAdminService;
 
@@ -39,6 +40,11 @@ class PriceAdmin extends Component
     public function mount(Admin $admin)
     {
         $this->priceAdminService->mount($this, $admin);
+    }
+
+    public function submitFormInvoicing()
+    {
+        $this->priceAdminService->submitFormInvoicing($this);
     }
 
     public function submitFormPrice()

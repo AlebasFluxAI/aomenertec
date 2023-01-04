@@ -15,6 +15,9 @@
 
 @elseif($col_translate)
     {{__($col_translate.".".$col_data)}}
+@elseif($col_money)
+
+    ${{\App\Http\Resources\V1\Formatter::currencyFormat($col_data,$col_currency)}}
 @else
     {{$col_data}}
 

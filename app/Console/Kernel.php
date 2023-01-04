@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\V1\DeleteStopUnpackData;
+use App\Console\Commands\V1\InvoiceGeneration;
 use App\Console\Commands\V1\RefactorClientData;
 use App\Console\Commands\V1\ReorderDataClientDay;
 use App\Console\Commands\V1\ReorderDataClientHour;
@@ -44,6 +45,7 @@ class Kernel extends ConsoleKernel
         //$schedule->command(RefactorClientData::class)->dailyAt('22:32')->withoutOverlapping();
         $schedule->command(RefactorClientData::class)->dailyAt('20:00')->withoutOverlapping();
         $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
+        $schedule->command(InvoiceGeneration::class)->dailyAt(2);
 
 
         ///Generar facturacion....
