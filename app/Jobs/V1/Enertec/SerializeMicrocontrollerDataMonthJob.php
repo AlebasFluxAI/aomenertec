@@ -36,7 +36,11 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
     public function handle()
     {
         $billing_day = $this->day_ref->format('d');
-        $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->get()->pluck('client_id');
+        if ($billing_day == $this->day_ref->format('t')){
+            $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
+        } else{
+            $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->get()->pluck('client_id');
+        }
         $clients_aux = Client::find($billing_day_clients);
         $clients = $clients_aux->where('has_telemetry', true)->all();
         if (count($clients)>0) {
@@ -52,28 +56,37 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                     }
                     $year_aux = $this->day_ref->format('Y');
                 }
-                $start_date = Carbon::create($year_aux, $month_aux, ($billing_day + 1));
-                $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $billing_day, "23", "59", 59);
+                if ($billing_day == $this->day_ref->format('t')){
+                    $date_aux = Carbon::create($year_aux, $month_aux, 1);
+                    $start_date = Carbon::create($year_aux, $month_aux, $date_aux->format('t'), 23, 59, 59);
+                    $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $this->day_ref->format('t'), 23, 59, 59);
 
-                $data_aux = $client->dailyMicrocontrollerData()
-                    ->where('year', $year_aux)
-                    ->where('month', ($month_aux))
-                    ->whereBetween('day', ['0' . ($billing_day + 1), ($start_date->format('t'))]);
-                $data_month = $client->dailyMicrocontrollerData()
-                    ->where('year', $this->day_ref->format('Y'))
-                    ->where('month', $this->day_ref->format('m'))
-                    ->whereBetween('day', ['01', $billing_day])
-                    ->union($data_aux)
-                    ->get();
-
-
+                    $data_month = $client->dailyMicrocontrollerData()
+                        ->where('year', $this->day_ref->format('Y'))
+                        ->where('month', $this->day_ref->format('m'))
+                        ->whereBetween('day', ['01', $billing_day])
+                        ->get();
+                } else{
+                    $start_date = Carbon::create($year_aux, $month_aux, ($billing_day), 23, 59, 59);
+                    $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $billing_day, "23", "59", 59);
+                    $data_aux = $client->dailyMicrocontrollerData()
+                        ->where('year', $year_aux)
+                        ->where('month', ($month_aux))
+                        ->whereBetween('day', [str_pad((strval(($billing_day+1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
+                    $data_month = $client->dailyMicrocontrollerData()
+                        ->where('year', $this->day_ref->format('Y'))
+                        ->where('month', $this->day_ref->format('m'))
+                        ->whereBetween('day', ['01', $billing_day])
+                        ->union($data_aux)
+                        ->get();
+                }
                 if (count($data_month) > 0) {
                     $end_data = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
+                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
                     $start_data = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
+                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp')
                         ->first();
                     if ($end_data) {

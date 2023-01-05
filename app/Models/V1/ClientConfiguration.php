@@ -77,7 +77,9 @@ class ClientConfiguration extends Model
                 ["key" => "Día 24", "value" => 24],
                 ["key" => "Día 25", "value" => 25],
                 ["key" => "Día 26", "value" => 26],
-                ["key" => "Día 27", "value" => 27]
+                ["key" => "Día 27", "value" => 27],
+                ["key" => "Día 27", "value" => 28],
+                ["key" => "Ultimo dia del mes", "value" => 31]
             ],
 
         ];
