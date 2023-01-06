@@ -75,7 +75,7 @@ class ConsumerCommand extends Command
                 if (array_key_exists('config_get', $json)) {
                     dispatch(new SetConfigJob($json))->onQueue('spot');
                 } elseif (array_key_exists('frame_save', $json)) {
-                    dispatch(new SetClientStopUnpackDataJob($json))->onQueue('spot');
+                    //dispatch(new SetClientStopUnpackDataJob($json))->onQueue('spot');
                 }
             }
         }, 2);

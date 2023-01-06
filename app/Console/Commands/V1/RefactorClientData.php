@@ -56,6 +56,7 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
+
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
@@ -64,6 +65,7 @@ class RefactorClientData extends Command
         }
         $this->unpackData();
         $this->deleteClientRelationship();
+
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
@@ -154,7 +156,7 @@ class RefactorClientData extends Command
     private function unpackData(){
         $data_pack = MicrocontrollerData::whereNull('client_id')
             ->whereNotNull('source_timestamp')
-           ->orderBy('source_timestamp')->orderBy('created_at')
+           ->orderBy('source_timestamp')->orderBy('created_at')->limit(1000)
             ->get();
         echo count($data_pack)."\n";
 
@@ -215,36 +217,33 @@ class RefactorClientData extends Command
         }
     }
     private function deleteClientRelationship(){
+
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
-        $data = MicrocontrollerData::
-            whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
-            ->get();
-        echo count($data)."\n";
-        if ($data) {
-            foreach ($data as $i=>&$item) {
-                $item->client_id = null;
-                if (is_string($item->raw_json)) {
-                    $raw_json = json_decode($item->raw_json, true);
-                } elseif (is_array($item->raw_json)) {
-                    $raw_json = $item->raw_json;
-                }
-                if ($raw_json != null) {
-                    $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
-                    $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
-                    $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'];
-                    $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'];
-                    $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'];
-                    $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
-                    $item->raw_json = json_encode($raw_json);
-                    $item->saveQuietly();
-                }
+        foreach (MicrocontrollerData::
+        whereNotNull('source_timestamp')
+                     ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+                     ->cursor() as $item) {
+            echo $item->id."\n";
+            $item->client_id = null;
+            if (is_string($item->raw_json)) {
+                $raw_json = json_decode($item->raw_json, true);
+            } elseif (is_array($item->raw_json)) {
+                $raw_json = $item->raw_json;
+            }
+            if ($raw_json != null) {
+                $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
+                $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
+                $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'];
+                $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'];
+                $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'];
+                $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
+                $item->raw_json = json_encode($raw_json);
+                $item->saveQuietly();
             }
         }
-
     }
     private function calculateConsumptionHourly(Carbon $hour_ref){
         $data_frame = config('data-frame.data_frame');

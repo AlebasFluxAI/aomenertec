@@ -37,13 +37,13 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
-        $schedule->command(UpdateDataConsumption::class)->everyThreeMinutes()->withoutOverlapping();
-        $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
+        //$schedule->command(UpdateDataConsumption::class)->everyThreeMinutes()->withoutOverlapping();
+        //$schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
         $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
         $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
         //$schedule->command(RefactorClientData::class)->dailyAt('22:32')->withoutOverlapping();
-        $schedule->command(RefactorClientData::class)->dailyAt('10:40')->withoutOverlapping();
+        $schedule->command(RefactorClientData::class)->dailyAt('13:47')->withoutOverlapping();
         $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
         $schedule->command(InvoiceGeneration::class)->dailyAt(2);
 
