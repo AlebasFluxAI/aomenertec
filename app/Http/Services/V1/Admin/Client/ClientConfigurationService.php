@@ -169,7 +169,7 @@ class ClientConfigurationService extends Singleton
             'client_config.real_time_latency' => 'numeric|required|min:10',
             'client_config.storage_latency' => 'required',
             'client_config.storage_type_latency' => 'required',
-            'client_config.frame_type' => 'required',
+            'client_config.billing_day' => 'required',
             'client_config.digital_outputs' => 'numeric|required|min:0|max:10',
             'client_config_alert.*.min_alert' => ['required', 'numeric'],
             'client_config_alert.*.max_alert' => ['required', 'numeric'],
