@@ -57,7 +57,7 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                     $year_aux = $this->day_ref->format('Y');
                 }
                 if ($billing_day == $this->day_ref->format('t')){
-                    $date_aux = Carbon::create($year_aux, $month_aux, 1);
+                    $date_aux = Carbon::create($year_aux, $month_aux, 2);
                     $start_date = Carbon::create($year_aux, $month_aux, $date_aux->format('t'), 23, 59, 59);
                     $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $this->day_ref->format('t'), 23, 59, 59);
 
@@ -86,8 +86,8 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
                     $start_data = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
-                        ->orderBy('source_timestamp')
+                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'), $start_date->format('Y-m-d 23:59:59')])
+                        ->orderBy('source_timestamp', 'desc')
                         ->first();
                     if ($end_data) {
                         $reference_data = $end_data->dailyMicrocontrollerData;
