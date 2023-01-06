@@ -154,64 +154,60 @@ class RefactorClientData extends Command
         }
     }
     private function unpackData(){
-        $data_pack = MicrocontrollerData::whereNull('client_id')
-            ->whereNotNull('source_timestamp')
-           ->orderBy('source_timestamp')->orderBy('created_at')->limit(1000)
-            ->get();
-        echo count($data_pack)."\n";
-
-        if ($data_pack) {
-            $data_frame = config('data-frame.data_frame');
-            $date = Carbon::now();
-            foreach ($data_pack as $i=>&$item) {
-                $raw_json = json_decode($item->raw_json, true);
-                if ($raw_json == null) {
-                    if (strlen($item->raw_json) > 20) {
-                        $decode = bin2hex(base64_decode($item->raw_json));
-                        $split = substr($decode, (16), (16));
-                        $bin = hex2bin($split);
-                        $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-                        $source_timestamp = Carbon::create($item->source_timestamp);
-                        if ($date->diffInDays($source_timestamp) <= 365) {
-                            foreach ($data_frame as $data) {
-                                try {
-                                    $split = substr($decode, ($data['start']), ($data['lenght']));
-                                    $bin = hex2bin($split);
-                                    if (strlen($bin) == ($data['lenght'] / 2)) {
-                                        if ($data['start'] >= 450) {
-                                            $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                            $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+        $data_frame = config('data-frame.data_frame');
+        $date = Carbon::now();
+        foreach (MicrocontrollerData::whereNull('client_id')
+                     ->whereNotNull('source_timestamp')
+                     ->orderBy('source_timestamp')->orderBy('created_at')
+                     ->cursor() as $item) {
+            echo $item->id."\n";
+            $raw_json = json_decode($item->raw_json, true);
+            if ($raw_json == null) {
+                if (strlen($item->raw_json) > 20) {
+                    $decode = bin2hex(base64_decode($item->raw_json));
+                    $split = substr($decode, (16), (16));
+                    $bin = hex2bin($split);
+                    $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+                    $source_timestamp = Carbon::create($item->source_timestamp);
+                    if ($date->diffInDays($source_timestamp) <= 365) {
+                        foreach ($data_frame as $data) {
+                            try {
+                                $split = substr($decode, ($data['start']), ($data['lenght']));
+                                $bin = hex2bin($split);
+                                if (strlen($bin) == ($data['lenght'] / 2)) {
+                                    if ($data['start'] >= 450) {
+                                        $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                        $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    } else {
+                                        if ($data['variable_name'] == "flags") {
+                                            $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                         } else {
-                                            if ($data['variable_name'] == "flags") {
-                                                $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                            if ($data['variable_name'] == "equipment_id") {
+                                                $json[$data['variable_name']] = $equipment_serial;
                                             } else {
-                                                if ($data['variable_name'] == "equipment_id") {
-                                                    $json[$data['variable_name']] = $equipment_serial;
-                                                } else {
-                                                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                                                }
+                                                $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                                             }
                                         }
-                                        if (is_nan($json[$data['variable_name']])) {
-                                            $json[$data['variable_name']] = null;
-                                        }
-
-                                        if ($data['variable_name'] == "ph3_varLh_acumm") {
-                                            break;
-                                        }
                                     }
-                                } catch (Exception $e) {
-                                    echo 'Excepción capturada: ', $e->getMessage(), "\n";
+                                    if (is_nan($json[$data['variable_name']])) {
+                                        $json[$data['variable_name']] = null;
+                                    }
+
+                                    if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                        break;
+                                    }
                                 }
+                            } catch (Exception $e) {
+                                echo 'Excepción capturada: ', $e->getMessage(), "\n";
                             }
-                            $item->raw_json = json_encode($json);
-                            $item->saveQuietly();
-                        } else {
-                            $item->forceDelete();
                         }
+                        $item->raw_json = json_encode($json);
+                        $item->saveQuietly();
                     } else {
                         $item->forceDelete();
                     }
+                } else {
+                    $item->forceDelete();
                 }
             }
         }
