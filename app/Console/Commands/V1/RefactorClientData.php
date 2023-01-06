@@ -62,11 +62,11 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        //$this->unpackData();
-        //$this->deleteClientRelationship();
+        $this->unpackData();
+        $this->deleteClientRelationship();
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(50)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
             ->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
@@ -76,7 +76,7 @@ class RefactorClientData extends Command
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
         $i=0;
-        /*while (true){
+        while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
                 ->whereNull('client_id')
@@ -117,7 +117,7 @@ class RefactorClientData extends Command
                 break;
             }
             $this->start_date->addHour();
-        }*/
+        }
         while (true) {
             echo $start_date_copy->format('Y-m-d H-i')."\n";
             dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot2');
@@ -217,11 +217,11 @@ class RefactorClientData extends Command
     private function deleteClientRelationship(){
         MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(50)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $data = MicrocontrollerData::
             whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(50)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->get();
         echo count($data)."\n";
         if ($data) {

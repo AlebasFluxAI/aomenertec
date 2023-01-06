@@ -156,13 +156,13 @@ class MicrocontrollerData extends Model
                         $this->forceDelete();
                         return;
                     }
-                }
+                }/*
                 if ($json['import_wh'] < $last_raw_json['import_wh']) {
                     $json['import_wh'] = $last_raw_json['import_wh'];
                 }
                 if ($json['import_VArh'] < $last_raw_json['import_VArh']) {
                     $json['import_VArh'] = $last_raw_json['import_VArh'];
-                }
+                }*/
             }
             $reference_hour = $current_time->copy()->subHour();
             $reference_data = $client->microcontrollerData()
