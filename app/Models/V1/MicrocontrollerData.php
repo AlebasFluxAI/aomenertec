@@ -83,8 +83,14 @@ class MicrocontrollerData extends Model
         } elseif (is_array($this->raw_json)) {
             $json = $this->raw_json;
         }
-
-
+        if ($json != null) {
+            $json['ph1_varCh_acumm'] = $json['data_ph1_varCh_acumm'];
+            $json['ph2_varCh_acumm'] = $json['data_ph2_varCh_acumm'];
+            $json['ph3_varCh_acumm'] = $json['data_ph3_varCh_acumm'];
+            $json['ph1_varLh_acumm'] = $json['data_ph1_varLh_acumm'];
+            $json['ph2_varLh_acumm'] = $json['data_ph2_varLh_acumm'];
+            $json['ph3_varLh_acumm'] = $json['data_ph3_varLh_acumm'];
+        }
         $timestamp_unix = $json['timestamp'];
         $current_time = $date->setTimestamp($timestamp_unix);
         $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);

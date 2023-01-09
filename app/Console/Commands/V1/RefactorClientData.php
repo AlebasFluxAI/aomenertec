@@ -224,21 +224,7 @@ class RefactorClientData extends Command
                      ->cursor() as $item) {
             echo $item->id."\n";
             $item->client_id = null;
-            if (is_string($item->raw_json)) {
-                $raw_json = json_decode($item->raw_json, true);
-            } elseif (is_array($item->raw_json)) {
-                $raw_json = $item->raw_json;
-            }
-            if ($raw_json != null) {
-                $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
-                $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
-                $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'];
-                $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'];
-                $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'];
-                $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
-                $item->raw_json = json_encode($raw_json);
-                $item->saveQuietly();
-            }
+            $item->saveQuietly();
         }
     }
     private function calculateConsumptionHourly(Carbon $hour_ref){
