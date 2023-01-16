@@ -26,9 +26,9 @@ class JsonEdit implements ShouldQueue
      */
     public $model;
     public $flag;
-    public function __construct(MicrocontrollerData $model, $flag)
+    public function __construct($model, $flag)
     {
-        $this->model = $model;
+        $this->model = MicrocontrollerData::find($model);
         $this->flag = $flag;
     }
 

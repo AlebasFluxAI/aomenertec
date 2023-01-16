@@ -56,7 +56,6 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
@@ -64,13 +63,11 @@ class RefactorClientData extends Command
             }
         }
         $this->unpackData();
-        $this->deleteClientRelationship();
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
-        $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(5)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
-            ->orderBy('source_timestamp')
-            ->first();
+        $first_data = MicrocontrollerData::select('source_timestamp')
+            ->whereDate("created_at", $this->current_time->copy()->subDays(5))
+            ->orderBy('source_timestamp')->first();
         $this->start_date = new Carbon($first_data->source_timestamp);
         $start_date_copy = new Carbon($first_data->source_timestamp);
         $current_time = $this->current_time->copy();
@@ -80,8 +77,8 @@ class RefactorClientData extends Command
         $i=0;
         while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
-            $minute_data = MicrocontrollerData::
-                whereNull('client_id')
+            $minute_data = MicrocontrollerData::select('raw_json', 'id')
+                ->whereNull('client_id')
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp')
                 ->get();
@@ -109,7 +106,7 @@ class RefactorClientData extends Command
                         if ($client == null) {
                             $datum->forceDelete();
                         } else{
-                            dispatch(new JsonEdit($datum, false))->onQueue($queues[$i]);
+                            dispatch(new JsonEdit($datum->id, false))->onQueue($queues[$i]);
                         }
                     }
                     $i++;
@@ -156,11 +153,15 @@ class RefactorClientData extends Command
     private function unpackData(){
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
-        foreach (MicrocontrollerData::whereNull('client_id')
-                     ->whereNotNull('source_timestamp')
-                     ->orderBy('source_timestamp')->orderBy('created_at')
+        MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
+        ->whereBetween("created_at", [$this->current_time->copy()->subDays(5)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->restore();
+        $i=0;
+        foreach (MicrocontrollerData::select('raw_json', 'client_id', 'source_timestamp')
+                     ->whereBetween("created_at", [$this->current_time->copy()->subDays(5)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                      ->cursor() as $item) {
-            echo $item->id."\n";
+            echo $i."\n";
+            $i++;
             $raw_json = json_decode($item->raw_json, true);
             if ($raw_json == null) {
                 if (strlen($item->raw_json) > 20) {
@@ -202,6 +203,7 @@ class RefactorClientData extends Command
                             }
                         }
                         $item->raw_json = json_encode($json);
+                        $item->client_id = null;
                         $item->saveQuietly();
                     } else {
                         $item->forceDelete();
@@ -209,6 +211,9 @@ class RefactorClientData extends Command
                 } else {
                     $item->forceDelete();
                 }
+            } else{
+                $item->client_id = null;
+                $item->saveQuietly();
             }
         }
     }
