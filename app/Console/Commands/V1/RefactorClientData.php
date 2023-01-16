@@ -56,14 +56,16 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
+
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        $this->unpackData();
-        $this->deleteClientRelationship();
+        //$this->unpackData();
+        //$this->deleteClientRelationship();
+
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
@@ -76,7 +78,7 @@ class RefactorClientData extends Command
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
         $i=0;
-        while (true){
+       /* while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
                 ->whereNull('client_id')
@@ -125,7 +127,7 @@ class RefactorClientData extends Command
                 break;
             }
             $start_date_copy->addHour();
-        }
+        }*/
 
         while (true) {
             echo "calc day =".$end_date->format('Y-m-d')."\n";
@@ -152,99 +154,79 @@ class RefactorClientData extends Command
         }
     }
     private function unpackData(){
-        $data_pack = MicrocontrollerData::whereNull('client_id')
-            ->whereNotNull('source_timestamp')
-           ->orderBy('source_timestamp')->orderBy('created_at')
-            ->get();
-        echo count($data_pack)."\n";
-
-        if ($data_pack) {
-            $data_frame = config('data-frame.data_frame');
-            $date = Carbon::now();
-            foreach ($data_pack as $i=>&$item) {
-                $raw_json = json_decode($item->raw_json, true);
-                if ($raw_json == null) {
-                    if (strlen($item->raw_json) > 20) {
-                        $decode = bin2hex(base64_decode($item->raw_json));
-                        $split = substr($decode, (16), (16));
-                        $bin = hex2bin($split);
-                        $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-                        $source_timestamp = Carbon::create($item->source_timestamp);
-                        if ($date->diffInDays($source_timestamp) <= 365) {
-                            foreach ($data_frame as $data) {
-                                try {
-                                    $split = substr($decode, ($data['start']), ($data['lenght']));
-                                    $bin = hex2bin($split);
-                                    if (strlen($bin) == ($data['lenght'] / 2)) {
-                                        if ($data['start'] >= 450) {
-                                            $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                            $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+        $data_frame = config('data-frame.data_frame');
+        $date = Carbon::now();
+        foreach (MicrocontrollerData::whereNull('client_id')
+                     ->whereNotNull('source_timestamp')
+                     ->orderBy('source_timestamp')->orderBy('created_at')
+                     ->cursor() as $item) {
+            echo $item->id."\n";
+            $raw_json = json_decode($item->raw_json, true);
+            if ($raw_json == null) {
+                if (strlen($item->raw_json) > 20) {
+                    $decode = bin2hex(base64_decode($item->raw_json));
+                    $split = substr($decode, (16), (16));
+                    $bin = hex2bin($split);
+                    $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+                    $source_timestamp = Carbon::create($item->source_timestamp);
+                    if ($date->diffInDays($source_timestamp) <= 365) {
+                        foreach ($data_frame as $data) {
+                            try {
+                                $split = substr($decode, ($data['start']), ($data['lenght']));
+                                $bin = hex2bin($split);
+                                if (strlen($bin) == ($data['lenght'] / 2)) {
+                                    if ($data['start'] >= 450) {
+                                        $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                        $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    } else {
+                                        if ($data['variable_name'] == "flags") {
+                                            $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                         } else {
-                                            if ($data['variable_name'] == "flags") {
-                                                $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                            if ($data['variable_name'] == "equipment_id") {
+                                                $json[$data['variable_name']] = $equipment_serial;
                                             } else {
-                                                if ($data['variable_name'] == "equipment_id") {
-                                                    $json[$data['variable_name']] = $equipment_serial;
-                                                } else {
-                                                    $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                                                }
+                                                $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                                             }
                                         }
-                                        if (is_nan($json[$data['variable_name']])) {
-                                            $json[$data['variable_name']] = null;
-                                        }
-
-                                        if ($data['variable_name'] == "ph3_varLh_acumm") {
-                                            break;
-                                        }
                                     }
-                                } catch (Exception $e) {
-                                    echo 'Excepción capturada: ', $e->getMessage(), "\n";
+                                    if (is_nan($json[$data['variable_name']])) {
+                                        $json[$data['variable_name']] = null;
+                                    }
+
+                                    if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                        break;
+                                    }
                                 }
+                            } catch (Exception $e) {
+                                echo 'Excepción capturada: ', $e->getMessage(), "\n";
                             }
-                            $item->raw_json = json_encode($json);
-                            $item->saveQuietly();
-                        } else {
-                            $item->forceDelete();
                         }
+                        $item->raw_json = json_encode($json);
+                        $item->saveQuietly();
                     } else {
                         $item->forceDelete();
                     }
+                } else {
+                    $item->forceDelete();
                 }
             }
         }
     }
     private function deleteClientRelationship(){
-        MicrocontrollerData::withTrashed()
+
+        /*MicrocontrollerData::withTrashed()
             ->whereNotNull('source_timestamp')
             ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
-            ->restore();
-        $data = MicrocontrollerData::
-            whereNotNull('source_timestamp')
-            ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
-            ->get();
-        echo count($data)."\n";
-        if ($data) {
-            foreach ($data as $i=>&$item) {
-                $item->client_id = null;
-                if (is_string($item->raw_json)) {
-                    $raw_json = json_decode($item->raw_json, true);
-                } elseif (is_array($item->raw_json)) {
-                    $raw_json = $item->raw_json;
-                }
-                if ($raw_json != null) {
-                    $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
-                    $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
-                    $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'];
-                    $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'];
-                    $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'];
-                    $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
-                    $item->raw_json = json_encode($raw_json);
-                    $item->saveQuietly();
-                }
-            }
-        }
+            ->restore();*/
+        foreach (MicrocontrollerData::
+        whereNotNull('source_timestamp')
+                     ->whereBetween("created_at", [$this->current_time->copy()->subDays(350)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+                     ->cursor() as $item) {
 
+            echo $item->id."\n";
+            $item->client_id = null;
+            $item->saveQuietly();
+        }
     }
     private function calculateConsumptionHourly(Carbon $hour_ref){
         $data_frame = config('data-frame.data_frame');

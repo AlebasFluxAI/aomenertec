@@ -40,8 +40,8 @@ class UpdateTimestampDataConsumption extends Command
      */
     public function handle()
     {
-        $data = MicrocontrollerData::whereNull('client_id')
-            ->whereNull('source_timestamp')
+        $data = MicrocontrollerData::whereNull('source_timestamp')
+            ->whereNull('client_id')
             ->orderBy('id')->get();
         if ($data) {
             foreach ($data as $item) {

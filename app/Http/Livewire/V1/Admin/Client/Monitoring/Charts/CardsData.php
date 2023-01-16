@@ -25,6 +25,9 @@ class CardsData extends Component
         $this->data_frame = $data_frame;
         $this->client =  $client;
         $last_data = $this->client->microcontrollerData()->latest()->first();
+       // if ($last_data == null){
+         //   $last_data = $this->client->hourlyMicrocontrollerData()->latest()->first();
+        //}
         $this->last_data = collect(json_decode($last_data->raw_json, true));
         $this->cards = [];
         $this->variables_selected = [];

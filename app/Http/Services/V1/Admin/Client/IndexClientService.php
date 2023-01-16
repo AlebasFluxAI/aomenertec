@@ -12,6 +12,7 @@ use App\Models\V1\ClientType;
 use App\Models\V1\Department;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\Location;
 use App\Models\V1\LocationType;
 use App\Models\V1\MicrocontrollerData;
@@ -51,7 +52,7 @@ class IndexClientService extends Singleton
 
     public function conditionalMonitoring(Component $component, $modelId)
     {
-        return !MicrocontrollerData::whereClientId($modelId)->exists();
+        return !HourlyMicrocontrollerData::whereClientId($modelId)->exists();
     }
 
     public function conditionalDeleteClient(Component $component, $modelId)
