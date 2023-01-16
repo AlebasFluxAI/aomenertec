@@ -53,7 +53,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
             $reference_data = $client->microcontrollerData()
-                ->whereDate("source_timestamp", $this->hour_ref)
+                ->whereate("source_timestamp", [$this->hour_ref->format('Y-m-d H:00:00'), $this->hour_ref->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
             if ($reference_data) {
@@ -136,7 +136,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                     }
                 }
             }
-            $hour_data =$client->hourlyMicrocontrollerdata()
+            /*$hour_data =$client->hourlyMicrocontrollerdata()
                 ->where('year', $year)
                 ->where('month',$month)
                 ->where('day', $day)
@@ -203,7 +203,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }
