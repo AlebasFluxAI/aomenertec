@@ -80,8 +80,8 @@ class RefactorClientData extends Command
         $i=0;
         while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
-            $minute_data = MicrocontrollerData::whereNotNull('source_timestamp')
-                ->whereNull('client_id')
+            $minute_data = MicrocontrollerData::
+                whereNull('client_id')
                 ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp')
                 ->get();
