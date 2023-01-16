@@ -56,18 +56,20 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        $clients = Client::whereHasTelemetry(true)->get();
+        /*$clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
-        }
+        }*/
         $this->unpackData();
+        dd("okkkk");
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::select('source_timestamp')
             ->whereDate("created_at", $this->current_time->copy()->subDays(5))
             ->orderBy('source_timestamp')->first();
+        echo($first_data->source_timestamp);
         $this->start_date = new Carbon($first_data->source_timestamp);
         $start_date_copy = new Carbon($first_data->source_timestamp);
         $current_time = $this->current_time->copy();
@@ -77,11 +79,15 @@ class RefactorClientData extends Command
         $i=0;
         while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
+            $minute_data = null;
             $minute_data = MicrocontrollerData::select('raw_json', 'id')
-                ->whereNull('client_id')
-                ->whereBetween("source_timestamp", [$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
+                ->whereDate('source_timestamp', $this->start_date)
+                ->whereTime('source_timestamp', '>=', $this->start_date->format('H:00:00'))
+                ->whereTime('source_timestamp', '<=', $this->start_date->format('H:59:59'))
                 ->orderBy('source_timestamp')
                 ->get();
+            echo "ok\n";
+
             if (count($minute_data)>0){
                 $i=0;
                 foreach ($minute_data as $datum){
@@ -106,7 +112,7 @@ class RefactorClientData extends Command
                         if ($client == null) {
                             $datum->forceDelete();
                         } else{
-                            dispatch(new JsonEdit($datum->id, false))->onQueue($queues[$i]);
+                            //dispatch(new JsonEdit($datum->id, false))->onQueue($queues[$i]);
                         }
                     }
                     $i++;
@@ -117,6 +123,7 @@ class RefactorClientData extends Command
             }
             $this->start_date->addHour();
         }
+        dd("okkkk");
         while (true) {
             echo $start_date_copy->format('Y-m-d H-i')."\n";
             dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot2');
