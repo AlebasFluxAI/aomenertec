@@ -62,7 +62,7 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }*/
-        //$this->unpackData();
+        $this->unpackData();
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::select('source_timestamp')
@@ -111,7 +111,7 @@ class RefactorClientData extends Command
                         if ($client == null) {
                             $datum->forceDelete();
                         } else{
-                            //dispatch(new JsonEdit($datum->id, false))->onQueue($queues[$i]);
+                            dispatch(new JsonEdit($datum->id, false))->onQueue($queues[$i]);
                         }
                     }
                     $i++;
