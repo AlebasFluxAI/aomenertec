@@ -62,8 +62,7 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }*/
-        $this->unpackData();
-        dd("okkkk");
+        //$this->unpackData();
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::select('source_timestamp')
