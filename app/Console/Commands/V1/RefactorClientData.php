@@ -62,7 +62,7 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }*/
-        $this->unpackData();
+        //$this->unpackData();
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
         $first_data = MicrocontrollerData::select('source_timestamp')
@@ -76,9 +76,8 @@ class RefactorClientData extends Command
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
         $i=0;
-        while (true){
+        /*while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
-            $minute_data = null;
             $minute_data = MicrocontrollerData::select('raw_json', 'id')
                 ->whereDate('source_timestamp', $this->start_date)
                 ->whereTime('source_timestamp', '>=', $this->start_date->format('H:00:00'))
@@ -121,8 +120,8 @@ class RefactorClientData extends Command
                 break;
             }
             $this->start_date->addHour();
-        }
-        dd("okkkk");
+        }*/
+
         while (true) {
             echo $start_date_copy->format('Y-m-d H-i')."\n";
             dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot2');
@@ -131,7 +130,7 @@ class RefactorClientData extends Command
             }
             $start_date_copy->addHour();
         }
-
+        dd("okkkk");
         while (true) {
             echo "calc day =".$end_date->format('Y-m-d')."\n";
             dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot2');

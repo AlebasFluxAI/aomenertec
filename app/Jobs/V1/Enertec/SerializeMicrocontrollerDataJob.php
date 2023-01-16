@@ -53,7 +53,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
             $reference_data = $client->microcontrollerData()
-                ->whereBetween("source_timestamp", [$this->hour_ref->format('Y-m-d H:00:00'), $this->hour_ref->format('Y-m-d H:59:59')])
+                ->whereDate("source_timestamp", $this->hour_ref)
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
             if ($reference_data) {
