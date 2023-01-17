@@ -142,10 +142,10 @@ class UnpackDataJob implements ShouldQueue
                     }
 
                     if ($client) {
-                        if (!$client->stopUnpackClient()->exists()) {
+                        //if (!$client->stopUnpackClient()->exists()) {
                             $this->item->save();
                             dispatch(new JsonEdit($this->item, true))->onQueue($this->queue);
-                        }
+                        //}
                     } else{
                         $this->item->forceDelete();
                     }

@@ -64,7 +64,7 @@ class RefactorClientData extends Command
             }
         }
         $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereDate("created_at", $this->current_time->copy()->subDays(2))
+            ->whereDate("created_at", $this->current_time->copy()->subDay())
             ->orderBy('source_timestamp')->first();
         echo($first_data->source_timestamp);
         $this->date_aux = new Carbon($first_data->source_timestamp);
@@ -163,11 +163,11 @@ class RefactorClientData extends Command
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
-        ->whereBetween("created_at", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+        ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $i=0;
         foreach (MicrocontrollerData::select('raw_json', 'client_id', 'source_timestamp')
-                     ->whereBetween("created_at", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+                     ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                      ->cursor() as $item) {
             echo $i."\n";
             $i++;
