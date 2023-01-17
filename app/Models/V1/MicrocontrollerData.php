@@ -151,9 +151,13 @@ class MicrocontrollerData extends Model
             $json['varCh_interval'] = 0;
             $json['varLh_interval'] = 0;
         } else {
-            if ($flag) {
+            //if ($flag) {
                 $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
+                    if (new Carbon($last_data->source_timestamp) >= $current_time) {
+                        $this->delete();
+                        return;
+                    }
                     $last_raw_json = json_decode($last_data->raw_json, true);
                     if ($json['import_wh'] <= 0) {
 
@@ -163,8 +167,8 @@ class MicrocontrollerData extends Model
                         }
                     }
                 }
-            } else{
-                $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
+           // } else{
+                /*$last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
                     $last_raw_json = json_decode($last_data->raw_json, true);
                     if ($json['import_wh'] <= 0) {
@@ -194,7 +198,7 @@ class MicrocontrollerData extends Model
                     $json['varCh_interval'] = 0;
                     $json['varLh_interval'] = 0;
                 }
-            }
+            }*/
             $reference_hour = $current_time->copy()->subHour();
             $reference_data = $client->microcontrollerData()
                 ->whereBetween('source_timestamp', [$reference_hour->format('Y-m-d H:00:00'), $reference_hour->format('Y-m-d H:59:59')])
