@@ -183,13 +183,7 @@ class MicrocontrollerData extends Model
                             $this->forceDelete();
                             return;
                         }
-                    }/*
-                if ($json['import_wh'] < $last_raw_json['import_wh']) {
-                    $json['import_wh'] = $last_raw_json['import_wh'];
-                }
-                if ($json['import_VArh'] < $last_raw_json['import_VArh']) {
-                    $json['import_VArh'] = $last_raw_json['import_VArh'];
-                }*/
+                    }
                 } else{
                     $json['kwh_interval'] = 0;
                     $json['varh_interval'] = 0;
@@ -293,17 +287,25 @@ class MicrocontrollerData extends Model
         $this->raw_json = $json;
         if (!$flag) {
             if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
-                if ($this->hourlyMicrocontrollerData()->exists()) {
-                    $this->hourlyMicrocontrollerData()->forceDelete();
+                $equals = $client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->get();
+                if ($equals){
+                    foreach ($equals as $item){
+                        if ($item->id != $this->id){
+                            if ($this->hourlyMicrocontrollerData()->exists()) {
+                                $this->hourlyMicrocontrollerData()->forceDelete();
+                            }
+                            if ($this->dailyMicrocontrollerData()->exists()) {
+                                $this->dailyMicrocontrollerData()->forceDelete();
+                            }
+                            if ($this->clientAlert()->exists()) {
+                                $this->clientAlert()->forceDelete();
+                            }
+                            $this->forceDelete();
+                            return;
+                        }
+                    }
                 }
-                if ($this->dailyMicrocontrollerData()->exists()) {
-                    $this->dailyMicrocontrollerData()->forceDelete();
-                }
-                if ($this->clientAlert()->exists()) {
-                    $this->clientAlert()->forceDelete();
-                }
-                $this->forceDelete();
-                return;
+
             }
         }
         $this->saveQuietly();
