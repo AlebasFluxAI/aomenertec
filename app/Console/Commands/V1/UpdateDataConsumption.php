@@ -54,6 +54,7 @@ class UpdateDataConsumption extends Command
                 $j=0;
             }
             dispatch(new UnpackDataJob($item, $queues[$i]))->onQueue($queues[$i]);
+            $j++;
         }
 
     }

@@ -155,10 +155,9 @@ class UnpackDataJob implements ShouldQueue
             } else {
                 $this->item->forceDelete();
             }
-
-
         }else {
-            $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
+            $this->item->delete();
+            /*$raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
             $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
             $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
             $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'] ;
@@ -177,6 +176,6 @@ class UnpackDataJob implements ShouldQueue
                     }
                 }
             }
-        }
+        */}
     }
 }
