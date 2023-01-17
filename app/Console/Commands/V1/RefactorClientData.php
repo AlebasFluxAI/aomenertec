@@ -57,28 +57,28 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        $clients = Client::whereHasTelemetry(true)->get();
+        /*$clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
         $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereDate("created_at", $this->current_time->copy()->subDays(7))
+            ->whereDate("created_at", $this->current_time->copy()->subDays(8))
             ->orderBy('source_timestamp')->first();
         echo($first_data->source_timestamp);
         $this->date_aux = new Carbon($first_data->source_timestamp);
         $this->unpackData();
-        $this->deleteClientRelationship();
+        $this->deleteClientRelationship();*/
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
-        $this->start_date = new Carbon($first_data->source_timestamp);
-        $start_date_copy = new Carbon($first_data->source_timestamp);
+        $this->start_date = new Carbon('2023-01-09 12:00:00');
+        $start_date_copy = new Carbon('2023-01-08 20:00:00');
         $current_time = $this->current_time->copy();
-        $end_date= new Carbon($first_data->source_timestamp);
-        $end_date_copy = new Carbon($first_data->source_timestamp);
-        $end_date_first = new Carbon($first_data->source_timestamp);
+        $end_date= new Carbon('2023-01-08 20:00:00');
+        $end_date_copy = new Carbon('2023-01-09 12:00:00');
+        $end_date_first = new Carbon('2023-01-08 20:00:00');
         $i=0;
         while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
