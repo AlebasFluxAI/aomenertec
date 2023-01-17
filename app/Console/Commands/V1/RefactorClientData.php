@@ -57,28 +57,28 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        /*$clients = Client::whereHasTelemetry(true)->get();
+        $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
-        }*/
-        /*$first_data = MicrocontrollerData::select('source_timestamp')
+        }
+        $first_data = MicrocontrollerData::select('source_timestamp')
             ->whereDate("created_at", $this->current_time->copy()->subDays(7))
-            ->orderBy('source_timestamp')->first();*/
-        echo('2023-01-08 20:00:00');
-        $this->date_aux = new Carbon('2023-01-10 00:00:00');
-        //$this->unpackData();
-        //$this->deleteClientRelationship();
+            ->orderBy('source_timestamp')->first();
+        echo($first_data->source_timestamp);
+        $this->date_aux = new Carbon($first_data->source_timestamp);
+        $this->unpackData();
+        $this->deleteClientRelationship();
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
-        $this->start_date = new Carbon('2023-01-10 00:00:00');
-        $start_date_copy = new Carbon('2023-01-10 00:00:00');
+        $this->start_date = new Carbon($first_data->source_timestamp);
+        $start_date_copy = new Carbon($first_data->source_timestamp);
         $current_time = $this->current_time->copy();
-        $end_date= new Carbon('2023-01-10 00:00:00');
-        $end_date_copy = new Carbon('2023-01-10 00:00:00');
-        $end_date_first = new Carbon('2023-01-10 00:00:00');
+        $end_date= new Carbon($first_data->source_timestamp);
+        $end_date_copy = new Carbon($first_data->source_timestamp);
+        $end_date_first = new Carbon($first_data->source_timestamp);
         $i=0;
         while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
@@ -164,11 +164,11 @@ class RefactorClientData extends Command
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
-        ->whereBetween("source_timestamp", ['2023-01-08 20:00:00', $this->current_time->format('Y-m-d H:i:s')])
+        ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $i=0;
         foreach (MicrocontrollerData::select('raw_json', 'client_id', 'source_timestamp')
-                     ->whereBetween("source_timestamp", ['2023-01-08 20:00:00', $this->current_time->format('Y-m-d H:i:s')])
+                     ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                      ->cursor() as $item) {
             echo $i."\n";
             $i++;
@@ -231,7 +231,7 @@ class RefactorClientData extends Command
 
         foreach (MicrocontrollerData::
         whereNotNull('source_timestamp')
-                     ->whereBetween("source_timestamp", ['2023-01-08 20:00:00', $this->current_time->format('Y-m-d H:i:s')])
+                     ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                      ->cursor() as $item) {
 
             echo $item->id."\n";

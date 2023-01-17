@@ -208,7 +208,7 @@ class MicrocontrollerData extends Model
                 $reference_data = $client->microcontrollerData()->where('source_timestamp', '<', $reference_hour->format('Y-m-d H:00:00'))->orderBy('source_timestamp', 'desc')->first();
             }
             if (empty($reference_data)) {
-                if ($last_data) {
+                //if ($last_data) {
                     $json['kwh_interval'] = $json['import_wh'] - $last_raw_json['import_wh'];
                     $json['varh_interval'] = $json['import_VArh'] - $last_raw_json['import_VArh'];
                     $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
@@ -235,10 +235,10 @@ class MicrocontrollerData extends Model
                     $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $last_raw_json['ph3_import_kvarh'];
                     $json['varCh_interval'] = $json['varCh_acumm'] - floatval($last_raw_json['varCh_acumm']);
                     $json['varLh_interval'] = $json['varLh_acumm'] - floatval($last_raw_json['varLh_acumm']);
-                }
+                //}
 
             } else {
-                if ($last_data) {
+                //if ($last_data) {
                     $reference_data_json = json_decode($reference_data->raw_json, true);
                     $json['kwh_interval'] = $json['import_wh'] - $reference_data_json['import_wh'];
                     $json['varh_interval'] = $json['import_VArh'] - $reference_data_json['import_VArh'];
@@ -266,7 +266,7 @@ class MicrocontrollerData extends Model
                     $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $reference_data_json['ph3_import_kvarh'];
                     $json['varCh_interval'] = $json['varCh_acumm'] - floatval($reference_data_json['varCh_acumm']);
                     $json['varLh_interval'] = $json['varLh_acumm'] - floatval($reference_data_json['varLh_acumm']);
-                }
+                //}
             }
         }
         $this->client_id = $client->id;
@@ -281,10 +281,10 @@ class MicrocontrollerData extends Model
         $this->raw_json = $json;
         if (!$flag) {
             if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
-                $equals = $client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->get();
+                /*$equals = $client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->get();
                 if ($equals){
                     foreach ($equals as $item){
-                        if ($item->id != $this->id){
+                        if ($item->id != $this->id){*/
                             if ($this->hourlyMicrocontrollerData()->exists()) {
                                 $this->hourlyMicrocontrollerData()->forceDelete();
                             }
@@ -296,9 +296,9 @@ class MicrocontrollerData extends Model
                             }
                             $this->forceDelete();
                             return;
-                        }
+                     /*   }
                     }
-                }
+                }*/
 
             }
         }
