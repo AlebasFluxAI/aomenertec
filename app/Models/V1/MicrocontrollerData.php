@@ -154,10 +154,6 @@ class MicrocontrollerData extends Model
             if ($flag) {
                 $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
-                    if (new Carbon($last_data->source_timestamp) >= $current_time) {
-                        $this->delete();
-                        return;
-                    }
                     $last_raw_json = json_decode($last_data->raw_json, true);
                     if ($json['import_wh'] <= 0) {
 
@@ -165,13 +161,7 @@ class MicrocontrollerData extends Model
                             $this->forceDelete();
                             return;
                         }
-                    }/*
-                if ($json['import_wh'] < $last_raw_json['import_wh']) {
-                    $json['import_wh'] = $last_raw_json['import_wh'];
-                }
-                if ($json['import_VArh'] < $last_raw_json['import_VArh']) {
-                    $json['import_VArh'] = $last_raw_json['import_VArh'];
-                }*/
+                    }
                 }
             } else{
                 $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
