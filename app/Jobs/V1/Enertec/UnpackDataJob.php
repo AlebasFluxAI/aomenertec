@@ -144,7 +144,7 @@ class UnpackDataJob implements ShouldQueue
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {
                             $this->item->save();
-                            dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
+                            //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
                     } else{
                         $this->item->forceDelete();
