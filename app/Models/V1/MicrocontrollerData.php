@@ -90,6 +90,8 @@ class MicrocontrollerData extends Model
             $json['ph1_varLh_acumm'] = $json['data_ph1_varLh_acumm'];
             $json['ph2_varLh_acumm'] = $json['data_ph2_varLh_acumm'];
             $json['ph3_varLh_acumm'] = $json['data_ph3_varLh_acumm'];
+            $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
+            $json['varLh_acumm'] = floatval($json['ph1_varLh_acumm']) + floatval($json['ph2_varLh_acumm']) + floatval($json['ph3_varLh_acumm']);
         }
         $timestamp_unix = $json['timestamp'];
         $current_time = $date->setTimestamp($timestamp_unix);

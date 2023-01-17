@@ -136,7 +136,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                     }
                 }
             }
-            $hour_data =$client->hourlyMicrocontrollerdata()
+            /*$hour_data =$client->hourlyMicrocontrollerdata()
                 ->where('year', $year)
                 ->where('month',$month)
                 ->where('day', $day)
@@ -203,7 +203,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }
