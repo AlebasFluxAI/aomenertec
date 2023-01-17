@@ -43,6 +43,7 @@ class RefactorClientData extends Command
      */
     public $current_time;
     public $start_date;
+    public $date_aux;
     public function __construct()
     {
         $this->current_time = new Carbon();
@@ -56,19 +57,21 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        /*$clients = Client::whereHasTelemetry(true)->get();
+        $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
-        }*/
-        //$this->unpackData();
-
-        $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
+        }
         $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereDate("created_at", $this->current_time->copy()->subDays(5))
+            ->whereDate("created_at", $this->current_time->copy()->subDay())
             ->orderBy('source_timestamp')->first();
         echo($first_data->source_timestamp);
+        $this->date_aux = new Carbon($first_data->source_timestamp);
+        $this->unpackData();
+
+        $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
+
         $this->start_date = new Carbon($first_data->source_timestamp);
         $start_date_copy = new Carbon($first_data->source_timestamp);
         $current_time = $this->current_time->copy();
@@ -76,7 +79,7 @@ class RefactorClientData extends Command
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
         $i=0;
-        /*while (true){
+        while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::select('raw_json', 'id')
                 ->whereDate('source_timestamp', $this->start_date)
@@ -120,7 +123,7 @@ class RefactorClientData extends Command
                 break;
             }
             $this->start_date->addHour();
-        }*/
+        }
 
         while (true) {
             echo $start_date_copy->format('Y-m-d H-i')."\n";
@@ -130,7 +133,7 @@ class RefactorClientData extends Command
             }
             $start_date_copy->addHour();
         }
-        dd("okkkk");
+
         while (true) {
             echo "calc day =".$end_date->format('Y-m-d')."\n";
             dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot2');
@@ -154,16 +157,17 @@ class RefactorClientData extends Command
                 break;
             }
         }
+        dd("okkkk");
     }
     private function unpackData(){
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
-        ->whereBetween("created_at", [$this->current_time->copy()->subDays(5)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+        ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $i=0;
         foreach (MicrocontrollerData::select('raw_json', 'client_id', 'source_timestamp')
-                     ->whereBetween("created_at", [$this->current_time->copy()->subDays(5)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+                     ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                      ->cursor() as $item) {
             echo $i."\n";
             $i++;
@@ -208,7 +212,6 @@ class RefactorClientData extends Command
                             }
                         }
                         $item->raw_json = json_encode($json);
-                        $item->client_id = null;
                         $item->saveQuietly();
                     } else {
                         $item->forceDelete();
@@ -216,9 +219,6 @@ class RefactorClientData extends Command
                 } else {
                     $item->forceDelete();
                 }
-            } else{
-                $item->client_id = null;
-                $item->saveQuietly();
             }
         }
     }

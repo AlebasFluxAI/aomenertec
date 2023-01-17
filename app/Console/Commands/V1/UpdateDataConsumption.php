@@ -53,7 +53,8 @@ class UpdateDataConsumption extends Command
             if ($j == (count($queues))){
                 $j=0;
             }
-            dispatch(new UnpackDataJob($item, $queues[$i]))->onQueue($queues[$i]);
+            dispatch(new UnpackDataJob($item, $queues[$j]))->onQueue($queues[$j]);
+            $j++;
         }
 
     }
