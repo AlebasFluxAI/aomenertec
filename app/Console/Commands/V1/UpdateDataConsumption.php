@@ -43,11 +43,14 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-
+        $now =new Carbon();
         $j=0;
         $i = 0;
-        $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
-        foreach (MicrocontrollerData::select('id')->whereNull('client_id')
+        $queues = ['spot1', 'spot2', 'spot4', 'spot5'];
+        foreach (MicrocontrollerData::select('id')
+                     ->whereDate('source_timestamp', $now->subHour()->format('Y-m-d'))
+                     ->whereTime('source_timestamp','>', $now->subHour()->format('H:00:00'))
+                     ->whereNull('client_id')
                      ->whereNotNull('source_timestamp')
                      ->orderBy('source_timestamp')
                      ->cursor() as $item) {

@@ -57,114 +57,119 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        $clients = Client::whereHasTelemetry(true)->get();
+        /*$clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
-        }
-        $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereDate("created_at", '>', $this->current_time->copy()->subDays(350))
-            ->orderBy('source_timestamp')->first();
-        echo($first_data->source_timestamp);
-        $this->date_aux = new Carbon($first_data->source_timestamp);
-        //$this->unpackData();
-        //$this->deleteClientRelationship();
-
-        $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
-
-        $this->start_date = new Carbon($first_data->source_timestamp);
-        $start_date_copy = new Carbon($first_data->source_timestamp);
-        $current_time = $this->current_time->copy();
-        $end_date= new Carbon($first_data->source_timestamp);
-        $end_date_copy = new Carbon($first_data->source_timestamp);
-        $end_date_first = new Carbon($first_data->source_timestamp);
-        $i=0;
-        /*while (true){
-            echo $this->start_date->format('Y-m-d H-i')."\n";
-            $minute_data = MicrocontrollerData::select('raw_json', 'id')
-                ->whereDate('source_timestamp', $this->start_date)
-                ->whereTime('source_timestamp', '>=', $this->start_date->format('H:00:00'))
-                ->whereTime('source_timestamp', '<=', $this->start_date->format('H:59:59'))
-                ->orderBy('source_timestamp')
-                ->get();
-            echo "ok\n";
-
-            if (count($minute_data)>0){
-                $i=0;
-                foreach ($minute_data as $datum){
-                    if ($i == (count($queues))){
-                        $i=0;
-                    }
-                    if (is_string($datum->raw_json)) {
-                        $json = json_decode($datum->raw_json, true);
-                        if ($json == null){
-                            continue;
-                        }
-                    } elseif (is_array($datum->raw_json)) {
-                        $json = $datum->raw_json;
-                    }
-                    $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
-                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                        ->first();
-                    if ($equipment == null) {
-                        $datum->delete();
-                    }else{
-                        $client = $equipment->clients()->first();
-                        if ($client == null) {
-                            $datum->delete();
-                        } else{
-                            dispatch(new JsonEdit($datum->id, false))->onQueue($queues[$i]);
-                        }
-                    }
-                    $i++;
-                }
-            }
-            if ($this->start_date->diffInHours($current_time) == 0){
-                break;
-            }
-            $this->start_date->addHour();
-        }
-
-        while (true) {
-            echo $start_date_copy->format('Y-m-d H-i')."\n";
-            dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot2');
-            if ($start_date_copy->diffInHours($current_time)==0){
-                break;
-            }
-            $start_date_copy->addHour();
         }*/
+        $first_data = MicrocontrollerData::select('source_timestamp')
+            ->whereDate("created_at", '>', $this->current_time->copy()->subDays(188))
+            ->orderBy('source_timestamp')->first();
+        if ($first_data) {
+            echo($first_data->source_timestamp);
+            $this->date_aux = new Carbon($first_data->source_timestamp);
+            //$this->unpackData();
+            //$this->deleteClientRelationship();
 
-        while (true) {
-            echo "calc day =".$end_date->format('Y-m-d')."\n";
-            dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot2');
+            $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
-            if ($end_date->diffInDays($this->current_time)==1){
-                break;
+            $this->start_date = new Carbon($first_data->source_timestamp);
+            $start_date_copy = new Carbon($first_data->source_timestamp);
+            $current_time = $this->current_time->copy();
+            $end_date = new Carbon($first_data->source_timestamp);
+            $end_date_copy = new Carbon($first_data->source_timestamp);
+            $end_date_first = new Carbon($first_data->source_timestamp);
+            $i = 0;
+            while (true) {
+                echo $this->start_date->format('Y-m-d H-i') . "\n";
+                if (MicrocontrollerData::
+                    whereDate('source_timestamp', $this->start_date)
+                    ->whereTime('source_timestamp', '>=', $this->start_date->format('H:00:00'))
+                    ->whereTime('source_timestamp', '<=', $this->start_date->format('H:59:59'))
+                    ->exists()) {
+                    $minute_data = MicrocontrollerData::select('raw_json', 'id')
+                        ->whereDate('source_timestamp', $this->start_date)
+                        ->whereTime('source_timestamp', '>=', $this->start_date->format('H:00:00'))
+                        ->whereTime('source_timestamp', '<=', $this->start_date->format('H:59:59'))
+                        ->orderBy('source_timestamp')
+                        ->get();
+                    echo "ok\n";
+                    $i = 0;
+                    foreach ($minute_data as $datum) {
+                        if ($i == (count($queues))) {
+                            $i = 0;
+                        }
+                        if (is_string($datum->raw_json)) {
+                            $json = json_decode($datum->raw_json, true);
+                            if ($json == null) {
+                                continue;
+                            }
+                        } elseif (is_array($datum->raw_json)) {
+                            $json = $datum->raw_json;
+                        }
+                        $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
+                        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                            ->first();
+                        if ($equipment == null) {
+                            $datum->delete();
+                        } else {
+                            $client = $equipment->clients()->first();
+                            if ($client == null) {
+                                $datum->delete();
+                            } else {
+                                dispatch(new JsonEdit($datum->id, false))->onQueue('spot3');
+                            }
+                        }
+                        $i++;
+                    }
+                }
+                if ($this->start_date->diffInHours($current_time) == 0) {
+                    break;
+                }
+                $this->start_date->addHour();
             }
-            $end_date->addDay();
-        }
 
-        $reference_date = $this->current_time->copy();
-        while (true) {
-            $reference_date->subDay();
-            echo "calc mes =".$reference_date->format('Y-m-d')."\n";
-            if ($i == (count($queues))){
-                $i=0;
+            while (true) {
+                echo $start_date_copy->format('Y-m-d H-i') . "\n";
+                dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot3');
+                if ($start_date_copy->diffInHours($current_time) == 0) {
+                    break;
+                }
+                $start_date_copy->addHour();
             }
-            dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00')))->onQueue('spot2');
-            $i++;
-            if ($reference_date->diffInDays($end_date_first)==0){
-                break;
+
+            while (true) {
+                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
+                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
+
+                if ($end_date->diffInDays($this->current_time) == 0) {
+                    break;
+                }
+                $end_date->addDay();
+            }
+
+            $reference_date = $this->current_time->copy();
+            while (true) {
+                $reference_date->subDay();
+                echo "calc mes =" . $reference_date->format('Y-m-d') . "\n";
+                if ($i == (count($queues))) {
+                    $i = 0;
+                }
+                dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00')))->onQueue('spot3');
+                $i++;
+                if ($reference_date->diffInDays($end_date_first) == 0) {
+                    break;
+                }
             }
         }
     }
     private function unpackData(){
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
-        MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
+        /*MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
         ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
-            ->restore();
+            ->restore();*/
         $i=0;
         foreach (MicrocontrollerData::select('raw_json', 'client_id', 'source_timestamp')
                      ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
@@ -212,7 +217,6 @@ class RefactorClientData extends Command
                             }
                         }
                         $item->raw_json = json_encode($json);
-                        $item->client_id = null;
                         $item->saveQuietly();
                     } else {
                         $item->forceDelete();
@@ -221,7 +225,6 @@ class RefactorClientData extends Command
                     $item->forceDelete();
                 }
             } else{
-                $item->client_id = null;
                 $item->saveQuietly();
             }
         }
