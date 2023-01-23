@@ -43,12 +43,11 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-        $data_frame = config('data-frame.data_frame');
-        $date = Carbon::now();
+
         $j=0;
         $i = 0;
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
-        foreach (MicrocontrollerData::whereNull('client_id')
+        foreach (MicrocontrollerData::select('id')->whereNull('client_id')
                      ->whereNotNull('source_timestamp')
                      ->orderBy('source_timestamp')
                      ->cursor() as $item) {
@@ -56,7 +55,7 @@ class UpdateDataConsumption extends Command
             if ($j == (count($queues))){
                 $j=0;
             }
-            dispatch(new UnpackDataJob($item, $queues[$j]))->onQueue($queues[$j]);
+            dispatch(new UnpackDataJob($item->id, $queues[$j]))->onQueue($queues[$j]);
             $j++;
             $i++;
         }
