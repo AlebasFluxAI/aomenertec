@@ -73,6 +73,7 @@ return [
         Permissions::PQR_REQUEST_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::CLIENT_ADD_EQUIPMENT,
+        Permissions::PQR_EQUIPMENT_CHANGE,
 
         Permissions::WORK_ORDER_SHOW,
         Permissions::WORK_ORDER_DETAILS,
@@ -216,6 +217,8 @@ return [
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
         Permissions::EQUIPMENT_SHOW,
+        Permissions::EQUIPMENT_REPAIR,
+        Permissions::EQUIPMENT_DELETE,
 
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
@@ -260,6 +263,7 @@ return [
         Permissions::PQR_CLOSE,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::PQR_CHANGE_LEVEL,
+        Permissions::PQR_EQUIPMENT_CHANGE,
 
         Permissions::WORK_ORDER_DETAILS,
         Permissions::WORK_ORDER_SHOW,
@@ -310,11 +314,10 @@ return [
         Permissions::WORK_ORDER_DETAILS,
         Permissions::WORK_ORDER_SHOW,
         Permissions::WORK_ORDER_INDEX,
+        Permissions::WORK_ORDER_CREATE,
         Permissions::WORK_ORDER_SOLVE,
         Permissions::WORK_ORDER_IN_PROGRESS,
         Permissions::WORK_ORDER_STOP,
-        Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
-        Permissions::PQR_EQUIPMENT_CHANGE,
 
         Permissions::CLIENT_SETTINGS,
 

@@ -100,6 +100,7 @@ class SupportAddClientService extends Singleton
 
     public function delete(Component $component, $clientId)
     {
+        
         $component->model->clientSupports()->whereClientId($clientId)->delete();
         $this->refreshClients($component);
     }

@@ -59,7 +59,7 @@ class AddClientSupport extends Component
 
     public function delete($client)
     {
-        $this->addSupportClient->delete($this, $client["id"]);
+        $this->addSupportClient->delete($this, json_decode($client, true)["id"]);
     }
 
     public function render()
