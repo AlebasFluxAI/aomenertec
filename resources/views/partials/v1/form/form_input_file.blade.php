@@ -2,7 +2,8 @@
 
     <div class="input-group">
         <div class="file-drop-area"><span class="choose-file-button">{{$placeholder}}</span><br>
-            <input wire:model="{{$input_model}}" type="file" class="file-input" @if($multiple??false)multiple @endif>
+            <input wire:model="{{$input_model}}" type="file" accept=".png,.jpg,.gif,.webp,.bmp" class="file-input"
+                   @if($multiple??false)multiple @endif>
         </div>
         <div id="divImageMediaPreview"></div>
     </div>

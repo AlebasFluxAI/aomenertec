@@ -31,5 +31,4 @@ return [
     PqrMessage::SENDER_TYPE_NETWORK_OPERATOR => "Operador de red",
     PqrMessage::SENDER_TYPE_SUPERVISOR => "Supervisor",
 
-
 ];
