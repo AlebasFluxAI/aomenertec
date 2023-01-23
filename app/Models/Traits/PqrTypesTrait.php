@@ -157,6 +157,7 @@ trait PqrTypesTrait
 
     public function submitMessage(Component $component)
     {
+        
         DB::transaction(function () use ($component) {
             $message = $component->model->messages()->create([
                 "message" => $component->description,
