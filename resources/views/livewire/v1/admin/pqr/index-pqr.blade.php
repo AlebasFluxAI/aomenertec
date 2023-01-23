@@ -83,6 +83,13 @@
                "col_translate"=>"pqr"
 
            ],
+           [
+               "col_name" =>"Prioridad",
+               "col_data" =>"severity",
+               "col_filter"=>false,
+               "col_translate"=>"pqr"
+           ],
+
 
             ],
              "table_actions"=>[

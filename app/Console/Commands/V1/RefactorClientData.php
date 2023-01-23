@@ -64,12 +64,12 @@ class RefactorClientData extends Command
             }
         }
         $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereDate("created_at", $this->current_time->copy()->subDays(10))
+            ->whereDate("created_at", '>', $this->current_time->copy()->subDays(350))
             ->orderBy('source_timestamp')->first();
         echo($first_data->source_timestamp);
         $this->date_aux = new Carbon($first_data->source_timestamp);
-        $this->unpackData();
-        $this->deleteClientRelationship();
+        //$this->unpackData();
+        //$this->deleteClientRelationship();
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
@@ -80,7 +80,7 @@ class RefactorClientData extends Command
         $end_date_copy = new Carbon($first_data->source_timestamp);
         $end_date_first = new Carbon($first_data->source_timestamp);
         $i=0;
-        while (true){
+        /*while (true){
             echo $this->start_date->format('Y-m-d H-i')."\n";
             $minute_data = MicrocontrollerData::select('raw_json', 'id')
                 ->whereDate('source_timestamp', $this->start_date)
@@ -133,7 +133,7 @@ class RefactorClientData extends Command
                 break;
             }
             $start_date_copy->addHour();
-        }
+        }*/
 
         while (true) {
             echo "calc day =".$end_date->format('Y-m-d')."\n";
@@ -158,7 +158,6 @@ class RefactorClientData extends Command
                 break;
             }
         }
-        dd("okkkk");
     }
     private function unpackData(){
         $data_frame = config('data-frame.data_frame');
