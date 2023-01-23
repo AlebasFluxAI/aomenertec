@@ -44,7 +44,7 @@ class ReorderDataClientHour extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2022,12, 9, 0,0,0);
+        $end_date= Carbon::create(2023,01, 8, 0,0,0);
         $end_date_copy = $end_date->copy();
         $data_frame = config('data-frame.data_frame');
         while (true) {

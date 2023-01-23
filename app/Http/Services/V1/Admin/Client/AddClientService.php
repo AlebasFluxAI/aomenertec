@@ -46,7 +46,7 @@ class AddClientService extends Singleton
         $component->fill([
             "network_topologies" => $this->topologies(),
             "network_topology" => "monophasic",
-            'serials' => collect([]),
+            'serials_array' => collect([]),
             'equipment' => [],
             "has_telemetry" => false,
             "create_supervisor" => false,
@@ -205,7 +205,7 @@ class AddClientService extends Singleton
                     "post" => "Digite serial de " . $type->type,
                     "disable" => true,
                 ]);
-                $component->serials = collect([]);
+                $component->serials_array = collect([]);
             }
         }
     }
@@ -326,14 +326,14 @@ class AddClientService extends Singleton
                         ToastEvent::launchToast($component, "show", "error", "Debes seleccionar un tecnico", ["duration" => "2s"]);
                         return;
                     }
-                    $component->serials = Equipment::where([
+                    $component->serials_array = Equipment::where([
                         ["serial", "like", '%' . $value . "%"],
                         ["equipment_type_id", $type_id],
                     ])->whereIn("id", Technician::find($component->technician_id)->equipments()->pluck("id"))
                         ->whereNotIn('assigned', [true])
                         ->whereNotIn("status", [Equipment::STATUS_DISREPAIR, Equipment::STATUS_REPAIR])
                         ->take(3)->get();
-                    if (count($component->serials) == 0) {
+                    if (count($component->serials_array) == 0) {
                         $component->equipment[$id]['post'] = "No registrado";
                     }
                 }
