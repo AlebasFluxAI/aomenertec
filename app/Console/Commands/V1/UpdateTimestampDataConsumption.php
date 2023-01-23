@@ -40,10 +40,11 @@ class UpdateTimestampDataConsumption extends Command
      */
     public function handle()
     {
-        $data = MicrocontrollerData::select('source_timestamp', 'raw_json')->whereNull('source_timestamp')
+        $data = MicrocontrollerData::select('id', 'source_timestamp', 'raw_json')->whereNull('source_timestamp')
             ->whereNull('client_id')->get();
         if ($data) {
             foreach ($data as $item) {
+                echo $item->id."\n";
                 if (json_decode($item->raw_json, true) == null) {
                     $decode = bin2hex(base64_decode($item->raw_json));
                     $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
