@@ -64,11 +64,12 @@ class RefactorClientData extends Command
             }
         }
         $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereDate("created_at", $this->current_time->copy()->subDay())
+            ->whereDate("created_at", $this->current_time->copy()->subDays(10))
             ->orderBy('source_timestamp')->first();
         echo($first_data->source_timestamp);
         $this->date_aux = new Carbon($first_data->source_timestamp);
         $this->unpackData();
+        $this->deleteClientRelationship();
 
         $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
@@ -107,11 +108,11 @@ class RefactorClientData extends Command
                     $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                         ->first();
                     if ($equipment == null) {
-                        $datum->forceDelete();
+                        $datum->delete();
                     }else{
                         $client = $equipment->clients()->first();
                         if ($client == null) {
-                            $datum->forceDelete();
+                            $datum->delete();
                         } else{
                             dispatch(new JsonEdit($datum->id, false))->onQueue($queues[$i]);
                         }
@@ -212,6 +213,7 @@ class RefactorClientData extends Command
                             }
                         }
                         $item->raw_json = json_encode($json);
+                        $item->client_id = null;
                         $item->saveQuietly();
                     } else {
                         $item->forceDelete();
@@ -219,6 +221,9 @@ class RefactorClientData extends Command
                 } else {
                     $item->forceDelete();
                 }
+            } else{
+                $item->client_id = null;
+                $item->saveQuietly();
             }
         }
     }
@@ -226,7 +231,7 @@ class RefactorClientData extends Command
 
         foreach (MicrocontrollerData::
         whereNotNull('source_timestamp')
-                     ->whereBetween("created_at", [$this->current_time->copy()->subDays(5)->format('Y-m-d 00:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+                     ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
                      ->cursor() as $item) {
 
             echo $item->id."\n";

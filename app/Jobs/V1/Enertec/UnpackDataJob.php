@@ -156,16 +156,15 @@ class UnpackDataJob implements ShouldQueue
                 $this->item->forceDelete();
             }
         }else {
-            $this->item->delete();
-            /*$raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
+            $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
             $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
             $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
             $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'] ;
             $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
             $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
             $this->item->raw_json = json_encode($raw_json);
-            //$this->item->save();
-            $equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
+            $this->item->save();
+            /*$equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
             $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
             if ($equipment) {
                 $client = $equipment->clients()->first();
@@ -175,7 +174,7 @@ class UnpackDataJob implements ShouldQueue
                         dispatch(new JsonEdit($this->item, true))->onQueue($this->queue);
                     }
                 }
-            }
-        */}
+            }*/
+        }
     }
 }
