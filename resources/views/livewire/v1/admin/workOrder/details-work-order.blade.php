@@ -105,7 +105,11 @@
                                                                           "value"=>$model->evidences,
                                                                           "show_column"=>($model->status==\App\Models\V1\WorkOrder::WORK_ORDER_STATUS_CLOSED),
                                                                      ],
-
+                                                                     [
+                                                                             "key"=>"Tiempo de solucion",
+                                                                             "value"=>\Carbon\Carbon::parse($model->closed_at)->diff(\Carbon\Carbon::parse($model->created_at))->format("%a Dias %h Horas  %i Minutos"),
+                                                                             "show_column"=>($model->status==\App\Models\V1\WorkOrder::WORK_ORDER_STATUS_CLOSED),
+                                                                     ],
                                                                  ]
                                                         ]
                                             ],
