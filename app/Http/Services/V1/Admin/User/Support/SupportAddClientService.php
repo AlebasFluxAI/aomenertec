@@ -98,9 +98,18 @@ class SupportAddClientService extends Singleton
         $component->client_picked = false;
     }
 
-    public function delete(Component $component, $clientId)
+    public function delete(Component $component, $client)
     {
-        
+        if (!$client) {
+            foreach ($component->model->clientSupports as $clientSupport) {
+                if (!Client::whereId($clientSupport->client_id)->exists()) {
+                    $component->model->clientSupports()->whereClientId($clientSupport->client_id)->delete();
+                }
+            }
+            $this->refreshClients($component);
+            return;
+        }
+        $clientId = json_decode($client, true)["id"];
         $component->model->clientSupports()->whereClientId($clientId)->delete();
         $this->refreshClients($component);
     }
