@@ -57,20 +57,19 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        /*$clients = Client::whereHasTelemetry(true)->get();
+        $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
-        }*/
-        $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereDate("created_at", '>', $this->current_time->copy()->subDays(180))
+        }
+        $first_data = MicrocontrollerData::select('source_timestamp', 'created_at')
+            ->whereDate("created_at", '>=', $this->current_time->copy()->subDays(36))
             ->orderBy('source_timestamp')->first();
         if ($first_data) {
             echo($first_data->source_timestamp);
             $this->date_aux = new Carbon($first_data->source_timestamp);
-            //$this->unpackData();
-            //$this->deleteClientRelationship();
+            $this->unpackData();
 
             $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
@@ -81,47 +80,18 @@ class RefactorClientData extends Command
             $end_date_copy = new Carbon($first_data->source_timestamp);
             $end_date_first = new Carbon($first_data->source_timestamp);
             $i = 0;
+            $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
+                ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:i:s'))
+                ->orderBy('source_timestamp')->limit(300000)->get();
             while (true) {
                 echo $this->start_date->format('Y-m-d H-i') . "\n";
-                if (MicrocontrollerData::
-                    whereDate('source_timestamp', $this->start_date)
-                    ->whereTime('source_timestamp', '>=', $this->start_date->format('H:00:00'))
-                    ->whereTime('source_timestamp', '<=', $this->start_date->format('H:59:59'))
-                    ->exists()) {
-                    $minute_data = MicrocontrollerData::select('raw_json', 'id')
-                        ->whereDate('source_timestamp', $this->start_date)
-                        ->whereTime('source_timestamp', '>=', $this->start_date->format('H:00:00'))
-                        ->whereTime('source_timestamp', '<=', $this->start_date->format('H:59:59'))
-                        ->orderBy('source_timestamp')
-                        ->get();
+                $minute_data = $data->whereBetween('source_timestamp',[$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
+                                ->sortBy('source_timestamp')
+                                ->all();
+                if ($minute_data) {
                     echo "ok\n";
-                    $i = 0;
                     foreach ($minute_data as $datum) {
-                        if ($i == (count($queues))) {
-                            $i = 0;
-                        }
-                        if (is_string($datum->raw_json)) {
-                            $json = json_decode($datum->raw_json, true);
-                            if ($json == null) {
-                                continue;
-                            }
-                        } elseif (is_array($datum->raw_json)) {
-                            $json = $datum->raw_json;
-                        }
-                        $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
-                        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                            ->first();
-                        if ($equipment == null) {
-                            $datum->delete();
-                        } else {
-                            $client = $equipment->clients()->first();
-                            if ($client == null) {
-                                $datum->delete();
-                            } else {
-                                dispatch(new JsonEdit($datum->id, false))->onQueue('spot3');
-                            }
-                        }
-                        $i++;
+                        dispatch(new JsonEdit($datum->id, false))->onQueue('spot3');
                     }
                 }
                 if ($this->start_date->diffInHours($current_time) == 0) {
@@ -229,7 +199,7 @@ class RefactorClientData extends Command
             }
         }
     }
-    private function deleteClientRelationship(){
+   /* private function deleteClientRelationship(){
 
         foreach (MicrocontrollerData::
         whereNotNull('source_timestamp')
@@ -494,5 +464,5 @@ class RefactorClientData extends Command
         $data->raw_json = $json;
         $data->saveQuietly();
 
-    }
+    }*/
 }
