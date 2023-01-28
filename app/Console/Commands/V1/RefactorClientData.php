@@ -57,14 +57,8 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        $clients = Client::whereHasTelemetry(true)->get();
-        foreach ($clients as $client){
-            if (!$client->stopUnpackClient()->exists()) {
-                StopUnpackDataClient::create(['client_id' => $client->id]);
-            }
-        }
         $first_data = MicrocontrollerData::select('source_timestamp', 'created_at')
-            ->whereDate("created_at", '>=', $this->current_time->copy()->subDays(36))
+            ->whereDate("created_at", '>=', $this->current_time->copy()->subDays(2))
             ->orderBy('source_timestamp')->first();
         if ($first_data) {
             echo($first_data->source_timestamp);
@@ -137,9 +131,9 @@ class RefactorClientData extends Command
     private function unpackData(){
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
-        /*MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
+        MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
         ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
-            ->restore();*/
+            ->restore();
         $i=0;
         foreach (MicrocontrollerData::select('raw_json', 'client_id', 'source_timestamp')
                      ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
