@@ -96,12 +96,12 @@ class MicrocontrollerData extends Model
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment == null) {
-            $this->forceDelete();
+            $this->delete();
             return;
         }
         $client = $equipment->clients()->first();
         if ($client == null) {
-            $this->forceDelete();
+            $this->delete();
             return;
         }
         if ($flag) {
@@ -437,7 +437,7 @@ class MicrocontrollerData extends Model
     {
         if ($alert->flag_id == 56) {
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
-                $query->whereBetween("source_timestamp", [$this->source_timestamp->copy()->subMinutes(10)->format('Y-m-d H:i:s'), $this->source_timestamp->format('Y-m-d H:i:s')]);
+                $query->whereBetween("source_timestamp", [$this->source_timestamp->copy()->subMinutes(25)->format('Y-m-d H:i:s'), $this->source_timestamp->format('Y-m-d H:i:s')]);
             })->exists()) {
                 ClientAlert::create([
                     'client_id' => $this->client_id,
