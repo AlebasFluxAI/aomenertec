@@ -4,7 +4,11 @@
         <!-- Modal -->
         <a class="btn btn-redirect btn-sm" data-toggle="modal" data-target="#{{$modal_target??"modal"}}"
         >
-            <i class="text-{{$icon_color}} {{$icon}}"></i></a>
+            @if(!isset($button_content))
+                <i
+                    class="text-{{$icon_color??""}} {{$icon??""}}"></i>
+            @endif
+            {{$button_content??""}}</a>
 
         <div class="modal fade" id="{{$modal_target??"modal"}}" tabindex="-1" role="dialog"
              aria-labelledby="#{{$modal_target??"modal"}}"

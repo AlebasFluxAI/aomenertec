@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
@@ -23,6 +24,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -204,5 +206,14 @@ class DetailClientService extends Singleton
     {
         $equipment = Equipment::find($id);
         $equipment->deprecate();
+    }
+
+    public function disableClient(Component $component, $clientId)
+    {
+        DB::transaction(function () use ($clientId, $component) {
+            Client::find($clientId)->disableClient();
+            ToastEvent::launchToast($component, "show", "success", "Cliente desactivado exitosamente");
+        });
+        $component->reset();
     }
 }
