@@ -21,7 +21,7 @@ class DetailClient extends Component
 
     public function mount(Client $client)
     {
-        
+
         $this->detailClientService->mount($this, $client);
     }
 
@@ -131,6 +131,12 @@ class DetailClient extends Component
     public function repairEquipment($id)
     {
         return $this->detailClientService->repairEquipment($id);
+    }
+
+    public function disableClient($clientId)
+    {
+        $this->detailClientService->disableClient($this, $clientId);
+
     }
 
     public function render()

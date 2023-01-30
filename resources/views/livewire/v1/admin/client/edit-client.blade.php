@@ -17,6 +17,13 @@
                     "button_content"=>"Ver listado",
                     "target_route"=>"v1.admin.client.list.client",
                     ],
+                    [
+                    "button_align"=>"right",
+                    "button_type"=>"dropdown",
+                    "button_icon"=>"fas fa-gear",
+                    "button_content"=>"Acciones",
+                    "button_options"=>$client->navigatorDropdownOptions()
+                    ]
 
                 ]
         ])

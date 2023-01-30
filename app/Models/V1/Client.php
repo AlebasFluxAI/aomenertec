@@ -77,6 +77,132 @@ class Client extends Model
         static::addGlobalScope(new ClientEnabledScope());
     }
 
+    public function navigatorDropdownOptions()
+    {
+        return [
+            [
+                "title" => "Detalles",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.detail.client",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-search",
+                    "tooltip_title" => "Detalles",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
+                ],
+            ],
+            [
+                "title" => "Editar",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.edit.client",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-pencil",
+                    "tooltip_title" => "Editar",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_EDIT],
+                ],
+            ],
+            [
+                "title" => "Configuración de equipos",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.settings",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-gear",
+                    "tooltip_title" => "Configuración de equipos",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
+                ],
+            ],
+            [
+                "title" => "Monitoreo",
+                "actionable" => [
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_SHOW_MONITORING],
+                    "redirect" => [
+                        "route" => "v1.admin.client.monitoring",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fa fa-connectdevelop",
+                    "tooltip_title" => "Monitoreo",
+                    "conditional" => "conditionalMonitoring",
+                ],
+            ],
+            [
+                "title" => "Agregar equipos",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.add.equipment",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-computer",
+                    "tooltip_title" => "Agregar equipos",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_ADD_EQUIPMENT],
+                ],
+            ],
+            [
+                "title" => "Ordenes de trabajo",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.work_orders",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-hammer",
+                    "tooltip_title" => "Ordenes de trabajo",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_WORK_ORDER],
+                ],
+            ],
+            [
+                "title" => "Historial de cambios de equipo",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.change_equipment.historical",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-server",
+                    "tooltip_title" => "Historial de cambios de equipo",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
+                ],
+            ],
+            [
+                "title" => "Alertas",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.add.alerts",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-bell",
+                    "tooltip_title" => "Alertas",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_SHOW_ALERTS],
+                ],
+            ],
+            [
+                "title" => "On/Off",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.monitoring.control",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-toggle-on",
+                    "tooltip_title" => "On/Off",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_MONITORING_CONTROL],
+                ],
+            ],
+        ];
+
+
+    }
+
     public function getPhonePlusIndicativeAttribute()
     {
         return "(" . $this->indicative . ") " . $this->phone;
