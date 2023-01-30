@@ -19,6 +19,13 @@
                     "target_binding_value"=>$model->id,
                     "target_route"=>"v1.admin.client.work_orders",
                     ],
+                    [
+                    "button_align"=>"right",
+                    "button_type"=>"dropdown",
+                    "button_icon"=>"fas fa-gear",
+                    "button_content"=>"Acciones",
+                    "button_options"=>$model->navigatorDropdownOptions()
+                    ]
 
                 ]
         ])

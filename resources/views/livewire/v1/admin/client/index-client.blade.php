@@ -75,7 +75,7 @@
                  "table_actions"=>[
 
                                     "customs"=>[
-                                        [
+                                                [
                                                    "redirect"=>[
                                                                "route"=>"v1.admin.client.detail.client",
                                                                "binding"=>"client"
