@@ -16,6 +16,7 @@ use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\MonthlyMicrocontrollerData;
 use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -58,13 +59,12 @@ class RefactorClientData extends Command
     public function handle()
     {
         $first_data = MicrocontrollerData::select('source_timestamp', 'created_at')
-            ->whereDate("created_at", '>=', $this->current_time->copy()->subDays(2))
+            ->whereDate("created_at", '>=', $this->current_time->copy()->subDay())
             ->orderBy('source_timestamp')->first();
         if ($first_data) {
             echo($first_data->source_timestamp);
             $this->date_aux = new Carbon($first_data->source_timestamp);
             $this->unpackData();
-
             $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
             $this->start_date = new Carbon($first_data->source_timestamp);
@@ -75,7 +75,7 @@ class RefactorClientData extends Command
             $end_date_first = new Carbon($first_data->source_timestamp);
             $i = 0;
             $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
-                ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:i:s'))
+                ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:00:00'))
                 ->orderBy('source_timestamp')->limit(300000)->get();
             while (true) {
                 echo $this->start_date->format('Y-m-d H-i') . "\n";
@@ -135,11 +135,13 @@ class RefactorClientData extends Command
         ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
         $i=0;
-        foreach (MicrocontrollerData::select('raw_json', 'client_id', 'source_timestamp')
-                     ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
-                     ->cursor() as $item) {
-            echo $i."\n";
-            $i++;
+        $data_pack = MicrocontrollerData::select('id','raw_json', 'source_timestamp')
+            ->whereNull('client_id')
+            ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->orderBy('source_timestamp')
+            ->get();
+        foreach ($data_pack as &$item) {
+            $raw_json = null;
             $raw_json = json_decode($item->raw_json, true);
             if ($raw_json == null) {
                 if (strlen($item->raw_json) > 20) {
@@ -149,6 +151,7 @@ class RefactorClientData extends Command
                     $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
                     $source_timestamp = Carbon::create($item->source_timestamp);
                     if ($date->diffInDays($source_timestamp) <= 365) {
+
                         foreach ($data_frame as $data) {
                             try {
                                 $split = substr($decode, ($data['start']), ($data['lenght']));
@@ -180,8 +183,11 @@ class RefactorClientData extends Command
                                 echo 'Excepción capturada: ', $e->getMessage(), "\n";
                             }
                         }
-                        $item->raw_json = json_encode($json);
+
+                        $item->raw_json = $json;
                         $item->saveQuietly();
+                        echo $i."\n";
+                        $i++;
                     } else {
                         $item->forceDelete();
                     }
