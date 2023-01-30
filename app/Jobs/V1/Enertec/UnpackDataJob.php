@@ -161,6 +161,7 @@ class UnpackDataJob implements ShouldQueue
             $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
             $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
             $this->item->raw_json = json_encode($raw_json);
+            $this->item->accumulated_real_consumption = 0;
             $this->item->save();
             /*$equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
             $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
