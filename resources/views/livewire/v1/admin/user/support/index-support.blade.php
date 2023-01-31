@@ -95,6 +95,11 @@
                                                             "tooltip_title"=>"Activar usuario para Pqr",
                                                             "conditional"=>"supportPqrDisabled"
                                                     ],
+                                                     [
+                                                            "function"=>"delete",
+                                                            "icon"=> "fas fa-trash",
+                                                            "tooltip_title"=>"Eliminar usuario",
+                                                    ],
                                                     [
                                                             "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_ENABLE_PQR],
                                                             "function"=>"disablePqrSupport",
