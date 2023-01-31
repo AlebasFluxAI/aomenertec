@@ -2,9 +2,11 @@
 
 namespace App\Http\Services\V1\Admin\User\Support;
 
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\V1\Support;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class SupportIndexService extends Singleton
@@ -30,6 +32,17 @@ class SupportIndexService extends Singleton
     public function addClients(Component $component, $modelId)
     {
         $component->redirectRoute("administrar.v1.usuarios.soporte.agregar_clientes", ["support" => $modelId]);
+    }
+
+    public function delete(Component $component, $modelId)
+    {
+        DB::transaction(function () use ($modelId) {
+            $support = Support::find($modelId);
+            $support->delete();
+        });
+
+        ToastEvent::launchToast($component, "success", "Usuario eliminado");
+
     }
 
     public function getData(Component $component)
