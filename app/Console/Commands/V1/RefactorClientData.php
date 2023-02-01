@@ -105,10 +105,10 @@ class RefactorClientData extends Command
 
             while (true) {
                 echo "calc day =" . $end_date->format('Y-m-d') . "\n";
+                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
                 if ($end_date->diffInDays($this->current_time) == 0) {
                     break;
                 }
-                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
 
                 $end_date->addDay();
             }
