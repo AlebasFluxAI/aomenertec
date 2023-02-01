@@ -211,12 +211,14 @@ class DataReport extends Component
 
     public function reportPdf()
     {
-        if ($this->start_report != "") {
-            $array = $this->arrayCreate();
-            /*for ($i=0; $i<=1; $i++){
-                return Excel::download(new MonitoringDataExport($array), 'data_'.$i.'-' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d') . '.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
-            }*/
-        }
+        //if ($this->start_report != "") {
+            //$array = $this->arrayCreate();
+            $pdf = \PDF::loadView('reports.variables_report');
+            $pdf->setPaper('A4','portrait');
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, 'export.pdf');
+       // }
     }
 
     public function selectReport()
