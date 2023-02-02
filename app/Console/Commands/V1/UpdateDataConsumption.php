@@ -51,6 +51,7 @@ class UpdateDataConsumption extends Command
                      ->whereDate('created_at', $now->format('Y-m-d'))
                      ->whereTime('created_at','>=', $now->subHours(2)->format('H:00:00'))
                      ->whereNull('client_id')
+                     ->whereNotNull('source_timestamp')
                      ->orderBy('source_timestamp')
                      ->cursor() as $item) {
             echo $i."\n";
