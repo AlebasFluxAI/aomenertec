@@ -85,12 +85,20 @@ class Support extends Model
                         "route" => "administrar.v1.ordenes_de_servicio.listado",
                         "submenu" => [
                             [
-                                "title" => "Ordenes de servicio",
+                                "title" => "Ordenes de servicio tomadas",
                                 "route" => "administrar.v1.ordenes_de_servicio.listado",
                                 "submenu" => [
 
                                 ],
                             ],
+                            [
+                                "title" => "Cola ordenes de servicio",
+                                "route" => "administrar.v1.usuarios.soporte.cola.ordenes_de_trabajo",
+                                "submenu" => [
+
+                                ],
+                            ],
+
                         ]
 
                     ],

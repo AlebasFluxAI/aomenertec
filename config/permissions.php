@@ -323,6 +323,7 @@ return [
 
         Permissions::CLIENT_DISABLED_SHOW,
         Permissions::CLIENT_ACTION_ENABLE,
+        Permissions::SUPPORT_WORK_ORDER_QUEUE
 
     ],
     // Vendedor
