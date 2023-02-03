@@ -82,12 +82,12 @@
                                                             "tooltip_title"=>"Editar",
                                                             "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_EDIT],
                                                     ],
-                                                    [
-                                                            "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_LINK_CLIENT],
-                                                            "function"=>"addClients",
-                                                            "icon"=> "fas fa-users",
-                                                            "tooltip_title"=>"Ver clientes"
-                                                    ],
+                                                  //  [
+                                                  //          "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_LINK_CLIENT],
+                                                  //          "function"=>"addClients",
+                                                  //          "icon"=> "fas fa-users",
+                                                  //          "tooltip_title"=>"Ver clientes"
+                                                  //  ],
                                                     [
                                                             "permission"=>[\App\Http\Resources\V1\Permissions::SUPPORT_ENABLE_PQR],
                                                             "function"=>"enablePqrSupport",

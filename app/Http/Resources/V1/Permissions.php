@@ -63,6 +63,7 @@ class Permissions
 
     public const SUPPORT_CREATE = "support.create";
     public const SUPPORT_EDIT = "support.edit";
+    public const SUPPORT_WORK_ORDER_QUEUE = "support.work_order_queue";
     public const SUPPORT_DELETE = "support.delete";
     public const SUPPORT_SHOW = "support.show";
     public const SUPPORT_LINK_CLIENT = "support.link_client";
