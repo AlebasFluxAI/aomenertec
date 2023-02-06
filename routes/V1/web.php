@@ -260,6 +260,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                             ->name("administrar.v1.usuarios.soporte.detalles")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPPORT_SHOW));
 
+                        Route::get('cola/ordenes_de_trabajo', Livewire\V1\Admin\User\Support\IndexWorkOrder::class)
+                            ->name("administrar.v1.usuarios.soporte.cola.ordenes_de_trabajo")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPPORT_WORK_ORDER_QUEUE));
+
                         Route::get('editar/{support}', Livewire\V1\Admin\User\Support\EditSupport::class)
                             ->name("administrar.v1.usuarios.soporte.editar")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPPORT_EDIT));

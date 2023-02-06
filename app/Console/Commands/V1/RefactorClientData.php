@@ -62,17 +62,19 @@ class RefactorClientData extends Command
             ->whereDate("created_at", '>=', $this->current_time->copy()->subDay())
             ->orderBy('source_timestamp')->first();
         if ($first_data) {
-            echo($first_data->source_timestamp);
-            $this->date_aux = new Carbon($first_data->source_timestamp);
+            $aux = new Carbon($first_data->source_timestamp);
+            $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
+            echo($date_init);
+            $this->date_aux = new Carbon($date_init);
             $this->unpackData();
             $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
-            $this->start_date = new Carbon($first_data->source_timestamp);
-            $start_date_copy = new Carbon($first_data->source_timestamp);
+            $this->start_date = new Carbon($date_init);
+            $start_date_copy = new Carbon($date_init);
             $current_time = $this->current_time->copy();
-            $end_date = new Carbon($first_data->source_timestamp);
-            $end_date_copy = new Carbon($first_data->source_timestamp);
-            $end_date_first = new Carbon($first_data->source_timestamp);
+            $end_date = new Carbon($date_init);
+            $end_date_copy = new Carbon($date_init);
+            $end_date_first = new Carbon($date_init);
             $i = 0;
             $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
                 ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:00:00'))
