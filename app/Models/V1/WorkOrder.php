@@ -50,7 +50,8 @@ class WorkOrder extends Model
         "open_by",
         "in_progress_by",
         "closed_by",
-        "support_id"
+        "support_id",
+        "taken"
     ];
 
     protected static function booted()
