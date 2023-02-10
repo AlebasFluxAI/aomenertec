@@ -298,7 +298,7 @@ class ClientConfigurationService extends Singleton
         $flag = false;
         $message = [];
         if ($component->client_config->isDirty('ssid')) {
-            $message['ssid'] = $component->client_config->ssid;
+            $message['ssid'] = strval($component->client_config->ssid);
             $flag = true;
         }
         if ($component->client_config->isDirty('wifi_password')) {
