@@ -121,7 +121,7 @@ class RealTimeChart extends Component
     public function selectRealTime()
     {
         if($this->client->clientConfiguration()->first()->active_real_time) {
-            if ($this->client->clientConfiguration()->first()->real_time_flag) {
+
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
                 if (!RealTimeListener::whereUserId(Auth::user()->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
@@ -136,9 +136,6 @@ class RealTimeChart extends Component
                         MQTT::disconnect();
                     }
                 }
-            } else{
-                $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data'=> 'El dispositivo no cuenta con conexión wifi...']);
-            }
         }else{
             $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data'=> 'El dispositivo no cuenta con conexión wifi...']);
         }
