@@ -43,8 +43,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     {
         $data = $this->unpackData();
         if ($data) {
-
-            dispatch(new RealTimeMonitoringEvent($data))->onQueue("events");
+            event(new RealTimeMonitoringEvent($data));
         }
     }
 
