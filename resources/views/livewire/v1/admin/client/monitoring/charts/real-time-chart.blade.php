@@ -115,19 +115,7 @@
                 });
             })
             var options_real_time = {
-                /*colors:[function({ value, seriesIndex, w }) {
-                    if ((w.config.series).length>1) {
-                        if (seriesIndex == 0) {
-                            return '#FFF000';
-                        } else if (seriesIndex ==1) {
-                            return '#000FFF';
-                        } else {
-                            return'#FF0000'
-                        }
-                    }else {
-                        return '#2D45BD';
-                    }
-                }],*/
+
                 series: [],
                 xaxis: {
                     type: 'text'
@@ -153,7 +141,20 @@
                     }
 
                 },
+                colors:[function({ value, seriesIndex, w }) {
+                    if ((w.config.series).length>1) {
+                        if (seriesIndex == 0) {
+                            return '#FFF000';
+                        } else if (seriesIndex ==1) {
+                            return '#000FFF';
+                        } else {
+                            return'#FF0000'
+                        }
+                    }else {
+                        return '#2D45BD';
+                    }
 
+                }],
                 dataLabels: {
                     enabled: false
                 },

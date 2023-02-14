@@ -58,10 +58,18 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
+        $clients = Client::whereHasTelemetry(true)->get();
+        foreach ($clients as $client){
+            if (!$client->stopUnpackClient()->exists()) {
+                StopUnpackDataClient::create(['client_id' => $client->id]);
+            }
+        }
         $first_data = MicrocontrollerData::select('source_timestamp', 'created_at')
             ->whereDate("created_at", '>=', $this->current_time->copy()->subDay())
             ->orderBy('source_timestamp')->first();
+
         if ($first_data) {
+            //$aux = new Carbon('2023-02-01 00:00:00');
             $aux = new Carbon($first_data->source_timestamp);
             $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
             echo($date_init);

@@ -119,14 +119,14 @@ class MicrocontrollerData extends Model
                 if ($this->clientAlert()->exists()){
                     $this->clientAlert()->forceDelete();
                 }
-                $this->forceDelete();
+                $this->delete();
                 return;
             }
-        }/*else{
+        }else{
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
-        }*/
+        }
 
 
         if (!MicrocontrollerData::whereClientId($client->id)->exists()) {
@@ -295,7 +295,7 @@ class MicrocontrollerData extends Model
                             if ($this->clientAlert()->exists()) {
                                 $this->clientAlert()->forceDelete();
                             }
-                            $this->forceDelete();
+                            $this->delete();
                             return;
                         }
                     }

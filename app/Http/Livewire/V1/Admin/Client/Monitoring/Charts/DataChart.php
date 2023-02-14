@@ -83,7 +83,6 @@ class DataChart extends Component
     public function selectHistory()
     {
         if($this->client->clientConfiguration()->first()->active_real_time) {
-            if ($this->client->clientConfiguration()->first()->real_time_flag) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
                 if (RealTimeListener::whereUserId(Auth::user()->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
@@ -98,7 +97,6 @@ class DataChart extends Component
                         MQTT::disconnect();
                     }
                 }
-            }
         }
         $this->restartDateRange();
     }

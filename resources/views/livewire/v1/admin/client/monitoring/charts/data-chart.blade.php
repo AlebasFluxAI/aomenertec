@@ -202,6 +202,7 @@
                     events: {
                         dataPointSelection: function(event, chartContext, config) {
                             // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
+
                             if(config.dataPointIndex>0) {
                                 @this.emitSelf('setPointPhasor', config.dataPointIndex)
                             }
@@ -212,8 +213,9 @@
 
                 },
                 tooltip: {
-                    shared: false,
-                    intersect: true,
+                    enabled:true,
+                    shared: true,
+                    intersect: false,
                 },
                 markers: {
                     size: 1,
