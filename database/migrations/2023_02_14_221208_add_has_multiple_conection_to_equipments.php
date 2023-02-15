@@ -13,7 +13,7 @@ class AddHasMultipleConectionToEquipments extends Migration
      */
     public function up()
     {
-        Schema::table('equipments', function (Blueprint $table) {
+        Schema::table('equipment', function (Blueprint $table) {
             $table->boolean("has_multiple_connection")->default(false);
         });
     }
@@ -25,7 +25,7 @@ class AddHasMultipleConectionToEquipments extends Migration
      */
     public function down()
     {
-        Schema::table('equipments', function (Blueprint $table) {
+        Schema::table('equipment', function (Blueprint $table) {
             $table->dropColumn("has_multiple_connection");
         });
     }
