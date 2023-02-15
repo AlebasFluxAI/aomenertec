@@ -33,7 +33,7 @@ class WhatsAppChannel
             return;
         }
         $cellphone = $toWhatsapp->to;
-
+        
         try {
             $body = [
                 'to' => (int)$notifiable->indicative . $notifiable->phone,
@@ -57,6 +57,7 @@ class WhatsAppChannel
                 'https://conversations.messagebird.com/v1/conversations/start',
                 $body
             );
+            dd($response);
         } catch (Throwable $e) {
         }
     }

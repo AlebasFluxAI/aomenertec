@@ -60,6 +60,7 @@ Route::get('/login', [AuthenticatedSessionController::class, 'create'])
     ->middleware(['guest:' . config('fortify.guard')])
     ->name('login');
 
+Route::get("healthcheck", [HomeController::class, "healthCheck"]);
 
 Route::post('', [testFile::class, 'upload']);
 
