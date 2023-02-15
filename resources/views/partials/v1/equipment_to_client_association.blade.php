@@ -7,7 +7,7 @@
 
     <div class="col-12 text-left">
     </div>
-    @if(count($equipment ))
+
     @foreach($equipment??[] as $index => $item)
         <div wire:key="equipment-field-{{ $index }}"
              class="form-group mb-2 align-content-start col-md-3 col-sm-12">
