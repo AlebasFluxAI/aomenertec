@@ -21,6 +21,7 @@ class EditEquipment extends Component
     public $picked;
     public $status;
     public $equipment_status;
+    public $has_multiple_connection;
     private $editEquipmentService;
 
 

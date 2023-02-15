@@ -60,6 +60,15 @@ class IndexClientService extends Singleton
         return MicrocontrollerData::whereClientId($modelId)->exists();
     }
 
+    public function setFilter(Component $component, $filterValue)
+    {
+        $clientType = ClientType::whereType($filterValue)->first();
+        $component->filterCol = "client_type_id";
+        $component->filter = $clientType->id;
+        $component->clientType = $filterValue;
+        
+    }
+
     public function deleteClient(Component $component, $modelId)
     {
         Client::find($modelId)->delete();
@@ -119,6 +128,7 @@ class IndexClientService extends Singleton
 
 
         if ($component->filter) {
+
             return Client::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
 
