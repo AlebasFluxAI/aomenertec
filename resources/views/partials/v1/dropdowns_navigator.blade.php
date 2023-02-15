@@ -25,10 +25,10 @@
 
                 @elseif(array_key_exists("function",$option["actionable"]))
                     @include("partials.v1.table.table-action-button",[
-                            "modal"=>$option["actionable"]["modal"],
-                            "button_content"=>$option["actionable"]["title"],
+                            "modal"=>$option["actionable"]["modal"]?? null,
+                            "button_content"=>$option["actionable"]["title"]?? null,
                             "button_action"=>$option["actionable"]["function"],
-                            "model_id"=>$option["actionable"]["value"],
+                            "model_id"=>$option["actionable"]["value"]?? 1,
 
                     ])
                 @endif

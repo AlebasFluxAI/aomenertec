@@ -13,6 +13,12 @@
                                         "dropdown_options"=>$option["button_options"],
                                         "button_icon"=>$option["button_icon"],
                                     ])
+                    @elseif(array_key_exists("button_type",$option) and $option["button_type"]=="dropdown_filter")
+                        @include("partials.v1.dropdowns_navigator",[
+                                        "button_content"=>$option["button_content"],
+                                        "dropdown_options"=>$option["button_options"],
+                                        "button_icon"=>$option["button_icon"],
+                                    ])
                     @else
                         @include("partials.v1.primary_navigator",[
                                               "button_align"=>$option["button_align"],

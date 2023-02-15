@@ -38,6 +38,7 @@ class Equipment extends Model
         'has_network_operator',
         'has_technician',
         'has_clients',
+        "has_multiple_connection"
     ];
 
     public static function getModelAsKeyValue()

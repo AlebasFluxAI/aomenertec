@@ -7,10 +7,11 @@
 
 
         @include("partials.v1.title",[
-              "second_title"=>"de clientes activos",
+              "second_title"=>"de clientes activos tipo ".$clientType,
               "first_title"=>"Listado"
           ])
         @endif
+        <span style="font-weight: bold">Tipo de cliente: {{$clientType}} </span>
         @include("partials.v1.table_nav",
                [
                    "nav_options"=>[
@@ -22,6 +23,79 @@
                           "button_icon"=>"fa-solid fa-plus",
                           "target_route"=>"v1.admin.client.add.client",
                           ],
+                          [
+                                "button_align"=>"right",
+                                "button_type"=>"dropdown_filter",
+                                "button_icon"=>"fas fa-gear",
+                                "button_content"=>"Tipo de cliente",
+                                "button_options"=>[
+                                         [
+                                        "title" => "ZNI Sistema fotovoltaico",
+                                        "actionable" => [
+                                            "function" => [
+                                                "button_content" => "ZNI Sistema fotovoltaico",
+                                                "button_action" => "setFilter",
+                                                "binding" => "client",
+                                                "value" => "ZNI Sistema fotovoltaico"
+                                            ],
+                                            "icon" => "fas fa-search",
+                                            "tooltip_title" => "ZNI Sistema fotovoltaico",
+                                        ],
+                                    ],
+                                     [
+                                        "title" => "ZNI Convencional",
+                                        "actionable" => [
+                                            "function" => [
+                                                "button_content" => "ZNI Convencional",
+                                                "button_action" => "setFilter",
+                                                "binding" => "client",
+                                                "value" => "ZNI Convencional"
+                                            ],
+                                            "icon" => "fas fa-search",
+                                            "tooltip_title" => "ZNI Convencional",
+                                        ],
+                                    ],
+                                     [
+                                        "title" => "ZNI rural",
+                                        "actionable" => [
+                                            "function" => [
+                                                "button_content" => "ZNI rural",
+                                                "button_action" => "setFilter",
+                                                "binding" => "client",
+                                                "value" => "ZNI rural"
+                                            ],
+                                            "icon" => "fas fa-search",
+                                            "tooltip_title" => "ZNI rural",
+                                        ],
+                                    ],
+                                     [
+                                        "title" => "SIN Convencional",
+                                        "actionable" => [
+                                            "function" => [
+                                                "button_content" => "SIN Convencional",
+                                                "button_action" => "setFilter",
+                                                "binding" => "client",
+                                                "value" => "SIN Convencional"
+                                            ],
+                                            "icon" => "fas fa-search",
+                                            "tooltip_title" => "SIN Convencional",
+                                        ],
+                                    ],
+                                     [
+                                        "title" => "Monitoreo",
+                                        "actionable" => [
+                                            "function" => [
+                                                "button_content" => "Monitoreo",
+                                                "button_action" => "setFilter",
+                                                "binding" => "client",
+                                                "value" => "Monitoreo"
+                                            ],
+                                            "icon" => "fas fa-search",
+                                            "tooltip_title" => "Monitoreo",
+                                        ],
+                                    ],
+]
+                           ],
 
                       ]
               ])
@@ -65,12 +139,6 @@
                    "col_data" =>"phonePlusIndicative",
                    "col_filter"=>true
                ],
-                [
-                       "col_name" =>"Operador de red",
-                       "col_data" =>"networkOperator.name",
-                       "col_filter"=>false
-                   ],
-
                 ],
                  "table_actions"=>[
 
@@ -190,6 +258,8 @@
 
 
            ])
+
         @if($view_header??true)
+
     </div>
 @endif
