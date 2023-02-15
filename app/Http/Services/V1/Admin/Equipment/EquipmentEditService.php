@@ -24,6 +24,7 @@ class EquipmentEditService extends Singleton
             'equipment_status' => $this->getStatus(),
             'status' => $equipment->status,
             'picked' => false,
+            "has_multiple_connection" => $equipment->has_multiple_connection
         ]);
     }
 
@@ -71,6 +72,7 @@ class EquipmentEditService extends Singleton
             "description" => $component->equipmentDescription,
             "equipment_type_id" => $component->equipmentTypeId,
             "status" => $component->status,
+            "has_multiple_connection" => $component->has_multiple_connection,
         ];
     }
 

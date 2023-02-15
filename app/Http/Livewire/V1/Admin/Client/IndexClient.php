@@ -15,7 +15,7 @@ class IndexClient extends Component
     use WithPagination;
     use FilterTrait;
 
-
+    public $clientType = "ZNI Sistema fotovoltaico";
     private $indexClientService;
 
     public function __construct($id = null)
@@ -56,6 +56,11 @@ class IndexClient extends Component
         return view('livewire.v1.admin.client.index-client', [
             "data" => $this->getData()
         ])->extends('layouts.v1.app');
+    }
+
+    public function setFilter($filterValue)
+    {
+        return $this->indexClientService->setFilter($this, $filterValue);
     }
 
     public function getData()

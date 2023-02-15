@@ -62,7 +62,15 @@
                                "list_option_view"=>"key",
                                "list_option_title"=>"",
                       ])
-
+                <br>
+                @include("partials.v1.divider_title",["title"=>"Equipos con multiples relaciones a clientes"])
+                @include("partials.v1.form.check_button",[
+                                       "check_label"=>"¿ Equipo con multiple conexión ?",
+                                       "check_model"=>"has_multiple_connection",
+                                       "icon_class"=>"fas fa-edit",
+                                       "placeholder"=>"Descripcion del equipo",
+                                       "col_with"=>10,
+                              ])
                 @include("partials.v1.form.form_submit_button",[
                                  "button_align"=>"right" ,
                                  "button_content"=>$form_submit_action_text??"Guardar"
