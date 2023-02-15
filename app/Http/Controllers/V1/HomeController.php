@@ -11,4 +11,9 @@ class HomeController extends Controller
     {
         return redirect('/v1/inicio');
     }
+
+    public function healthCheck()
+    {
+        return;
+    }
 }
