@@ -38,6 +38,15 @@ use function session;
 
 class IndexClientService extends Singleton
 {
+    public function mount(Component $component)
+    {
+        $clientType = ClientType::first();
+        $component->fill([
+            "clientType" => $clientType->type,
+            "filterAuxValue" => $clientType->id
+        ]);
+    }
+
     public function getClients()
     {
         return Client::get()->pagination();
@@ -63,10 +72,11 @@ class IndexClientService extends Singleton
     public function setFilter(Component $component, $filterValue)
     {
         $clientType = ClientType::whereType($filterValue)->first();
-        $component->filterCol = "client_type_id";
-        $component->filter = $clientType->id;
+        $component->filterAuxColumn = "client_type_id";
+        $component->filterAuxValue = $clientType->id;
         $component->clientType = $filterValue;
-        
+
+
     }
 
     public function deleteClient(Component $component, $modelId)
@@ -80,39 +90,51 @@ class IndexClientService extends Singleton
         if (User::getUserModel()::class == Seller::class) {
             $seller = User::getUserModel();
             if ($component->filter) {
-                return Client::whereIn('id', $seller->clientSellers()->pluck('client_id'))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+                return (Client::whereIn('id', $seller->clientSellers()->pluck('client_id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%'))
+                    ->where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
             }
-            return Client::whereIn('id', $seller->clientSellers()->pluck('client_id'))->pagination();
+            return (Client::whereIn('id', $seller->clientSellers()->pluck('client_id')))
+                ->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
         }
 
         if (User::getUserModel()::class == NetworkOperator::class) {
             $networkOperator = User::getUserModel();
             if ($component->filter) {
-                return $networkOperator->clients()->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+                return ($networkOperator->clients()->where($component->filterCol, 'ilike', '%' . $component->filter . '%'))
+                    ->where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
             }
-            return $networkOperator->clients()->pagination();
+            return $networkOperator->clients()
+                ->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
         }
 
         if (User::getUserModel()::class == Supervisor::class) {
             $supervisor = User::getUserModel();
             if ($component->filter) {
-                return Client::whereIn('id', $supervisor->clients->pluck('id'))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+                return (Client::whereIn('id', $supervisor->clients->pluck('id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%'))
+                    ->where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
             }
-            return Client::whereIn('id', $supervisor->clients->pluck('id'))->pagination();
+            return (Client::whereIn('id', $supervisor->clients->pluck('id')))
+                ->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
         }
 
         if (User::getUserModel()::class == Admin::class) {
             $admin = User::getUserModel();
             if ($component->filter) {
-                return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
+                return (Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
                     ->orWhere("admin_id", Auth::user()->getAdmin()->id)
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
+                )->where($component->filterAuxColumn, $component->filterAuxValue)
                     ->pagination();
             }
-            return Client::whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
-                ->orWhere("admin_id", Auth::user()->getAdmin()->id)
+            return Client::where(function ($query) use ($admin) {
+                $query->whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
+                    ->orWhere("admin_id", Auth::user()->getAdmin()->id);
+            })->where($component->filterAuxColumn, $component->filterAuxValue)
                 ->pagination();
         }
 
@@ -120,19 +142,22 @@ class IndexClientService extends Singleton
         if (User::getUserModel()::class == Technician::class) {
             $technician = User::getUserModel();
             if ($component->filter) {
-                return Client::whereIn('id', $technician->clients->pluck("id"))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+                return (Client::whereIn('id', $technician->clients->pluck("id"))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
+                )->where($component->filterAuxColumn, $component->filterAuxValue)
+                    ->pagination();
             }
-            return Client::whereIn('id', $technician->clients->pluck("id"))->pagination();
+            return (Client::whereIn('id', $technician->clients->pluck("id"))
+            )->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
         }
 
-
-        if ($component->filter) {
-
-            return Client::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+        if ($component->filterAuxColumn) {
+            return Client::where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
+        } else {
+            return Client::pagination();
         }
 
-        return Client::pagination();
     }
 
 

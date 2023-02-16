@@ -15,7 +15,9 @@ use Throwable;
 class IndicativeHelper extends Singleton
 {
     public const COLOMBIA = "+57";
-    public const REPUBLICA_DOMINICANA = "+809";
+    public const REPUBLICA_DOMINICANA_809 = "+809";
+    public const REPUBLICA_DOMINICANA_849 = "+849";
+    public const REPUBLICA_DOMINICANA_829 = "+829";
     public const BRASIL = "+55";
     public const ARGENTINA = "+54";
     public const BOLIVIA = "+591";
@@ -27,6 +29,7 @@ class IndicativeHelper extends Singleton
     public const NICARAGUA = "+505";
     public const COSTA_RICA = "+506";
     public const GUATEMALA = "+502";
+    public const ESPAÑA = "+34";
 
     public static function getIndicativesKeyValue()
     {
