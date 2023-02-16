@@ -48,7 +48,7 @@ class AlertMonitor extends Command
         $time_sleep = 120;
         while (true) {
             echo 'Prueba de conexion ' . date("Y/m/d h:i:sa") . "\n";
-            $request = Http::get("http://3.12.98.178/healthchecks");
+            $request = Http::get("http://3.12.98.178/healthcheck");
             if ($request->ok()) {
                 echo "Conexion exitosa ... \n";
                 sleep($time_sleep);
@@ -56,7 +56,7 @@ class AlertMonitor extends Command
             }
             echo "Primer error de conexion reintentando...\n";
             sleep($time_sleep);
-            $request = Http::get("http://3.12.98.178/healthchecks");
+            $request = Http::get("http://3.12.98.178/healthcheck");
             if ($request->ok()) {
                 echo "Conexion exitosa...\n";
                 continue;
