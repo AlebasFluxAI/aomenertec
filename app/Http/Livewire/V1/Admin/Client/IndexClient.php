@@ -16,12 +16,19 @@ class IndexClient extends Component
     use FilterTrait;
 
     public $clientType = "ZNI Sistema fotovoltaico";
+    public $filterAuxColumn = "client_type_id";
+    public $filterAuxValue = null;
     private $indexClientService;
 
     public function __construct($id = null)
     {
         $this->indexClientService = IndexClientService::getInstance();
         parent::__construct($id);
+    }
+
+    public function mount()
+    {
+        return $this->indexClientService->mount($this);
     }
 
     public function getClient()
@@ -65,6 +72,6 @@ class IndexClient extends Component
 
     public function getData()
     {
-        return $this->indexClientService->getData($this);
+        return ($this->indexClientService->getData($this));
     }
 }
