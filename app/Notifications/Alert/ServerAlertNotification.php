@@ -18,7 +18,7 @@ class ServerAlertNotification extends Notification
 
     public function via($notifiable)
     {
-        return WhatsAppChannel::class;
+        return [WhatsAppChannel::class];
     }
 
 
