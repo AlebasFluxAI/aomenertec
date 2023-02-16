@@ -67,7 +67,7 @@ class AlertMonitor extends Command
                 try {
                     User::wherePhone($cellphone)->first()->notifyNow(new ServerAlertNotification());
                 } catch (\Throwable $error) {
-                    echo $error;
+                    echo "No se logro notificar por whatsapp";
                 }
             }
 
