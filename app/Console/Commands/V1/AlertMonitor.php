@@ -45,21 +45,33 @@ class AlertMonitor extends Command
      */
     public function handle()
     {
-
-        $request = Http::get("http://3.12.98.178/healthcheck");
-        if ($request->ok()) {
-            return;
-        }
-        $cellphones = [3209720220, 3103343616];
-        foreach ($cellphones as $cellphone) {
-            try {
-                User::wherePhone($cellphone)->first()->notifyNow(new ServerAlertNotification());
-            } catch (\Throwable $error) {
-
+        $time_sleep = 120;
+        while (true) {
+            echo 'Prueba de conexion ' . date("Y/m/d h:i:sa") . "\n";
+            $request = Http::get("http://3.12.98.178/healthchecks");
+            if ($request->ok()) {
+                echo "Conexion exitosa ... \n";
+                sleep($time_sleep);
+                continue;
             }
+            echo "Primer error de conexion reintentando...\n";
+            sleep($time_sleep);
+            $request = Http::get("http://3.12.98.178/healthchecks");
+            if ($request->ok()) {
+                echo "Conexion exitosa...\n";
+                continue;
+            }
+            echo "Segundo error de conexion enviando alerta...\n";
+            $cellphones = [3209720220, 3103343616, 3163085286];
+            foreach ($cellphones as $cellphone) {
+                try {
+                    User::wherePhone($cellphone)->first()->notifyNow(new ServerAlertNotification());
+                } catch (\Throwable $error) {
+                    echo $error;
+                }
+            }
+
         }
-
-
     }
 
 
