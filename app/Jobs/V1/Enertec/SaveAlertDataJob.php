@@ -29,7 +29,8 @@ class SaveAlertDataJob implements ShouldQueue
     public $raw_json;
     public $source_timestamp;
 
-    public function __construct($raw_json)
+    public function
+    __construct($raw_json)
     {
         $this->raw_json = $raw_json;
         $this->source_timestamp = new Carbon();

@@ -53,18 +53,20 @@ class ConsumerCommand extends Command
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
         }, 1);
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
+            echo "msj aLERTA = ".$message."\n";
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
             dispatch(new SaveAlertDataJob($message))->onQueue('default');
         }, 1);
 
         $mqtt->subscribe('mc/real_time', function (string $topic, string $message) {
-            echo "msj = ".$message."\n";
+
             dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
         },1);
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
+            echo "msj ALERTA = ".$message."\n";
             dispatch(new SaveMicrocontrollerDataJob($message))->onQueue('spot');
             dispatch(new SaveAlertDataJob($message))->onQueue('default');
         }, 0);

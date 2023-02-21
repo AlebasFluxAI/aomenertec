@@ -43,6 +43,7 @@ class AddAdmin extends Component
         'model.billing_address' => 'required',
         'model.person_type' => 'required',
         'model.identification_type' => 'required',
+        'model.indicative' => 'required',
     ];
 
     public function __construct($id = null)

@@ -6,6 +6,7 @@ use App\Events\RealTimeMonitoringEvent;
 use App\Events\UserNotificationEvent;
 use App\Http\Resources\V1\NotificationTypes;
 use App\Jobs\V1\Enertec\JsonEdit;
+use App\Jobs\V1\Enertec\SaveAlertDataJob;
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 use App\Mail\User\UserCratedMail;
 use App\Mail\User\UserResetPasswordMail;
@@ -33,130 +34,16 @@ use PhpMqtt\Client\MqttClient;
 
 class MailTestController
 {
-    public $day_ref;
+    public $raw_json;
+    public $source_timestamp;
     public function userCreatedNotification()
     {
-        $this->day_ref = new Carbon('2022-12-31');
-        $billing_day = $this->day_ref->format('d');
-        if ($billing_day == $this->day_ref->format('t')){
-            $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-        } else{
-            $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
-        }
-        $clients_aux = Client::find($billing_day_clients);
+        $this->source_timestamp = new Carbon();
+        $this->raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAAAAAAQAAFDIEPRjkI/5QixQ+kJKnflCmBaWPi3euz2rUj8+T8U4QdKN/0BPLyRB8SwSQhQlN0EndLxBsuIKwoMy/cDJ8ajB7VqfPlzRMz9aNN8+p9DWPj3/j8IdfzLCwe9/wvUBgsLqIvBB/B1/wnePb0KPNrZFAAAAAMDSR0R2muVESWxYQ15xWEPCG1hDAAAAAAAAAAAAAAAAn8nkRArXI3wK1yN8AAAAAAAAAAAAAAAAzLAYRXKc3kQx3MhEm8TAQwT2bEPGyzBD2vIcPwAAAADcLxI+AAAAADuIvj4AAAAA';
+        $this->alertVariableEvent();
 
-        $clients = $clients_aux->where('has_telemetry', true)->all();
-        if (count($clients)>0) {
-            if ($this->day_ref->format('m') == '01') {
-                $month_aux = 12;
-                $year_aux = $this->day_ref->format('Y') - 1;
-            } else {
-                $month_aux = $this->day_ref->format('m') - 1;
-                if ($month_aux<10) {
-                    $month_aux = '0'.$month_aux;
-                }
-                $year_aux = $this->day_ref->format('Y');
-            }
-            if ($billing_day == $this->day_ref->format('t')){
-                $date_aux = Carbon::create($year_aux, $month_aux, 2);
-                $start_date = Carbon::create($year_aux, $month_aux, $date_aux->format('t'), 23, 59, 59);
-                $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $this->day_ref->format('t'), 23, 59, 59);
-            } else{
-                $start_date = Carbon::create($year_aux, $month_aux, ($billing_day), 23, 59, 59);
-                $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $billing_day, "23", "59", 59);
-            }
-            foreach ($clients as $client_aux) {
-                $client = Client::find($client_aux->id);
-                if ($billing_day == $this->day_ref->format('t')){
 
-                    $data_month = $client->dailyMicrocontrollerData()
-                        ->where('year', $this->day_ref->format('Y'))
-                        ->where('month', $this->day_ref->format('m'))
-                        ->whereBetween('day', ['01', $billing_day])
-                        ->get();
-                } else{
-                    $data_aux = $client->dailyMicrocontrollerData()
-                        ->where('year', $year_aux)
-                        ->where('month', ($month_aux))
-                        ->whereBetween('day', [str_pad((strval(($billing_day+1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
-                    $data_month = $client->dailyMicrocontrollerData()
-                        ->where('year', $this->day_ref->format('Y'))
-                        ->where('month', $this->day_ref->format('m'))
-                        ->whereBetween('day', ['01', $billing_day])
-                        ->union($data_aux)
-                        ->get();
-                }
-                if (count($data_month) > 0) {
-                    $end_data = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
-                        ->orderBy('source_timestamp', 'desc')
-                        ->first();
-
-                    $start_data = $client->microcontrollerData()
-                        ->whereDate('source_timestamp', $start_date->format('Y-m-d 00:00:00'))
-                        ->orderBy('source_timestamp', 'desc')
-                        ->first();
-                    if (empty($start_data)){
-                        $start_data = $client->microcontrollerData()
-                            ->whereDate('source_timestamp', '<', $start_date->format('Y-m-d 00:00:00'))
-                            ->orderBy('source_timestamp', 'desc')
-                            ->first();
-                        if (empty($start_data)){
-                            $start_data = $client->microcontrollerData()
-                                ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
-                                ->orderBy('source_timestamp')
-                                ->first();
-                        }
-                    }
-                    if ($end_data) {
-                        $reference_data = $end_data;
-                        $json = json_decode($reference_data->raw_json, true);
-                        $penalizable_inductive_month = 0;
-                        $penalizable_capacitive_month = 0;
-                        $interval_active_month = $end_data->accumulated_real_consumption - $start_data->accumulated_real_consumption;
-                        $interval_capacitive_month = $end_data->accumulated_reactive_capacitive_consumption - $start_data->accumulated_reactive_capacitive_consumption;
-                        $interval_inductive_month = $end_data->accumulated_reactive_inductive_consumption - $start_data->accumulated_reactive_inductive_consumption;
-                        foreach ($data_month as $item) {
-                            $penalizable_inductive_month = $penalizable_inductive_month + $item->penalizable_reactive_inductive_consumption;
-                            $penalizable_capacitive_month = $penalizable_capacitive_month + $item->penalizable_reactive_capacitive_consumption;
-                        }
-                        $json_first = json_decode($start_data->raw_json, true);
-                        $json['kwh_interval'] = $json['import_wh'] - $json_first['import_wh'];
-                        $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $json_first['ph1_import_kwh'];
-                        $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $json_first['ph2_import_kwh'];
-                        $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $json_first['ph3_import_kwh'];
-                        $json['varh_interval'] = $json['import_VArh'] - $json_first['import_VArh'];
-                        $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $json_first['ph1_import_kvarh'];
-                        $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $json_first['ph2_import_kvarh'];
-                        $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $json_first['ph3_import_kvarh'];
-                        $json['varCh_interval'] = $json['varCh_acumm'] - $json_first['varCh_acumm'];
-                        $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $json_first['ph1_varCh_acumm'];
-                        $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $json_first['ph2_varCh_acumm'];
-                        $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $json_first['ph3_varCh_acumm'];
-                        $json['varLh_interval'] = $json['varLh_acumm'] - $json_first['varLh_acumm'];
-                        $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $json_first['ph1_varLh_acumm'];
-                        $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $json_first['ph2_varLh_acumm'];
-                        $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $json_first['ph3_varLh_acumm'];
-
-                        MonthlyMicrocontrollerData::updateOrCreate([
-                            'year' => $this->day_ref->format('Y'),
-                            'month' => $this->day_ref->format('m'),
-                            'day' => $billing_day,
-                            'client_id' => $client->id],
-                            ['microcontroller_data_id' => $reference_data->id,
-                                'interval_real_consumption' => $interval_active_month,
-                                'interval_reactive_capacitive_consumption' => $interval_capacitive_month,
-                                'interval_reactive_inductive_consumption' => $interval_inductive_month,
-                                'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_month,
-                                'penalizable_reactive_inductive_consumption' => $penalizable_inductive_month,
-                                'raw_json' => json_encode($json),
-                            ]);
-                    }
-                }
-            }
-        }
-
-       // return (new WorkOrderUpdatedMail(WorkOrder::find(29)))->render();
+        // return (new WorkOrderUpdatedMail(WorkOrder::find(29)))->render();
     }
 
     public function whatsappNotification()
@@ -216,11 +103,10 @@ class MailTestController
     }
     private function alertVariableEvent()
     {
-        $raw_json = '3dc5AgAAAAChuw0AAAAAAAAAiEEAAJxBASAAwHh9718ID6ZjEEADQ2AqA0OQjgNDpMreQihu2EK49LhCQ5tjRgDUWEbPRTxGtMdjRpBCXUbKFD1GXfANRD8+MEWfH4xESM5\/PzzEej\/S5X4\/6Gl+P+By6D9gZz9BmIixQLAmzkCrtR1HE+WMRQD2b0JrV45Ia2ZCQO7Vp0fHGddFoGhjQxCpY0Pw62JDexReQHsUXkBSuF5AKVz\/QHE98kA9Ch9BAAAAAAAAAAAAAAAAcoTER2c5v0fSn7VHSaDRRsg6AEffQc1GAAAAAOjeJUEAAAAAa6FQQgAAAAA33KhB';
-        //$microcontroller_data = MicrocontrollerData::find(1615799);
-        $microcontroller_data = null;
+        //$microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
         $flags_frame = config('data-frame.flags_frame');
-        $decode = bin2hex(base64_decode($raw_json));
+        $decode = bin2hex(base64_decode($this->raw_json));
+
         $flag = $this->calculateValueAlert(5, $decode);
         $binary_flags = sprintf("%064b", ($flag));
 
@@ -234,20 +120,20 @@ class MailTestController
         if ($client == null) {
             return;
         }
+        $timestamp = $this->calculateValueAlert(6, $decode);
+
+        $this->source_timestamp->setTimestamp($timestamp);
         $value = 0;
-        dd($binary_flags);
         foreach ($flags_frame as $item) {
             if ($item['id'] >= 14 and $item['id'] <= 49) {
+                $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
                 $type = "";
-                $alert = null;
                 $split = substr($binary_flags, $item['bit'], 1);
                 if ($split == "1") {
                     if ($item['flag_name'] == 'flagOpened') {
                         $value = 1;
                         $type = ClientAlert::ALERT;
                     } else {
-                        dd($item['flag_name']);
-                        $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
                         $value = $this->calculateValueAlert($item['variable_id'], $decode);
 
                         if($alert) {
@@ -288,12 +174,14 @@ class MailTestController
                     }
                     if ($alert) {
                         if ($type != "") {
+                            $microcontroller_data = false;
                             ClientAlert::create([
                                 'client_id' => $client->id,
                                 'microcontroller_data_id' => ($microcontroller_data) ? $microcontroller_data->id : null,
                                 'client_alert_configuration_id' => $alert->id,
                                 'value' => $value,
-                                'type' => $type
+                                'type' => $type,
+                                'created_at' => $this->source_timestamp->format('Y-m-d H:i:s')
                             ]);
                         }
                     }
