@@ -64,7 +64,7 @@ class AlertControlNotification extends Notification
             array_push($name_outputs, $output->name);
         }
         $outputs = implode(", ", $name_outputs);
-        $date = new Carbon($this->clientAlert->created_at);
+        $date = new Carbon($this->clientAlert->source_timestamp);
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
             ->template_name($this->template)

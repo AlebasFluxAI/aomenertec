@@ -181,7 +181,7 @@ class MailTestController
                                 'client_alert_configuration_id' => $alert->id,
                                 'value' => $value,
                                 'type' => $type,
-                                'created_at' => $this->source_timestamp->format('Y-m-d H:i:s')
+                                'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s')
                             ]);
                         }
                     }
