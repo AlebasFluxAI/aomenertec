@@ -25,7 +25,8 @@ class ClientAlert extends Model
         'microcontroller_data_id',
         'client_alert_configuration_id',
         'value',
-        'type'
+        'type',
+        'source_timestamp'
     ];
 
     protected static function booted()

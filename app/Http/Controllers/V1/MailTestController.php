@@ -40,8 +40,7 @@ class MailTestController
     {
         $this->source_timestamp = new Carbon();
         $this->raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAAAAAAQAAFDIEPRjkI/5QixQ+kJKnflCmBaWPi3euz2rUj8+T8U4QdKN/0BPLyRB8SwSQhQlN0EndLxBsuIKwoMy/cDJ8ajB7VqfPlzRMz9aNN8+p9DWPj3/j8IdfzLCwe9/wvUBgsLqIvBB/B1/wnePb0KPNrZFAAAAAMDSR0R2muVESWxYQ15xWEPCG1hDAAAAAAAAAAAAAAAAn8nkRArXI3wK1yN8AAAAAAAAAAAAAAAAzLAYRXKc3kQx3MhEm8TAQwT2bEPGyzBD2vIcPwAAAADcLxI+AAAAADuIvj4AAAAA';
-        $this->alertVariableEvent();
-
+        dispatch(new SaveAlertDataJob($this->raw_json))->onQueue('default');
 
         // return (new WorkOrderUpdatedMail(WorkOrder::find(29)))->render();
     }
@@ -103,7 +102,6 @@ class MailTestController
     }
     private function alertVariableEvent()
     {
-        //$microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
         $flags_frame = config('data-frame.flags_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
 
@@ -174,7 +172,7 @@ class MailTestController
                     }
                     if ($alert) {
                         if ($type != "") {
-                            $microcontroller_data = false;
+                            $microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
                             ClientAlert::create([
                                 'client_id' => $client->id,
                                 'microcontroller_data_id' => ($microcontroller_data) ? $microcontroller_data->id : null,
