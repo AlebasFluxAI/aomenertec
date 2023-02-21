@@ -32,7 +32,8 @@ class AdminAddService extends Singleton
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
-            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue(),
+            "model.indicative" => IndicativeHelper::COLOMBIA
         ]);
     }
 

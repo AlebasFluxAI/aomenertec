@@ -79,6 +79,7 @@ class AddClientService extends Singleton
             'picked_aux_network_operator' => false, 'message_aux_network_operator' => 'Digite identificación del operador de red',
             'aux_network_operators' => [],
             "billing_types" => $this->getBillingType($component),
+            "indicative" => IndicativeHelper::COLOMBIA,
             "indicatives" => IndicativeHelper::getIndicativesKeyValue()
 
         ]);
