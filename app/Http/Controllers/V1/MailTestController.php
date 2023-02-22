@@ -39,9 +39,9 @@ class MailTestController
     public function userCreatedNotification()
     {
         $this->source_timestamp = new Carbon();
-        $this->raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAAAAAAQAAFDIEPRjkI/5QixQ+kJKnflCmBaWPi3euz2rUj8+T8U4QdKN/0BPLyRB8SwSQhQlN0EndLxBsuIKwoMy/cDJ8ajB7VqfPlzRMz9aNN8+p9DWPj3/j8IdfzLCwe9/wvUBgsLqIvBB/B1/wnePb0KPNrZFAAAAAMDSR0R2muVESWxYQ15xWEPCG1hDAAAAAAAAAAAAAAAAn8nkRArXI3wK1yN8AAAAAAAAAAAAAAAAzLAYRXKc3kQx3MhEm8TAQwT2bEPGyzBD2vIcPwAAAADcLxI+AAAAADuIvj4AAAAA';
-        dispatch(new SaveAlertDataJob($this->raw_json))->onQueue('default');
-
+        $this->raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAAAAAAQAAFCa3/Rjeq32QvrE+EJdnPdC4ExPQd/FPUHAa6A/Aam2RBPfnUQWdRND60zHRAbzt0QupxtDVfccRHIYQMSqhEHCW3lrPx2oWz+wTnM/L49/P1JwukHuLPnBx02QwZc1acBRTDRFHbM3w4axb0JyZLZFAAAAAOsJSESf3uVE2m5WQxXXVkMX51VDAAAAAAAAAAAAAAAAcYO1RLfBtUTDi9REAAAAAAAAAAAAAAAAJN4YRTHY3kRP/chE+Q7BQwT2bEO2EzFDAAAAAK2wBkJKuipCAAAAAPe3L0AAAAAA';
+        //dispatch(new SaveAlertDataJob($this->raw_json))->onQueue('default');
+        $this->alertVariableEvent();
         // return (new WorkOrderUpdatedMail(WorkOrder::find(29)))->render();
     }
 
@@ -119,7 +119,6 @@ class MailTestController
             return;
         }
         $timestamp = $this->calculateValueAlert(6, $decode);
-
         $this->source_timestamp->setTimestamp($timestamp);
         $value = 0;
         foreach ($flags_frame as $item) {
@@ -133,7 +132,6 @@ class MailTestController
                         $type = ClientAlert::ALERT;
                     } else {
                         $value = $this->calculateValueAlert($item['variable_id'], $decode);
-
                         if($alert) {
                             if ($alert->active_control) {
                                 if ($alert->min_alert != 0) {
