@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Resources\V1\IndicativeHelper;
+use App\Http\Resources\V1\TimeZoneHelper;
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Resources\V1\Icon;
 use App\Http\Resources\V1\ToastEvent;
@@ -80,7 +81,9 @@ class AddClientService extends Singleton
             'aux_network_operators' => [],
             "billing_types" => $this->getBillingType($component),
             "indicative" => IndicativeHelper::COLOMBIA,
-            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue(),
+            "time_zone" => TimeZoneHelper::COLOMBIA,
+            "time_zones" => TimeZoneHelper::getTimeZoneKeyValue(),
 
         ]);
     }
@@ -423,6 +426,7 @@ class AddClientService extends Singleton
             'code' => $code,
             'phone' => $component->phone,
             'indicative' => $component->indicative,
+            'time_zone' => $component->time_zone,
             'identification' => $component->client_identification,
             'network_topology' => $component->network_topology,
             'active' => $component->active,

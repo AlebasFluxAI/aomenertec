@@ -38,10 +38,11 @@ class MailTestController
     public $source_timestamp;
     public function userCreatedNotification()
     {
-        $this->source_timestamp = new Carbon();
-        $this->raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAAAAAAQAAFCa3/Rjeq32QvrE+EJdnPdC4ExPQd/FPUHAa6A/Aam2RBPfnUQWdRND60zHRAbzt0QupxtDVfccRHIYQMSqhEHCW3lrPx2oWz+wTnM/L49/P1JwukHuLPnBx02QwZc1acBRTDRFHbM3w4axb0JyZLZFAAAAAOsJSESf3uVE2m5WQxXXVkMX51VDAAAAAAAAAAAAAAAAcYO1RLfBtUTDi9REAAAAAAAAAAAAAAAAJN4YRTHY3kRP/chE+Q7BQwT2bEO2EzFDAAAAAK2wBkJKuipCAAAAAPe3L0AAAAAA';
+        $this->source_timestamp = new Carbon('now', 'America/Santo_Domingo');
+        dd($this->source_timestamp);
+        //$this->raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAAAAAAQAAFCa3/Rjeq32QvrE+EJdnPdC4ExPQd/FPUHAa6A/Aam2RBPfnUQWdRND60zHRAbzt0QupxtDVfccRHIYQMSqhEHCW3lrPx2oWz+wTnM/L49/P1JwukHuLPnBx02QwZc1acBRTDRFHbM3w4axb0JyZLZFAAAAAOsJSESf3uVE2m5WQxXXVkMX51VDAAAAAAAAAAAAAAAAcYO1RLfBtUTDi9REAAAAAAAAAAAAAAAAJN4YRTHY3kRP/chE+Q7BQwT2bEO2EzFDAAAAAK2wBkJKuipCAAAAAPe3L0AAAAAA';
         //dispatch(new SaveAlertDataJob($this->raw_json))->onQueue('default');
-        $this->alertVariableEvent();
+        //$this->alertVariableEvent();
         // return (new WorkOrderUpdatedMail(WorkOrder::find(29)))->render();
     }
 

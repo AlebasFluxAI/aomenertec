@@ -67,6 +67,7 @@ class Client extends Model
         "admin_id",
         "alias",
         "indicative",
+        "time_zone",
         "status"
     ];
 
