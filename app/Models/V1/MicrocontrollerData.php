@@ -40,6 +40,7 @@ class MicrocontrollerData extends Model
         "accumulated_reactive_capacitive_consumption",
         "interval_reactive_capacitive_consumption",
         "interval_reactive_inductive_consumption",
+        "is_alert"
     ];
 
     public function client()
@@ -445,7 +446,8 @@ class MicrocontrollerData extends Model
                     'microcontroller_data_id' => $this->id,
                     'client_alert_configuration_id' => $alert->id,
                     'value' => $value,
-                    'type' => $type
+                    'type' => $type,
+                    'source_timestamp' => $this->source_timestamp
                 ]);
             }
         } elseif ($alert->flag_id == 50
@@ -459,7 +461,8 @@ class MicrocontrollerData extends Model
                     'microcontroller_data_id' => $this->id,
                     'client_alert_configuration_id' => $alert->id,
                     'value' => $value,
-                    'type' => $type
+                    'type' => $type,
+                    'source_timestamp' => $this->source_timestamp
                 ]);
             }
         } else {
@@ -471,7 +474,8 @@ class MicrocontrollerData extends Model
                     'microcontroller_data_id' => $this->id,
                     'client_alert_configuration_id' => $alert->id,
                     'value' => $value,
-                    'type' => $type
+                    'type' => $type,
+                    'source_timestamp' => $this->source_timestamp
                 ]);
             }
         }
