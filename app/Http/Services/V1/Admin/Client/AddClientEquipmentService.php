@@ -48,6 +48,7 @@ class AddClientEquipmentService extends Singleton
         ]);
         $component->equipment = [];
         $component->serials_array = [];
+
         $component->equipment_types = $model->admin ? EquipmentType::whereIn("id", $model->admin->adminEquipmentTypes()->pluck("equipment_type_id"))->get() : [];
         foreach ($component->equipment_types as $index => $type) {
             array_push($component->equipment, [

@@ -4,6 +4,7 @@ namespace App\Notifications\Alert;
 
 use App\Channels\WhatsAppChannel;
 use App\Http\Resources\V1\UserNotificationPayload;
+use App\Mail\Alert\AlertMail;
 use App\Notifications\WhatsAppMessage;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
@@ -29,7 +30,13 @@ class AlertNotification extends Notification
 
     public function via($notifiable)
     {
-        return ["database", WhatsAppChannel::class];
+        return ["mail", "database", WhatsAppChannel::class];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new AlertMail($notifiable, $this->clientAlert));
+
     }
 
     public function toDatabase()

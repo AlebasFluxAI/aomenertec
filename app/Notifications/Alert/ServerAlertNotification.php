@@ -24,7 +24,7 @@ class ServerAlertNotification extends Notification
 
     public function toWhatsApp($notifiable)
     {
-        $template = 'alert_v1';
+        $template = 'server_error_notification';
 
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
