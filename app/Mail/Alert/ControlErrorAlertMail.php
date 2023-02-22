@@ -48,7 +48,7 @@ class ControlErrorAlertMail extends Mailable
             "variable_time" => (new Carbon($this->clientAlert->created_at))->format('d F H:i'),
             "variable_outputs" => $this->outputs,
             "detail_link" => "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id
-        ])->subject("¡¡ Nueva alerta de control generada !! - " . Subdomain::getTitle())
+        ])->subject("¡¡ Nueva alerta de control generada !!")
             ->to($this->user->email);
     }
 }

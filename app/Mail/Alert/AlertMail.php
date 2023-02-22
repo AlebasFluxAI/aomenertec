@@ -42,7 +42,7 @@ class AlertMail extends Mailable
             "variable_value" => $this->clientAlert->value,
             "variable_time" => $this->clientAlert->created_at->format('d F H:i'),
             "detail_link" => "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id
-        ])->subject("¡¡ Nueva alerta generada !! - " . Subdomain::getTitle())
+        ])->subject("¡¡ Nueva alerta generada !! - ")
             ->to($this->user->email);
     }
 }
