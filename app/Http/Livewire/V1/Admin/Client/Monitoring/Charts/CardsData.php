@@ -28,24 +28,26 @@ class CardsData extends Component
        // if ($last_data == null){
          //   $last_data = $this->client->hourlyMicrocontrollerData()->latest()->first();
         //}
-        $this->last_data = collect(json_decode($last_data->raw_json, true));
-        $this->cards = [];
-        $this->variables_selected = [];
-        $initial_variables = $variables->take(6);
-        foreach ($initial_variables as $variable) {
-            $aux = [];
-            $var_data_frame = $this->data_frame->where('variable_id', $variable['id'])->all();
-            foreach ($var_data_frame as $item) {
-                $item['value'] = round($this->last_data[$item['variable_name']], 2);
-                array_push($aux, $item);
+        if ($last_data) {
+            $this->last_data = collect(json_decode($last_data->raw_json, true));
+            $this->cards = [];
+            $this->variables_selected = [];
+            $initial_variables = $variables->take(6);
+            foreach ($initial_variables as $variable) {
+                $aux = [];
+                $var_data_frame = $this->data_frame->where('variable_id', $variable['id'])->all();
+                foreach ($var_data_frame as $item) {
+                    $item['value'] = round($this->last_data[$item['variable_name']], 2);
+                    array_push($aux, $item);
+                }
+                array_push($this->cards, [
+                    "id" => $variable['id'],
+                    "color" => $variable['style'],
+                    "icon" => $variable['icon'],
+                    "list_model_variable" => $variable['id'],
+                    "variables_selected" => $aux,
+                ]);
             }
-            array_push($this->cards, [
-                "id" => $variable['id'],
-                "color" => $variable['style'],
-                "icon" => $variable['icon'],
-                "list_model_variable" => $variable['id'],
-                "variables_selected" => $aux,
-            ]);
         }
     }
 
@@ -55,14 +57,16 @@ class CardsData extends Component
         $id = filter_var($key, FILTER_SANITIZE_NUMBER_INT);
         $aux = [];
         $var_data_frame = $this->data_frame->where('variable_id', $value)->all();
-        foreach ($var_data_frame as $item) {
-            $item['value'] = round($this->last_data[$item['variable_name']], 2);
-            array_push($aux, $item);
+        if ($this->last_data) {
+            foreach ($var_data_frame as $item) {
+                $item['value'] = round($this->last_data[$item['variable_name']], 2);
+                array_push($aux, $item);
+            }
+            $this->cards[$id]['id'] = $variable_select['id'];
+            $this->cards[$id]['color'] = $variable_select['style'];
+            $this->cards[$id]['icon'] = $variable_select['icon'];
+            $this->cards[$id]['variables_selected'] = $aux;
         }
-        $this->cards[$id]['id'] = $variable_select['id'];
-        $this->cards[$id]['color'] = $variable_select['style'];
-        $this->cards[$id]['icon'] = $variable_select['icon'];
-        $this->cards[$id]['variables_selected'] = $aux;
     }
 
 
