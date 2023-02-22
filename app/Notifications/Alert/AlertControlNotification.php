@@ -79,13 +79,14 @@ class AlertControlNotification extends Notification
 
     public function toWhatsApp($notifiable)
     {
+        $date = new Carbon($this->clientAlert->source_timestamp);
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
             ->template_name($this->template)
             ->params([($this->client->alias ?? $this->client->name),
                 $this->client_alert_configuration->getVariableName(),
                 $this->clientAlert->value,
-                (new Carbon($this->clientAlert->created_at))->format('d F H:i'),
+                $date->format('d F H:i'),
                 $this->outputs,
                 "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,
             ]);

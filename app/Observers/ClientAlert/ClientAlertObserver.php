@@ -55,28 +55,7 @@ class ClientAlertObserver
 
                 try {
                     $mqtt=MQTT::connection();
-                    $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($client, $clientAlert) {
-                        if ($elapsedTime >= 50) {
-                            $technicians = $client->clientTechnician;
-                            $supervisors = $client->supervisors;
-                            $flag = true;
-                            foreach ($technicians as $user) {
-                                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
-                            }
-                            foreach ($supervisors as $user) {
-                                if ($user->user->phone == $client->phone) {
-                                    $flag = false;
-                                }
-                                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
-                            }
-                            if ($flag) {
-                                $client->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
-                            }
-                            $mqtt->interrupt();
-                        }
-                    });
+
                     foreach ($digital_output as $output){
                         if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
                             if ($output->status) {
@@ -90,6 +69,28 @@ class ClientAlertObserver
                             $message = "{\"coil" . $output->number . "\":false}";
                         }
                         $mqtt->publish($topic, $message);
+                        $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($client, $clientAlert) {
+                            if ($elapsedTime >= 50) {
+                                $technicians = $client->clientTechnician;
+                                $supervisors = $client->supervisors;
+                                $flag = true;
+                                foreach ($technicians as $user) {
+                                    //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                    $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                                }
+                                foreach ($supervisors as $user) {
+                                    if ($user->user->phone == $client->phone) {
+                                        $flag = false;
+                                    }
+                                    //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                    $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                                }
+                                if ($flag) {
+                                    $client->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                                }
+                                $mqtt->interrupt();
+                            }
+                        });
                     }
                     $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($client, $mqtt, $digital_output, $clientAlert) {
                         $json = json_decode($message, true);
