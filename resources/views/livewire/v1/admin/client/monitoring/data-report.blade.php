@@ -1,5 +1,6 @@
 <div>
-    <div  class="row pt-3">
+    <div class="row pt-3">
+        @include("partials.v1.divider_title",["title"=>"Generador de reportes"])
 
 
         @include("partials.v1.form.multiselect_dropdown",[
@@ -48,39 +49,39 @@
                         "input_name"=>"datetime_report",
                         "autocomplete"=> "off",
                ])
-            <div class="d-flex justify-content-center mt-4">
-        @include("partials.v1.primary_button",[
-                            "col_with" => 'auto',
-                            "button_align" => 'center',
-                            "click_action" => 'reportCsv',
-                            "class_button" => 'success',
-                            "button_icon" => 'fas fa-file-excel',
-                            "button_content" => 'Exportar XLSX',
+        <div class="mt-4">
+            @include("partials.v1.primary_button",[
+                                "col_with" => 'auto',
+                                "button_align" => 'right',
+                                "click_action" => 'reportCsv',
+                                "class_button" => 'success',
+                                "button_icon" => 'fas fa-file-excel',
+                                "button_content" => 'Exportar XLSX',
 
-                    ])
-          {{--  @include("partials.v1.primary_button",[
-                            "col_with" => 'auto',
-                            "button_align" => 'center',
-                            "click_action" => 'reportPdf',
-                            "class_button" => 'danger',
-                            "button_icon" => 'fas fa-file-pdf',
-                            "button_content" => 'Exportar PDF',
+                        ])
+            {{--  @include("partials.v1.primary_button",[
+                              "col_with" => 'auto',
+                              "button_align" => 'center',
+                              "click_action" => 'reportPdf',
+                              "class_button" => 'danger',
+                              "button_icon" => 'fas fa-file-pdf',
+                              "button_content" => 'Exportar PDF',
 
-                    ])--}}
-                <div wire:loading wire:target="reportCsv" >
-                    <label>Generando archivo excel...</label>
-                </div>
-                <div wire:loading wire:target="reportPdf" >
-                    <label>Generando archivo PDF...</label>
-                </div>
-
+                      ])--}}
+            <div wire:loading wire:target="reportCsv">
+                <label>Generando archivo excel...</label>
             </div>
+            <div wire:loading wire:target="reportPdf">
+                <label>Generando archivo PDF...</label>
+            </div>
+
+        </div>
     </div>
 
     <script>
 
         document.addEventListener('livewire:load', function () {
-            $(function() {
+            $(function () {
                 $('input[name="datetime_report"]').daterangepicker({
                     applyButtonClasses: 'text-primary',
                     timePicker: false,
@@ -93,15 +94,14 @@
 
             });
 
-            $('input[name="datetime_report"]').on('apply.daterangepicker', function(ev, picker) {
+            $('input[name="datetime_report"]').on('apply.daterangepicker', function (ev, picker) {
                 $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
-                @this.emit('dateRangeReport', picker.startDate.format('YYYY-MM-DD 00:00:00'),picker.endDate.format('YYYY-MM-DD 23:59:59'))
+            @this.emit('dateRangeReport', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'))
             });
-            $('input[name="datetime_report"]').on('cancel.daterangepicker', function(ev, picker) {
-            @this.emit('dateRangeReport', '','')
+            $('input[name="datetime_report"]').on('cancel.daterangepicker', function (ev, picker) {
+            @this.emit('dateRangeReport', '', '')
                 $(this).val('');
             })
-
 
 
         })
