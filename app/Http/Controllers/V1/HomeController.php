@@ -17,8 +17,6 @@ class HomeController extends Controller
 
     public function healthCheck()
     {
-        $user = User::whereEmail("wilder.herrera@unillanos.edu.co")->first();
-        $user->notifyNow(new AlertControlNotification(ClientAlert::first(), "alert_control_successs"));
         return;
     }
 }
