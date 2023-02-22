@@ -4,7 +4,9 @@ namespace App\Notifications\Alert;
 
 use App\Channels\WhatsAppChannel;
 use App\Http\Resources\V1\UserNotificationPayload;
+use App\Mail\Alert\AlertMail;
 use App\Notifications\WhatsAppMessage;
+use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
 
 class AlertNotification extends Notification
@@ -28,7 +30,13 @@ class AlertNotification extends Notification
 
     public function via($notifiable)
     {
-        return ["database", WhatsAppChannel::class];
+        return ["mail", "database", WhatsAppChannel::class];
+    }
+
+    public function toMail($notifiable)
+    {
+        return (new AlertMail($notifiable, $this->clientAlert));
+
     }
 
     public function toDatabase()
@@ -45,11 +53,12 @@ class AlertNotification extends Notification
     public function toWhatsApp($notifiable)
     {
         $template = 'alert_variable';
+        $date = new Carbon($this->clientAlert->source_timestamp);
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
             ->template_name($template)
             ->params([($this->client->alias ?? $this->client->name), $this->clientAlert->clientAlertConfiguration->getVariableName(),
-                $this->clientAlert->value, $this->clientAlert->created_at->format('d F H:i'),
+                $this->clientAlert->value, $date->format('d F H:i'),
                 "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,
             ]);
     }
