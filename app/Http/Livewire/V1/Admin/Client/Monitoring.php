@@ -50,6 +50,9 @@ class Monitoring extends Component
         if (count($this->data_chart) == 0) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
             $this->time = 1;
+            if (count($this->data_chart) == 0){
+                $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "No se encontraron datos registrados"]);
+            }
         }
     }
 

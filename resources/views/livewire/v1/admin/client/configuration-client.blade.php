@@ -47,6 +47,15 @@
                                                     "title"=>"Alertas",
 
                                                 ],
+                                                [
+                                                    "title"=>"Permisos",
+                                                    "permissions"=>[
+                                                        \App\Models\V1\Admin::class=>\App\Models\V1\TabPermission::CLIENT_CONFIG_CONNECTION,
+                                                        \App\Models\V1\NetworkOperator::class=>\App\Models\V1\TabPermission::CLIENT_CONFIG_CONNECTION,
+                                                        \App\Models\V1\Technician::class=>\App\Models\V1\TabPermission::CLIENT_CONFIG_CONNECTION,
+                                                        ]
+
+                                                ],
 
 
 
@@ -179,16 +188,7 @@
                                                                                                 "select_option_value"=>"value",
                                                                                                 "select_option_view"=>"key",
                                                                                             ],
-                                                                                            [
-                                                                                                "input_type"=>"checkbox",
-                                                                                                "input_model"=>"client_config.active_real_time",
-                                                                                                "placeholder"=>"Habilitar tiempo real",
-                                                                                                "updated_input"=>"lazy",
-                                                                                                "col_with"=>6,
-                                                                                                "click_action"=>"",
-                                                                                                "required"=>false,
 
-                                                                                            ],
                                                                                             [
                                                                                                 "input_type"=>"number",
                                                                                                 "input_model"=>"client_config.real_time_latency",
@@ -249,6 +249,30 @@
                                                                         "form_title"=>"",
                                                                         "form_inputs"=> $inputs
 
+                                                            ]
+                                                ],
+                                                [
+                                                    "view_name"=>"partials.v2.form.primary_form",
+                                                    "view_values"=>  [
+                                                                        "loading_state"=>true,
+                                                                        "form_toast"=>true,
+                                                                        "session_message"=>"message",
+                                                                        "form_submit_action"=>"submitFormPermission",
+                                                                        "form_title"=>"",
+                                                                        "form_inputs"=> [
+                                                                                            [
+                                                                                                "input_type"=>"checkbox",
+                                                                                                "input_model"=>"active_real_time",
+                                                                                                "placeholder"=>"Habilitar tiempo real",
+                                                                                                "updated_input"=>"lazy",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>false,
+
+                                                                                            ],
+
+
+                                                                                ]
                                                             ]
                                                 ],
 

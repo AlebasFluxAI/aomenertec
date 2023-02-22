@@ -24,10 +24,12 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
      * @return void
      */
     public $raw_json;
+    public $flag;
 
-    public function __construct($raw_json)
+    public function __construct($raw_json, $is_alert)
     {
         $this->raw_json = $raw_json;
+        $this->flag = $is_alert;
     }
 
     /**
@@ -39,6 +41,7 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
     {
         $data = MicrocontrollerData::create([
             "raw_json" => $this->raw_json,
+            "is_alert" => $this->flag,
         ]);
         AuxData::create([
           'data' => $this->raw_json

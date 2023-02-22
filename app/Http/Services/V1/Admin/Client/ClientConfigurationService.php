@@ -88,6 +88,7 @@ class ClientConfigurationService extends Singleton
         $component->fill([
             "client" => $client,
             "client_config" => $client->clientConfiguration,
+            'active_real_time' => $client->clientConfiguration->active_real_time,
             "client_config_alert" => $client->clientAlertConfiguration,
             "digital_outputs" => $client->digitalOutputs,
             "frame_types" => [
@@ -165,7 +166,6 @@ class ClientConfigurationService extends Singleton
             'client_config.mqtt_port' => 'required',
             'client_config.mqtt_user' => 'required',
             'client_config.mqtt_password' => 'required',
-            'client_config.active_real_time' => 'required',
             'client_config.real_time_latency' => 'numeric|required|min:10',
             'client_config.storage_latency' => 'required',
             'client_config.storage_type_latency' => 'required',
@@ -375,6 +375,14 @@ class ClientConfigurationService extends Singleton
             }
         } catch (MqttClientException $e) {
 
+        }
+    }
+
+    public function submitFormPermission(Component $component){
+        $config = ClientConfiguration::find($component->client_config->id);
+        $config->active_real_time = $component->active_real_time;
+        if ($config->save()) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
         }
     }
 
