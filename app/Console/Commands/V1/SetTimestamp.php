@@ -48,7 +48,6 @@ class SetTimestamp extends Command
             $topic = "mc/config/" . $equipment->serial;
             $date = (new Carbon('now', $client->time_zone));
             $date_unix = (Carbon::parse($date->format('Y-m-d H:i:s'), TimeZoneHelper::COLOMBIA))->timestamp;
-            echo $topic." - ".$client->time_zone. " - " .$date->format('Y-m-d H:i:s')."\n";
             MQTT::publish($topic, $date_unix);
         }
         MQTT::disconnect();
