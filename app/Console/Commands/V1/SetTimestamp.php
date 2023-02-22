@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Http\Resources\V1\TimeZoneHelper;
+use App\Models\V1\Client;
+use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use PhpMqtt\Client\Facades\MQTT;
@@ -39,9 +42,14 @@ class SetTimestamp extends Command
      */
     public function handle()
     {
-        $topic = 'mc/config';
-        $date = Carbon::now()->timestamp;
-        MQTT::publish($topic, $date);
+        $clients = Client::whereHasTelemetry(true)->get();
+        foreach ($clients as $client){
+            $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
+            $topic = "mc/config/" . $equipment->serial;
+            $date = (new Carbon('now', $client->time_zone));
+            $date_unix = (Carbon::parse($date->format('Y-m-d H:i:s'), TimeZoneHelper::COLOMBIA))->timestamp;
+            MQTT::publish($topic, $date_unix);
+        }
         MQTT::disconnect();
     }
 }

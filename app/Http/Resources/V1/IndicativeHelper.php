@@ -47,7 +47,9 @@ class IndicativeHelper extends Singleton
     {
         return [
             self::COLOMBIA,
-            self::REPUBLICA_DOMINICANA,
+            self::REPUBLICA_DOMINICANA_809,
+            self::REPUBLICA_DOMINICANA_829,
+            self::REPUBLICA_DOMINICANA_849,
             self::BRASIL,
             self::ARGENTINA,
             self::BOLIVIA,
@@ -59,6 +61,7 @@ class IndicativeHelper extends Singleton
             self::NICARAGUA,
             self::COSTA_RICA,
             self::GUATEMALA,
+            self::ESPAÑA,
         ];
     }
 }

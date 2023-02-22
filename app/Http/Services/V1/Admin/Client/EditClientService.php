@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Livewire\V1\Admin\User\EditUser;
 use App\Http\Resources\V1\IndicativeHelper;
+use App\Http\Resources\V1\TimeZoneHelper;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
 use App\Models\V1\Client;
@@ -44,6 +45,7 @@ class EditClientService extends Singleton
             'last_name' => $client->last_name,
             'alias' => $client->alias,
             'indicative' => $client->indicative,
+            'time_zone' => $client->time_zone,
             'email' => $client->email,
             'phone' => $client->phone,
             'direction' => $client->direction,
@@ -84,7 +86,8 @@ class EditClientService extends Singleton
             "billing_address" => $billingInformation ? $billingInformation->address : "",
             "addressDetails" => $clientAddress ? $clientAddress->details : "",
             "decodedAddress" => $clientAddress ? $clientAddress->address : "",
-            "indicatives" => IndicativeHelper::getIndicativesKeyValue()
+            "indicatives" => IndicativeHelper::getIndicativesKeyValue(),
+            "time_zones" => TimeZoneHelper::getTimeZoneKeyValue()
         ]);
     }
 
@@ -188,6 +191,7 @@ class EditClientService extends Singleton
             'last_name' => $component->last_name,
             'alias' => $component->alias,
             'indicative' => $component->indicative,
+            'time_zone' => $component->time_zone,
             'phone' => $component->phone,
             'identification' => $component->identification,
             'network_topology' => $component->network_topology,
@@ -198,7 +202,6 @@ class EditClientService extends Singleton
             'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,
             'stratum_id' => $component->stratum_id,
-
         ];
     }
 

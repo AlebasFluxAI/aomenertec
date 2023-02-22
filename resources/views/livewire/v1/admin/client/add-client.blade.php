@@ -106,6 +106,17 @@
                                     "col_with"=>8,
                                     "input_type"=>"email",
                            ])
+                            @include("partials.v1.form.form_list",[
+                               "col_with"=>2,
+                               "input_label"=>"Zona horaria",
+                               "input_type"=>"text",
+                               "list_model" => "time_zone",
+                               "list_default" => "Zona horaria ...",
+                               "list_options" => $time_zones,
+                               "list_option_value"=>"value",
+                               "list_option_view"=>"key",
+                                "list_option_title"=>"",
+                               ])
 
                             @include("partials.v1.form.form_list",[
                               "col_with"=>8,

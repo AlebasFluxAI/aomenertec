@@ -422,7 +422,7 @@ class ClientConfigurationService extends Singleton
                 } elseif ($item['variable_name'] == 'equipment_new_id') {
                     $data = $equipment->serial;
                 } else {
-                    $aux_variable = $component->client->clientAlertConfiguration()->where('flag_id', $item['flag_id'])->first();
+                    $aux_variable = $component->client_config_alert->where('flag_id', $item['flag_id'])->first();
                     $data = $aux_variable->{$item['limit']};
                 }
                 array_push($binary_data, pack($item['type'], $data));
