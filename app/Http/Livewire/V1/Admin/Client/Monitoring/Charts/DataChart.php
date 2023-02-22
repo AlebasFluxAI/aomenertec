@@ -42,6 +42,8 @@ class DataChart extends Component
         $this->chart_title = $aux['display_name'];
         $this->chart_type = $aux['chart_type'];
         $this->time_id = $time;
+        $this->series =[];
+        $this->x_axis =[];
         $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
         if (count($this->data_chart)>0) {
             if ($time == 1 or $time == 2) {
@@ -52,7 +54,10 @@ class DataChart extends Component
                 $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
             }
             $this->date_range = $this->start . " - " . $this->end;
+        } else{
+            $this->data_chart = [];
         }
+
         $this->chartRender(true);
     }
 

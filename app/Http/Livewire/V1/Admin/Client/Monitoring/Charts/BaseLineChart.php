@@ -42,6 +42,7 @@ class BaseLineChart extends Component
         $this->chart_title = $aux['display_name'];
         $this->chart_type = 'line';
         $this->time_id_baseline = 2;
+        $this->series = [];
         //$this->data_chart_result = $this->client->hourlyMicrocontrollerData()->limit(24)->get();;
         $first_day = Carbon::now();
         $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();

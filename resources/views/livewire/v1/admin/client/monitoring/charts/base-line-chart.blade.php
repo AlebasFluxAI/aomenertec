@@ -157,19 +157,21 @@
             var chart_baseline = new ApexCharts(document.querySelector("#chart_baseline"), options);
 
             chart_baseline.render();
-            var pos1 = 0;
-            var pos2 = @js($series)[0].data[0];
+                var pos1 = 0;
+                var pos2 = @js($series)[0].data[0];
 
-            @js($series)[0].data.forEach(function (element){
-                if (pos1<element){
-                    pos1 = element
-                }
-            }  );
-            @js($series)[1].data.forEach(function (element){
-                if (pos2>element){
-                    pos2 = element
-                }
-            }  );
+            @js($series)
+                [0].data.forEach(function (element) {
+                    if (pos1 < element) {
+                        pos1 = element
+                    }
+                });
+            @js($series)
+                [1].data.forEach(function (element) {
+                    if (pos2 > element) {
+                        pos2 = element
+                    }
+                });
             ApexCharts.exec('baseline_chart', "updateOptions", {
                 series: @js($series),
                 xaxis: {

@@ -246,7 +246,6 @@
                     curve: 'smooth'
                 }
 
-
             }
 
             var chart_line = new ApexCharts(document.querySelector("#chart_line"), options);
