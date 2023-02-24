@@ -38,24 +38,90 @@ use function session;
 
 class IndexClientDisabledService extends Singleton
 {
+    public function setFilter(Component $component, $filterValue)
+    {
+        $clientType = ClientType::whereType($filterValue)->first();
+        $component->filterAuxColumn = "client_type_id";
+        $component->filterAuxValue = $clientType->id;
+        $component->clientType = $filterValue;
+
+
+    }
 
     public function getData(Component $component)
     {
 
+        if (User::getUserModel()::class == Seller::class) {
+            $seller = User::getUserModel();
+            if ($component->filter) {
+                return (Client::whereIn('id', $seller->clientSellers()->pluck('client_id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%'))
+                    ->where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
+            }
+            return (Client::whereIn('id', $seller->clientSellers()->pluck('client_id')))
+                ->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
+        }
+
+        if (User::getUserModel()::class == NetworkOperator::class) {
+            $networkOperator = User::getUserModel();
+            if ($component->filter) {
+                return ($networkOperator->clients()->where($component->filterCol, 'ilike', '%' . $component->filter . '%'))
+                    ->where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
+            }
+            return $networkOperator->clients()
+                ->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
+        }
+
         if (User::getUserModel()::class == Supervisor::class) {
             $supervisor = User::getUserModel();
             if ($component->filter) {
-                return Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->whereIn('id', $supervisor->clients->pluck('id'))
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+                return (Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->whereIn('id', $supervisor->clients->pluck('id'))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%'))
+                    ->where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
             }
-            return Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->whereIn('id', $supervisor->clients->pluck('id'))->pagination();
+            return (Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->whereIn('id', $supervisor->clients->pluck('id')))
+                ->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
         }
 
-        if ($component->filter) {
-            return Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+        if (User::getUserModel()::class == Admin::class) {
+            $admin = User::getUserModel();
+            if ($component->filter) {
+                return (Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
+                    ->orWhere("admin_id", Auth::user()->getAdmin()->id)
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
+                )->where($component->filterAuxColumn, $component->filterAuxValue)
+                    ->pagination();
+            }
+            return Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->where(function ($query) use ($admin) {
+                $query->whereIn('network_operator_id', $admin->networkOperators()->pluck('id'))
+                    ->orWhere("admin_id", Auth::user()->getAdmin()->id);
+            })->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
         }
 
-        return Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->pagination();
+
+        if (User::getUserModel()::class == Technician::class) {
+            $technician = User::getUserModel();
+            if ($component->filter) {
+                return (Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->whereIn('id', $technician->clients->pluck("id"))
+                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
+                )->where($component->filterAuxColumn, $component->filterAuxValue)
+                    ->pagination();
+            }
+            return (Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->whereIn('id', $technician->clients->pluck("id"))
+            )->where($component->filterAuxColumn, $component->filterAuxValue)
+                ->pagination();
+        }
+
+        if ($component->filterAuxColumn) {
+            return Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->where($component->filterAuxColumn, $component->filterAuxValue)->pagination();
+        } else {
+            return Client::withoutGlobalScope(ClientEnabledScope::class)->whereStatus(Client::CLIENT_STATUS_DISABLED)->pagination();
+        }
+
     }
 
     public function enableClient(Component $component, $clientId)
