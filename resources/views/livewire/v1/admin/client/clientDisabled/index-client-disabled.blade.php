@@ -7,7 +7,7 @@
 
 
         @include("partials.v1.title",[
-              "second_title"=>"de clientes desactivados",
+              "second_title"=>(isset($clientType)?"de clientes desactivados tipo ".$clientType:"de clientes"),
               "first_title"=>"Listado"
           ])
         @endif
