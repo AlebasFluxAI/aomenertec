@@ -14,6 +14,6 @@ class Formatter
         if (!$money) {
             return 0;
         }
-        return (number_format($money, 0));
+        return (number_format($money, 3));
     }
 }

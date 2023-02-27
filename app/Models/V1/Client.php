@@ -295,6 +295,14 @@ class Client extends Model
     {
         return $this->hasMany(Pqr::class);
     }
+    public function recharges()
+    {
+        return $this->hasMany(ClientRecharge::class);
+    }
+    public function lastConsecutiveRecharge()
+    {
+        return $this->recharges()->orderBy("consecutive", 'desc')->first();
+    }
 
     public function supervisors()
     {

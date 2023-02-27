@@ -143,13 +143,25 @@
                                     <hr>
                                     <p><b>Cantidad de
                                             KWh: </b><br><span
-                                            style="color: teal;font-size: 20px">{{\App\Http\Resources\V1\Formatter::numberFormat((is_numeric($total)?$total:0)*($price->price??0))}}</span>
+                                            style="color: teal;font-size: 20px">{{\App\Http\Resources\V1\Formatter::numberFormat(((is_numeric($total)?$total:0)/($price->price??0)))}}</span>
                                     </p>
                                 </div>
                             </div>
                         </div>
                     @endif
-
+                    @if($recharge_code)
+                        <div class="col-4 text-center"
+                             style="background-color: #f2f2f2;margin: 10px;padding: 15px;border-radius: 15px">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p><b>CODIGO:</b><br> <span
+                                            style="color: teal;font-size: 20px"> {{ $recharge_code }}</span>
+                                    </p>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
                 </div>
                 <div class="text-center">
@@ -178,8 +190,7 @@
                                 </p>
 
                                 <div class="text-right">
-                                    <form action="https://checkout.wompi.co/p/"
-                                          method="GET">
+
                                         <!-- OBLIGATORIOS -->
                                         <input type="hidden" name="public-key"
                                                value="pub_test_knPE3DSMREXJQgxqle2QgpGDEs7x3wJT"/>
@@ -197,8 +208,8 @@
                                                value="{{$client->identification}}"/>
                                         <input type="hidden" name="customer-data.legal-type"
                                                value="{{$client->identification_type}}"/>
-                                        <button wire:click="confirmRecharge" type="submit">Pagar recarga</button>
-                                    </form>
+                                        <button wire:click="confirmRecharge" type="button">Pagar recarga</button>
+
                                 </div>
                             </div>
 

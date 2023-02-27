@@ -70,6 +70,10 @@ class ConsumerCommand extends Command
             dispatch(new SaveMicrocontrollerDataJob($message, true))->onQueue('spot');
             dispatch(new SaveAlertDataJob($message))->onQueue('default');
         }, 0);
+        $mqtt->subscribe('mc/config/#', function (string $topic, string $message) {
+            echo "msj c = ".$message."\n";
+
+        }, 0);
         $mqtt->subscribe('mc/ack', function (string $topic, string $message) {
             echo $message . "\n";
             $json = json_decode($message, true);

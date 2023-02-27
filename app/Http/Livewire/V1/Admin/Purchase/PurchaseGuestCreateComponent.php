@@ -49,6 +49,10 @@ class PurchaseGuestCreateComponent extends Component
     {
         $this->purchaseGuestCreateService->updatedKwhQuantity($this);
     }
+    public function updatedTotal()
+    {
+        $this->purchaseGuestCreateService->updatedTotal($this);
+    }
 
     public function confirmRecharge()
     {
@@ -58,6 +62,7 @@ class PurchaseGuestCreateComponent extends Component
 
     public function mount()
     {
+        dd("ok");
         $this->purchaseGuestCreateService->mount($this);
     }
 

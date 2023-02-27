@@ -52,10 +52,8 @@ class ClientAlertObserver
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
                 $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
                 $topic = "mc/config/" . $equipment->serial;
-
                 try {
                     $mqtt=MQTT::connection();
-
                     foreach ($digital_output as $output){
                         if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
                             if ($output->status) {
