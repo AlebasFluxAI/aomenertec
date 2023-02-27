@@ -27,7 +27,6 @@ class ConfigurationClient extends Component
     public $outputs_selected;
     public $model;
     public $control_options;
-    public $active_real_time;
 
 
     private $configurationClientService;
@@ -73,10 +72,6 @@ class ConfigurationClient extends Component
     public function submitFormConection()
     {
         $this->configurationClientService->submitFormConection($this);
-    }
-    public function submitFormPermission(){
-        $this->configurationClientService->submitFormPermission($this);
-
     }
 
     public function submitFormAlert()

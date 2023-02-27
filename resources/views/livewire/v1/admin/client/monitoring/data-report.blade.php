@@ -78,6 +78,90 @@
         </div>
     </div>
 
+    @include("partials.v1.divider_title",["title"=>"Simulador de tarifa"])
+    <form wire:submit.prevent="simulateFee" id="formulario-simulateFee" class="needs-validation" role="form">
+        {{--
+        <div> &nbsp;&nbsp; <strong> Agregar manualmente</strong></div>
+        --}}
+        <div class="row ">
+            @include("partials.v1.form.form_input_icon",[
+                        "mt"=>0,
+                        "tooltip_title"=>"El simulador de tarifa le dara un costo aproximado dentro de un periodo de consumo en base a
+                        un costo de Kw/h",
+                        "input_model"=>"date_range_simulator",
+                        "icon_class"=>"fas fa-calendar",
+                        "updated_input"=>"defer",
+                        "input_label"=>"Seleccione rango de fechas",
+                        "col_with"=>6,
+                        "input_type"=>"text",
+                        "input_name"=>"datetime_simulator",
+                        "autocomplete"=> "off",
+            ])
+
+            @include("partials.v1.form.form_input_icon",[
+                        "input_model"=>"kwh_cost",
+                        "updated_input"=> "defer",
+                        "input_label"=>"Costo del Kw/h",
+                        "icon_class"=>"fas fa-money-bill",
+                        "placeholder"=>"Ingrese costo de Kw/h",
+                        "col_with"=>6,
+                        "input_type"=>"number",
+                        "required"=>true
+            ])
+            @include("partials.v1.form.form_submit_button",[
+            "button_align"=>"right" ,
+            "function"=>"simulateFee",
+            "button_content"=>"Simular tarifa"
+            ])
+            @if($total_simulation==null)
+            @else
+                <div class="col-4 bg-secondary text-center" style="border-radius: 15px;padding: 20px;margin: auto">
+                    <p><b>Resultado:</b></p>
+                    <hr>
+                    <div class="row bg-gradient-gray m-1">
+                        <div class="col-md-5">
+                            <p style="text-align: left;margin-top: 5px"><b>Fecha inicial</b></p>
+                        </div>
+                        <div class="col-md-7">
+                            <p style="text-align: right;margin-top: 5px"><b>{{$start_simululator}}</b></p>
+                        </div>
+                    </div>
+                    <div class="row bg-gradient-gray m-1">
+                        <div class="col-md-5">
+                            <p style="text-align: left;margin-top: 5px"><b>Fecha Final</b></p>
+                        </div>
+                        <div class="col-md-7">
+                            <p style="text-align: right;margin-top: 5px"><b>{{$end_simululator}}</b></p>
+                        </div>
+                    </div>
+                    <div class="row bg-gradient-gray m-1">
+                        <div class="col-md-5">
+                            <p style="text-align: left;margin-top: 5px"><b>Kw/h Consumidos</b></p>
+                        </div>
+                        <div class="col-md-7">
+                            <p style="text-align: right;margin-top: 5px">
+                                <b>{{\App\Http\Resources\V1\Formatter::numberFormat($total_consumption,3)}}</b></p>
+                        </div>
+                    </div>
+                    <div class="row bg-gradient-gray m-1">
+                        <div class="col-md-6">
+                            <p style="text-align: left;margin-top: 5px"><b>Costo Kw/h</b></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p style="text-align: right;margin-top: 5px"><b>{{$kwh_cost}}</b></p>
+                        </div>
+                    </div>
+                    <br>
+                    <p style="text-align: left;margin-top: 10px"><b>Tarifa calculada:</b></p>
+                    <hr>
+                    <p style="text-align: right">
+                        <b>{{\App\Http\Resources\V1\Formatter::currencyFormat($total_simulation)}}</b></p>
+                </div>
+        </div>
+    </form>
+    @endif
+    @include("partials.v1.divider_title",["title"=>""])
+
     <script>
 
         document.addEventListener('livewire:load', function () {
@@ -104,6 +188,30 @@
             })
 
 
+            $(function () {
+                $('input[name="datetime_simulator"]').daterangepicker({
+                    applyButtonClasses: 'text-primary',
+                    timePicker: false,
+                    autoUpdateInput: false,
+                    locale: {
+                        format: 'YYYY-MM-DD',
+                        cancelLabel: 'Clear'
+                    }
+                });
+
+            });
+
+            $('input[name="datetime_simulator"]').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+            @this.emit('dateRangeSimulator', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'))
+            });
+            $('input[name="datetime_simulator"]').on('cancel.daterangepicker', function (ev, picker) {
+            @this.emit('dateRangeSimulator', '', '')
+                $(this).val('');
+            })
+
+
         })
+
     </script>
 </div>
