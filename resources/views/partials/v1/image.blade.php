@@ -1,31 +1,31 @@
 <img class="myImg" id="myImg.{{$image_url}}" src="{{$image_url}}" style="width:100%;max-width:300px">
 
 <!-- The Modal -->
-<div id="myModal" class="modal myImg">
+<div id="myModalImage" class="modalImg myImg">
     <span class="close">&times;</span>
-    <img class="modal-content" id="img01">
+    <img class="modalImg-content" id="img01">
     <div id="caption"></div>
 </div>
 <script>
-    // Get the modal
-    var modal = document.getElementById("myModal");
+    // Get the modalImg
+    var modalImg = document.getElementById("myModalImage");
 
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    // Get the image and insert it inside the modalImg - use its "alt" text as a caption
     var img = document.getElementById("myImg.{{$image_url}}");
-    var modalImg = document.getElementById("img01");
+    var modalImgImg = document.getElementById("img01");
     var captionText = document.getElementById("caption");
     img.onclick = function () {
-        modal.style.display = "block";
-        modalImg.src = this.src;
+        modalImg.style.display = "block";
+        modalImgImg.src = this.src;
         captionText.innerHTML = this.alt;
     }
 
-    // Get the <span> element that closes the modal
+    // Get the <span> element that closes the modalImg
     var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks on <span> (x), close the modal
+    // When the user clicks on <span> (x), close the modalImg
     span.onclick = function () {
-        modal.style.display = "none";
+        modalImg.style.display = "none";
     }
 </script>
 <style>
@@ -36,11 +36,11 @@
     }
 
     .myImg:hover {
-        opacity: 0.7;
+        opacity: 1;
     }
 
     /* The Modal (background) */
-    .modal {
+    .modalImg {
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
         z-index: 1; /* Sit on top */
@@ -51,11 +51,11 @@
         height: 100%; /* Full height */
         overflow: auto; /* Enable scroll if needed */
         background-color: rgb(0, 0, 0); /* Fallback color */
-        background-color: rgba(0, 0, 0, 0.9); /* Black w/ opacity */
+        background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
     }
 
     /* Modal Content (image) */
-    .modal-content {
+    .modalImg-content {
         margin: auto;
         display: block;
         width: 80%;
@@ -75,7 +75,7 @@
     }
 
     /* Add Animation */
-    .modal-content, #caption {
+    .modalImg-content, #caption {
         -webkit-animation-name: zoom;
         -webkit-animation-duration: 0.6s;
         animation-name: zoom;
@@ -120,7 +120,7 @@
 
     /* 100% Image Width on Smaller Screens */
     @media only screen and (max-width: 700px) {
-        .modal-content {
+        .modalImg-content {
             width: 100%;
         }
     }

@@ -83,7 +83,7 @@ return [
         Permissions::CLIENT_WORK_ORDER,
 
         Permissions::CLIENT_DISABLED_SHOW,
-        Permissions::CLIENT_ACTION_ENABLE,
+        
 
         Permissions::INVOICE_SHOW,
         Permissions::INVOICE_INDEX,

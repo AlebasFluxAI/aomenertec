@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
 use App\Exports\V1\MultipleSheetsMonitoringData;
+use App\Http\Resources\V1\Formatter;
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
@@ -25,10 +26,19 @@ class DataReport extends Component
     public $start_report;
     public $end_report;
     public $date_range_report;
+
+    public $start_simulator;
+    public $end_simulator;
+    public $date_range_simulator;
+    public $kwh_cost;
+    public $total_consumption;
+
+
     public $variables_selected;
     public $time_report_id;
     public $end_day;
-    protected $listeners = ['dateRangeReport', 'selectReport'];
+    public $total_simulation;
+    protected $listeners = ['dateRangeReport', 'selectReport', "dateRangeSimulator", 'selectSimulator'];
 
     public function mount(Client $client, $variables, $data_frame)
     {
@@ -37,12 +47,21 @@ class DataReport extends Component
         $this->client = $client;
         $this->variables = $variables;
         $this->data_frame = $data_frame;
+
         $start = Carbon::now();
         $end = Carbon::now();
+
         $this->start_report = $start->format('Y-m-d 00:00:00');
         $this->end_report = $end->format('Y-m-d 23:59:59');
         $this->end_day = Carbon::create($this->end_report);
         $this->date_range_report = $start->format('Y-m-d') . " - " . $end->format('Y-m-d');
+
+        $this->start_simulator = $start->format('Y-m-d 00:00:00');
+        $this->end_simulator = $end->format('Y-m-d 23:59:59');
+        $this->end_day = Carbon::create($this->end_simulator);
+        $this->date_range_simulator = $start->format('Y-m-d') . " - " . $end->format('Y-m-d');
+
+
         $index = 0;
         $this->variables->push(
             ['id' => 33, 'display_name' => 'Matriz de reactivos']
@@ -58,10 +77,33 @@ class DataReport extends Component
         $this->end_report = $end;
     }
 
+    public function dateRangeSimulator($start, $end)
+    {
+        $aux_start = Carbon::create($start);
+        $aux_end = Carbon::create($end);
+        $this->date_range_simululator = $aux_start->format('Y-m-d') . " - " . $aux_end->format('Y-m-d');
+        $this->start_simululator = $start;
+        $this->end_simululator = $end;
+        $microcontrollerData = $this->client->microcontrollerData()
+            ->whereBetween("source_timestamp", [$this->start_simululator, $this->end_simululator])
+            ->whereIsAlert(false)
+            ->orderBy('source_timestamp')
+            ->get();
+        $first_data = $microcontrollerData->first()->accumulated_real_consumption;
+        $last_data = $microcontrollerData->last()->accumulated_real_consumption;
+        $this->total_consumption = ($last_data - $first_data);
+        $this->total_simulation = $this->total_consumption * $this->kwh_cost;
+    }
+
+    public function simulateFee()
+    {
+
+    }
+
     public function reportCsv()
     {
         if ($this->start_report != "") {
-            if (count($this->variables_selected)>0) {
+            if (count($this->variables_selected) > 0) {
                 $array = $this->arrayCreate();
                 return Excel::download(new MultipleSheetsMonitoringData($array), 'data_' . $this->client->identification . '_' . Carbon::now()->format('Y-m-d H:i:s') . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
             }
@@ -213,18 +255,18 @@ class DataReport extends Component
     public function reportPdf()
     {
         //if ($this->start_report != "") {
-            //$array = $this->arrayCreate();
-            $pdf = \PDF::loadView('reports.variables_report');
-            $pdf->setPaper('A4','portrait');
+        //$array = $this->arrayCreate();
+        $pdf = \PDF::loadView('reports.variables_report');
+        $pdf->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
         }, 'export.pdf');
-       // }
+        // }
     }
 
     public function selectReport()
     {
-        if($this->client->clientConfiguration()->first()->active_real_time) {
+        if ($this->client->clientConfiguration()->first()->active_real_time) {
             if ($this->client->clientConfiguration()->first()->real_time_flag) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
                 if (RealTimeListener::whereUserId(Auth::user()->id)

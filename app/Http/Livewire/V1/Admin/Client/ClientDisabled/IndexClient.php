@@ -18,11 +18,19 @@ class IndexClient extends Component
 
 
     private $indexClientDisabledService;
+    public $clientType = "ZNI Sistema fotovoltaico";
+    public $filterAuxColumn = "client_type_id";
+    public $filterAuxValue = null;
 
     public function __construct($id = null)
     {
         $this->indexClientDisabledService = IndexClientDisabledService::getInstance();
         parent::__construct($id);
+    }
+
+    public function setFilter($filterValue)
+    {
+        return $this->indexClientDisabledService->setFilter($this, $filterValue);
     }
 
     public function getClient()
