@@ -39,7 +39,9 @@ class ClientRecharge extends Model
         "purchase_type",
         "payment_method",
         "payment_status",
-        "notified"
+        "notified",
+        "recharge_code",
+        "consecutive"
     ];
 
     public function client()

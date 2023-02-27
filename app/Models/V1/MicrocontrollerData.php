@@ -447,7 +447,7 @@ class MicrocontrollerData extends Model
                     'client_alert_configuration_id' => $alert->id,
                     'value' => $value,
                     'type' => $type,
-                    'source_timestamp' => $this->source_timestamp
+                    'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s')
                 ]);
             }
         } elseif ($alert->flag_id == 50
@@ -462,7 +462,7 @@ class MicrocontrollerData extends Model
                     'client_alert_configuration_id' => $alert->id,
                     'value' => $value,
                     'type' => $type,
-                    'source_timestamp' => $this->source_timestamp
+                    'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s')
                 ]);
             }
         } else {
@@ -475,7 +475,7 @@ class MicrocontrollerData extends Model
                     'client_alert_configuration_id' => $alert->id,
                     'value' => $value,
                     'type' => $type,
-                    'source_timestamp' => $this->source_timestamp
+                    'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s'),
                 ]);
             }
         }

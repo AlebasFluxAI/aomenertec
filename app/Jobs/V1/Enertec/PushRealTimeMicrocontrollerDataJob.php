@@ -94,9 +94,10 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
             }
         }
 
-        $current_time = Carbon::now()->format('Y-m-d H:i:s');
         if ($equipment) {
             $client = $equipment->clients()->first();
+
+            $current_time = (new Carbon('now', $client->time_zone))->format('Y-m-d H:i:s');
             $client_id = $client->id;
             $json['timestamp'] = $current_time;
             $json['client_id'] = $client_id;

@@ -9,11 +9,11 @@ class Formatter
         return (number_format($money, 0)) . " " . $currency;
     }
 
-    public static function numberFormat($money, $decimals = 0)
+    public static function numberFormat($money)
     {
         if (!$money) {
             return 0;
         }
-        return (number_format($money, $decimals));
+        return (number_format($money, 3));
     }
 }

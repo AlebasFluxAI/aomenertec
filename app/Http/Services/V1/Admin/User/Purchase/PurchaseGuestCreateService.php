@@ -21,6 +21,7 @@ use App\Models\V1\EquipmentType;
 use App\Models\V1\Image;
 use App\Models\V1\Pqr;
 use App\Models\V1\User;
+use Crc16\Crc16;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -35,6 +36,7 @@ class PurchaseGuestCreateService extends Singleton
 
     public function confirmRecharge(Component $component)
     {
+        $component->recharge_code = $this->createRechargeCode($component);
         DB::transaction(function () use ($component) {
             ClientRecharge::create([
                 "client_id" => $component->client->id,
@@ -46,7 +48,10 @@ class PurchaseGuestCreateService extends Singleton
                 "total" => $component->total,
                 "reference" => $component->reference,
                 "status" => ClientRecharge::PURCHASE_PAYMENT_STATUS_PENDING,
+                "recharge_code"=> $component->recharge_code,
+                "consecutive" => $component->client->lastConsecutiveRecharge()?0:$component->client->lastConsecutiveRecharge()
             ]);
         });
     }
+
 }
