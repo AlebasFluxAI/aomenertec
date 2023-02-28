@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Controllers\V1\Controller;
+use App\Models\V1\Client;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -82,29 +83,34 @@ class AuthController extends Controller
     public function joblist()
     {
         $user = auth("api")->user();
+        $clients = $user->technician->clients;
 
         $pass = "jghsdjfg626FFDS5266s";
         $pass1 = "jkdhjk54858DDS55";
+        $response = [];
+        foreach ($clients as $client){
+            array_push($response, ['uid'=>$client->networkOperator->identification,
+                'did'=>($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
+                'ssid'=>'wifi_'.($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
+                'password'=>$client->identification,
+                'nombre'=>($client->alias ?? $client->name),
+                'ubicacion'=> json_decode($client->addresses()->first()->here_maps),
+                'celular'=>$client->phone,
+                "fecha_lectura"=>"25/12/2021",
+                "estado"=>"habilitado",
+                "orden"=>"lectura",
+                "pass"=>$pass,
+                "equipments" => $this->clientEquipment($client)
+            ]);
+        }
+        return response()->json($response);
+    }
 
-        $respuesta = [['uid'=>"123456789", 'did'=>'999999', 'ssid'=>'wifi_123456789',
-            'password'=>"00000000", 'nombre'=>'cliente 1', 'direccion'=>'direccion cliente 1', 'departamento'=>'meta',
-            'municipio'=>'villavicencio', 'ubicacion'=>"", "latitud"=>"", "longitud"=>"",
-            'celular'=>"", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"lectura", "pass"=>$pass, "macAddres"=>"CC:50:E3:95:F4:B6"],
-            ['uid'=>"123456789", 'did'=>'888888', 'ssid'=>'wifi_00000',
-                'password'=>"00000001", 'nombre'=>"cliente 2", 'direccion'=>"direccion cliente 2", 'departamento'=>"meta",
-                'municipio'=>"villavicewncio", 'ubicacion'=>"", "latitud"=>"", "longitud"=>"",
-                'celular'=>"", "fecha_lectura"=>"25/12/2021", "estado"=>"inhabilitado", "orden"=>"conexion", "pass"=>$pass1, "macAddres"=>"00:19:06:35:7F:27"],
-            ['uid'=>123456789, 'did'=>"444444", 'ssid'=>'wifi_44444444',
-                'password'=>"00000004", 'nombre'=>"SNEIDER FUENTES", 'direccion'=>'CRR 22 38-47', 'departamento'=>'META',
-                'municipio'=>"VILLAVICENCIO", 'ubicacion'=>"VILLAVICENCIO", "latitud"=>"", "longitud"=>"",
-                'celular'=>"3444444444", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"lectura", "pass"=>"kedjidjiosdjsio", "macAddres"=>"00:19:06:35:7F:27"],
-            ['uid'=>1234567890, 'did'=>"555555", 'ssid'=>'wifi_55555555',
-                'password'=>"00000005", 'nombre'=>"ENERTEC PRUEBA", 'direccion'=>"LLANOCENTRO", 'departamento'=>"META",
-                'municipio'=>"VILLAVICENCIO", 'ubicacion'=>"VILLAVICENCIO", "latitud"=>"", "longitud"=>"",
-                'celular'=>"3959758995", "fecha_lectura"=>"25/12/2021", "estado"=>"habilitado", "orden"=>"corte", "pass"=>"lmnd848ojeoijef3", "macAddres"=>"00:19:06:35:7F:27"],
-
-        ];
-
-        return response()->json($respuesta);
+    private function clientEquipment(Client $client){
+        $equipment_serial = [];
+        foreach ($client->equipments as $equipment){
+            array_push($equipment_serial, ['type' => $equipment->equipmentType->type, 'serial' => $equipment->serial]);
+        }
+        return $equipment_serial;
     }
 }

@@ -62,7 +62,6 @@ class PurchaseGuestCreateComponent extends Component
 
     public function mount()
     {
-        dd("ok");
         $this->purchaseGuestCreateService->mount($this);
     }
 

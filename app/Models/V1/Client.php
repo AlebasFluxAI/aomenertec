@@ -301,7 +301,8 @@ class Client extends Model
     }
     public function lastConsecutiveRecharge()
     {
-        return $this->recharges()->orderBy("consecutive", 'desc')->first();
+        $last = $this->recharges()->orderBy("consecutive", 'desc')->first();
+        return ($last == null)? 1 : $last->consecutive;
     }
 
     public function supervisors()
