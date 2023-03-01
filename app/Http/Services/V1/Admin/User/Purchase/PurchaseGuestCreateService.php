@@ -49,7 +49,7 @@ class PurchaseGuestCreateService extends Singleton
                 "reference" => $component->reference,
                 "status" => ClientRecharge::PURCHASE_PAYMENT_STATUS_PENDING,
                 "recharge_code"=> $component->recharge_code,
-                "consecutive" => $component->client->lastConsecutiveRecharge()?0:$component->client->lastConsecutiveRecharge()
+                "consecutive" => $component->client->lastConsecutiveRecharge() + 1
             ]);
         });
     }

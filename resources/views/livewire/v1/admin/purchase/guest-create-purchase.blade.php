@@ -165,8 +165,8 @@
 
                 </div>
                 <div class="text-center">
-                    <button id="add"
-                            class="mb-2 py-2 px-4" data-toggle="modal" data-target="#exampleModal">
+                    <button wire:click="confirmRecharge"class="mb-2 py-2 px-4">
+<!--                             data-toggle="modal" data-target="#exampleModal">-->
                         <b>
                             <i class="fas fa-check"></i> Confirmar recarga
                         </b>

@@ -30,6 +30,7 @@ use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use App\Notifications\Alert\AlertControlNotification;
+use Crc16\Crc16;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
@@ -436,6 +437,12 @@ class ClientConfigurationService extends Singleton
                 array_push($binary_data, pack($item['type'], $data));
             }
             $message = base64_encode(implode($binary_data));
+            $message2 = implode($binary_data);
+            $crc = Crc16::XMODEM(pack('C', 1).$message2);
+            $crc_pack = pack('n', $crc);
+
+            $message2 = pack('C', 1).$message2.$crc_pack;
+            $mqtt->publish('v1/config/888889', $message2);
             $mqtt->publish($topic, $message);
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
                 $json = json_decode($message, true);

@@ -100,9 +100,9 @@ trait CreateRechargeTrait
     public function createRechargeCode(Component $component)
     {
         $key = ($component->client->equipments()->whereEquipmentTypeId(1)->first())->serial . $component->client->networkOperator->identification;
-        $cons = $component->client->lastConsecutiveRecharge()?0:$component->client->lastConsecutiveRecharge();
+        $cons = $component->client->lastConsecutiveRecharge() + 1;
         $kw = $this->byteArray($component->kwh_quantity*100);
-        $consecutivo = $this->byteArray1($cons + 1);
+        $consecutivo = $this->byteArray1($cons);
         $crcin = [$consecutivo[1],$consecutivo[0],$kw[3],$kw[2],$kw[1],$kw[0]];
         $crc = Crc16::XMODEM(implode("", $crcin));
         $aux = dechex($crc);
