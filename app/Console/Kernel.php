@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\V1\ClientReport;
 use App\Console\Commands\V1\DeleteStopUnpackData;
 use App\Console\Commands\V1\InvoiceGeneration;
 use App\Console\Commands\V1\RefactorClientData;
@@ -17,6 +18,7 @@ use App\Console\Commands\V1\UpdateTimestampDataConsumption;
 use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Models\V1\AuxData;
+use App\Models\V1\Client;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
@@ -44,10 +46,10 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(RefactorClientData::class)->dailyAt('01:32')->withoutOverlapping();
         $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
+
         $schedule->command(InvoiceGeneration::class)->dailyAt(2);
-
-
-        ///Generar facturacion....
+        $schedule->command(ClientReport::class, [Client::MONTHLY_RATE])->monthlyOn(1, '12:00');
+        $schedule->command(ClientReport::class, [Client::DAILY_RATE])->dailyAt('12:00');
     }
 
     /**

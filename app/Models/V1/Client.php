@@ -24,6 +24,9 @@ class Client extends Model
     use PaginatorTrait;
 
 
+    public const MONTHLY_RATE = "monthly";
+    public const DAILY_RATE = "daily";
+
     public const MONOPHASIC = 'monophasic';
     public const BIPHASIC = 'biphasic';
     public const TRIPHASIC = 'triphasic';
@@ -68,7 +71,9 @@ class Client extends Model
         "alias",
         "indicative",
         "time_zone",
-        "status"
+        "status",
+        "report_rate",
+        "report_variables"
     ];
 
     protected static function booted()
@@ -76,6 +81,16 @@ class Client extends Model
         static::addGlobalScope(new OrderIdScope());
 
         static::addGlobalScope(new ClientEnabledScope());
+    }
+
+    public static function getReportVariableFromId($variable_id)
+    {
+        $array = collect(config('data-frame.variables'));
+        foreach ($array as $element) {
+            if ($element["id"] == (int)$variable_id) {
+                return $element["display_name"];
+            }
+        }
     }
 
     public function navigatorDropdownOptions()
@@ -295,10 +310,12 @@ class Client extends Model
     {
         return $this->hasMany(Pqr::class);
     }
+
     public function recharges()
     {
         return $this->hasMany(ClientRecharge::class);
     }
+
     public function lastConsecutiveRecharge()
     {
         $last = $this->recharges()->orderBy("consecutive", 'desc')->first();

@@ -14,6 +14,9 @@
                         @if(array_key_exists("data_foreach", $form_input))
                             @foreach($form_input['data_foreach'] as $index => $data)
                                 @foreach($form_input['foreach_inputs'] as $foreach_input)
+                                    @if($foreach_input["input_type"]=="custom")
+                                        @include($foreach_input["template_name"],$foreach_input["template_values"])
+                                    @endif
                                     @if($foreach_input["input_type"]=="divider")
                                         @include("partials.v1.divider_title",[
                                              "title"=>$foreach_input["title"]
@@ -129,6 +132,9 @@
                                 @endforeach
                             @endforeach
                         @else
+                            @if($form_input["input_type"]=="custom")
+                                @include($form_input["template_name"],$form_input["template_values"])
+                            @endif
                             @if($form_input["input_type"]=="divider")
                                 @include("partials.v1.divider_title",[
                                      "title"=>$form_input["title"]
@@ -233,6 +239,7 @@
                                                  "list_option_value"=>$form_input["list_option_value"],
                                                  "list_option_view"=>$form_input["list_option_view"],
                                                  "list_option_title"=>$form_input["list_option_title"],
+                                                 "input_label"=> $form_input["input_label"]??""
 
 
                             ])
@@ -266,7 +273,8 @@
                         @endif
                     @endforeach
                     @if($loading_state??false)
-                        <div wire:loading wire:target="{{ $form_submit_action }}" class="justify-content-end  mx-2 form-group mb-0 mt-0 ">
+                        <div wire:loading wire:target="{{ $form_submit_action }}"
+                             class="justify-content-end  mx-2 form-group mb-0 mt-0 ">
 
                             <span class="">Conectando...</span>
                             <div class="spinner-grow" role="status">

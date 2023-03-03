@@ -28,8 +28,6 @@
                                                                     ['id'=>2, 'display_name'=> 'Hora'],
                                                                     ['id'=>3, 'display_name'=> 'Dia'],
                                                                     ['id'=>4, 'display_name'=> 'Mes'],
-
-
                                                                    ],
                                                  "list_option_value"=>"id",
                                                  "list_option_view"=>"display_name",
@@ -113,11 +111,15 @@
             "function"=>"simulateFee",
             "button_content"=>"Simular tarifa"
             ])
+            <div wire:loading>
+                <div class="clock-loader"></div>
+            </div>
             @if($total_simulation==null)
             @else
                 <div class="col-4 bg-secondary text-center" style="border-radius: 15px;padding: 20px;margin: auto">
                     <p><b>Resultado:</b></p>
                     <hr>
+                    s
                     <div class="row bg-gradient-gray m-1">
                         <div class="col-md-5">
                             <p style="text-align: left;margin-top: 5px"><b>Fecha inicial</b></p>

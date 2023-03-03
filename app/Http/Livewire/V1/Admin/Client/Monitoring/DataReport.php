@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
 use App\Exports\V1\MultipleSheetsMonitoringData;
 use App\Http\Resources\V1\Formatter;
+use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
@@ -79,20 +80,25 @@ class DataReport extends Component
 
     public function dateRangeSimulator($start, $end)
     {
-        $aux_start = Carbon::create($start);
-        $aux_end = Carbon::create($end);
-        $this->date_range_simululator = $aux_start->format('Y-m-d') . " - " . $aux_end->format('Y-m-d');
-        $this->start_simululator = $start;
-        $this->end_simululator = $end;
-        $microcontrollerData = $this->client->microcontrollerData()
-            ->whereBetween("source_timestamp", [$this->start_simululator, $this->end_simululator])
-            ->whereIsAlert(false)
-            ->orderBy('source_timestamp')
-            ->get();
-        $first_data = $microcontrollerData->first()->accumulated_real_consumption;
-        $last_data = $microcontrollerData->last()->accumulated_real_consumption;
-        $this->total_consumption = ($last_data - $first_data);
-        $this->total_simulation = $this->total_consumption * $this->kwh_cost;
+        try {
+            $aux_start = Carbon::create($start);
+            $aux_end = Carbon::create($end);
+            $this->date_range_simululator = $aux_start->format('Y-m-d') . " - " . $aux_end->format('Y-m-d');
+            $this->start_simululator = $start;
+            $this->end_simululator = $end;
+            $microcontrollerData = $this->client->microcontrollerData()
+                ->whereBetween("source_timestamp", [$this->start_simululator, $this->end_simululator])
+                ->whereIsAlert(false)
+                ->orderBy('source_timestamp')
+                ->get();
+            $first_data = $microcontrollerData->first()->accumulated_real_consumption;
+            $last_data = $microcontrollerData->last()->accumulated_real_consumption;
+            $this->total_consumption = ($last_data - $first_data);
+            $this->total_simulation = $this->total_consumption * $this->kwh_cost;
+        } catch (\Throwable) {
+            ToastEvent::launchToast($this, "show", "error", "Ocurrio un error al calcular tarifa");
+        }
+
     }
 
     public function simulateFee()

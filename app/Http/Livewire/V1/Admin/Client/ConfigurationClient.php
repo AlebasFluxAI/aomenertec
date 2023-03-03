@@ -27,6 +27,12 @@ class ConfigurationClient extends Component
     public $outputs_selected;
     public $model;
     public $control_options;
+    public $report_rate;
+    public $report_rates;
+    public $variables;
+    public $variables_selected;
+    public $select_report;
+    public $client_report_variables;
 
 
     private $configurationClientService;
@@ -46,6 +52,11 @@ class ConfigurationClient extends Component
     protected function rules()
     {
         return $this->configurationClientService->rules($this);
+    }
+
+    public function submitReportRate()
+    {
+        $this->configurationClientService->submitReportRate($this);
     }
 
     public function outputRelation($id)

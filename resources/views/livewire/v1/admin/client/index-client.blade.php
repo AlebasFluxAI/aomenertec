@@ -183,7 +183,7 @@
                                                                "binding"=>"client"
                                                          ],
                                                        "icon"=>"fas fa-gear",
-                                                       "tooltip_title"=>"Configuración de equipos",
+                                                       "tooltip_title"=>"Configuración",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SETTINGS],
                                                  ],
 

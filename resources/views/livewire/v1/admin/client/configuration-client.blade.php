@@ -47,6 +47,10 @@
                                                     "title"=>"Alertas",
 
                                                 ],
+                                                 [
+                                                    "title"=>"Reportes automaticos",
+
+                                                ],
 
 
 
@@ -249,6 +253,58 @@
                                                                         "form_title"=>"",
                                                                         "form_inputs"=> $inputs
 
+                                                            ]
+                                                ],
+                                                  [
+                                                    "view_name"=>"partials.v2.form.primary_form",
+                                                    "view_values"=>  [
+                                                                        "form_toast"=>true,
+                                                                        "session_message"=>"message",
+                                                                        "form_submit_action"=>"submitReportRate",
+                                                                        "form_title"=>"",
+                                                                        "form_inputs"=> [
+
+                                                                                        [
+                                                                                            "input_type"=>"divider",
+                                                                                            "title"=>"Frecuencia de reportes"
+                                                                                        ],
+                                                                                             [
+                                                                                                "mt"=>0,
+                                                                                                "mb"=>2,
+                                                                                                "col_width"=>3,
+                                                                                                "input_type"=>"multioselect",
+                                                                                                "input_label"=>"Seleccione las variables para reportar",
+                                                                                                "options_list"=>$variables,
+                                                                                                "model_select"=>"variables_selected",
+                                                                                                "name_select"=>"select_report",
+                                                                                                "option_value"=>"id",
+                                                                                                "option_view"=>"display_name",
+                                                                                                "optgroup"=>true,
+                                                                                            ],
+                                                                                            [
+                                                                                               "col_with"=>2,
+                                                                                               "input_label"=>"Frecuencia de reportes",
+                                                                                               "input_type"=>"list",
+                                                                                               "list_model" => "report_rate",
+                                                                                               "list_default" => "Frecuencia de reportes",
+                                                                                               "list_options" => $report_rates,
+                                                                                               "list_option_value"=>"value",
+                                                                                               "list_option_view"=>"key",
+                                                                                                "list_option_title"=>"",
+                                                                                            ],
+                                                                                            [
+                                                                                            "input_type"=>"divider",
+                                                                                            "title"=>"Variables para reporte"
+                                                                                        ],
+                                                                                            [
+                                                                                              "input_type"=>"custom",
+                                                                                              "template_name"=>"livewire.v1.admin.client.client-report-variables",
+                                                                                              "template_values"=>[
+                                                                                                                       "client_variables"=>$model->report_variables
+                                                                                                                ]
+                                                                                            ],
+
+                                                                                ]
                                                             ]
                                                 ],
 
