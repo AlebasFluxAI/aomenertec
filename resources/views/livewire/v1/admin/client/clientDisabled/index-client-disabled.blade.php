@@ -156,11 +156,22 @@
                                                        "tooltip_title"=>"Detalles",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW],
                                                  ],
-                                                       [
+                                                [
                                                         "function"=>"enableClient",
                                                         "icon"=>"fas fa-user",
                                                         "tooltip_title"=>"Activar cliente",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_ACTION_ENABLE],
+                                                ],
+                                                 [
+                                                        "function"=>"createActivationWorkOrder",
+                                                        "icon"=>"fas fa-clipboard-list",
+                                                        "tooltip_title"=>"Orden de trabajo para activacion",
+                                                        "conditional"=>"createActivationWorkOrderConditional",
+                                                        "modal"=>[
+                                                                "header"=>"Crear oden de trabajo de activacion",
+                                                                "body"=>"Esta seguro de crear una orden de trabajo para reactivar cliente ?",
+                                                        ],
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_WORK_ACTIVATION_ORDER],
                                                 ],
 
                                     ]

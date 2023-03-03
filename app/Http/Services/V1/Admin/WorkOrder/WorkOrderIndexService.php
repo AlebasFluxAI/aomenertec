@@ -13,6 +13,7 @@ use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
+use App\Scope\ClientEnabledScope;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -64,10 +65,12 @@ class WorkOrderIndexService extends Singleton
         }
 
         if ($userModel::class == NetworkOperator::class) {
-            return WorkOrder::where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)->whereIn("client_id", $userModel->clients->pluck("id"))->pagination();
+            return WorkOrder::where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)
+                ->where("type", "!=", WorkOrder::WORK_ORDER_TYPE_ENABLE_CLIENT)
+                ->whereIn("client_id", $userModel->allClients->pluck("id"))->pagination();
         }
         if ($userModel::class == Admin::class) {
-            $clientId = Client::whereAdminId($userModel->id)
+            $clientId = Client::withoutGlobalScope(ClientEnabledScope::class)->whereAdminId($userModel->id)
                 ->pluck("id");
             return WorkOrder::whereIn("client_id", $clientId)->pagination();
         }

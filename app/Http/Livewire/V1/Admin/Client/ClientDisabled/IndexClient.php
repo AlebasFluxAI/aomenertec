@@ -43,6 +43,17 @@ class IndexClient extends Component
         return $this->indexClientDisabledService->enableClient($this, $clientId);
     }
 
+    public function createActivationWorkOrder($clientId)
+    {
+        $this->indexClientDisabledService->createActivationWorkOrder($this, $clientId);
+
+    }
+
+    public function createActivationWorkOrderConditional($clientId)
+    {
+        return $this->indexClientDisabledService->createActivationWorkOrderConditional($this, $clientId);
+
+    }
 
     public function render()
     {

@@ -24,6 +24,7 @@ class WorkOrder extends Model
     public const WORK_ORDER_TYPE_CORRECTIVE_MAINTENANCE = "corrective_maintenance";
     public const WORK_ORDER_TYPE_PREVENTIVE_MAINTENANCE = "preventive_maintenance";
     public const WORK_ORDER_TYPE_DISABLE_CLIENT = "disable_client";
+    public const WORK_ORDER_TYPE_ENABLE_CLIENT = "enable_client";
 
     public const WORK_ORDER_STATUS_OPEN = "open";
     public const WORK_ORDER_STATUS_IN_PROGRESS = "in_progress";

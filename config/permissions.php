@@ -83,7 +83,7 @@ return [
         Permissions::CLIENT_WORK_ORDER,
 
         Permissions::CLIENT_DISABLED_SHOW,
-        
+
 
         Permissions::INVOICE_SHOW,
         Permissions::INVOICE_INDEX,
@@ -91,6 +91,7 @@ return [
         Permissions::INVOICE_PAY,
 
         Permissions::PQR_LINK_CLIENT,
+        Permissions::CLIENT_WORK_ACTIVATION_ORDER
 
 
     ],

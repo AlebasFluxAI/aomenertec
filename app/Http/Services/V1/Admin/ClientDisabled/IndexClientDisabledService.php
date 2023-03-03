@@ -25,6 +25,7 @@ use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use App\Models\V1\WorkOrder;
 use App\Scope\ClientEnabledScope;
 use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,32 @@ class IndexClientDisabledService extends Singleton
         $component->clientType = $filterValue;
 
 
+    }
+
+    public function createActivationWorkOrder(Component $component, $clientId)
+    {
+
+        DB::transaction(function () use ($component, $clientId) {
+            $client = Client::withoutGlobalScope(ClientEnabledScope::class)->find($clientId);
+            $client->update([
+                "activation_requested" => true,
+            ]);
+            $workOrder = $client->workOrders()->create([
+                "description" => "Orden de servicio para activacion de cliente " . $client->alias,
+                "type" => WorkOrder::WORK_ORDER_TYPE_ENABLE_CLIENT,
+                "technician_id" => $client->technician()->first()->technician->id,
+                "days" => 0,
+                "hours" => 0,
+                "minutes" => 10,
+            ]);
+            $component->redirectRoute("administrar.v1.ordenes_de_servicio.detalle", ["workOrder" => $workOrder->id]);
+        });
+
+    }
+
+    public function createActivationWorkOrderConditional(Component $component, $clientId)
+    {
+        return Client::withoutGlobalScope(ClientEnabledScope::class)->find($clientId)->activation_requested;
     }
 
     public function getData(Component $component)
