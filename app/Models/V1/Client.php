@@ -73,7 +73,8 @@ class Client extends Model
         "time_zone",
         "status",
         "report_rate",
-        "report_variables"
+        "report_variables",
+        "activation_requested"
     ];
 
     protected static function booted()
@@ -238,6 +239,7 @@ class Client extends Model
         ]);
     }
 
+
     public function equipmentChangeHistorical()
     {
         return $this->hasMany(HistoricalClientEquipment::class);
@@ -319,7 +321,7 @@ class Client extends Model
     public function lastConsecutiveRecharge()
     {
         $last = $this->recharges()->orderBy("consecutive", 'desc')->first();
-        return ($last == null)? 1 : $last->consecutive;
+        return ($last == null) ? 1 : $last->consecutive;
     }
 
     public function supervisors()

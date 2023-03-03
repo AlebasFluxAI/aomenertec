@@ -6,6 +6,7 @@ use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\UserPermissionableTrait;
+use App\Scope\ClientEnabledScope;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -196,6 +197,12 @@ class NetworkOperator extends Model
     {
         return $this->hasMany(Client::class);
     }
+
+    public function allClients()
+    {
+        return $this->hasMany(Client::class)->withoutGlobalScope(ClientEnabledScope::class);
+    }
+
 
     public function sellers()
     {

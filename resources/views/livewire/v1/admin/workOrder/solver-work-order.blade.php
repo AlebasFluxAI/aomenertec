@@ -95,7 +95,7 @@
 
 
 
-            @if($model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)
+            @if($model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT or $model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_ENABLE_CLIENT)
                 @include("partials.v1.form.form_submit_button",[
                                       "button_align"=>"right" ,
                                       "button_content"=>"Cerrar orden de trabajo",
