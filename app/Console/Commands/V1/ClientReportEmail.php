@@ -47,7 +47,7 @@ class ClientReportEmail extends Command
      */
     public function handle()
     {
-        dispatch(new ClientReportSendJobEmail($this->argument('email')))->onQueue("spot");
+        dispatch(new ClientReportSendJobEmail($this->argument('email')))->onConnection("sync");
     }
 
 
