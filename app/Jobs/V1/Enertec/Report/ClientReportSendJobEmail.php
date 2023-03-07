@@ -46,8 +46,10 @@ class ClientReportSendJobEmail implements ShouldQueue
     {
         foreach (Client::where("email", $this->email)->get() as $client) {
             try {
+
                 $filePath = 'reporte_' . $client->alias . '_' . Carbon::now()->format('Y-m-d H:i:s') . '.xlsx';
                 $array = $this->arrayCreate($client, $client->report_variables, 1);
+
                 if (!$array) {
                     continue;
                 }
@@ -65,8 +67,8 @@ class ClientReportSendJobEmail implements ShouldQueue
                 });
 
                 Storage::disk("public")->delete($filePath);
-            } catch (\Throwable) {
-                continue;
+            } catch (\Throwable $e) {
+                echo $e;
             }
         }
 
