@@ -28,6 +28,8 @@ class DataReport extends Component
     public $end_report;
     public $date_range_report;
 
+    public $aux_start;
+    public $aux_end;
     public $start_simulator;
     public $end_simulator;
     public $date_range_simulator;
@@ -71,9 +73,9 @@ class DataReport extends Component
 
     public function dateRangeReport($start, $end)
     {
-        $aux_start = Carbon::create($start);
-        $aux_end = Carbon::create($end);
-        $this->date_range_report = $aux_start->format('Y-m-d') . " - " . $aux_end->format('Y-m-d');
+        $this->aux_start = Carbon::create($start);
+        $this->aux_end = Carbon::create($end);
+        $this->date_range_report = $this->aux_start->format('Y-m-d') . " - " . $this->aux_end->format('Y-m-d');
         $this->start_report = $start;
         $this->end_report = $end;
     }
@@ -81,11 +83,15 @@ class DataReport extends Component
     public function dateRangeSimulator($start, $end)
     {
         try {
-            $aux_start = Carbon::create($start);
-            $aux_end = Carbon::create($end);
-            $this->date_range_simululator = $aux_start->format('Y-m-d') . " - " . $aux_end->format('Y-m-d');
+
+            $this->aux_start = Carbon::create($start);
+            $this->aux_end = Carbon::create($end);
+            $this->date_range_simululator = $this->aux_start->format('Y-m-d') . " - " . $this->aux_end->format('Y-m-d');
             $this->start_simululator = $start;
             $this->end_simululator = $end;
+            if (!$this->kwh_cost) {
+                return;
+            }
             $microcontrollerData = $this->client->microcontrollerData()
                 ->whereBetween("source_timestamp", [$this->start_simululator, $this->end_simululator])
                 ->whereIsAlert(false)
@@ -95,6 +101,7 @@ class DataReport extends Component
             $last_data = $microcontrollerData->last()->accumulated_real_consumption;
             $this->total_consumption = ($last_data - $first_data);
             $this->total_simulation = $this->total_consumption * $this->kwh_cost;
+            
         } catch (\Throwable) {
             ToastEvent::launchToast($this, "show", "error", "Ocurrio un error al calcular tarifa");
         }
@@ -103,7 +110,7 @@ class DataReport extends Component
 
     public function simulateFee()
     {
-
+        $this->dateRangeSimulator($this->aux_start, $this->aux_end);
     }
 
     public function reportCsv()
