@@ -75,7 +75,7 @@ class ClientReportSendJob implements ShouldQueue
     private function timeRange($client): array
     {
         if ($client->report_rate == Client::DAILY_RATE) {
-            return [now()->startOfDay(), now()->endOfDay()];
+            return [now()->subDay(), now()->endOfDay()];
         } else {
             return [now()->subMonth(), now()];
         }
