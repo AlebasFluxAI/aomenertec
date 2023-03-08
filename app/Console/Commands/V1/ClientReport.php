@@ -46,7 +46,7 @@ class ClientReport extends Command
      */
     public function handle()
     {
-        dispatch(new ClientReportSendJob($this->argument('rate')))->onQueue("spot");
+        dispatch(new ClientReportSendJob($this->argument('rate')))->onConnection("sync");
     }
 
 

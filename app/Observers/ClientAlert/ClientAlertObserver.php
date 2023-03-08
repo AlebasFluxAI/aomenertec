@@ -21,16 +21,16 @@ class ClientAlertObserver
     /**
      * Handle the ClientAlert "created" event.
      *
-     * @param  \App\Models\V1\ClientAlert  $clientAlert
+     * @param \App\Models\V1\ClientAlert $clientAlert
      * @return void
      */
     public function created(ClientAlert $clientAlert)
     {
-        $client =$clientAlert->client;
+        $client = $clientAlert->client;
         $technicians = $client->clientTechnician;
         $supervisors = $client->supervisors;
         $flag = true;
-        if ($clientAlert->type == ClientAlert::ALERT){
+        if ($clientAlert->type == ClientAlert::ALERT) {
             foreach ($technicians as $user) {
                 //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
                 $user->user->notify(new AlertNotification($clientAlert));
@@ -46,24 +46,24 @@ class ClientAlertObserver
                 $client->notify(new AlertNotification($clientAlert));
             }
         }
-        if ($clientAlert->type == ClientAlert::CONTROL){
+        if ($clientAlert->type == ClientAlert::CONTROL) {
             $client_alert_configuration = $clientAlert->clientAlertConfiguration;
-            if ($client_alert_configuration->active_control){
+            if ($client_alert_configuration->active_control) {
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
                 $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
                 $topic = "mc/config/" . $equipment->serial;
                 try {
-                    $mqtt=MQTT::connection();
-                    foreach ($digital_output as $output){
+                    $mqtt = MQTT::connection();
+                    foreach ($digital_output as $output) {
                         if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
                             if ($output->status) {
                                 $message = "{\"coil" . $output->number . "\":false}";
                             } else {
                                 $message = "{\"coil" . $output->number . "\":true}";
                             }
-                        } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON){
+                        } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
                             $message = "{\"coil" . $output->number . "\":true}";
-                        } else{
+                        } else {
                             $message = "{\"coil" . $output->number . "\":false}";
                         }
                         $mqtt->publish($topic, $message);
@@ -74,17 +74,17 @@ class ClientAlertObserver
                                 $flag = true;
                                 foreach ($technicians as $user) {
                                     //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                    $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                                    $user->user->notifyNow(new AlertControlNotification($clientAlert, 'alert_control_warning'));
                                 }
                                 foreach ($supervisors as $user) {
                                     if ($user->user->phone == $client->phone) {
                                         $flag = false;
                                     }
                                     //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                    $user->user->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                                    $user->user->notifyNow(new AlertControlNotification($clientAlert, 'alert_control_warning'));
                                 }
                                 if ($flag) {
-                                    $client->notify(new AlertControlNotification($clientAlert, 'alert_control_warning'));
+                                    $client->notifyNow(new AlertControlNotification($clientAlert, 'alert_control_warning'));
                                 }
                                 $mqtt->interrupt();
                             }
@@ -100,14 +100,14 @@ class ClientAlertObserver
                                 $client_aux = $equipment->clients()->first();
                                 if ($client_aux->id == $client->id) {
                                     if ($json['coil_ack']) {
-                                        foreach ($digital_output as $output){
+                                        foreach ($digital_output as $output) {
                                             if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
                                                 $output->status = !$output->status;
                                                 $output->save();
-                                            } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON){
+                                            } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
                                                 $output->status = true;
                                                 $output->save();
-                                            } else{
+                                            } else {
                                                 $output->status = false;
                                                 $output->save();
                                             }
@@ -116,7 +116,7 @@ class ClientAlertObserver
                                         $supervisors = $client->supervisors;
                                         foreach ($technicians as $user) {
                                             //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
+                                            $user->user->notifyNow(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                         }
                                         $flag = true;
                                         foreach ($supervisors as $user) {
@@ -124,10 +124,10 @@ class ClientAlertObserver
                                                 $flag = false;
                                             }
                                             //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
+                                            $user->user->notifyNow(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                         }
                                         if ($flag) {
-                                            $client->notify(new AlertControlNotification($clientAlert, 'control_alert_ok'));
+                                            $client->notifyNow(new AlertControlNotification($clientAlert, 'control_alert_ok'));
                                         }
                                     }
                                 }
@@ -148,7 +148,7 @@ class ClientAlertObserver
     /**
      * Handle the ClientAlert "updated" event.
      *
-     * @param  \App\Models\ClientAlert  $clientAlert
+     * @param \App\Models\ClientAlert $clientAlert
      * @return void
      */
     public function updated(ClientAlert $clientAlert)
@@ -159,7 +159,7 @@ class ClientAlertObserver
     /**
      * Handle the ClientAlert "deleted" event.
      *
-     * @param  \App\Models\ClientAlert  $clientAlert
+     * @param \App\Models\ClientAlert $clientAlert
      * @return void
      */
     public function deleted(ClientAlert $clientAlert)
@@ -170,7 +170,7 @@ class ClientAlertObserver
     /**
      * Handle the ClientAlert "restored" event.
      *
-     * @param  \App\Models\ClientAlert  $clientAlert
+     * @param \App\Models\ClientAlert $clientAlert
      * @return void
      */
     public function restored(ClientAlert $clientAlert)
@@ -181,7 +181,7 @@ class ClientAlertObserver
     /**
      * Handle the ClientAlert "force deleted" event.
      *
-     * @param  \App\Models\ClientAlert  $clientAlert
+     * @param \App\Models\ClientAlert $clientAlert
      * @return void
      */
     public function forceDeleted(ClientAlert $clientAlert)

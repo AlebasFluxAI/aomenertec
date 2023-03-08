@@ -48,8 +48,12 @@ class Kernel extends ConsoleKernel
         $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
 
         $schedule->command(InvoiceGeneration::class)->dailyAt(2);
-        $schedule->command(ClientReport::class, [Client::MONTHLY_RATE])->monthlyOn(1, '12:00');
-        $schedule->command(ClientReport::class, [Client::DAILY_RATE])->dailyAt('12:00');
+        $schedule->command(ClientReport::class, [Client::MONTHLY_RATE])
+            ->monthlyOn(1, '12:00')
+            ->appendOutputTo(storage_path('cron.log'));
+        $schedule->command(ClientReport::class, [Client::DAILY_RATE])
+            ->dailyAt('12:00')
+            ->appendOutputTo(storage_path('cron.log'));
     }
 
     /**
