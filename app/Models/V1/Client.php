@@ -26,6 +26,7 @@ class Client extends Model
 
     public const MONTHLY_RATE = "monthly";
     public const DAILY_RATE = "daily";
+    public const NONE = "none";
 
     public const MONOPHASIC = 'monophasic';
     public const BIPHASIC = 'biphasic';
