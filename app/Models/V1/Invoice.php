@@ -37,7 +37,11 @@ class Invoice extends Model
 
     public function getAdminNameAttribute()
     {
-        return $this->admin->name;
+        if ($this->admin) {
+            return $this->admin->name;
+        }
+        return "";
+
     }
 
     public function admin()

@@ -50,13 +50,11 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(InvoiceGeneration::class)->dailyAt(2);
         $schedule->command(ClientReport::class, [Client::MONTHLY_RATE])
-            ->monthlyOn(1, '12:00')
+            ->monthlyOn(1, '13:00')
             ->appendOutputTo(storage_path('cron.log'));
         $schedule->command(ClientReport::class, [Client::DAILY_RATE])
-            ->dailyAt('12:00')
+            ->dailyAt('13:00')
             ->appendOutputTo(storage_path('cron.log'));
-        $schedule->command(ClientInvoicingCommand::class)
-            ->dailyAt('07:00');
     }
 
     /**
