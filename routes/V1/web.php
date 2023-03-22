@@ -164,6 +164,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                         Route::get('configurar_precios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\PriceConfigurationNetworkOperator::class)
                             ->name("administrar.v1.usuarios.operadores.configurar_precios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
+
+                        Route::get('modulo_precios', Livewire\V1\Admin\User\NetworkOperator\PriceNetworkOperator::class)
+                            ->name("administrar.v1.usuarios.operadores.modulo_precios")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
                     });
 
 
