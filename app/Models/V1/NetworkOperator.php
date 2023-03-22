@@ -22,6 +22,19 @@ class NetworkOperator extends Model
     use AuditableTrait;
     use PaginatorTrait;
 
+    public const GENERATION_FEE = "generation";
+    public const TRANSMISSION_FEE = "transmission";
+    public const DISTRIBUTION_FEE = "distribution";
+    public const COMMERCIALIZATION_FEE = "commercialization";
+    public const LOST_FEE = "lost";
+    public const RESTRICTIONS_FEE = "restriction";
+    public const UNIT_COST_FEE = "unit_cost";
+    public const TOTAL_FEE = "total_fee";
+
+    public const DISCOUNT_CONCEPT = "discount";
+    public const CONTRIBUTION_CONCEPT = "contribution";
+    public const TAX_CONCEPT = "tax";
+    public const OPTIONAL_FEE = "optional_fee";
 
     protected $fillable = [
         'user_id',
@@ -132,14 +145,100 @@ class NetworkOperator extends Model
                         ]
 
                     ],
+                    [
+                        "title" => "Precios",
+                        "route" => "administrar.v1.usuarios.operadores.modulo_precios",
+                        "submenu" => [
+                            [
+                                "title" => "Modulo de precios",
+                                "route" => "administrar.v1.usuarios.operadores.modulo_precios",
+                                "submenu" => [
+
+                                ],
+                            ],
+                        ]
+
+                    ],
 
                 ]
+        ];
+    }
+
+    public static function getOtherConcepts()
+    {
+        return [
+            self::DISCOUNT_CONCEPT,
+            self::CONTRIBUTION_CONCEPT,
+            self::TAX_CONCEPT,
         ];
     }
 
     public function getPhonePlusIndicativeAttribute()
     {
         return "(" . $this->indicative . ") " . $this->phone;
+    }
+
+    public function zniFees()
+    {
+        return $this->hasMany(ZniLevelFee::class);
+    }
+
+    public function sinFees()
+    {
+        return $this->hasMany(SinLevelFee::class);
+    }
+
+
+    public function sinOtherFees()
+    {
+        return $this->hasMany(SinOtherFee::class);
+    }
+
+    public function zniOtherFees()
+    {
+        return $this->hasMany(ZniOtherFee::class);
+    }
+
+    public static function priceOtionalType()
+    {
+        return [
+            self::OPTIONAL_FEE,
+        ];
+    }
+
+    public static function priceType()
+    {
+        return [
+            self::GENERATION_FEE,
+            self::TRANSMISSION_FEE,
+            self::DISTRIBUTION_FEE,
+            self::COMMERCIALIZATION_FEE,
+            self::LOST_FEE,
+            self::RESTRICTIONS_FEE,
+            self::UNIT_COST_FEE,
+            self::TOTAL_FEE
+        ];
+    }
+
+    public static function getLevelTension()
+    {
+        return [
+            ZniLevelFee::LEVEL_1_A,
+            ZniLevelFee::LEVEL_1_B,
+            ZniLevelFee::LEVEL_1_C,
+            ZniLevelFee::LEVEL_2,
+            ZniLevelFee::LEVEL_3,
+        ];
+    }
+
+    public function getClientTypeForPrice()
+    {
+        return (array_map(function ($key) {
+            return [
+                "title" => $key
+            ];
+        }, ClientType::whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
+
     }
 
     public function photovoltaicPrice()

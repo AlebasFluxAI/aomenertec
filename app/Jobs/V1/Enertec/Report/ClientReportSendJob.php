@@ -54,7 +54,6 @@ class ClientReportSendJob implements ShouldQueue
                 Excel::store(new MultipleSheetsMonitoringData($array),
                     $filePath,
                     "public");
-
                 Mail::send("mail.v1.report_client", [
                     "user" => $client,
                     "logo_url" => Icon::getUserIconUser($client),
@@ -75,7 +74,7 @@ class ClientReportSendJob implements ShouldQueue
     private function timeRange($client): array
     {
         if ($client->report_rate == Client::DAILY_RATE) {
-            return [now()->startOfDay(), now()->endOfDay()];
+            return [now()->subDay()->startOfDay(), now()->subDay()->endOfDay()];
         } else {
             return [now()->subMonth(), now()];
         }
