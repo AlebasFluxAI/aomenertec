@@ -26,12 +26,14 @@ use App\Models\V1\PqrLog;
 use App\Models\V1\PqrMessage;
 use App\Models\V1\PqrUser;
 use App\Models\V1\Seller;
+use App\Models\V1\SinLevelFee;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
+use App\Models\V1\ZniLevelFee;
 use App\Observers\ActionBy\ActionByObserve;
 use App\Observers\AuditoryStatus\AuditoryStatusObserver;
 use App\Observers\BillableItem\BillableItemObserver;
@@ -59,6 +61,7 @@ use App\Observers\ClientAlert\ClientAlertObserver;
 use App\Models\V1\ClientAlert;
 use App\Observers\V1\Change\ChangeObserver;
 use App\Observers\V1\ClientConfiguration\ClientConfigurationObserver;
+use App\Observers\V1\FeeObserver;
 use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
 use App\Observers\WorkOrder\WorkOrderObserver;
@@ -158,6 +161,10 @@ class AppServiceProvider extends ServiceProvider
         Invoice::observe(InvoiceObserver::class);
 
         InvoiceItem::observe(InvoiceItemObserver::class);
+
+        ZniLevelFee::observe(FeeObserver::class);
+
+        SinLevelFee::observe(FeeObserver::class);
 
     }
 }
