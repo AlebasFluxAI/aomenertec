@@ -86,6 +86,8 @@
                     @if($purchase_type ==\App\Http\Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent::PURCHASE_TYPE_KWH)
                         <div class="col-4">
                             @include("partials.v1.form.form_input_icon",[
+                                         "number_step" => 0.1,
+                                         "updated_input"=>"defer",
                                          "input_label"=>"Ingrese la cantidad de Kwh",
                                          "input_model"=>"kwh_quantity",
                                          "icon_class"=>"fas fa-bolt",
@@ -106,12 +108,12 @@
                                 </div>
                                 <div class="col-6">
                                     <p><b>Monto a recargar:</b><br> <span
-                                            style="color: teal;font-size: 20px"> ${{\App\Http\Resources\V1\Formatter::currencyFormat((is_numeric($kwh_quantity)?$kwh_quantity:0)*$price->price)}}</span>
+                                            style="color: teal;font-size: 20px"> {{$kwh_quantity*$price->price}}</span>
                                     </p>
                                     <hr>
                                     <p><b>Cantidad de
                                             KWh: </b><br><span
-                                            style="color: teal;font-size: 20px">{{\App\Http\Resources\V1\Formatter::numberFormat((is_numeric($kwh_quantity)?$kwh_quantity:0))}}</span>
+                                            style="color: teal;font-size: 20px">{{$kwh_quantity}}</span>
                                     </p>
                                 </div>
                             </div>
@@ -119,6 +121,8 @@
                     @elseif($purchase_type ==\App\Http\Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent::PURCHASE_TYPE_CASH)
                         <div class="col-4">
                             @include("partials.v1.form.form_input_icon",[
+                                             "number_step" => 50,
+                                         "updated_input"=>"defer",
                                          "input_label"=>"Ingrese el monto a recargar",
                                          "input_model"=>"total",
                                          "icon_class"=>"fas fa-dollar",
@@ -138,12 +142,12 @@
                                 </div>
                                 <div class="col-6">
                                     <p><b>Monto a recargar:</b><br> <span
-                                            style="color: teal;font-size: 20px"> ${{\App\Http\Resources\V1\Formatter::currencyFormat($total)}}</span>
+                                            style="color: teal;font-size: 20px"> {{$total}}</span>
                                     </p>
                                     <hr>
                                     <p><b>Cantidad de
                                             KWh: </b><br><span
-                                            style="color: teal;font-size: 20px">{{\App\Http\Resources\V1\Formatter::numberFormat(((is_numeric($total)?$total:0)/($price->price??0)))}}</span>
+                                            style="color: teal;font-size: 20px">{{($total)/($price->price??0)}}</span>
                                     </p>
                                 </div>
                             </div>
@@ -186,7 +190,7 @@
 
                                 <p> ¿Estas seguro de realizar la recarga ?</p>
                                 <p style="color: teal"> <span
-                                        style="color: teal;font-size: 20px"> ${{\App\Http\Resources\V1\Formatter::currencyFormat($total)}}</span>
+                                        style="color: teal;font-size: 20px"> {{$total}}</span>
                                 </p>
 
                                 <div class="text-right">

@@ -38,7 +38,7 @@ class MailTestController
     public $source_timestamp;
     public function userCreatedNotification()
     {
-        $clientAlert = ClientAlert::find(11408);
+        $clientAlert = ClientAlert::find(11532);
         $client = $clientAlert->client;
         if ($clientAlert->type == ClientAlert::CONTROL){
             $client_alert_configuration = $clientAlert->clientAlertConfiguration;
