@@ -35,20 +35,30 @@ trait CreateRechargeTrait
 
     public function updatedKwhQuantity(Component $component)
     {
-        if ($component->purchase_type == "kwh") {
-            $component->total = $component->price->price * $component->kwh_quantity;
+        if ($component->purchase_type == "kwh" ) {
+            if ($component->kwh_quantity != "") {
+                $component->total = $component->price->price * $component->kwh_quantity;
+            }
+            else{
+                $component->kwh_quantity = 0;
+                $component->total = 0;
+            }
         } else{
             $component->total = $component->kwh_quantity / $component->price->price;
-
         }
     }
     public function updatedTotal(Component $component)
     {
-        if ($component->purchase_type == "kwh") {
+        if ($component->purchase_type == "kwh" ) {
             $component->total = $component->price->price * $component->kwh_quantity;
         } else{
-            $component->kwh_quantity = $component->total / $component->price->price;
+            if ($component->total != "") {
 
+                $component->kwh_quantity = $component->total / $component->price->price;
+            }else{
+                $component->total = 0;
+                $component->kwh_quantity = 0;
+            }
         }
     }
 
@@ -94,6 +104,7 @@ trait CreateRechargeTrait
             "reference" => strval(Str::uuid()),
             "purchase_types" => $this->getPurchaseType(),
             "total" => 0,
+            "kwh_quantity" => 0,
             "purchase_type" => PurchaseGuestCreateComponent::PURCHASE_TYPE_CASH,
         ]);
     }
