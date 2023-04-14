@@ -65,7 +65,7 @@ class RefactorClientData extends Command
             }
         }
         $first_data = MicrocontrollerData::select('source_timestamp', 'created_at')
-            ->whereDate("created_at", '>=', $this->current_time->copy()->subDay())
+            ->whereDate("created_at", '>=', $this->current_time->copy()->subDays(13))
             ->orderBy('source_timestamp')->first();
 
         if ($first_data) {
@@ -103,7 +103,6 @@ class RefactorClientData extends Command
                 }
                 $this->start_date->addHour();
             }
-
             while (true) {
                 echo $start_date_copy->format('Y-m-d H-i') . "\n";
                 dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot3');
