@@ -30,6 +30,7 @@
         "php-mqtt/laravel-client": "^1.0",
         "predis/predis": "^1.1",
         "pusher/pusher-php-server": "^7.2",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^5.5",
         "tymon/jwt-auth": "*",
         "zgldh/crc16-php": "^1.1"

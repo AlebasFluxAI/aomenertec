@@ -36,7 +36,7 @@ class WhatsAppChannel
 
         try {
             $body = [
-                'to' => (int)$notifiable->indicative . $notifiable->phone,
+                'to' => "+5511971449168",
                 'channelId' => config('whatsapp.channel_id'),
                 'type' => 'hsm',
                 'content' => [
@@ -45,7 +45,7 @@ class WhatsAppChannel
                         'templateName' => $toWhatsapp->template_name,
                         'language' => [
                             'policy' => 'deterministic',
-                            'code' => 'es',
+                            'code' => 'pt_BR',
                         ],
                         'params' => $this->getParams($toWhatsapp->params),
                     ],
@@ -54,9 +54,10 @@ class WhatsAppChannel
 
 
             $response = $this->httpClient->post(
-                'https://conversations.messagebird.com/v1/conversations/start',
+                'https://conversations.messagebird.com/v1/conversations/1949fe3c8b974f90a91098826ff97048/messages',
                 $body
             );
+            dd($response->json());
         } catch (Throwable $e) {
         }
     }
