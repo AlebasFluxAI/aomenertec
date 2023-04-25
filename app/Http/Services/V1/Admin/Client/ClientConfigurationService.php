@@ -30,8 +30,6 @@ use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use App\Notifications\Alert\AlertControlNotification;
-use Crc16\Crc16;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
@@ -93,10 +91,6 @@ class ClientConfigurationService extends Singleton
             'active_real_time' => $client->clientConfiguration->active_real_time,
             "client_config_alert" => $client->clientAlertConfiguration,
             "digital_outputs" => $client->digitalOutputs,
-            "report_rates" => $this->getReportRates(),
-            "variables" => collect(config('data-frame.variables')),
-            "report_rate" => $client->report_rate,
-            "client_report_variables" => $client->report_variables,
             "frame_types" => [
                 ["key" => "Consumo activo", "value" => ClientConfiguration::FRAME_TYPE_ACTIVE_ENERGY],
                 ["key" => "Consumo activo + reactivo", "value" => ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY],
@@ -114,7 +108,7 @@ class ClientConfigurationService extends Singleton
             'storage_latency_options' => ClientConfiguration::STORAGE_LATENCY_OPTIONS[$client->clientConfiguration->storage_type_latency],
         ]);
         foreach ($component->digital_outputs as $index => $output) {
-            $component->checks[$index] = ["id" => $output->id, "output" => false, "control_status" => ClientDigitalOutputAlertConfiguration::CHANGE];
+            $component->checks[$index] = ["id" => $output->id, "output" => false, "control_status"=>ClientDigitalOutputAlertConfiguration::CHANGE];
         }
         $alert_config_frame = collect(config('data-frame.alert_config_frame'));
         $component->inputs = [
@@ -124,7 +118,7 @@ class ClientConfigurationService extends Singleton
             ]
         ];
         foreach ($component->client_config_alert as $index => $item) {
-            if ($item->flag_id < 50) {
+            if ($item->flag_id < 47) {
                 array_push($component->inputs, [
                     "input_type" => "input_min_max",
                     "input_min_model" => "client_config_alert." . $index . ".min_alert",
@@ -163,20 +157,6 @@ class ClientConfigurationService extends Singleton
         }
     }
 
-    public function getReportRates()
-    {
-        return [
-            [
-                "key" => __("client." . Client::DAILY_RATE),
-                "value" => Client::DAILY_RATE
-            ],
-            [
-                "key" => __("client." . Client::MONTHLY_RATE),
-                "value" => Client::MONTHLY_RATE
-            ]
-        ];
-    }
-
     public function rules()
     {
         return [
@@ -213,20 +193,6 @@ class ClientConfigurationService extends Singleton
         } else {
             $component->validateOnly($propertyName);
         }
-    }
-
-    public function submitReportRate(Component $component)
-    {
-
-        DB::transaction(function () use ($component) {
-            $component->model->update([
-                "report_rate" => $component->report_rate,
-                "report_variables" => $component->variables_selected
-            ]);
-        });
-        $component->model->refresh();
-        $component->client_report_variable = $component->model->report_variables;
-        ToastEvent::launchToast($component, "show", "success", "Frecuencia configurada exitosamente");
     }
 
     public function updatedClientConfig(Component $component, $value, $key)
@@ -300,10 +266,10 @@ class ClientConfigurationService extends Singleton
             $relation = ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->first();
             if ($check['output']) {
                 ClientDigitalOutputAlertConfiguration::updateOrCreate([
-                    'client_alert_configuration_id' => $id,
-                    'client_digital_output_id' => $check['id']], [
-                    'control_status' => $check['control_status']
-                ]);
+                        'client_alert_configuration_id' => $id,
+                        'client_digital_output_id' => $check['id']],[
+                        'control_status' => $check['control_status']
+                    ]);
                 $flag = true;
             } else {
                 if (ClientDigitalOutputAlertConfiguration::where('client_alert_configuration_id', $id)->where('client_digital_output_id', $check['id'])->exists()) {
@@ -370,7 +336,7 @@ class ClientConfigurationService extends Singleton
                 $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
                 $message['did'] = $equipment->serial;
                 $topic = "mc/config/" . $equipment->serial;
-                $mqtt = MQTT::connection();
+                $mqtt=MQTT::connection();
                 $mqtt->publish($topic, json_encode($message));
                 $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
                     if ($elapsedTime >= 50) {
@@ -412,8 +378,7 @@ class ClientConfigurationService extends Singleton
         }
     }
 
-    public function submitFormPermission(Component $component)
-    {
+    public function submitFormPermission(Component $component){
         $config = ClientConfiguration::find($component->client_config->id);
         $config->active_real_time = $component->active_real_time;
         if ($config->save()) {
@@ -443,7 +408,7 @@ class ClientConfigurationService extends Singleton
                     'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
                 ]);
             }
-            $mqtt = MQTT::connection();
+            $mqtt=MQTT::connection();
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
                 if ($elapsedTime >= 50) {
                     $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);
@@ -471,12 +436,6 @@ class ClientConfigurationService extends Singleton
                 array_push($binary_data, pack($item['type'], $data));
             }
             $message = base64_encode(implode($binary_data));
-            $message2 = implode($binary_data);
-            $crc = Crc16::XMODEM(pack('C', 1) . $message2);
-            $crc_pack = pack('n', $crc);
-
-            $message2 = pack('C', 1) . $message2 . $crc_pack;
-            $mqtt->publish('v1/config/888889', $message2);
             $mqtt->publish($topic, $message);
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
                 $json = json_decode($message, true);
