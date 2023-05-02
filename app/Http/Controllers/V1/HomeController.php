@@ -25,6 +25,6 @@ class HomeController extends Controller
 
     public function healthCheck()
     {
-
+        return response()->json("", 200);
     }
 }
