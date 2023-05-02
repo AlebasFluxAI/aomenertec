@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\V1\ClientInvoiceGeneration;
 use App\Console\Commands\V1\ClientInvoicingCommand;
 use App\Console\Commands\V1\ClientReport;
 use App\Console\Commands\V1\DeleteStopUnpackData;
@@ -55,6 +56,9 @@ class Kernel extends ConsoleKernel
         $schedule->command(ClientReport::class, [Client::DAILY_RATE])
             ->dailyAt('08:00')
             ->appendOutputTo(storage_path('cron.log'));
+
+        $schedule->command(ClientInvoiceGeneration::class)
+            ->dailyAt('08:00');
     }
 
     /**

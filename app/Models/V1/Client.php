@@ -334,6 +334,34 @@ class Client extends Model
         }
     }
 
+
+    public function consumptionFeeFlag()
+    {
+
+        if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
+
+            $zniFee = $this->networkOperator->zniFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+            if ($zniFee->optional_fee) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            $sinFee = $this->networkOperator->sinFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+
+            if ($sinFee->optional_fee) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
     public function consumptionFee()
     {
 
