@@ -14,11 +14,30 @@ class BillableItem extends Model
     use SoftDeletes;
     use PaginatorTrait;
 
+    public const CONTRIBUTION_ITEM = "contribution";
+    public const DISCOUNT_ITEM = "discount";
+    public const PUBLIC_TAX_ITEM = "public_item";
+    public const PUBLIC_TAX_TYPE_ITEM = "public_item_type";
+    public const PUBLIC_TAX_TYPE_TOTAL = "public_item_total";
+    public const COMMERCIALIZATION_ITEM = "commercialization_item";
+    public const DISTRIBUTION_ITEM = "distribution_item";
+    public const RESTRICTION_ITEM = "restriction_item";
+    public const GENERATION_ITEM = "generation_item";
+    public const TRANSMISSION_ITEM = "transmission_item";
+    public const LOST_ITEM = "lost_item";
+    public const TOTAL_CONSUMPTION = "total_consumption";
+    public const TOTAL_CONSUMPTION_BASE = "total_consumption_base";
+    public const TOTAL_WITH_SUB = "total_with_sub";
+    public const TOTAL_WITHOUT_SUB = "total_without_sub";
+    public const TOTAL_INVOICE = "total_invoice";
+
+
     protected $fillable = [
         "name",
         "description",
         "code",
-        "tax_id"
+        "tax_id",
+        "slug"
     ];
 
     public function tax()

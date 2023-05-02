@@ -46,30 +46,7 @@ class ClientInvoicingJob implements ShouldQueue
             ->first()
             ->interval_real_consumption;
         $total_value = $monthlyConsumption;
-        $networkOperator = $this->client->networkOperator;
-
-        if ($this->client->clientType->type == ClientType::ZIN_CONVENTIONAL) {
-
-            $zniFee = $networkOperator->model->zniFees()->where([
-                "voltage_level_id" => $this->client->voltage_level_id
-            ])->first();
-
-            if ($zniFee->optional_fee) {
-                $totalToPay = $total_value * $zniFee->optional_fee;
-            } else {
-                $totalToPay = $total_value * $zniFee->total_fee;
-            }
-
-        } else {
-            $sinFee = $networkOperator->model->sinFees()->where([
-                "voltage_level_id" => $this->client->voltage_level_id
-            ])->first();
-
-            if ($sinFee->optional_fee) {
-                $totalToPay = $total_value * $sinFee->optional_fee;
-            } else {
-                $totalToPay = $total_value * $sinFee->total_fee;
-            }
-        }
+        $totalToPay = $this->client->consumptionFee() * $total_value;
+    
     }
 }

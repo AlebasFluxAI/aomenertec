@@ -6,7 +6,7 @@ class Formatter
 {
     public static function currencyFormat($money, $currency = "COP")
     {
-        return (number_format($money, 0)) . " " . $currency;
+        return "$ " . (number_format($money, 2)) . " " . strtoupper($currency);
     }
 
     public static function numberFormat($money)

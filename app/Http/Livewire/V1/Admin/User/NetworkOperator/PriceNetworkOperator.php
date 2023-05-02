@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
+use App\Http\Controllers\testFile;
 use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorPriceService;
@@ -15,6 +16,7 @@ class PriceNetworkOperator extends Component
 {
 
     public $model;
+    public $taxType = [];
 
     private $networkOperatorPriceService;
 
@@ -57,6 +59,16 @@ class PriceNetworkOperator extends Component
     {
         $this->networkOperatorPriceService->changeOtherFee($this, $type, $value, $strata, $client_type);
 
+    }
+
+    public function changeTaxTypeStrata($value, $strata, $client_type)
+    {
+        $this->networkOperatorPriceService->changeTaxTypeStrata($this, $value, $strata, $client_type);
+    }
+
+    public function getPercentageOption($strata, $clientType)
+    {
+        return $this->networkOperatorPriceService->getPercentageOption($this, $strata, $clientType);
     }
 
     public function getOtherFee($value, $strata, $client_type)

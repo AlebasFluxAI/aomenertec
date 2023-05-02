@@ -54,6 +54,7 @@ class ClientReportSendJob implements ShouldQueue
                 Excel::store(new MultipleSheetsMonitoringData($array),
                     $filePath,
                     "public");
+
                 Mail::send("mail.v1.report_client", [
                     "user" => $client,
                     "logo_url" => Icon::getUserIconUser($client),
