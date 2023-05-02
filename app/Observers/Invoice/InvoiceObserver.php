@@ -17,6 +17,9 @@ class InvoiceObserver
     public function creating(Invoice $invoice)
     {
         $invoice->code = "IN-" . Invoice::count() + 1;
+        if ($invoice->client and !$invoice->admin) {
+            $invoice->admin_id = $invoice->client->admin_id;
+        }
     }
 
 }

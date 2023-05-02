@@ -10,10 +10,14 @@ use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\ClientType;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\Stratum;
 use App\Models\V1\User;
+use App\Models\V1\ZniLevelFee;
+use App\Models\V1\ZniOtherFee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use function Livewire\str;
 
 class NetworkOperatorPriceService extends Singleton
 {
@@ -24,6 +28,32 @@ class NetworkOperatorPriceService extends Singleton
         $component->fill([
             "model" => User::getUserModel()
         ]);
+        $this->fillStrataArray($component);
+
+    }
+
+    public function fillStrataArray(Component $component)
+    {
+        $component->taxType[ClientType::ZIN_CONVENTIONAL] = [];
+        $component->taxType[ClientType::SIN_CONVENTIONAL] = [];
+
+        foreach (Stratum::get() as $strata) {
+            $component->taxType[ClientType::ZIN_CONVENTIONAL] [strval($strata->id)] = ZniLevelFee::MONEY_FEE;
+            $component->taxType[ClientType::SIN_CONVENTIONAL][strval($strata->id)] = ZniLevelFee::MONEY_FEE;
+        }
+
+        foreach ($component->model->zniOtherFees()->get() as $zniFees) {
+            $component->taxType[ClientType::ZIN_CONVENTIONAL][strval($zniFees->strata_id)] = $zniFees->tax_type;
+        }
+
+        foreach ($component->model->sinOtherFees()->get() as $sinFees) {
+            $component->taxType[ClientType::SIN_CONVENTIONAL][strval($sinFees->strata_id)] = $sinFees->tax_type;
+        }
+    }
+
+    public function getPercentageOption(Component $component, $strata, $clientType)
+    {
+        return $component->taxType[$clientType][$strata];
     }
 
     public function changeOptionalFee(Component $component, $value, $level, $type, $client_type)
@@ -48,11 +78,9 @@ class NetworkOperatorPriceService extends Singleton
         return $this->getFeeFunction($component, $value, $level, $type);
     }
 
-
-    public function changeOtherFee(Component $component, $type, $value, $strata, $client_type)
+    public function changeTaxTypeStrata(Component $component, $value, $strata, $client_type)
     {
-
-
+        $component->taxType[$client_type][strval($strata)] = $value;
         if ($client_type == ClientType::ZIN_CONVENTIONAL) {
             if ($component->model->zniOtherFees()->where([
                 "strata_id" => $strata,
@@ -61,12 +89,52 @@ class NetworkOperatorPriceService extends Singleton
                     "strata_id" => $strata,
                 ])->first();
                 $fee->update([
-                    $type => $value
+                    "tax_type" => $component->taxType[$client_type][$strata],
                 ]);
-
             } else {
                 $component->model->zniOtherFees()->create([
                     "strata_id" => $strata,
+                    "tax_type" => $component->taxType[$client_type][$strata],
+                ]);
+            }
+        } else {
+            if ($component->model->sinOtherFees()->where([
+                "strata_id" => $strata,
+            ])->exists()) {
+                $fee = $component->model->sinOtherFees()->where([
+                    "strata_id" => $strata,
+                ]);
+                $fee->update([
+                    "tax_type" => $component->taxType[$client_type][$strata],
+                ]);
+            } else {
+                $component->model->sinOtherFees()->create([
+                    "strata_id" => $strata,
+                    "tax_type" => $component->taxType[$client_type][$strata],
+                ]);
+            }
+        }
+        ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
+    }
+
+    public function changeOtherFee(Component $component, $type, $value, $strata, $client_type)
+    {
+        if ($client_type == ClientType::ZIN_CONVENTIONAL) {
+            if ($component->model->zniOtherFees()->where([
+                "strata_id" => $strata,
+            ])->exists()) {
+                $fee = $component->model->zniOtherFees()->where([
+                    "strata_id" => $strata,
+                ])->first();
+                $fee->update([
+                    $type => $value,
+                    "tax_type" => $component->taxType[$client_type][$strata],
+
+                ]);
+            } else {
+                $component->model->zniOtherFees()->create([
+                    "strata_id" => $strata,
+                    "tax_type" => $component->taxType[$client_type][$strata],
                     $type => $value
                 ]);
             }
@@ -78,28 +146,31 @@ class NetworkOperatorPriceService extends Singleton
                     "strata_id" => $strata,
                 ]);
                 $fee->update([
-                    $type => $value
+                    $type => $value,
+                    "tax_type" => $component->taxType[$client_type][$strata],
+
                 ]);
             } else {
                 $component->model->sinOtherFees()->create([
                     "strata_id" => $strata,
+                    "tax_type" => $component->taxType[$client_type][$strata],
                     $type => $value
                 ]);
             }
         }
         ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
-
-
     }
 
     public function getOtherFee(Component $component, $value, $strata, $type)
     {
+
         if ($type == ClientType::ZIN_CONVENTIONAL) {
             $fee = $component->model->zniOtherFees()->where([
                 "strata_id" => $strata
             ])->first();
+
             if ($fee) {
-                return $fee->{$level};
+                return $fee->{$value};
             }
             return 0.0;
         }
@@ -107,7 +178,7 @@ class NetworkOperatorPriceService extends Singleton
             "strata_id" => $strata
         ])->first();
         if ($fee) {
-            return $fee->{$level};
+            return $fee->{$value};
         }
         return 0.0;
     }

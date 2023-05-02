@@ -95,6 +95,11 @@ class Client extends Model
         }
     }
 
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
     public function navigatorDropdownOptions()
     {
         return [
@@ -303,6 +308,86 @@ class Client extends Model
         return $this->hasMany(BillingInformation::class);
     }
 
+    public function currency()
+    {
+        return $this->admin->configAdmin->coin;
+    }
+
+    public function consumption()
+    {
+
+        if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
+
+            $zniFee = $this->networkOperator->zniFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+            return $zniFee;
+
+
+        } else {
+            $sinFee = $this->networkOperator->sinFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+
+            return $sinFee;
+
+        }
+    }
+
+
+    public function consumptionFeeFlag()
+    {
+
+        if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
+
+            $zniFee = $this->networkOperator->zniFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+            if ($zniFee->optional_fee) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            $sinFee = $this->networkOperator->sinFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+
+            if ($sinFee->optional_fee) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function consumptionFee()
+    {
+
+        if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
+
+            $zniFee = $this->networkOperator->zniFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+            if ($zniFee->optional_fee) {
+                return $zniFee->optional_fee;
+            } else {
+                return $zniFee->total_fee;
+            }
+
+        } else {
+            $sinFee = $this->networkOperator->sinFees()->where([
+                "voltage_level_id" => $this->voltage_level_id
+            ])->first();
+
+            if ($sinFee->optional_fee) {
+                return $sinFee->optional_fee;
+            } else {
+                return $sinFee->total_fee;
+            }
+        }
+    }
 
     public function stratum()
     {

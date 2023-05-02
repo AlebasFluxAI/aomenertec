@@ -136,7 +136,7 @@
                 <b>Contribucion %</b>
             </th>
             <th style="font-size: 10px">
-                <b>Impuestos AP ($ O %)</b>
+                <b>Impuestos AP ($ - %)</b>
             </th>
 
         </tr>
@@ -173,12 +173,16 @@
                                  class="{{$type==\App\Models\V1\NetworkOperator::TAX_CONCEPT?"col-2":"col-0"}}">
                                 @if($type==\App\Models\V1\NetworkOperator::TAX_CONCEPT)
                                     <select
+                                        wire:change="changeTaxTypeStrata($event.target.value,'{{$strata->id}}','{{$client_type}}')"
+
                                         style="background-color: #f2f2f2;
                                                border-radius: 5px;
                                                padding: 5px;"
                                         name="languages" id="lang">
-                                        <option value="value">$</option>
-                                        <option value="percentage">%</option>
+                                        <option
+                                            value="{{ $this->getPercentageOption($strata->id,$client_type)}}">{{ $this->getPercentageOption($strata->id,$client_type)==\App\Models\V1\ZniLevelFee::MONEY_FEE?"$":"%"}}
+                                        <option value="{{ \App\Models\V1\ZniLevelFee::MONEY_FEE}}">$</option>
+                                        <option value="{{ \App\Models\V1\ZniLevelFee::PERCENTAGE_FEE}}">%</option>
                                     </select>
                                 @endif
                             </div>
