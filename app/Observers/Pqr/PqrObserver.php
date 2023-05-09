@@ -50,13 +50,6 @@ class PqrObserver
         return Client::whereIdentification($pqr->identification)->first();
     }
 
-    public function updating(Pqr $pqr)
-    {
-        if ($pqr->isDirty("level") and $pqr->level == Pqr::PQR_LEVEL_2) {
-            dispatch(new AssignSupportUserToPqr($pqr));
-        }
-    }
-
     public function updated(Pqr $pqr)
     {
         $this->sendChangeNotification($pqr);

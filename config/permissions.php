@@ -324,7 +324,9 @@ return [
 
         Permissions::CLIENT_DISABLED_SHOW,
         Permissions::CLIENT_ACTION_ENABLE,
-        Permissions::SUPPORT_WORK_ORDER_QUEUE
+        Permissions::SUPPORT_WORK_ORDER_QUEUE,
+
+        Permissions::SUPPORT_PQR_QUEUE
 
     ],
     // Vendedor
@@ -353,5 +355,6 @@ return [
         Permissions::PQR_SHOW,
         Permissions::PQR_REPLY,
         Permissions::PQR_CLOSE,
+
     ]
 ];
