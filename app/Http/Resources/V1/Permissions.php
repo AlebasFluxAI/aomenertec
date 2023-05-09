@@ -112,6 +112,8 @@ class Permissions
     public const PQR_EQUIPMENT_CHANGE = "pqr_equipment_change";
     public const PQR_EQUIPMENT_CHANGE_MANAGE = "pqr_equipment_change_manage";
     public const PQR_LINK_CLIENT = "pqr_link_client";
+    public const SUPPORT_PQR_QUEUE = "support.pqr_queue";
+
 
     public const NETWORK_OPERATOR_PRICE_CONFIGURATION = "network_operator_price_configuration";
 

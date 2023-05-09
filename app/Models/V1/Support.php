@@ -76,7 +76,14 @@ class Support extends Model
                                 "submenu" => [
 
                                 ]
-                            ]
+                            ],
+                            [
+                                "title" => "Cola ordenes de pqr",
+                                "route" => "administrar.v1.usuarios.soporte.cola.pqr",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],
