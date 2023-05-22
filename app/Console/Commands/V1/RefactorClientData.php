@@ -65,7 +65,7 @@ class RefactorClientData extends Command
             }
         }
         $first_data = MicrocontrollerData::select('source_timestamp', 'created_at')
-            ->whereDate("created_at", '>=', $this->current_time->copy()->subDays(4))
+            ->whereDate("created_at", '>=', $this->current_time->copy()->subDays(6))
             ->orderBy('source_timestamp')->first();
 
         if ($first_data) {
