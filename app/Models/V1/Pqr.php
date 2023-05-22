@@ -65,6 +65,7 @@ class Pqr extends Model
         'client_code',
         "code",
         "supervisor_id",
+        "taken",
         "change_equipment",
         "has_equipment_changed",
         "status_" . self::STATUS_CREATED . "_at",
@@ -176,6 +177,38 @@ class Pqr extends Model
         return $this->hasMany(HistoricalClientEquipment::class);
     }
 
+    static public function indexTableHeaders()
+    {
+        return [
+            [
+                "col_name" => "ID",
+                "col_data" => "id",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Cliente",
+                "col_data" => "client.name",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Tipo",
+                "col_translate" => "pqr",
+                "col_data" => "type",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Estado",
+                "col_translate" => "pqr",
+                "col_data" => "status",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Descripción",
+                "col_data" => "description",
+                "col_filter" => false
+            ],
+        ];
+    }
 
     public function sender()
     {

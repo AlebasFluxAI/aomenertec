@@ -17,8 +17,8 @@ class ClientType extends Model
     use PaginatorTrait;
 
 
-    public const ZIN_CONVENTIONAL = "zin_conventional";
-    public const SIN_CONVENTIONAL = "sin_conventional";
+    public const ZIN_CONVENTIONAL = "ZNI Convencional";
+    public const SIN_CONVENTIONAL = "SIN Convencional";
 
     protected $fillable = [
         'type',

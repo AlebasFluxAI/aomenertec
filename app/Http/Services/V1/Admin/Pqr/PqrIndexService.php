@@ -16,6 +16,7 @@ use App\Models\V1\Pqr;
 use App\Models\V1\PqrUser;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
+use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,10 @@ class PqrIndexService extends Singleton
             $clientsUserId = Client::whereIn("id", $model->clients->pluck("id"))
                 ->pluck("id");
             return Pqr::whereIn("client_id", $clientsUserId)->pagination();
+        }
+
+        if ($model::class == Support::class) {
+            return $model->pqrs()->pagination();
         }
 
         $user = Auth::user();

@@ -265,6 +265,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                             ->name("administrar.v1.usuarios.soporte.detalles")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPPORT_SHOW));
 
+                        Route::get('cola/pqr', Livewire\V1\Admin\User\Support\IndexPqr::class)
+                            ->name("administrar.v1.usuarios.soporte.cola.pqr")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPPORT_PQR_QUEUE));
+
                         Route::get('cola/ordenes_de_trabajo', Livewire\V1\Admin\User\Support\IndexWorkOrder::class)
                             ->name("administrar.v1.usuarios.soporte.cola.ordenes_de_trabajo")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPPORT_WORK_ORDER_QUEUE));

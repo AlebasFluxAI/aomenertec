@@ -20,6 +20,7 @@ class Invoice extends Model
 
     protected $fillable = [
         "admin_id",
+        "client_id",
         "subtotal",
         "total",
         "tax_total",
@@ -42,6 +43,11 @@ class Invoice extends Model
         }
         return "";
 
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 
     public function admin()
