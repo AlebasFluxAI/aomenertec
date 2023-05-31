@@ -22,9 +22,9 @@ class UnpackDataJob implements ShouldQueue
      * @return void
      */
     public $item;
-    public function __construct(MicrocontrollerData $item)
+    public function __construct($item)
     {
-        $this->item = $item->withoutRelations();
+        $this->item = MicrocontrollerData::find($item);
     }
 
     /**
