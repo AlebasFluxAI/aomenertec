@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            RolesTableSeeder::class,
+            RolesTableSeeder::class,//
             UsersTableSeeder::class,
             PermissionsTableSeeder::class,
             SuperAdminsTableSeeder::class,
@@ -25,13 +25,13 @@ class DatabaseSeeder extends Seeder
             SellersTableSeeder::class,
             TechniciansTableSeeder::class,
             SupportsTableSeeder::class,
-            ClientTypesTableSeeder::class,
-            EquipmentTypesTableSeeder::class,
+            ClientTypesTableSeeder::class,//
+            EquipmentTypesTableSeeder::class,//
             ClientTypeEquipmentTypesTableSeeder::class,
             EquipmentsTableSeeder::class,
-            StrataTableSeeder::class,
-            SubsistenceConsumptionsTableSeeder::class,
-            VoltageLevelsTableSeeder::class,
+            StrataTableSeeder::class,//
+            SubsistenceConsumptionsTableSeeder::class,//
+            VoltageLevelsTableSeeder::class,//
             RoleHasPermissionsTableSeeder::class,
             ClientsTableSeeder::class,
         ]);

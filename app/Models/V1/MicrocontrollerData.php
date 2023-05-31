@@ -110,7 +110,7 @@ class MicrocontrollerData extends Model
             if ($client->stopUnpackClient()->exists()) {
                 return;
             }
-            if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
+            if (MicrocontrollerData::where('client_id', $client->id)->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
                 if ($this->hourlyMicrocontrollerData()->exists()){
                     $this->hourlyMicrocontrollerData()->forceDelete();
                 }
@@ -282,9 +282,8 @@ class MicrocontrollerData extends Model
         $this->interval_reactive_inductive_consumption = $json['varLh_interval'];
         $this->raw_json = $json;
         if (!$flag) {
-            if ($client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
-                $equals = $client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->get();
-                if ($equals){
+            $equals = $client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->get();
+            if ($equals){
                     foreach ($equals as $item){
                         if ($item->id != $this->id){
                             if ($this->hourlyMicrocontrollerData()->exists()) {
@@ -300,7 +299,6 @@ class MicrocontrollerData extends Model
                             return;
                         }
                     }
-                }
 
             }
         }
@@ -413,19 +411,26 @@ class MicrocontrollerData extends Model
 
     public function calculateValueAlert($flag_id, $energy_month, $energy_hour)
     {
-        if ($flag_id == 50) {
-            $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
-        } elseif ($flag_id == 51) {
-            $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
-        } elseif ($flag_id == 52) {
-            $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
-        } elseif ($flag_id == 53) {
-            $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
-        } elseif ($flag_id == 54) {
-            $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
-        } elseif ($flag_id == 55) {
-            $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
-        } else {
+        $value = 0;
+        if($energy_month) {
+            if ($flag_id == 50) {
+                $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
+            } elseif ($flag_id == 51) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 52) {
+                $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
+            }
+        }
+        if ($energy_hour) {
+            if ($flag_id == 53) {
+                $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
+            } elseif ($flag_id == 54) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 55) {
+                $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
+            }
+        }
+        if($flag_id == 56) {
             if ($this->interval_real_consumption != 0) {
                 $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
             } else {
