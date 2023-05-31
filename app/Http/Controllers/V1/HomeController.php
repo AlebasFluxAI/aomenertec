@@ -25,6 +25,10 @@ class HomeController extends Controller
 
     public function healthCheck()
     {
+        $client = Client::first();
+        $client->update([
+            "updated_at" => now()
+        ]);
         return response()->json("", 200);
     }
 }
