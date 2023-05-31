@@ -88,12 +88,16 @@ class AuthController extends Controller
         $pass = "jghsdjfg626FFDS5266s";
         $pass1 = "jkdhjk54858DDS55";
         $response = [];
+
         foreach ($clients as $client){
-            array_push($response, ['uid'=>$client->networkOperator->identification,
+
+            array_push($response, [
+                'uid'=>$client->networkOperator->identification,
                 'did'=>($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
                 'ssid'=>'wifi_'.($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
                 'password'=>$client->identification,
                 'nombre'=>($client->alias ?? $client->name),
+                'codigo_cliente'=>$client->code,
                 'ubicacion'=> json_decode($client->addresses()->first()->here_maps),
                 'celular'=>$client->phone,
                 "fecha_lectura"=>"25/12/2021",
