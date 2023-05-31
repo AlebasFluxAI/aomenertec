@@ -84,11 +84,9 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                 );
             } else {
                 $last_hour = $this->hour_ref->copy()->subHour();
-                $last_data = $client->hourlyMicrocontrollerData()
-                    ->where('year', $last_hour->format('Y'))
-                    ->where('month', $last_hour->format('m'))
-                    ->where('day', $last_hour->format('d'))
-                    ->where('hour', $last_hour->format('H'))->first();
+                $last_data = HourlyMicrocontrollerData::whereClientId($client->id)
+                    ->whereBetween('source_timestamp', [$last_hour->format('Y-m-d H:00:00'), $last_hour->format('Y-m-d H:59:59') ])
+                    ->first();
                 if ($last_data) {
                     $raw_json = json_decode($last_data->raw_json, true);
                     if ($raw_json != null) {
@@ -136,11 +134,8 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                     }
                 }
             }
-            $hour_data =$client->hourlyMicrocontrollerdata()
-                ->where('year', $year)
-                ->where('month',$month)
-                ->where('day', $day)
-                ->where('hour', $hour)
+            $hour_data = HourlyMicrocontrollerData::whereClientId($client->id)
+                ->whereBetween('source_timestamp', [$this->hour_ref->format('Y-m-d H:00:00'), $this->hour_ref->format('Y-m-d H:59:59') ])
                 ->first();
             if ($hour_data) {
                 if ($hour_data->interval_real_consumption != 0) {

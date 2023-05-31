@@ -66,22 +66,12 @@ class RefactorClientData extends Command
             }
         }
         $day_search = $this->current_time->copy()->subDays(6);
-        /*
-        $first_data = MicrocontrollerData::select('source_timestamp')
-            ->whereBetween("created_at", [ $day_search->format('Y-m-d H:i:s')])
-            ->orderBy('source_timestamp')->first();
-        dd($first_data);*/
+        $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
+            ->min('source_timestamp');
 
-        $created_at = MicrocontrollerData::whereBetween("source_timestamp", [ $day_search->format('Y-m-d 00:00:00'), $day_search->format('Y-m-d 23:59:59')])
-            ->min('created_at');
-        dd($created_at);
-        echo $created_at."\n";
-        $first_data = MicrocontrollerData::whereCreatedAt($created_at)->orderBy('source_timestamp')->first();
-        dd($first_data);
-
-        if ($first_data) {
+        if ($source_date) {
             //$aux = new Carbon('2023-02-01 00:00:00');
-            $aux = new Carbon($first_data->source_timestamp);
+            $aux = new Carbon($source_date);
             $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
             echo($date_init);
             $this->date_aux = new Carbon($date_init);
@@ -106,7 +96,7 @@ class RefactorClientData extends Command
                 if ($minute_data) {
                     echo "ok\n";
                     foreach ($minute_data as $datum) {
-                        dispatch(new JsonEdit($datum->id, false))->onQueue('spot3');
+                        dispatch(new JsonEdit($datum, false))->onQueue('spot3');
                     }
                 }
                 if ($this->start_date->diffInHours($current_time) == 0) {

@@ -41,9 +41,8 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
             if ($client->microcontrollerData()
                 ->whereBetween('source_timestamp', [$this->day_ref->format('Y-m-d 00:00:00'), $this->day_ref->format('Y-m-d 23:59:59')])->exists()) {
                 $data_day = $client->hourlyMicrocontrollerData()
-                    ->where('year', $this->day_ref->format('Y'))
-                    ->where('month', $this->day_ref->format('m'))
-                    ->where('day', $this->day_ref->format('d'))->get();
+                    ->whereBetween('source_timestamp', [$this->day_ref->format('Y-m-d 00:00:00'), $this->day_ref->format('Y-m-d 23:59:59')])
+                    ->get();
                 $reference_data = $client->microcontrollerData()
                     ->whereBetween('source_timestamp', [$this->day_ref->format('Y-m-d 00:00:00'), $this->day_ref->format('Y-m-d 23:59:59')])
                     ->orderBy('source_timestamp', 'desc')
@@ -116,9 +115,8 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
             } else {
                 $last_day = $this->day_ref->copy()->subDay();
                 $last_data = $client->hourlyMicrocontrollerData()
-                    ->where('year', $last_day->format('Y'))
-                    ->where('month', $last_day->format('m'))
-                    ->where('day', $last_day->format('d'))->first();
+                    ->whereBetween('source_timestamp', [$last_day->format('Y-m-d 00:00:00'), $last_day->format('Y-m-d 23:59:59')])
+                    ->first();
                 if ($last_data) {
                     $raw_json = json_decode($last_data->raw_json, true);
                     foreach ($data_frame as $item){
@@ -167,17 +165,13 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
             $day =   $this->day_ref->format('d');
             $hour =  $this->day_ref->format('H');
             $day_data =$client->dailyMicrocontrollerdata()
-                ->where('year', $year)
-                ->where('month',$month)
-                ->where('day', $day)
+                ->whereBetween('source_timestamp', [$this->day_ref->format('Y-m-d 00:00:00'), $this->day_ref->format('Y-m-d 23:59:59')])
                 ->first();
             if ($day_data) {
                 if ($day_data->interval_real_consumption != 0) {
                     $last_raw_json = json_decode($day_data->raw_json, true);
                     $previous_day_data = $client->dailyMicrocontrollerdata()
-                        ->where('year', $this->day_ref->copy()->subDay()->format('Y'))
-                        ->where('month', $this->day_ref->copy()->subDay()->format('m'))
-                        ->where('day', $this->day_ref->copy()->subDay()->format('d'))
+                        ->where('source_timestamp', [$this->day_ref->copy()->subDay()->format('Y-m-d 00:00:00'), $this->day_ref->copy()->subDay()->format('Y-m-d 23:59:59')])
                         ->first();
                     if ($previous_day_data) {
                         if ($previous_day_data->interval_real_consumption == 0) {
