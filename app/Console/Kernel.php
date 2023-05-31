@@ -43,11 +43,11 @@ class Kernel extends ConsoleKernel
         ////unpack data
         // $schedule->command(UpdateDataConsumption::class)->everyThreeMinutes()->withoutOverlapping();
         // $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
-        $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
-        $schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
+        //$schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
+        //$schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
         // $schedule->command(RefactorClientData::class)->dailyAt('01:32')->withoutOverlapping();
-        $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
+        //$schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
 
         $schedule->command(InvoiceGeneration::class)->dailyAt(2);
         $schedule->command(ClientReport::class, [Client::MONTHLY_RATE])
