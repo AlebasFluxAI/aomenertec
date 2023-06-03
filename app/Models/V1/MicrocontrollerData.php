@@ -75,6 +75,9 @@ class MicrocontrollerData extends Model
 
     public function jsonEdit($flag)
     {
+        $this->accumulated_real_consumption = 0;
+        $this->saveQuietly();
+        return;
         $date = new Carbon();
         if (is_string($this->raw_json)) {
             $json = json_decode($this->raw_json, true);

@@ -25,6 +25,7 @@ class UnpackDataJob implements ShouldQueue
     public function __construct($item)
     {
         $this->item = MicrocontrollerData::find($item);
+
     }
 
     /**
@@ -34,6 +35,9 @@ class UnpackDataJob implements ShouldQueue
      */
     public function handle()
     {
+        $this->item->accumulated_real_consumption =2;
+        $this->item->saveQuietly();
+        return;
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($this->item->raw_json, true);

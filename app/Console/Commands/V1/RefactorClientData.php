@@ -66,7 +66,7 @@ class RefactorClientData extends Command
 //            }
 //        }
         echo "init.\n";
-        $day_search = $this->current_time->copy()->subDays(20);
+        $day_search = $this->current_time->copy()->subDay();
         $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
             ->min('source_timestamp');
         echo $source_date."\n";
@@ -89,7 +89,7 @@ class RefactorClientData extends Command
             $i = 0;
             $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
                 ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:00:00'))
-                ->orderBy('source_timestamp')->limit(50000)->get();
+                ->orderBy('source_timestamp')->limit(100000)->get();
             echo"ok";
             while (true) {
                 echo $this->start_date->format('Y-m-d H-i') . "\n";

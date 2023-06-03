@@ -52,13 +52,14 @@ class UpdateDataConsumption extends Command
         $i = 0;
         $queues = ['spot1', 'spot2', 'spot4', 'spot5'];
         foreach (MicrocontrollerData::select('id', 'source_timestamp', 'raw_json')
-                     ->where('created_at', '>=', $now->subHours(6)->format('Y-m-d H:00:00'))
+                     ->where('created_at', '>=', $now->subHours(18)->format('Y-m-d H:00:00'))
                      ->whereNull('client_id')
                      ->whereNotNull('source_timestamp')
                      ->orderBy('source_timestamp')
                      ->cursor() as $item) {
-            echo $i."\n";
+            echo $item->id."\n";
             dispatch(new UnpackDataJob($item->id))->onQueue('spot4');
+            return;
             $i++;
         }
 
