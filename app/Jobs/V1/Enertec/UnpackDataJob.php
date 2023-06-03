@@ -36,7 +36,7 @@ class UnpackDataJob implements ShouldQueue
     public function handle()
     {
         $this->item->accumulated_real_consumption =2;
-        $this->item->saveQuietly();
+        $this->item->save();
         return;
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
