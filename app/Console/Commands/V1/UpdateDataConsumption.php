@@ -57,9 +57,8 @@ class UpdateDataConsumption extends Command
                      ->whereNotNull('source_timestamp')
                      ->orderBy('source_timestamp')
                      ->cursor() as $item) {
-            echo $item->id."\n";
+            echo $i."\n";
             dispatch(new UnpackDataJob($item->id))->onQueue('spot4');
-            return;
             $i++;
         }
 

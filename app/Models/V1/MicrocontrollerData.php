@@ -98,12 +98,12 @@ class MicrocontrollerData extends Model
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
             ->first();
         if ($equipment == null) {
-            $this->delete();
+            $this->forceDelete();
             return;
         }
         $client = $equipment->clients()->first();
         if ($client == null) {
-            $this->delete();
+            $this->forceDelete();
             return;
         }
         if ($flag) {
