@@ -44,7 +44,7 @@ class DeleteStopUnpackData extends Command
         foreach ($stop_clients as $item){
             $create_date = Carbon::create($item->created_at);
             if ($now->diffInHours($create_date) >= 1){
-                $item->delete();
+                $item->forceDelete();
             }
         }
     }

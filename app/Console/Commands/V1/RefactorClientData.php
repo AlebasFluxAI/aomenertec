@@ -58,14 +58,14 @@ class RefactorClientData extends Command
      */
     public function handle()
     {
-        echo "init.\n";
+
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client){
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        $day_search = $this->current_time->copy()->subDays(6);
+        $day_search = $this->current_time->copy()->subDay();
         $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
             ->min('source_timestamp');
 
@@ -73,7 +73,6 @@ class RefactorClientData extends Command
             //$aux = new Carbon('2023-02-01 00:00:00');
             $aux = new Carbon($source_date);
             $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
-            echo($date_init);
             $this->date_aux = new Carbon($date_init);
             $this->unpackData();
             $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
@@ -87,7 +86,7 @@ class RefactorClientData extends Command
             $i = 0;
             $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
                 ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:00:00'))
-                ->orderBy('source_timestamp')->limit(50000)->get();
+                ->orderBy('source_timestamp')->limit(100000)->get();
             while (true) {
                 echo $this->start_date->format('Y-m-d H-i') . "\n";
                 $minute_data = $data->whereBetween('source_timestamp',[$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])

@@ -22,9 +22,10 @@ class UnpackDataJob implements ShouldQueue
      * @return void
      */
     public $item;
-    public function __construct(MicrocontrollerData $item)
+    public function __construct($item)
     {
-        $this->item = $item->withoutRelations();
+        $this->item = MicrocontrollerData::find($item);
+
     }
 
     /**
@@ -34,6 +35,7 @@ class UnpackDataJob implements ShouldQueue
      */
     public function handle()
     {
+
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($this->item->raw_json, true);
@@ -141,7 +143,8 @@ class UnpackDataJob implements ShouldQueue
 
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {
-                            $this->item->save();
+
+                        $this->item->save();
                             //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
                     } else{
