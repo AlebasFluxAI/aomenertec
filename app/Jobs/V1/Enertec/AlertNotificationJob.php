@@ -28,9 +28,10 @@ class AlertNotificationJob implements ShouldQueue
      * @return void
      */
     public $clientAlert;
-    public function __construct(MicrocontrollerData $clientAlert)
+
+    public function __construct($clientAlert)
     {
-        $this->clientAlert= $clientAlert->withoutRelations();
+        $this->clientAlert = $clientAlert->withoutRelations();
     }
 
     /**

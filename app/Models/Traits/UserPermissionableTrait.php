@@ -51,8 +51,9 @@ trait UserPermissionableTrait
 
     public function tabPermissionConditionableExist($permissionName, $model)
     {
-        $tabPermission = TabPermission::wherePermission($permissionName)->first()->id;
 
+        $tabPermission = TabPermission::wherePermission($permissionName)->first()->id;
+        
         return $this->tabPermissions()
             ->whereConditionableId($model->id)
             ->whereConditionableType($model::class)

@@ -259,6 +259,16 @@
                                                         ],
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_ACTION_DISABLE],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.invoicing",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-money-bill",
+                                                        "tooltip_title"=>"Facturas",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_INVOICING],
+                                                ],
+
 
 
 

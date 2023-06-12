@@ -196,6 +196,19 @@ class Client extends Model
                 ],
             ],
             [
+                "title" => "Facturas",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "v1.admin.client.invoicing",
+                        "binding" => "client",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-money-bill",
+                    "tooltip_title" => "Facturas",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_SHOW_INVOICING],
+                ],
+            ],
+            [
                 "title" => "Alertas",
                 "actionable" => [
                     "redirect" => [

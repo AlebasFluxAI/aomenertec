@@ -33,6 +33,7 @@ class ConfigurationClient extends Component
     public $variables_selected;
     public $select_report;
     public $client_report_variables;
+    public $invoicing_day;
 
 
     private $configurationClientService;
@@ -47,6 +48,11 @@ class ConfigurationClient extends Component
     public function mount(Client $client)
     {
         $this->configurationClientService->mount($this, $client);
+    }
+
+    public function submitFormInvoicing()
+    {
+        $this->configurationClientService->submitFormInvoicing($this);
     }
 
     protected function rules()
