@@ -3,10 +3,21 @@
 namespace App\Observers\User\NetworkOperator;
 
 use App\Models\V1\NetworkOperator;
+use App\Models\V1\TabPermission;
 use Illuminate\Support\Facades\Http;
 
 class UserNetworkOperatorObserver
 {
+
+    public function created(NetworkOperator $networkOperator)
+    {
+        $tabPermissionId = TabPermission::wherePermission(TabPermission::CLIENT_BILLING_CONFIG)->first()->id;
+
+        $networkOperator->tabPermissions()->create([
+            "tab_permission_id" => $tabPermissionId
+        ]);
+    }
+
     public function creating(NetworkOperator $networkOperator)
     {
         $this->setHereMapJson($networkOperator);

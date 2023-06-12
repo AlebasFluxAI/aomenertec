@@ -287,6 +287,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                         ->name('v1.admin.client.add.client')
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_CREATE));
 
+
                     Route::get('listado', Livewire\V1\Admin\Client\IndexClient::class)
                         ->name("v1.admin.client.list.client")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW));
@@ -306,6 +307,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                     Route::get('alertas/{client}', Livewire\V1\Admin\Client\ClientAlertIndex::class)
                         ->name("v1.admin.client.add.alerts")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW_ALERTS));
+
+                    Route::get('facturas/{client}', Livewire\V1\Admin\Client\ClientInvoiceIndex::class)
+                        ->name("v1.admin.client.invoicing")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW_MONITORING));
 
                     Route::get('monitoreo/{client}', Livewire\V1\Admin\Client\Monitoring::class)
                         ->name("v1.admin.client.monitoring")

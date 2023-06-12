@@ -19,7 +19,18 @@
                         @endphp
                     @endif
                     @if($tab_title["conditionable"]??false)
+
                         @if(!(\App\Models\V1\User::getUserModel()->tabPermissionConditionableExist($permission,$model)))
+                            @php
+                                $permission_failed[$index] = true
+                            @endphp
+                        @else
+                            @php
+                                $permission_failed[$index] = false
+                            @endphp
+                        @endif
+                    @else
+                        @if(!(\App\Models\V1\User::getUserModel()->tabPermissionExist($permission)))
                             @php
                                 $permission_failed[$index] = true
                             @endphp

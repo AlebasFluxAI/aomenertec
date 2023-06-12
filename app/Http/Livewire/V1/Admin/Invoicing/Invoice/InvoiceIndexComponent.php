@@ -39,6 +39,11 @@ class InvoiceIndexComponent extends Component
     }
 
 
+    public function mount()
+    {
+        return $this->indexInvoicetemsService->mount($this);
+    }
+
     public function render()
     {
         return view(
@@ -47,6 +52,11 @@ class InvoiceIndexComponent extends Component
                 "data" => $this->getData()
             ]
         )->extends('layouts.v1.app');
+    }
+
+    public function setFilter($filterValue)
+    {
+        return $this->indexInvoicetemsService->setFilter($this, $filterValue);
     }
 
     public function getData()

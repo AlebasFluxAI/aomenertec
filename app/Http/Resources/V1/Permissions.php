@@ -94,6 +94,7 @@ class Permissions
     public const CLIENT_DELETE = "client.delete";
     public const CLIENT_SHOW = "client.show";
     public const CLIENT_SHOW_MONITORING = "client.show_monitoring";
+    public const CLIENT_SHOW_INVOICING = "client.show_invoicing";
     public const CLIENT_SETTINGS = "client.settings";
     public const CLIENT_ENABLED = "client.enabled";
     public const CLIENT_ACTION_ENABLE = "client.action.enable";

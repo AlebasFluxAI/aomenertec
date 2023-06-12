@@ -88,6 +88,18 @@ class Support extends Model
 
                     ],
                     [
+                        "title" => "Equipos",
+                        "route" => null,
+                        "submenu" => [
+                            [
+                                "title" => "Equipos",
+                                "route" => "administrar.v1.equipos.listado",
+                                "submenu" => [],
+                            ],
+
+                        ]
+                    ],
+                    [
                         "title" => "Ordenes de servicio",
                         "route" => "administrar.v1.ordenes_de_servicio.listado",
                         "submenu" => [

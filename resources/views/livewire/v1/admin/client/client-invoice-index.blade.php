@@ -1,49 +1,28 @@
 <div class="login">
 
     @include("partials.v1.title",[
-          "second_title"=>"facturas",
+          "second_title"=>"facturas cliente ".$model->alias,
           "first_title"=>"Listado"
       ])
+
     @include("partials.v1.table_nav",
-           [
-               "nav_options"=>[
-                      [
-                            "button_align"=>"right",
-                            "button_type"=>"dropdown_filter",
-                            "button_icon"=>"fas fa-gear",
-                            "button_content"=>"Tipo de factura",
-                            "button_options"=>[
-                                    [
-                                        "title" => \App\Models\V1\Invoice::TYPE_PLATFORM_USAGE,
-                                        "actionable" => [
-                                            "function" => [
-                                                "button_content" => __("invoice.".\App\Models\V1\Invoice::TYPE_PLATFORM_USAGE),
-                                                "button_action" => "setFilter",
-                                                "value" => \App\Models\V1\Invoice::TYPE_PLATFORM_USAGE,
-                                            ],
-                                            "icon" => "fas fa-search",
-                                            "tooltip_title" => "ZNI Convencional",
-                                        ],
-                                    ],
-                                     [
-                                    "title" => \App\Models\V1\Invoice::TYPE_CONSUMPTION,
-                                    "actionable" => [
-                                        "function" => [
-                                            "button_content" => __("invoice.".\App\Models\V1\Invoice::TYPE_CONSUMPTION),
-                                            "button_action" => "setFilter",
-                                            "value" => \App\Models\V1\Invoice::TYPE_CONSUMPTION,
-                                        ],
-                                        "icon" => "fas fa-search",
-                                        "tooltip_title" => "ZNI Sistema fotovoltaico",
-                                    ],
-                                ],
-
-                                ]
-                       ],
-
+          ["mt"=>2,
+          "nav_options"=>[
+                     ["button_align"=>"right",
+                     "click_action"=>"",
+                     "button_icon"=>"fas fa-list",
+                     "button_content"=>"Ver listado",
+                     "target_route"=>"v1.admin.client.list.client",
+                     ],
+                     [
+                     "button_align"=>"right",
+                     "button_type"=>"dropdown",
+                     "button_icon"=>"fas fa-gear",
+                     "button_content"=>"Acciones",
+                     "button_options"=>$client->navigatorDropdownOptions()
+                     ]
                   ]
-          ])
-
+         ])
     @include("partials.v2.table.primary-table",[
                "table_rows"=>$data,
                "table_headers"=>[
@@ -58,18 +37,12 @@
                        "col_filter"=>true
                    ],
                    [
-                       "col_name" =>"Tipo de factura",
-                       "col_data" =>"type",
-                       "col_translate"=>"invoice",
-                       "col_filter"=>true
-                   ],
-                   [
                        "col_name" =>"Administrador",
                        "col_data" =>"adminName",
                        "col_filter"=>false
                    ],
                    [
-                       "col_name" =>"Estado de pago",
+                       "col_name" =>"Estado",
                        "col_data" =>"payment_status",
                        "col_translate"=>"invoice",
                        "col_filter"=>false
