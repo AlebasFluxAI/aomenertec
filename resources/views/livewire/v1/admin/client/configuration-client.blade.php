@@ -47,6 +47,14 @@
                                                     "title"=>"Alertas",
 
                                                 ],
+                                                 [
+                                                    "title"=>"Facturacion",
+                                                    "conditionable"=>false,
+                                                    "permissions"=>[
+                                                        \App\Models\V1\Admin::class=>\App\Models\V1\TabPermission::CLIENT_BILLING_CONFIG
+                                                        ]
+
+                                                ],
 
 
 
@@ -140,7 +148,8 @@
                                                                                                 "input_type"=>"divider",
                                                                                                 "title"=>"Configuraciones de muestreo"
                                                                                             ],
-                                                                                            [    "input_model"=>"client_config.billing_day",
+                                                                                            [
+                                                                                             "input_model"=>"client_config.billing_day",
                                                                                              "updated_input"=>"defer",
                                                                                              "input_field"=>"",
                                                                                              "input_type"=>"select",
@@ -249,6 +258,34 @@
                                                                         "form_title"=>"",
                                                                         "form_inputs"=> $inputs
 
+                                                            ]
+                                                ],
+                                                               [
+                                                    "view_name"=>"partials.v2.form.primary_form",
+                                                    "view_values"=>  [
+                                                                        "loading_state"=>true,
+                                                                        "form_toast"=>true,
+                                                                        "session_message"=>"message",
+                                                                        "form_submit_action"=>"submitFormInvoicing",
+                                                                        "form_title"=>"",
+                                                                        "form_inputs"=> [
+                                                                                            [
+                                                                                            "input_type"=>"divider",
+                                                                                            "title"=>"Configuraciones de facturacion"
+                                                                                        ], [
+                                                                                                "input_type"=>"number",
+                                                                                                "input_model"=>"invoicing_day",
+                                                                                                "icon_class"=>null,
+                                                                                                "placeholder"=>"Dia de facturación",
+                                                                                                "col_with"=>6,
+                                                                                                "number_min"=>1,
+                                                                                                "number_max"=>31,
+                                                                                                "click_action"=>"",
+                                                                                                "updated_input" => "defer",
+                                                                                                "required"=>true
+                                                                                            ],
+
+                                                                                ]
                                                             ]
                                                 ],
 

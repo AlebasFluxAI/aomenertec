@@ -18,6 +18,9 @@ class Invoice extends Model
     public const PAYMENT_STATUS_PAID = "paid";
     public const PAYMENT_STATUS_LATE = "late";
 
+    public const TYPE_PLATFORM_USAGE = "platform_usage";
+    public const TYPE_CONSUMPTION = "consumption";
+
     protected $fillable = [
         "admin_id",
         "client_id",
@@ -33,6 +36,7 @@ class Invoice extends Model
         "currency",
         "invoice_start",
         "invoice_end",
+        "type"
 
     ];
 

@@ -7,6 +7,7 @@ use App\Models\V1\BillableItem;
 use App\Models\V1\Client;
 use App\Models\V1\ClientType;
 use App\Models\V1\HourlyMicrocontrollerData;
+use App\Models\V1\Invoice;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\ZniLevelFee;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -54,7 +55,9 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $stratum = $client->stratum;
         $networkOperator = $client->networkOperator;
         $clientType = $client->client_type_id;
-        $invoice = $client->invoices()->create();
+        $invoice = $client->invoices()->create([
+            "type" => Invoice::TYPE_CONSUMPTION
+        ]);
 
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();

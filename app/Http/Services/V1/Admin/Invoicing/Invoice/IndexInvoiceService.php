@@ -40,6 +40,20 @@ use function session;
 class IndexInvoiceService extends Singleton
 {
 
+    public function mount(Component $component)
+    {
+        $component->filterCol = "type";
+        $component->filter = Invoice::TYPE_PLATFORM_USAGE;
+    }
+
+    public function setFilter(Component $component, $filterValue)
+    {
+        $component->filterCol = "type";
+        $component->filter = $filterValue;
+
+    }
+
+
     public function getData(Component $component)
     {
         $model = User::getUserModel();
@@ -52,6 +66,7 @@ class IndexInvoiceService extends Singleton
         if ($component->filter) {
             return Invoice::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
         }
+
         return Invoice::pagination();
     }
 

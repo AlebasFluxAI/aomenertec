@@ -57,6 +57,7 @@ return [
         Permissions::CLIENT_MONITORING_CONTROL,
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
+        Permissions::CLIENT_SHOW_INVOICING,
 
         Permissions::SUPPORT_LINK_CLIENT,
 
@@ -152,6 +153,7 @@ return [
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_WORK_ORDER,
+        Permissions::CLIENT_SHOW_INVOICING,
 
         Permissions::SUPERVISOR_CREATE,
         Permissions::SUPERVISOR_EDIT,
@@ -245,6 +247,7 @@ return [
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_ADD_EQUIPMENT,
+        Permissions::CLIENT_SHOW_INVOICING,
 
         Permissions::SUPPORT_CREATE,
         Permissions::SUPPORT_EDIT,
@@ -311,6 +314,16 @@ return [
         Permissions::PQR_CLOSE,
         Permissions::PQR_CHANGE_LEVEL,
 
+        Permissions::EQUIPMENT_TYPE_CREATE,
+        Permissions::EQUIPMENT_TYPE_EDIT,
+        Permissions::EQUIPMENT_TYPE_DELETE,
+        Permissions::EQUIPMENT_TYPE_SHOW,
+
+        Permissions::EQUIPMENT_CREATE,
+        Permissions::EQUIPMENT_EDIT,
+        Permissions::EQUIPMENT_DELETE,
+        Permissions::EQUIPMENT_REPAIR,
+        Permissions::EQUIPMENT_SHOW,
 
         Permissions::WORK_ORDER_DETAILS,
         Permissions::WORK_ORDER_SHOW,
