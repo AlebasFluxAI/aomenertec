@@ -139,6 +139,7 @@ class Permissions
 
     public const INVOICE_SHOW = "invoice_show";
     public const INVOICE_INDEX = "invoice_index";
+    public const INVOICE_REPORT = "invoice_report";
     public const INVOICE_PAY = "invoice_pay";
     public const INVOICE_FILE = "invoice_file";
 }

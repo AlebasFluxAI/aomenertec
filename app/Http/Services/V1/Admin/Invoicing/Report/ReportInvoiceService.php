@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\V1\Admin\Invoicing\Invoice;
+namespace App\Http\Services\V1\Admin\Invoicing\Report;
 
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\V1\Admin\Client\AddClient;
@@ -37,44 +37,25 @@ use function auth;
 use function bcrypt;
 use function session;
 
-class IndexInvoiceService extends Singleton
+class ReportInvoiceService extends Singleton
 {
 
     public function mount(Component $component)
     {
-        $component->filterCol = "type";
-        $component->filter = Invoice::TYPE_PLATFORM_USAGE;
-    }
-
-    public function setFilter(Component $component, $filterValue)
-    {
-        $component->filterCol = "type";
-        $component->filter = $filterValue;
-
-    }
-
-
-    public function getData(Component $component)
-    {
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
             $admin_id = $model->admin_id;
-            if ($component->filter) {
-                return Invoice::whereAdminId($admin_id)->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
-            }
-            return Invoice::whereAdminId($admin_id)->pagination();
+            $invoices = Invoice::whereAdminId($admin_id)->orderBy("created_at", "asc")->get();
         }
         if ($model::class == Admin::class) {
-            if ($component->filter) {
-                return Invoice::whereAdminId($model->id)->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
-            }
-            return Invoice::whereAdminId($model->id)->pagination();
+            $invoices = Invoice::whereAdminId($model->id)->orderBy("created_at", "asc")->get();
         }
-        if ($component->filter) {
-            return Invoice::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
-        }
+        $dates = $invoices->pluck("created_at");
 
-        return Invoice::pagination();
+        $component->months = $dates->unique()->map(function ($value) {
+            return (__("months." . $value->month));
+        });
+
     }
 
 
