@@ -190,6 +190,13 @@ class Admin extends Model
 
                                 ],
                             ],
+                            [
+                                "title" => "Generar reporte",
+                                "route" => "administrar.v1.facturacion.facturas.reportes",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],

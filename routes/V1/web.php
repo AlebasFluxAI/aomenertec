@@ -463,6 +463,12 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                             ->name("administrar.v1.facturacion.facturas.pdf")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::INVOICE_FILE));
                     });
+                    Route::prefix("reportes")->group(function () {
+                        Route::get("", Livewire\V1\Admin\Invoicing\Report\InvoiceReportComponent::class)
+                            ->name("administrar.v1.facturacion.facturas.reportes")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::INVOICE_REPORT));
+
+                    });
 
                 });
 

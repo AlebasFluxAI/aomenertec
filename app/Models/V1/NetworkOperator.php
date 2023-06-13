@@ -159,6 +159,27 @@ class NetworkOperator extends Model
                         ]
 
                     ],
+                    [
+                        "title" => "Facturacion",
+                        "route" => "administrar.v1.facturacion.facturas.listado",
+                        "submenu" => [
+                            [
+                                "title" => "Facturas",
+                                "route" => "administrar.v1.facturacion.facturas.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
+                            [
+                                "title" => "Generar reporte",
+                                "route" => "administrar.v1.facturacion.facturas.reportes",
+                                "submenu" => [
+
+                                ],
+                            ],
+                        ]
+
+                    ],
 
                 ]
         ];
