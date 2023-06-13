@@ -58,6 +58,7 @@ return [
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_SHOW_INVOICING,
+        Permissions::INVOICE_REPORT,
 
         Permissions::SUPPORT_LINK_CLIENT,
 
@@ -154,6 +155,7 @@ return [
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_WORK_ORDER,
         Permissions::CLIENT_SHOW_INVOICING,
+        Permissions::INVOICE_REPORT,
 
         Permissions::SUPERVISOR_CREATE,
         Permissions::SUPERVISOR_EDIT,
@@ -248,6 +250,7 @@ return [
         Permissions::CLIENT_SETTINGS,
         Permissions::CLIENT_ADD_EQUIPMENT,
         Permissions::CLIENT_SHOW_INVOICING,
+        Permissions::INVOICE_REPORT,
 
         Permissions::SUPPORT_CREATE,
         Permissions::SUPPORT_EDIT,
