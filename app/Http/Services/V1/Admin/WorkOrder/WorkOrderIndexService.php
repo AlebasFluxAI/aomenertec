@@ -60,9 +60,6 @@ class WorkOrderIndexService extends Singleton
     public function getData()
     {
         $userModel = User::getUserModel();
-        if ($userModel::class == Technician::class) {
-            return WorkOrder::where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)->pagination();
-        }
 
         if ($userModel::class == NetworkOperator::class) {
             return WorkOrder::where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)
@@ -73,6 +70,12 @@ class WorkOrderIndexService extends Singleton
             $clientId = Client::withoutGlobalScope(ClientEnabledScope::class)->whereAdminId($userModel->id)
                 ->pluck("id");
             return WorkOrder::whereIn("client_id", $clientId)->pagination();
+        }
+        if ($userModel::class == Technician::class) {
+            $admin_id = $userModel->admin_id;
+            $clientId = Client::withoutGlobalScope(ClientEnabledScope::class)->whereAdminId($admin_id)
+                ->pluck("id");
+            return WorkOrder::whereIn("client_id", $clientId)->where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)->pagination();
         }
 
         if ($userModel::class == Support::class) {
