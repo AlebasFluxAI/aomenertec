@@ -55,7 +55,7 @@ class ClientInvoiceGeneration extends Command
     public function handle()
     {
         foreach (Client::get() as $client) {
-            if ($client->clientConfiguration->billing_day != now()->day) {
+            if ($client->clientConfiguration->billing_day + 1 != now()->day) {
                 return;
             }
             dispatch(new ClientInvoiceGenerationJob($client));
