@@ -53,6 +53,9 @@ class PqrIndexService extends Singleton
                 ->pluck("id");
             return Pqr::whereIn("technician_id", $techniciansUserId)->pagination();
         }
+        if ($model::class == Technician::class) {
+            return Pqr::where("technician_id", $model->id)->pagination();
+        }
         if ($model::class == Supervisor::class) {
             $clientsUserId = Client::whereIn("id", $model->clients->pluck("id"))
                 ->pluck("id");
