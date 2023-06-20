@@ -154,7 +154,7 @@ class MicrocontrollerData extends Model
                 $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
                     if (new Carbon($last_data->source_timestamp) >= $current_time) {
-                        $this->delete();
+                        $this->forceDelete();
                         return;
                     }
                     $last_raw_json = json_decode($last_data->raw_json, true);
@@ -170,7 +170,7 @@ class MicrocontrollerData extends Model
                 $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
                     if (new Carbon($last_data->source_timestamp) >= $current_time) {
-                        $this->delete();
+                        $this->forceDelete();
                         return;
                     }
                     $last_raw_json = json_decode($last_data->raw_json, true);
