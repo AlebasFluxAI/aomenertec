@@ -54,7 +54,7 @@ class ProcessFailedJob extends Command
                 } catch (\Throwable $error) {
                     continue;
                 }
-                print("Success -> " . $job->uuid . " " . Artisan::output() . " \n");
+                print("Success-> " . $job->uuid . " " . Artisan::output() . " \n");
             }
         });
     }
