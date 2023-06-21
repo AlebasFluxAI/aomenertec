@@ -72,7 +72,7 @@ class WorkOrderIndexService extends Singleton
             return WorkOrder::whereIn("client_id", $clientId)->pagination();
         }
         if ($userModel::class == Technician::class) {
-            $admin_id = $userModel->admin_id;
+            $admin_id = $userModel->networkOperator->admin_id;
             $clientId = Client::withoutGlobalScope(ClientEnabledScope::class)->whereAdminId($admin_id)
                 ->pluck("id");
             return WorkOrder::whereIn("client_id", $clientId)->where("type", "!=", WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT)->pagination();
