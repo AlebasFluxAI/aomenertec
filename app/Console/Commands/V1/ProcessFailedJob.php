@@ -47,7 +47,7 @@ class ProcessFailedJob extends Command
      */
     public function handle()
     {
-        DB::table('failed_jobs')->orderBy('failed_at')->chunk($this->argument('number'), function ($jobs) {
+        DB::table('failed_jobs')->orderBy('failed_at', "desc")->chunk($this->argument('number'), function ($jobs) {
             foreach ($jobs as $job) {
                 try {
                     Artisan::call("queue:retry", ["id" => $job->uuid]);
