@@ -52,9 +52,10 @@ class ProcessFailedJob extends Command
                 try {
                     Artisan::call("queue:retry", ["id" => $job->uuid]);
                 } catch (\Throwable $error) {
+                    print("Error -> " . $job->uuid . " \n");
                     continue;
                 }
-                print("Success-> " . $job->uuid . " " . Artisan::output() . " \n");
+                print("Success -> " . $job->uuid . " " . Artisan::output() . " \n");
             }
         });
     }
