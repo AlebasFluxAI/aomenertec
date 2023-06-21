@@ -25,10 +25,22 @@ class HomeController extends Controller
 
     public function healthCheck()
     {
-        $client = Client::first();
-        $client->update([
-            "updated_at" => now()
-        ]);
+        try {
+            $client = Client::first();
+            $client->update([
+                "updated_at" => now()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json("Base de datos fallando", 500);
+        }
+        if (!exec("pm2 pid mqttLaraverReceiverCommand")) {
+            return response()->json(exec("pm2 show mosquittoServer"), 500);
+        }
+        if (!exec("pm2 pid mosquittoServer")) {
+            return response()->json(exec("pm2 show mosquittoServer"), 500);
+        }
+ 
+
         return response()->json("", 200);
     }
 }
