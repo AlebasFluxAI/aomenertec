@@ -47,9 +47,11 @@ class AlertMonitor extends Command
     {
         $time_sleep = 120;
         while (true) {
+            $mqttLaraverReceiverCommand = shell_exec("pm2 pid mqttLaraverReceiverCommand");
+            $mosquittoServer = shell_exec("pm2 pid mosquittoServer");
             echo 'Prueba de conexion ' . date("Y/m/d h:i:sa") . "\n";
             $request = Http::get("http://3.12.98.178/healthcheck");
-            if ($request->ok()) {
+            if ($request->ok() and $mqttLaraverReceiverCommand and $mosquittoServer) {
                 echo "Conexion exitosa ... \n";
                 sleep($time_sleep);
                 continue;
@@ -57,7 +59,7 @@ class AlertMonitor extends Command
             echo "Primer error de conexion reintentando...\n";
             sleep($time_sleep);
             $request = Http::get("http://3.12.98.178/healthcheck");
-            if ($request->ok()) {
+            if ($request->ok() and $mqttLaraverReceiverCommand and $mosquittoServer) {
                 echo "Conexion exitosa...\n";
                 continue;
             }
