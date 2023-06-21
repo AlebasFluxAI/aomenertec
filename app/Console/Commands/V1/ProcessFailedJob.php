@@ -47,6 +47,7 @@ class ProcessFailedJob extends Command
      */
     public function handle()
     {
+
         foreach (DB::select("select uuid from failed_jobs order by failed_at desc limit " . $this->argument("number")) as $job) {
             try {
                 Artisan::call("queue:retry", ["id" => $job->uuid]);
