@@ -47,17 +47,16 @@ class ProcessFailedJob extends Command
      */
     public function handle()
     {
-        DB::table('failed_jobs')->orderBy('failed_at', "desc")->chunk($this->argument('number'), function ($jobs) {
-            foreach ($jobs as $job) {
-                try {
-                    Artisan::call("queue:retry", ["id" => $job->uuid]);
-                } catch (\Throwable $error) {
-                    print("Error -> " . $job->uuid . " \n");
-                    continue;
-                }
-                print("Success -> " . $job->uuid . " " . Artisan::output() . " \n");
+        foreach (DB::select("select uuid from failed_jobs order by failed_at desc limit " . $this->argument("number")) as $job) {
+            try {
+                Artisan::call("queue:retry", ["id" => $job->uuid]);
+            } catch (\Throwable $error) {
+                print("Error -> " . $job->uuid . " \n");
+                continue;
             }
-        });
+            print("Success -> " . $job->uuid . " " . Artisan::output() . " \n");
+        }
+
     }
 
 
