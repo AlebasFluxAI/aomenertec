@@ -21,7 +21,7 @@ class ProcessFailedJob extends Command
      *
      * @var string
      */
-    protected $signature = 'command:enertec:v1:process_job';
+    protected $signature = 'command:enertec:v1:process_job {number}';
 
     /**
      * The console command description.
@@ -47,8 +47,13 @@ class ProcessFailedJob extends Command
      */
     public function handle()
     {
-        foreach ($failed = DB::select("select * from failed_jobs order by failed_at desc limit 1000") as $job) {
-            Artisan::call("queue:retry", ["id" => $job]);
+        foreach (DB::select("select uuid from failed_jobs order by failed_at desc limit " . $this->argument('number')) as $job) {
+            try {
+                print($job->uuid . " \n");
+                Artisan::call("queue:retry", ["id" => $job->uuid]);
+            } catch (\Throwable $error) {
+                print("ERROR " . $job->uuid . " $error" . " \n");
+            }
         }
     }
 
