@@ -174,7 +174,9 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
                 if ($day_data->interval_real_consumption != 0) {
                     $last_raw_json = json_decode($day_data->raw_json, true);
                     $previous_day_data = $client->dailyMicrocontrollerdata()
-                        ->where('source_timestamp', [$this->day_ref->copy()->subDay()->format('Y-m-d 00:00:00'), $this->day_ref->copy()->subDay()->format('Y-m-d 23:59:59')])
+                        ->where('year', $year)
+                        ->where('month', $month)
+                        ->where('day', $day)
                         ->first();
                     if ($previous_day_data) {
                         if ($previous_day_data->interval_real_consumption == 0) {
