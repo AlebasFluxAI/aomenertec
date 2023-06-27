@@ -258,7 +258,27 @@ class NetworkOperator extends Model
             return [
                 "title" => $key
             ];
-        }, ClientType::whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
+        }, ClientType::whereIn("type", [
+            ClientType::SIN_CONVENTIONAL,
+            ClientType::ZIN_CONVENTIONAL,
+        ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
+
+    }
+
+    public function getTabContentForPrice()
+    {
+        return (array_map(function ($key) {
+            return [
+                "view_name" => "livewire.v1.admin.user.network-operator.price-calculator.calculator",
+                "view_values" => [
+                    "client_type" => $key
+                ],
+
+            ];
+        }, ClientType::whereIn("type", [
+            ClientType::SIN_CONVENTIONAL,
+            ClientType::ZIN_CONVENTIONAL,
+        ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
 
     }
 

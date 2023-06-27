@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\Invoicing\Report;
 
+use App\Exports\V1\MultipleSheetsMonitoringData;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
@@ -28,10 +29,13 @@ use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use App\Scope\PaginationScope;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Maatwebsite\Excel\Concerns\FromArray;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 use function auth;
 use function bcrypt;
@@ -45,18 +49,50 @@ class ReportInvoiceService extends Singleton
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
             $admin_id = $model->admin_id;
-            $invoices = Invoice::whereAdminId($admin_id)->orderBy("created_at", "asc")->get();
+            $invoices = Invoice::whereType(Invoice::TYPE_CONSUMPTION)->whereAdminId($admin_id)->orderBy("created_at", "desc")->get();
         }
         if ($model::class == Admin::class) {
-            $invoices = Invoice::whereAdminId($model->id)->orderBy("created_at", "asc")->get();
+            $invoices = Invoice::whereType(Invoice::TYPE_CONSUMPTION)->whereAdminId($model->id)->orderBy("created_at", "desc")->get();
         }
         $dates = $invoices->pluck("created_at");
 
-        $component->months = $dates->unique()->map(function ($value) {
-            return (__("months." . $value->month));
-        });
-
+        $component->months = collect($dates->map(function ($value) {
+            return new Month($value->month);
+        }))->unique();
     }
 
+    public function generateReport(Component $component, $month)
+    {
+        $component->months = collect($component->months->unique()->map(function ($value) {
+            return new Month($value[array_keys($value)[0]]);
+        }));
 
+        return Excel::download(new InvoiceReportData($month), 'data.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+}
+
+class InvoicesExport implements FromArray
+{
+    protected $invoices;
+
+    public function __construct(array $invoices)
+    {
+        $this->invoices = $invoices;
+    }
+
+    public function array(): array
+    {
+        return $this->invoices;
+    }
+}
+
+class Month
+{
+    public $month;
+
+    public function __construct($month)
+    {
+        $this->month = $month;
+    }
 }

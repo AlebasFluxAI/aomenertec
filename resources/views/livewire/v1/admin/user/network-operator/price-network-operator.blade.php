@@ -14,20 +14,7 @@
     @include("partials.v1.tab.v1.tab",[
                            "wire_ignore"=>true,
                            "tab_titles"=> $model->getClientTypeForPrice(),
-                           "tab_contents"=>[
-                                               [
-                                                   "view_name"=>"livewire.v1.admin.user.network-operator.price-calculator.calculator",
-                                                   "view_values"=>  [
-                                                                "client_type"=>\App\Models\V1\ClientType::ZIN_CONVENTIONAL
-                                                           ],
-
-
-                                               ],
-
-
-
-
-                                ],
+                           "tab_contents"=> $model->getTabContentForPrice()
         ])
 
 
