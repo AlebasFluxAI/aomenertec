@@ -61,20 +61,20 @@ class ClientInvoiceGenerationJob implements ShouldQueue
 
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
-            $discount = $otherFee->discount;
-            $contribution = $otherFee->contribution;
-            $publicTaxType = $otherFee->tax_type;
-            $publicTax = $otherFee->tax;
+            $discount = $otherFee ? $otherFee->discount : 0.0;
+            $contribution = $otherFee ? $otherFee->contribution : 0.0;
+            $publicTaxType = $otherFee ? $otherFee->tax_type : 0.0;
+            $publicTax = $otherFee ? $otherFee->tax : 0.0;
         } else {
             $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->first();
-            $discount = $otherFee->discount;
-            $contribution = $otherFee->contribution;
-            $publicTaxType = $otherFee->tax_type;
-            $publicTax = $otherFee->tax;
+            $discount = $otherFee ? $otherFee->discount : 0.0;
+            $contribution = $otherFee ? $otherFee->contribution : 0.0;
+            $publicTaxType = $otherFee ? $otherFee->tax_type : 0.0;
+            $publicTax = $otherFee ? $otherFee->tax : 0.0;
         }
 
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
-            ->where("month", now()->month)
+            ->where("month", strlen(now()->month) > 1 ? now()->month : "0" . now()->month)
             ->where("year", now()->year)
             ->first()
             ->interval_real_consumption;
@@ -82,6 +82,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $consumptionFee = $invoice->client->consumptionFee();
         $totalConsumptionBase = $consumptionFee * $total_consumption;
         $totalConsumption = $totalConsumptionBase;
+
         $item = $invoice->items()->create([
             "unit_total" => $consumptionFee,
             "subtotal" => $totalConsumption,
@@ -142,11 +143,10 @@ class ClientInvoiceGenerationJob implements ShouldQueue
                      BillableItem::TOTAL_INVOICE => $totalInvoice,
                  ]
                  as $key => $item) {
-
             $invoice->items()->create([
-                "unit_total" => $item,
-                "subtotal" => $item,
-                "total" => $item,
+                "unit_total" => $item ?? 0.0,
+                "subtotal" => $item ?? 0.0,
+                "total" => $item ?? 0.0,
                 "tax_total" => 0.0,
                 "discount" => 0.0,
                 "billable_item_id" => BillableItem::whereSlug($key)->first()->id,

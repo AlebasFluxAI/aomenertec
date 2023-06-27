@@ -334,6 +334,11 @@ class Client extends Model
             $zniFee = $this->networkOperator->zniFees()->where([
                 "voltage_level_id" => $this->voltage_level_id
             ])->first();
+            if (!$zniFee) {
+                return $this->networkOperator->zniFees()->create([
+                    "voltage_level_id" => $this->voltage_level_id
+                ]);
+            }
             return $zniFee;
 
 
@@ -341,7 +346,11 @@ class Client extends Model
             $sinFee = $this->networkOperator->sinFees()->where([
                 "voltage_level_id" => $this->voltage_level_id
             ])->first();
-
+            if (!$sinFee) {
+                return $this->networkOperator->sinFees()->create([
+                    "voltage_level_id" => $this->voltage_level_id
+                ]);
+            }
             return $sinFee;
 
         }
@@ -383,6 +392,9 @@ class Client extends Model
             $zniFee = $this->networkOperator->zniFees()->where([
                 "voltage_level_id" => $this->voltage_level_id
             ])->first();
+            if (!$zniFee) {
+                return 0.0;
+            }
             if ($zniFee->optional_fee) {
                 return $zniFee->optional_fee;
             } else {
@@ -394,6 +406,9 @@ class Client extends Model
                 "voltage_level_id" => $this->voltage_level_id
             ])->first();
 
+            if (!$sinFee) {
+                return 0.0;
+            }
             if ($sinFee->optional_fee) {
                 return $sinFee->optional_fee;
             } else {

@@ -10,6 +10,7 @@ use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\Invoicing\BillableItems\IndexBillableItemsService;
 use App\Http\Services\V1\Admin\Invoicing\IndexInvoicingService;
 use App\Http\Services\V1\Admin\Invoicing\Invoice\IndexInvoiceService;
+use App\Http\Services\V1\Admin\Invoicing\Report\InvoicesExport;
 use App\Http\Services\V1\Admin\Invoicing\Report\ReportInvoiceService;
 use App\Http\Services\V1\Admin\Pqr\AddPqrGuestClientService;
 use App\Http\Services\V1\Admin\Pqr\PqrIndexService;
@@ -23,6 +24,7 @@ use App\Models\V1\Image;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 use function view;
 
 class InvoiceReportComponent extends Component
@@ -44,6 +46,12 @@ class InvoiceReportComponent extends Component
     public function mount()
     {
         return $this->reportInvoicetemsService->mount($this);
+    }
+
+    public function generateReport($month)
+    {
+        return $this->reportInvoicetemsService->generateReport($this, $month);
+
     }
 
     public function render()
