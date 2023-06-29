@@ -71,8 +71,6 @@ class NetworkOperator extends Model
                         "title" => "Usuarios",
                         "route" => null,
                         "submenu" => [
-
-
                             [
                                 "title" => "Vendedores",
                                 "route" => "administrar.v1.usuarios.vendedores.listado",
@@ -146,20 +144,6 @@ class NetworkOperator extends Model
 
                     ],
                     [
-                        "title" => "Precios",
-                        "route" => "administrar.v1.usuarios.operadores.modulo_precios",
-                        "submenu" => [
-                            [
-                                "title" => "Modulo de precios",
-                                "route" => "administrar.v1.usuarios.operadores.modulo_precios",
-                                "submenu" => [
-
-                                ],
-                            ],
-                        ]
-
-                    ],
-                    [
                         "title" => "Facturacion",
                         "route" => "administrar.v1.facturacion.facturas.listado",
                         "submenu" => [
@@ -173,6 +157,13 @@ class NetworkOperator extends Model
                             [
                                 "title" => "Generar reporte",
                                 "route" => "administrar.v1.facturacion.facturas.reportes",
+                                "submenu" => [
+
+                                ],
+                            ],
+                            [
+                                "title" => "Modulo de precios",
+                                "route" => "administrar.v1.usuarios.operadores.modulo_precios",
                                 "submenu" => [
 
                                 ],
