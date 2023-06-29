@@ -279,6 +279,7 @@ return [
         Permissions::WORK_ORDER_EDIT,
         Permissions::CLIENT_WORK_ORDER,
         Permissions::PQR_LINK_CLIENT,
+        Permissions::INVOICE_INDEX,
 
 
     ],
