@@ -338,7 +338,7 @@ class ClientConfigurationService extends Singleton
                 $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
                 $message['did'] = $equipment->serial;
                 $topic = "mc/config/" . $equipment->serial;
-                $mqtt = MQTT::connection('default', null);
+                $mqtt = MQTT::connection('default', 'client_aux');
                 $mqtt->publish($topic, json_encode($message));
                 $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
                     if ($elapsedTime >= 50) {
@@ -412,7 +412,7 @@ class ClientConfigurationService extends Singleton
                 ]);
             }
             
-            $mqtt = MQTT::connection('default', null);
+            $mqtt = MQTT::connection('default', 'client_aux');
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
                 if ($elapsedTime >= 50) {
                     $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);
