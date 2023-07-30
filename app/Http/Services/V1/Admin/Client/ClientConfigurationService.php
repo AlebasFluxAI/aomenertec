@@ -440,7 +440,7 @@ class ClientConfigurationService extends Singleton
                 array_push($binary_data, pack($item['type'], $data));
             }
             $message = base64_encode(implode($binary_data));
-           dd($message);
+         
            $mqtt->publish($topic, $message);
             
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
