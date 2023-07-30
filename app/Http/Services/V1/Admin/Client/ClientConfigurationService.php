@@ -439,8 +439,9 @@ class ClientConfigurationService extends Singleton
                 array_push($binary_data, pack($item['type'], $data));
             }
             $message = base64_encode(implode($binary_data));
-            $mqtt->publish($topic, $message);
-            dd($message);
+           dd($message);
+           $mqtt->publish($topic, $message);
+            
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
                 $json = json_decode($message, true);
                 if (array_key_exists('config_ack', $json)) {
