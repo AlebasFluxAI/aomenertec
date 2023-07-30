@@ -411,6 +411,7 @@ class ClientConfigurationService extends Singleton
                     'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
                 ]);
             }
+            dd('ok');
             $mqtt = MQTT::connection('default', null);
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
                 if ($elapsedTime >= 50) {
