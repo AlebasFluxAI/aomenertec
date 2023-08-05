@@ -32,6 +32,7 @@ return [
         Permissions::NETWORK_OPERATOR_ENABLED,
         Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
 
+        Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION,
 
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
@@ -343,7 +344,9 @@ return [
         Permissions::CLIENT_ACTION_ENABLE,
         Permissions::SUPPORT_WORK_ORDER_QUEUE,
 
-        Permissions::SUPPORT_PQR_QUEUE
+        Permissions::SUPPORT_PQR_QUEUE,
+
+        Permissions::PQR_TO_WORK_ORDER,
 
     ],
     // Vendedor

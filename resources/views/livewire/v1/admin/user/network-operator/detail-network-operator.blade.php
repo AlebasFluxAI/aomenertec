@@ -106,6 +106,18 @@
                                                                              "key"=>"Detalles de direccion",
                                                                              "value"=>$model->address_details
                                                                          ],
+                                                                          [
+                                                                             "key"=>"Dia de facturacion",
+                                                                             "value"=>$model->billing_day
+                                                                         ],
+                                                                          [
+                                                                             "key"=>"Bolsa inicial de PQR gestionadas",
+                                                                             "value"=>$model->pqr_initial_bag
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"Bolsa inicial de horas ordenes de trabajo gestionadas",
+                                                                             "value"=>$model->work_order_initial_bag
+                                                                        ],
                                                                      ]
                                                             ]
                                                 ],

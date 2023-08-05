@@ -111,12 +111,14 @@ class Permissions
     public const PQR_CREATE_NETWORK_OPERATOR = "pqr_create_network_operator";
     public const PQR_CLOSE = "pqr_close";
     public const PQR_EQUIPMENT_CHANGE = "pqr_equipment_change";
+    public const PQR_TO_WORK_ORDER = "pqr_convert_work_order";
     public const PQR_EQUIPMENT_CHANGE_MANAGE = "pqr_equipment_change_manage";
     public const PQR_LINK_CLIENT = "pqr_link_client";
     public const SUPPORT_PQR_QUEUE = "support.pqr_queue";
 
 
     public const NETWORK_OPERATOR_PRICE_CONFIGURATION = "network_operator_price_configuration";
+    public const NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION = "network_operator_service_bag_configuration";
 
     public const WORK_ORDER_CREATE = "work_order_create";
     public const WORK_ORDER_SHOW = "work_order_show";

@@ -104,7 +104,7 @@
                         "placeholder"=>"Ingrese costo de Kw/h",
                         "col_with"=>6,
                         "input_type"=>"number",
-                        "required"=>true
+                        "required"=>false
             ])
             @include("partials.v1.form.form_submit_button",[
             "button_align"=>"right" ,
@@ -162,8 +162,27 @@
         </div>
     </form>
     @endif
-    @include("partials.v1.divider_title",["title"=>""])
+    @include("partials.v1.divider_title",["title"=>"Tarifa para cliente monitoreo"])
+    <form wire:submit.prevent="submitMonitoringFeeForm" id="submitMonitoringFeeForm" class="needs-validation"
+          role="form">
+        @include("partials.v1.form.form_input_icon",[
+         "input_model"=>"monitoring_fee",
+         "input_label"=>"Tarifa para cliente monitoreo",
+          "updated_input"=>"defer",
+         "icon_class"=>"fas fa-money-bill",
+         "placeholder"=>"Ingrese tarifa para cliente monitoreo",
+         "col_with"=>6,
+         "min_number"=>0,
+         "input_type"=>"number",
+         "required"=>true,
+])
 
+        @include("partials.v1.form.form_submit_button",[
+                                  "button_align"=>"right" ,
+                                  "function"=>"submitMonitoringFeeForm",
+                                  "button_content"=>"Guardar tarifa"
+                      ])
+    </form>
     <script>
 
         document.addEventListener('livewire:load', function () {

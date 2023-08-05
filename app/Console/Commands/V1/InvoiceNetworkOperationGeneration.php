@@ -2,14 +2,13 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\GenerateAdminInvoiceJob;
+use App\Jobs\GenerateNetworkOperationInvoiceJob;
 use App\Models\V1\Admin;
-use App\Models\V1\Client;
-use App\Models\V1\HourlyMicrocontrollerData;
+use App\Models\V1\NetworkOperator;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
-class InvoiceGeneration extends Command
+class InvoiceNetworkOperationGeneration extends Command
 {
     /**
      * The name and signature of the console command.
@@ -43,11 +42,9 @@ class InvoiceGeneration extends Command
     public function handle()
     {
 
-        foreach (Admin::get() as $admin) {
-            if ($admin->invoicing_day != Carbon::parse(now())->format('d')) {
-                continue;
-            }
-            dispatch(new GenerateAdminInvoiceJob($admin))->onQueue("spot");
+        foreach (NetworkOperator::get() as $networkOperator) {
+
+            dispatch(new GenerateNetworkOperationInvoiceJob($networkOperator))->onQueue("spot");
         }
 
 

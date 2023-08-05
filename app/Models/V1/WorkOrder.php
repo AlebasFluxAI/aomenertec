@@ -10,6 +10,7 @@ use App\Scope\ClientEnabledScope;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class WorkOrder extends Model
 {
@@ -25,10 +26,14 @@ class WorkOrder extends Model
     public const WORK_ORDER_TYPE_PREVENTIVE_MAINTENANCE = "preventive_maintenance";
     public const WORK_ORDER_TYPE_DISABLE_CLIENT = "disable_client";
     public const WORK_ORDER_TYPE_ENABLE_CLIENT = "enable_client";
+    public const WORK_ORDER_TYPE_PQR = "pqr";
 
     public const WORK_ORDER_STATUS_OPEN = "open";
     public const WORK_ORDER_STATUS_IN_PROGRESS = "in_progress";
     public const WORK_ORDER_STATUS_CLOSED = "closed";
+
+    public const WORK_ORDER_LEVEL_1 = "level_1";
+    public const WORK_ORDER_LEVEL_2 = "level_2";
 
     protected $fillable = [
         "client_id",
@@ -52,7 +57,8 @@ class WorkOrder extends Model
         "in_progress_by",
         "closed_by",
         "support_id",
-        "taken"
+        "taken",
+        "level"
     ];
 
     protected static function booted()
@@ -63,6 +69,22 @@ class WorkOrder extends Model
     public function createdBy()
     {
         return User::find($this->created_by_id);
+    }
+
+    public static function createFromPqr(Pqr $pqr)
+    {
+        return DB::transaction(function () use ($pqr) {
+            return WorkOrder::create([
+                "description" => $pqr->description,
+                "client_id" => $pqr->client_id,
+                "pqr_id" => $pqr->id,
+                "status" => WorkOrder::WORK_ORDER_STATUS_OPEN,
+                "level" => WorkOrder::WORK_ORDER_LEVEL_2,
+                "taken" => false,
+                "type" => WorkOrder::WORK_ORDER_TYPE_PQR
+            ]);
+        });
+
     }
 
     public function setInProgress()
@@ -121,6 +143,12 @@ class WorkOrder extends Model
             [
                 "col_name" => "Herramientas",
                 "col_data" => "tools",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Nivel",
+                "col_translate" => "work_order",
+                "col_data" => "level",
                 "col_filter" => false
             ],
         ];

@@ -110,6 +110,14 @@
                                                                              "value"=>\Carbon\Carbon::parse($model->closed_at)->diff(\Carbon\Carbon::parse($model->created_at))->format("%a Dias %h Horas  %i Minutos"),
                                                                              "show_column"=>($model->status==\App\Models\V1\WorkOrder::WORK_ORDER_STATUS_CLOSED),
                                                                      ],
+                                                                     [
+                                                                          "key"=>"Pqr asociada",
+                                                                          "value"=>$model->pqr->id.". ".$model->pqr->description,
+                                                                          "show_column"=>($model->pqr),
+                                                                          "redirect_route"=>"administrar.v1.peticiones.detalles",
+                                                                          "redirect_binding"=>"pqr",
+                                                                          "redirect_value"=>$model->pqr->id
+                                                                     ],
                                                                  ]
                                                         ]
                                             ],

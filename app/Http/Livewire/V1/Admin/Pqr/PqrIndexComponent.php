@@ -74,6 +74,18 @@ class PqrIndexComponent extends Component
         return $this->pqrIndexService->closedTicked($this, $id);
     }
 
+    public function canConvertToOrder($id)
+    {
+        return $this->pqrIndexService->canConvertToOrder($this, $id);
+
+    }
+
+    public function convertToWorkOrder($id)
+    {
+        return $this->pqrIndexService->convertToWorkOrder($this, $id);
+
+    }
+
     public function render()
     {
         return view(

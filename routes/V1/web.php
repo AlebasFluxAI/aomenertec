@@ -141,6 +141,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
 
 
                     Route::prefix("operador")->group(function () {
+
                         Route::get('listado', Livewire\V1\Admin\User\NetworkOperator\IndexNetworkOperator::class)
                             ->name("administrar.v1.usuarios.operadores.listado")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_SHOW));
@@ -164,6 +165,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                         Route::get('configurar_precios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\PriceConfigurationNetworkOperator::class)
                             ->name("administrar.v1.usuarios.operadores.configurar_precios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
+                        
+                        Route::get('configurar_bolsa_servicios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\BagServiceConfigurationNetworkOperator::class)
+                            ->name("administrar.v1.usuarios.operadores.configurar_bolsa_servicios")
+                            ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION));
 
                         Route::get('modulo_precios', Livewire\V1\Admin\User\NetworkOperator\PriceNetworkOperator::class)
                             ->name("administrar.v1.usuarios.operadores.modulo_precios")

@@ -27,6 +27,7 @@ class WorkOrderObserver
             $this->notifySupportUsers($workOrder);
             return;
         }
+        $user = null;
         if ($workOrder->technician) {
             $user = $workOrder->technician->user;
         }

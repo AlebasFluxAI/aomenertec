@@ -58,11 +58,11 @@ class IndexInvoiceService extends Singleton
     {
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
-            $admin_id = $model->admin_id;
+
             if ($component->filter) {
-                return Invoice::whereAdminId($admin_id)->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+                return Invoice::whereNetworkOperatorId($model->id)->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
-            return Invoice::whereAdminId($admin_id)->pagination();
+            return Invoice::whereNetworkOperatorId($model->id)->pagination();
         }
         if ($model::class == Admin::class) {
             if ($component->filter) {

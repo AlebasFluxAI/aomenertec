@@ -2,17 +2,9 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\GenerateAdminInvoiceJob;
-use App\Jobs\V1\Enertec\Report\ClientReportSendJob;
+
 use App\Jobs\V1\Enertec\Report\ClientReportSendJobEmail;
-use App\Models\V1\Admin;
-use App\Models\V1\Client;
-use App\Models\V1\HourlyMicrocontrollerData;
-use App\Models\V1\User;
-use App\Notifications\Alert\ServerAlertNotification;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class ClientReportEmail extends Command
 {

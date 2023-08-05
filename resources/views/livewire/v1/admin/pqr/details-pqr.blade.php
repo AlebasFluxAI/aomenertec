@@ -142,6 +142,14 @@
                                                                              "value"=>\Carbon\Carbon::parse($model->status_closed_at)->diff(\Carbon\Carbon::parse($model->created_at))->format("%a Dias %h Horas  %i Minutos"),
                                                                               "show_column"=>($model->status==\App\Models\V1\Pqr::STATUS_CLOSED),
                                                                          ],
+                                                                            [
+                                                                             "key"=>"Order de trabajo",
+                                                                             "value"=>($model->workOrder->id).". ".($model->workOrder->description),
+                                                                             "show_column"=>($model->workOrder),
+                                                                             "redirect_route"=>"administrar.v1.ordenes_de_servicio.detalle",
+                                                                             "redirect_binding"=>"workOrder",
+                                                                             "redirect_value"=>($model->workOrder->id)
+                                                                         ],
                                                                          ]
                                                             ]
                                                 ],
