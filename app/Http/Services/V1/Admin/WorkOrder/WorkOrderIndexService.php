@@ -44,11 +44,6 @@ class WorkOrderIndexService extends Singleton
         return (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_OPEN);
     }
 
-    public function setPauseWorkOrderConditional($workOrderId)
-    {
-        return !(WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_OPEN);
-    }
-
 
     public function replaceEquipmentHandlerConditional(Component $component, $workOrderId)
     {
