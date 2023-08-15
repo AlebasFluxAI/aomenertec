@@ -44,6 +44,7 @@ class WorkOrderIndexService extends Singleton
         return (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_OPEN);
     }
 
+
     public function replaceEquipmentHandlerConditional(Component $component, $workOrderId)
     {
         $workOrder = WorkOrder::find($workOrderId);
@@ -94,4 +95,6 @@ class WorkOrderIndexService extends Singleton
     {
         WorkOrder::find($workOrderId)->setOpen();
     }
+
+
 }
