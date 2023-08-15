@@ -34,9 +34,7 @@
                                                    "title"=>"Mis Equipos",
 
                                                ],
-                                               [
-                                                    "title"=>"Precios"
-                                               ]
+
 
                                           ],
 
@@ -120,15 +118,7 @@
                                                       "col_filter"=>false
                                                    ],
                                                ],
-                                               [
-                                                  "view_name"=>"livewire.v1.admin.user.network-operator.price-configuration-network-operator",
-                                                   "view_values"=>[
-                                                                       "data"=>\App\Models\V1\Stratum::get(),
-                                                                       "table_class_container"=>"",
-                                                                       "view_header"=>false,
-                                                                       "col_filter"=>false,
-                                                                  ]
-                                               ],
+
 
 
 

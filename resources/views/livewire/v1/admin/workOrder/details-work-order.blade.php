@@ -97,18 +97,32 @@
                                                                      [
                                                                           "key"=>"Descripcion de la solucion",
                                                                           "value"=>$model->solution_description,
-                                                                          "show_column"=>($model->status==\App\Models\V1\WorkOrder::WORK_ORDER_STATUS_CLOSED),
                                                                      ],
                                                                      [
                                                                           "key"=>"Evidencias de solucion",
                                                                           "type"=>"image_multiple",
                                                                           "value"=>$model->evidences,
-                                                                          "show_column"=>($model->status==\App\Models\V1\WorkOrder::WORK_ORDER_STATUS_CLOSED),
                                                                      ],
                                                                      [
                                                                              "key"=>"Tiempo de solucion",
-                                                                             "value"=>\Carbon\Carbon::parse($model->closed_at)->diff(\Carbon\Carbon::parse($model->created_at))->format("%a Dias %h Horas  %i Minutos"),
-                                                                             "show_column"=>($model->status==\App\Models\V1\WorkOrder::WORK_ORDER_STATUS_CLOSED),
+                                                                             "value"=>($model->execution_time_minutes or $model->execution_time_hours)?$model->execution_time_hours." Horas  ".$model->execution_time_minutes." Minutos":\Carbon\Carbon::parse($model->closed_at)->diff(\Carbon\Carbon::parse($model->open_at))->format("%a Dias %h Horas  %i Minutos"),
+                                                                     ],
+
+                                                                     [
+                                                                          "key"=>"Pqr asociada",
+                                                                          "value"=>$model->pqr?($model->pqr->id.". ".$model->pqr->description):"",
+                                                                          "show_column"=>$model->pqr!=null,
+                                                                          "redirect_route"=>"administrar.v1.peticiones.detalles",
+                                                                          "redirect_binding"=>"pqr",
+                                                                          "redirect_value"=>$model->pqr?$model->pqr->id:1
+                                                                     ],
+                                                                      [
+                                                                          "key"=>"Equipo intervenido",
+                                                                          "value"=>$model->equipment()->equipment->id."-".$model->equipment()->equipment->serial,
+                                                                          "show_column"=>($model->equipment()),
+                                                                          "redirect_route"=>"administrar.v1.equipos.detalle",
+                                                                          "redirect_binding"=>"equipment",
+                                                                          "redirect_value"=>$model->equipment()->equipment->id
                                                                      ],
                                                                  ]
                                                         ]
@@ -116,3 +130,9 @@
 
                                             ]
      ])
+
+
+
+
+
+

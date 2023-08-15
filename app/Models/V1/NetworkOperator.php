@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use App\Models\Model\V1\BillingService;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
@@ -57,8 +58,22 @@ class NetworkOperator extends Model
         "country",
         "city",
         "state",
-        "indicative"
+        "indicative",
+        "pqr_initial_bag",
+        "work_order_initial_bag",
+        "billing_day"
     ];
+
+
+    public function getCurrentEnabledClients()
+    {
+        return $this->clients();
+    }
+
+    public function billableServices()
+    {
+        return $this->hasOne(BillingService::class);
+    }
 
     public static function menu()
     {
@@ -252,6 +267,7 @@ class NetworkOperator extends Model
         }, ClientType::whereIn("type", [
             ClientType::SIN_CONVENTIONAL,
             ClientType::ZIN_CONVENTIONAL,
+            ClientType::ZIN_PHOTOVOLTAIC,
         ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
 
     }
@@ -259,6 +275,17 @@ class NetworkOperator extends Model
     public function getTabContentForPrice()
     {
         return (array_map(function ($key) {
+            if ($key == ClientType::ZIN_PHOTOVOLTAIC) {
+                return [
+                    "view_name" => "livewire.v1.admin.user.network-operator.price-configuration-network-operator",
+                    "view_values" => [
+                        "data" => \App\Models\V1\Stratum::get(),
+                        "table_class_container" => "",
+                        "view_header" => false,
+                        "col_filter" => false,
+                    ]
+                ];
+            }
             return [
                 "view_name" => "livewire.v1.admin.user.network-operator.price-calculator.calculator",
                 "view_values" => [
@@ -269,6 +296,7 @@ class NetworkOperator extends Model
         }, ClientType::whereIn("type", [
             ClientType::SIN_CONVENTIONAL,
             ClientType::ZIN_CONVENTIONAL,
+            ClientType::ZIN_PHOTOVOLTAIC,
         ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
 
     }
@@ -323,6 +351,12 @@ class NetworkOperator extends Model
     {
         return $this->belongsTo(Admin::class);
     }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
+
 
     public function clients()
     {

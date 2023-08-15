@@ -75,7 +75,8 @@ class Client extends Model
         "status",
         "report_rate",
         "report_variables",
-        "activation_requested"
+        "activation_requested",
+        "monitoring_fee"
     ];
 
     protected static function booted()

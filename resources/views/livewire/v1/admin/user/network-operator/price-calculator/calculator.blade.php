@@ -190,8 +190,6 @@
                     </td>
 
                 @endforeach
-
-
             </tr>
         @endforeach
         </tbody>

@@ -122,15 +122,25 @@ class RefactorClientData extends Command
                 $end_date->addDay();
             }
 
+            // calculate monthly consumption
+
             $reference_date = $this->current_time->copy();
             while (true) {
                 $reference_date->subDay();
                 echo "calc mes =" . $reference_date->format('Y-m-d') . "\n";
-                if ($i == (count($queues))) {
-                    $i = 0;
+                $billing_day = $reference_date->format('d');
+                if ($billing_day == $reference_date->format('t')){
+                    $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
+                } else{
+                    $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
                 }
-                dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00')))->onQueue('spot3');
-                $i++;
+                $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
+
+                if (count($clients_aux)>0) {
+                    foreach ($clients_aux as $client_aux) {
+                        dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00'), $client_aux))->onQueue('spot3');
+                    }
+                }
                 if ($reference_date->diffInDays($end_date_first) == 0) {
                     break;
                 }

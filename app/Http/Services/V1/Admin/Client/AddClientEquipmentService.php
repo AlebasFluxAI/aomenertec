@@ -76,35 +76,6 @@ class AddClientEquipmentService extends Singleton
         $component->equipment[$aux]['post'] = "";
     }
 
-    public function addInputEquipment(Component $component)
-    {
-        $component->equipment_types = $component->client->admin ? EquipmentType::whereIn("id", $component->client->admin->adminEquipmentTypes()->pluck("equipment_type_id"))->get() : [];
-        array_push($component->equipment, [
-            "index" => count($component->equipment),
-            "id" => "",
-            "type_id" => "",
-            "type" => "",
-            "serial" => "",
-            "picked" => false,
-            "post" => "Seleccione tipo de equipo",
-            "disable" => false,
-        ]);
-    }
-
-    public function deleteInputEquipment(Component $component)
-    {
-        $necessary_equipment = 0;
-        if ($component->client_type) {
-            $necessary_equipment = count($component->client_type->equipmentTypes);
-        }
-        $current_equipment = count($component->equipment);
-        if ($current_equipment > $necessary_equipment) {
-            array_pop($component->equipment);
-        } else {
-            session()->flash('no_delete', 'Los equipos actuales son obligatorios');
-        }
-    }
-
     public function updated(Component $component, $property_name, $value)
     {
         if (strpos($property_name, "serial") !== false) {

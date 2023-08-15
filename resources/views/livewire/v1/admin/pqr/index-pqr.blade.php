@@ -195,6 +195,14 @@
                                                         "tooltip_title"=>"Resolver ticket",
                                                         "conditional"=>"openTicked"
                                                 ],
+                                                  [
+
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_TO_WORK_ORDER],
+                                                        "function"=>"convertToWorkOrder",
+                                                        "icon"=>"fas fa-arrows-spin",
+                                                        "tooltip_title"=>"Convertir en orden de trabajo",
+                                                        "conditional"=>"canConvertToOrder"
+                                                ],
                                     ]
                                 ],
 

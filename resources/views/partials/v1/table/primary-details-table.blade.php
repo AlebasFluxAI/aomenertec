@@ -5,7 +5,6 @@
             <thead style="position: sticky;top: 0;z-index: 2">
             @foreach($table_info  as $info)
                 @isset($info["show_column"])
-
                     @if($info["show_column"]==false)
                         @continue
                     @endif

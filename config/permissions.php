@@ -32,7 +32,6 @@ return [
         Permissions::NETWORK_OPERATOR_ENABLED,
         Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
 
-
         Permissions::TECHNICIAN_CREATE,
         Permissions::TECHNICIAN_EDIT,
         Permissions::TECHNICIAN_DELETE,
@@ -109,6 +108,7 @@ return [
         Permissions::ADMIN_DELETE,
         Permissions::ADMIN_SHOW,
         Permissions::ADMIN_ENABLED,
+        Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION,
 
 
         Permissions::EQUIPMENT_TYPE_CREATE,
@@ -280,7 +280,9 @@ return [
         Permissions::CLIENT_WORK_ORDER,
         Permissions::PQR_LINK_CLIENT,
         Permissions::INVOICE_INDEX,
-
+        Permissions::INVOICE_SHOW,
+        Permissions::INVOICE_FILE,
+        Permissions::INVOICE_PAY,
 
     ],
     // Tecnico
@@ -343,7 +345,9 @@ return [
         Permissions::CLIENT_ACTION_ENABLE,
         Permissions::SUPPORT_WORK_ORDER_QUEUE,
 
-        Permissions::SUPPORT_PQR_QUEUE
+        Permissions::SUPPORT_PQR_QUEUE,
+
+        Permissions::PQR_TO_WORK_ORDER,
 
     ],
     // Vendedor

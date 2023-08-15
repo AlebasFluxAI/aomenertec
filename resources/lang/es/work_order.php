@@ -11,5 +11,8 @@ return [
     WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS => "En progreso",
     WorkOrder::WORK_ORDER_STATUS_CLOSED => "Cerrada",
     WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT => "Desactivar / Activar cliente",
-    WorkOrder::WORK_ORDER_TYPE_ENABLE_CLIENT => "Activar cliente"
+    WorkOrder::WORK_ORDER_TYPE_ENABLE_CLIENT => "Activar cliente",
+    WorkOrder::WORK_ORDER_TYPE_PQR => "Creada desde PQR",
+    WorkOrder::WORK_ORDER_LEVEL_1 => "Nivel 1",
+    WorkOrder::WORK_ORDER_LEVEL_2 => "Nivel 2",
 ];

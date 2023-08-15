@@ -118,14 +118,23 @@
                                                             "icon"=>"fas fa-trash",
                                                             "tooltip_title"=>"Eliminar"
                                                     ],
-                                                    [
+                                                    //[
+                                                    //   "redirect"=>[
+                                                    //               "route"=>"administrar.v1.usuarios.operadores.configurar_precios",
+                                                    //               "binding"=>"networkOperator"
+                                                    //         ],
+                                                    //       "icon"=>"fas fa-money-bill-wave",
+                                                    //       "tooltip_title"=>"Configurar precios",
+                                                    //       "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION],
+                                                    // ],
+                                                     [
                                                        "redirect"=>[
-                                                                   "route"=>"administrar.v1.usuarios.operadores.configurar_precios",
+                                                                   "route"=>"administrar.v1.usuarios.operadores.configurar_bolsa_servicios",
                                                                    "binding"=>"networkOperator"
                                                              ],
-                                                           "icon"=>"fas fa-money-bill-wave",
-                                                           "tooltip_title"=>"Configurar precios",
-                                                           "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION],
+                                                           "icon"=>"fas fa-cash-register",
+                                                           "tooltip_title"=>"Bolsa de servicios",
+                                                           "permission"=>[\App\Http\Resources\V1\Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION],
                                                      ],
                                            ]
                                         ],

@@ -23,6 +23,7 @@ class Invoice extends Model
 
     protected $fillable = [
         "admin_id",
+        "network_operator_id",
         "client_id",
         "subtotal",
         "total",
@@ -49,6 +50,14 @@ class Invoice extends Model
 
     }
 
+    public function getNetworkOperatorNameAttribute()
+    {
+        if ($this->networkOperator) {
+            return $this->networkOperator->name;
+        }
+        return "";
+    }
+
     public function client()
     {
         return $this->belongsTo(Client::class);
@@ -57,6 +66,11 @@ class Invoice extends Model
     public function admin()
     {
         return $this->belongsTo(Admin::class);
+    }
+
+    public function networkOperator()
+    {
+        return $this->belongsTo(NetworkOperator::class);
     }
 
     public function items()
