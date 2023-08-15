@@ -6,6 +6,7 @@ use App\Http\Livewire\V1\Admin\User\AssignedEquipmentInterface;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\EquipmentAssignationTrait;
+use App\Models\Traits\NetworkOperatorPriceTrait;
 use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\ClientType;
 use App\Models\V1\Equipment;
@@ -22,6 +23,8 @@ use function Livewire\str;
 class NetworkOperatorPriceService extends Singleton
 {
     use EquipmentAssignationTrait;
+    use NetworkOperatorPriceTrait;
+
 
     public function mount(Component $component)
     {

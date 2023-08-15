@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\GenerateAdminInvoiceJob;
+use App\Jobs\GenerateNetworkOperationInvoiceJob;
 use App\Models\V1\Admin;
 use App\Models\V1\Client;
 use App\Models\V1\HourlyMicrocontrollerData;

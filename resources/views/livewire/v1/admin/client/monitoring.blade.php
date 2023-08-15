@@ -65,7 +65,7 @@
 
                                                 ],
                                                 [
-                                                    "title"=>"Reportes",
+                                                    "title"=>"Reportes y tarifas",
                                                     "action" => "emit('selectReport')"
 
                                                 ],

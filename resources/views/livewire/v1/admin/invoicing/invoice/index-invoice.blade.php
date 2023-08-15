@@ -64,9 +64,9 @@
                        "col_filter"=>true
                    ],
                    [
-                       "col_name" =>"Administrador",
-                       "col_data" =>"adminName",
-                       "col_filter"=>false
+                       "col_name" =>"Operador de red",
+                       "col_data" =>"networkOperatorName",
+                       "col_filter"=>false,
                    ],
                    [
                        "col_name" =>"Estado de pago",

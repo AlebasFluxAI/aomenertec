@@ -14,7 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 
-class GenerateAdminInvoiceJob implements ShouldQueue
+class GenerateNetworkOperationInvoiceJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -24,11 +24,11 @@ class GenerateAdminInvoiceJob implements ShouldQueue
      * @return void
      */
 
-    private $admin;
+    private $network_operator;
 
-    public function __construct($admin)
+    public function __construct($network_operator)
     {
-        $this->admin = $admin;
+        $this->network_operator = $network_operator;
     }
 
     /**
@@ -39,30 +39,31 @@ class GenerateAdminInvoiceJob implements ShouldQueue
     public function handle()
     {
 
-        $admin_clients = $this->admin->getCurrentEnabledClients();
-        $client_quantity = $admin_clients->count();
-        DB::transaction(function () use ($admin_clients, $client_quantity) {
-            if ($this->admin->configAdmin->min_clients >= $client_quantity) {
+        $network_operator_clients = $this->network_operator->getCurrentEnabledClients();
+        $client_quantity = $network_operator_clients->count();
+        DB::transaction(function () use ($network_operator_clients, $client_quantity) {
+            if ($this->network_operator->admin->configAdmin->min_clients >= $client_quantity) {
                 $this->minCostGeneration($client_quantity);
                 return;
             }
-            $this->regularCostGeneration($admin_clients->get());
+            $this->regularCostGeneration($network_operator_clients->get());
         });
     }
 
     private function minCostGeneration($client_quantity)
     {
         $billable_item = BillableItem::first();
-        $client_value = $this->admin->configAdmin->min_value;
+        $client_value = $this->network_operator->admin->configAdmin->min_value;
         $subtotal = $client_value * $client_quantity;
         $tax = $billable_item->tax;
         $total_tax = ($subtotal * $tax->percentage / 100);
         $total = $subtotal + $total_tax;
 
-        $invoice = $this->admin->invoices()->create([
+        $invoice = $this->network_operator->invoices()->create([
             "payment_date" => now(),
+            "admin_id" => $this->network_operator->id,
             "expiration_date" => now()->addDays(5),
-            "currency" => strtoupper($this->admin->configAdmin->coin),
+            "currency" => strtoupper($this->network_operator->admin->configAdmin->coin),
         ]);
         $invoice->items()->create([
             "unit_total" => $client_value,
@@ -81,12 +82,12 @@ class GenerateAdminInvoiceJob implements ShouldQueue
     {
         $billable_item = BillableItem::first();
 
-        $adminPrices = $this->admin->priceAdmin;
+        $adminPrices = $this->network_operator->admin->priceAdmin;
 
-        $invoice = $this->admin->invoices()->create([
+        $invoice = $this->network_operator->invoices()->create([
             "payment_date" => now(),
             "expiration_date" => now()->addDays(5),
-            "currency" => strtoupper($this->admin->configAdmin->coin),
+            "currency" => strtoupper($this->network_operator->admin->configAdmin->coin),
         ]);
 
         foreach ($admin_clients->groupBy("client_type_id")->all() as $clientTypeId => $clientGrouped) {
