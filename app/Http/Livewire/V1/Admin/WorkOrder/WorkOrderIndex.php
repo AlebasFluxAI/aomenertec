@@ -49,6 +49,11 @@ class WorkOrderIndex extends Component
         return $this->workOrderDetailsService->setOpenWorkOrderConditional($this, $workOrderId);
     }
 
+    public function setPauseWorkOrderConditional($workOrderId)
+    {
+        return $this->workOrderDetailsService->setPauseWorkOrderConditional($this, $workOrderId);
+    }
+
     public function replaceEquipmentHandlerConditional($workOrderId)
     {
         return $this->workOrderDetailsService->replaceEquipmentHandlerConditional($this, $workOrderId);
@@ -58,6 +63,7 @@ class WorkOrderIndex extends Component
     {
         $this->workOrderDetailsService->setOpen($workOrderId);
     }
+
 
     public function setInProgress($workOrderId)
     {
