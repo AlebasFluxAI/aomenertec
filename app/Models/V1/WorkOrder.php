@@ -174,6 +174,7 @@ class WorkOrder extends Model
         ]);
     }
 
+
     public function evidences()
     {
         return $this->morphMany(Image::class, "imageable")->whereType("evidences");
