@@ -58,7 +58,10 @@ class WorkOrder extends Model
         "closed_by",
         "support_id",
         "taken",
-        "level"
+        "level",
+        "execution_time_hours",
+        "execution_time_minutes",
+
     ];
 
     protected static function booted()
@@ -103,6 +106,11 @@ class WorkOrder extends Model
     public function equipments()
     {
         return $this->hasMany(WorkOrderEquipment::class);
+    }
+
+    public function equipment()
+    {
+        return $this->hasMany(WorkOrderEquipment::class)->first();
     }
 
     static public function indexTableHeaders()

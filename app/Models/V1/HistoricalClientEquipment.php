@@ -26,7 +26,14 @@ class HistoricalClientEquipment extends Model
         "assigned_by_id",
         "assigned_by_model",
         "notes",
+        "work_order_id"
     ];
+
+
+    public function workOrder()
+    {
+        return $this->belongsTo(WorkOrder::class);
+    }
 
     public function assignedBy()
     {

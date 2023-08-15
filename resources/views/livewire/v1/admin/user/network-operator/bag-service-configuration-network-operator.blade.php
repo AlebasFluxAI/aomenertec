@@ -42,7 +42,7 @@
                                   "check_id"=>"penalizable",
   ])
             @include("partials.v1.divider_title",[
-              "title"=>"Dia de facturacion"
+              "title"=>"Facturacion"
       ])
 
             @include("partials.v1.form.form_input_icon",[
@@ -57,6 +57,26 @@
               "input_type"=>"number",
               "required"=>true,
      ])
+
+            @include("partials.v1.form.form_input_icon",
+            ["input_model"=>"currency",
+            "updated_input"=>"defer",
+            "input_field"=>"",
+            "input_type"=>"select",
+            "icon_class"=>null,
+            "placeholder"=>"Moneda",
+            "col_with"=>6,
+            "required"=>true,
+            "offset"=>'',
+            "data_target"=>'',
+            "placeholder_clickable"=>false,
+            "input_rows"=>0,
+            "select_options"=>$currencies,
+            "select_option_value"=>"value",
+            "select_option_view"=>"key",
+            ])
+
+
             @include("partials.v1.divider_title",[
                     "title"=>"Pqrs"
             ])
@@ -87,7 +107,17 @@
              "required"=>true,
     ])
 
-
+            @include("partials.v1.form.form_input_icon",[
+                            "input_model"=>"initial_package_pqr_price",
+                            "input_label"=>"Costo del paquete inicial de pqr",
+                             "updated_input"=>"defer",
+                            "icon_class"=>"fas fa-money-bill",
+                            "placeholder"=>"Ingrese el costo del paquete inicial de pqr",
+                            "col_with"=>6,
+                            "min_number"=>0,
+                            "input_type"=>"number",
+                            "required"=>true,
+                   ])
             @include("partials.v1.divider_title",[
                     "title"=>"Ordenes de servicio"
             ])
@@ -118,6 +148,21 @@
                  "input_type"=>"number",
                  "required"=>true,
         ])
+            @include("partials.v1.form.form_input_icon",[
+                 "input_model"=>"initial_package_orders_price",
+                 "input_label"=>"Costo del paquete inicial de ordenes de servicio",
+                  "updated_input"=>"defer",
+                 "icon_class"=>"fas fa-money-bill",
+                 "placeholder"=>"Ingrese el costo del paquete inicial de ordenes de servicio",
+                 "col_with"=>6,
+                 "min_number"=>0,
+                 "input_type"=>"number",
+                 "required"=>true,
+        ])
+            @include("partials.v1.divider_title",[
+                "title"=>"Costo por tipo de cliente activo"
+            ])
+
 
             @include("partials.v1.form.form_submit_button",[
                                       "button_align"=>"right" ,

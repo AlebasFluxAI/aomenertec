@@ -5,6 +5,7 @@ namespace App\Http\Livewire\V1\Admin\WorkOrder;
 use App\Http\Services\V1\Admin\Client\WorkOrderClientService;
 use App\Http\Services\V1\Admin\WorkOrder\WorkOrderDetailsService;
 use App\Http\Services\V1\Admin\WorkOrder\WorkOrderSolverService;
+use App\Models\Traits\ClientFormTrait;
 use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
@@ -19,9 +20,20 @@ use PhpMqtt\Client\Facades\MQTT;
 class WorkOrderSolver extends Component
 {
     use WithFileUploads;
+    use ClientFormTrait;
 
     public $model;
     public $solution_description;
+    public $set_execution_time;
+    public $execution_time_hours;
+    public $execution_time_minutes;
+    public $equipment_type;
+    public $equipment_picked;
+    public $bachelors_equipments = [];
+    public $equipment_serial;
+    public $equipment_types;
+    public $equipment;
+    public $equipment_type_id;
     public $evidences = [];
 
 
@@ -42,6 +54,18 @@ class WorkOrderSolver extends Component
     {
         $this->workOrderSolverService->submitForm($this);
     }
+
+    public function updated($property_name, $value)
+    {
+        $this->workOrderSolverService->updated($this, $property_name, $value);
+    }
+
+
+    public function assignEquipment($equipment)
+    {
+        $this->workOrderSolverService->assignEquipment($this, $equipment);
+    }
+
 
     public function render()
     {

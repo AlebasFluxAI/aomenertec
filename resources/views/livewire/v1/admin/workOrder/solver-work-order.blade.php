@@ -80,6 +80,32 @@
          ])
 
             @include("partials.v1.divider_title",[
+                      "title"=>"Puedes especificar el tiempo de ejecucion o dejar que se calcule automaticamente"
+              ]
+             )
+            @include("partials.v1.form.form_input_icon",[
+                 "input_model"=>"execution_time_hours",
+                 "input_label"=>"Numero de horas ejecutadas",
+                 "icon_class"=>"fas fa-clock",
+                 "placeholder"=>"Ingrese el numero de horas ejecutadas en la orden de servicio",
+                 "col_with"=>3,
+                 "min_number"=>0,
+                 "input_type"=>"number",
+                 "required"=>false,
+           ])
+
+            @include("partials.v1.form.form_input_icon",[
+                 "input_model"=>"execution_time_minutes",
+                 "input_label"=>"Numero de minutos ejecutados",
+                 "icon_class"=>"fas fa-clock",
+                 "placeholder"=>"Ingrese el numero de minutos ejecutadas en la orden de servicio",
+                 "col_with"=>3,
+                 "min_number"=>0,
+                 "input_type"=>"number",
+                 "required"=>false,
+           ])
+
+            @include("partials.v1.divider_title",[
                             "title"=>"Agrega aqui evidencias de tu trabajo"
                     ]
                    )
@@ -92,9 +118,39 @@
                                  "col_with"=>12,
                                  "required"=>false,
                                                 ])
+            @if($model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_REPLACE)
+                <div class="row pl-5 pr-3">
 
-
-
+                    @include("partials.v1.divider_title",[
+                                             "title"=>"Equipo intervenido"
+                                     ]
+                                    )
+                    <div class="form-group mb-2 align-content-start col-md-3 col-sm-12">
+                        @include("partials.v1.form.form_list",[
+                                 "col_with"=>8,
+                                 "mb"=>0,
+                                 "aux_class"=>"no-border",
+                                 "list_model" => "equipment_type_id",
+                                 "list_default" => "Seleccione equipo...",
+                                 "list_options" => $equipment_types??[],
+                                 "list_option_value"=>"id",
+                                 "list_option_view"=>"type",
+                                 "list_option_title"=>""
+                        ])
+                        @include("partials.v1.form.form_dropdown_input_searchable",[
+                                  "form_group" => false,
+                                   "col_with"=>8,
+                                  "dropdown_model" => "equipment_serial",
+                                  "required" => false,
+                                  "picked_variable" => $equipment_picked,
+                                  "dropdown_results" => $bachelors_equipments,
+                                  "count_bool" => count($bachelors_equipments)>0,
+                                  "selected_value_function" => "assignEquipment",
+                                  "dropdown_result_id" => "id",
+                                  "dropdown_result_value" => "serial",
+                        ])
+                    </div>
+            @endif
             @if($model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT or $model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_ENABLE_CLIENT)
                 @include("partials.v1.form.form_submit_button",[
                                       "button_align"=>"right" ,
@@ -104,6 +160,7 @@
                                       "function"=>"submitForm"
                           ])
             @else
+
                 @include("partials.v1.form.form_submit_button",[
                                 "button_align"=>"right" ,
                                 "button_content"=>"Cerrar orden de trabajo",

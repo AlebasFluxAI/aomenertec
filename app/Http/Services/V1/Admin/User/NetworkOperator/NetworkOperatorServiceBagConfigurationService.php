@@ -4,7 +4,9 @@ namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
+use App\Models\Model\V1\BillingService;
 use App\Models\Traits\NetworkOperatorPriceTrait;
+use App\Models\V1\AdminConfiguration;
 use App\Models\V1\Client;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\PhotovoltaicPrice;
@@ -30,6 +32,11 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
             "has_billable_clients" => $model->billableServices ? $model->billableServices->has_billable_clients : false,
             "pqr_price" => $model->billableServices ? $model->billableServices->pqr_price : false,
             "orders_price" => $model->billableServices ? $model->billableServices->orders_price : false,
+            "currency" => $model->currency,
+            "currencies" => [
+                ["key" => "Peso Colombiano", "value" => BillingService::COP],
+                ["key" => "Dolar", "value" => BillingService::USD]
+            ]
         ]);
     }
 
@@ -47,11 +54,17 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
                 $billableService->update([
                     "orders_price" => $component->orders_price,
                     "pqr_price" => $component->pqr_price,
+                    "currency" => $component->currency,
+                    "initial_package_pqr_price" => $component->initial_package_pqr_price,
+                    "initial_package_orders_price" => $component->initial_package_orders_price,
                 ]);
             } else {
                 $component->model->billableServices()->create([
                     "pqr_price" => $component->pqr_price,
                     "orders_price" => $component->orders_price,
+                    "currency" => $component->currency,
+                    "initial_package_pqr_price" => $component->initial_package_pqr_price,
+                    "initial_package_orders_price" => $component->initial_package_orders_price,
                 ]);
             }
         });

@@ -22,6 +22,7 @@ class BagServiceConfigurationNetworkOperator extends Component
     use FilterTrait;
 
     public $model;
+    public $currency;
     public $pqr_bag;
     public $work_order_hours;
     public $billing_day;
@@ -30,6 +31,9 @@ class BagServiceConfigurationNetworkOperator extends Component
     public $has_billable_orders;
     public $pqr_price;
     public $orders_price;
+    public $initial_package_pqr_price;
+    public $initial_package_orders_price;
+    public $currencies;
 
     private $networkOperatorServiceBagConfigurationService;
 

@@ -12,6 +12,9 @@ class BillingService extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const COP = 'cop';
+    public const USD = 'usd';
+
     protected $fillable = [
         "network_operator_id",
         "has_billable_pqr",
@@ -19,6 +22,9 @@ class BillingService extends Model
         "has_billable_clients",
         "pqr_price",
         "orders_price",
+        "initial_package_pqr_price",
+        "initial_package_orders_price",
+        "currency"
     ];
 
     public function networkOperator()

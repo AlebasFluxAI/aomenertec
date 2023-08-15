@@ -1,29 +1,4 @@
 <div class="login">
-    @include("partials.v1.divider_title",["title"=>"Facturacion"])
-
-    @include("partials.v1.form.primary_form",[
-                                                                  "form_toast"=>true,
-                                                                  "class_container"=>"",
-                                                                  "session_message"=>"message",
-                                                                  "form_submit_action"=>"submitFormInvoicing",
-                                                                  "form_title"=>"",
-                                                                  "form_inputs"=> [
-
-                                                                                   [
-                                                                                          "input_type"=>"number",
-                                                                                          "number_max"=>28,
-                                                                                          "number_min"=>1,
-                                                                                          "input_label"=>"Dia de facturación",
-                                                                                          "tooltip_title"=>"Ingrese el dia del mes donde se generan las facturas del administrador",
-                                                                                          "input_model"=>"invoicing_day",
-                                                                                          "placeholder"=>"Dia de facturación",
-                                                                                          "col_with"=>4,
-                                                                                          "required"=>true,
-                                                                                  ],
-
-                                                                              ]
-                                                                  ])
-
     @include("partials.v1.divider_title",["title"=>"Tipos de clientes"])
 
     @include("partials.v1.form.primary_form",[
