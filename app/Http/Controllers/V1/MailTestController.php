@@ -151,17 +151,130 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $day_ref = Carbon::create(2023, 06,30);
-        $billing_day = $day_ref->format('d');
-        if ($billing_day == $day_ref->format('t')){
-            $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-        } else{
-            $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
-        }
-        $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
-        if (count($clients_aux)>0) {
-            foreach ($clients_aux as $client_aux) {
-                dispatch(new SerializeMicrocontrollerDataMonthJob($day_ref->format('Y-m-d H:00:00'), $client_aux))->onQueue('spot3');
+        $item = 'uQKqNQAAAAAjeggAAAAAAAAAAAAAAAAAAAAAAAAAAADxvbVkWDm0PPW52jwRx7o8F7fRORe30TkXt9E5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAAAAAAPBCAABwQwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+        $data_frame = config('data-frame.data_frame');
+        $date = Carbon::now();
+        $raw_json = json_decode($item, true);
+        $last_data = null;
+        $client = null;
+        if ($raw_json === null) {
+            $decode = bin2hex(base64_decode($item));
+            $split = substr($decode, (16), (16));
+            $bin = hex2bin($split);
+            $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+                ->first();
+            if ($equipment) {
+                $client = $equipment->clients()->first();
+                if ($client) {
+                    if ($client->stopUnpackClient()->exists()) {
+                        return;
+                    }
+                    $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+                }
+            }
+
+            if (strlen($item) > 20) {
+                if ($last_data) {
+                    $last_raw_json = json_decode($last_data->raw_json, true);
+                }
+                $source_timestamp = Carbon::create('2023-07-17 16:55:43.000');
+                if ($date->diffInDays($source_timestamp) <= 365) {
+                    foreach ($data_frame as $data) {
+                        try {
+                            $split = substr($decode, ($data['start']), ($data['lenght']));
+
+                            $bin = hex2bin($split);
+                            if (strlen($bin) == ($data['lenght'] / 2)) {
+                                if ($data['start'] >= 450) {
+                                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                } else {
+                                    if ($data['variable_name'] == "flags") {
+                                        $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                    } else {
+                                        if ($data['variable_name'] == "equipment_id") {
+                                            $json[$data['variable_name']] = $equipment_serial;
+                                        } else {
+                                            $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                        }
+                                    }
+                                }
+                               if($data['id'] == 60){
+                                   dd($json);
+                               }
+                                if ($data['start'] >= 72) {
+                                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
+                                        if (!$data['default']) {
+                                            $json[$data['variable_name']] = $data['default'];
+                                        } else {
+                                            if ($last_data) {
+                                                if ($data['start'] >= 450) {
+                                                    $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
+                                                } else {
+                                                    $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                                }
+                                            } else {
+                                                $json[$data['variable_name']] = 0;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (is_nan($json[$data['variable_name']])) {
+                                    $json[$data['variable_name']] = null;
+                                }
+
+                                if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                    break;
+                                }
+                            } else {
+                                if ($data['start'] >= 72) {
+                                    if (!$data['default']) {
+                                        $json[$data['variable_name']] = $data['default'];
+                                    } else {
+                                        if ($last_data) {
+                                            if (isset($last_raw_json[$data['variable_name']])) {
+                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                            } else {
+                                                $json[$data['variable_name']] = 0;
+                                            }
+                                        } else {
+                                            $json[$data['variable_name']] = 0;
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (Exception $e) {
+                            echo 'Excepción capturada: ', $e->getMessage(), "\n";
+                        }
+                    }
+                    $item = $json;
+
+                    if ($json['import_wh'] <= 0) {
+                        if ($last_data) {
+                            if ($last_raw_json['import_wh']>0) {
+                                $item->updateQuietly();
+                                $item->forceDelete();
+                                return;
+                            }
+                        }
+                    }
+
+                    if ($client) {
+                        //if (!$client->stopUnpackClient()->exists()) {
+
+                        $item->save();
+                        //dispatch(new JsonEdit($item->id, true))->onQueue($this->queue);
+                        //}
+                    } else{
+                        $item->forceDelete();
+                    }
+                } else {
+                    $item->forceDelete();
+                }
+            } else {
+                $item->forceDelete();
             }
         }
 

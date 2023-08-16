@@ -144,11 +144,11 @@
                                                                          ],
                                                                             [
                                                                              "key"=>"Order de trabajo",
-                                                                             "value"=>($model->workOrder->id).". ".($model->workOrder->description),
-                                                                             "show_column"=>($model->workOrder),
+                                                                             "value"=>$model->workOrder?($model->workOrder->id).". ".$model->workOrder->description:"",
+                                                                             "show_column"=>($model->workOrder!=null),
                                                                              "redirect_route"=>"administrar.v1.ordenes_de_servicio.detalle",
                                                                              "redirect_binding"=>"workOrder",
-                                                                             "redirect_value"=>($model->workOrder->id)
+                                                                             "redirect_value"=>($model->workOrder?$model->workOrder->id:1)
                                                                          ],
                                                                          ]
                                                             ]

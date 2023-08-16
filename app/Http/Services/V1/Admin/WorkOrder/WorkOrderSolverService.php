@@ -60,8 +60,9 @@ class WorkOrderSolverService extends Singleton
             $component->model->update([
                 "solution_description" => $component->solution_description,
                 "status" => WorkOrder::WORK_ORDER_STATUS_CLOSED,
-                "execution_time_hours" => $component->execution_time_hours,
-                "execution_time_minutes" => $component->execution_time_minutes,
+                "execution_time_hours" => $component->execution_time_hours ?? 0,
+                "execution_time_minutes" => $component->execution_time_minutes ?? 0,
+                "final_recommendations" => $component->final_recommendations
 
             ]);
 

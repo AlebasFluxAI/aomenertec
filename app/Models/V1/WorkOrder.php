@@ -61,6 +61,7 @@ class WorkOrder extends Model
         "level",
         "execution_time_hours",
         "execution_time_minutes",
+        "final_recommendations"
 
     ];
 

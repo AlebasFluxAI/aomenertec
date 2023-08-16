@@ -118,11 +118,15 @@
                                                                      ],
                                                                       [
                                                                           "key"=>"Equipo intervenido",
-                                                                          "value"=>$model->equipment()->equipment->id."-".$model->equipment()->equipment->serial,
-                                                                          "show_column"=>($model->equipment()),
+                                                                          "value"=>$model->equipment()?$model->equipment()->equipment->id."-".$model->equipment()->equipment->serial:"",
+                                                                          "show_column"=>($model->equipment()!=null),
                                                                           "redirect_route"=>"administrar.v1.equipos.detalle",
                                                                           "redirect_binding"=>"equipment",
-                                                                          "redirect_value"=>$model->equipment()->equipment->id
+                                                                          "redirect_value"=>$model->equipment()?$model->equipment()->equipment->id:1
+                                                                     ],
+                                                                       [
+                                                                          "key"=>"Recomencaciones finales",
+                                                                          "value"=>$model->final_recommendations,
                                                                      ],
                                                                  ]
                                                         ]
