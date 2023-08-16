@@ -52,14 +52,6 @@
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_IN_PROGRESS],
                                                  ],
                                                  [
-
-                                                       "conditional"=>"setOpenWorkOrderConditional",
-                                                       "function"=>"setOpen",
-                                                       "icon"=>"fas fa-pause",
-                                                       "tooltip_title"=>"Pausar orden de trabajo",
-                                                       "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_STOP],
-                                                 ],
-                                                 [
                                                        "function"=>"processEquipmentReplace",
                                                        "conditional"=>"replaceEquipmentHandlerConditional",
                                                        "icon"=>"fas fa-computer",

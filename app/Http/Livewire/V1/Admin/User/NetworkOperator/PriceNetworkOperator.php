@@ -77,6 +77,37 @@ class PriceNetworkOperator extends Component
         return $this->networkOperatorPriceService->getOtherFee($this, $value, $strata, $client_type);
     }
 
+
+    public function changeSubsidy($event, $stratum_id)
+    {
+        return $this->networkOperatorPriceService->changeSubsidy($this, $event, $stratum_id);
+    }
+
+    public function changeCredit($event, $stratum_id)
+    {
+        return $this->networkOperatorPriceService->changeCredit($this, $event, $stratum_id);
+    }
+
+    public function changeValue($event, $stratum_id)
+    {
+        return $this->networkOperatorPriceService->changeValue($this, $event, $stratum_id);
+    }
+
+    public function getSubsidy($stratum_id)
+    {
+        return $this->networkOperatorPriceService->getSubsidy($this, $stratum_id);
+    }
+
+    public function getCredit($stratum_id)
+    {
+        return $this->networkOperatorPriceService->getCredit($this, $stratum_id);
+    }
+
+    public function getValue($stratum_id)
+    {
+        return $this->networkOperatorPriceService->getValue($this, $stratum_id);
+    }
+
     public function render()
     {
         return view('livewire.v1.admin.user.network-operator.price-network-operator')

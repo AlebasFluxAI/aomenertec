@@ -35,6 +35,7 @@ class DataReport extends Component
     public $date_range_simulator;
     public $kwh_cost;
     public $total_consumption;
+    public $monitoring_fee;
 
 
     public $variables_selected;
@@ -58,6 +59,7 @@ class DataReport extends Component
         $this->end_report = $end->format('Y-m-d 23:59:59');
         $this->end_day = Carbon::create($this->end_report);
         $this->date_range_report = $start->format('Y-m-d') . " - " . $end->format('Y-m-d');
+        $this->monitoring_fee = $client->monitoring_fee;
 
         $this->start_simulator = $start->format('Y-m-d 00:00:00');
         $this->end_simulator = $end->format('Y-m-d 23:59:59');
@@ -69,6 +71,15 @@ class DataReport extends Component
         $this->variables->push(
             ['id' => 33, 'display_name' => 'Matriz de reactivos']
         );
+    }
+
+    public function submitMonitoringFeeForm()
+    {
+        $this->client->update([
+            "monitoring_fee" => $this->monitoring_fee
+        ]);
+        ToastEvent::launchToast($this, "show", "success", "Tarifa actualizada exitosamente");
+
     }
 
     public function dateRangeReport($start, $end)
@@ -101,7 +112,7 @@ class DataReport extends Component
             $last_data = $microcontrollerData->last()->accumulated_real_consumption;
             $this->total_consumption = ($last_data - $first_data);
             $this->total_simulation = $this->total_consumption * $this->kwh_cost;
-            
+
         } catch (\Throwable) {
             ToastEvent::launchToast($this, "show", "error", "Ocurrio un error al calcular tarifa");
         }
