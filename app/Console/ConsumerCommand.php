@@ -6,6 +6,7 @@ namespace App\Console;
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SaveAlertDataJob;
+use App\Jobs\V1\SetClientStopUnpackDataJob;
 use App\Jobs\V1\SetConfigJob;
 use Illuminate\Console\Command;
 use PhpMqtt\Client\Facades\MQTT;
@@ -74,7 +75,7 @@ class ConsumerCommand extends Command
                 if (array_key_exists('config_get', $json)) {
                     dispatch(new SetConfigJob($json))->onQueue('spot');
                 } elseif (array_key_exists('frame_save', $json)) {
-                    //dispatch(new SetClientStopUnpackDataJob($json))->onQueue('spot');
+                    // dispatch(new SetClientStopUnpackDataJob($json))->onQueue('spot');
                 }
             }
         }, 2);

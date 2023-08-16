@@ -44,7 +44,7 @@ class Control extends Component
             $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
         }
         try {
-            $mqtt=MQTT::connection();
+            $mqtt=MQTT::connection('default','default');
             $mqtt->publish($topic, $message);
 
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
