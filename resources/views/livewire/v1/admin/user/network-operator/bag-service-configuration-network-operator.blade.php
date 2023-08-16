@@ -62,6 +62,7 @@
             ["input_model"=>"currency",
             "updated_input"=>"defer",
             "input_field"=>"",
+            "input_label"=>"Seleccione la moneda",
             "input_type"=>"select",
             "icon_class"=>null,
             "placeholder"=>"Moneda",
@@ -162,6 +163,71 @@
             @include("partials.v1.divider_title",[
                 "title"=>"Costo por tipo de cliente activo"
             ])
+
+            @include("partials.v2.form.form_input_icon",[
+              "input_model"=>"prices_zni_fotovoltaico",
+              "input_label"=>'ZNI Sistema fotovoltaico',
+              "updated_input"=>"defer",
+              "icon_class"=>"fa-solid fa-circle-dollar-to-slot",
+              "col_with"=>12,
+              "min_number"=>0,
+              "input_type"=>"number",
+              "required"=>false,
+              "placeholder_clickable"=>false,
+              "placeholder"=>"ZNI Sistema fotovoltaico",
+            ])
+
+            @include("partials.v2.form.form_input_icon",[
+                  "input_model"=>"zni_conventional",
+                  "input_label"=>"ZNI Convencional",
+                  "updated_input"=>"defer",
+                  "icon_class"=>"fa-solid fa-circle-dollar-to-slot",
+                  "col_with"=>12,
+                  "min_number"=>0,
+                  "input_type"=>"number",
+                  "required"=>false,
+                  "placeholder_clickable"=>false,
+                  "placeholder"=>"ZNI Convencional",
+                ])
+
+            @include("partials.v2.form.form_input_icon",[
+                  "input_model"=>"zni_rural",
+                  "input_label"=>"ZNI rural",
+                  "updated_input"=>"defer",
+                  "icon_class"=>"fa-solid fa-circle-dollar-to-slot",
+                  "col_with"=>12,
+                  "min_number"=>0,
+                  "input_type"=>"number",
+                  "required"=>false,
+                  "placeholder_clickable"=>false,
+                  "placeholder"=>"ZNI rural",
+                ])
+
+            @include("partials.v2.form.form_input_icon",[
+                  "input_model"=>"sin_conventional",
+                  "input_label"=>"SIN Convencional",
+                  "updated_input"=>"defer",
+                  "icon_class"=>"fa-solid fa-circle-dollar-to-slot",
+                  "col_with"=>12,
+                  "min_number"=>0,
+                  "input_type"=>"number",
+                  "required"=>false,
+                  "placeholder_clickable"=>false,
+                  "placeholder"=>"SIN Convencional",
+                ])
+
+            @include("partials.v2.form.form_input_icon",[
+                  "input_model"=>"monitoring",
+                  "input_label"=>"Monitoreo",
+                  "updated_input"=>"defer",
+                  "icon_class"=>"fa-solid fa-circle-dollar-to-slot",
+                  "col_with"=>12,
+                  "min_number"=>0,
+                  "input_type"=>"number",
+                  "required"=>false,
+                  "placeholder_clickable"=>false,
+                  "placeholder"=>"Monitoreo"
+                ])
 
 
             @include("partials.v1.form.form_submit_button",[
