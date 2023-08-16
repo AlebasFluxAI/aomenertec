@@ -22,6 +22,7 @@ class BagServiceConfigurationNetworkOperator extends Component
     use FilterTrait;
 
     public $model;
+    public $prices;
     public $currency;
     public $pqr_bag;
     public $work_order_hours;
@@ -34,8 +35,17 @@ class BagServiceConfigurationNetworkOperator extends Component
     public $initial_package_pqr_price;
     public $initial_package_orders_price;
     public $currencies;
+    public $client_types;
+    public $prices_zni_fotovoltaico;
+    public $zni_conventional;
+    public $zni_rural;
+    public $sin_conventional;
+    public $monitoring;
 
     private $networkOperatorServiceBagConfigurationService;
+    protected $rules = [
+        'prices.*.value' => 'required',
+    ];
 
     public function __construct($id = null)
     {
