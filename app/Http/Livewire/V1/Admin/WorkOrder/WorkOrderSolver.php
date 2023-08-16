@@ -35,6 +35,7 @@ class WorkOrderSolver extends Component
     public $equipment;
     public $equipment_type_id;
     public $evidences = [];
+    public $final_recommendations;
 
 
     private $workOrderSolverService;
