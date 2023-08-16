@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject
     use AuditableTrait;
     use UserMenuHomeTrait;
     use PaginatorTrait;
-
+  
 
     public const TYPE_SUPER_ADMIN = "super_administrator";
     public const TYPE_ADMIN = "administrator";
