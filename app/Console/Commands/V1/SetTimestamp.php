@@ -7,7 +7,7 @@ use App\Models\V1\Client;
 use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 
 class SetTimestamp extends Command
 {

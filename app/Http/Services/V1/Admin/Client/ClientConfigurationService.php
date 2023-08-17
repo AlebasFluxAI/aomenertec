@@ -33,7 +33,7 @@ use App\Notifications\Alert\AlertControlNotification;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 use PhpMqtt\Client\MqttClient;
 use Spatie\Permission\Models\Role;
 use function auth;
@@ -411,7 +411,7 @@ class ClientConfigurationService extends Singleton
                     'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
                 ]);
             }
-            
+
             $mqtt = MQTT::connection('default', 'client_aux');
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
                 if ($elapsedTime >= 50) {
@@ -440,9 +440,9 @@ class ClientConfigurationService extends Singleton
                 array_push($binary_data, pack($item['type'], $data));
             }
             $message = base64_encode(implode($binary_data));
-         
+
            $mqtt->publish($topic, $message);
-            
+
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
                 $json = json_decode($message, true);
                 if (array_key_exists('config_ack', $json)) {

@@ -8,7 +8,7 @@ use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 use PhpMqtt\Client\MqttClient;
 use Psr\Log\LogLevel;
 use PhpMqtt\Client\Exceptions\MqttClientException;use function PHPUnit\Framework\once;

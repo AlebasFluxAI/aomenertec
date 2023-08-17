@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Matrix\Builder;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 
 class DataChart extends Component
 {

@@ -32,7 +32,7 @@
         }
         .middle-container {
             display: table;
-            width: 98%;
+            width: 100%;
             border: 2px solid #B6B7B7;
             border-radius: 10px;
             background-color: #fff;
@@ -59,6 +59,11 @@
             /* Ajusta el tamaño del logo según tus necesidades */
             margin-right: 20px;
             /* Reducido el margen para dar más espacio */
+        }
+        .chart-consumption {
+            width: 300px;
+            margin: 0;
+            padding: 0;
         }
         .table-container {
             width: 100%;
@@ -107,12 +112,12 @@
     </tr>
 </table>
 
-<table class="large-container" style="margin-top: 170px;">
+<table class="large-container" style="margin-top: 150px;">
     <tr class="flex-row">
-        <td class="flex-item" style="padding: 10px; margin: 0; background: #ffdf7e; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item" colspan="6"></td>
+        <td class="flex-item" style="padding: 6px;" colspan="6"></td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Razón social:</strong></td>
@@ -148,9 +153,9 @@
 <table class="table-container">
     <tr>
         <td>
-            <table class="middle-container" style="margin-top: 20px; margin-right: 10px;">
+            <table class="middle-container" style="margin-top: 10px; margin-right: 5px; ">
                 <tr class="flex-row">
-                    <td class="flex-item" style="padding: 10px; margin: 0; background: #ffdf7e; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="2"><strong>INFORMACIÓN DE PAGO</strong></td>
+                    <td class="flex-item" style="padding: 10px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="2"><strong>INFORMACIÓN DE PAGO</strong></td>
                 </tr>
                 <tr class="flex-row" style="background: #B6B7B7;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Total a pagar</strong></td>
@@ -188,11 +193,66 @@
                     <td class="flex-item" style="padding:5px; text-align: right" >052023</td>
                 </tr>
             </table>
+            <table class="middle-container" style="margin-top: 13px; margin-right: 5px;">
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="3"><strong>HISTORIAL DE CONSUMOS</strong></td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="border-radius: 10px; padding:2px; text-align: center;background: #ffdf7e; font-size: 8px"><strong>Consumo facturado <br> mes actual</strong></td>
+                    <td class="flex-item" style="border-radius: 10px;padding:2px; text-align: center; background: #F3F3F3; font-size: 8px" ><strong>Consumo facturado <br>mes anterior</strong></td>
+                    <td class="flex-item" style="border-radius: 10px; padding:2px; text-align: center; background: #B6B7B7; font-size: 8px" ><strong>Promedio de consumo <br>ultimos 6 meses</strong></td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding:2px; text-align: center;">2845</td>
+                    <td class="flex-item" style="padding:2px; text-align: center;" >2650</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >2786</td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="text-align: center" colspan="3" rowspan="3"><img src="https://i.ibb.co/VVNm8p9/linexchart-3.png" alt="Logo" class="chart-consumption"></td>
+                </tr>
+
+            </table>
+            <table class="middle-container" style="margin-top: 13px; margin-right: 5px; font-size: 10px ">
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="3"><strong>DETALLE DE LA FACTURA</strong></td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding:2px; text-align: center;"><strong>Detalle</strong></td>
+                    <td class="flex-item" style="padding:2px; text-align: center; " ><strong>Unidad</strong></td>
+                    <td class="flex-item" style="padding:2px; text-align: center" ><strong>Cantidad</strong></td>
+                </tr>
+
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding:2px; text-align: left;">Activa</td>
+                    <td class="flex-item" style="padding:2px; text-align: center;" >kWh</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >2565</td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding:2px; text-align: left;">Reactiva inductiva total</td>
+                    <td class="flex-item" style="padding:2px; text-align: center; " >kVArh</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >25.640</td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding:2px; text-align: left;">Reactiva capacitiva</td>
+                    <td class="flex-item" style="padding:2px; text-align: center;">kVArh</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >2</td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding:2px; text-align: left;">Reactiva inductiva </td>
+                    <td class="flex-item" style="padding:2px; text-align: center; " >kVArh</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >25.640</td>
+                </tr>
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding:2px; text-align: left;">Factor M</td>
+                    <td class="flex-item" style="padding:2px; text-align: center; " >-</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >1</td>
+                </tr>
+            </table>
         </td>
         <td>
-            <table class="middle-container" style="margin-top: 20px; margin-left: 10px;">
+            <table class="middle-container" style="margin-top: 10px; margin-left: 5px; ">
                 <tr class="flex-row">
-                    <td class="flex-item" style="padding: 10px; margin: 0; background: #ffdf7e; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="3"><strong>DETALLE DE LA FACTURA</strong></td>
+                    <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="3"><strong>DETALLE DE LA FACTURA</strong></td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: center;"><strong>Item</strong></td>
@@ -236,7 +296,7 @@
                     <td class="flex-item" style="padding: 15px; " colspan="3"></td>
                 </tr>
                 <tr class="flex-row">
-                    <td class="flex-item" style="padding: 10px; margin: 0; background: #ffdf7e; text-align: center;" colspan="3"><strong>OTROS COBROS</strong></td>
+                    <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; text-align: center;" colspan="3"><strong>OTROS COBROS</strong></td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: center;"></td>
@@ -259,13 +319,83 @@
                 <tr class="flex-row">
                     <td class="flex-item" style="padding: 15px; " colspan="3"></td>
                 </tr>
-                <tr class="flex-row" style="background: #ffdf7e;">
-                    <td class="flex-item" style="padding: 10px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;" colspan="2"><strong>Total a pagar</strong></td>
-                    <td class="flex-item" style="padding: 10px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>$2.000.000</strong></td>
+                <tr class="flex-row" style="background: #009599;">
+                    <td class="flex-item" style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;" colspan="2"><strong>Total a pagar</strong></td>
+                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>$2.000.000</strong></td>
                 </tr>
             </table>
+            <table class="middle-container" style="margin-top: 10px; margin-left: 5px; ">
+                <tr class="flex-row">
+                    <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="2"><strong>CALCULO DE TARIFA DE ENERGÍA</strong></td>
+                </tr>
+                <tr class="flex-row" style="background: #B6B7B7;">
+                    <td class="flex-item" style="padding:5px; text-align: left;"><strong>Generación(G)</strong></td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >$158.52</td>
+                </tr>
+                <tr class="flex-row" style="background: #F3F3F3;">
+                    <td class="flex-item" style="padding:5px; text-align: left;"><strong>Transmisión (T)</strong></td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >$40.05</td>
+                </tr>
+                <tr class="flex-row" style="background: #B6B7B7;">
+                    <td class="flex-item" style="padding:5px; text-align: left;"><strong>Distribucción (D)</strong></td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >$250.56</td>
+                </tr>
+                <tr class="flex-row" style="background: #F3F3F3;">
+                    <td class="flex-item" style="padding:5px; text-align: left;"><strong>Comercialización (Cv)</strong></td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >$40.05</td>
+                </tr>
+                <tr class="flex-row" style="background: #B6B7B7;">
+                    <td class="flex-item" style="padding:5px; text-align: left;"><strong>Pérdidas (P)</strong></td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >$250.56</td>
+                </tr>
+                <tr class="flex-row" style="background: #F3F3F3;">
+                    <td class="flex-item" style="padding:5px; text-align: left;"><strong>Restricciones (R)</strong></td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >$40.05</td>
+                </tr>
+                <tr class="flex-row" style="background: #009599;">
+                    <td class="flex-item" style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;" ><strong>Total Costo Unitario (CU)</strong></td>
+                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>$750.25</strong></td>
+                </tr>
+                <tr class="flex-row" style="background: #009599;">
+                    <td class="flex-item" style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;" ><strong>Tarifa opcional</strong></td>
+                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>$710.25</strong></td>
+                </tr>
+            </table>
+
         </td>
     </tr>
+
+</table>
+<table class="large-container" style="margin-top: 10px;">
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="6"><strong>DATOS TÉCNICOS</strong></td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Tipo de servicio:</strong></td>
+        <td class="flex-item" style="padding:2px;" colspan="2">INDUSTRIAL</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Anomalía</strong></td>
+        <td class="flex-item" style="padding:2px;" colspan="2">N/A</td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Estrato:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>No. Medidor</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1234567</td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Nivel de tensión:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">Nivel 1</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Propiedad activos</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">100% Operador</td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Circuito:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">12</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Transformador</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">15615</td>
+    </tr>
+
+
 </table>
 </body>
 </html>
