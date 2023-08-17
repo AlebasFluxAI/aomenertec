@@ -9,7 +9,7 @@ use App\Jobs\V1\Enertec\SaveAlertDataJob;
 use App\Jobs\V1\SetClientStopUnpackDataJob;
 use App\Jobs\V1\SetConfigJob;
 use Illuminate\Console\Command;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 
 class ConsumerCommand extends Command
 {

@@ -13,7 +13,7 @@ use Livewire\Component;
 use App\Exports\V1\MonitoringDataExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;

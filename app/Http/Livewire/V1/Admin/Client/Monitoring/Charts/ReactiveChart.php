@@ -7,7 +7,7 @@ use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 
 class ReactiveChart extends Component
 {

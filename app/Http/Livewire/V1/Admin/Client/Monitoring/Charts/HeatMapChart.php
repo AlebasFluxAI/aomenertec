@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use App\Models\V1\Client;
-use PhpMqtt\Client\Facades\MQTT;
+use App\ModulesAux\MQTT;
 
 class HeatMapChart extends Component
 {
