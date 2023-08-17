@@ -16,6 +16,7 @@ use PhpMqtt\Client\Exceptions\DataTransferException;
 use PhpMqtt\Client\Exceptions\ProtocolNotSupportedException;
 use PhpMqtt\Client\Exceptions\RepositoryException;
 use PhpMqtt\Client\MqttClient;
+use PhpMqtt\Client\ConnectionSettings;
 
 /**
  * Manages the MQTT connections of the application.
@@ -37,11 +38,12 @@ class ConnectionManager
      * @param Application $application
      * @param array       $config
      */
-    public function __construct(Application $application, array $config)
+    public function __construct(Application $application)
     {
         $this->application       = $application;
-        $this->config            = $config;
-        $this->defaultConnection = Arr::get($config, 'default_connection', 'default');
+        $this->config            = config('mqtt-client');
+        $this->defaultConnection = Arr::get($this->config, 'default_connection', 'default');
+
     }
 
     /**
@@ -125,7 +127,7 @@ class ConnectionManager
      * @throws ConnectionNotAvailableException
      * @throws ProtocolNotSupportedException
      */
-    protected function createConnection(string $name): MqttClientContract
+    protected function createConnection(string $name, string $clientId): MqttClientContract
     {
         $config = Arr::get($this->config, "connections.{$name}");
 
@@ -135,7 +137,7 @@ class ConnectionManager
 
         $host           = (string) Arr::get($config, 'host');
         $port           = (int) Arr::get($config, 'port', 1883);
-        $clientId       = $clientId == null ? Arr::get($config, 'client_id'): $clientId;
+        $clientId       = $clientId == "null" ? Arr::get($config, 'client_id'): $clientId;
         $protocol       = (string) Arr::get($config, 'protocol', MqttClient::MQTT_3_1);
         $cleanSession   = (bool) Arr::get($config, 'use_clean_session', true);
         $repository     = Arr::get($config, 'repository', Repository::class);
