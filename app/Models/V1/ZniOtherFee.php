@@ -16,6 +16,8 @@ class ZniOtherFee extends Model
         "contribution",
         "discount",
         "tax",
+        "month",
+        "year",
     ];
 
 }

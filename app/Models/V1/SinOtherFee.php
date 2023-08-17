@@ -20,5 +20,7 @@ class SinOtherFee extends Model
         "contribution",
         "discount",
         "tax",
+        "month",
+        "year",
     ];
 }

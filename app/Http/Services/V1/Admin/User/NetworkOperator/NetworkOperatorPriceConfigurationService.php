@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
+use App\Http\Resources\V1\MonthsYears;
 use App\Http\Services\Singleton;
 use App\Models\Traits\NetworkOperatorPriceTrait;
 use App\Models\V1\Client;
@@ -20,6 +21,9 @@ class NetworkOperatorPriceConfigurationService extends Singleton
     {
         $component->fill([
             'model' => $model,
+            'months' => MonthsYears::months(),
+            'years' => MonthsYears::years(),
+            "date_picked" => false
         ]);
     }
 
