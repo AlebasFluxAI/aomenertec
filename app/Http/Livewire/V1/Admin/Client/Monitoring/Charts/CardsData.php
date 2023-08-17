@@ -32,7 +32,7 @@ class CardsData extends Component
             $this->last_data = collect(json_decode($last_data->raw_json, true));
             $this->cards = [];
             $this->variables_selected = [];
-            $initial_variables = $variables->take(6);
+            $initial_variables = $variables->take(3);
             foreach ($initial_variables as $variable) {
                 $aux = [];
                 $var_data_frame = $this->data_frame->where('variable_id', $variable['id'])->all();
