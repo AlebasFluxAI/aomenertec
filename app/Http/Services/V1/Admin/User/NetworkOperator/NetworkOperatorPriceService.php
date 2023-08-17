@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
 use App\Http\Livewire\V1\Admin\User\AssignedEquipmentInterface;
+use App\Http\Resources\V1\MonthsYears;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\EquipmentAssignationTrait;
@@ -26,10 +27,15 @@ class NetworkOperatorPriceService extends Singleton
     use NetworkOperatorPriceTrait;
 
 
-    public function mount(Component $component)
+    public function mount(Component $component, $client_type)
     {
         $component->fill([
-            "model" => User::getUserModel()
+            "model" => User::getUserModel(),
+            'months' => MonthsYears::months(),
+            'years' => MonthsYears::years(),
+            "date_picked" => false,
+            "client_type" => $client_type
+
         ]);
         $this->fillStrataArray($component);
 
@@ -87,9 +93,13 @@ class NetworkOperatorPriceService extends Singleton
         if ($client_type == ClientType::ZIN_CONVENTIONAL) {
             if ($component->model->zniOtherFees()->where([
                 "strata_id" => $strata,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->exists()) {
                 $fee = $component->model->zniOtherFees()->where([
                     "strata_id" => $strata,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ])->first();
                 $fee->update([
                     "tax_type" => $component->taxType[$client_type][$strata],
@@ -98,14 +108,20 @@ class NetworkOperatorPriceService extends Singleton
                 $component->model->zniOtherFees()->create([
                     "strata_id" => $strata,
                     "tax_type" => $component->taxType[$client_type][$strata],
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ]);
             }
         } else {
             if ($component->model->sinOtherFees()->where([
                 "strata_id" => $strata,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->exists()) {
                 $fee = $component->model->sinOtherFees()->where([
                     "strata_id" => $strata,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ]);
                 $fee->update([
                     "tax_type" => $component->taxType[$client_type][$strata],
@@ -114,6 +130,8 @@ class NetworkOperatorPriceService extends Singleton
                 $component->model->sinOtherFees()->create([
                     "strata_id" => $strata,
                     "tax_type" => $component->taxType[$client_type][$strata],
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ]);
             }
         }
@@ -125,9 +143,13 @@ class NetworkOperatorPriceService extends Singleton
         if ($client_type == ClientType::ZIN_CONVENTIONAL) {
             if ($component->model->zniOtherFees()->where([
                 "strata_id" => $strata,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->exists()) {
                 $fee = $component->model->zniOtherFees()->where([
                     "strata_id" => $strata,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ])->first();
                 $fee->update([
                     $type => $value,
@@ -138,26 +160,35 @@ class NetworkOperatorPriceService extends Singleton
                 $component->model->zniOtherFees()->create([
                     "strata_id" => $strata,
                     "tax_type" => $component->taxType[$client_type][$strata],
-                    $type => $value
+                    $type => $value,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ]);
             }
         } else {
             if ($component->model->sinOtherFees()->where([
                 "strata_id" => $strata,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->exists()) {
                 $fee = $component->model->sinOtherFees()->where([
                     "strata_id" => $strata,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ]);
                 $fee->update([
                     $type => $value,
                     "tax_type" => $component->taxType[$client_type][$strata],
+
 
                 ]);
             } else {
                 $component->model->sinOtherFees()->create([
                     "strata_id" => $strata,
                     "tax_type" => $component->taxType[$client_type][$strata],
-                    $type => $value
+                    $type => $value,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ]);
             }
         }
@@ -169,7 +200,9 @@ class NetworkOperatorPriceService extends Singleton
 
         if ($type == ClientType::ZIN_CONVENTIONAL) {
             $fee = $component->model->zniOtherFees()->where([
-                "strata_id" => $strata
+                "strata_id" => $strata,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->first();
 
             if ($fee) {
@@ -178,7 +211,9 @@ class NetworkOperatorPriceService extends Singleton
             return 0.0;
         }
         $fee = $component->model->sinOtherFees()->where([
-            "strata_id" => $strata
+            "strata_id" => $strata,
+            "month" => $component->month,
+            "year" => $component->year,
         ])->first();
         if ($fee) {
             return $fee->{$value};
@@ -190,7 +225,9 @@ class NetworkOperatorPriceService extends Singleton
     {
         if ($type == ClientType::ZIN_CONVENTIONAL) {
             $fee = $component->model->zniFees()->where([
-                "voltage_level_id" => $value
+                "voltage_level_id" => $value,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->first();
             if ($fee) {
                 return $fee->{$level};
@@ -198,7 +235,9 @@ class NetworkOperatorPriceService extends Singleton
             return 0.0;
         }
         $fee = $component->model->sinFees()->where([
-            "voltage_level_id" => $value
+            "voltage_level_id" => $value,
+            "month" => $component->month,
+            "year" => $component->year,
         ])->first();
         if ($fee) {
             return $fee->{$level};
@@ -212,9 +251,13 @@ class NetworkOperatorPriceService extends Singleton
         if ($client_type == ClientType::ZIN_CONVENTIONAL) {
             if ($component->model->zniFees()->where([
                 "voltage_level_id" => $level,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->exists()) {
                 $fee = $component->model->zniFees()->where([
                     "voltage_level_id" => $level,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ])->first();
                 $fee->update([
                     $type => $value
@@ -223,15 +266,21 @@ class NetworkOperatorPriceService extends Singleton
             } else {
                 $component->model->zniFees()->create([
                     "voltage_level_id" => $level,
+                    "month" => $component->month,
+                    "year" => $component->year,
                     $type => $value
                 ]);
             }
         } else {
             if ($component->model->sinFees()->where([
                 "voltage_level_id" => $level,
+                "month" => $component->month,
+                "year" => $component->year,
             ])->exists()) {
                 $fee = $component->model->sinFees()->where([
                     "voltage_level_id" => $level,
+                    "month" => $component->month,
+                    "year" => $component->year,
                 ]);
                 $fee->update([
                     $type => $value
@@ -239,6 +288,8 @@ class NetworkOperatorPriceService extends Singleton
             } else {
                 $component->model->sinFees()->create([
                     "voltage_level_id" => $level,
+                    "month" => $component->month,
+                    "year" => $component->year,
                     $type => $value
                 ]);
             }

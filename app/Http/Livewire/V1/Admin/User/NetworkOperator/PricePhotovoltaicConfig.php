@@ -15,12 +15,17 @@ use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class PriceConfigurationNetworkOperator extends Component
+class PricePhotovoltaicConfig extends Component
 {
     use WithPagination;
     use FilterTrait;
 
     public $model;
+    public $months;
+    public $years;
+    public $month;
+    public $year;
+    public $date_picked;
 
     private $priceConfiguratioNetworkOperatorService;
 
@@ -65,10 +70,15 @@ class PriceConfigurationNetworkOperator extends Component
         return $this->priceConfiguratioNetworkOperatorService->getValue($this, $stratum_id);
     }
 
+    public function pickDate()
+    {
+        $this->priceConfiguratioNetworkOperatorService->pickDate($this);
+    }
+
     public function render()
     {
         return view(
-            'livewire.v1.admin.user.network-operator.price-configuration-network-operator',
+            'livewire.v1.admin.user.network-operator.price-configuration.price-photovoltaic-configuration',
             [
                 "data" => $this->getData()
             ]

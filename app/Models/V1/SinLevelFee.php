@@ -31,7 +31,9 @@ class SinLevelFee extends Model
         "restriction",
         "unit_cost",
         "total_fee",
-        "optional_fee"
+        "optional_fee",
+        "month",
+        "year",
     ];
 
     public function voltageLevel()

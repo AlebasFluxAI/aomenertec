@@ -22,6 +22,8 @@ class PhotovoltaicPrice extends Model
         "subsidy",
         "price",
         "credit",
+        "month",
+        "year",
     ];
 
     public function network_operator()

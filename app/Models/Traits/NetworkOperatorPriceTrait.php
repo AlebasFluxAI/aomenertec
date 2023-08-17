@@ -15,16 +15,22 @@ trait NetworkOperatorPriceTrait
     public function changeSubsidy(Component $component, $event, $stratum_id)
     {
         if ($price = PhotovoltaicPrice::whereNetworkOperatorId($component->model->id)
+            ->where("month", $component->month)
+            ->where("year", $component->year)
             ->whereStratumId($stratum_id)->first()) {
             $price->update([
                 "subsidy" => $event,
-                "stratum_id" => $stratum_id
+                "stratum_id" => $stratum_id,
+                "month" => $component->month,
+                "year" => $component->year,
             ]);
         } else {
             PhotovoltaicPrice::create([
                 "network_operator_id" => $component->model->id,
                 "subsidy" => $event,
-                "stratum_id" => $stratum_id
+                "stratum_id" => $stratum_id,
+                "month" => $component->month,
+                "year" => $component->year,
             ]);
         }
 
@@ -34,16 +40,22 @@ trait NetworkOperatorPriceTrait
     public function changeCredit(Component $component, $event, $stratum_id)
     {
         if ($price = PhotovoltaicPrice::whereNetworkOperatorId($component->model->id)
+            ->where("month", $component->month)
+            ->where("year", $component->year)
             ->whereStratumId($stratum_id)->first()) {
             $price->update([
                 "credit" => $event,
-                "stratum_id" => $stratum_id
+                "stratum_id" => $stratum_id,
+                "month" => $component->month,
+                "year" => $component->year,
             ]);
         } else {
             PhotovoltaicPrice::create([
                 "network_operator_id" => $component->model->id,
                 "credit" => $event,
-                "stratum_id" => $stratum_id
+                "stratum_id" => $stratum_id,
+                "month" => $component->month,
+                "year" => $component->year,
             ]);
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
@@ -52,16 +64,22 @@ trait NetworkOperatorPriceTrait
     public function changeValue(Component $component, $event, $stratum_id)
     {
         if ($price = PhotovoltaicPrice::whereNetworkOperatorId($component->model->id)
+            ->where("month", $component->month)
+            ->where("year", $component->year)
             ->whereStratumId($stratum_id)->first()) {
             $price->update([
                 "price" => $event,
-                "stratum_id" => $stratum_id
+                "stratum_id" => $stratum_id,
+                "month" => $component->month,
+                "year" => $component->year,
             ]);
         } else {
             PhotovoltaicPrice::create([
                 "network_operator_id" => $component->model->id,
                 "price" => $event,
-                "stratum_id" => $stratum_id
+                "stratum_id" => $stratum_id,
+                "month" => $component->month,
+                "year" => $component->year,
             ]);
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
@@ -69,7 +87,11 @@ trait NetworkOperatorPriceTrait
 
     public function getSubsidy(Component $component, $stratum_id)
     {
-        if ($price = $component->model->photovoltaicPrice()->whereStratumId($stratum_id)->first()) {
+
+        if ($price = $component->model->photovoltaicPrice()->whereStratumId($stratum_id)
+            ->where("month", $component->month)
+            ->where("year", $component->year)
+            ->first()) {
             return $price->subsidy;
         }
         return 0;
@@ -77,7 +99,10 @@ trait NetworkOperatorPriceTrait
 
     public function getCredit(Component $component, $stratum_id)
     {
-        if ($price = $component->model->photovoltaicPrice()->whereStratumId($stratum_id)->first()) {
+        if ($price = $component->model->photovoltaicPrice()->whereStratumId($stratum_id)
+            ->where("month", $component->month)
+            ->where("year", $component->year)
+            ->first()) {
             return $price->credit;
         }
         return 0;
@@ -85,9 +110,22 @@ trait NetworkOperatorPriceTrait
 
     public function getValue(Component $component, $stratum_id)
     {
-        if ($price = $component->model->photovoltaicPrice()->whereStratumId($stratum_id)->first()) {
+        if ($price = $component->model->photovoltaicPrice()->whereStratumId($stratum_id)
+            ->where("month", $component->month)
+            ->where("year", $component->year)
+            ->first()) {
             return $price->price;
         }
         return 0;
+    }
+
+    public function pickDate(Component $component)
+    {
+        if (!$component->month or !$component->year) {
+            $component->addError('date_picker_error', 'Debes seleccionar el mes y el año');
+            return;
+        }
+        $component->date_picked = true;
+        $component->model->refresh();
     }
 }
