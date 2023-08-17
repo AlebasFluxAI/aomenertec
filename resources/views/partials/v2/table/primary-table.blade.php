@@ -189,8 +189,8 @@
                                                                      "button_binding"=>array_key_exists("binding",$custom["redirect"])?$custom["redirect"]["binding"]:"",
                                                                      "redirect_values"=>array_key_exists("extra_params",$custom["redirect"])?$custom["redirect"]["extra_params"]:[],
                                                                      "icon_color"=>"secondary",
-                                                                     "model_id"=>isset($custom["model_id"])?$table_row->{$custom["model_id"]}:
-                                                                        $table_row->{$table_headers[0]["col_data"]},
+                                                                     "model_id"=> array_key_exists("binding_value",$custom["redirect"])?$table_row->{$custom["redirect"]["binding_value"]} : ((isset($custom["model_id"]))?$table_row->{$custom["model_id"]}:
+                                                                        $table_row->{$table_headers[0]["col_data"]}),
                                                                      "icon"=>$custom["icon"],
                                                                      "tooltip_title"=>$custom["tooltip_title"] ?? '',
                                                                      "button_subdomain"=>$custom["button_subdomain"]??null

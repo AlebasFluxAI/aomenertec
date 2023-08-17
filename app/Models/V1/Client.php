@@ -449,6 +449,10 @@ class Client extends Model
         return $this->hasMany(MicrocontrollerData::class);
     }
 
+    public function handReading()
+    {
+        return $this->hasMany(MicrocontrollerData::class)->whereManually(true);
+    }
     public function hourlyMicrocontrollerData()
     {
         return $this->hasMany(HourlyMicrocontrollerData::class);

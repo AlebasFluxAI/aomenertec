@@ -21,6 +21,9 @@ class WorkOrder extends Model
 
 
     public const WORK_ORDER_TYPE_INSTALLATION = "installation";
+    public const WORK_ORDER_TYPE_DISCONNECTION = "disconnection";
+    public const WORK_ORDER_TYPE_READING = "reading";
+    public const WORK_ORDER_TYPE_RECONNECTION = "reconnection";
     public const WORK_ORDER_TYPE_REPLACE = "replace";
     public const WORK_ORDER_TYPE_CORRECTIVE_MAINTENANCE = "corrective_maintenance";
     public const WORK_ORDER_TYPE_PREVENTIVE_MAINTENANCE = "preventive_maintenance";
@@ -61,6 +64,7 @@ class WorkOrder extends Model
         "level",
         "execution_time_hours",
         "execution_time_minutes",
+        "microcontroller_data_id"
 
     ];
 
@@ -159,12 +163,18 @@ class WorkOrder extends Model
                 "col_data" => "level",
                 "col_filter" => false
             ],
+
         ];
     }
 
     public function pqr()
     {
         return $this->belongsTo(Pqr::class);
+    }
+
+    public function microcontrollerData()
+    {
+        return $this->belongsTo(MicrocontrollerData::class);
     }
 
     public function setOpen()

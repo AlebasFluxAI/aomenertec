@@ -3,6 +3,9 @@
 use App\Models\V1\WorkOrder;
 
 return [
+    WorkOrder::WORK_ORDER_TYPE_RECONNECTION => "Reconexión",
+    WorkOrder::WORK_ORDER_TYPE_DISCONNECTION => "Desconexión",
+    WorkOrder::WORK_ORDER_TYPE_READING => "Lectura",
     WorkOrder::WORK_ORDER_TYPE_INSTALLATION => "Instalacion",
     WorkOrder::WORK_ORDER_TYPE_REPLACE => "Cambio de equipo",
     WorkOrder::WORK_ORDER_TYPE_CORRECTIVE_MAINTENANCE => "Mantenimiento correctivo",

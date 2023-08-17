@@ -78,4 +78,17 @@ class WorkOrderIndex extends Component
     {
         return $this->workOrderDetailsService->getData($this);
     }
+    public function conditionalManuallyDetail($workOrderId)
+    {
+        return $this->workOrderDetailsService->conditionalManuallyDetail($this, $workOrderId);
+
+    }
+    public function conditionalManuallyCreate($workOrderId)
+    {
+        return $this->workOrderDetailsService->conditionalManuallyCreate($this, $workOrderId);
+    }
+    public function conditionalTypeReading($workOrderId)
+    {
+        return $this->workOrderDetailsService->conditionalTypeReading($this, $workOrderId);
+    }
 }
