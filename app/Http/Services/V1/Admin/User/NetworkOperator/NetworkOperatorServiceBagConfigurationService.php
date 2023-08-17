@@ -8,6 +8,7 @@ use App\Models\Model\V1\BillingService;
 use App\Models\Traits\NetworkOperatorPriceTrait;
 use App\Models\V1\AdminConfiguration;
 use App\Models\V1\Client;
+use App\Models\V1\ClientType;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\PhotovoltaicPrice;
 use App\Models\V1\Stratum;
@@ -22,6 +23,7 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
 
     public function mount(Component $component, $model)
     {
+        $clientPrices = $model->networkOperatorClientPrices;
         $component->fill([
             'model' => $model,
             'pqr_bag' => $model->pqr_initial_bag,
@@ -32,24 +34,56 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
             "has_billable_clients" => $model->billableServices ? $model->billableServices->has_billable_clients : false,
             "pqr_price" => $model->billableServices ? $model->billableServices->pqr_price : false,
             "orders_price" => $model->billableServices ? $model->billableServices->orders_price : false,
-            "currency" => $model->currency,
+            "initial_package_pqr_price" => $model->billableServices ? $model->billableServices->initial_package_pqr_price : false,
+            "initial_package_orders_price" => $model->billableServices ? $model->billableServices->initial_package_orders_price : false,
+            "currency" => $model->billableServices ? $model->billableServices->currency : false,
+            "prices" => $model->networkOperatorClientPrices,
+            "client_types" => ClientType::get(),
+            "zni_conventional" => count($clientPrices) > 0 ? $clientPrices->where("client_type_id", ClientType::whereType(ClientType::ZIN_CONVENTIONAL)->first()->id)->first()->value : 0,
+            "prices_zni_fotovoltaico" => count($clientPrices) > 0 ? $clientPrices->where("client_type_id", ClientType::whereType(ClientType::ZIN_PHOTOVOLTAIC)->first()->id)->first()->value : 0,
+            "zni_rural" => count($clientPrices) > 0 ? $clientPrices->where("client_type_id", ClientType::whereType(ClientType::ZIN_RURAL)->first()->id)->first()->value : 0,
+            "sin_conventional" => count($clientPrices) > 0 ? $clientPrices->where("client_type_id", ClientType::whereType(ClientType::SIN_CONVENTIONAL)->first()->id)->first()->value : 0,
+            "monitoring" => count($clientPrices) > 0 ? $clientPrices->where("client_type_id", ClientType::whereType(ClientType::MONITORING)->first()->id)->first()->value : 0,
             "currencies" => [
                 ["key" => "Peso Colombiano", "value" => BillingService::COP],
                 ["key" => "Dolar", "value" => BillingService::USD]
             ]
         ]);
+
     }
 
 
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
+            foreach ([
+                         ClientType::ZIN_CONVENTIONAL => $component->zni_conventional,
+                         ClientType::ZIN_PHOTOVOLTAIC => $component->prices_zni_fotovoltaico,
+                         ClientType::ZIN_RURAL => $component->zni_rural,
+                         ClientType::SIN_CONVENTIONAL => $component->sin_conventional,
+                         ClientType::MONITORING => $component->monitoring,
+                     ] as $key => $priceClient) {
+                $clientTypeId = ClientType::whereType($key)->first()->id;
+                if (!$price = $component->model->networkOperatorClientPrices()->where([
+                    "client_type_id" => $clientTypeId,
+                ])->first()) {
+                    $component->model->networkOperatorClientPrices()->create([
+                        "client_type_id" => $clientTypeId,
+                        "value" => $priceClient
+                    ]);
+                    continue;
+                }
+                $price->update([
+                    "value" => $priceClient
+                ]);
+            }
+            $component->prices = $component->model->networkOperatorClientPrices;
+
             $component->model->update([
                 "pqr_initial_bag" => $component->pqr_bag,
                 "work_order_initial_bag" => $component->work_order_hours,
                 "billing_day" => $component->billing_day
             ]);
-
             if ($billableService = $component->model->billableServices) {
                 $billableService->update([
                     "orders_price" => $component->orders_price,
@@ -68,7 +102,7 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
                 ]);
             }
         });
-        $component->redirectRoute("administrar.v1.usuarios.operadores.detalles", ["networkOperator" => $component->model->id]);
+        ToastEvent::launchToast($component, "show", "success", "Tarifa modificada");
 
     }
 

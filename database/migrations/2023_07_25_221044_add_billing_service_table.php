@@ -21,6 +21,7 @@ class AddBillingServiceTable extends Migration
             $table->boolean("has_billable_orders")->default(true);
             $table->boolean("has_billable_clients")->default(true);
             $table->double("pqr_price")->default(0.0);
+            $table->double("orders_price")->default(0.0);
             $table->double("initial_package_pqr_price")->default(0.0);
             $table->double("initial_package_orders_price")->default(0.0);
             $table->enum("currency", [

@@ -151,6 +151,17 @@
                         ])
                     </div>
             @endif
+
+            @include("partials.v1.form.form_input_icon",[
+             "input_model"=>"final_recommendations",
+             "input_label"=>"Si tienes recomendaciones finales por favor escribelas aqui",
+             "icon_class"=>"fas fa-edit",
+             "placeholder"=>"Ingrese las sugerencias finales",
+             "col_with"=>12,
+             "input_type"=>"text",
+             "input_rows"=>6,
+             "required"=>true
+    ])
             @if($model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_DISABLE_CLIENT or $model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_ENABLE_CLIENT)
                 @include("partials.v1.form.form_submit_button",[
                                       "button_align"=>"right" ,

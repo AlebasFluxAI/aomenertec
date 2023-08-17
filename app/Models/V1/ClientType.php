@@ -20,6 +20,8 @@ class ClientType extends Model
     public const ZIN_CONVENTIONAL = "ZNI Convencional";
     public const SIN_CONVENTIONAL = "SIN Convencional";
     public const ZIN_PHOTOVOLTAIC = "ZNI Sistema fotovoltaico";
+    public const ZIN_RURAL = "ZNI rural";
+    public const MONITORING = "Monitoreo";
 
     protected $fillable = [
         'type',

@@ -65,6 +65,11 @@ class NetworkOperator extends Model
     ];
 
 
+    public function networkOperatorClientPrices()
+    {
+        return $this->hasMany(NetworkOperatorClientPrice::class)->orderBy("client_type_id");
+    }
+
     public function getCurrentEnabledClients()
     {
         return $this->clients();
