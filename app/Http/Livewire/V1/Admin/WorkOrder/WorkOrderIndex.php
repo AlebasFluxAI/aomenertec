@@ -36,7 +36,7 @@ class WorkOrderIndex extends Component
 
     public function adminWorkOrderConditional($workOrderId)
     {
-        return !($this->workOrderDetailsService->setInProgressWorkOrderConditional($this, $workOrderId));
+        return $this->workOrderDetailsService->adminWorkOrderConditional($this, $workOrderId);
     }
 
     public function setInProgressWorkOrderConditional($workOrderId)

@@ -162,7 +162,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                             ->name("administrar.v1.usuarios.operadores.agregar_equipos")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT));
 
-                        Route::get('configurar_precios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\PriceConfigurationNetworkOperator::class)
+                        Route::get('configurar_precios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\PricePhotovoltaicConfig::class)
                             ->name("administrar.v1.usuarios.operadores.configurar_precios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
 
@@ -170,7 +170,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                             ->name("administrar.v1.usuarios.operadores.configurar_bolsa_servicios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION));
 
-                        Route::get('modulo_precios', Livewire\V1\Admin\User\NetworkOperator\PriceNetworkOperator::class)
+                        Route::get('modulo_precios', Livewire\V1\Admin\User\NetworkOperator\PriceNetworkOperatorWrap::class)
                             ->name("administrar.v1.usuarios.operadores.modulo_precios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
                     });

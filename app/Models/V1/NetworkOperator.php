@@ -2,6 +2,8 @@
 
 namespace App\Models\V1;
 
+use App\Http\Livewire\V1\Admin\User\NetworkOperator\PriceClientTypePriceNetworkOperator;
+use App\Http\Livewire\V1\Admin\User\NetworkOperator\PricePhotovoltaicConfig;
 use App\Models\Model\V1\BillingService;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
@@ -282,18 +284,15 @@ class NetworkOperator extends Model
         return (array_map(function ($key) {
             if ($key == ClientType::ZIN_PHOTOVOLTAIC) {
                 return [
-                    "view_name" => "livewire.v1.admin.user.network-operator.price-configuration-network-operator",
-                    "view_values" => [
-                        "data" => \App\Models\V1\Stratum::get(),
-                        "table_class_container" => "",
-                        "view_header" => false,
-                        "col_filter" => false,
+                    "component_class" => PricePhotovoltaicConfig::class,
+                    "component_values" => [
+                        "networkOperator" => $this,
                     ]
                 ];
             }
             return [
-                "view_name" => "livewire.v1.admin.user.network-operator.price-calculator.calculator",
-                "view_values" => [
+                "component_class" => PriceClientTypePriceNetworkOperator::class,
+                "component_values" => [
                     "client_type" => $key
                 ],
 

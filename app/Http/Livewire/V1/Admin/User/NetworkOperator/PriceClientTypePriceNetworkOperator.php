@@ -12,13 +12,20 @@ use App\Models\Traits\ValidateUserFormTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class PriceNetworkOperator extends Component
+class PriceClientTypePriceNetworkOperator extends Component
 {
 
     public $model;
     public $taxType = [];
 
     private $networkOperatorPriceService;
+    public $months;
+    public $years;
+    public $month;
+    public $year;
+    public $date_picked;
+    public $client_type;
+
 
     function __construct($id = null)
     {
@@ -26,9 +33,9 @@ class PriceNetworkOperator extends Component
         $this->networkOperatorPriceService = NetworkOperatorPriceService::getInstance();
     }
 
-    public function mount()
+    public function mount($client_type)
     {
-        $this->networkOperatorPriceService->mount($this);
+        $this->networkOperatorPriceService->mount($this, $client_type);
     }
 
     public function getFee($value, $level, $type)
@@ -103,6 +110,12 @@ class PriceNetworkOperator extends Component
         return $this->networkOperatorPriceService->getCredit($this, $stratum_id);
     }
 
+    public function pickDate()
+    {
+        $this->networkOperatorPriceService->pickDate($this);
+    }
+
+
     public function getValue($stratum_id)
     {
         return $this->networkOperatorPriceService->getValue($this, $stratum_id);
@@ -110,7 +123,7 @@ class PriceNetworkOperator extends Component
 
     public function render()
     {
-        return view('livewire.v1.admin.user.network-operator.price-network-operator')
+        return view('livewire.v1.admin.user.network-operator.price-configuration.client-type-price-calculator')
             ->extends('layouts.v1.app');
     }
 }

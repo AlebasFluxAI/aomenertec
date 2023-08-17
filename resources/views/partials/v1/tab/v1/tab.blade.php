@@ -86,26 +86,34 @@
             <div wire:ignore.self class="tab-pane contenedor-grande fade show active" id="tab-{{$index}}"
                  role="tabpanel"
                  aria-labelledby="nav-{{$index}}-tab">
-                @include($tab_content["view_name"],$tab_content["view_values"])
-                @if($logout_button??false)
-                    @include("partials.v1.table_nav",
-                            ["mt"=>2,"nav_options"=>[
-                             ["button_align"=>"right",
-                             "click_action"=>"",
-                             "button_content"=>"Cerrar sesión",
-                             "button_icon"=>"fa-solid fa-right-from-bracket",
-                             "target_route"=>"logout",
-                             ],
-                         ]
-                    ])
+                @if(array_key_exists("component_class",$tab_content))
+                    @livewire($tab_content["component_class"],$tab_content["component_values"])
+                @else
+                    @include($tab_content["view_name"],$tab_content["view_values"])
+                    @if($logout_button??false)
+                        @include("partials.v1.table_nav",
+                                ["mt"=>2,"nav_options"=>[
+                                 ["button_align"=>"right",
+                                 "click_action"=>"",
+                                 "button_content"=>"Cerrar sesión",
+                                 "button_icon"=>"fa-solid fa-right-from-bracket",
+                                 "target_route"=>"logout",
+                                 ],
+                             ]
+                        ])
+                    @endif
                 @endif
             </div>
         @else
             <div wire:ignore.self class="contenedor-grande tab-pane fade" id="tab-{{$index}}"
                  role="tabpanel"
                  aria-labelledby="nav-{{$index}}-tab">
-                @include($tab_content["view_name"],$tab_content["view_values"])
 
+                @if(array_key_exists("component_class",$tab_content))
+                    @livewire($tab_content["component_class"],$tab_content["component_values"])
+                @else
+                    @include($tab_content["view_name"],$tab_content["view_values"])
+                @endif
             </div>
         @endif
     @endforeach
