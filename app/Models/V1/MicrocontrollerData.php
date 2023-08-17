@@ -4,6 +4,8 @@ namespace App\Models\V1;
 
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
+use App\Models\Traits\ImageableManyTrait;
+use App\Models\Traits\ImageableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\V1\AlertHistory;
 use App\Models\V1\Client;
@@ -25,6 +27,7 @@ class MicrocontrollerData extends Model
     use HasFactory;
     use SoftDeletes;
     use PaginatorTrait;
+    use ImageableTrait;
 
 
     protected $fillable = [
@@ -40,7 +43,8 @@ class MicrocontrollerData extends Model
         "accumulated_reactive_capacitive_consumption",
         "interval_reactive_capacitive_consumption",
         "interval_reactive_inductive_consumption",
-        "is_alert"
+        "is_alert",
+        "manually"
     ];
 
     public function client()
@@ -48,6 +52,15 @@ class MicrocontrollerData extends Model
         return $this->belongsTo(Client::class);
     }
 
+    public function images()
+    {
+        return $this->morphMany(Image::class, "imageable")->whereType("evidences");
+    }
+
+    public function evidences()
+    {
+        return $this->morphMany(Image::class, "imageable")->whereType("evidences");
+    }
     public function alertHistories()
     {
         return $this->hasMany(AlertHistory::class);

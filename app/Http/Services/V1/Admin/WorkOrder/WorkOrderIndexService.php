@@ -28,9 +28,15 @@ class WorkOrderIndexService extends Singleton
 
     public function setInProgressWorkOrderConditional(Component $component, $workOrderId)
     {
-        return (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS);
+        return (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS) or (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_CLOSED);
     }
 
+
+    public function adminWorkOrderConditional(Component $component, $workOrderId)
+    {
+        $workOrder = WorkOrder::find($workOrderId);
+        return !($workOrder->status == WorkOrder::WORK_ORDER_STATUS_OPEN);
+    }
 
     public function processEquipmentReplace(Component $component, $workOrderId)
     {
@@ -41,6 +47,10 @@ class WorkOrderIndexService extends Singleton
 
     public function setOpenWorkOrderConditional(Component $component, $workOrderId)
     {
+        $workOrder = WorkOrder::find($workOrderId);
+        if ($workOrder->type == WorkOrder::WORK_ORDER_TYPE_READING) {
+            return true;
+        }
         return (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_OPEN);
     }
 
@@ -48,6 +58,9 @@ class WorkOrderIndexService extends Singleton
     public function replaceEquipmentHandlerConditional(Component $component, $workOrderId)
     {
         $workOrder = WorkOrder::find($workOrderId);
+        if ($workOrder->type == WorkOrder::WORK_ORDER_TYPE_READING) {
+            return true;
+        }
         if (!($workOrder->type == WorkOrder::WORK_ORDER_TYPE_REPLACE)) {
             return true;
         }
@@ -94,6 +107,30 @@ class WorkOrderIndexService extends Singleton
     public function setOpen($workOrderId)
     {
         WorkOrder::find($workOrderId)->setOpen();
+    }
+
+    public function conditionalManuallyDetail(Component $component, $modelId)
+    {
+        $workOrder = WorkOrder::find($modelId);
+        if ($workOrder->type == WorkOrder::WORK_ORDER_TYPE_READING) {
+            return ($workOrder->microcontroller_data_id == null || $workOrder->microcontroller_data_id == "");
+        }
+        return true;
+    }
+
+    public function conditionalManuallyCreate(Component $component, $modelId)
+    {
+        $workOrder = WorkOrder::find($modelId);
+        if ($workOrder->type == WorkOrder::WORK_ORDER_TYPE_READING) {
+            return !($workOrder->microcontroller_data_id == null || $workOrder->microcontroller_data_id == "");
+        }
+        return true;
+    }
+
+    public function conditionalTypeReading(Component $component, $modelId)
+    {
+        $workOrder = WorkOrder::find($modelId);
+        return $workOrder->type == WorkOrder::WORK_ORDER_TYPE_READING;
     }
 
 

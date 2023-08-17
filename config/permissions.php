@@ -291,6 +291,10 @@ return [
         Permissions::CLIENT_SHOW_MONITORING,
         Permissions::CLIENT_MONITORING_CONTROL,
         Permissions::CLIENT_SHOW_ALERTS,
+        Permissions::CLIENT_HAND_READING,
+        Permissions::CLIENT_HAND_READING_SHOW,
+        Permissions::CLIENT_HAND_READING_CREATE,
+
 
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,

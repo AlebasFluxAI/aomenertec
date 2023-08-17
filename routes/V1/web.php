@@ -162,15 +162,15 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                             ->name("administrar.v1.usuarios.operadores.agregar_equipos")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_LINK_EQUIPMENT));
 
-                        Route::get('configurar_precios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\PriceConfigurationNetworkOperator::class)
+                        Route::get('configurar_precios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\PricePhotovoltaicConfig::class)
                             ->name("administrar.v1.usuarios.operadores.configurar_precios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
-                        
+
                         Route::get('configurar_bolsa_servicios/{networkOperator}', Livewire\V1\Admin\User\NetworkOperator\BagServiceConfigurationNetworkOperator::class)
                             ->name("administrar.v1.usuarios.operadores.configurar_bolsa_servicios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION));
 
-                        Route::get('modulo_precios', Livewire\V1\Admin\User\NetworkOperator\PriceNetworkOperator::class)
+                        Route::get('modulo_precios', Livewire\V1\Admin\User\NetworkOperator\PriceNetworkOperatorWrap::class)
                             ->name("administrar.v1.usuarios.operadores.modulo_precios")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION));
                     });
@@ -316,6 +316,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                     Route::get('facturas/{client}', Livewire\V1\Admin\Client\ClientInvoiceIndex::class)
                         ->name("v1.admin.client.invoicing")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW_MONITORING));
+
+                    Route::get('lectura_manual/{client}', Livewire\V1\Admin\Client\ClientHandReadingIndex::class)
+                        ->name("v1.admin.client.hand_reading")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_HAND_READING));
+
+                    Route::get("lectura_manual/detalles/{microcontroller_data}", Livewire\V1\Admin\Client\ClientHandReadingDetailComponent::class)
+                        ->name("v1.admin.client.hand_reading.detalle")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_HAND_READING_SHOW));
+
+                    Route::get("lectura_manual/crear/{work_order?}", Livewire\V1\Admin\Client\ClientHandReadingCreateComponent::class)
+                        ->name("v1.admin.client.hand_reading.crear")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_HAND_READING_SHOW));
 
                     Route::get('monitoreo/{client}', Livewire\V1\Admin\Client\Monitoring::class)
                         ->name("v1.admin.client.monitoring")

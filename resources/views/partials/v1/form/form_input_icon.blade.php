@@ -63,6 +63,7 @@
                    @if($input_type??"text" == "number")
                        min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
                    @endif
+                   @if($disabled??false)disabled @endif
                    @if($required??false)
                        required
                 @endif

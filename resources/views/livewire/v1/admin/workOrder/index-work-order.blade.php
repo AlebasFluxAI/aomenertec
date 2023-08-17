@@ -22,6 +22,7 @@
                                                          ],
                                                        "icon"=>"fas fa-search",
                                                        "tooltip_title"=>"Detalles",
+                                                       "conditional" => "conditionalTypeReading",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_DETAILS],
                                                  ],
                                                  [
@@ -41,21 +42,41 @@
                                                          ],
                                                        "icon"=>"fas fa-pencil",
                                                        "tooltip_title"=>"Editar",
+                                                       "conditional" => "conditionalTypeReading",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_EDIT],
+                                                 ],
+                                                  ["redirect"=>[
+                                                               "route"=>"v1.admin.client.hand_reading.detalle",
+                                                               "binding"=>"microcontroller_data",
+                                                               "binding_value"=>"microcontroller_data_id"
+
+                                                         ],
+                                                       "icon"=>"fas fa-info-circle",
+                                                       "tooltip_title"=>"Detalle de lectura",
+                                                       "conditional" => "conditionalManuallyDetail",
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING_SHOW],
+                                                 ],
+                                                 ["redirect"=>[
+                                                               "route"=>"v1.admin.client.hand_reading.crear",
+                                                         ],
+                                                       "icon"=>"fas fa-file-signature",
+                                                       "tooltip_title"=>"Registrar lectura",
+                                                       "conditional" => "conditionalManuallyCreate",
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING_CREATE],
                                                  ],
                                                   [
 
-                                                       "conditional"=>"setInProgressWorkOrderConditional",
                                                        "function"=>"setInProgress",
                                                        "icon"=>"fas fa-rotate-right",
                                                        "tooltip_title"=>"Iniciar orden de trabajo",
+                                                       "conditional" => "conditionalTypeReading",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_IN_PROGRESS],
                                                  ],
                                                  [
                                                        "function"=>"processEquipmentReplace",
                                                        "conditional"=>"replaceEquipmentHandlerConditional",
                                                        "icon"=>"fas fa-computer",
-                                                       "tooltip_title"=>"Gestionar cambio de equpo",
+                                                       "tooltip_title"=>"Gestionar cambio de equipo",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE_MANAGE],
                                                  ],
                                                ],

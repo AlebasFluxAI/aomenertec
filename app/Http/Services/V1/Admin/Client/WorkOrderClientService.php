@@ -108,6 +108,14 @@ class WorkOrderClientService extends Singleton
         ];
     }
 
+    public function conditionalManuallyDetail(Component $component, $modelId)
+    {
+        return !(($modelId->microcontroller_data_id == null or $modelId->microcontroller_data_id == "") and $modelId->type == WorkOrder::WORK_ORDER_TYPE_READING);
+    }
+    public function conditionalManuallyCreate(Component $component, $modelId)
+    {
+        return (($modelId->microcontroller_data_id == null or $modelId->microcontroller_data_id == "") and $modelId->type == WorkOrder::WORK_ORDER_TYPE_READING);
+    }
     public function getData(Component $component)
     {
         return $component->model->workOrders()->pagination();

@@ -268,6 +268,15 @@
                                                         "tooltip_title"=>"Facturas",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_SHOW_INVOICING],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.hand_reading",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-file-signature",
+                                                        "tooltip_title"=>"Lecturas manuales",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING],
+                                                ],
 
 
 

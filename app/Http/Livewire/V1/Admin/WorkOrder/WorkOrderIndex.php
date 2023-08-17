@@ -36,7 +36,7 @@ class WorkOrderIndex extends Component
 
     public function adminWorkOrderConditional($workOrderId)
     {
-        return !($this->workOrderDetailsService->setInProgressWorkOrderConditional($this, $workOrderId));
+        return $this->workOrderDetailsService->adminWorkOrderConditional($this, $workOrderId);
     }
 
     public function setInProgressWorkOrderConditional($workOrderId)
@@ -77,5 +77,18 @@ class WorkOrderIndex extends Component
     public function getData()
     {
         return $this->workOrderDetailsService->getData($this);
+    }
+    public function conditionalManuallyDetail($workOrderId)
+    {
+        return $this->workOrderDetailsService->conditionalManuallyDetail($this, $workOrderId);
+
+    }
+    public function conditionalManuallyCreate($workOrderId)
+    {
+        return $this->workOrderDetailsService->conditionalManuallyCreate($this, $workOrderId);
+    }
+    public function conditionalTypeReading($workOrderId)
+    {
+        return $this->workOrderDetailsService->conditionalTypeReading($this, $workOrderId);
     }
 }
