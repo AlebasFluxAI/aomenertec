@@ -201,7 +201,7 @@
                                            )
                 @include("partials.v1.form.form_input_icon",
    ["input_model"=>"month",
-   "updated_input"=>"defer",
+   "updated_input"=>"lazy",
    "input_field"=>"",
    "input_label"=>"Seleccione el mes a facturar",
    "input_type"=>"select",
@@ -220,7 +220,7 @@
 
                 @include("partials.v1.form.form_input_icon",
              ["input_model"=>"year",
-             "updated_input"=>"defer",
+             "updated_input"=>"lazy",
              "input_field"=>"",
              "input_label"=>"Seleccione un año a facturar",
              "input_type"=>"select",

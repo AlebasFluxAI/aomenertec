@@ -36,13 +36,13 @@ class ClientInvoiceGenerateService extends Singleton
         ]);
     }
 
-    public function updateMonth(Component $component,  $value){
-        $component->fees = $component->client->feesDate($value, $component->year);
-        $component->other_fees = $component->client->otherFeesDate($value, $component->year);
+    public function updatedMonth(Component $component, $value){
+        $component->fees = Client::find($component->client->id)->feesDate($value, $component->year);
+        $component->other_fees = Client::find($component->client->id)->otherFeesDate($value, $component->year);
     }
-    public function updateYear(Component $component,  $value){
-        $component->fees = $component->client->feesDate($component->month, $value);
-        $component->other_fees = $component->client->otherFeesDate($component->month, $value);
+    public function updatedYear(Component $component,  $value){
+        $component->fees = Client::find($component->client->id)->feesDate($component->month, $value);
+        $component->other_fees = Client::find($component->client->id)->otherFeesDate($component->month, $value);
 
     }
 

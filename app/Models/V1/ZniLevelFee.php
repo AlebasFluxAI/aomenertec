@@ -32,7 +32,6 @@ class ZniLevelFee extends Model
         "lost",
         "restriction",
         "unit_cost",
-        "total_fee",
         "optional_fee",
         "month",
         "year",
