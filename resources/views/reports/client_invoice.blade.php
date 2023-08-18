@@ -55,6 +55,7 @@
             padding: 10px;
         }
         .logo {
+            max-height: 50px;
             width: 200px;
             /* Ajusta el tamaño del logo según tus necesidades */
             margin-right: 20px;
@@ -97,14 +98,14 @@
 <body>
 <table class="header-container">
     <tr class="flex-row">
-        <td class="flex-item" rowspan="3"> <img src="https://enerteclatam.com/media/nuhcco0k/logotipo-enerteclatam.png" alt="Logo" class="logo"></td>
-        <td class="flex-item" rowspan="3">Enertec Latinoamerica SAS<br>Nit: 901091737-7<br>www.enerteclatam.com</td>
+        <td class="flex-item" rowspan="3"> <img src={{$admin->icon->url}} alt="Logo" class="logo"></td>
+        <td class="flex-item" rowspan="3">{{$network_operator->name. ' '. $network_operator->last_name}}<br>{{$network_operator->identification_type.': '.$network_operator->identification}}<br>www.enerteclatam.com</td>
         <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>No. de cuenta:</strong></td>
         <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">1000</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Total a pagar:</strong></td>
-        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">$150.000</td>
+        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">{{'$'.$value->total}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Pago oportuno:</strong></td>
@@ -121,27 +122,27 @@
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Razón social:</strong></td>
-        <td class="flex-item" style="padding:2px;" colspan="2">Luz Costero alba</td>
+        <td class="flex-item" style="padding:2px;" colspan="2">{{$client->name. ' '. $client->last_name}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Ciudad y Depto</strong></td>
-        <td class="flex-item" style="padding:2px;" colspan="2">Villavicencio, Meta</td>
+        <td class="flex-item" style="padding:2px;" colspan="2">{{$client->address->city.', '.$client->address->state }}</td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Nit:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1234567895</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>{{$client->identification_type}}:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->identification}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>No. Medidor</strong></td>
         <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1234567</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Dirección:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">Cra 20 28-05</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->address->address}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Codigo cliente</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">8678546</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->code}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Clase de servicio:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">Industrial</td>
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Mercado</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">Regulado</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{($client->stratum->name == 'Comercial' || $client->stratum->name == 'Industrial')?$client->stratum->name:'Domicialiario' }}</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Tipo de cliente</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->clientType->type}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>CUFE:</strong></td>
@@ -159,7 +160,7 @@
                 </tr>
                 <tr class="flex-row" style="background: #B6B7B7;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Total a pagar</strong></td>
-                    <td class="flex-item" style="padding:5px; text-align: right" >$198.000</td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >{{'$'.$value->total}}</td>
                 </tr>
                 <tr class="flex-row" style="background: #F3F3F3;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Fecha de pago oportuno</strong></td>
@@ -203,7 +204,7 @@
                     <td class="flex-item" style="border-radius: 10px; padding:2px; text-align: center; background: #B6B7B7; font-size: 8px" ><strong>Promedio de consumo <br>ultimos 6 meses</strong></td>
                 </tr>
                 <tr class="flex-row">
-                    <td class="flex-item" style="padding:2px; text-align: center;">2845</td>
+                    <td class="flex-item" style="padding:2px; text-align: center;">{{$monthly_data->interval_real_consumption}}</td>
                     <td class="flex-item" style="padding:2px; text-align: center;" >2650</td>
                     <td class="flex-item" style="padding:2px; text-align: center" >2786</td>
                 </tr>
@@ -214,7 +215,7 @@
             </table>
             <table class="middle-container" style="margin-top: 13px; margin-right: 5px; font-size: 10px ">
                 <tr class="flex-row">
-                    <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="3"><strong>DETALLE DE LA FACTURA</strong></td>
+                    <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="3"><strong>DESGLOSE REACTIVA</strong></td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: center;"><strong>Detalle</strong></td>
@@ -225,22 +226,22 @@
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Activa</td>
                     <td class="flex-item" style="padding:2px; text-align: center;" >kWh</td>
-                    <td class="flex-item" style="padding:2px; text-align: center" >2565</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >{{$monthly_data->interval_real_consumption}}</td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Reactiva inductiva total</td>
-                    <td class="flex-item" style="padding:2px; text-align: center; " >kVArh</td>
-                    <td class="flex-item" style="padding:2px; text-align: center" >25.640</td>
+                    <td class="flex-item" style="padding:2px; text-align: center; " >kVArLh</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >{{$monthly_data->interval_reactive_inductive_consumption}}</td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Reactiva capacitiva</td>
-                    <td class="flex-item" style="padding:2px; text-align: center;">kVArh</td>
-                    <td class="flex-item" style="padding:2px; text-align: center" >2</td>
+                    <td class="flex-item" style="padding:2px; text-align: center;">kVArCh</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >{{$monthly_data->interval_reactive_capacitive_consumption}}</td>
                 </tr>
                 <tr class="flex-row">
-                    <td class="flex-item" style="padding:2px; text-align: left;">Reactiva inductiva </td>
-                    <td class="flex-item" style="padding:2px; text-align: center; " >kVArh</td>
-                    <td class="flex-item" style="padding:2px; text-align: center" >25.640</td>
+                    <td class="flex-item" style="padding:2px; text-align: left;">Reactiva inductiva facturada </td>
+                    <td class="flex-item" style="padding:2px; text-align: center; " >kVArLh</td>
+                    <td class="flex-item" style="padding:2px; text-align: center" >{{$monthly_data->penalizable_reactive_inductive_consumption}}</td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Factor M</td>
@@ -261,36 +262,50 @@
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Activa</td>
-                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >1203</td>
-                    <td class="flex-item" style="padding:2px; text-align: right" >$1.895.541</td>
+                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >{{$monthly_data->interval_real_consumption}}</td>
+                    <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->value_active}}</td>
                 </tr>
-                <tr class="flex-row">
-                    <td class="flex-item" style="padding:2px; text-align: left;">Contribución</td>
-                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >10%</td>
-                    <td class="flex-item" style="padding:2px; text-align: right" >$180000</td>
-                </tr>
+                @if($client->stratum->id > 4)
+                    @if($client->contribution && $other_fees->contribution > 0)
+                        <tr class="flex-row">
+                            <td class="flex-item" style="padding:2px; text-align: left;">Contribución</td>
+                            <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >{{$other_fees->contribution.'%'}}</td>
+                            <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->value_contribution}}</td>
+                        </tr>
+                    @endif
+                @elseif($client->stratum->id < 4)
+                    @if($other_fees->discount > 0)
+                        <tr class="flex-row">
+                            <td class="flex-item" style="padding:2px; text-align: left;">Descuento</td>
+                            <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >{{$other_fees->discount.'%'}}</td>
+                            <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->value_discount}}</td>
+                        </tr>
+                    @endif
+                @endif
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Reactiva capacitiva</td>
-                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >10</td>
-                    <td class="flex-item" style="padding:2px; text-align: right" >$2565</td>
+                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >{{$monthly_data->interval_reactive_capacitive_consumption}}</td>
+                    <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->value_varch}}</td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Reactiva inductiva</td>
-                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >120</td>
-                    <td class="flex-item" style="padding:2px; text-align: right" >$25.640</td>
+                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >{{$monthly_data->penalizable_reactive_inductive_consumption}}</td>
+                    <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->value_varlh}}</td>
                 </tr>
-                <tr class="flex-row">
-                    <td class="flex-item" style="padding:2px; text-align: left;">Impuesto AP</td>
-                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >8%</td>
-                    <td class="flex-item" style="padding:2px; text-align: right" >$98000</td>
-                </tr>
+                @if($client->public_lighting_tax && $other_fees->tax > 0)
+                    <tr class="flex-row">
+                        <td class="flex-item" style="padding:2px; text-align: left;">Impuesto AP</td>
+                        <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >{{($other_fees->tax_type == 'money_fee')?'$'.$other_fees->tax:$other_fees->tax.'%'}}</td>
+                        <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->tax}}</td>
+                    </tr>
+                @endif
                 <tr class="flex-row">
                     <td class="flex-item" style="padding: 2px; " colspan="3"></td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;"><strong>Subtotal energia</strong></td>
                     <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >-</td>
-                    <td class="flex-item" style="padding:2px; text-align: right" >$2.895.541</td>
+                    <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->subtotal_energy}}</td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding: 15px; " colspan="3"></td>
@@ -305,7 +320,7 @@
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;">Saldo de cartera</td>
-                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >1</td>
+                    <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >-</td>
                     <td class="flex-item" style="padding:2px; text-align: right" >$0</td>
                 </tr>
                 <tr class="flex-row">
@@ -314,14 +329,14 @@
                 <tr class="flex-row">
                     <td class="flex-item" style="padding:2px; text-align: left;"><strong>Subtotal otros cobros</strong></td>
                     <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >-</td>
-                    <td class="flex-item" style="padding:2px; text-align: right" >$2.895.541</td>
+                    <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->subtotal_others}}</td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item" style="padding: 15px; " colspan="3"></td>
                 </tr>
                 <tr class="flex-row" style="background: #009599;">
                     <td class="flex-item" style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;" colspan="2"><strong>Total a pagar</strong></td>
-                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>$2.000.000</strong></td>
+                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>{{'$'.$value->total}}</strong></td>
                 </tr>
             </table>
             <table class="middle-container" style="margin-top: 10px; margin-left: 5px; ">
@@ -330,35 +345,35 @@
                 </tr>
                 <tr class="flex-row" style="background: #B6B7B7;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Generación(G)</strong></td>
-                    <td class="flex-item" style="padding:5px; text-align: right" >$158.52</td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >{{'$'.$fees->generation}}</td>
                 </tr>
                 <tr class="flex-row" style="background: #F3F3F3;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Transmisión (T)</strong></td>
-                    <td class="flex-item" style="padding:5px; text-align: right" >$40.05</td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >{{'$'.$fees->transmission}}</td>
                 </tr>
                 <tr class="flex-row" style="background: #B6B7B7;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Distribucción (D)</strong></td>
-                    <td class="flex-item" style="padding:5px; text-align: right" >$250.56</td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >{{'$'.$fees->distribution}}</td>
                 </tr>
                 <tr class="flex-row" style="background: #F3F3F3;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Comercialización (Cv)</strong></td>
-                    <td class="flex-item" style="padding:5px; text-align: right" >$40.05</td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >{{'$'.$fees->commercialization}}</td>
                 </tr>
                 <tr class="flex-row" style="background: #B6B7B7;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Pérdidas (P)</strong></td>
-                    <td class="flex-item" style="padding:5px; text-align: right" >$250.56</td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >{{'$'.$fees->lost}}</td>
                 </tr>
                 <tr class="flex-row" style="background: #F3F3F3;">
                     <td class="flex-item" style="padding:5px; text-align: left;"><strong>Restricciones (R)</strong></td>
-                    <td class="flex-item" style="padding:5px; text-align: right" >$40.05</td>
+                    <td class="flex-item" style="padding:5px; text-align: right" >{{'$'.$fees->restriction}}</td>
                 </tr>
                 <tr class="flex-row" style="background: #009599;">
                     <td class="flex-item" style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;" ><strong>Total Costo Unitario (CU)</strong></td>
-                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>$750.25</strong></td>
+                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>{{'$'.$fees->unit_cost}}</strong></td>
                 </tr>
                 <tr class="flex-row" style="background: #009599;">
                     <td class="flex-item" style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;" ><strong>Tarifa opcional</strong></td>
-                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>$710.25</strong></td>
+                    <td class="flex-item" style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;"><strong>{{'$'.$fees->optional_fee}}</strong></td>
                 </tr>
             </table>
 
@@ -372,21 +387,21 @@
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Tipo de servicio:</strong></td>
-        <td class="flex-item" style="padding:2px;" colspan="2">INDUSTRIAL</td>
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Anomalía</strong></td>
-        <td class="flex-item" style="padding:2px;" colspan="2">N/A</td>
+        <td class="flex-item" style="padding:2px;" colspan="2">{{($client->stratum->name == 'Comercial' || $client->stratum->name == 'Industrial')?$client->stratum->name:'Domicialiario' }}</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Topologia de la red</strong></td>
+        <td class="flex-item" style="padding:2px;" colspan="2">{{$client->network_topology}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Estrato:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->stratum->name}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>No. Medidor</strong></td>
         <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1234567</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Nivel de tensión:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">Nivel 1</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->voltageLevel->level}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Propiedad activos</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">100% Operador</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{($client->voltageLevel->level == 'NIVEL 1(b)') ? 'Compartida Cliente-Operador de red':(($client->voltageLevel->level == 'NIVEL 1(c)')?'100% Cliente': '100% Operador de red')}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Circuito:</strong></td>

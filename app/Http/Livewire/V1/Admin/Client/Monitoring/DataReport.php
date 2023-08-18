@@ -280,7 +280,7 @@ class DataReport extends Component
     {
         //if ($this->start_report != "") {
         //$array = $this->arrayCreate();
-        $pdf = \PDF::loadView('reports.client_invoice');
+        $pdf = PDF::loadView('reports.client_invoice');
         $pdf->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();

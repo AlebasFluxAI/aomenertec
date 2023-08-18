@@ -156,6 +156,7 @@ return [
         Permissions::CLIENT_WORK_ORDER,
         Permissions::CLIENT_SHOW_INVOICING,
         Permissions::INVOICE_REPORT,
+        Permissions::CLIENT_INVOICE_GENERATE,
 
         Permissions::SUPERVISOR_CREATE,
         Permissions::SUPERVISOR_EDIT,

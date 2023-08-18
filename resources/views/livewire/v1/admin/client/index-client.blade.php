@@ -277,6 +277,15 @@
                                                         "tooltip_title"=>"Lecturas manuales",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING],
                                                 ],
+                                                [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.invoice_generate",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-receipt",
+                                                        "tooltip_title"=>"Generar factura de prueba",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_INVOICE_GENERATE],
+                                                ],
 
 
 

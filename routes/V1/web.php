@@ -305,6 +305,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                         ->name("v1.admin.client.edit.client")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_EDIT));
 
+                    Route::get('generar_factura_test/{client}', Livewire\V1\Admin\Client\ClientInvoiceGenerate::class)
+                        ->name("v1.admin.client.invoice_generate")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_INVOICE_GENERATE));
+
                     Route::get('equipos/{client}', Livewire\V1\Admin\Client\AddEquipmentToClient::class)
                         ->name("v1.admin.client.add.equipment")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_ADD_EQUIPMENT));
