@@ -8,6 +8,7 @@ use App\Models\V1\NetworkOperator;
 use App\Models\V1\SinOtherFee;
 use App\Models\V1\SubsistenceConsumption;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class ClientInvoiceGenerate extends Component
@@ -21,21 +22,23 @@ class ClientInvoiceGenerate extends Component
     public $year;
     public $months;
     public $years;
+    public $image_uri;
+    protected $listeners = ['setImageChart'];
 
     public function __construct()
     {
         parent::__construct();
         $this->clientInvoiceGenerateService = ClientInvoiceGenerateService::getInstance();
     }
-
+    public function setImageChart($uri)
+    {
+        $this->clientInvoiceGenerateService->setImageChart($this, $uri);
+    }
     public function submitForm()
     {
-
-
         $monthly_data = $this->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($this->month, 2, "0", STR_PAD_LEFT))
             ->where("year", $this->year)->first();
-
         if($monthly_data){
             $sc = SubsistenceConsumption::find($this->client->subsistence_consumption_id);
             $value_kwh = (($this->fees->optional_fee == 0)?$this->fees->unit_cost:$this->fees->optional_fee);
@@ -55,6 +58,7 @@ class ClientInvoiceGenerate extends Component
             $value->total = $value->subtotal_energy + $value->subtotal_others;
             $json = json_decode($monthly_data->raw_json);
             $pdf = PDF::loadView('reports.client_invoice',[
+                'image_chart_url' => $this->image_uri,
                 'value' => $value,
                 'json' => $json,
                 'monthly_data'=>$monthly_data,

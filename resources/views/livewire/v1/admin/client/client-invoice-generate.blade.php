@@ -245,7 +245,96 @@
                           ])
             </div>
         </form>
-
+        <div wire:ignore id="chart"></div>
     </div>
+
 </div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener('livewire:load', function () {
+    var options = {
+        chart: {
+            id: 'chart',
+            type: 'bar',
+            height: '400px',
+            animations: {
+                enabled: false,
+            }
+        },
+        series: [{
+            name:'Consumo kWh',
+            data:[]
+        }],
+        yaxis: {
+            show:true,
+            labels:{
+                show: true,
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: 'normal',
+                    cssClass: 'apexcharts-yaxis-label',
+                },
+            }
+        },
+        xaxis: {
+            categories: [],
+            labels:{
+                show: true,
+                style: {
+                    fontSize: '14px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                    fontWeight: 'normal',
+                    cssClass: 'apexcharts-xaxis-label',
+                },
+            }
+        },
+        title: {
+            text: 'Historico de consumos (kWh)',
+            align: 'center',
+            style: {
+                fontSize: '18px',
+                fontWeight: 'bold',
+                fontFamily: 'sans-serif',
+                color: '#000'
+            },
+        },
+
+        dataLabels: {
+            enabled: true,
+            style: {
+                fontSize: '14px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 'normal',
+            }
+    },
+
+    }
+
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render()
+
+
+    @this.on('setChartData',(e) =>{
+
+        ApexCharts.exec('chart', "updateOptions", {
+            series: [{
+                data: e.series
+            }],
+            xaxis: {
+                categories: e.x_axis
+            },
+        }).then(function (){
+            chart.dataURI().then(function (uri) {
+            @this.emit('setImageChart', uri)
+            });
+        });
+
+
+    })
+
+
+
+    })
+</script>
 
