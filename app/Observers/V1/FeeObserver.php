@@ -6,11 +6,11 @@ class FeeObserver
 {
     public function updating($model)
     {
-        $model->total_fee = $model->getTotal();
+        $model->unit_cost = $model->getTotal();
     }
 
     public function creating($model)
     {
-        $model->total_fee = $model->getTotal();
+        $model->unit_cost = $model->getTotal();
     }
 }

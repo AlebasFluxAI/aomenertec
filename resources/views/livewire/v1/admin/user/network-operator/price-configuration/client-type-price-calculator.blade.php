@@ -30,7 +30,7 @@
                     <b>Costo unitario($) {{__("coin.".$model->admin->configAdmin->coin)}}</b>
                 </th>
                 <th style="font-size: 10px">
-                    <b>Tarifa ($/kWh) {{__("coin.".$model->admin->configAdmin->coin)}}</b>
+                    <b>Tarifa opcional($/kWh) {{__("coin.".$model->admin->configAdmin->coin)}}</b>
                 </th>
             </tr>
             </thead>
@@ -53,11 +53,11 @@
                                         wire:change="changeFee($event.target.value,'{{$level->id}}','{{$type}}','{{$client_type}}')"
                                         class="form-control text-right"
                                         style="font-size: 12px"
-                                        type="currency"
+                                        type="number"
                                         pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"
                                         min="0"
                                         placeholder="$"
-                                        {{($type==\App\Models\V1\NetworkOperator::TOTAL_FEE)?"disabled":""}}
+                                        {{($type==\App\Models\V1\NetworkOperator::UNIT_COST_FEE)?"disabled":""}}
                                         value={{$this->getFee($level->id,$type,$client_type)}}>
 
                                 </div>
@@ -72,54 +72,7 @@
             @endforeach
             </tbody>
         </table>
-        @include("partials.v1.divider_title",[
-            "title"=>"Tarifas opcionales"
-        ])
-        <div class="col-6 text-center offset-3">
-            <table class="table table-bordered">
-                <thead style="position: sticky;top: 0;z-index: 2">
-                <tr>
-                    <th style="font-size: 10px">
-                        <b>Tension</b>
-                    </th>
-                    <th style="font-size: 10px">
-                        <b>Tarifa ($/kWh) {{__("coin.".$model->admin->configAdmin->coin)}}</b>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach(\App\Models\V1\VoltageLevel::get() as $level)
-                    <tr>
-                        <td>
-                            <div class="row">
-                                <div class="col-12">
-                                    <b>{{$level->level}}</b>
-                                </div>
-                            </div>
-                        </td>
-                        <td style="font-size: 10px">
-                            @foreach(\App\Models\V1\NetworkOperator::priceOtionalType() as $type)
-                                <div class="row">
-                                    <div class="col-12">
-                                        <input
-                                            wire:change="changeOptionalFee($event.target.value,'{{$level->id}}','{{$type}}','{{$client_type}}')"
-                                            class="form-control text-right"
-                                            style="font-size: 12px"
-                                            type="currency"
-                                            pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"
-                                            min="0"
-                                            placeholder="$"
-                                            value={{$this->getOptionalFee($level->id,$type,$client_type)}}>
-                                    </div>
 
-                                </div>
-                            @endforeach
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
         @include("partials.v1.divider_title",[
             "title"=>"Otros conceptos"
         ])

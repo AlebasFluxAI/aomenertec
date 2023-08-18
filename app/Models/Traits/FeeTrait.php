@@ -16,12 +16,12 @@ trait FeeTrait
 {
     public function getTotal()
     {
-        return $this->total_fee = $this->generation +
+        return $this->generation +
             $this->transmission +
             $this->distribution +
             $this->commercialization +
             $this->lost +
-            $this->restriction +
-            $this->unit_cost;
+            $this->restriction;
+
     }
 }
