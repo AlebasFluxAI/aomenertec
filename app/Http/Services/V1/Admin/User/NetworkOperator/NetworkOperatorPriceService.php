@@ -249,16 +249,11 @@ class NetworkOperatorPriceService extends Singleton
     {
 
         if ($client_type == ClientType::ZIN_CONVENTIONAL) {
-            if ($component->model->zniFees()->where([
+            if ($fee = $component->model->zniFees()->where([
                 "voltage_level_id" => $level,
                 "month" => $component->month,
                 "year" => $component->year,
-            ])->exists()) {
-                $fee = $component->model->zniFees()->where([
-                    "voltage_level_id" => $level,
-                    "month" => $component->month,
-                    "year" => $component->year,
-                ])->first();
+            ])->first()) {
                 $fee->update([
                     $type => $value
                 ]);
@@ -272,16 +267,11 @@ class NetworkOperatorPriceService extends Singleton
                 ]);
             }
         } else {
-            if ($component->model->sinFees()->where([
+            if ($fee = $component->model->sinFees()->where([
                 "voltage_level_id" => $level,
                 "month" => $component->month,
                 "year" => $component->year,
-            ])->exists()) {
-                $fee = $component->model->sinFees()->where([
-                    "voltage_level_id" => $level,
-                    "month" => $component->month,
-                    "year" => $component->year,
-                ]);
+            ])->first()) {
                 $fee->update([
                     $type => $value
                 ]);

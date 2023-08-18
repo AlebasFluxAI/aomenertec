@@ -250,7 +250,7 @@ class NetworkOperator extends Model
             self::LOST_FEE,
             self::RESTRICTIONS_FEE,
             self::UNIT_COST_FEE,
-            self::TOTAL_FEE
+            self::OPTIONAL_FEE
         ];
     }
 
