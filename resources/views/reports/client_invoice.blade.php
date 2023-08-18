@@ -296,7 +296,7 @@
                     <tr class="flex-row">
                         <td class="flex-item" style="padding:2px; text-align: left;">Impuesto AP</td>
                         <td class="flex-item" style="padding:2px; text-align: center; background: #B6B7B7" >{{($other_fees->tax_type == 'money_fee')?'$'.$other_fees->tax:$other_fees->tax.'%'}}</td>
-                        <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->tax}}</td>
+                        <td class="flex-item" style="padding:2px; text-align: right" >{{'$'.$value->value_tax}}</td>
                     </tr>
                 @endif
                 <tr class="flex-row">

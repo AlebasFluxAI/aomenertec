@@ -31,6 +31,7 @@ class ClientInvoiceGenerate extends Component
     public function submitForm()
     {
 
+
         $monthly_data = $this->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($this->month, 2, "0", STR_PAD_LEFT))
             ->where("year", $this->year)->first();
@@ -75,12 +76,12 @@ class ClientInvoiceGenerate extends Component
     {
         $this->clientInvoiceGenerateService->mount($this, $client);
     }
-     public function updateMonth($value){
-         $this->clientInvoiceGenerateService->updateMonth($this, $value);
+     public function updatedMonth($value){
+         $this->clientInvoiceGenerateService->updatedMonth($this, $value);
 
      }
-     public function updateYear($value){
-         $this->clientInvoiceGenerateService->updateYear($this, $value);
+     public function updatedYear($value){
+         $this->clientInvoiceGenerateService->updatedYear($this, $value);
 
      }
 
