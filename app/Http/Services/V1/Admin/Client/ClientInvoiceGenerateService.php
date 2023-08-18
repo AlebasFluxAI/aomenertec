@@ -37,13 +37,52 @@ class ClientInvoiceGenerateService extends Singleton
     }
 
     public function updatedMonth(Component $component, $value){
+        $component->image_uri = null;
         $component->fees = Client::find($component->client->id)->feesDate($value, $component->year);
         $component->other_fees = Client::find($component->client->id)->otherFeesDate($value, $component->year);
+        $this->searchDataChart($component);
     }
     public function updatedYear(Component $component,  $value){
+        $component->image_uri = null;
         $component->fees = Client::find($component->client->id)->feesDate($component->month, $value);
         $component->other_fees = Client::find($component->client->id)->otherFeesDate($component->month, $value);
+        $this->searchDataChart($component);
+    }
 
+    private function searchDataChart(Component $component){
+        $monthly_data = $component->client->monthlyMicrocontrollerData()
+            ->where("month", str_pad($component->month, 2, "0", STR_PAD_LEFT))
+            ->where("year", $component->year)->first();
+
+        $value_chart = ['series'=> [], 'x_axis'=> []];
+        $date= Carbon::create($component->year, $component->month);
+        if($monthly_data) {
+            $i = 0;
+            while (true) {
+                $data = $component->client->monthlyMicrocontrollerData()
+                    ->where("month", str_pad($date->format('m'), 2, "0", STR_PAD_LEFT))
+                    ->where("year", $date->format('Y'))->first();
+                if ($data) {
+                    array_push($value_chart['series'], round($data->interval_real_consumption, 2));
+                    array_push($value_chart['x_axis'], Carbon::create($data->year, $data->month, $data->day)->format('d M y'));
+                } else {
+                    array_push($value_chart['series'], 0);
+                    array_push($value_chart['x_axis'], $date->format('M y'));
+                }
+                if ($i == 5) {
+                    break;
+                }
+                $i++;
+                $date->subMonth();
+            }
+            $component->emit('setChartData', $value_chart);
+        }else {
+            $component->emit('setChartData', $value_chart);
+        }
+    }
+    public function setImageChart(Component $component, $uri)
+    {
+        $component->image_uri = $uri['imgURI'];
     }
 
     public function rules()
