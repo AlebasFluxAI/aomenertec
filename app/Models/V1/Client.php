@@ -329,7 +329,6 @@ class Client extends Model
 
     public function consumption()
     {
-
         if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
 
             $zniFee = $this->networkOperator->zniFees()->where([
@@ -350,6 +349,85 @@ class Client extends Model
             if (!$sinFee) {
                 return $this->networkOperator->sinFees()->create([
                     "voltage_level_id" => $this->voltage_level_id
+                ]);
+            }
+            return $sinFee;
+
+        }
+    }
+    public function feesDate($month, $year)
+    {
+        if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
+
+            $zniFee = $this->networkOperator->zniFees()->where([
+                "voltage_level_id" => $this->voltage_level_id,
+                "month" => $month,
+                "year" => $year,
+            ])->first();
+            if (!$zniFee) {
+
+                return $this->networkOperator->zniFees()->create([
+                    "voltage_level_id" => $this->voltage_level_id,
+                    "month" => $month,
+                    "year" => $year,
+                ]);
+            }
+            return $zniFee;
+
+
+        } else {
+            $sinFee = $this->networkOperator->sinFees()->where([
+                "voltage_level_id" => $this->voltage_level_id,
+                "month" => $month,
+                "year" => $year,
+            ])->first();
+            if (!$sinFee) {
+                return $this->networkOperator->sinFees()->create([
+                    "voltage_level_id" => $this->voltage_level_id,
+                    "month" => $month,
+                    "year" => $year,
+                ]);
+            }
+            return $sinFee;
+
+        }
+    }
+
+    public function otherFeesDate($month, $year)
+    {
+        if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
+
+            $zniFee = $this->networkOperator->zniOtherFees()->where([
+                "strata_id" => $this->stratum_id,
+                "month" => $month,
+                "year" => $year,
+            ])->first();
+            if (!$zniFee) {
+
+                return $this->networkOperator->zniOtherFees()->create([
+                    "strata_id" => $this->stratum_id,
+                    "month" => $month,
+                    "year" => $year,
+                    "tax_type" => SinOtherFee::MONEY_FEE,
+
+                ]);
+            }
+            return $zniFee;
+
+
+        } else {
+            $sinFee = $this->networkOperator->sinOtherFees()->where([
+                "strata_id" => $this->stratum_id,
+                "month" => $month,
+                "year" => $year,
+            ])->first();
+            if (!$sinFee) {
+                return $this->networkOperator->sinOtherFees()->create([
+                    "strata_id" => $this->stratum_id,
+                    "month" => $month,
+                    "year" => $year,
+                    "tax_type" => SinOtherFee::MONEY_FEE,
+
                 ]);
             }
             return $sinFee;
@@ -515,6 +593,10 @@ class Client extends Model
     public function addresses()
     {
         return $this->hasMany(ClientAddress::class);
+    }
+    public function address()
+    {
+        return $this->hasOne(ClientAddress::class);
     }
 
     public function digitalOutputs()

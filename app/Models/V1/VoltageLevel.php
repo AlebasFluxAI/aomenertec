@@ -15,7 +15,12 @@ class VoltageLevel extends Model
     use AuditableTrait;
     use PaginatorTrait;
 
-
+    protected $fillable = [
+        'id',
+        'level',
+        'description'
+    ];
+    protected $table = 'voltage_levels';
     public function clients()
     {
         return $this->hasMany(Client::class);
