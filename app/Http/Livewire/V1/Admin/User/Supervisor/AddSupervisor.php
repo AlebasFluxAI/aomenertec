@@ -33,7 +33,7 @@ class AddSupervisor extends Component
 
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
-        'model.name' => 'required|min:6',
+        'model.name' => 'required|min:2',
         'model.last_name' => 'required|min:6',
         'model.phone' => 'min:7|unique:users,phone',
         'model.email' => 'required|email|unique:users,email',

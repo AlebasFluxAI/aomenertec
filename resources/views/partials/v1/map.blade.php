@@ -29,10 +29,7 @@
             lat: position.coords.latitude,
             lng: position.coords.longitude
         };
-    @this.latitude
-        = position.coords.latitude;
-    @this.longitude
-        = position.coords.longitude;
+
         var mapProp = {
             center: center,
             zoom: 14,
@@ -97,14 +94,19 @@
 
 
         }
-
-
         function updateLocation(latitude, longitude) {
         @this.latitude
             = latitude;
         @this.longitude
             = longitude;
         }
+        document.addEventListener('livewire:load', function () {
+        @this.latitude
+            = position.coords.latitude;
+        @this.longitude
+            = position.coords.longitude;
+        console.log(position)
+        })
 
 
     }

@@ -173,10 +173,10 @@ class MicrocontrollerData extends Model
                     $last_raw_json = json_decode($last_data->raw_json, true);
                     if ($json['import_wh'] <= 0) {
 
-                        if ($last_raw_json['import_wh'] > 0) {
-                            $this->forceDelete();
-                            return;
-                        }
+//                        if ($last_raw_json['import_wh'] > 0) {
+//                            $this->forceDelete();
+//                            return;
+//                        }
                     }
                 }
             } else{
