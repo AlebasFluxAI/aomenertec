@@ -48,9 +48,10 @@ class EditClientService extends Singleton
             'time_zone' => $client->time_zone,
             'email' => $client->email,
             'phone' => $client->phone,
-            'direction' => $client->direction,
-            'latitude' => $client->latitude,
-            'longitude' => $client->longitude,
+            'direction' => $clientAddress->direction,
+            'latitude' => $clientAddress->latitude,
+            'longitude' => $clientAddress->longitude,
+            'address_details' => $clientAddress->details,
             'contribution' => $client->contribution,
             'public_lighting_tax' => $client->public_lighting_tax,
             'active_client' => $client->active_client,
@@ -166,7 +167,7 @@ class EditClientService extends Singleton
             $component->client->fill($this->mapper($component));
             $component->client->update();
             $this->linkTechnician($component, $component->client);
-            //$this->linkAddress($component, $component->client);
+            $this->linkAddress($component, $component->client);
             $this->linkBillingInformation($component, $component->client);
             $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
         });
@@ -207,18 +208,18 @@ class EditClientService extends Singleton
 
     private function linkAddress(Component $component, Client $client)
     {
-        if ($address = $client->addresses()->first()) {
+        if ($address = $this->getClientAddress($client)) {
             $address->update([
                 "latitude" => $component->latitude,
                 "longitude" => $component->longitude,
-                "details" => $component->addressDetails,
+                "details" => $component->address_details,
             ]);
             return;
         }
         $client->addresses()->create([
             "latitude" => $component->latitude,
             "longitude" => $component->longitude,
-            "details" => $component->addressDetails,
+            "details" => $component->address_details,
         ]);
     }
 
