@@ -113,10 +113,6 @@
         }
 
         document.addEventListener('livewire:load', function () {
-            if (@this.latitude && @this.longitude) {
-                return
-            }
-
         @this.latitude
             = position.coords.latitude;
         @this.longitude
