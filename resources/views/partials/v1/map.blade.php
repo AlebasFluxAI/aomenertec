@@ -25,20 +25,27 @@
     }
 
     function getLocation(position) {
-        var center = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-        };
-    @this.latitude
-        = position.coords.latitude;
-    @this.longitude
-        = position.coords.longitude;
+
+        if (@this.latitude != null && @this.longitude != null) {
+            var center = {
+                lat: Number(@this.latitude),
+                lng: Number(@this.longitude)
+            };
+        } else {
+            var center = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+        }
+
+
         var mapProp = {
             center: center,
             zoom: 14,
             streetViewControl: false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+
         map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
 
         marker = new google.maps.Marker({
@@ -98,13 +105,19 @@
 
         }
 
-
         function updateLocation(latitude, longitude) {
         @this.latitude
             = latitude;
         @this.longitude
             = longitude;
         }
+
+        document.addEventListener('livewire:load', function () {
+        @this.latitude
+            = position.coords.latitude;
+        @this.longitude
+            = position.coords.longitude;
+        })
 
 
     }
@@ -150,7 +163,7 @@
     </ul>
 </div>
 <div class="col-md-8 mb-3">
-    <p><b>Coordenadas:</b></p>
+    <p><b>Coordenadas :</b></p>
     <ul>
         <li>
             @include("partials.v1.form.form_input_icon",[
@@ -180,7 +193,6 @@
                ])</li>
     </ul>
 </div>
-
 <script
     src="https://maps.googleapis.com/maps/api/js?key={{config("google.apiKey")}}&callback=myMap&libraries=places"></script>
 

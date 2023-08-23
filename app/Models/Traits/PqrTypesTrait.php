@@ -111,7 +111,7 @@ trait PqrTypesTrait
     public function submitForm(Component $component)
     {
         $component->validate([
-            'attach' => 'image|max:10240', // 1MB Max
+            'attach' => 'max:10240', // 1MB Max
         ]);
         if (!$this->validateSupervisor($component)) {
             return;
@@ -157,7 +157,7 @@ trait PqrTypesTrait
 
     public function submitMessage(Component $component)
     {
-        
+
         DB::transaction(function () use ($component) {
             $message = $component->model->messages()->create([
                 "message" => $component->description,

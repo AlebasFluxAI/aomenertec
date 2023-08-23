@@ -151,7 +151,7 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $item = 'uQKqNQAAAAAjeggAAAAAAAAAAAAAAAAAAAAAAAAAAADxvbVkWDm0PPW52jwRx7o8F7fRORe30TkXt9E5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAPwAAgD8AAIA/AACAPwAAAAAAAPBCAABwQwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+        $item = 'UsWo9wEAAAAVAAAAAAAAAAAAiEEAAJxBAAAAAAAAAJB7PuBkpdb8QkRv/0IyrfxCQr1dQLpq+j0cWmpAjQbJQ0Y0MEH5tNRDYVTbQ/bheUEzUOdD5mxEwjMSH8HbNmZCrLNqPy2+Mj8AR2g/7+BoPzSFvMFSlDXCRMDDQbdhxcEIj15ETCE9wT+Lb0LhByRGbOcLQCtTFUXGQ6ZEvRhcQ6v8W0M5+1pDAAAAAAAAAAAAAAAArSvBROmOKUR/6LpEAAAAAAAAAAAAAAAAJNp+Rd36GUWDSndFAAAAAFZ2+kQAwMBDArfrQAAAAADaVL8/AAAAAAAAAAAfdgJB';
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($item, true);
@@ -162,6 +162,7 @@ class MailTestController
             $split = substr($decode, (16), (16));
             $bin = hex2bin($split);
             $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
+
             $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
                 ->first();
             if ($equipment) {
@@ -200,9 +201,7 @@ class MailTestController
                                         }
                                     }
                                 }
-                               if($data['id'] == 60){
-                                   dd($json);
-                               }
+
                                 if ($data['start'] >= 72) {
                                     if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
                                         if (!$data['default']) {
@@ -250,16 +249,17 @@ class MailTestController
                         }
                     }
                     $item = $json;
+                    dd($json);
 
-                    if ($json['import_wh'] <= 0) {
-                        if ($last_data) {
-                            if ($last_raw_json['import_wh']>0) {
-                                $item->updateQuietly();
-                                $item->forceDelete();
-                                return;
-                            }
-                        }
-                    }
+//                    if ($json['import_wh'] <= 0) {
+//                        if ($last_data) {
+//                            if ($last_raw_json['import_wh']>0) {
+//                                $item->updateQuietly();
+//                                $item->forceDelete();
+//                                return;
+//                            }
+//                        }
+//                    }
 
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {

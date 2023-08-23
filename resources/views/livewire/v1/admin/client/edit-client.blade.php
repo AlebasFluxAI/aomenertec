@@ -122,6 +122,11 @@
                     </div>
 
                     @include("partials.v1.divider_title",[
+                                "title"=>"Ubicación del cliente"
+                        ])
+                    @include("partials.v1.addUserTemplate.client-add-location-form")
+
+                    @include("partials.v1.divider_title",[
                             "title"=>"Datos de facturacion"
                     ]
                    )

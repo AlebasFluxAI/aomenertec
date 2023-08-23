@@ -92,4 +92,5 @@ trait ClientFormTrait
     public $indicative;
     public $time_zones;
     public $time_zone;
+    public $address_details;
 }

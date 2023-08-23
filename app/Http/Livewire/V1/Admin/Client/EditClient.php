@@ -12,6 +12,7 @@ class EditClient extends Component
 {
     use ClientFormTrait;
 
+    public $model;
     protected $rules = [
         'identification' => 'required|min:6|unique:clients,identification',
         'name' => 'required|min:8',
