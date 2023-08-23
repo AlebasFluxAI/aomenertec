@@ -131,15 +131,15 @@ class UnpackDataJob implements ShouldQueue
                     }
                     $this->item->raw_json = $json;
 
-                    if ($json['import_wh'] <= 0) {
-                        if ($last_data) {
-                            if ($last_raw_json['import_wh']>0) {
-                                $this->item->updateQuietly();
-                                $this->item->forceDelete();
-                                return;
-                            }
-                        }
-                    }
+//                    if ($json['import_wh'] <= 0) {
+//                        if ($last_data) {
+//                            if ($last_raw_json['import_wh']>0) {
+//                                $this->item->updateQuietly();
+//                                $this->item->forceDelete();
+//                                return;
+//                            }
+//                        }
+//                    }
 
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {
