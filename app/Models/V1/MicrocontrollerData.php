@@ -187,13 +187,13 @@ class MicrocontrollerData extends Model
                         return;
                     }
                     $last_raw_json = json_decode($last_data->raw_json, true);
-                    if ($json['import_wh'] <= 0) {
-
-                        if ($last_raw_json['import_wh'] > 0) {
-                            $this->forceDelete();
-                            return;
-                        }
-                    }
+//                    if ($json['import_wh'] <= 0) {
+//
+//                        if ($last_raw_json['import_wh'] > 0) {
+//                            $this->forceDelete();
+//                            return;
+//                        }
+//                    }
                 } else{
                     $json['kwh_interval'] = 0;
                     $json['varh_interval'] = 0;

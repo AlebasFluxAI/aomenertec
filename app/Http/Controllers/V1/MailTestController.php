@@ -151,7 +151,7 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $item = 'UsWo9wEAAAAVAAAAAAAAAAAAiEEAAJxBAAAAAAAAAJB7PuBkpdb8QkRv/0IyrfxCQr1dQLpq+j0cWmpAjQbJQ0Y0MEH5tNRDYVTbQ/bheUEzUOdD5mxEwjMSH8HbNmZCrLNqPy2+Mj8AR2g/7+BoPzSFvMFSlDXCRMDDQbdhxcEIj15ETCE9wT+Lb0LhByRGbOcLQCtTFUXGQ6ZEvRhcQ6v8W0M5+1pDAAAAAAAAAAAAAAAArSvBROmOKUR/6LpEAAAAAAAAAAAAAAAAJNp+Rd36GUWDSndFAAAAAFZ2+kQAwMBDArfrQAAAAADaVL8/AAAAAAAAAAAfdgJB';
+        $item = 'UsWo9wEAAAAWAAAAAAAAAAAAiEEAAJxBAAAAAAAAAICvEpxkAAAAAAAAAACBlO9CAAAAAAAAAABAGLpAAAAAAAAAAAB93ppDAAAAAAAAAABYeThEAAAAAAAAAAAAAAAAAACAPwAAgD8pJNk+B2nZPgAAAAAAAAAAoD51Qp9pbELLn5xDYwerQWaGb0JaYYlFzMyMP1ZmsUQeTVdEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgXglFAAAAAAAAAAAAAAAABNojRXBd3UQ732dAAAAAANJJsUSTGGQ/AAAAAAAAAAAAAAAAAAAAAJGeTkAlpO0/';
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($item, true);
@@ -201,24 +201,29 @@ class MailTestController
                                         }
                                     }
                                 }
-
-                                if ($data['start'] >= 72) {
-                                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
-                                        if (!$data['default']) {
-                                            $json[$data['variable_name']] = $data['default'];
-                                        } else {
-                                            if ($last_data) {
-                                                if ($data['start'] >= 450) {
-                                                    $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
-                                                } else {
-                                                    $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                                }
-                                            } else {
-                                                $json[$data['variable_name']] = 0;
-                                            }
-                                        }
-                                    }
+                                if($data['variable_name'] == 'timestamp'){
+                                    $date_aux = new Carbon();
+                                    $timestamp_unix = $json[$data['variable_name']];
+                                    $date_aux->setTimestamp($timestamp_unix);
                                 }
+//
+//                                if ($data['start'] >= 72) {
+//                                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
+//                                        if (!$data['default']) {
+//                                            $json[$data['variable_name']] = $data['default'];
+//                                        } else {
+//                                            if ($last_data) {
+//                                                if ($data['start'] >= 450) {
+//                                                    $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
+//                                                } else {
+//                                                    $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+//                                                }
+//                                            } else {
+//                                                $json[$data['variable_name']] = 0;
+//                                            }
+//                                        }
+//                                    }
+//                                }
 
                                 if (is_nan($json[$data['variable_name']])) {
                                     $json[$data['variable_name']] = null;
@@ -228,27 +233,29 @@ class MailTestController
                                     break;
                                 }
                             } else {
-                                if ($data['start'] >= 72) {
-                                    if (!$data['default']) {
-                                        $json[$data['variable_name']] = $data['default'];
-                                    } else {
-                                        if ($last_data) {
-                                            if (isset($last_raw_json[$data['variable_name']])) {
-                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                            } else {
-                                                $json[$data['variable_name']] = 0;
-                                            }
-                                        } else {
-                                            $json[$data['variable_name']] = 0;
-                                        }
-                                    }
-                                }
+//                                if ($data['start'] >= 72) {
+//                                    if (!$data['default']) {
+//                                        $json[$data['variable_name']] = $data['default'];
+//                                    } else {
+//                                        if ($last_data) {
+//                                            if (isset($last_raw_json[$data['variable_name']])) {
+//                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+//                                            } else {
+//                                                $json[$data['variable_name']] = 0;
+//                                            }
+//                                        } else {
+//                                            $json[$data['variable_name']] = 0;
+//                                        }
+//                                    }
+//                                }
                             }
                         } catch (Exception $e) {
                             echo 'Excepción capturada: ', $e->getMessage(), "\n";
                         }
                     }
                     $item = $json;
+                    $json['date'] = $date_aux->format('Y-m-d H:i:s');
+                    $json['client_id'] = $client->id;
                     dd($json);
 
 //                    if ($json['import_wh'] <= 0) {
