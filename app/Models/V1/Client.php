@@ -327,16 +327,20 @@ class Client extends Model
         return $this->admin->configAdmin->coin;
     }
 
-    public function consumption()
+    public function consumption($year, $month)
     {
         if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
 
             $zniFee = $this->networkOperator->zniFees()->where([
-                "voltage_level_id" => $this->voltage_level_id
+                "voltage_level_id" => $this->voltage_level_id,
+                "month" => $month,
+                "year" => $year,
             ])->first();
             if (!$zniFee) {
                 return $this->networkOperator->zniFees()->create([
-                    "voltage_level_id" => $this->voltage_level_id
+                    "voltage_level_id" => $this->voltage_level_id,
+                    "month" => $month,
+                    "year" => $year,
                 ]);
             }
             return $zniFee;
@@ -344,17 +348,22 @@ class Client extends Model
 
         } else {
             $sinFee = $this->networkOperator->sinFees()->where([
-                "voltage_level_id" => $this->voltage_level_id
+                "voltage_level_id" => $this->voltage_level_id,
+                "month" => $month,
+                "year" => $year,
             ])->first();
             if (!$sinFee) {
                 return $this->networkOperator->sinFees()->create([
-                    "voltage_level_id" => $this->voltage_level_id
+                    "voltage_level_id" => $this->voltage_level_id,
+                    "month" => $month,
+                    "year" => $year,
                 ]);
             }
             return $sinFee;
 
         }
     }
+
     public function feesDate($month, $year)
     {
         if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
@@ -463,18 +472,19 @@ class Client extends Model
         }
     }
 
-    public function consumptionFee()
+    public function consumptionFee($year, $month)
     {
-
         if ($this->clientType->type == ClientType::ZIN_CONVENTIONAL) {
 
             $zniFee = $this->networkOperator->zniFees()->where([
+                "year" => $year,
+                "month" => $month,
                 "voltage_level_id" => $this->voltage_level_id
             ])->first();
             if (!$zniFee) {
                 return 0.0;
             }
-            if ($zniFee->optional_fee) {
+            if ($zniFee->optional_fee or $zniFee->optional_fee != 0) {
                 return $zniFee->optional_fee;
             } else {
                 return $zniFee->total_fee;
@@ -482,16 +492,17 @@ class Client extends Model
 
         } else {
             $sinFee = $this->networkOperator->sinFees()->where([
+                "year" => $year,
+                "month" => $month,
                 "voltage_level_id" => $this->voltage_level_id
             ])->first();
-
             if (!$sinFee) {
                 return 0.0;
             }
-            if ($sinFee->optional_fee) {
+            if ($sinFee->optional_fee or $sinFee->optional_fee != 0) {
                 return $sinFee->optional_fee;
             } else {
-                return $sinFee->total_fee;
+                return $sinFee->unit_cost;
             }
         }
     }
@@ -531,6 +542,7 @@ class Client extends Model
     {
         return $this->hasMany(MicrocontrollerData::class)->whereManually(true);
     }
+
     public function hourlyMicrocontrollerData()
     {
         return $this->hasMany(HourlyMicrocontrollerData::class);
@@ -594,6 +606,7 @@ class Client extends Model
     {
         return $this->hasMany(ClientAddress::class);
     }
+
     public function address()
     {
         return $this->hasOne(ClientAddress::class);

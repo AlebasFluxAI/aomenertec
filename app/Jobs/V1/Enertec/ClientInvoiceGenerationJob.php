@@ -9,6 +9,9 @@ use App\Models\V1\ClientType;
 use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\Invoice;
 use App\Models\V1\MicrocontrollerData;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\SinOtherFee;
+use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\ZniLevelFee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
@@ -56,7 +59,8 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $networkOperator = $client->networkOperator;
         $clientType = $client->client_type_id;
         $invoice = $client->invoices()->create([
-            "type" => Invoice::TYPE_CONSUMPTION
+            "type" => Invoice::TYPE_CONSUMPTION,
+            "network_operator_id" => $networkOperator->id
         ]);
 
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
@@ -73,16 +77,18 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         }
 
+        $year = now()->year;
+        //$month = strlen(now()->month) > 1 ? now()->month : "0" . now()->month;
+        $month = 4;
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
-            ->where("month", strlen(now()->month) > 1 ? now()->month : "0" . now()->month)
-            ->where("year", now()->year)
+            ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
+            ->where("year", $year)
             ->first()
             ->interval_real_consumption;
 
-        $consumptionFee = $invoice->client->consumptionFee();
+        $consumptionFee = $invoice->client->consumptionFee($year, $month);
         $totalConsumptionBase = $consumptionFee * $total_consumption;
         $totalConsumption = $totalConsumptionBase;
-
         $item = $invoice->items()->create([
             "unit_total" => $consumptionFee,
             "subtotal" => $totalConsumption,
@@ -92,7 +98,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             "billable_item_id" => BillableItem::whereSlug(BillableItem::TOTAL_CONSUMPTION)->first()->id,
             "quantity" => $total_consumption,
         ]);
-        $consumption = $invoice->client->consumption();
+        $consumption = $invoice->client->consumption($year, $month);
         /// Sub
         $consumptionTotalWithoutSub = 0;
         $consumptionTotalWithSub = 0;
@@ -155,12 +161,84 @@ class ClientInvoiceGenerationJob implements ShouldQueue
 
         }
 
-        $pdf = Pdf::loadView("mail.v1.client_invoice_pdf", [
-            "invoice" => $invoice,
-            "consumption" => $invoice->client->consumption(),
-            "client" => $client
+        $fees = $client->feesDate($month, $year);
+        $other_fees = $client->otherFeesDate($month, $year);
+        $monthly_data = $client->monthlyMicrocontrollerData()
+            ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
+            ->where("year", $year)->first();
+        $json = json_decode($monthly_data->raw_json);
+
+        $sc = SubsistenceConsumption::find($client->subsistence_consumption_id);
+        $value_kwh = (($fees->optional_fee == 0) ? $fees->unit_cost : $fees->optional_fee);
+        $value_discount_kwh = $value_kwh * $other_fees->discount / 100;
+        $value_discount = ($monthly_data->interval_real_consumption > $sc->value) ? ($sc->value * $value_discount_kwh * (-1)) : ($monthly_data->interval_real_consumption * $value_discount_kwh * (-1));
+        $value_kwh = (($fees->optional_fee == 0) ? $fees->unit_cost : $fees->optional_fee);
+        $value_active = $monthly_data->interval_real_consumption * $value_kwh;
+        $value_tax = ($client->public_lighting_tax) ? (($other_fees->tax_type == SinOtherFee::MONEY_FEE) ? $other_fees->tax : $value_active * $other_fees->tax / 100) : 0;
+        $value_kwh = (($fees->optional_fee == 0) ? $fees->unit_cost : $fees->optional_fee);
+        $value_active = $monthly_data->interval_real_consumption * $value_kwh;
+        $value = collect([]);
+        $value->value_active = $value_active;
+        $value->value_contribution = ($client->stratum->id > 4) ? (($client->contribution && $other_fees->contribution > 0) ? $value_active * $other_fees->contribution / 100 : 0) : 0;
+        $value->value_discount = ($client->stratum->id < 4) ? (($other_fees->discount > 0) ? $value_discount : 0) : 0;
+        $value->value_tax = $value_tax;
+        $value->value_varch = $fees->distribution * $monthly_data->interval_reactive_capacitive_consumption;
+        $value->value_varlh = $fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption;
+        $value->subtotal_energy = $value->value_active + $value->value_contribution + $value->value_discount + $value->value_tax + $value->value_varch + $value->value_varlh;
+        $value->subtotal_others = 0;
+        $value->total = $value->subtotal_energy + $value->subtotal_others;
+
+
+        $monthly_data = $client->monthlyMicrocontrollerData()
+            ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
+            ->where("year", $year)->first();
+
+        $value_chart = ['series' => [], 'x_axis' => []];
+        $date = Carbon::create($year, $month);
+        $i = 0;
+        while (true) {
+            $data = $client->monthlyMicrocontrollerData()
+                ->where("month", str_pad($date->format('m'), 2, "0", STR_PAD_LEFT))
+                ->where("year", $date->format('Y'))->first();
+            if ($data) {
+                array_push($value_chart['series'], round($data->interval_real_consumption, 2));
+                array_push($value_chart['x_axis'], Carbon::create($data->year, $data->month, $data->day)->format('d M y'));
+            } else {
+                array_push($value_chart['series'], 0);
+                array_push($value_chart['x_axis'], $date->format('M y'));
+            }
+            if ($i == 5) {
+                break;
+            }
+            $i++;
+            $date->subMonth();
+        }
+
+        $chartConfig = "{
+              'type': 'bar',
+              'data': {
+                'labels': " . json_encode($value_chart['x_axis']) . ",
+                'datasets': [{
+                  'label': 'Historicos de consumo (Kwh)',
+                  'data': " . json_encode($value_chart['series']) . "
+                }]
+              }
+            }";
+        $chartUrl = 'https://quickchart.io/chart?w=500&h=300&c=' . urlencode($chartConfig);
+
+
+        $pdf = Pdf::loadView('reports.client_invoice', [
+            "image_chart_url" => $chartUrl,
+            'value' => $value,
+            'json' => $json,
+            'monthly_data' => $monthly_data,
+            'client' => Client::find($this->client->id),
+            'network_operator' => $networkOperator,
+            'admin' => $networkOperator->admin,
+            'fees' => $fees,
+            'other_fees' => $other_fees,
         ]);
-        $pdf->setPaper('LETTER');
+        $pdf->setPaper('A4', 'portrait');
         $pdf->render();
         $date = now()->format("d-m-Y");
         $content = $pdf->download()->getOriginalContent();
