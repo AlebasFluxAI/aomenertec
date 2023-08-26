@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Resources\V1\AlterEnumHelper;
 use App\Models\V1\WorkOrder;
+
 class AddOptionsToTypeColumnToWorkOrdersTable extends Migration
 {
     /**
@@ -24,7 +25,7 @@ class AddOptionsToTypeColumnToWorkOrdersTable extends Migration
             WorkOrder::WORK_ORDER_TYPE_DISCONNECTION,
             WorkOrder::WORK_ORDER_TYPE_RECONNECTION,
             WorkOrder::WORK_ORDER_TYPE_READING,
-        ]);
+        ]);;
     }
 
     /**

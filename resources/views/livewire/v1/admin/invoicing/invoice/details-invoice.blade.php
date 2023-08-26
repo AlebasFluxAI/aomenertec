@@ -49,7 +49,7 @@
                                                                          ],
                                                                          [
                                                                              "key"=>"Administrador",
-                                                                             "value"=>$model->admin->id." -".$model->admin->name
+                                                                             "value"=>$model->model->id." -".$model->model->name
 
                                                                          ],
                                                                          [
@@ -193,17 +193,17 @@
                                 <input type="hidden" name="currency" value="COP"/>
                                 <input type="hidden" name="amount-in-cents" value="{{$model->total."00"}}"/>
                                 <input type="hidden" name="reference" value="{{$model->code}}"/>
-                                <input type="hidden" name="customer-data.email" value="{{$model->admin->email}}"/>
+                                <input type="hidden" name="customer-data.email" value="{{$model->model->email}}"/>
                                 <input type="hidden" name="customer-data.full-name"
-                                       value="{{$model->admin->name." ".$model->admin->last_name}}"/>
+                                       value="{{$model->model->name." ".$model->model->last_name}}"/>
                                 <input type="hidden" name="customer-data.phone-number"
-                                       value="{{$model->admin->phone}}"/>
+                                       value="{{$model->model->phone}}"/>
                                 <input type="hidden" name="customer-data.phone-number-prefix"
                                        value="+57"/>
                                 <input type="hidden" name="customer-data.legal-id"
-                                       value="{{$model->admin->identification}}"/>
+                                       value="{{$model->model->identification}}"/>
                                 <input type="hidden" name="customer-data.legal-type"
-                                       value="{{$model->admin->identification_type}}"/>
+                                       value="{{$model->model->identification_type}}"/>
                                 <button wire:click="confirmRecharge" type="submit">Pagar factura</button>
                             </form>
                         </div>

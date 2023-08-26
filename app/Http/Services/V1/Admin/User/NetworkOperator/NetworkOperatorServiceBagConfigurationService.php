@@ -36,7 +36,9 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
             "orders_price" => $model->billableServices ? $model->billableServices->orders_price : false,
             "initial_package_pqr_price" => $model->billableServices ? $model->billableServices->initial_package_pqr_price : false,
             "initial_package_orders_price" => $model->billableServices ? $model->billableServices->initial_package_orders_price : false,
-            "currency" => $model->billableServices ? $model->billableServices->currency : false,
+            "min_clients" => $model->billableServices ? $model->billableServices->min_clients : false,
+            "min_client_value" => $model->billableServices ? $model->billableServices->min_client_value : false,
+            "currency" => $model->billableServices ? $model->billableServices->currency : BillingService::COP,
             "prices" => $model->networkOperatorClientPrices,
             "client_types" => ClientType::get(),
             "zni_conventional" => count($clientPrices) > 0 ? $clientPrices->where("client_type_id", ClientType::whereType(ClientType::ZIN_CONVENTIONAL)->first()->id)->first()->value : 0,
@@ -91,6 +93,8 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
                     "currency" => $component->currency,
                     "initial_package_pqr_price" => $component->initial_package_pqr_price,
                     "initial_package_orders_price" => $component->initial_package_orders_price,
+                    "min_client_value" => $component->min_client_value,
+                    "min_clients" => $component->min_clients,
                 ]);
             } else {
                 $component->model->billableServices()->create([
@@ -99,6 +103,8 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
                     "currency" => $component->currency,
                     "initial_package_pqr_price" => $component->initial_package_pqr_price,
                     "initial_package_orders_price" => $component->initial_package_orders_price,
+                    "min_client_value" => $component->min_client_value,
+                    "min_clients" => $component->min_clients,
                 ]);
             }
         });
