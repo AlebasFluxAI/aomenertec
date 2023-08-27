@@ -24,7 +24,7 @@ class AddPqrWorkOrderBillableItem extends Migration
 
         BillableItem::create([
             "name" => "Ordenes de trabajo gestionadas",
-            "slug" => BillableItem::PQR_WORK_ORDER,
+            "slug" => BillableItem::WORK_ORDER,
             "description" => "Ordenes de trabajo gestionadas",
             "tax_id" => Tax::wherePercentage(0)->first()->id
         ]);
@@ -38,7 +38,7 @@ class AddPqrWorkOrderBillableItem extends Migration
 
         BillableItem::create([
             "name" => "Ordenes de trabajo gestionadas bolsa inicial",
-            "slug" => BillableItem::PQR_WORK_ORDER_INITIAL,
+            "slug" => BillableItem::WORK_ORDER_INITIAL,
             "description" => "Ordenes de trabajo gestionadas bolsa inicial",
             "tax_id" => Tax::wherePercentage(0)->first()->id
         ]);

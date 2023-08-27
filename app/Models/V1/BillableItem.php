@@ -31,9 +31,9 @@ class BillableItem extends Model
     public const TOTAL_WITHOUT_SUB = "total_without_sub";
     public const TOTAL_INVOICE = "total_invoice";
     public const PQR_ISSUED = "pqr_issued";
-    public const PQR_WORK_ORDER = "work_order";
+    public const WORK_ORDER = "work_order";
     public const PQR_ISSUED_INITIAL = "pqr_issued_initial";
-    public const PQR_WORK_ORDER_INITIAL = "work_order_initial";
+    public const WORK_ORDER_INITIAL = "work_order_initial";
 
 
     protected $fillable = [

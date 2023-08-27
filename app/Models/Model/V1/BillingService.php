@@ -26,7 +26,10 @@ class BillingService extends Model
         "initial_package_orders_price",
         "currency",
         "min_clients",
-        "min_client_value"
+        "min_client_value",
+        "pqr_initial_bag",
+        "work_order_initial_bag",
+        "billing_day"
     ];
 
     public function networkOperator()

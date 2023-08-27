@@ -320,6 +320,11 @@ class NetworkOperator extends Model
         return User::TYPE_NETWORK_OPERATOR;
     }
 
+    public function getWorkOrdersAttribute()
+    {
+        return WorkOrder::whereIn("client_id", $this->clients->pluck("id"));
+    }
+
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
