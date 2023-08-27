@@ -77,6 +77,32 @@
             "select_option_view"=>"key",
             ])
 
+            @include("partials.v1.divider_title",[
+                               "title"=>"Paquete de clientes"
+                       ])
+
+            @include("partials.v1.form.form_input_icon",[
+              "input_model"=>"min_clients",
+              "input_label"=>"Numero inicial de clientes",
+               "updated_input"=>"defer",
+              "icon_class"=>"fas fa-list",
+              "placeholder"=>"Ingrese el paquete inicial de clientes",
+              "col_with"=>6,
+              "min_number"=>0,
+              "input_type"=>"number",
+              "required"=>true,
+     ])
+            @include("partials.v1.form.form_input_icon",[
+             "input_model"=>"min_client_value",
+             "input_label"=>"Costo paquete inicial de clientes",
+              "updated_input"=>"defer",
+             "icon_class"=>"fas fa-money-bill",
+             "placeholder"=>"Ingrese el costo del paquete inicial de clientes",
+             "col_with"=>6,
+             "min_number"=>0,
+             "input_type"=>"number",
+             "required"=>true,
+    ])
 
             @include("partials.v1.divider_title",[
                     "title"=>"Pqrs"

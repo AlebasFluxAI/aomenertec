@@ -26,9 +26,9 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
         $clientPrices = $model->networkOperatorClientPrices;
         $component->fill([
             'model' => $model,
-            'pqr_bag' => $model->pqr_initial_bag,
-            'work_order_hours' => $model->work_order_initial_bag,
-            'billing_day' => $model->billing_day,
+            'pqr_bag' => $model->billableServices ? $model->billableServices->pqr_initial_bag : 0,
+            'work_order_hours' => $model->billableServices ? $model->billableServices->work_order_initial_bag : 0,
+            'billing_day' => $model->billableServices ? $model->billableServices->billing_day : 0,
             "has_billable_pqr" => $model->billableServices ? $model->billableServices->has_billable_pqr : false,
             "has_billable_orders" => $model->billableServices ? $model->billableServices->has_billable_orders : false,
             "has_billable_clients" => $model->billableServices ? $model->billableServices->has_billable_clients : false,
@@ -36,7 +36,9 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
             "orders_price" => $model->billableServices ? $model->billableServices->orders_price : false,
             "initial_package_pqr_price" => $model->billableServices ? $model->billableServices->initial_package_pqr_price : false,
             "initial_package_orders_price" => $model->billableServices ? $model->billableServices->initial_package_orders_price : false,
-            "currency" => $model->billableServices ? $model->billableServices->currency : false,
+            "min_clients" => $model->billableServices ? $model->billableServices->min_clients : false,
+            "min_client_value" => $model->billableServices ? $model->billableServices->min_client_value : false,
+            "currency" => $model->billableServices ? $model->billableServices->currency : BillingService::COP,
             "prices" => $model->networkOperatorClientPrices,
             "client_types" => ClientType::get(),
             "zni_conventional" => count($clientPrices) > 0 ? $clientPrices->where("client_type_id", ClientType::whereType(ClientType::ZIN_CONVENTIONAL)->first()->id)->first()->value : 0,
@@ -79,11 +81,7 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
             }
             $component->prices = $component->model->networkOperatorClientPrices;
 
-            $component->model->update([
-                "pqr_initial_bag" => $component->pqr_bag,
-                "work_order_initial_bag" => $component->work_order_hours,
-                "billing_day" => $component->billing_day
-            ]);
+
             if ($billableService = $component->model->billableServices) {
                 $billableService->update([
                     "orders_price" => $component->orders_price,
@@ -91,6 +89,11 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
                     "currency" => $component->currency,
                     "initial_package_pqr_price" => $component->initial_package_pqr_price,
                     "initial_package_orders_price" => $component->initial_package_orders_price,
+                    "min_client_value" => $component->min_client_value,
+                    "min_clients" => $component->min_clients,
+                    "pqr_initial_bag" => $component->pqr_bag,
+                    "work_order_initial_bag" => $component->work_order_hours,
+                    "billing_day" => $component->billing_day
                 ]);
             } else {
                 $component->model->billableServices()->create([
@@ -99,6 +102,11 @@ class NetworkOperatorServiceBagConfigurationService extends Singleton
                     "currency" => $component->currency,
                     "initial_package_pqr_price" => $component->initial_package_pqr_price,
                     "initial_package_orders_price" => $component->initial_package_orders_price,
+                    "min_client_value" => $component->min_client_value,
+                    "min_clients" => $component->min_clients,
+                    "pqr_initial_bag" => $component->pqr_bag,
+                    "work_order_initial_bag" => $component->work_order_hours,
+                    "billing_day" => $component->billing_day
                 ]);
             }
         });

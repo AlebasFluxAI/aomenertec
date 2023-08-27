@@ -41,6 +41,8 @@ class BagServiceConfigurationNetworkOperator extends Component
     public $zni_rural;
     public $sin_conventional;
     public $monitoring;
+    public $min_clients;
+    public $min_client_value;
 
     private $networkOperatorServiceBagConfigurationService;
     protected $rules = [

@@ -78,6 +78,11 @@ class Invoice extends Model
         return $this->hasMany(InvoiceItem::class);
     }
 
+    public function getModelAttribute()
+    {
+        return $this->admin ? $this->admin : $this->networkOperator;
+    }
+
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
