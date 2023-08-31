@@ -45,6 +45,17 @@ class Client extends Model
     public const IDENTIFICATION_TYPE_NIT = 'NIT';
 
 
+    public const RESIDENCE_1_41R = "Residencia 1 (41R)";
+    public const RESIDENCE_2_42R = "Residencia 2 (42R)";
+    public const RESIDENCE_3_43R = "Residencia 3 (43R)";
+    public const OFFICIAL_1_410 = "Oficial 1 (410)";
+    public const OFFICIAL_2_420 = "Oficial 2 (420)";
+    public const COMMERCIAL_1_41C = "Comercial 1 (41C)";
+    public const COMMERCIAL_2_42C = "Comercial 2 (42C)";
+    public const COMMERCIAL_3_43C = "Comercial 3 (43C)";
+    public const SUSPENDED_R1_R2 = "Suspendidos R1 Y R2";
+
+
     protected $fillable = [
         'code',
         'identification',
@@ -76,7 +87,8 @@ class Client extends Model
         "report_rate",
         "report_variables",
         "activation_requested",
-        "monitoring_fee"
+        "monitoring_fee",
+        "vaupes_stratification_type"
     ];
 
     protected static function booted()
@@ -99,6 +111,21 @@ class Client extends Model
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    public static function vaupesClientStratification()
+    {
+        return [
+            self::RESIDENCE_1_41R => "residence_1_41r",
+            self::RESIDENCE_2_42R => "residence_2_42r",
+            self::RESIDENCE_3_43R => "residence_3_43r",
+            self::OFFICIAL_1_410 => "official_1_410",
+            self::OFFICIAL_2_420 => "official_2_420",
+            self::COMMERCIAL_1_41C => "commercial_1_41c",
+            self::COMMERCIAL_2_42C => "commercial_2_42c",
+            self::COMMERCIAL_3_43C => "commercial_3_43c",
+            self::SUSPENDED_R1_R2 => "suspended_r1_r2",
+        ];
     }
 
     public function navigatorDropdownOptions()

@@ -68,4 +68,5 @@ trait ClientServiceTrait
     {
         return $client->addresses()->first();
     }
+
 }

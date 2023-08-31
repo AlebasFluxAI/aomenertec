@@ -84,6 +84,17 @@ class AddClientService extends Singleton
             "indicatives" => IndicativeHelper::getIndicativesKeyValue(),
             "time_zone" => TimeZoneHelper::COLOMBIA,
             "time_zones" => TimeZoneHelper::getTimeZoneKeyValue(),
+            "stratification" => [
+                ["key" => Client::RESIDENCE_1_41R, "value" => Client::RESIDENCE_1_41R],
+                ["key" => Client::RESIDENCE_2_42R, "value" => Client::RESIDENCE_2_42R],
+                ["key" => Client::RESIDENCE_3_43R, "value" => Client::RESIDENCE_3_43R],
+                ["key" => Client::OFFICIAL_1_410, "value" => Client::OFFICIAL_1_410],
+                ["key" => Client::OFFICIAL_2_420, "value" => Client::OFFICIAL_2_420],
+                ["key" => Client::COMMERCIAL_1_41C, "value" => Client::COMMERCIAL_1_41C],
+                ["key" => Client::COMMERCIAL_2_42C, "value" => Client::COMMERCIAL_2_42C],
+                ["key" => Client::COMMERCIAL_3_43C, "value" => Client::COMMERCIAL_3_43C],
+                ["key" => Client::SUSPENDED_R1_R2, "value" => Client::SUSPENDED_R1_R2],
+            ]
 
         ]);
     }
@@ -441,6 +452,7 @@ class AddClientService extends Singleton
             'person_type' => $component->client_person_type,
             "has_telemetry" => $component->has_telemetry,
             "admin_id" => Auth::user()->getAdmin() ? Auth::user()->getAdmin()->id : null,
+            "vaupes_stratification_type" => $component->stratification_name,
         ]);
     }
 
