@@ -279,6 +279,11 @@ class NetworkOperator extends Model
 
     }
 
+    public function vaupesClientStrata()
+    {
+        return $this->hasMany(VaupesClientStratificationFee::class);
+    }
+
     public function getTabContentForPrice()
     {
         return (array_map(function ($key) {

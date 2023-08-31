@@ -149,5 +149,8 @@
             @endforeach
             </tbody>
         </table>
+        @include("livewire.v1.admin.user.network-operator.price-configuration.vaupes-client-type-price-calculator")
     @endif
+
+
 </div>

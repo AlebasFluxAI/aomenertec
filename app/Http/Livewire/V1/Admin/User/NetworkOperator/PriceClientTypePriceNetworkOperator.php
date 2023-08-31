@@ -8,12 +8,14 @@ use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorPriceService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
 use App\Models\Traits\AddUserFormTrait;
+use App\Models\Traits\ClientFormTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class PriceClientTypePriceNetworkOperator extends Component
 {
+    use ClientFormTrait;
 
     public $model;
     public $taxType = [];
@@ -33,9 +35,25 @@ class PriceClientTypePriceNetworkOperator extends Component
         $this->networkOperatorPriceService = NetworkOperatorPriceService::getInstance();
     }
 
+    public function updated()
+    {
+        $this->emit('somethingUpdated', $this->month, $this->year);
+    }
+
     public function mount($client_type)
     {
         $this->networkOperatorPriceService->mount($this, $client_type);
+    }
+
+
+    public function changeVaupesFeeType($fee, $clientType, $month, $year, $client_type)
+    {
+        $this->networkOperatorPriceService->changeVaupesFeeType($this, $fee, $clientType, $month, $year, $client_type);
+    }
+
+    public function getVaupesFee($clientType, $month, $year, $client_type)
+    {
+        return $this->networkOperatorPriceService->getVaupesFee($this, $clientType, $month, $year, $client_type);
     }
 
     public function getFee($value, $level, $type)

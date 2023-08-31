@@ -368,6 +368,27 @@
                              ])
 
                         </div>
+                        <div>
+                            @if($this->getVaupesStratification())
+                                @include("partials.v1.divider_title",[
+                             "title"=>"Tipificación cliente Vaupes"
+                             ]
+                            )
+
+                                @include("partials.v1.form.form_list",[
+                                     "col_with"=>8,
+                                     "input_type"=>"text",
+                                     "input_label"=>"Estratificacion de cliente",
+                                     "list_model" => "stratification_name",
+                                     "list_default" => "Tipo...",
+                                     "list_options" => $stratification,
+                                     "list_option_value"=>"value",
+                                     "list_option_view"=>"key",
+                                     "list_option_title"=>"",
+                            ])
+
+                            @endif
+                        </div>
 
                         {{--@include("partials.v1.equipment_to_client_association")--}}
 
