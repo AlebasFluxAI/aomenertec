@@ -2,6 +2,8 @@
 
 namespace App\Models\Traits;
 
+use App\Http\Resources\V1\ToastEvent;
+use App\Models\V1\ClientType;
 use App\Models\V1\Image;
 use App\Models\V1\PhotovoltaicPrice;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -127,5 +129,44 @@ trait NetworkOperatorPriceTrait
         }
         $component->date_picked = true;
         $component->model->refresh();
+    }
+
+
+    public function changeVaupesFeeType(Component $component, $fee, $clientVaupesType, $month, $year, $client_type)
+    {
+
+        if ($clientFee = $component->model->vaupesClientStrata()->where([
+            "month" => $month,
+            "year" => $year,
+            "client_type_id" => ClientType::whereType($client_type)->first()->id
+
+        ])->first()) {
+            $clientFee->update([
+                $clientVaupesType => $fee
+            ]);
+        } else {
+            $component->model->vaupesClientStrata()->create([
+                "month" => $month,
+                "year" => $year,
+                "client_type_id" => ClientType::whereType($client_type)->first()->id,
+                $clientVaupesType => $fee
+            ]);
+        }
+
+        ToastEvent::launchToast($component, "show", "success", "Tarifa cambiada exitosamente");
+    }
+
+    public function getVaupesFee(Component $component, $clientVaupesType, $month, $year, $client_type)
+    {
+
+        if ($clientFee = $component->model->vaupesClientStrata()->where([
+            "month" => $month,
+            "year" => $year,
+            "client_type_id" => ClientType::whereType($client_type)->first()->id
+        ])->first()) {
+            return $clientFee->{$clientVaupesType};
+        } else {
+            return 0.0;
+        }
     }
 }

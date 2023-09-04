@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Models\V1\Image;
+use App\Models\V1\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -93,4 +94,12 @@ trait ClientFormTrait
     public $time_zones;
     public $time_zone;
     public $address_details;
+    public $stratification;
+
+    public function getVaupesStratification()
+    {
+        return true;
+        $admin = User::getUserModel()->user->getAdmin();
+        return $admin->identification == "8450000210";
+    }
 }

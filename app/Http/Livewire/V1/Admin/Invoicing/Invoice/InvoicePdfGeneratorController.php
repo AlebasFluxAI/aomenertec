@@ -16,9 +16,9 @@ class InvoicePdfGeneratorController extends Component
     {
         $pdf = Pdf::loadView('reports.invoice', [
             "logo_url" => Subdomain::getHeaderIcon(),
-            "client_name" => $invoice->networkOperator->name,
-            "client_document" => $invoice->networkOperator->identification,
-            "client_address" => $invoice->networkOperator->address,
+            "client_name" => $invoice->admin ? $invoice->admin->name : $invoice->networkOperator->name,
+            "client_document" => $invoice->admin ? $invoice->admin->identification : $invoice->networkOperator->identification,
+            "client_address" => $invoice->admin ? $invoice->admin->address : $invoice->networkOperator->address,
             "client_city" => "Bogota",
             "money" => "COP",
             "notes" => "Factura recurrente por uso de plataforma",

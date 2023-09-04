@@ -43,8 +43,9 @@ class InvoiceNetworkOperationGeneration extends Command
     {
 
         foreach (NetworkOperator::get() as $networkOperator) {
-
-            dispatch(new GenerateNetworkOperationInvoiceJob($networkOperator))->onQueue("spot");
+            if (now()->day == $networkOperator->billableServices->billing_day) {
+                dispatch(new GenerateNetworkOperationInvoiceJob($networkOperator))->onQueue("spot");
+            }
         }
 
 

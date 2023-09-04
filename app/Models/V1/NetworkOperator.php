@@ -279,6 +279,11 @@ class NetworkOperator extends Model
 
     }
 
+    public function vaupesClientStrata()
+    {
+        return $this->hasMany(VaupesClientStratificationFee::class);
+    }
+
     public function getTabContentForPrice()
     {
         return (array_map(function ($key) {
@@ -318,6 +323,11 @@ class NetworkOperator extends Model
     public static function getRole()
     {
         return User::TYPE_NETWORK_OPERATOR;
+    }
+
+    public function getWorkOrdersAttribute()
+    {
+        return WorkOrder::whereIn("client_id", $this->clients->pluck("id"));
     }
 
     protected static function booted()

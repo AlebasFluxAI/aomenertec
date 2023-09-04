@@ -58,7 +58,6 @@ class IndexInvoiceService extends Singleton
     {
         $model = User::getUserModel();
         if ($model::class == NetworkOperator::class) {
-
             if ($component->filter) {
                 return Invoice::whereNetworkOperatorId($model->id)->where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
             }
