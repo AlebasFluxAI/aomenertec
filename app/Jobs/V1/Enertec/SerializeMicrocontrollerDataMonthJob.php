@@ -83,8 +83,8 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
             if($date_end_data->isSameDay($this->day_ref)) {
 
                 $start_data_aux = $this->client->monthlyMicrocontrollerData()
-                    ->whereYear($start_date->format('Y'))
-                    ->whereMonth($start_date->format('m'))->first();
+                    ->where('year', $start_date->format('Y'))
+                    ->where('month', $start_date->format('m'))->first();
                 if (empty($start_data_aux)) {
                     $start_data = $this->client->microcontrollerData()
                         ->whereDate('source_timestamp', $start_date->format('Y-m-d 00:00:00'))

@@ -84,7 +84,7 @@ class UnpackDataJob implements ShouldQueue
                                     }
                                 }
                                 if ($data['start'] >= 72) {
-                                    if ($json[$data['variable_name']] < $data['min'] or $json[$data['variable_name']] > $data['max']) {
+                                    if ($json[$data['variable_name']] <= $data['min'] or $json[$data['variable_name']] > $data['max']) {
                                         if (!$data['default']) {
                                             $json[$data['variable_name']] = $data['default'];
                                         } else {
@@ -164,7 +164,7 @@ class UnpackDataJob implements ShouldQueue
             $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
             $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
             if($this->item->manually){
-                $this->item->interval_real_consumption = 6;
+                $this->item->interval_real_consumption = 1;
             }
             $this->item->raw_json = json_encode($raw_json);
             $this->item->save();
