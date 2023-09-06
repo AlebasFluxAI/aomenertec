@@ -65,7 +65,7 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        $day_search = $this->current_time->copy()->subDays(1);
+        $day_search = $this->current_time->copy()->subDays(7);
         $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
             ->min('source_timestamp');
 
@@ -74,7 +74,7 @@ class RefactorClientData extends Command
             $aux = new Carbon($source_date);
             $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
             $this->date_aux = new Carbon($date_init);
-            $this->unpackData();
+            // $this->unpackData();
             $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5'];
 
             $this->start_date = new Carbon($date_init);
@@ -84,43 +84,43 @@ class RefactorClientData extends Command
             $end_date_copy = new Carbon($date_init);
             $end_date_first = new Carbon($date_init);
             $i = 0;
-            $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
-                ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:00:00'))
-                ->orderBy('source_timestamp')->limit(100000)->get();
-            while (true) {
-                echo $this->start_date->format('Y-m-d H-i') . "\n";
-                $minute_data = $data->whereBetween('source_timestamp',[$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
-                                ->sortBy('source_timestamp')
-                                ->all();
-                if ($minute_data) {
-                    echo "ok\n";
-                    foreach ($minute_data as $datum) {
-                        dispatch(new JsonEdit($datum, false))->onQueue('spot3');
-                    }
-                }
-                if ($this->start_date->diffInHours($current_time) == 0) {
-                    break;
-                }
-                $this->start_date->addHour();
-            }
-            while (true) {
-                echo $start_date_copy->format('Y-m-d H-i') . "\n";
-                dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot3');
-                if ($start_date_copy->diffInHours($current_time) == 0) {
-                    break;
-                }
-                $start_date_copy->addHour();
-            }
-
-            while (true) {
-                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
-                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
-                if ($end_date->diffInDays($this->current_time) == 0) {
-                    break;
-                }
-
-                $end_date->addDay();
-            }
+//            $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
+//                ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:00:00'))
+//                ->orderBy('source_timestamp')->limit(100000)->get();
+//            while (true) {
+//                echo $this->start_date->format('Y-m-d H-i') . "\n";
+//                $minute_data = $data->whereBetween('source_timestamp',[$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
+//                                ->sortBy('source_timestamp')
+//                                ->all();
+//                if ($minute_data) {
+//                    echo "ok\n";
+//                    foreach ($minute_data as $datum) {
+//                        dispatch(new JsonEdit($datum, false))->onQueue('spot3');
+//                    }
+//                }
+//                if ($this->start_date->diffInHours($current_time) == 0) {
+//                    break;
+//                }
+//                $this->start_date->addHour();
+//            }
+//            while (true) {
+//                echo $start_date_copy->format('Y-m-d H-i') . "\n";
+//                dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot3');
+//                if ($start_date_copy->diffInHours($current_time) == 0) {
+//                    break;
+//                }
+//                $start_date_copy->addHour();
+//            }
+//
+//            while (true) {
+//                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
+//                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
+//                if ($end_date->diffInDays($this->current_time) == 0) {
+//                    break;
+//                }
+//
+//                $end_date->addDay();
+//            }
 
             // calculate monthly consumption
 
