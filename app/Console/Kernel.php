@@ -8,7 +8,7 @@ use App\Console\Commands\V1\ClientReport;
 use App\Console\Commands\V1\DeleteStopUnpackData;
 use App\Console\Commands\V1\InvoiceGeneration;
 use App\Console\Commands\V1\RefactorClientData;
-use App\Console\Commands\V1\ReorderDataClientDay;
+use App\Console\Commands\V1\ReorderDataClientMonth;
 use App\Console\Commands\V1\ReorderDataClientHour;
 use App\Console\Commands\V1\SetTimestamp;
 use App\Console\Commands\V1\RecordDailyConsumption;
@@ -29,7 +29,8 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-        ConsumerCommand::class
+        ConsumerCommand::class,
+        ReorderDataClientMonth::class
     ];
 
     /**
