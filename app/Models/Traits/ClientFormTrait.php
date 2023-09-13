@@ -95,6 +95,7 @@ trait ClientFormTrait
     public $time_zone;
     public $address_details;
     public $stratification;
+    public $stratification_name;
 
     public function getVaupesStratification()
     {
