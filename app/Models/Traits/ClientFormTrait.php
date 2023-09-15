@@ -99,8 +99,8 @@ trait ClientFormTrait
 
     public function getVaupesStratification()
     {
-        return true;
         $admin = User::getUserModel()->user->getAdmin();
         return $admin->identification == "8450000210";
     }
 }
+
