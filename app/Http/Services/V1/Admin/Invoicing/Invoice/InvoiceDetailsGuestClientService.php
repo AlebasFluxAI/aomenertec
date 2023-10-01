@@ -43,5 +43,14 @@ class InvoiceDetailsGuestClientService extends Singleton
     {
         $component->model = $invoice;
         $component->data = $invoice;
+        try {
+            $wompiSecret = $invoice->client->networkOperator->wompiCredentials->wompiSecret;
+
+        } catch (\Throwable $error) {
+
+        }
+
+        $component->public_key = $wompiSecret->public_key ?? config("wompi.wompi_default_public");
+
     }
 }

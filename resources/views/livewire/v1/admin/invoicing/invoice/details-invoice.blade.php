@@ -161,7 +161,7 @@
              "customer_phone"=>$model->model->phone,
              "customer_identification"=>$model->model->identification,
              "customer_identification_type"=>$model->model->identification_type,
-             "public_key"=>"pub_test_knPE3DSMREXJQgxqle2QgpGDEs7x3wJT"
+             "public_key"=>$public_key
           ])
     @endif
 

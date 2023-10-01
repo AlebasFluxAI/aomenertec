@@ -41,9 +41,17 @@ class DetailsInvoiceService extends Singleton
 {
     public function mount(Component $component, Invoice $invoices)
     {
+        try {
+            $wompiSecret = $invoices->client->networkOperator->wompiCredentials->wompiSecret;
+
+        } catch (\Throwable $error) {
+            $wompiSecret = config("wompi.wompi_default_public");
+        }
         $component->fill([
-            "model" => $invoices
+            "model" => $invoices,
+            "public_key" => $wompiSecret->public_key ?? config("wompi.wompi_default_public")
         ]);
     }
+
 
 }
