@@ -78,8 +78,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         }
 
         $year = now()->year;
-        //$month = strlen(now()->month) > 1 ? now()->month : "0" . now()->month;
-        $month = 4;
+        $month = now()->month;
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
             ->where("year", $year)

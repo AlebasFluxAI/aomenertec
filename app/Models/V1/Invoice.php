@@ -14,9 +14,12 @@ class Invoice extends Model
     use SoftDeletes;
     use PaginatorTrait;
 
+
+    public const PAYMENT_STATUS_APPROVED = "approved";
+    public const PAYMENT_STATUS_VOIDED = "voided";
+    public const PAYMENT_STATUS_DECLINED = "declined";
+    public const PAYMENT_STATUS_ERROR = "error";
     public const PAYMENT_STATUS_PENDING = "pending";
-    public const PAYMENT_STATUS_PAID = "paid";
-    public const PAYMENT_STATUS_LATE = "late";
 
     public const TYPE_PLATFORM_USAGE = "platform_usage";
     public const TYPE_CONSUMPTION = "consumption";

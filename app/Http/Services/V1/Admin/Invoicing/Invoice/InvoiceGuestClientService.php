@@ -30,6 +30,7 @@ use App\Models\V1\VoltageLevel;
 use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -37,20 +38,30 @@ use function auth;
 use function bcrypt;
 use function session;
 
-class DetailsInvoiceService extends Singleton
+class InvoiceGuestClientService extends Singleton
 {
     public function mount(Component $component, Invoice $invoices)
     {
-        try {
-            $wompiSecret = $invoices->client->networkOperator->wompiCredentials->wompiSecret;
-
-        } catch (\Throwable $error) {
-            $wompiSecret = config("wompi.wompi_default_public");
-        }
         $component->fill([
-            "model" => $invoices,
-            "public_key" => $wompiSecret->public_key ?? config("wompi.wompi_default_public")
+            "model" => $invoices
         ]);
+    }
+
+    public function submitForm(Component $component)
+    {
+        if ($component->client_code) {
+            $client = Client::whereCode($component->client_code)->first();
+        }
+        if ($component->contact_identification and !$client) {
+            $client = Client::whereIdentification($component->contact_identification)->first();
+        }
+        if (!$client) {
+            $component->addError("clientError", "No se encuentra cliente con los criterios de busqueda");
+            return;
+        }
+
+        $component->redirectRoute("guest.invoice-index-payment", ["client" => $client->id, "subdomain" => $component->subdomain]);
+
     }
 
 

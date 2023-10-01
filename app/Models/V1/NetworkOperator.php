@@ -279,6 +279,11 @@ class NetworkOperator extends Model
 
     }
 
+    public function wompiCredentials()
+    {
+        return $this->morphOne(WompiCredential::class, "credentiable");
+    }
+
     public function vaupesClientStrata()
     {
         return $this->hasMany(VaupesClientStratificationFee::class);

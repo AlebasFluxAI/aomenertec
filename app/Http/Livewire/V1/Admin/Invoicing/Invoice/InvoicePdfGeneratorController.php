@@ -31,7 +31,7 @@ class InvoicePdfGeneratorController extends Component
             "currency" => $invoice->currency,
             "invoice_code" => $invoice->code,
             "invoice_payment_status" => strtoupper(__("invoice." . $invoice->payment_status)),
-            "color" => $invoice->payment_status == Invoice::PAYMENT_STATUS_PAID ? "#3d8f5f" : "gray",
+            "color" => $invoice->payment_status == Invoice::PAYMENT_STATUS_APPROVED ? "#3d8f5f" : "gray",
         ]); //load view page
         $pdf->setPaper("LETTER");
         return $pdf->download('Factura-' . $invoice->code . '.pdf');

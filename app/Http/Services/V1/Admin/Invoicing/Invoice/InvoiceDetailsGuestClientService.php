@@ -37,21 +37,20 @@ use function auth;
 use function bcrypt;
 use function session;
 
-class DetailsInvoiceService extends Singleton
+class InvoiceDetailsGuestClientService extends Singleton
 {
-    public function mount(Component $component, Invoice $invoices)
+    public function mount(Component $component, Invoice $invoice)
     {
+        $component->model = $invoice;
+        $component->data = $invoice;
         try {
-            $wompiSecret = $invoices->client->networkOperator->wompiCredentials->wompiSecret;
+            $wompiSecret = $invoice->client->networkOperator->wompiCredentials->wompiSecret;
 
         } catch (\Throwable $error) {
-            $wompiSecret = config("wompi.wompi_default_public");
+
         }
-        $component->fill([
-            "model" => $invoices,
-            "public_key" => $wompiSecret->public_key ?? config("wompi.wompi_default_public")
-        ]);
+
+        $component->public_key = $wompiSecret->public_key ?? config("wompi.wompi_default_public");
+
     }
-
-
 }
