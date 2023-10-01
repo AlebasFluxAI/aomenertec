@@ -95,11 +95,12 @@ trait ClientFormTrait
     public $time_zone;
     public $address_details;
     public $stratification;
+    public $stratification_name;
 
     public function getVaupesStratification()
     {
-        return true;
         $admin = User::getUserModel()->user->getAdmin();
         return $admin->identification == "8450000210";
     }
 }
+

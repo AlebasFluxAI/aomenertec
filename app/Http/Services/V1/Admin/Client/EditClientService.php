@@ -88,7 +88,19 @@ class EditClientService extends Singleton
             "addressDetails" => $clientAddress ? $clientAddress->details : "",
             "decodedAddress" => $clientAddress ? $clientAddress->address : "",
             "indicatives" => IndicativeHelper::getIndicativesKeyValue(),
-            "time_zones" => TimeZoneHelper::getTimeZoneKeyValue()
+            "time_zones" => TimeZoneHelper::getTimeZoneKeyValue(),
+            "stratification_name" => $client->vaupes_stratification_type,
+            "stratification" => [
+                ["key" => Client::RESIDENCE_1_41R, "value" => Client::RESIDENCE_1_41R],
+                ["key" => Client::RESIDENCE_2_42R, "value" => Client::RESIDENCE_2_42R],
+                ["key" => Client::RESIDENCE_3_43R, "value" => Client::RESIDENCE_3_43R],
+                ["key" => Client::OFFICIAL_1_410, "value" => Client::OFFICIAL_1_410],
+                ["key" => Client::OFFICIAL_2_420, "value" => Client::OFFICIAL_2_420],
+                ["key" => Client::COMMERCIAL_1_41C, "value" => Client::COMMERCIAL_1_41C],
+                ["key" => Client::COMMERCIAL_2_42C, "value" => Client::COMMERCIAL_2_42C],
+                ["key" => Client::COMMERCIAL_3_43C, "value" => Client::COMMERCIAL_3_43C],
+                ["key" => Client::SUSPENDED_R1_R2, "value" => Client::SUSPENDED_R1_R2],
+            ]
         ]);
     }
 
@@ -203,6 +215,7 @@ class EditClientService extends Singleton
             'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,
             'stratum_id' => $component->stratum_id,
+            "vaupes_stratification_type" => $component->stratification_name,
         ];
     }
 

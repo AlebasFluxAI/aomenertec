@@ -48,7 +48,7 @@ class Control extends Component
             $mqtt->publish($topic, $message);
 
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
-                if ($elapsedTime >= 10) {
+                if ($elapsedTime >= 20) {
                     $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
                     $mqtt->interrupt();
                     $this->emit('changeCheck', ['index'=>$index, 'flag'=>false]);

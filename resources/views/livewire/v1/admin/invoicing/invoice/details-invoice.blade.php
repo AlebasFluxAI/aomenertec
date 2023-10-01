@@ -48,11 +48,6 @@
                                                                              "value"=>$model->code
                                                                          ],
                                                                          [
-                                                                             "key"=>"Administrador",
-                                                                             "value"=>$model->model->id." -".$model->model->name
-
-                                                                         ],
-                                                                         [
                                                                              "key"=>"Subtotal",
                                                                              "value"=>$model->subtotal,
                                                                              "money"=>true,
@@ -156,62 +151,18 @@
                                                 ],
                                                 ]
          ])
-    @if($model->payment_status!=\App\Models\V1\Invoice::PAYMENT_STATUS_PAID)
-        <div class="text-center"
-             style="background-color: green;padding: 10px;margin-left: 20%;margin-right: 20%;border-radius: 15px">
-            <button id="add"
-                    class="mb-2 py-2 px-4" data-toggle="modal" data-target="#exampleModal">
-                <b>
-                    <i class="fas fa-check"></i> Pagar factura
-                </b>
-            </button>
-        </div>
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <p>Confirmar pago</p>
-                    </div>
-                    <div class="modal-body">
-
-                        <p> ¿Estas seguro de realizar el pago ?</p>
-                        <p style="color: teal"> <span
-                                style="color: teal;font-size: 20px"> ${{\App\Http\Resources\V1\Formatter::currencyFormat($model->total)}}</span>
-                        </p>
-
-                        <div class="text-right">
-
-                            <form action="https://checkout.wompi.co/p/"
-                                  method="GET">
-                                <!-- OBLIGATORIOS -->
-                                <input type="hidden" name="public-key"
-                                       value="pub_test_knPE3DSMREXJQgxqle2QgpGDEs7x3wJT"/>
-                                <input type="hidden" name="currency" value="COP"/>
-                                <input type="hidden" name="amount-in-cents" value="{{$model->total."00"}}"/>
-                                <input type="hidden" name="reference" value="{{$model->code}}"/>
-                                <input type="hidden" name="customer-data.email" value="{{$model->model->email}}"/>
-                                <input type="hidden" name="customer-data.full-name"
-                                       value="{{$model->model->name." ".$model->model->last_name}}"/>
-                                <input type="hidden" name="customer-data.phone-number"
-                                       value="{{$model->model->phone}}"/>
-                                <input type="hidden" name="customer-data.phone-number-prefix"
-                                       value="+57"/>
-                                <input type="hidden" name="customer-data.legal-id"
-                                       value="{{$model->model->identification}}"/>
-                                <input type="hidden" name="customer-data.legal-type"
-                                       value="{{$model->model->identification_type}}"/>
-                                <button wire:click="confirmRecharge" type="submit">Pagar factura</button>
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+    @if($model->payment_status!=\App\Models\V1\Invoice::PAYMENT_STATUS_APPROVED)
+        @include("partials.v1.payment.payment_button",[
+             "total"=>$model->total,
+             "reference"=>$model->code,
+             "email"=>$model->model->email,
+             "customer_last_name"=>$model->model->last_name,
+             "customer_name"=>$model->model->name,
+             "customer_phone"=>$model->model->phone,
+             "customer_identification"=>$model->model->identification,
+             "customer_identification_type"=>$model->model->identification_type,
+             "public_key"=>$public_key
+          ])
     @endif
 
 </div>
