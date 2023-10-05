@@ -90,6 +90,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
 
         $year = $fechaActual->copy()->subDay()->format('Y');
         $month = $fechaActual->copy()->subDay()->format('m');
+
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
             ->where("year", $year)

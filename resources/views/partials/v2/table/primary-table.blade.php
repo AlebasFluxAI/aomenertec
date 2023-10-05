@@ -193,7 +193,7 @@
                                                                         $table_row->{$table_headers[0]["col_data"]}),
                                                                      "icon"=>$custom["icon"],
                                                                      "tooltip_title"=>$custom["tooltip_title"] ?? '',
-                                                                     "button_subdomain"=>$custom["button_subdomain"]??null
+                                                                     "button_subdomain"=>array_key_exists("button_subdomain",$custom)?$custom["button_subdomain"]:\Illuminate\Support\Facades\Route::input("subdomain")
                                                                  ])
                                                         @else
                                                             @if(array_key_exists("modal",$custom))

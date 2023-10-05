@@ -45,6 +45,14 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent::class)->name("guest.add-purchase");
     });
 
+
+    Route::prefix("clientes/invitados/facturas")->group(function () {
+        Route::get('/pagos', Livewire\V1\Admin\Invoicing\Invoice\InvoiceGuestClientComponent::class)->name("guest.invoice-payment");
+        Route::get('/cliente/{client}', Livewire\V1\Admin\Invoicing\Invoice\InvoiceIndexGuestClientComponent::class)->name("guest.invoice-index-payment");
+        Route::get('/cliente/factura/{invoice}', Livewire\V1\Admin\Invoicing\Invoice\InvoiceDetailsGuestComponent::class)->name("guest.invoice-details-payment");
+
+    });
+
     Route::prefix("reestablecer-cuenta")->group(function () {
         Route::get('/', Livewire\V1\Admin\User\ResetPassword\ResetPassword::class)->name("subdomain.password.reset.form");
         Route::get('/{otp}', Livewire\V1\Admin\User\ResetPassword\ResetPasswordReset::class)->name("subdomain.password.reset.reset");
@@ -73,6 +81,7 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::post("pagos/wompi/eventos", (\App\Http\Controllers\V1\Wompi\WompiController::class) . "@processPayment");
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get("mail/test/user_created", (MailTestController::class) . "@userCreatedNotification");
