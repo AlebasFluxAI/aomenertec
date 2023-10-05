@@ -68,7 +68,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         ]);
 
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
-            $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy->subDay()->format('Y'))->first();
+            $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
             if(isEmpty($otherFee)) {
                 $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
             }
@@ -78,7 +78,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             $publicTaxType = $otherFee ? $otherFee->tax_type : 0.0;
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         } else {
-            $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy->subDay()->format('Y'))->first();
+            $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
             if(isEmpty($otherFee)) {
                 $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->first();
             }
