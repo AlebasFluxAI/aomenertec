@@ -548,6 +548,17 @@ class Client extends Model
     {
         return $this->hasMany(ClientRecharge::class);
     }
+    public function getSerialMeter()
+    {
+        $meter = $this->equipments()->whereEquipmentTypeId(1)->first();
+        return $meter->serial;
+    }
+
+    public function getSerialGabinete()
+    {
+        $gabinete = $this->equipments()->whereEquipmentTypeId(1)->first();
+        return $gabinete->serial;
+    }
 
     public function lastConsecutiveRecharge()
     {

@@ -17,6 +17,7 @@ use PhpMqtt\Client\Facades\MQTT;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
+
 class ClientInvoiceGenerateService extends Singleton
 {
     use WithPagination;
@@ -33,6 +34,7 @@ class ClientInvoiceGenerateService extends Singleton
             'month' => $fechaActual->month,
             'fees' => $client->feesDate($fechaActual->month, $fechaActual->year),
             'other_fees' => $client->otherFeesDate($fechaActual->month, $fechaActual->year),
+            'others_data' => ['pago_oportuno' => $fechaActual->copy()->addDays(15)->format('Y-m-d'), 'suspension' => $fechaActual->copy()->addDays(20)->format('Y-m-d')]
         ]);
     }
 
@@ -55,6 +57,8 @@ class ClientInvoiceGenerateService extends Singleton
             ->where("year", $component->year)->first();
 
         $value_chart = ['series'=> [], 'x_axis'=> []];
+        $promedio = 0;
+        $last_month = 0;
         $date= Carbon::create($component->year, $component->month);
         if($monthly_data) {
             $i = 0;
@@ -65,10 +69,28 @@ class ClientInvoiceGenerateService extends Singleton
                 if ($data) {
                     array_push($value_chart['series'], round($data->interval_real_consumption, 2));
                     array_push($value_chart['x_axis'], Carbon::create($data->year, $data->month, $data->day)->format('d M y'));
+                    if ($i==1){
+                        $last_month = $data->interval_real_consumption;
+                        $date_last_month = Carbon::create($data->microcontrollerData->source_timestamp);
+                    }
+                    if ($i==0){
+                        $month = $data->interval_real_consumption;
+                        $date_month = Carbon::create($data->microcontrollerData->source_timestamp);
+                    }
                 } else {
                     array_push($value_chart['series'], 0);
                     array_push($value_chart['x_axis'], $date->format('M y'));
+                    if ($i==1){
+                        $last_month = 0;
+                        $date_last_month = null;
+                    }
+                    if ($i==0){
+                        $month = 0;
+                        $date_month = null;
+                    }
                 }
+
+                $promedio = $data->interval_real_consumption + $promedio;
                 if ($i == 5) {
                     break;
                 }
@@ -79,6 +101,17 @@ class ClientInvoiceGenerateService extends Singleton
         }else {
             $component->emit('setChartData', $value_chart);
         }
+
+        $client = Client::find($component->client->id);
+        $promedio = $promedio/6;
+        $component->others_data['serial_meter']= $client->getSerialMeter();
+        $component->others_data['promedio']= $promedio;
+        $component->others_data['last_month']= $last_month;
+        $component->others_data['periodo_facturado']= $date_last_month == null ? $date_month->format('Y-m-d'). ' - ' .$date_month->format('Y-m-01'):$date_month->format('Y-m-d'). ' - ' .$date_last_month->format('Y-m-d');
+        $component->others_data['dias_facturados']= $date_last_month == null ? $date_month->format('d'):$date_month->diffInDays($date_last_month);
+        $component->others_data['numero_factura']= $date_month->format('y').$date_month->format('m').$component->client->code;
+
+
     }
     public function setImageChart(Component $component, $uri)
     {

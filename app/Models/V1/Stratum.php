@@ -15,6 +15,11 @@ class Stratum extends Model
     use AuditableTrait;
     use PaginatorTrait;
 
+    protected $fillable = [
+                'acronym',
+                'name'
+                ];
+
 
     public function clients()
     {

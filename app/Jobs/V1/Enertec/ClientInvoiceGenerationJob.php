@@ -24,6 +24,9 @@ use Illuminate\Queue\SerializesModels;
 use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
+use function PHPUnit\Framework\isEmpty;
 
 class ClientInvoiceGenerationJob implements ShouldQueue
 {
@@ -57,6 +60,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $publicLightTaxFlag = $client->public_lighting_tax;
         $stratum = $client->stratum;
         $networkOperator = $client->networkOperator;
+        $fechaActual = Carbon::now();
         $clientType = $client->client_type_id;
         $invoice = $client->invoices()->create([
             "type" => Invoice::TYPE_CONSUMPTION,
@@ -64,22 +68,28 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         ]);
 
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
+            $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy->subDay()->format('Y'))->first();
+            if(isEmpty($otherFee)) {
+                $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
+            }
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
             $discount = $otherFee ? $otherFee->discount : 0.0;
             $contribution = $otherFee ? $otherFee->contribution : 0.0;
             $publicTaxType = $otherFee ? $otherFee->tax_type : 0.0;
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         } else {
-            $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->first();
+            $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy->subDay()->format('Y'))->first();
+            if(isEmpty($otherFee)) {
+                $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->first();
+            }
             $discount = $otherFee ? $otherFee->discount : 0.0;
             $contribution = $otherFee ? $otherFee->contribution : 0.0;
             $publicTaxType = $otherFee ? $otherFee->tax_type : 0.0;
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         }
 
-        $year = now()->year;
-        //$month = strlen(now()->month) > 1 ? now()->month : "0" . now()->month;
-        $month = 4;
+        $year = $fechaActual->copy()->subDay()->format('Y');
+        $month = $fechaActual->copy()->subDay()->format('m');
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
             ->where("year", $year)
@@ -182,8 +192,8 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $value->value_contribution = ($client->stratum->id > 4) ? (($client->contribution && $other_fees->contribution > 0) ? $value_active * $other_fees->contribution / 100 : 0) : 0;
         $value->value_discount = ($client->stratum->id < 4) ? (($other_fees->discount > 0) ? $value_discount : 0) : 0;
         $value->value_tax = $value_tax;
-        $value->value_varch = $fees->distribution * $monthly_data->interval_reactive_capacitive_consumption;
-        $value->value_varlh = $fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption;
+        $value->value_varch = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND')? ($this->fees->distribution * $monthly_data->interval_reactive_capacitive_consumption):0;
+        $value->value_varlh = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND')?($this->fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption):0;
         $value->subtotal_energy = $value->value_active + $value->value_contribution + $value->value_discount + $value->value_tax + $value->value_varch + $value->value_varlh;
         $value->subtotal_others = 0;
         $value->total = $value->subtotal_energy + $value->subtotal_others;
@@ -194,6 +204,8 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             ->where("year", $year)->first();
 
         $value_chart = ['series' => [], 'x_axis' => []];
+        $promedio = 0;
+        $last_month = 0;
         $date = Carbon::create($year, $month);
         $i = 0;
         while (true) {
@@ -203,10 +215,28 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             if ($data) {
                 array_push($value_chart['series'], round($data->interval_real_consumption, 2));
                 array_push($value_chart['x_axis'], Carbon::create($data->year, $data->month, $data->day)->format('d M y'));
+                if ($i==1){
+                    $last_month = $data->interval_real_consumption;
+                    $date_last_month = Carbon::create($data->microcontrollerData->source_timestamp);
+                }
+                if ($i==0){
+                    $month = $data->interval_real_consumption;
+                    $date_month = Carbon::create($data->microcontrollerData->source_timestamp);
+                }
             } else {
                 array_push($value_chart['series'], 0);
                 array_push($value_chart['x_axis'], $date->format('M y'));
+                if ($i==1){
+                    $last_month = 0;
+                    $date_last_month = null;
+                }
+                if ($i==0){
+                    $month = 0;
+                    $date_month = null;
+                }
             }
+            $promedio = $data->interval_real_consumption + $promedio;
+
             if ($i == 5) {
                 break;
             }
@@ -225,8 +255,20 @@ class ClientInvoiceGenerationJob implements ShouldQueue
               }
             }";
         $chartUrl = 'https://quickchart.io/chart?w=500&h=300&c=' . urlencode($chartConfig);
-
-
+        $client = Client::find($client->id);
+        $promedio = $promedio/6;
+        $others_data['pago_oportuno'] = $fechaActual->copy()->addDays(15)->format('Y-m-d');
+        $others_data['suspension'] = $fechaActual->copy()->addDays(20)->format('Y-m-d');
+        $others_data['serial_meter']= $client->getSerialMeter();
+        $others_data['promedio']= $promedio;
+        $others_data['last_month']= $last_month;
+        $others_data['periodo_facturado']= $date_last_month == null ? $date_month->format('Y-m-d'). ' - ' .$date_month->format('Y-m-01'):$date_month->format('Y-m-d'). ' - ' .$date_last_month->format('Y-m-d');
+        $others_data['dias_facturados']= $date_last_month == null ? $date_month->format('d'):$date_month->diffInDays($date_last_month);
+        $others_data['numero_factura']= $date_month->format('y').$date_month->format('m').$client->code;
+        $generadorDeCodigoDeBarras = new DNS1D();
+        $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
+        $generate_qr_code = new DNS2D();
+        $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
         $pdf = Pdf::loadView('reports.client_invoice', [
             "image_chart_url" => $chartUrl,
             'value' => $value,
@@ -237,6 +279,9 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             'admin' => $networkOperator->admin,
             'fees' => $fees,
             'other_fees' => $other_fees,
+            'bar_code' => $imagenDeCodigoDeBarras,
+            'qr_code' => $qr_code,
+            'other_data' => $others_data
         ]);
         $pdf->setPaper('A4', 'portrait');
         $pdf->render();
