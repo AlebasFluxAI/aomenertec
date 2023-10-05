@@ -64,7 +64,6 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             "type" => Invoice::TYPE_CONSUMPTION,
             "network_operator_id" => $networkOperator->id
         ]);
-
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
             if (!$otherFee) {
@@ -190,6 +189,7 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
                         $month = $data->interval_real_consumption;
                         $date_month = Carbon::create($data->microcontrollerData->source_timestamp);
                     }
+                    $promedio = $data->interval_real_consumption + $promedio;
                 } else {
                     array_push($value_chart['series'], 0);
                     array_push($value_chart['x_axis'], $date->format('M y'));
@@ -202,7 +202,7 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
                         $date_month = null;
                     }
                 }
-                $promedio = $data->interval_real_consumption + $promedio;
+
 
                 if ($i == 5) {
                     break;
@@ -222,7 +222,6 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
               }
             }";
             $chartUrl = 'https://quickchart.io/chart?w=500&h=300&c=' . urlencode($chartConfig);
-            $client = Client::find($client->id);
             $promedio = $promedio / 6;
             $others_data['pago_oportuno'] = $fechaActual->copy()->addDays(15)->format('Y-m-d');
             $others_data['suspension'] = $fechaActual->copy()->addDays(20)->format('Y-m-d');
@@ -236,25 +235,39 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
             $generate_qr_code = new DNS2D();
             $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
+
+            $value_aux = [
+                'value_active' => $value->value_active,
+                'value_contribution' => $value->value_contribution,
+                'value_discount' => $value->value_discount,
+                'value_tax' => $value->value_tax,
+                'value_varch' => $value->value_varch,
+                'value_varlh' => $value->value_varlh,
+                'subtotal_energy' => $value->subtotal_energy,
+                'subtotal_others' => $value->subtotal_others,
+                'total' => $value->total,
+            ];
+            $pdf_data = [
+                "image_chart_url" => $chartUrl,
+                'value' => $value_aux,
+                'json' => $json,
+                'monthly_data' => $monthly_data,
+                'client' => Client::find($this->client->id),
+                'network_operator' => $networkOperator,
+                'admin' => $networkOperator->admin,
+                'fees' => $fees,
+                'other_fees' => $other_fees,
+                'bar_code' => $imagenDeCodigoDeBarras,
+                'qr_code' => $qr_code,
+                'other_data' => $others_data
+            ];
             $invoice->update([
                 "sub_total" => $value->total,
                 "total" => $value->total,
                 "tax_total" => $publicTax,
-                "pdf_data" => [
-                    "image_chart_url" => $chartUrl,
-                    'value' => $value,
-                    'json' => $json,
-                    'monthly_data' => $monthly_data,
-                    'client' => Client::find($this->client->id),
-                    'network_operator' => $networkOperator,
-                    'admin' => $networkOperator->admin,
-                    'fees' => $fees,
-                    'other_fees' => $other_fees,
-                    'bar_code' => $imagenDeCodigoDeBarras,
-                    'qr_code' => $qr_code,
-                    'other_data' => $others_data
-                ]
+                "pdf_data" => json_encode($pdf_data)
             ]);
+
             $pdf = Pdf::loadView('reports.client_invoice', [
                 "image_chart_url" => $chartUrl,
                 'value' => $value,
