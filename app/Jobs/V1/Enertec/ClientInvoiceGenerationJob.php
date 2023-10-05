@@ -191,6 +191,8 @@ class ClientInvoiceGenerationJob implements ShouldQueue
                     $month = $data->interval_real_consumption;
                     $date_month = Carbon::create($data->microcontrollerData->source_timestamp);
                 }
+                $promedio = $data->interval_real_consumption + $promedio;
+
             } else {
                 array_push($value_chart['series'], 0);
                 array_push($value_chart['x_axis'], $date->format('M y'));
@@ -203,7 +205,6 @@ class ClientInvoiceGenerationJob implements ShouldQueue
                     $date_month = null;
                 }
             }
-            $promedio = $data->interval_real_consumption + $promedio;
 
             if ($i == 5) {
                 break;
@@ -237,13 +238,24 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
         $generate_qr_code = new DNS2D();
         $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
+        $value_aux = [
+            'value_active' => $value->value_active,
+            'value_contribution' => $value->value_contribution,
+            'value_discount' => $value->value_discount,
+            'value_tax' => $value->value_tax,
+            'value_varch' => $value->value_varch,
+            'value_varlh' => $value->value_varlh,
+            'subtotal_energy' => $value->subtotal_energy,
+            'subtotal_others' => $value->subtotal_others,
+            'total' => $value->total,
+        ];
         $invoice->update([
             "sub_total" => $value->total,
             "total" => $value->total,
             "tax_total" => $publicTax,
             "pdf_data" => [
                 "image_chart_url" => $chartUrl,
-                'value' => $value,
+                'value' => $value_aux,
                 'json' => $json,
                 'monthly_data' => $monthly_data,
                 'client' => Client::find($this->client->id),
