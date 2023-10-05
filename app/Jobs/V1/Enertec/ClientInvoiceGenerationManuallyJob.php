@@ -6,10 +6,7 @@ use App\Http\Resources\V1\Icon;
 use App\Models\V1\BillableItem;
 use App\Models\V1\Client;
 use App\Models\V1\ClientType;
-use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\Invoice;
-use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\SinOtherFee;
 use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\ZniLevelFee;
@@ -21,14 +18,13 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
 use function PHPUnit\Framework\isEmpty;
 
-class ClientInvoiceGenerationJob implements ShouldQueue
+class ClientInvoiceGenerationManuallyJob implements ShouldQueue
 {
     use Dispatchable;
     use InteractsWithQueue;
@@ -43,10 +39,12 @@ class ClientInvoiceGenerationJob implements ShouldQueue
      */
     public $model;
     public $client;
+    public $date;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, Carbon $date)
     {
         $this->client = $client;
+        $this->date = $date;
     }
 
     /**
@@ -60,7 +58,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $publicLightTaxFlag = $client->public_lighting_tax;
         $stratum = $client->stratum;
         $networkOperator = $client->networkOperator;
-        $fechaActual = Carbon::now();
+        $fechaActual = $this->date->copy();
         $clientType = $client->client_type_id;
         $invoice = $client->invoices()->create([
             "type" => Invoice::TYPE_CONSUMPTION,

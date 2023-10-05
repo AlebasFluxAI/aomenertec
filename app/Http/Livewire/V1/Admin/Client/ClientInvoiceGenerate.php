@@ -10,6 +10,10 @@ use App\Models\V1\SubsistenceConsumption;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Livewire\Component;
+use Milon\Barcode\DNS1D;
+use Milon\Barcode\DNS2D;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 class ClientInvoiceGenerate extends Component
 {
@@ -17,6 +21,7 @@ class ClientInvoiceGenerate extends Component
     public $client;
     public $fees;
     public $network_operator;
+    public $others_data;
     public $other_fees;
     public $month;
     public $year;
@@ -40,6 +45,12 @@ class ClientInvoiceGenerate extends Component
             ->where("month", str_pad($this->month, 2, "0", STR_PAD_LEFT))
             ->where("year", $this->year)->first();
         if($monthly_data){
+            $generadorDeCodigoDeBarras = new DNS1D();
+            $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
+            $generate_qr_code = new DNS2D();
+            $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
+
+
             $sc = SubsistenceConsumption::find($this->client->subsistence_consumption_id);
             $value_kwh = (($this->fees->optional_fee == 0)?$this->fees->unit_cost:$this->fees->optional_fee);
             $value_active = $monthly_data->interval_real_consumption * $value_kwh;
@@ -51,8 +62,8 @@ class ClientInvoiceGenerate extends Component
             $value->value_contribution = ($this->client->stratum->id > 4)?(($this->client->contribution && $this->other_fees->contribution > 0)?$value_active*$this->other_fees->contribution/100:0):0;
             $value->value_discount = ($this->client->stratum->id < 4)?(($this->other_fees->discount > 0)?$value_discount:0):0;
             $value->value_tax = $value_tax;
-            $value->value_varch = $this->fees->distribution * $monthly_data->interval_reactive_capacitive_consumption;
-            $value->value_varlh = $this->fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption;
+            $value->value_varch = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND')? ($this->fees->distribution * $monthly_data->interval_reactive_capacitive_consumption):0;
+            $value->value_varlh = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND')?($this->fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption):0;
             $value->subtotal_energy = $value->value_active + $value->value_contribution + $value->value_discount + $value->value_tax + $value->value_varch + $value->value_varlh;
             $value->subtotal_others = 0;
             $value->total = $value->subtotal_energy + $value->subtotal_others;
@@ -67,6 +78,9 @@ class ClientInvoiceGenerate extends Component
                 'admin'=> NetworkOperator::find($this->network_operator->id)->admin,
                 'fees'=> $this->fees,
                 'other_fees'=> $this->other_fees,
+                'bar_code' => $imagenDeCodigoDeBarras,
+                'qr_code' => $qr_code,
+                'other_data' => $this->others_data
             ]);
             $pdf->setPaper('A4', 'portrait');
             return response()->streamDownload(function () use ($pdf) {
