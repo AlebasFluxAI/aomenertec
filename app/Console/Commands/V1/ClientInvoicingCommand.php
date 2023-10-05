@@ -2,46 +2,83 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\V1\Enertec\Invoicing\ClientInvoicingJob;
+use App\Jobs\V1\Enertec\ClientInvoiceGenerationJob;
+use App\Jobs\V1\Enertec\ClientInvoiceGenerationManuallyJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
+use App\Models\V1\ClientConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Console\Command;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ClientInvoicingCommand implements ShouldQueue
+class ClientInvoicingCommand extends Command
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'command:enertec:v1:invoice_client_generation_manually {date_init} {clients_id?*}';
 
     /**
-     * Create a new job instance.
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'genera facturas a clientes';
+
+    /**
+     * Create a new command instance.
      *
      * @return void
      */
 
 
+    public function __construct()
+    {
+
+        parent::__construct();
+    }
+
     /**
-     * Execute the job.
+     * Execute the console command.
      *
-     * @return void
+     * @return int
      */
     public function handle()
     {
-        foreach (Client::get() as $client) {
-            if (now()->subDay()->day == $client->clientConfiguration->billing_day) {
-                dispatch(new ClientInvoicingJob($client));
+
+        $now_day = new Carbon($this->argument('date_init'));
+        $clients_id = $this->argument('clients_id');
+        $billing_day = ($now_day->format('d') == 29 or $now_day->format('d') == 30 or $now_day->format('d') == 31) ? 31 : $now_day->format('d');
+        $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->get()->pluck('client_id');
+        if(count($clients_id)>0){
+            $clients_aux = [];
+
+            foreach ($billing_day_clients as $elemento1) {
+                foreach ($clients_id as $elemento2) {
+                    if ($elemento1 == $elemento2) {
+                        $clients_aux[] = $elemento1;
+                        break;
+                    }
+                }
             }
-
+            $clients = Client::find($clients_aux);
+        }else {
+            $clients = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->get();
         }
-
+        if (count($clients)>0) {
+            foreach ($clients as $client) {
+                dispatch(new ClientInvoiceGenerationManuallyJob($client, $now_day));
+            }
+        }
     }
+
 }
