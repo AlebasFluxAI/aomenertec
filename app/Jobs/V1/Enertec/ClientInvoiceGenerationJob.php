@@ -165,11 +165,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             ]);
 
         }
-        $invoice->update([
-            "sub_total" => $value->total,
-            "total" => $value->total,
-            "tax_total" => $publicTax,
-        ]);
+
 
         $monthly_data = $client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
@@ -241,6 +237,25 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
         $generate_qr_code = new DNS2D();
         $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
+        $invoice->update([
+            "sub_total" => $value->total,
+            "total" => $value->total,
+            "tax_total" => $publicTax,
+            "pdf_data" => [
+                "image_chart_url" => $chartUrl,
+                'value' => $value,
+                'json' => $json,
+                'monthly_data' => $monthly_data,
+                'client' => Client::find($this->client->id),
+                'network_operator' => $networkOperator,
+                'admin' => $networkOperator->admin,
+                'fees' => $fees,
+                'other_fees' => $other_fees,
+                'bar_code' => $imagenDeCodigoDeBarras,
+                'qr_code' => $qr_code,
+                'other_data' => $others_data
+            ]
+        ]);
         $pdf = Pdf::loadView('reports.client_invoice', [
             "image_chart_url" => $chartUrl,
             'value' => $value,

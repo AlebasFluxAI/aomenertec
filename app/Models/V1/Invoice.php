@@ -40,7 +40,8 @@ class Invoice extends Model
         "currency",
         "invoice_start",
         "invoice_end",
-        "type"
+        "type",
+        "pdf_data"
 
     ];
 
