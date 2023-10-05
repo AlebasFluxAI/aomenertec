@@ -160,8 +160,6 @@ class AppServiceProvider extends ServiceProvider
         BillableItem::observe(BillableItemObserver::class);
         Invoice::observe(InvoiceObserver::class);
 
-        InvoiceItem::observe(InvoiceItemObserver::class);
-
         ZniLevelFee::observe(FeeObserver::class);
 
         SinLevelFee::observe(FeeObserver::class);

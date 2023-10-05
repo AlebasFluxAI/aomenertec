@@ -31,6 +31,7 @@ class InvoiceDetailsComponent extends Component
 {
     private $detailsInvoiceService;
     public $model;
+    public $public_key;
 
     public function __construct($id = null)
     {
