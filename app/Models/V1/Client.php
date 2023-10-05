@@ -514,7 +514,7 @@ class Client extends Model
             if ($zniFee->optional_fee or $zniFee->optional_fee != 0) {
                 return $zniFee->optional_fee;
             } else {
-                return $zniFee->total_fee;
+                return $zniFee->unit_cost;
             }
 
         } else {
@@ -548,6 +548,7 @@ class Client extends Model
     {
         return $this->hasMany(ClientRecharge::class);
     }
+
     public function getSerialMeter()
     {
         $meter = $this->equipments()->whereEquipmentTypeId(1)->first();

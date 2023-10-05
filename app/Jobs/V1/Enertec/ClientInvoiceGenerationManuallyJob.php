@@ -67,7 +67,7 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
 
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
-            if(isEmpty($otherFee)) {
+            if (!$otherFee) {
                 $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
             }
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
@@ -77,7 +77,7 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         } else {
             $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
-            if(isEmpty($otherFee)) {
+            if (!$otherFee) {
                 $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->first();
             }
             $discount = $otherFee ? $otherFee->discount : 0.0;
@@ -109,66 +109,7 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             ]);
             $consumption = $invoice->client->consumption($year, $month);
             /// Sub
-            $consumptionTotalWithoutSub = 0;
-            $consumptionTotalWithSub = 0;
-            if ($subsistenceConsumption = $client->subsistenceConsumption) {
-                $consumptionWithoutSub = ($total_consumption - $subsistenceConsumption->value) < 0 ? 0 : $total_consumption - $subsistenceConsumption->value;
-                $consumptionWithSub = $total_consumption - $consumptionWithoutSub;
-                $consumptionTotalWithoutSub = $consumptionWithoutSub * $consumptionFee;
-                $consumptionTotalWithSub = ($consumptionWithSub * $consumptionFee) - (($consumptionWithSub * $consumptionFee) * $discount / 100);
-                $totalConsumption = $consumptionTotalWithoutSub + $consumptionTotalWithSub;
-            }
-            ///
-            $totalContribution = 0;
-            //// Contribution
-            if ($client->contribution) {
-                $totalContribution = $totalConsumptionBase * $contribution / 100;
-            }
 
-            /// Public tax calculation
-            $publicTaxTotal = 0;
-
-            if ($publicLightTaxFlag) {
-                if ($publicTaxType == ZniLevelFee::PERCENTAGE_FEE) {
-                    $publicTaxTotal = ($totalConsumption * $publicTax / 100);
-                } else {
-                    $publicTaxTotal = $totalConsumption + $publicTax;
-                }
-            }
-
-            /////
-            $totalDiscount = ($totalConsumptionBase * ($discount ?? 0) / 100);
-            $totalInvoice = $totalConsumptionBase + $totalContribution + $publicTaxTotal - $totalDiscount;
-
-
-            foreach ([
-                         BillableItem::DISTRIBUTION_ITEM => $consumption->distribution,
-                         BillableItem::TRANSMISSION_ITEM => $consumption->transmission,
-                         BillableItem::GENERATION_ITEM => $consumption->generation,
-                         BillableItem::LOST_ITEM => $consumption->lost,
-                         BillableItem::RESTRICTION_ITEM => $consumption->restriction,
-                         BillableItem::COMMERCIALIZATION_ITEM => $consumption->commercialization,
-                         BillableItem::DISCOUNT_ITEM => $totalDiscount,
-                         BillableItem::CONTRIBUTION_ITEM => $totalContribution ?? 0,
-                         BillableItem::PUBLIC_TAX_ITEM => $publicTax ?? 0,
-                         BillableItem::PUBLIC_TAX_TYPE_TOTAL => $publicTaxTotal ?? 0,
-                         BillableItem::TOTAL_WITH_SUB => $consumptionTotalWithSub,
-                         BillableItem::TOTAL_WITHOUT_SUB => $consumptionTotalWithoutSub,
-                         BillableItem::TOTAL_CONSUMPTION_BASE => $totalConsumptionBase,
-                         BillableItem::TOTAL_INVOICE => $totalInvoice,
-                     ]
-                     as $key => $item) {
-                $invoice->items()->create([
-                    "unit_total" => $item ?? 0.0,
-                    "subtotal" => $item ?? 0.0,
-                    "total" => $item ?? 0.0,
-                    "tax_total" => 0.0,
-                    "discount" => 0.0,
-                    "billable_item_id" => BillableItem::whereSlug($key)->first()->id,
-                    "quantity" => 1,
-                ]);
-
-            }
 
             $fees = $client->feesDate($month, $year);
             $other_fees = $client->otherFeesDate($month, $year);
@@ -197,7 +138,38 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             $value->subtotal_others = 0;
             $value->total = $value->subtotal_energy + $value->subtotal_others;
 
+            foreach ([
+                         BillableItem::DISTRIBUTION_ITEM => $consumption->distribution,
+                         BillableItem::TRANSMISSION_ITEM => $consumption->transmission,
+                         BillableItem::GENERATION_ITEM => $consumption->generation,
+                         BillableItem::LOST_ITEM => $consumption->lost,
+                         BillableItem::RESTRICTION_ITEM => $consumption->restriction,
+                         BillableItem::COMMERCIALIZATION_ITEM => $consumption->commercialization,
+                         BillableItem::DISCOUNT_ITEM => $value->value_discount,
+                         BillableItem::CONTRIBUTION_ITEM => $totalContribution ?? 0,
+                         BillableItem::PUBLIC_TAX_ITEM => $publicTax ?? 0,
+                         BillableItem::PUBLIC_TAX_TYPE_TOTAL => $publicTaxTotal ?? 0,
+                         BillableItem::TOTAL_WITH_SUB => $value->total,
+                         BillableItem::TOTAL_WITHOUT_SUB => $value->total,
+                         BillableItem::TOTAL_CONSUMPTION_BASE => $totalConsumptionBase,
+                         BillableItem::TOTAL_INVOICE => $value->total,
+                     ]
+                     as $key => $item) {
+                $invoice->items()->create([
+                    "unit_total" => $item ?? 0.0,
+                    "subtotal" => $item ?? 0.0,
+                    "total" => $item ?? 0.0,
+                    "tax_total" => 0.0,
+                    "discount" => 0.0,
+                    "billable_item_id" => BillableItem::whereSlug($key)->first()->id,
+                    "quantity" => 1,
+                ]);
 
+            }
+            $invoice->update([
+                "total" => $value->total,
+                "tax_total" => $publicTax,
+            ]);
             $monthly_data = $client->monthlyMicrocontrollerData()
                 ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
                 ->where("year", $year)->first();

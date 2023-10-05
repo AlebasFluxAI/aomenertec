@@ -69,7 +69,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
 
         if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
-            if(isEmpty($otherFee)) {
+            if (!($otherFee)) {
                 $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
             }
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
@@ -79,7 +79,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         } else {
             $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
-            if(isEmpty($otherFee)) {
+            if (!($otherFee)) {
                 $otherFee = $networkOperator->zniOtherFees()->whereStrataId($stratum->id)->first();
             }
             $discount = $otherFee ? $otherFee->discount : 0.0;
@@ -88,15 +88,14 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         }
 
-        $year = $fechaActual->copy()->subDay()->format('Y');
-        $month = $fechaActual->copy()->subDay()->format('m');
+        $year = "2023";
+        $month = "9";
 
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
             ->where("year", $year)
             ->first()
             ->interval_real_consumption;
-
         $consumptionFee = $invoice->client->consumptionFee($year, $month);
         $totalConsumptionBase = $consumptionFee * $total_consumption;
         $totalConsumption = $totalConsumptionBase;
@@ -110,67 +109,6 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             "quantity" => $total_consumption,
         ]);
         $consumption = $invoice->client->consumption($year, $month);
-        /// Sub
-        $consumptionTotalWithoutSub = 0;
-        $consumptionTotalWithSub = 0;
-        if ($subsistenceConsumption = $client->subsistenceConsumption) {
-            $consumptionWithoutSub = ($total_consumption - $subsistenceConsumption->value) < 0 ? 0 : $total_consumption - $subsistenceConsumption->value;
-            $consumptionWithSub = $total_consumption - $consumptionWithoutSub;
-            $consumptionTotalWithoutSub = $consumptionWithoutSub * $consumptionFee;
-            $consumptionTotalWithSub = ($consumptionWithSub * $consumptionFee) - (($consumptionWithSub * $consumptionFee) * $discount / 100);
-            $totalConsumption = $consumptionTotalWithoutSub + $consumptionTotalWithSub;
-        }
-        ///
-        $totalContribution = 0;
-        //// Contribution
-        if ($client->contribution) {
-            $totalContribution = $totalConsumptionBase * $contribution / 100;
-        }
-
-        /// Public tax calculation
-        $publicTaxTotal = 0;
-
-        if ($publicLightTaxFlag) {
-            if ($publicTaxType == ZniLevelFee::PERCENTAGE_FEE) {
-                $publicTaxTotal = ($totalConsumption * $publicTax / 100);
-            } else {
-                $publicTaxTotal = $totalConsumption + $publicTax;
-            }
-        }
-
-        /////
-        $totalDiscount = ($totalConsumptionBase * ($discount ?? 0) / 100);
-        $totalInvoice = $totalConsumptionBase + $totalContribution + $publicTaxTotal - $totalDiscount;
-
-
-        foreach ([
-                     BillableItem::DISTRIBUTION_ITEM => $consumption->distribution,
-                     BillableItem::TRANSMISSION_ITEM => $consumption->transmission,
-                     BillableItem::GENERATION_ITEM => $consumption->generation,
-                     BillableItem::LOST_ITEM => $consumption->lost,
-                     BillableItem::RESTRICTION_ITEM => $consumption->restriction,
-                     BillableItem::COMMERCIALIZATION_ITEM => $consumption->commercialization,
-                     BillableItem::DISCOUNT_ITEM => $totalDiscount,
-                     BillableItem::CONTRIBUTION_ITEM => $totalContribution ?? 0,
-                     BillableItem::PUBLIC_TAX_ITEM => $publicTax ?? 0,
-                     BillableItem::PUBLIC_TAX_TYPE_TOTAL => $publicTaxTotal ?? 0,
-                     BillableItem::TOTAL_WITH_SUB => $consumptionTotalWithSub,
-                     BillableItem::TOTAL_WITHOUT_SUB => $consumptionTotalWithoutSub,
-                     BillableItem::TOTAL_CONSUMPTION_BASE => $totalConsumptionBase,
-                     BillableItem::TOTAL_INVOICE => $totalInvoice,
-                 ]
-                 as $key => $item) {
-            $invoice->items()->create([
-                "unit_total" => $item ?? 0.0,
-                "subtotal" => $item ?? 0.0,
-                "total" => $item ?? 0.0,
-                "tax_total" => 0.0,
-                "discount" => 0.0,
-                "billable_item_id" => BillableItem::whereSlug($key)->first()->id,
-                "quantity" => 1,
-            ]);
-
-        }
 
         $fees = $client->feesDate($month, $year);
         $other_fees = $client->otherFeesDate($month, $year);
@@ -193,12 +131,45 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $value->value_contribution = ($client->stratum->id > 4) ? (($client->contribution && $other_fees->contribution > 0) ? $value_active * $other_fees->contribution / 100 : 0) : 0;
         $value->value_discount = ($client->stratum->id < 4) ? (($other_fees->discount > 0) ? $value_discount : 0) : 0;
         $value->value_tax = $value_tax;
-        $value->value_varch = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND')? ($this->fees->distribution * $monthly_data->interval_reactive_capacitive_consumption):0;
-        $value->value_varlh = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND')?($this->fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption):0;
+        $value->value_varch = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND') ? ($this->fees->distribution * $monthly_data->interval_reactive_capacitive_consumption) : 0;
+        $value->value_varlh = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND') ? ($this->fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption) : 0;
         $value->subtotal_energy = $value->value_active + $value->value_contribution + $value->value_discount + $value->value_tax + $value->value_varch + $value->value_varlh;
         $value->subtotal_others = 0;
         $value->total = $value->subtotal_energy + $value->subtotal_others;
 
+        foreach ([
+                     BillableItem::DISTRIBUTION_ITEM => $consumption->distribution,
+                     BillableItem::TRANSMISSION_ITEM => $consumption->transmission,
+                     BillableItem::GENERATION_ITEM => $consumption->generation,
+                     BillableItem::LOST_ITEM => $consumption->lost,
+                     BillableItem::RESTRICTION_ITEM => $consumption->restriction,
+                     BillableItem::COMMERCIALIZATION_ITEM => $consumption->commercialization,
+                     BillableItem::DISCOUNT_ITEM => $value->value_discount,
+                     BillableItem::CONTRIBUTION_ITEM => $totalContribution ?? 0,
+                     BillableItem::PUBLIC_TAX_ITEM => $publicTax ?? 0,
+                     BillableItem::PUBLIC_TAX_TYPE_TOTAL => $publicTaxTotal ?? 0,
+                     BillableItem::TOTAL_WITH_SUB => $value->total,
+                     BillableItem::TOTAL_WITHOUT_SUB => $value->total,
+                     BillableItem::TOTAL_CONSUMPTION_BASE => $totalConsumptionBase,
+                     BillableItem::TOTAL_INVOICE => $value->total,
+                 ]
+                 as $key => $item) {
+            $invoice->items()->create([
+                "unit_total" => $item ?? 0.0,
+                "subtotal" => $item ?? 0.0,
+                "total" => $item ?? 0.0,
+                "tax_total" => 0.0,
+                "discount" => 0.0,
+                "billable_item_id" => BillableItem::whereSlug($key)->first()->id,
+                "quantity" => 1,
+            ]);
+
+        }
+        $invoice->update([
+            "sub_total" => $value->total,
+            "total" => $value->total,
+            "tax_total" => $publicTax,
+        ]);
 
         $monthly_data = $client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
@@ -216,22 +187,22 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             if ($data) {
                 array_push($value_chart['series'], round($data->interval_real_consumption, 2));
                 array_push($value_chart['x_axis'], Carbon::create($data->year, $data->month, $data->day)->format('d M y'));
-                if ($i==1){
+                if ($i == 1) {
                     $last_month = $data->interval_real_consumption;
                     $date_last_month = Carbon::create($data->microcontrollerData->source_timestamp);
                 }
-                if ($i==0){
+                if ($i == 0) {
                     $month = $data->interval_real_consumption;
                     $date_month = Carbon::create($data->microcontrollerData->source_timestamp);
                 }
             } else {
                 array_push($value_chart['series'], 0);
                 array_push($value_chart['x_axis'], $date->format('M y'));
-                if ($i==1){
+                if ($i == 1) {
                     $last_month = 0;
                     $date_last_month = null;
                 }
-                if ($i==0){
+                if ($i == 0) {
                     $month = 0;
                     $date_month = null;
                 }
@@ -257,15 +228,15 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             }";
         $chartUrl = 'https://quickchart.io/chart?w=500&h=300&c=' . urlencode($chartConfig);
         $client = Client::find($client->id);
-        $promedio = $promedio/6;
+        $promedio = $promedio / 6;
         $others_data['pago_oportuno'] = $fechaActual->copy()->addDays(15)->format('Y-m-d');
         $others_data['suspension'] = $fechaActual->copy()->addDays(20)->format('Y-m-d');
-        $others_data['serial_meter']= $client->getSerialMeter();
-        $others_data['promedio']= $promedio;
-        $others_data['last_month']= $last_month;
-        $others_data['periodo_facturado']= $date_last_month == null ? $date_month->format('Y-m-d'). ' - ' .$date_month->format('Y-m-01'):$date_month->format('Y-m-d'). ' - ' .$date_last_month->format('Y-m-d');
-        $others_data['dias_facturados']= $date_last_month == null ? $date_month->format('d'):$date_month->diffInDays($date_last_month);
-        $others_data['numero_factura']= $date_month->format('y').$date_month->format('m').$client->code;
+        $others_data['serial_meter'] = $client->getSerialMeter();
+        $others_data['promedio'] = $promedio;
+        $others_data['last_month'] = $last_month;
+        $others_data['periodo_facturado'] = $date_last_month == null ? $date_month->format('Y-m-d') . ' - ' . $date_month->format('Y-m-01') : $date_month->format('Y-m-d') . ' - ' . $date_last_month->format('Y-m-d');
+        $others_data['dias_facturados'] = $date_last_month == null ? $date_month->format('d') : $date_month->diffInDays($date_last_month);
+        $others_data['numero_factura'] = $date_month->format('y') . $date_month->format('m') . $client->code;
         $generadorDeCodigoDeBarras = new DNS1D();
         $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
         $generate_qr_code = new DNS2D();
