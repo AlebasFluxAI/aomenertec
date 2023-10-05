@@ -76,7 +76,7 @@ class ClientInvoicingCommand extends Command
         }
         if (count($clients)>0) {
             foreach ($clients as $client) {
-                dispatch(new ClientInvoiceGenerationManuallyJob($client, $now_day));
+                dispatch(new ClientInvoiceGenerationManuallyJob($client, $now_day->addDay()));
             }
         }
     }
