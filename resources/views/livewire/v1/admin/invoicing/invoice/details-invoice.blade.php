@@ -117,20 +117,6 @@
                                                                                "col_currency_custom"=>$model->currency
                                                                            ],
                                                                            [
-                                                                               "col_name" =>"Subtotal",
-                                                                               "col_data" =>"subtotal",
-                                                                               "col_filter"=>false,
-                                                                               "col_money"=>true,
-                                                                               "col_currency_custom"=>$model->currency
-                                                                           ],
-                                                                           [
-                                                                               "col_name" =>"Descuentos",
-                                                                               "col_data" =>"discount",
-                                                                               "col_filter"=>false,
-                                                                               "col_money"=>true,
-                                                                               "col_currency_custom"=>$model->currency
-                                                                           ],
-                                                                           [
                                                                                "col_name" =>"Impuestos",
                                                                                "col_data" =>"tax_total",
                                                                                "col_filter"=>false,
