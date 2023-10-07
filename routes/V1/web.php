@@ -302,6 +302,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_CREATE));
 
 
+                    Route::get('importaciones/{import}/detallles', Livewire\V1\Admin\Client\ClientImportDetails::class)
+                        ->name("v1.admin.client.import-details.client")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_CREATE));
+
+                    Route::get('importaciones', Livewire\V1\Admin\Client\ClientImportIndex::class)
+                        ->name("v1.admin.client.import-index.client")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_CREATE));
+
+                    Route::get('importar', Livewire\V1\Admin\Client\ClientImportComponent::class)
+                        ->name("v1.admin.client.import.client")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_CREATE));
+
                     Route::get('listado', Livewire\V1\Admin\Client\IndexClient::class)
                         ->name("v1.admin.client.list.client")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW));

@@ -13,6 +13,8 @@
             {{array_key_exists($col_array_data,$col_data)?$col_data[$col_array_data]:""}} </a>
     </div>
 
+@elseif($col_redirect_url)
+    <a style="color: #0a53be" href="{{$col_redirect_url}}">{{$col_data}}</a>
 @elseif($col_translate)
     {{__($col_translate.".".$col_data)}}
 @elseif($col_money)
