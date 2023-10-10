@@ -81,14 +81,17 @@
                                                "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]}(),
                                                "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:"",
                                                "col_translate"=>$table_header["col_translate"]??null,
+                                               "col_redirect_url"=>null,
                                                "col_money"=>$table_header["col_money"]??null,
                                                "col_currency"=>(array_key_exists("col_currency",$table_header)?$table_row->{$table_header["col_currency"]}:(array_key_exists("col_currency_custom",$table_header)?$table_header["col_currency_custom"]:"")),
                                            ])
                                     @else
+
                                         @include("partials.v2.table.primary-table-column",[
                                                   "col_data"=>$table_row->{explode(".",$table_header["col_data"])[0]}->{explode(".",$table_header["col_data"])[1]},
                                                   "col_type"=>array_key_exists("col_type",$table_header)?$table_row->{$table_header["col_type"]}:"",
                                                   "col_translate"=>$table_header["col_translate"]??null,
+                                                  "col_redirect_url"=>null,
                                                   "col_money"=>$table_header["col_money"]??null,
                                                    "col_currency"=>(array_key_exists("col_currency",$table_header)?$table_row->{$table_header["col_currency"]}:(array_key_exists("col_currency_custom",$table_header)?$table_header["col_currency_custom"]:"")),
                                               ])
@@ -99,15 +102,18 @@
                                                "col_data"=>$this->{$table_header["col_data"]}($table_row->{$table_headers[0]["col_data"]}),
                                                "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
                                                "col_translate"=>$table_header["col_translate"]??null,
+                                               "col_redirect_url"=>null,
                                                "col_money"=>$table_header["col_money"]??null,
                                                "col_currency"=>(array_key_exists("col_currency",$table_header)?$table_row->{$table_header["col_currency"]}:(array_key_exists("col_currency_custom",$table_header)?$table_header["col_currency_custom"]:"")),
                                            ])
                                     @elseif(isset($table_header["col_data_function"]))
+
                                         @include("partials.v2.table.primary-table-column",[
                                       "col_data"=>$table_row->{$table_header["col_data"]}(),
                                       "col_array_data"=>$table_header["col_array_data"]??"",
                                       "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
                                       "col_translate"=>$table_header["col_translate"]??null,
+                                      "col_redirect_url"=>null,
                                       "col_money"=>$table_header["col_money"]??null,
                                       "col_currency"=>(array_key_exists("col_currency",$table_header)?$table_row->{$table_header["col_currency"]}:(array_key_exists("col_currency_custom",$table_header)?$table_header["col_currency_custom"]:"")),
                                   ])
@@ -117,6 +123,7 @@
                                         "col_array_data"=>$table_header["col_array_data"]??"",
                                         "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:"",
                                         "col_translate"=>$table_header["col_translate"]??null,
+                                        "col_redirect_url"=>array_key_exists("col_redirect_url",$table_header)?$table_row->{$table_header["col_redirect_url"]}:null,
                                         "col_money"=>$table_header["col_money"]??null,
                                         "col_currency"=>(array_key_exists("col_currency",$table_header)?$table_row->{$table_header["col_currency"]}:(array_key_exists("col_currency_custom",$table_header)?$table_header["col_currency_custom"]:"")),
                                     ])
