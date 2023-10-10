@@ -93,7 +93,7 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             ->where("year", $year)
             ->first();
         $total_consumption = $total_consumption_aux != null ? $total_consumption_aux->interval_real_consumption : null;
-        if ($total_consumption) {
+        if ($total_consumption != null) {
             $consumptionFee = $invoice->client->consumptionFee($year, $month);
             $totalConsumptionBase = $consumptionFee * $total_consumption;
             $totalConsumption = $totalConsumptionBase;
@@ -231,10 +231,11 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             $others_data['periodo_facturado'] = $date_last_month == null ? $date_month->format('Y-m-d') . ' - ' . $date_month->format('Y-m-01') : $date_month->format('Y-m-d') . ' - ' . $date_last_month->format('Y-m-d');
             $others_data['dias_facturados'] = $date_last_month == null ? $date_month->format('d') : $date_month->diffInDays($date_last_month);
             $others_data['numero_factura'] = $date_month->format('y') . $date_month->format('m') . $client->code;
+            $bar_code =  $others_data['numero_factura'] . str_replace("-", "",  $others_data['pago_oportuno']) . $value->total;
             $generadorDeCodigoDeBarras = new DNS1D();
-            $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
+            $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG($bar_code, 'C39');
             $generate_qr_code = new DNS2D();
-            $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
+            $qr_code = $generate_qr_code->getBarcodePNG('https://aom.enerteclatam.com/clientes/invitados/facturas/cliente/factura/'.$invoice->id, 'QRCODE');
 
             $value_aux = [
                 'value_active' => $value->value_active,
@@ -297,6 +298,8 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
 //                    ->attach((Storage::disk("public")->path($filePath)))
 //                    ->subject("Nueva factura de consumo");
 //            });
+        } else {
+            $invoice->forceDelete();
         }
     }
 }

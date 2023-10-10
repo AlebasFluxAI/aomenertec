@@ -49,6 +49,7 @@ class InvoiceGuestClientService extends Singleton
 
     public function submitForm(Component $component)
     {
+        $client = null;
         if ($component->client_code) {
             $client = Client::whereCode($component->client_code)->first();
         }

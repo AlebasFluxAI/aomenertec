@@ -1,246 +1,222 @@
-<html lang="en">
-
-<style>
-
-.cabeceraprincipal
-{
-
-border:1px solid black;
-width:660px;
-height:80px;
-position: absolute;
-
-
-}
-.cabecera
-{
-font-size: small;
-text-align: center;
-display: inline-block;
-width:220px;
-height:70px;
-}
-
-
-.containertabla1
-{
-border:1px solid black;
-width:660px;
-position: absolute;
-top: 260px;
-}
-
-tbody tr:nth-child(odd) {
-  background-color: #D2D2D2;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #ffffff;
-}
-
-
-table {
-      width:100%;
-  empty-cells: hide;
-  text-align: center;
-}
-
-body{
-
-      margin-top: 2px;
-      margin-bottom: 2px;
-      margin-left: 2px;
-      margin-right: 2px;
-      padding: 1em;
-
-}
-html {
-	margin: 60.7pt 39.9pt 39.9pt 53.1pt;
-
-}
-
-.title1{
-width:200px;
-position: relative;
-top: 120px; left: 2px;
-float:left;
-}
-.fecha{
-border:1px solid black;
-text-align: center;
-width:260px;
-height:80px;
-float: right;
-}
-.datos{
-border:1px solid black;
-text-align: center;
-width:660px;
-height:20px;
-position: absolute;
-top: 200px;
-}
-.cliente{
-text-align: center;
-width:660px;
-position: relative;
-top: 230px;
-}
-.detalle{
-    border:1px solid black;
-    text-align: center;
-    width:660px;
-    height:20px;
-    position: absolute;
-    top: 330px;
-}
-.equipo{
-    text-align: center;
-    width:660px;
-    position: relative;
-    top: 340px;
-}
-.descripcion{
-    border:1px solid black;
-    text-align: justify;
-    width:660px;
-    height:110px;
-    position: absolute;
-    top: 400px;
-}
-.imagenes{
-    text-align: justify;
-    width:660px;
-    position: relative;
-    top: 480px;
-}
-.diagnostico{
-    border:1px solid black;
-    text-align: justify;
-    width:660px;
-    height:110px;
-    position: absolute;
-    top: 710px;
-}
-#presentacion{
-text-align: center;
-display: inline-block;
-position: relative;
-top: 100px;
-}
-.presentacion1{
-width:660px;
-height:80px;
-position: absolute;
-top: 100px;
-
-}
-.contacto{
-
-      width:230px;
-      text-align: center;
-      position: absolute;
-      top: 480px; left: 2px;
-}
-.logo {
-      width: 210px; height: 60px;
-}
-.logo1 {
-    width: 210px; height: 60px;
-}
-img {
-    width: 140px; height: 160px;
-}
-.firma{
-    text-align: right;
-      position: absolute;
-top: 860px; left: 400px;
-}
-
-</style>
+<!DOCTYPE html>
+<html>
 <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <meta name="viewport"
-              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title >Historial PQR</title>
+    <meta charset="UTF-8">
+    <title>Ejemplo de PDF con Dompdf</title>
+    <style>
+        @page {
+            margin: 0; /* Elimina los márgenes de la página */
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .header-container {
+            position: absolute;
+            display: table;
+            width: 100%;
+            border: 2px solid #B6B7B7;
+            background-color: #F3F3F3;
+            padding: 10px;
+        }
+        .large-container {
+            margin-left: 40px;
+            display: table;
+            width: 90%;
+            border: 2px solid #B6B7B7;
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 0;
+        }
+        .middle-container {
+            display: table;
+            width: 100%;
+            border: 2px solid #B6B7B7;
+            border-radius: 10px;
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .column-container {
+            display: table;
+            width: 33%;
+            margin: 10px;
+            padding: 10px;
+        }
+        .column-container_firma {
+            display: table;
+            width: 50%;
+            margin: 20px;
+            padding: 20px;
+            float: right;
+        }
+
+
+        .flex-row {
+            display: table-row;
+        }
+
+        .flex-item {
+            display: table-cell;
+            padding: 10px;
+        }
+        .logo {
+            max-height: 50px;
+            width: 200px;
+            /* Ajusta el tamaño del logo según tus necesidades */
+            margin-right: 20px;
+            /* Reducido el margen para dar más espacio */
+        }
+        .chart-consumption {
+            width: 300px;
+            height: 150px;
+            margin: 0;
+            padding: 0;
+        }
+        .table-container {
+            width: 100%;
+            border-collapse: collapse;
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+        .table-container td {
+            padding: 0;
+            vertical-align: top;
+        }
+
+    </style>
 </head>
 <body>
-<div class="cabeceraprincipal">
-      <div class="cabecera">
-           <p><img class="logo" src="./storage/formato/firma_logo.png"></p>
-      </div>
-      <div class="cabecera">
-                  <p><strong>ENERTEC LATINOAMERICA S.A.S.</strong> <br>
-                  Av. 40 15-67 Local 148 <br>
-                  Villavicencio - Meta
-                              </p>
-      </div>
-      <div class="cabecera">
-             <strong>SOPORTE:</strong> <br>
-                  soporte@enerteclatam.com <br>
-                    (+57) 3058139238
-      </div>
-</div>
-<div class = "presentacion1">
-      <div class= "title1" id ="presentacion"><h2>Reporte de PQR</h2></div>
+<table class="header-container">
+    <tr class="flex-row">
+        <td class="flex-item" rowspan="3"> <img src="https://www.enerteclatam.com/media/nuhcco0k/logotipo-enerteclatam.png" alt="Logo" class="logo"></td>
+        <td class="flex-item" rowspan="3"><br>Enertec Latinoamerica SAS<br>www.enerteclatam.com</td>
+        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>Reporte PQR</strong></td>
+        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">375227</td>
+    </tr>
 
-     <div class ="fecha" id ="presentacion"><p><strong> PQR #:&nbsp;&nbsp;</strong>{{$pqr->id}}<br>
-                        <strong>Radicado:</strong> {{$pqr->created_at}}<br>
-                        <strong>Resuelto:</strong> {{$pqr->fecha_solucion}}</p></div>
-                        </div>
-      <div class="datos"> <strong> Datos de cliente</strong></div>
-    @if($pqr->client_id == null)
-      <div class="cliente"><strong>Nombre:</strong>{{$pqr->user->name}}&nbsp;&nbsp;&nbsp;&nbsp;<strong>C.C:</strong>{{$pqr->user->identificacion}}&nbsp;&nbsp;&nbsp;&nbsp;<strong>Celular:</strong>{{$pqr->user->celular}}</div>
-    @else
-        <div class="cliente"><strong>Nombre:</strong>{{$pqr->cliente->name}}&nbsp;&nbsp;&nbsp;&nbsp;<strong>C.C:</strong>{{$pqr->cliente->identificacion}}&nbsp;&nbsp;&nbsp;&nbsp;<strong>Celular:</strong>{{$pqr->cliente->celular}}</div>
-    @endif
-        <div class = "containertabla1">
-      <table>
-            <thead>
-                  <tr>
-                        <th>Solicitado por:</th>
-                        <th>Tramitado por:</th>
-                        <th>Tipo de falla</th>
-                  </tr>
-            </thead>
-            <tbody>
-                  <tr>
-                        <td>{{$pqr->user->name}}</td>
-                        <td>{{$ing->name}}</td>
-                        <td>{{$pqr->tipo->nombre}}</td>
-                  </tr>
-            </tbody>
-      </table>
-      </div>
-    <div class="detalle"> <strong> Detalles</strong></div>
-    @foreach($equipos as $equipo)
-        @if($equipo['id'] == $pqr->tipo_eqipo)
-            <div class="equipo"><strong>Equipo:</strong>{{$equipo['name']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Serial:</strong>{{$pqr->serial_equipo}}</div>
-        @endif
-    @endforeach
-    <div class="descripcion"><p><strong>Descripcion:</strong>{{$pqr->detalle}}
-        </p></div>
-    <div class="imagenes"><strong>Archivos adjuntos:</strong><br><br><br>
-        <?php $counter =0;?>
-        @foreach($mensajes as $mensaje)
-            @if($mensaje->imagen != null)
-                <?php $counter++;?>
-                <img src=".{{$mensaje->imagen}}">
-                @break($counter == 4)
-            @endif
-        @endforeach
-        @if($counter<4)
-            @for($i= $counter; $i<4; $i++)
-                <img src="./storage/pqr_imagenes/sin_imagen.png">
-            @endfor
-        @endif
-    </div>
-    <div class="diagnostico"><p><strong>Diagnostico y solucion:</strong>{{$pqr->solucion}}
-    </p></div>
-      <div class="firma">
-          <strong>Firma: </strong><img class="logo" src="./storage/{{$ing->avatar}}"><br>
-          {{$ing->name}}
-        </div>
+    <tr class="flex-row">
+        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>Tipo de PQR</strong></td>
+        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">Tècnico</td>
+    </tr>
+
+    <tr class="flex-row">
+        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Fecha de registro<strong></strong></td>
+        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right; ">20/09/2023</td>
+    </tr>
+
+</table>
+
+<table class="large-container" style="margin-top: 150px;">
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px;" colspan="4"></td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Razón social:</strong></td>
+        <td class="flex-item" style="padding:2px;" colspan="2">LorenaM</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Cuidad y Depto</strong></td>
+        <td class="flex-item" style="padding:2px;" colspan="2">Villavicencio - Meta</td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Nit:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1121919373</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Dirección:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">Calle 25 sur</td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Teléfono:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">3209302716</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Código cliente</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">125874</td>
+    </tr>
+</table>
+
+
+
+<table class="large-container" style="margin-top: 20px; margin-right: 5px;">
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>INFORMACIÓN DEL PROCEDIMIENTO PQR</strong></td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:2px; text-align: left; width: 10%;"><strong>Elaboró:</strong></td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">Lorena Pineda</td>
+        <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Tramitó:</strong></td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">Sneider Fuentes</td>
+        <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Importancia:</strong></td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">Alta</td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px;" colspan="12"></td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="6"><strong>DETALLE:</strong><br>no registra datos en la plataforma</td>
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="6"><strong>ASUNTO:</strong> <br>No me deja ver la medicion en la plataforma </td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px;" colspan="12"></td>
+    </tr>
+    <tr class="flex-row">
+
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="12"><strong>DESCRIPCIÓN:</strong> <br>No me deja ver la medicion en la plataforma </td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px;" colspan="12"></td>
+    </tr>
+    <tr class="flex-row">
+
+        <td class="flex-item" style="padding:2px; text-align: center; width: 10%;"colspan="12"><strong>Fecha de finalización:</strong>29/09/2023</td>
+
+    </tr>
+
+</table>
+
+
+
+<table class="large-container" style="margin-top: 20px; margin-right: 5px;">
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>ARCHIVOS ADJUNTOS</strong></td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; " ><strong>ARCHIVO1 ARCHIVO1 ARCHIVO1 ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1</strong></td>
+        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; "><strong>ARCHIVO2 ARCHIVO2 ARCHIVO2</strong></td>
+        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; "><strong>ARCHIVO3 ARCHIVO3 ARCHIVO3</strong></td>
+        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; "><strong>ARCHIVO4 ARCHIVO4 ARCHIVO4</strong></td>
+    </tr>
+</table>
+
+
+<table class="large-container" style="margin-top: 20px; margin-right: 20px;">
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>DIAGNÓSTICO Y SOLUCIÓNS</strong></td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:6px; text-align: left;" colspan="12"><strong>Se realizó cambio de tarjeta electronica y limpieza de superficies Se realizó cambio de tarjeta electronica y limpieza de superficies Se realizó cambio de tarjeta electronica y limpieza de superficies</strong></td>
+
+    </tr>
+
+</table>
+<table class="column-container_firma " style="margin-top: 20px; margin-right: 20px;">
+
+    <tr class="flex-row">
+        <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong>SneneneFF</td>
+    </tr>
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>

@@ -30,7 +30,7 @@
                                         "placeholder"=>"identificación",
                                         "col_with"=>6,
                                         "input_type"=>"text",
-                                        "required"=>false
+                                        "required"=>true
                                ])
                 @else
 
