@@ -18,6 +18,7 @@ class AddImportsItemsTable extends Migration
             $table->id();
             $table->foreignId("import_id")->constrained();
             $table->text("error")->nullable();
+            $table->integer("item_index")->nullable();
             $table->enum("status", [
                 Import::STATUS_PROCESSING,
                 Import::STATUS_ERROR,

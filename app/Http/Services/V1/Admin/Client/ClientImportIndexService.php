@@ -9,6 +9,7 @@ use App\Http\Resources\V1\Icon;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
+use App\Models\V1\Admin;
 use App\Models\V1\BillingInformation;
 use App\Models\V1\ClientSupervisor;
 use App\Models\V1\EquipmentClient;
@@ -25,6 +26,7 @@ use App\Models\V1\Seller;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\Client;
+use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
@@ -48,7 +50,20 @@ class ClientImportIndexService extends Singleton
     public function getData()
     {
         $admin = Auth::user()->getAdmin();
-        return Import::whereAuditableId($admin->id)->paginate();
+        if (User::getUserModel()::class == Admin::class) {
+            return Import::whereAuditableId(Auth::user()->id)->paginate();
+        }
+        if (User::getUserModel()::class == Admin::class) {
+
+            return Import::whereAuditableId($admin->user_id)->paginate();
+        }
+
+        if (User::getUserModel()::class == SuperAdmin::class) {
+
+            return Import::paginate();
+        }
+        return [];
+
     }
 
 }

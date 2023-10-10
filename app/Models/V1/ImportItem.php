@@ -2,6 +2,7 @@
 
 namespace App\Models\V1;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +16,15 @@ class ImportItem extends Model
         "status",
         "importable_type",
         "importable_id",
+        "item_index"
     ];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope('item_index_order', function (Builder $builder) {
+            $builder->orderBy('item_index', "asc");
+        });
+    }
 
     public function import()
     {

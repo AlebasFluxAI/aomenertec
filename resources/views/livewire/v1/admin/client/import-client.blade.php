@@ -90,6 +90,14 @@
                                                     "key"=>"TIPO_FACTURACION",
                                                     "value"=>"TIPO DE FACTURACION DE CLIENTE  --- PREPAGO/POSTPAGO (Requerido)"
                                                     ],
+                                                    [
+                                                    "key"=>"CLIENTE_CON_CONTRIBUCION",
+                                                    "value"=>"CLIENTE CON CONTRIBUCION  --- SI/NO (Opcional)"
+                                                    ],
+                                                    [
+                                                    "key"=>"CLIENTE_CON_IMPUESTO_ALUMBRADO",
+                                                    "value"=>"CLIENTE CON IMPUESTO ALUMBRADO  --- SI/NO (Opcional)"
+                                                    ],
 
                                           ]
                             ])
@@ -139,6 +147,10 @@
                                                     "value"=>"DEFINE SI EL CLIENTE TIENE O NO TELEMETRIA  --- SI/NO (Opcional)"
                                                     ],
                                                     [
+                                                    "key"=>"TIPO_DE_SUBSIDIO",
+                                                    "value"=>"TIPO DE SUBSIDIO PARA CLIENTE --- 173/130 (Opcional)"
+                                                    ],
+                                                    [
                                                     "key"=>"CREAR_SUPERVISOR",
                                                     "value"=>"CREAR SUPERVISOR ASOCIADO A CLIENTE  --- SI/NO (Opcional)"
                                                     ],
@@ -152,7 +164,11 @@
                                                     ],
                                                     [
                                                     "key"=>"EQUIPOS_ASOCIADOS",
-                                                    "value"=>"SERIALES DE LOS EQUIPOS QUE SE QUIEREN ASOCIAR AL CLIENTE  --- Seriales de equipos separados por coma - B215,SE256,SE555 (Opcional)"
+                                                    "value"=>"SERIALES DE LOS EQUIPOS QUE SE QUIEREN ASOCIAR AL CLIENTE  --- Seriales de equipos separados por slash  - B215/SE256/SE555"
+                                                    ],
+                                                    [
+                                                    "key"=>"TIPO_EQUIPOS_ASOCIADOS",
+                                                    "value"=>"TIPOS DE LOS EQUIPOS QUE SE QUIEREN ASOCIAR AL CLIENTE  --- ID de tipos de equipos separados por slash estos deben estar en el orden de los equipos asociados  - 12/167/190"
                                                     ],
                                           ]
                             ])
@@ -165,7 +181,7 @@
                     <div class="col-md-6">
                         <span style="color: green" class="fas fa-file-excel"></span>
                         <a style="color: #0a53be;font-weight: bold"
-                           href="https://enertedevops.s3.us-east-2.amazonaws.com/images/PlantillaClientes.csv">
+                           href="https://enertedevops.s3.us-east-2.amazonaws.com/images/PlantillaClientesFVcsv.csv">
                             Descargar
                             plantilla</a>
                     </div>
