@@ -79,11 +79,8 @@
             /* Reducido el margen para dar más espacio */
         }
         .bar_code {
-            height: 80px;
-            width: 200px;
-            /* Ajusta el tamaño del logo según tus necesidades */
-            margin-right: 20px;
-            /* Reducido el margen para dar más espacio */
+            height: 50px;
+            width: 550px;
         }
         .chart-consumption {
             width: 300px;

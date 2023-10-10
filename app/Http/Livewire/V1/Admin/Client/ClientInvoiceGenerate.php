@@ -45,10 +45,6 @@ class ClientInvoiceGenerate extends Component
             ->where("month", str_pad($this->month, 2, "0", STR_PAD_LEFT))
             ->where("year", $this->year)->first();
         if($monthly_data){
-            $generadorDeCodigoDeBarras = new DNS1D();
-            $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
-            $generate_qr_code = new DNS2D();
-            $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
 
 
             $sc = SubsistenceConsumption::find($this->client->subsistence_consumption_id);
@@ -68,6 +64,13 @@ class ClientInvoiceGenerate extends Component
             $value->subtotal_others = 0;
             $value->total = $value->subtotal_energy + $value->subtotal_others;
             $json = json_decode($monthly_data->raw_json);
+            $bar_code =  $this->others_data['numero_factura'] . str_replace("-", "",  $this->others_data['pago_oportuno']) . $value->total;
+            $generadorDeCodigoDeBarras = new DNS1D();
+            $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG($bar_code, 'C39');
+            $generate_qr_code = new DNS2D();
+            $qr_code = $generate_qr_code->getBarcodePNG('https://aom.enerteclatam.com/', 'QRCODE');
+
+
             $pdf = PDF::loadView('reports.client_invoice',[
                 'image_chart_url' => $this->image_uri,
                 'value' => $value,
@@ -86,6 +89,7 @@ class ClientInvoiceGenerate extends Component
             return response()->streamDownload(function () use ($pdf) {
                 echo $pdf->stream();
             }, 'export.pdf');
+
         }
 
     }

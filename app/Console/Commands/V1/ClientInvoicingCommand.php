@@ -74,9 +74,10 @@ class ClientInvoicingCommand extends Command
         }else {
             $clients = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->get();
         }
+        $now_day->addDay();
         if (count($clients)>0) {
             foreach ($clients as $client) {
-                dispatch(new ClientInvoiceGenerationManuallyJob($client, $now_day->addDay()))->onQueue('default');
+                dispatch(new ClientInvoiceGenerationManuallyJob($client, $now_day))->onQueue('default');
             }
         }
     }

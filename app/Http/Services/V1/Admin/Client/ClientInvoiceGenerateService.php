@@ -77,6 +77,8 @@ class ClientInvoiceGenerateService extends Singleton
                         $month = $data->interval_real_consumption;
                         $date_month = Carbon::create($data->microcontrollerData->source_timestamp);
                     }
+                    $promedio = $data->interval_real_consumption + $promedio;
+
                 } else {
                     array_push($value_chart['series'], 0);
                     array_push($value_chart['x_axis'], $date->format('M y'));
@@ -90,7 +92,6 @@ class ClientInvoiceGenerateService extends Singleton
                     }
                 }
 
-                $promedio = $data->interval_real_consumption + $promedio;
                 if ($i == 5) {
                     break;
                 }
