@@ -265,7 +265,7 @@
 
 
                             @if($client_type != "")
-                                @if(strpos($client_type->type, "CONVENCIONAL") !== false)
+                                @if(strpos($client_type->type, "SIN Convencion") !== false)
                                     @include("partials.v1.form.form_list",[
                                              "col_with"=>8,
                                              "input_label"=>"Nivel de tension",
