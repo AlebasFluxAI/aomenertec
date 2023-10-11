@@ -51,13 +51,11 @@ class ClientImportIndexService extends Singleton
     {
         $admin = Auth::user()->getAdmin();
         if (User::getUserModel()::class == Admin::class) {
+            return Import::whereIn("auditable_id", array_merge($admin->networkOperators()->pluck('id')->toArray(), [$admin->id]))->paginate();
+        }
+        if (User::getUserModel()::class == NetworkOperator::class) {
             return Import::whereAuditableId(Auth::user()->id)->paginate();
         }
-        if (User::getUserModel()::class == Admin::class) {
-
-            return Import::whereAuditableId($admin->user_id)->paginate();
-        }
-
         if (User::getUserModel()::class == SuperAdmin::class) {
 
             return Import::paginate();
