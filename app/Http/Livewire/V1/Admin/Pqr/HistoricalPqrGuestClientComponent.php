@@ -57,6 +57,12 @@ class HistoricalPqrGuestClientComponent extends Component
         $this->historicalPqrGuestClientService->submitForm($this);
     }
 
+    public function closePqrForm()
+    {
+        $this->historicalPqrGuestClientService->closePqrForm($this);
+    }
+
+
     public function mount(Pqr $pqr)
     {
         $this->historicalPqrGuestClientService->mount($this, $pqr);

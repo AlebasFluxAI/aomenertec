@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Http\Resources\V1\ToastEvent;
 use App\Jobs\CreateWorkOrderJob;
 use App\Models\V1\Image;
 use App\Models\V1\Pqr;
@@ -19,7 +20,15 @@ trait PqrStatusTrait
 {
     public function openTicked(Component $component, $id)
     {
+        if ((Pqr::find($id)->status == Pqr::STATUS_RESOLVED)) {
+            return true;
+        }
         return (Pqr::find($id)->status == Pqr::STATUS_CLOSED);
+    }
+
+    public function resolvedTicked(Component $component, $id)
+    {
+        return !(Pqr::find($id)->status == Pqr::STATUS_RESOLVED);
     }
 
     public function closedTicked(Component $component, $id)
@@ -29,16 +38,32 @@ trait PqrStatusTrait
 
     public function closePqr(Component $component, $id)
     {
-        Pqr::find($id)->update(
+        $pqr = Pqr::find($id);
+        if ($workOrder = $pqr->workOrder) {
+            if ($workOrder->staus != WorkOrder::WORK_ORDER_STATUS_CLOSED) {
+                ToastEvent::launchToast($component, "show", "error", "Eciste una orden de trabajo asociada pendiente");
+                return;
+            }
+
+        }
+        $pqr->update(
             ["status" => Pqr::STATUS_CLOSED]
         );
     }
 
     public function solvePqr(Component $component, $id)
     {
-        Pqr::find($id)->update(
+        $pqr = Pqr::find($id);
+        if ($workOrder = $pqr->workOrder) {
+            if ($workOrder->staus != WorkOrder::WORK_ORDER_STATUS_CLOSED) {
+                ToastEvent::launchToast($component, "show", "error", "Existe una orden de trabajo asociada pendiente");
+                return false;
+            }
+        }
+        $pqr->update(
             ["status" => Pqr::STATUS_RESOLVED]
         );
+        return true;
     }
 
     public function requestEquipment(Component $component, $id)

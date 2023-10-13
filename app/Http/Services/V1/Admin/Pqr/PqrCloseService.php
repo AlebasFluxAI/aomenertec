@@ -39,6 +39,7 @@ class PqrCloseService extends Singleton
                 $message->buildOneImageFromFile("attach", $component->attach);
             }
         });
+
         $component->description = "";
         $component->emitTo(
             'livewire-toast',
@@ -49,9 +50,10 @@ class PqrCloseService extends Singleton
         $component->model->refresh();
         $component->attach = null;
         $component->emit("pqr_message_created");
+        if ($this->solvePqr($component, $component->model->id)) {
+            $component->redirectRoute("administrar.v1.peticiones.detalles", ["pqr" => $component->model->id]);
+        }
 
-        $component->redirectRoute("administrar.v1.peticiones.detalles", ["pqr" => $component->model->id]);
 
-        $this->closePqr($component, $component->model->id);
     }
 }
