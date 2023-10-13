@@ -23,16 +23,15 @@
                 <p style="color: teal"> <span
                         style="color: teal;font-size: 20px"> ${{\App\Http\Resources\V1\Formatter::currencyFormat($total)}}</span>
                 </p>
-
+                {{number_format($total, 2, '.', '')}}
                 <div class="text-right">
-
                     <form action="https://checkout.wompi.co/p/"
                           method="GET">
                         <!-- OBLIGATORIOS -->
                         <input type="hidden" name="public-key"
                                value="{{$public_key}}"/>
                         <input type="hidden" name="currency" value="COP"/>
-                        <input type="hidden" name="amount-in-cents" value="{{$total."00"}}"/>
+                        <input type="hidden" name="amount-in-cents" value="{{number_format($total, 2, '', '')}}"/>
                         <input type="hidden" name="reference" value="{{$reference}}"/>
                         <input type="hidden" name="customer-data.email" value="{{$email}}"/>
                         <input type="hidden" name="customer-data.full-name"

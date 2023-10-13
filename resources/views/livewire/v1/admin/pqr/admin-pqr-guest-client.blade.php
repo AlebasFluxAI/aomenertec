@@ -129,7 +129,6 @@
                                                            ],
                                                          "icon"=>"fa fa-list",
                                                          "tooltip_title"=>"Historial de mensajes",
-                                                         "conditional"=>"closedTicked",
                                                          "button_subdomain"=>$subdomain
                                                  ],
                                                  [
@@ -137,7 +136,7 @@
                                                          "function"=>"closePqr",
                                                          "icon"=>"fas fa-check",
                                                          "tooltip_title"=>"Cerrar ticket",
-                                                         "conditional"=>"openTicked"
+                                                         "conditional"=>"resolvedTicked"
                                                  ],
 
 

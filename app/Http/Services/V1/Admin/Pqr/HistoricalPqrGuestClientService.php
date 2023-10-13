@@ -2,8 +2,10 @@
 
 namespace App\Http\Services\V1\Admin\Pqr;
 
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\EquipmentAssignationTrait;
+use App\Models\Traits\PqrStatusTrait;
 use App\Models\Traits\PqrTypesTrait;
 use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\Equipment;
@@ -14,9 +16,17 @@ use Livewire\Component;
 
 class HistoricalPqrGuestClientService extends Singleton
 {
+    use PqrStatusTrait;
 
-    public function mount(Component $component, $pqr)
+    public function mount(Component $component, Pqr $pqr)
     {
         $component->model = $pqr;
+    }
+
+    public function closePqrForm(Component $component)
+    {
+        $this->closePqr($component, $component->model->id);
+        ToastEvent::launchToast($component, "show", "success", "Pqr cerrado exitosamente");
+        $component->model->refresh();
     }
 }
