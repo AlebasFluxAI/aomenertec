@@ -71,6 +71,19 @@
             @endforeach
         @endif
     </div>
+    <div wire:loading.class="loader">
+    </div>
+    <div wire:loading.remove class="text-right">
+        @if($model->status==\App\Models\V1\Pqr::STATUS_RESOLVED)
+            <form wire:submit.prevent="closePqrForm" id="formulario" class="needs-validation" role="form">
+                @include("partials.v1.form.form_submit_button",[
+                                      "button_align"=>"right" ,
+                                      "button_content"=>" Cerrar petición"
+                          ])
+
+            </form>
+        @endif
+    </div>
     <div class="m-5">
 
         <a href="{{ url()->previous() }}" class="btn btn-default">Volver</a>

@@ -43,9 +43,19 @@ class AdminPqrGuestClientComponent extends Component
         parent::__construct($id);
     }
 
+    public function closePqr($id)
+    {
+        return $this->pqrIndexService->closePqr($this, $id);
+    }
+
     public function openTicked($id)
     {
         return $this->adminPqrGuestClientService->openTicked($this, $id);
+    }
+
+    public function resolvedTicked($id)
+    {
+        return $this->adminPqrGuestClientService->resolvedTicked($this, $id);
     }
 
     public function closedTicked($id)

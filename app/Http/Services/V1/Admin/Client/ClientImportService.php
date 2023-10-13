@@ -44,7 +44,7 @@ class ClientImportService extends Singleton
         $csv->setHeaderOffset(0);
         $csvValues = $csv->getRecords();
         $admin = Auth::user()->getAdmin() ? Auth::user()->getAdmin()->id : null;
-        dispatch(new ClientImportationJob(iterator_to_array($csvValues), $import, $admin))->onConnection("sync");
+        dispatch(new ClientImportationJob(iterator_to_array($csvValues), $import, $admin))->ponConnection("sync");
         $component->redirectRoute("v1.admin.client.import-details.client", ["import" => $import->id]);
     }
 

@@ -6,7 +6,7 @@ use App\Console\Commands\V1\ClientInvoiceGeneration;
 use App\Console\Commands\V1\ClientInvoicingCommand;
 use App\Console\Commands\V1\ClientReport;
 use App\Console\Commands\V1\DeleteStopUnpackData;
-use App\Console\Commands\V1\InvoiceGeneration;
+use App\Console\Commands\V1\PqrSolvedValidation;
 use App\Console\Commands\V1\RefactorClientData;
 use App\Console\Commands\V1\ReorderDataClientMonth;
 use App\Console\Commands\V1\ReorderDataClientHour;
@@ -42,15 +42,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
-         $schedule->command(UpdateDataConsumption::class)->everyTenMinutes()->withoutOverlapping();
-         $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
+        $schedule->command(UpdateDataConsumption::class)->everyTenMinutes()->withoutOverlapping();
+        $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
         //$schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
         //$schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
-         $schedule->command(RefactorClientData::class)->twiceDailyAt(1, 13, 32)->withoutOverlapping(); // si se cambia la frecuencia revisar la hora en que se seleccionan los datos
-         $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
+        $schedule->command(RefactorClientData::class)->twiceDailyAt(1, 13, 32)->withoutOverlapping(); // si se cambia la frecuencia revisar la hora en que se seleccionan los datos
+        $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
 
-        $schedule->command(InvoiceGeneration::class)->dailyAt(2);
         $schedule->command(ClientReport::class, [Client::MONTHLY_RATE])
             ->monthlyOn(1, '08:00')
             ->appendOutputTo(storage_path('cron.log'));
@@ -60,6 +59,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(ClientInvoiceGeneration::class)
             ->dailyAt('08:00');
+
+        $schedule->command(PqrSolvedValidation::class)
+            ->dailyAt('02:00');
     }
 
     /**
