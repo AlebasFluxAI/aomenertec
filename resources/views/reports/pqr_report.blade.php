@@ -98,7 +98,7 @@
     <tr class="flex-row">
         <td class="flex-item" rowspan="3"> <img src={{$admin->icon->url}} alt="Logo" class="logo"></td>
         <td class="flex-item" rowspan="3"><br>{{$network_operator->name. ' '. $network_operator->last_name}}<br>www.enerteclatam.com</td>
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>Codigo PQR</strong></td>
+        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>Reporte PQR {{$pqr->code}}</strong></td>
         <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">{{$pqr->code}}</td>
     </tr>
 
@@ -149,9 +149,9 @@
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: left; width: 10%;"><strong>Elaboró:</strong></td>
-        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$pqr->status_created_by}}</td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$created_by->name . ' ' . $created_by->last_name}}</td>
         <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Tramitó:</strong></td>
-        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$pqr->status_closed_by}}</td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$resolved_by->name . ' ' . $resolved_by->last_name}}</td>
         <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Importancia:</strong></td>
         <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$pqr->severity}}</td>
     </tr>
@@ -215,7 +215,7 @@
         <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>DIAGNÓSTICO Y SOLUCIÓN</strong></td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item" style="padding:6px; text-align: left;" colspan="12"><strong>vvvv</strong></td>
+        <td class="flex-item" style="padding:6px; text-align: left;" colspan="12"><strong>{{ $close_message->message }}</strong></td>
 
     </tr>
 
@@ -223,7 +223,7 @@
 <table class="column-container_firma " style="margin-top: 20px; margin-right: 20px;">
 
     <tr class="flex-row">
-        <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong>xxxxxxx</td>
+        <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong><img src="https://enertedevops.s3.us-east-2.amazonaws.com/images/16455020603793018/firma_sf.png" alt="Archivo-adjunto" class="logo"></td>
     </tr>
 
 </table>

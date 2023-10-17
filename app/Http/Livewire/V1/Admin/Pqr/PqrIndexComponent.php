@@ -80,6 +80,16 @@ class PqrIndexComponent extends Component
 
     }
 
+    public function downloadReport($id)
+    {
+        return $this->pqrIndexService->downloadReport($this, $id);
+
+    }
+    public function canDownloadReport($id)
+    {
+        return $this->pqrIndexService->canDownloadReport($this, $id);
+
+    }
     public function convertToWorkOrder($id)
     {
         return $this->pqrIndexService->convertToWorkOrder($this, $id);

@@ -8,6 +8,7 @@ use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\Client;
 use App\Models\V1\Pqr;
 use App\Models\V1\RealTimeListener;
+use App\Models\V1\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -289,7 +290,10 @@ class DataReport extends Component
             'client' => $pqr->client,
             'network_operator' => $network_operator,
             'admin' => $network_operator->admin,
-            'files' => $pqr_messages_file
+            'files' => $pqr_messages_file,
+            'created_by' => $pqr->status_created_by == null ? $pqr->client : User::find($pqr->status_created_by),
+            'closed_by' => $pqr->status_closed_by == null ? $pqr->client : User::find($pqr->status_closed_by),
+            'resolved_by' => $pqr->status_resolved_by == null ? $pqr->client->clientTechnician()->first() : User::find($pqr->status_resolved_by)
         ]);
         $pdf->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($pdf) {
