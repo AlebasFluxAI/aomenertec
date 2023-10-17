@@ -45,7 +45,12 @@ class AdminPqrGuestClientComponent extends Component
 
     public function closePqr($id)
     {
-        return $this->pqrIndexService->closePqr($this, $id);
+        return $this->adminPqrGuestClientService->closePqr($this, $id);
+    }
+
+    public function rejectPqr($id)
+    {
+        return $this->adminPqrGuestClientService->processingPqr($this, $id);
     }
 
     public function openTicked($id)

@@ -36,12 +36,22 @@ trait PqrStatusTrait
         return !(Pqr::find($id)->status == Pqr::STATUS_CLOSED);
     }
 
+    public function processingPqr(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        $pqr->update(
+            ["status" => Pqr::STATUS_PROCESSING]
+        );
+        ToastEvent::launchToast($component, "show", "success", "Solucion de pqr rechazada");
+        
+    }
+
     public function closePqr(Component $component, $id)
     {
         $pqr = Pqr::find($id);
         if ($workOrder = $pqr->workOrder) {
             if ($workOrder->staus != WorkOrder::WORK_ORDER_STATUS_CLOSED) {
-                ToastEvent::launchToast($component, "show", "error", "Eciste una orden de trabajo asociada pendiente");
+                ToastEvent::launchToast($component, "show", "error", "Existe una orden de trabajo asociada pendiente");
                 return;
             }
 
@@ -49,6 +59,7 @@ trait PqrStatusTrait
         $pqr->update(
             ["status" => Pqr::STATUS_CLOSED]
         );
+        $pqr->refresh();
     }
 
     public function solvePqr(Component $component, $id)
