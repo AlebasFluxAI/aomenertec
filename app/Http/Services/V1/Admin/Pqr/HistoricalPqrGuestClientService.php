@@ -29,4 +29,11 @@ class HistoricalPqrGuestClientService extends Singleton
         ToastEvent::launchToast($component, "show", "success", "Pqr cerrado exitosamente");
         $component->model->refresh();
     }
+
+    public function rejectPqrForm(Component $component)
+    {
+        $this->processingPqr($component, $component->model->id);
+        $component->model->refresh();
+    }
+
 }

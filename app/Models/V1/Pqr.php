@@ -129,6 +129,18 @@ class Pqr extends Model
         return $this->hasMany(PqrMessage::class)->whereType(PqrMessage::MESSAGE_TYPE_REGULAR);
     }
 
+    public function messagesFile()
+    {
+        $messages = $this->messages;
+        $images = [];
+        foreach ($messages as $index => $message){
+            if ($message->attach){
+                $images[$index] = $message->attach->url;
+            }
+        }
+        return $images;
+    }
+
     public function closeMessage()
     {
         return $this->hasOne(PqrMessage::class)->whereType(PqrMessage::MESSAGE_TYPE_CLOSER);

@@ -69,6 +69,11 @@
             margin-right: 20px;
             /* Reducido el margen para dar más espacio */
         }
+        .file {
+            width: 150px;
+            /* Ajusta el tamaño del logo según tus necesidades */
+            /* Reducido el margen para dar más espacio */
+        }
         .chart-consumption {
             width: 300px;
             height: 150px;
@@ -91,20 +96,20 @@
 <body>
 <table class="header-container">
     <tr class="flex-row">
-        <td class="flex-item" rowspan="3"> <img src="https://www.enerteclatam.com/media/nuhcco0k/logotipo-enerteclatam.png" alt="Logo" class="logo"></td>
-        <td class="flex-item" rowspan="3"><br>Enertec Latinoamerica SAS<br>www.enerteclatam.com</td>
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>Reporte PQR</strong></td>
-        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">375227</td>
+        <td class="flex-item" rowspan="3"> <img src={{$admin->icon->url}} alt="Logo" class="logo"></td>
+        <td class="flex-item" rowspan="3"><br>{{$network_operator->name. ' '. $network_operator->last_name}}<br>www.enerteclatam.com</td>
+        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>Codigo PQR</strong></td>
+        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">{{$pqr->code}}</td>
     </tr>
 
     <tr class="flex-row">
         <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;" ><strong>Tipo de PQR</strong></td>
-        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">Tècnico</td>
+        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right;">{{$pqr->type}}</td>
     </tr>
 
     <tr class="flex-row">
         <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Fecha de registro<strong></strong></td>
-        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right; ">20/09/2023</td>
+        <td class="flex-item" style="background: #fff; border-top-right-radius: 15px; text-align: right; ">{{$pqr->created_at}}</td>
     </tr>
 
 </table>
@@ -118,21 +123,21 @@
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Razón social:</strong></td>
-        <td class="flex-item" style="padding:2px;" colspan="2">LorenaM</td>
+        <td class="flex-item" style="padding:2px;" colspan="2">{{$client->name. ' '. $client->last_name}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Cuidad y Depto</strong></td>
-        <td class="flex-item" style="padding:2px;" colspan="2">Villavicencio - Meta</td>
+        <td class="flex-item" style="padding:2px;" colspan="2">{{$client->address->city.', '.$client->address->state }}</td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Nit:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">1121919373</td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>{{$client->identification_type}}:</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->identification}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Dirección:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">Calle 25 sur</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->address->address}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Teléfono:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">3209302716</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->phone}}</td>
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Código cliente</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">125874</td>
+        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->code}}</td>
     </tr>
 </table>
 
@@ -144,32 +149,32 @@
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: left; width: 10%;"><strong>Elaboró:</strong></td>
-        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">Lorena Pineda</td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$pqr->status_created_by}}</td>
         <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Tramitó:</strong></td>
-        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">Sneider Fuentes</td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$pqr->status_closed_by}}</td>
         <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Importancia:</strong></td>
-        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">Alta</td>
+        <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$pqr->severity}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding: 6px;" colspan="12"></td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="6"><strong>DETALLE:</strong><br>no registra datos en la plataforma</td>
-        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="6"><strong>ASUNTO:</strong> <br>No me deja ver la medicion en la plataforma </td>
-    </tr>
-    <tr class="flex-row">
-        <td class="flex-item" style="padding: 6px;" colspan="12"></td>
-    </tr>
-    <tr class="flex-row">
-
-        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="12"><strong>DESCRIPCIÓN:</strong> <br>No me deja ver la medicion en la plataforma </td>
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="6"><strong>ASUNTO:</strong> <br>{{$pqr->subject}}</td>
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="6"><strong>DETALLE:</strong><br>{{$pqr->detail}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item" style="padding: 6px;" colspan="12"></td>
     </tr>
     <tr class="flex-row">
 
-        <td class="flex-item" style="padding:2px; text-align: center; width: 10%;"colspan="12"><strong>Fecha de finalización:</strong>29/09/2023</td>
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #DFE9F5; border-top-left-radius: 10px; text-align: left;" colspan="12"><strong>DESCRIPCIÓN:</strong> <br>{{$pqr->description}}</td>
+    </tr>
+    <tr class="flex-row">
+        <td class="flex-item" style="padding: 6px;" colspan="12"></td>
+    </tr>
+    <tr class="flex-row">
+
+        <td class="flex-item" style="padding:2px; text-align: center; width: 10%;"colspan="12"><strong>Fecha de finalización:</strong>{{$pqr->status_closed_at}}</td>
 
     </tr>
 
@@ -182,20 +187,35 @@
         <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>ARCHIVOS ADJUNTOS</strong></td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; " ><strong>ARCHIVO1 ARCHIVO1 ARCHIVO1 ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1ARCHIVO1 ARCHIVO1 ARCHIVO1</strong></td>
-        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; "><strong>ARCHIVO2 ARCHIVO2 ARCHIVO2</strong></td>
-        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; "><strong>ARCHIVO3 ARCHIVO3 ARCHIVO3</strong></td>
-        <td class="flex-item middle-container" style="padding:6px; text-align: left; width: 25%; "><strong>ARCHIVO4 ARCHIVO4 ARCHIVO4</strong></td>
+            @if($pqr->attach)
+                <td class="flex-item middle-container" style="padding:6px; text-align: center; " ><img src={{$pqr->attach->url}} alt="Archivo-adjunto" class="file"></td>
+                @for($i = 1; $i < 4; $i++)
+                    @if(count($files) >= $i)
+                        <td class="flex-item middle-container" style="padding:6px; text-align: center; " ><img src={{$files[$i]}} alt="Archivo-adjunto" class="file"></td>
+                    @else
+                        <td class="flex-item middle-container" style="padding:6px; text-align: center; " ><img src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg" alt="Archivo-adjunto" class="file"></td>
+                    @endif
+                @endfor
+
+            @else
+            @for($i = 1; $i < 5; $i++)
+                @if(count($files) >= $i)
+                    <td class="flex-item middle-container" style="padding:6px; text-align: center; " ><img src={{$files[$i]}} alt="Archivo-adjunto" class="file"></td>
+                @else
+                    <td class="flex-item middle-container" style="padding:6px; text-align: center; " ><img src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg" alt="Archivo-adjunto" class="file"></td>
+                @endif
+            @endfor
+            @endif
     </tr>
 </table>
 
 
 <table class="large-container" style="margin-top: 20px; margin-right: 20px;">
     <tr class="flex-row">
-        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>DIAGNÓSTICO Y SOLUCIÓNS</strong></td>
+        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>DIAGNÓSTICO Y SOLUCIÓN</strong></td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item" style="padding:6px; text-align: left;" colspan="12"><strong>Se realizó cambio de tarjeta electronica y limpieza de superficies Se realizó cambio de tarjeta electronica y limpieza de superficies Se realizó cambio de tarjeta electronica y limpieza de superficies</strong></td>
+        <td class="flex-item" style="padding:6px; text-align: left;" colspan="12"><strong>vvvv</strong></td>
 
     </tr>
 
@@ -203,7 +223,7 @@
 <table class="column-container_firma " style="margin-top: 20px; margin-right: 20px;">
 
     <tr class="flex-row">
-        <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong>SneneneFF</td>
+        <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong>xxxxxxx</td>
     </tr>
 
 </table>

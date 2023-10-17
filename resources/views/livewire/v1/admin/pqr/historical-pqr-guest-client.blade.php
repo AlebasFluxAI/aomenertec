@@ -78,7 +78,17 @@
             <form wire:submit.prevent="closePqrForm" id="formulario" class="needs-validation" role="form">
                 @include("partials.v1.form.form_submit_button",[
                                       "button_align"=>"right" ,
-                                      "button_content"=>" Cerrar petición"
+                                      "button_icon"=>"fas fa-check",
+                                      "button_content"=>" Aceptar solución"
+                          ])
+
+            </form>
+
+            <form wire:submit.prevent="rejectPqrForm" id="formulario" class="needs-validation" role="form">
+                @include("partials.v1.form.form_submit_button",[
+                                      "button_align"=>"right" ,
+                                      "button_icon"=>"fas fa-square-minus",
+                                      "button_content"=>" Declinar solución"
                           ])
 
             </form>

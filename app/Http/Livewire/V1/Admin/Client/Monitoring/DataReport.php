@@ -6,6 +6,7 @@ use App\Exports\V1\MultipleSheetsMonitoringData;
 use App\Http\Resources\V1\Formatter;
 use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\Client;
+use App\Models\V1\Pqr;
 use App\Models\V1\RealTimeListener;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -280,7 +281,16 @@ class DataReport extends Component
     {
         //if ($this->start_report != "") {
         //$array = $this->arrayCreate();
-        $pdf = PDF::loadView('reports.pqr_report');
+        $pqr = Pqr::find(38);
+        $pqr_messages_file = $pqr->messagesFile();
+        $network_operator = $pqr->client->networkOperator;
+        $pdf = PDF::loadView('reports.pqr_report',[
+            'pqr' => $pqr,
+            'client' => $pqr->client,
+            'network_operator' => $network_operator,
+            'admin' => $network_operator->admin,
+            'files' => $pqr_messages_file
+        ]);
         $pdf->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();

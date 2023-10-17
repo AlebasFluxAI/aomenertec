@@ -47,6 +47,11 @@ class HistoricalPqrGuestClientComponent extends Component
         $this->historicalPqrGuestClientService->closePqr($this, $pqr);
     }
 
+    public function rejectPqrForm()
+    {
+        $this->historicalPqrGuestClientService->processingPqr($this);
+    }
+
     public function updatedPqrType()
     {
         $this->historicalPqrGuestClientService->updateType($this);
