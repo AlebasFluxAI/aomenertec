@@ -19,8 +19,10 @@ use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
+use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
 use App\Scope\PaginationScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -37,6 +39,33 @@ class PqrIndexService extends Singleton
     public function linkClientConditional(Component $component)
     {
         return $component->model->hasClient();
+    }
+
+    public function canDownloadReport(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        return !($pqr->status == Pqr::STATUS_CLOSED);
+    }
+    public function downloadReport(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        $pqr_messages_file = $pqr->messagesFile();
+        $network_operator = $pqr->client->networkOperator;
+        $pdf = PDF::loadView('reports.pqr_report',[
+            'pqr' => $pqr,
+            'client' => $pqr->client,
+            'network_operator' => $network_operator,
+            'admin' => $network_operator->admin,
+            'files' => $pqr_messages_file,
+            'created_by' => $pqr->status_created_by == null ? $pqr->client : User::find($pqr->status_created_by),
+            'closed_by' => $pqr->status_closed_by == null ? $pqr->client : User::find($pqr->status_closed_by),
+            'resolved_by' => $pqr->status_resolved_by == null ? $pqr->client->clientTechnician()->first() : User::find($pqr->status_resolved_by),
+            'close_message' => $pqr->closeMessage
+        ]);
+        $pdf->setPaper('A4', 'portrait');
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, 'Pqr_report_'.$pqr->code.'.pdf');
     }
 
     public function canConvertToOrder(Component $component, $id)

@@ -203,6 +203,12 @@
                                                         "tooltip_title"=>"Convertir en orden de trabajo",
                                                         "conditional"=>"canConvertToOrder"
                                                 ],
+                                                 [
+                                                        "function"=>"downloadReport",
+                                                        "icon"=>"fas fa-file-download",
+                                                        "tooltip_title"=>"Reporte de PQR",
+                                                        "conditional"=>"canDownloadReport"
+                                                ],
                                     ]
                                 ],
 
