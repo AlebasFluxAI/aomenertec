@@ -12,7 +12,7 @@
 
     @include("partials.v1.title",[
           "second_title"=>"",
-          "first_title"=>"CERRAR        PQR ".$model->code,
+          "first_title"=>"CERRAR PQR ".$model->code,
       ])
 
     @auth
@@ -85,6 +85,7 @@
                           "placeholder"=>"Agregar mensaje",
                           "col_with"=>12,
                           "input_type"=>"text",
+                          "updated_input"=>"defer",
                           "required"=>true
                                        ])
 
@@ -97,10 +98,11 @@
                                                 "col_with"=>12,
                                                 "required"=>false,
                                            ])
+
         @include("partials.v1.form.form_submit_button",[
-                                            "button_align"=>"right" ,
-                                            "button_content"=>"Cerrar petición"
-                                ])
+                                        "button_align"=>"right" ,
+                                        "button_content"=>"Solucionar petición"
+                            ])
 
     </form>
 

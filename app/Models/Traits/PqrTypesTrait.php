@@ -173,9 +173,17 @@ trait PqrTypesTrait
         $component->emitTo(
             'livewire-toast',
             'show',
-            ['type' => 'success',
-                'message' => "Se registro la respuesta exitosamente"]
+            [
+                'type' => 'success',
+                'message' => "Se registro la respuesta exitosamente"
+            ]
         );
+        if ($component->model->status != Pqr::STATUS_PROCESSING) {
+            $component->model->update([
+                "status" => Pqr::STATUS_PROCESSING
+            ]);
+        }
+
         $component->model->refresh();
         $component->attach = null;
         $component->emit("pqr_message_created");
