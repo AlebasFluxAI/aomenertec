@@ -138,6 +138,13 @@
                                                          "tooltip_title"=>"Cerrar ticket",
                                                          "conditional"=>"resolvedTicked"
                                                  ],
+                                                 [
+
+                                                         "function"=>"rejectPqr",
+                                                         "icon"=>"fas fa-square-minus",
+                                                         "tooltip_title"=>"Rechazar ticket",
+                                                         "conditional"=>"resolvedTicked"
+                                                 ],
 
 
                                      ]
