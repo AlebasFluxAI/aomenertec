@@ -33,12 +33,14 @@ class ClientImportationJob implements ShouldQueue
     public $csvValues;
     public $import;
     public $admin;
+    public $networkOperator;
 
-    public function __construct($csvValues, $import, $admin)
+    public function __construct($csvValues, $import, $admin, $networkOperator)
     {
         $this->csvValues = $csvValues;
         $this->import = $import;
         $this->admin = $admin;
+        $this->networkOperator = $networkOperator;
     }
 
     /**
@@ -260,6 +262,10 @@ class ClientImportationJob implements ShouldQueue
             $clientArray = array_merge($clientArray, ["code" => $code]);
         }
         $clientArray = array_merge($clientArray, ["admin_id" => $admin]);
+        if ($this->networkOperator) {
+            $clientArray = array_merge($clientArray, ["network_operator_id" => $this->networkOperator->id]);
+        }
+
 
         if (!$this->validateClientData($importValues, $errors)) {
             return null;
@@ -291,7 +297,7 @@ class ClientImportationJob implements ShouldQueue
             }
             $fieldValue = $importValues[$key];
             if ($value == "person_type") {
-                $fieldValue = strtolower($fieldValue);
+                $fieldValue = $fieldValue == "JURIDICA" ? "juridical" : strtolower($fieldValue);
             }
             $resultArray = array_merge($resultArray, [$value => $fieldValue]);
         }
