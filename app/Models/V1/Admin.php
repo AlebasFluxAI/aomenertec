@@ -56,7 +56,9 @@ class Admin extends Model
         "city",
         "state",
         "indicative",
-        "invoicing_day"
+        "invoicing_day",
+        "annually_client_cost",
+        "annually_client_invoicing_month",
     ];
 
     public function getCurrentEnabledClients()

@@ -42,7 +42,7 @@ class PqrSolvedValidation extends Command
      */
     public function handle()
     {
-        $today = now()->subDays(5);
+        $today = now()->subDays(1);
 
         foreach (Pqr::whereStatus(Pqr::STATUS_RESOLVED)->where("status_resolved_at", "<=", $today)->get() as $pqr) {
             $pqr->update([

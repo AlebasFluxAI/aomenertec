@@ -11,6 +11,8 @@ class PriceAdmin extends Component
 {
     public $prices;
     public $config;
+    public $months;
+    public $month;
     public $client_types;
     public $notification_types;
     public $coins;
@@ -20,6 +22,8 @@ class PriceAdmin extends Component
     public $channels;
     public $tab_permissions;
     public $invoicing_day;
+    public $annually_client_cost;
+    public $annually_client_invoicing_month;
 
     private $priceAdminService;
 
@@ -65,6 +69,11 @@ class PriceAdmin extends Component
     public function blinkTabPermission($tabPermission)
     {
         $this->priceAdminService->blinkTabPermission($this, $tabPermission);
+    }
+
+    public function submitAnnuallyForm()
+    {
+        $this->priceAdminService->submitAnnuallyForm($this);
     }
 
     public function render()

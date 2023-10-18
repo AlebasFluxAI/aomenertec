@@ -4,6 +4,7 @@ namespace App\Models\V1;
 
 use App\Http\Livewire\V1\Admin\User\NetworkOperator\PriceClientTypePriceNetworkOperator;
 use App\Http\Livewire\V1\Admin\User\NetworkOperator\PricePhotovoltaicConfig;
+use App\Http\Livewire\V1\Admin\User\NetworkOperator\TimelyPaymentConfig;
 use App\Models\Model\V1\BillingService;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
@@ -63,7 +64,8 @@ class NetworkOperator extends Model
         "indicative",
         "pqr_initial_bag",
         "work_order_initial_bag",
-        "billing_day"
+        "billing_day",
+
     ];
 
 
@@ -80,6 +82,11 @@ class NetworkOperator extends Model
     public function billableServices()
     {
         return $this->hasOne(BillingService::class);
+    }
+
+    public function timelyPayment()
+    {
+        return $this->hasOne(NetworkOperatorTimelyPayment::class);
     }
 
     public static function menu()
@@ -271,11 +278,11 @@ class NetworkOperator extends Model
             return [
                 "title" => $key
             ];
-        }, ClientType::whereIn("type", [
+        }, array_merge(ClientType::whereIn("type", [
             ClientType::SIN_CONVENTIONAL,
             ClientType::ZIN_CONVENTIONAL,
             ClientType::ZIN_PHOTOVOLTAIC,
-        ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
+        ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray(), ["Pago oportuno"])));
 
     }
 
@@ -292,6 +299,15 @@ class NetworkOperator extends Model
     public function getTabContentForPrice()
     {
         return (array_map(function ($key) {
+            if ($key == "Pago oportuno") {
+
+                return [
+                    "component_class" => TimelyPaymentConfig::class,
+                    "component_values" => [
+                        "networkOperator" => $this,
+                    ]
+                ];
+            }
             if ($key == ClientType::ZIN_PHOTOVOLTAIC) {
                 return [
                     "component_class" => PricePhotovoltaicConfig::class,
@@ -307,12 +323,11 @@ class NetworkOperator extends Model
                 ],
 
             ];
-        }, ClientType::whereIn("type", [
+        }, array_merge(ClientType::whereIn("type", [
             ClientType::SIN_CONVENTIONAL,
             ClientType::ZIN_CONVENTIONAL,
             ClientType::ZIN_PHOTOVOLTAIC,
-        ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray()));
-
+        ])->whereIn("id", $this->clients()->pluck("client_type_id")->unique())->pluck("type")->toArray(), ["Pago oportuno"])));
     }
 
     public function photovoltaicPrice()
