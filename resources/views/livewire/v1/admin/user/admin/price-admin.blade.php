@@ -29,6 +29,10 @@
                                                "title"=>"Configuracion inicial",
 
                                            ],
+                                           [
+                                               "title"=>"Configuracion de cobro anual a administradores",
+
+                                           ],
 
                                       ],
 
@@ -40,11 +44,10 @@
                                                   "view_values"=>  []
                                            ],
 
-                                        //  [
-                                        //                               "view_name"=>"livewire.v1.admin.user.tab-permissions-admin",
-                                        //                               "view_values"=>  [
-                                        //                               ]
-                                        //  ]
+                                         [
+                                                    "view_name"=>"livewire.v1.admin.user.admin.annually-cost-config",
+                                                    "view_values"=>  []
+                                         ]
 
 
 

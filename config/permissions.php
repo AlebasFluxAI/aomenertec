@@ -109,6 +109,7 @@ return [
         Permissions::ADMIN_SHOW,
         Permissions::ADMIN_ENABLED,
         Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION,
+        Permissions::SUPER_ADMIN_ANNUALLY_CLIENT_COST,
 
 
         Permissions::EQUIPMENT_TYPE_CREATE,

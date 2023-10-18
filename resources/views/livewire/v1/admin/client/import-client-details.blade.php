@@ -64,6 +64,11 @@
                                                                          "table_pageable"=>true,
                                                                          "table_headers"=>[
                                                                             [
+                                                                                "col_name" =>"ID",
+                                                                                "col_data" =>"id",
+                                                                                "col_filter"=>false
+                                                                            ],
+                                                                             [
                                                                                 "col_name" =>"Columna archivo",
                                                                                 "col_data" =>"item_index",
                                                                                 "col_filter"=>false
