@@ -29,7 +29,35 @@ class TimelyPaymentService extends Singleton
 
     public function mount(Component $component, $netwotkOperator)
     {
-        
+        $component->model = $netwotkOperator;
+    }
+
+    public function submitForm(Component $component)
+    {
+        if ($component->timely_payment_days < $component->disconnection_days) {
+            $component->addError("error", "Los dias de desconexion deben ser mayores que los dias para pago oportuno");
+            return;
+        }
+        if ($component->timely_payment_days > 30) {
+            $component->addError("error", "Los dias para pago oportuno no pueden ser mas de 30");
+            return;
+        }
+        if ($component->model->timelyPayment) {
+            $component->model->timelyPayment->update([
+                "days_to_disconnection" => $component->timely_payment_days,
+                "days_to_payment" => $component->reconnection_cost,
+                "reconnection_cost" => $component->disconnection_days
+            ]);
+        } else {
+            $component->model->timelyPayment()->create([
+                "days_to_disconnection" => $component->timely_payment_days,
+                "days_to_payment" => $component->reconnection_cost,
+                "reconnection_cost" => $component->disconnection_days
+            ]);
+        }
+
+        ToastEvent::launchToast($component, "show", "success", "Datos modificados exitosamente");
+
     }
 
 

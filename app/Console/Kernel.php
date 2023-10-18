@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\V1\AdminClientEnabledAnnuallyCronjob;
 use App\Console\Commands\V1\ClientInvoiceGeneration;
 use App\Console\Commands\V1\ClientInvoicingCommand;
 use App\Console\Commands\V1\ClientReport;
@@ -62,6 +63,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(PqrSolvedValidation::class)
             ->dailyAt('02:00');
+
+        $schedule->command(AdminClientEnabledAnnuallyCronjob::class)
+            ->monthlyOn(1);
     }
 
     /**

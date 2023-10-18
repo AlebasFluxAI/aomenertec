@@ -25,10 +25,10 @@ class TimelyPaymentConfig extends Component
     use ClientFormTrait;
 
     public $model;
-    public $timelyPaymentDays;
-    public $reconnectionCost;
-    public $disconnectionDays;
-    
+    public $timely_payment_days;
+    public $reconnection_cost;
+    public $disconnection_days;
+
 
     private $timelyPayment;
 
@@ -43,9 +43,15 @@ class TimelyPaymentConfig extends Component
         return $this->timelyPayment->mount($this, $networkOperator);
     }
 
+    public function submitForm()
+    {
+        return $this->timelyPayment->submitForm($this);
+    }
+
     public function render()
     {
-        return view('livewire.v1.admin.user.network-operator.price-configuration.timely-payment')->extends('layouts.v1.app');
+        return view('livewire.v1.admin.user.network-operator.price-configuration.timely-payment')
+            ->extends('layouts.v1.app');
     }
 
 

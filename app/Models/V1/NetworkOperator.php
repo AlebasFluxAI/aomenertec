@@ -64,7 +64,8 @@ class NetworkOperator extends Model
         "indicative",
         "pqr_initial_bag",
         "work_order_initial_bag",
-        "billing_day"
+        "billing_day",
+
     ];
 
 
@@ -81,6 +82,11 @@ class NetworkOperator extends Model
     public function billableServices()
     {
         return $this->hasOne(BillingService::class);
+    }
+
+    public function timelyPayment()
+    {
+        return $this->hasOne(NetworkOperatorTimelyPayment::class);
     }
 
     public static function menu()
