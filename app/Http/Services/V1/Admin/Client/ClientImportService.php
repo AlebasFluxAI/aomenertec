@@ -6,6 +6,7 @@ namespace App\Http\Services\V1\Admin\Client;
 use App\Http\Services\Singleton;
 use App\Jobs\V1\Enertec\Import\ClientImportationJob;
 use App\Models\V1\Import;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -44,7 +45,11 @@ class ClientImportService extends Singleton
         $csv->setHeaderOffset(0);
         $csvValues = $csv->getRecords();
         $admin = Auth::user()->getAdmin() ? Auth::user()->getAdmin()->id : null;
-        dispatch(new ClientImportationJob(iterator_to_array($csvValues), $import, $admin))->ponConnection("sync");
+        $authModel = User::getUserModel();
+        if ($authModel::class == NetworkOperator::class) {
+            $networkOperator = $authModel;
+        }
+        dispatch(new ClientImportationJob(iterator_to_array($csvValues), $import, $admin, $networkOperator))->onConnection("sync");
         $component->redirectRoute("v1.admin.client.import-details.client", ["import" => $import->id]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\Admin;
 
 use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
+use App\Http\Resources\V1\MonthsYears;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\AdminClientType;
@@ -42,10 +43,12 @@ class PriceAdminService extends Singleton
         $component->fill([
             "client_types" => ClientType::all(),
             "model" => $model,
+            'months' => MonthsYears::months(),
             "invoicing_day" => $model->invoicing_day,
             "prices" => $model->priceAdmin,
             "config" => $model->configAdmin,
-
+            "annually_client_cost" => $model->annually_client_cost,
+            "annually_client_invoicing_month" => $model->annually_client_invoicing_month,
             "coins" => [
                 ["key" => "Peso Colombiano", "value" => AdminConfiguration::COP],
                 ["key" => "Dolar", "value" => AdminConfiguration::USD]
@@ -121,4 +124,16 @@ class PriceAdminService extends Singleton
         $component->model->refresh();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
     }
+
+    public function submitAnnuallyForm(Component $component)
+    {
+        $component->model->update([
+            "annually_client_cost" => $component->annually_client_cost,
+            "annually_client_invoicing_month" => $component->annually_client_invoicing_month
+
+        ]);
+        $component->model->refresh();
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+    }
+
 }
