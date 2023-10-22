@@ -38,6 +38,11 @@ class MailTestController
 {
     public $raw_json;
     public $source_timestamp;
+
+    public function imageTest()
+    {
+        return view('partials.test_image');
+    }
     public function userCreatedNotification()
     {
         $data = AuxData::where('created_at', '>', '2023-08-01')->where('data', 'LIKE', '%UsWo9wEAAAAWA%')->get();
@@ -51,7 +56,7 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $item = 'UsWo9wEAAAAWAAAAAAAAAAAAiEEAAJxBAAAAAAAAAICvEpxkAAAAAAAAAACBlO9CAAAAAAAAAABAGLpAAAAAAAAAAAB93ppDAAAAAAAAAABYeThEAAAAAAAAAAAAAAAAAACAPwAAgD8pJNk+B2nZPgAAAAAAAAAAoD51Qp9pbELLn5xDYwerQWaGb0JaYYlFzMyMP1ZmsUQeTVdEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgXglFAAAAAAAAAAAAAAAABNojRXBd3UQ732dAAAAAANJJsUSTGGQ/AAAAAAAAAAAAAAAAAAAAAJGeTkAlpO0/';
+        $item = 'TmG8AAAAAAChuw0AAAAAAAAAiEEAAJxBACAAABAAAKDvlTJlMBMAQwhbAEP4FgBDgC3QQswu4EJcyOBCc6kzRuYHSkYi3khG1h9QRh20YEY9zGBG+PjQRYVLw0V3JMpFmshcP0pPZj9cemQ/IM5iP/qL8UEAINBB6G/UQfWz3EHpzRBHPZqXRgAAcEIWVuZIa2ZCQHuKDkg9BwNGCAdeQ8C8XkPI41xDPQpHQIXrQUBSuD5AexSeQJqZiUA9CodAAAAAAAAAAAAAAAAAn7MdSJg/Gkj3uBRIEM82R4HEUkdbljBHAAAAAHwKuEIAAAAAuWGpQgAAAADoSbBC';
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($item, true);
