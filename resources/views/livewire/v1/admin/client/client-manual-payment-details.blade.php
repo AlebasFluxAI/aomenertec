@@ -61,7 +61,7 @@
                                                                          [
                                                                              "key"=>"Evidencia",
                                                                              "type"=>"image",
-                                                                             "value"=>$register->evidence
+                                                                             "value"=>$register->evidence?$register->evidence->url:""
                                                                          ],
 
                                                                          ]

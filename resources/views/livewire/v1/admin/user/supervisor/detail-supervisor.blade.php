@@ -83,6 +83,11 @@
                                                                              "key"=>"Operador de red",
                                                                              "value"=>$model->networkOperator->id." - ".$model->networkOperator->name
                                                                          ],
+                                                                           [
+                                                                             "key"=>"Firma",
+                                                                             "type"=>"image",
+                                                                             "value"=>$model->sign?$model->sign->url:""
+                                                                         ],
                                                                      ]
                                                             ]
                                                 ],
