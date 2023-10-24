@@ -8,10 +8,12 @@ use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\PassTrait;
 use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AddSupervisor extends Component
 {
     use PassTrait;
+    use WithFileUploads;
 
 
     public $decodedAddress;
@@ -27,7 +29,7 @@ class AddSupervisor extends Component
     public $network_operators;
     public $indicatives;
     public $indicative;
-
+    public $sign;
 
     private $supervisorAddService;
 

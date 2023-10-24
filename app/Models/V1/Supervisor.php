@@ -3,6 +3,7 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
+use App\Models\Traits\ImageableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\UserPermissionableTrait;
@@ -20,6 +21,7 @@ class Supervisor extends Model
     use AuditableTrait;
     use PaginatorTrait;
     use UserPermissionableTrait;
+    use ImageableTrait;
 
 
     protected $fillable = [
@@ -85,6 +87,11 @@ class Supervisor extends Model
         ];
     }
 
+    public function sign()
+    {
+        return $this->morphOne(Image::class, "imageable");
+    }
+    
     public function getPhonePlusIndicativeAttribute()
     {
         return "(" . $this->indicative . ") " . $this->phone;
