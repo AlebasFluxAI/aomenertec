@@ -29,6 +29,17 @@ class WorkOrderIndex extends Component
         $this->workOrderDetailsService = WorkOrderIndexService::getInstance();
     }
 
+    public function downloadReport($id)
+    {
+        return $this->workOrderDetailsService->downloadReport($this, $id);
+
+    }
+    public function canDownloadReport($id)
+    {
+        return $this->workOrderDetailsService->canDownloadReport($this, $id);
+
+    }
+
     public function processEquipmentReplace($workOrderId)
     {
         $this->workOrderDetailsService->processEquipmentReplace($this, $workOrderId);

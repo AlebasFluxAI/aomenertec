@@ -124,7 +124,7 @@
     <tr class="flex-row">
         <td class="flex-item" style="padding:2px; text-align: right;"><strong>Razón social:</strong></td>
         <td class="flex-item" style="padding:2px;" colspan="2">{{$client->name. ' '. $client->last_name}}</td>
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Cuidad y Depto</strong></td>
+        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Ciudad y Depto</strong></td>
         <td class="flex-item" style="padding:2px;" colspan="2">{{$client->address->city.', '.$client->address->state }}</td>
     </tr>
     <tr class="flex-row">

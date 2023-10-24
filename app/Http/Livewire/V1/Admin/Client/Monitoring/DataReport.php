@@ -9,6 +9,7 @@ use App\Models\V1\Client;
 use App\Models\V1\Pqr;
 use App\Models\V1\RealTimeListener;
 use App\Models\V1\User;
+use App\Models\V1\WorkOrder;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -282,18 +283,13 @@ class DataReport extends Component
     {
         //if ($this->start_report != "") {
         //$array = $this->arrayCreate();
-        $pqr = Pqr::find(38);
-        $pqr_messages_file = $pqr->messagesFile();
-        $network_operator = $pqr->client->networkOperator;
-        $pdf = PDF::loadView('reports.pqr_report',[
-            'pqr' => $pqr,
-            'client' => $pqr->client,
+        $work_order = WorkOrder::find(27);
+        $network_operator = $work_order->client->networkOperator;
+        $pdf = PDF::loadView('reports.orden_work_report',[
+            'work_order' => $work_order,
+            'client' => $work_order->client,
             'network_operator' => $network_operator,
-            'admin' => $network_operator->admin,
-            'files' => $pqr_messages_file,
-            'created_by' => $pqr->status_created_by == null ? $pqr->client : User::find($pqr->status_created_by),
-            'closed_by' => $pqr->status_closed_by == null ? $pqr->client : User::find($pqr->status_closed_by),
-            'resolved_by' => $pqr->status_resolved_by == null ? $pqr->client->clientTechnician()->first() : User::find($pqr->status_resolved_by)
+            'admin' => $network_operator->admin
         ]);
         $pdf->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($pdf) {

@@ -14,6 +14,7 @@ use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
 use App\Scope\ClientEnabledScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,26 @@ class WorkOrderIndexService extends Singleton
         return (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS) or (WorkOrder::find($workOrderId)->status == WorkOrder::WORK_ORDER_STATUS_CLOSED);
     }
 
+    public function canDownloadReport(Component $component, $id)
+    {
+        $pqr = WorkOrder::find($id);
+        return !($pqr->status == WorkOrder::WORK_ORDER_STATUS_CLOSED);
+    }
+    public function downloadReport(Component $component, $id)
+    {
+        $work_order = WorkOrder::find($id);
+        $network_operator = $work_order->client->networkOperator;
+        $pdf = PDF::loadView('reports.orden_work_report',[
+            'work_order' => $work_order,
+            'client' => $work_order->client,
+            'network_operator' => $network_operator,
+            'admin' => $network_operator->admin
+        ]);
+        $pdf->setPaper('A4', 'portrait');
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, 'work_order_report_'.$work_order->id.'.pdf');
+    }
 
     public function adminWorkOrderConditional(Component $component, $workOrderId)
     {
