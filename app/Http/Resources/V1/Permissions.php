@@ -33,6 +33,7 @@ class Permissions
     public const CLIENT_WORK_ORDER = "client_work_order";
     public const CLIENT_WORK_ACTIVATION_ORDER = "client_activation_work_order";
     public const CLIENT_INVOICE_GENERATE = "client_invoice_generate";
+    public const CLIENT_INVOICE_MANUAL_PAYMENT = "client_invoice_manual_payment";
 
     public const EQUIPMENT_CREATE = "equipment.create";
     public const EQUIPMENT_EDIT = "equipment.edit";

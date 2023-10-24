@@ -2,11 +2,15 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Http\Resources\V1\ToastEvent;
+use App\Http\Resources\V1\IndicativeHelper;
+use App\Http\Resources\V1\TimeZoneHelper;
 use App\Http\Services\V1\Admin\Client\AddClient;
+use App\Http\Resources\V1\Icon;
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
-use App\Models\V1\ClientAlert;
-use App\Models\V1\ClientTechnician;
+use App\Models\Traits\ClientServiceTrait;
+use App\Models\V1\BillingInformation;
+use App\Models\V1\ClientSupervisor;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\ClientType;
 use App\Models\V1\Department;
@@ -15,17 +19,19 @@ use App\Models\V1\EquipmentType;
 use App\Models\V1\Invoice;
 use App\Models\V1\Location;
 use App\Models\V1\LocationType;
-use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\Municipality;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\Client;
+use App\Models\V1\Supervisor;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
@@ -33,24 +39,20 @@ use function auth;
 use function bcrypt;
 use function session;
 
-class ClientInvoiceIndexService extends Singleton
+class ClientManualPaymentService extends Singleton
 {
+    use ClientServiceTrait;
 
-    public function mount(Component $component, $client)
+    public function mount(Component $component, Client $client)
     {
-        $component->model = $client;
-        $component->client = $client;
+        $component->fill([
+            "model" => $client
+        ]);
     }
 
     public function getData(Component $component)
     {
-        return $component->model->invoices;
-    }
-
-    public function hasPaymentRegister($invoiceId)
-    {
-        
-        return !Invoice::find($invoiceId)->paymentRecord;
+        return $component->model->invoices()->where("payment_status", "!=", Invoice::PAYMENT_STATUS_APPROVED)->get();
 
     }
 

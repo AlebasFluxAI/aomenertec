@@ -1,8 +1,8 @@
 <div class="login">
 
     @include("partials.v1.title",[
-          "second_title"=>"facturas cliente ".$model->alias,
-          "first_title"=>"Listado"
+          "second_title"=>"pagp cliente ".$model->alias,
+          "first_title"=>"Registrar"
       ])
 
     @include("partials.v1.table_nav",
@@ -19,10 +19,13 @@
                      "button_type"=>"dropdown",
                      "button_icon"=>"fas fa-gear",
                      "button_content"=>"Acciones",
-                     "button_options"=>$client->navigatorDropdownOptions()
+                     "button_options"=>$model->navigatorDropdownOptions()
                      ]
                   ]
          ])
+    @include("partials.v1.divider_title",
+         ["title"=>"Facturas con pago pendiente"])
+
     @include("partials.v2.table.primary-table",[
                "table_rows"=>$data,
                "table_headers"=>[
@@ -35,11 +38,6 @@
                        "col_name" =>"Codigo",
                        "col_data" =>"code",
                        "col_filter"=>true
-                   ],
-                   [
-                       "col_name" =>"Administrador",
-                       "col_data" =>"adminName",
-                       "col_filter"=>false
                    ],
                    [
                        "col_name" =>"Estado",
@@ -64,33 +62,13 @@
                                 "customs"=>[
                                                 [
                                                    "redirect"=>[
-                                                               "route"=>"administrar.v1.facturacion.facturas.detalle",
+                                                               "route"=>"v1.admin.client.manual_payment.register",
                                                                "binding"=>"invoice"
                                                          ],
-                                                       "icon"=>"fas fa-search",
-                                                       "tooltip_title"=>"Detalles",
+                                                       "icon"=>"fas fa-cash-register",
+                                                       "tooltip_title"=>"Registrar pago",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::INVOICE_SHOW],
                                                  ],
-                                                 [
-                                                   "redirect"=>[
-                                                               "route"=>"administrar.v1.facturacion.facturas.pdf",
-                                                               "binding"=>"invoice"
-                                                         ],
-                                                       "icon"=>"fas fa-download",
-                                                       "tooltip_title"=>"Descargar PDF",
-                                                       "permission"=>[\App\Http\Resources\V1\Permissions::INVOICE_FILE],
-                                                 ],
-                                                  [
-                                                   "redirect"=>[
-                                                               "route"=>"v1.admin.client.manual_payment.register-details",
-                                                               "binding"=>"invoice"
-                                                         ],
-                                                       "conditional"=>"hasPaymentRegister",
-                                                       "icon"=>"fas fa-dollar-sign",
-                                                       "tooltip_title"=>"Pago manual",
-
-                                                 ],
-
                                             ],
                                      ],
 

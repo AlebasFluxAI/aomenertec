@@ -17,6 +17,7 @@ use App\Models\V1\HistoricalClientEquipment;
 use App\Models\V1\Image;
 use App\Models\V1\Invoice;
 use App\Models\V1\InvoiceItem;
+use App\Models\V1\InvoicePaymentRegistration;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Notification;
@@ -62,6 +63,7 @@ use App\Models\V1\ClientAlert;
 use App\Observers\V1\Change\ChangeObserver;
 use App\Observers\V1\ClientConfiguration\ClientConfigurationObserver;
 use App\Observers\V1\FeeObserver;
+use App\Observers\V1\InvoicePaymentRegistrationObserver;
 use App\Observers\V1\Pqr\PqrLogObserver;
 use App\Observers\V1\PqrUser\PqrUserObserver;
 use App\Observers\WorkOrder\WorkOrderObserver;
@@ -163,6 +165,8 @@ class AppServiceProvider extends ServiceProvider
         ZniLevelFee::observe(FeeObserver::class);
 
         SinLevelFee::observe(FeeObserver::class);
+
+        InvoicePaymentRegistration::observe(InvoicePaymentRegistrationObserver::class);
 
     }
 }
