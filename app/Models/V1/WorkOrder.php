@@ -78,6 +78,11 @@ class WorkOrder extends Model
     {
         return User::find($this->created_by_id);
     }
+    public function closedBy()
+    {
+        return User::find($this->closed_by);
+    }
+
 
     public static function createFromPqr(Pqr $pqr)
     {

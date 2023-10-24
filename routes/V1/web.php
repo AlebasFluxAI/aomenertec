@@ -1,4 +1,4 @@
-}<?php
+<?php
 
 use App\Http\Controllers\testFile;
 use App\Http\Controllers\V1\HomeController;
