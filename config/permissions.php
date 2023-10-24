@@ -82,6 +82,7 @@ return [
         Permissions::WORK_ORDER_CREATE,
         Permissions::WORK_ORDER_EDIT,
         Permissions::CLIENT_WORK_ORDER,
+        Permissions::CLIENT_INVOICE_GENERATE,
 
         Permissions::CLIENT_DISABLED_SHOW,
 
@@ -253,6 +254,7 @@ return [
         Permissions::CLIENT_ADD_EQUIPMENT,
         Permissions::CLIENT_SHOW_INVOICING,
         Permissions::INVOICE_REPORT,
+        Permissions::CLIENT_INVOICE_GENERATE,
 
         Permissions::SUPPORT_CREATE,
         Permissions::SUPPORT_EDIT,
