@@ -220,7 +220,7 @@ return [
 
 
         Permissions::NETWORK_OPERATOR_PRICE_CONFIGURATION,
-
+        Permissions::CLIENT_INVOICE_MANUAL_PAYMENT,
         Permissions::EQUIPMENT_CREATE,
         Permissions::EQUIPMENT_EDIT,
         Permissions::EQUIPMENT_SHOW,

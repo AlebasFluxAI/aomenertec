@@ -63,11 +63,7 @@
                        "col_translate"=>"invoice",
                        "col_filter"=>true
                    ],
-                   [
-                       "col_name" =>"Operador de red",
-                       "col_data" =>"networkOperatorName",
-                       "col_filter"=>false,
-                   ],
+
                    [
                        "col_name" =>"Estado de pago",
                        "col_data" =>"payment_status",
