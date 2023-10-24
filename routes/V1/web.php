@@ -1,4 +1,4 @@
-<?php
+}<?php
 
 use App\Http\Controllers\testFile;
 use App\Http\Controllers\V1\HomeController;
@@ -342,6 +342,18 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                     Route::get('facturas/{client}', Livewire\V1\Admin\Client\ClientInvoiceIndex::class)
                         ->name("v1.admin.client.invoicing")
                         ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_SHOW_MONITORING));
+
+                    Route::get('registrar-pagos/{client}', Livewire\V1\Admin\Client\ClientManualPayment::class)
+                        ->name("v1.admin.client.manual_payment")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_INVOICE_MANUAL_PAYMENT));
+
+                    Route::get('pago-registrado/factura/{invoice}', Livewire\V1\Admin\Client\ClientManualPaymentDetails::class)
+                        ->name("v1.admin.client.manual_payment.register-details")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_INVOICE_MANUAL_PAYMENT));
+
+                    Route::get('registrar-pagos/factura/{invoice}', Livewire\V1\Admin\Client\ClientManualPaymentRegister::class)
+                        ->name("v1.admin.client.manual_payment.register")
+                        ->middleware(PermissionsRouteWard::permissionWard(Permissions::CLIENT_INVOICE_MANUAL_PAYMENT));
 
                     Route::get('lectura_manual/{client}', Livewire\V1\Admin\Client\ClientHandReadingIndex::class)
                         ->name("v1.admin.client.hand_reading")

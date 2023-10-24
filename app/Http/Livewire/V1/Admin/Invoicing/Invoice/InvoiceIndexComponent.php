@@ -59,6 +59,7 @@ class InvoiceIndexComponent extends Component
         return $this->indexInvoicetemsService->setFilter($this, $filterValue);
     }
 
+
     public function getData()
     {
         return $this->indexInvoicetemsService->getData($this);

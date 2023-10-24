@@ -1,7 +1,7 @@
 <div class="text-center"
      style="background-color: green;padding: 10px;margin-left: 20%;margin-right: 20%;border-radius: 15px">
     <button id="add"
-            class="mb-2 py-2 px-4" data-toggle="modal" data-target="#exampleModal">
+            class="mb-2 py-2 px-4" data-toggle="" data-target="#exampleModal">
         <b>
             <i class="fas fa-check"></i> Pagar factura
         </b>

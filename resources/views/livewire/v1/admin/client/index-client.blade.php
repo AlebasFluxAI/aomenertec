@@ -294,11 +294,15 @@
                                                         "tooltip_title"=>"Generar factura de prueba",
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_INVOICE_GENERATE],
                                                 ],
-
-
-
-
-
+                                                 [
+                                                        "redirect"=>[
+                                                                    "route"=>"v1.admin.client.manual_payment",
+                                                                    "binding"=>"client"
+                                                              ],
+                                                        "icon"=>"fas fa-dollar-sign",
+                                                        "tooltip_title"=>"Registrar pagos",
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_INVOICE_MANUAL_PAYMENT],
+                                                ],
                                     ]
                                     ],
 

@@ -45,6 +45,13 @@ class Invoice extends Model
 
     ];
 
+
+    public function paymentRecord()
+    {
+        return $this->hasOne(InvoicePaymentRegistration::class);
+    }
+
+
     public function getAdminNameAttribute()
     {
         if ($this->admin) {
