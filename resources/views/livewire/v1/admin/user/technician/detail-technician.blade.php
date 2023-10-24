@@ -92,6 +92,11 @@
                                                                              "key"=>"Operador de red",
                                                                              "value"=>($model->networkOperator?$model->networkOperator->id:null). "- ". ($model->networkOperator?$model->networkOperator->name:null)
                                                                          ],
+                                                                          [
+                                                                             "key"=>"Firma",
+                                                                             "type"=>"image",
+                                                                             "value"=>$model->sign?$model->sign->url:""
+                                                                         ],
                                                                      ]
                                                             ],
 
