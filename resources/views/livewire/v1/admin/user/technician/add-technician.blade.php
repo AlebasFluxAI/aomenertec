@@ -104,7 +104,18 @@
                                         "dropdown_result_value"=>"name",
                                         "dropdown_editing"=>true,
                                       ]
-                               ]
+                               ],
+                               [
+                                    "view_name"=>"partials.v1.form.form_input_file",
+                                    "view_values" =>[
+                                            "input_type"=>"file",
+                                            "input_model"=>"sign",
+                                            "icon_class"=>"fas fa-file",
+                                            "placeholder"=>"Firma de supervisor",
+                                            "col_with"=>12,
+                                            "required"=>false,
+                                      ]
+                                ]
                                ]
               ])
         </form>

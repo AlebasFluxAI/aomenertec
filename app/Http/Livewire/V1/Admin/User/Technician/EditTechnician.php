@@ -12,6 +12,8 @@ use Livewire\WithFileUploads;
 
 class EditTechnician extends Component
 {
+    use WithFileUploads;
+
     public $decodedAddress;
     public $latitude;
     public $longitude;
@@ -23,6 +25,7 @@ class EditTechnician extends Component
     private $editTechnicianService;
     public $indicatives;
     public $indicative;
+    public $sign;
 
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',

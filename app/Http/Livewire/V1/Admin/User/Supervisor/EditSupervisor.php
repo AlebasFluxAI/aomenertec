@@ -7,9 +7,12 @@ use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EditSupervisor extends Component
 {
+    use WithFileUploads;
+
     public $decodedAddress;
     public $latitude;
     public $longitude;
@@ -21,6 +24,7 @@ class EditSupervisor extends Component
     private $supervisorEditService;
     public $indicatives;
     public $indicative;
+    public $sign;
 
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',

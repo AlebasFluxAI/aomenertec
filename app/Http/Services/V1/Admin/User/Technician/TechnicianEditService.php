@@ -35,6 +35,10 @@ class TechnicianEditService extends Singleton
 
     public function submitForm(Component $component)
     {
+        $component->validate([
+            'sign' => 'image|max:10240', // 1MB Max
+        ]);
+
         DB::transaction(function () use ($component) {
             $component->model->latitude = $component->latitude;
             $component->model->longitude = $component->longitude;
@@ -53,6 +57,8 @@ class TechnicianEditService extends Singleton
                 'model.identification_type' => 'required',
             ]);
             $component->model->update();
+            $component->model->buildOneImageFromFile("sign", $component->sign);
+
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$component->model->name} actualizado"]);
             $component->redirectRoute("administrar.v1.usuarios.tecnicos.detalles", ["technician" => $component->model->id]);
         });

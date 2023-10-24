@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
 
     @include("partials.v1.title",[
@@ -21,9 +22,22 @@
         ])
 
     {{----------------------------------Formulario--------------------------}}
-        <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
-            @include("partials.v1.addUserTemplate.user-add-form")
-        </form>
+    <form wire:submit.prevent="submitForm" id="formulario" class="needs-validation" role="form">
+        @include("partials.v1.addUserTemplate.user-add-form",[
+                      "custom_input"=>[[
+                          "view_name"=>"partials.v1.form.form_input_file",
+                           "view_values" =>[
+                                        "input_type"=>"file",
+                                        "input_model"=>"sign",
+                                        "icon_class"=>"fas fa-file",
+                                        "placeholder"=>"Firma de supervisor",
+                                        "col_with"=>12,
+                                        "required"=>false,
+                                  ]
+]
+]
+                      ])
+    </form>
 
 
 </div>
