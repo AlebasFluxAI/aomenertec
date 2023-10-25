@@ -57,7 +57,13 @@
                                         pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"
                                         min="0"
                                         placeholder="$"
-                                        {{($type==\App\Models\V1\NetworkOperator::UNIT_COST_FEE)?"disabled":""}}
+                                        {{($type==\App\Models\V1\NetworkOperator::UNIT_COST_FEE)?
+                                            "disabled"
+                                           :(($client_type==\App\Models\V1\ClientType::ZIN_CONVENTIONAL)?
+                                             (($type==\App\Models\V1\NetworkOperator::LOST_FEE or $type==\App\Models\V1\NetworkOperator::RESTRICTIONS_FEE or $type==\App\Models\V1\NetworkOperator::TRANSMISSION_FEE)?
+                                                "disabled":"")
+                                              :"")
+                                          }}
                                         value={{$this->getFee($level->id,$type,$client_type)}}>
 
                                 </div>

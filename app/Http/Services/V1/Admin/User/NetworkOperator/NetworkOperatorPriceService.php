@@ -3,6 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
 use App\Http\Livewire\V1\Admin\User\AssignedEquipmentInterface;
+use App\Http\Livewire\V1\Admin\User\NetworkOperator\PriceClientTypePriceNetworkOperator;
 use App\Http\Resources\V1\MonthsYears;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
@@ -254,17 +255,37 @@ class NetworkOperatorPriceService extends Singleton
                 "month" => $component->month,
                 "year" => $component->year,
             ])->first()) {
-                $fee->update([
-                    $type => $value
-                ]);
+                if ($type == "generation") {
+                    $fee->update([
+                        $type => $value,
+                        "lost" => ($value/0.9) - $value
+                    ]);
+                } else {
+                    $fee->update([
+                        $type => $value
+                    ]);
+                }
+
 
             } else {
-                $component->model->zniFees()->create([
-                    "voltage_level_id" => $level,
-                    "month" => $component->month,
-                    "year" => $component->year,
-                    $type => $value
-                ]);
+                if ($type == "generation") {
+                    $component->model->zniFees()->create([
+                        "voltage_level_id" => $level,
+                        "month" => $component->month,
+                        "year" => $component->year,
+                        "lost" => ($value/0.9) - $value,
+                        $type => $value
+                    ]);
+                } else {
+                    $component->model->zniFees()->create([
+                        "voltage_level_id" => $level,
+                        "month" => $component->month,
+                        "year" => $component->year,
+                        $type => $value
+                    ]);
+                }
+
+
             }
         } else {
             if ($fee = $component->model->sinFees()->where([
