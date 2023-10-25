@@ -79,11 +79,11 @@
                                                        "tooltip_title"=>"Gestionar cambio de equipo",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE_MANAGE],
                                                  ],
-                                                 
+
                                                  [
                                                         "function"=>"downloadReport",
                                                         "icon"=>"fas fa-file-download",
-                                                        "tooltip_title"=>"Reporte de PQR",
+                                                        "tooltip_title"=>"Reporte de orden de trabajo",
                                                         "conditional"=>"canDownloadReport"
                                                 ],
                                                ],

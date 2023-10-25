@@ -4,6 +4,7 @@ namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\ClientInvoiceGenerateService;
 use App\Models\V1\Client;
+use App\Models\V1\ClientType;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\SinOtherFee;
 use App\Models\V1\SubsistenceConsumption;
@@ -52,7 +53,13 @@ class ClientInvoiceGenerate extends Component
             $value_active = $monthly_data->interval_real_consumption * $value_kwh;
             $value_tax = ($this->client->public_lighting_tax)?(($this->other_fees->tax_type == SinOtherFee::MONEY_FEE)?$this->other_fees->tax:$value_active*$this->other_fees->tax/100):0;
             $value_discount_kwh = $value_kwh * $this->other_fees->discount/100;
-            $value_discount = ($monthly_data->interval_real_consumption > $sc->value)?($sc->value * $value_discount_kwh * (-1)):($monthly_data->interval_real_consumption* $value_discount_kwh * (-1));
+            $client_aux = Client::find($this->client->id);
+
+            if ($client_aux->clientType->type === ClientType::ZIN_CONVENTIONAL){
+                $value_discount = ($monthly_data->interval_real_consumption * $value_discount_kwh * (-1));
+            }else{
+                $value_discount = ($monthly_data->interval_real_consumption > $sc->value)?($sc->value * $value_discount_kwh * (-1)):($monthly_data->interval_real_consumption* $value_discount_kwh * (-1));
+            }
             $value = collect([]);
             $value->value_active= $value_active;
             $value->value_contribution = ($this->client->stratum->id > 4)?(($this->client->contribution && $this->other_fees->contribution > 0)?$value_active*$this->other_fees->contribution/100:0):0;
