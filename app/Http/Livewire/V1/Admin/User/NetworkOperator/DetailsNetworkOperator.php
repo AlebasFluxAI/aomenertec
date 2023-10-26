@@ -184,7 +184,16 @@ class DetailsNetworkOperator extends Component
     {
         return $this->detailsNetworkOperatorService->repairEquipment($id);
     }
+    public function downloadReport($id)
+    {
+        return $this->detailsNetworkOperatorService->downloadReport($this, $id);
 
+    }
+    public function canDownloadReport($id)
+    {
+        return $this->detailsNetworkOperatorService->canDownloadReport($this, $id);
+
+    }
 
     public function render()
     {

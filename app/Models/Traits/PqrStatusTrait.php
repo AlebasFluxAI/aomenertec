@@ -6,7 +6,9 @@ use App\Http\Resources\V1\ToastEvent;
 use App\Jobs\CreateWorkOrderJob;
 use App\Models\V1\Image;
 use App\Models\V1\Pqr;
+use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -43,7 +45,7 @@ trait PqrStatusTrait
             ["status" => Pqr::STATUS_PROCESSING]
         );
         ToastEvent::launchToast($component, "show", "success", "Solucion de pqr rechazada");
-        
+
     }
 
     public function closePqr(Component $component, $id)
@@ -115,5 +117,32 @@ trait PqrStatusTrait
             return true;
         }
         return ($pqr->change_equipment);
+    }
+
+    public function canDownloadReport(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        return !($pqr->status == Pqr::STATUS_CLOSED);
+    }
+    public function downloadReport(Component $component, $id)
+    {
+        $pqr = Pqr::find($id);
+        $pqr_messages_file = $pqr->messagesFile();
+        $network_operator = $pqr->client->networkOperator;
+        $pdf = PDF::loadView('reports.pqr_report',[
+            'pqr' => $pqr,
+            'client' => $pqr->client,
+            'network_operator' => $network_operator,
+            'admin' => $network_operator->admin,
+            'files' => $pqr_messages_file,
+            'created_by' => $pqr->status_created_by == null ? $pqr->client : User::find($pqr->status_created_by),
+            'closed_by' => $pqr->status_closed_by == null ? $pqr->client : User::find($pqr->status_closed_by),
+            'resolved_by' => $pqr->status_resolved_by == null ? $pqr->client->clientTechnician()->first() : User::find($pqr->status_resolved_by),
+            'close_message' => $pqr->closeMessage
+        ]);
+        $pdf->setPaper('A4', 'portrait');
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->stream();
+        }, 'Pqr_report_'.$pqr->code.'.pdf');
     }
 }
