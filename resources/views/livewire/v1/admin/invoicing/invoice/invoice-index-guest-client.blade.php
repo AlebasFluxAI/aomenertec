@@ -57,6 +57,12 @@
                                                      "tooltip_title"=>"Detalles",
                                                      "permission"=>[\App\Http\Resources\V1\Permissions::INVOICE_SHOW],
                                                ],
+                                               [
+                                                       "payment_button"=>true,
+                                                       "icon"=>"fas fa-download",
+                                                       "tooltip_title"=>"Pagar factura",
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::INVOICE_FILE],
+                                                 ],
                                           ],
                                    ],
 
