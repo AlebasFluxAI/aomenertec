@@ -57,6 +57,15 @@
                                                      "tooltip_title"=>"Detalles",
                                                      "permission"=>[\App\Http\Resources\V1\Permissions::INVOICE_SHOW],
                                                ],
+                                                 [
+                                                   "redirect"=>[
+                                                               "route"=>"administrar.v1.facturacion.invitados.facturas.pdf",
+                                                               "binding"=>"invoice"
+                                                         ],
+                                                       "icon"=>"fas fa-file-pdf",
+                                                       "tooltip_title"=>"Descargar PDF",
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::INVOICE_FILE],
+                                                 ],
                                                [
                                                        "payment_button"=>true,
                                                        "icon"=>"fas fa-download",

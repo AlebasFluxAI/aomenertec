@@ -50,6 +50,9 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
         Route::get('/pagos', Livewire\V1\Admin\Invoicing\Invoice\InvoiceGuestClientComponent::class)->name("guest.invoice-payment");
         Route::get('/cliente/{client}', Livewire\V1\Admin\Invoicing\Invoice\InvoiceIndexGuestClientComponent::class)->name("guest.invoice-index-payment");
         Route::get('/cliente/factura/{invoice}', Livewire\V1\Admin\Invoicing\Invoice\InvoiceDetailsGuestComponent::class)->name("guest.invoice-details-payment");
+        Route::get("/pdf/{invoice}", [Livewire\V1\Admin\Invoicing\Invoice\InvoicePdfGeneratorController::class, "getPdfId"])
+            ->name("administrar.v1.facturacion.invitados.facturas.pdf");
+
 
     });
 
