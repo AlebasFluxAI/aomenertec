@@ -137,7 +137,7 @@ trait PqrStatusTrait
             'files' => $pqr_messages_file,
             'created_by' => $pqr->status_created_by == null ? $pqr->client : User::find($pqr->status_created_by),
             'closed_by' => $pqr->status_closed_by == null ? $pqr->client : User::find($pqr->status_closed_by),
-            'resolved_by' => $pqr->status_resolved_by == null ? $pqr->client->clientTechnician()->first() : User::find($pqr->status_resolved_by),
+            'resolved_by' => $pqr->client->clientTechnician()->first(),
             'close_message' => $pqr->closeMessage
         ]);
         $pdf->setPaper('A4', 'portrait');
