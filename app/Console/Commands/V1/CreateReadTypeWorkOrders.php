@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Jobs\V1\Enertec\WorkOrder\CreateReadTypeWorkOrderJob;
 use App\Models\V1\Client;
+use App\Models\V1\ClientConfiguration;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -39,9 +41,24 @@ class CreateReadTypeWorkOrders extends Command
      */
     public function handle()
     {
-        $clientesSinRegistros = Client::whereDoesntHave('microcontrollerData', function ($query) {
-            $query->where('source_timestamp', '>=', Carbon::now()->subHours(48));
-        })->get()->pluck('id');
-        dd($clientesSinRegistros);
+        $now = Carbon::create(2023,10,29);
+        $billing_date = $now->copy()->addDays(2);
+        if ($billing_date->format('d') == $billing_date->format('t')){
+            $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
+        } else{
+            $billing_day_clients = ClientConfiguration::whereBillingDay($billing_date->format('d'))->orderBy('client_id')->get()->pluck('client_id');
+        }
+        $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get();
+        $limit_date = $billing_date->copy()->subDays(2);
+        foreach ($clients_aux as $client){
+            if(!($client->microcontrollerData()
+                ->where('source_timestamp', '>=', $limit_date)
+                ->exists())){
+                //Job para crear orden de trabajo tipo lectura
+
+                    dispatch(new CreateReadTypeWorkOrderJob($client->id))->onConnection('sync');
+
+            }
+        }
     }
 }

@@ -259,7 +259,7 @@
 <table class="column-container_firma " style="margin-top: 20px; margin-right: 20px;">
 
     <tr class="flex-row">
-        <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong><img src="https://enertedevops.s3.us-east-2.amazonaws.com/images/16455020603793018/firma_sf.png" alt="Archivo-adjunto" class="logo"></td>
+        <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong><img src="https://enertedevops.s3.us-east-2.amazonaws.com/images/16455020603793018/firma_sf.png" alt="Archivo-adjunto" class="logo"><br> {{ $work_order->closedBy()->name . ' ' . $work_order->closedBy()->last_name}} - Tecnico</td>
     </tr>
 
 </table>

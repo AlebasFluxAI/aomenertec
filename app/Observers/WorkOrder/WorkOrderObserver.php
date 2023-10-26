@@ -13,9 +13,10 @@ class WorkOrderObserver
 {
     public function creating(WorkOrder $workOrder)
     {
-        $userModel = User::getUserModel();
+
         $workOrder->status = WorkOrder::WORK_ORDER_STATUS_OPEN;
         if (!$workOrder->created_by_id) {
+            $userModel = User::getUserModel();
             $workOrder->created_by_type = User::class;
             $workOrder->created_by_id = $userModel->user_id;
         }
