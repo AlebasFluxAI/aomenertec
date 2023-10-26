@@ -46,5 +46,9 @@ class StrataTableSeeder extends Seeder
             'acronym' => 'IND',
             'name' => 'Industrial',
         ]);
+        Stratum::create([
+            'acronym' => 'EP',
+            'name' => 'Entidades publicas',
+        ]);
     }
 }

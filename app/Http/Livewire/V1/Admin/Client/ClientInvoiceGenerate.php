@@ -97,6 +97,9 @@ class ClientInvoiceGenerate extends Component
                 echo $pdf->stream();
             }, 'export.pdf');
 
+        } else {
+            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No existen datos para el mes seleccionado"]);
+
         }
 
     }

@@ -34,7 +34,7 @@ class TimelyPaymentService extends Singleton
 
     public function submitForm(Component $component)
     {
-        if ($component->timely_payment_days < $component->disconnection_days) {
+        if ($component->timely_payment_days > $component->disconnection_days) {
             $component->addError("error", "Los dias de desconexion deben ser mayores que los dias para pago oportuno");
             return;
         }

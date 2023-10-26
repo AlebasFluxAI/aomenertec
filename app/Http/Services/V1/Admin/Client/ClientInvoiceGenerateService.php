@@ -99,18 +99,19 @@ class ClientInvoiceGenerateService extends Singleton
                 $date->subMonth();
             }
             $component->emit('setChartData', $value_chart);
+            $client = Client::find($component->client->id);
+            $promedio = $promedio/6;
+            $component->others_data['serial_meter']= $client->getSerialMeter();
+            $component->others_data['promedio']= $promedio;
+            $component->others_data['last_month']= $last_month;
+            $component->others_data['periodo_facturado']= $date_last_month == null ? $date_month->format('Y-m-d'). ' - ' .$date_month->format('Y-m-01'):$date_month->format('Y-m-d'). ' - ' .$date_last_month->format('Y-m-d');
+            $component->others_data['dias_facturados']= $date_last_month == null ? $date_month->format('d'):$date_month->diffInDays($date_last_month);
+            $component->others_data['numero_factura']= $date_month->format('y').$date_month->format('m').$component->client->code;
+
         }else {
             $component->emit('setChartData', $value_chart);
         }
 
-        $client = Client::find($component->client->id);
-        $promedio = $promedio/6;
-        $component->others_data['serial_meter']= $client->getSerialMeter();
-        $component->others_data['promedio']= $promedio;
-        $component->others_data['last_month']= $last_month;
-        $component->others_data['periodo_facturado']= $date_last_month == null ? $date_month->format('Y-m-d'). ' - ' .$date_month->format('Y-m-01'):$date_month->format('Y-m-d'). ' - ' .$date_last_month->format('Y-m-d');
-        $component->others_data['dias_facturados']= $date_last_month == null ? $date_month->format('d'):$date_month->diffInDays($date_last_month);
-        $component->others_data['numero_factura']= $date_month->format('y').$date_month->format('m').$component->client->code;
 
 
     }

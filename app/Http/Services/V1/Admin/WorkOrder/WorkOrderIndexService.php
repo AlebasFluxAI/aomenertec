@@ -56,7 +56,7 @@ class WorkOrderIndexService extends Singleton
     public function adminWorkOrderConditional(Component $component, $workOrderId)
     {
         $workOrder = WorkOrder::find($workOrderId);
-        return !($workOrder->status == WorkOrder::WORK_ORDER_STATUS_OPEN);
+        return !($workOrder->status == WorkOrder::WORK_ORDER_STATUS_OPEN and $workOrder->type != WorkOrder::WORK_ORDER_TYPE_READING);
     }
 
     public function processEquipmentReplace(Component $component, $workOrderId)
