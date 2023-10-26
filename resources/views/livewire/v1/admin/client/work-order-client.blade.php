@@ -43,6 +43,12 @@
                                                        "tooltip_title"=>"Detalles",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_DETAILS],
                                                  ],
+                                                 [
+                                                        "function"=>"downloadReport",
+                                                        "icon"=>"fas fa-file-download",
+                                                        "tooltip_title"=>"Reporte de orden de trabajo",
+                                                        "conditional"=>"canDownloadReport"
+                                                ],
                                                 ],
                                            ],
          "table_rows"=>$data
