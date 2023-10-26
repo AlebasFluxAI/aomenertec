@@ -35,7 +35,7 @@ class NetworkOperatorPriceService extends Singleton
             'months' => MonthsYears::months(),
             'years' => MonthsYears::years(),
             "date_picked" => false,
-            "client_type" => $client_type
+            "client_type" => $client_type,
 
         ]);
         $this->fillStrataArray($component);
@@ -222,6 +222,7 @@ class NetworkOperatorPriceService extends Singleton
         return 0.0;
     }
 
+
     private function getFeeFunction(Component $component, $value, $level, $type)
     {
         if ($type == ClientType::ZIN_CONVENTIONAL) {
@@ -248,7 +249,6 @@ class NetworkOperatorPriceService extends Singleton
 
     public function changeFeeFunction(Component $component, $value, $level, $type, $client_type)
     {
-
         if ($client_type == ClientType::ZIN_CONVENTIONAL) {
             if ($fee = $component->model->zniFees()->where([
                 "voltage_level_id" => $level,

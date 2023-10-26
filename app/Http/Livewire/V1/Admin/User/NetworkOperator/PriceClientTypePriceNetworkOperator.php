@@ -25,6 +25,7 @@ class PriceClientTypePriceNetworkOperator extends Component
     public $years;
     public $month;
     public $year;
+    public $default_rate;
     public $date_picked;
     public $client_type;
 
@@ -44,6 +45,11 @@ class PriceClientTypePriceNetworkOperator extends Component
     {
         $this->networkOperatorPriceService->mount($this, $client_type);
     }
+    public function updatedDefaultRate($value)
+    {
+        $this->networkOperatorPriceService->updatedDefaultRate($this, $value);
+    }
+
 
 
     public function changeVaupesFeeType($fee, $clientType, $month, $year, $client_type)

@@ -34,6 +34,7 @@ class SinLevelFee extends Model
         "optional_fee",
         "month",
         "year",
+        "default_rate"
     ];
 
     public function voltageLevel()

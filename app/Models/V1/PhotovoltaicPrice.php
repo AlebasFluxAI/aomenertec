@@ -24,6 +24,7 @@ class PhotovoltaicPrice extends Model
         "credit",
         "month",
         "year",
+        "default_rate"
     ];
 
     public function network_operator()

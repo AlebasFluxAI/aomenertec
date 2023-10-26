@@ -94,7 +94,6 @@ class ClientHandReadingCreateService extends Singleton
         DB::transaction(function () use ($component, $json, &$microcontrollerData) {
             $component->validate([
                 'evidences.*' => 'image|max:1024', // 1MB Max
-
             ]);
 
 
@@ -118,6 +117,9 @@ class ClientHandReadingCreateService extends Singleton
                 "in_progress_at" => Carbon::now()->format('Y-m-d H:i:s'),
                 "closed_at" => Carbon::now()->format('Y-m-d H:i:s')
             ]);
+            foreach ($component->evidences as $evidence) {
+                $component->model->saveImageOnModelWithMorphMany($evidence, "evidences");
+            }
         });
         $component->redirectRoute("v1.admin.client.hand_reading.detalle", ["microcontroller_data" => $microcontrollerData->id]);
     }
