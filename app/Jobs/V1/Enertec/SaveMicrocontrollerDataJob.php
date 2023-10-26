@@ -43,6 +43,7 @@ class SaveMicrocontrollerDataJob implements ShouldQueue
             "raw_json" => $this->raw_json,
             "is_alert" => $this->flag,
         ]);
+        
         AuxData::create([
           'data' => $this->raw_json
         ]);

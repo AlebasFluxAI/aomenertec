@@ -280,8 +280,8 @@ return [
         Permissions::WORK_ORDER_SHOW,
         Permissions::WORK_ORDER_INDEX,
         Permissions::WORK_ORDER_CREATE,
-        Permissions::WORK_ORDER_EDIT,
         Permissions::CLIENT_WORK_ORDER,
+        Permissions::WORK_ORDER_EDIT,
         Permissions::PQR_LINK_CLIENT,
         Permissions::INVOICE_INDEX,
         Permissions::INVOICE_SHOW,
@@ -313,6 +313,8 @@ return [
         Permissions::WORK_ORDER_IN_PROGRESS,
         Permissions::WORK_ORDER_STOP,
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
+        Permissions::WORK_ORDER_CREATE,
+        Permissions::CLIENT_WORK_ORDER,
     ],
     // Soporte
     Support::class => [
