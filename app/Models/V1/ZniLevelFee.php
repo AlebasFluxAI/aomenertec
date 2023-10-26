@@ -35,6 +35,7 @@ class ZniLevelFee extends Model
         "optional_fee",
         "month",
         "year",
+        "default_rate"
     ];
 
     public function networkOperator()

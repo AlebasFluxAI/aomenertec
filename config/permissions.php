@@ -378,7 +378,7 @@ return [
     Supervisor::class => [
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
-        Permissions::CLIENT_MONITORING_CONTROL,
+        Permissions::CLIENT_INVOICE_GENERATE,
         Permissions::CLIENT_SHOW_ALERTS,
         Permissions::PQR_CREATE,
         Permissions::PQR_SHOW,

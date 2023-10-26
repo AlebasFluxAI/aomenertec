@@ -2,6 +2,19 @@
     @include("livewire.v1.admin.user.network-operator.price-configuration.date-picker")
     <br>
     @if($date_picked)
+        @include("partials.v1.divider_title",[
+           "title"=>"Tasa de mora"
+       ])
+        @include("partials.v1.form.form_input_icon",[
+            "col_with" => 3,
+            "input_model" => "default_rate",
+            "input_label" => "Ingresa tasa de mora",
+            "updated_input" => "lazy",
+            "input_type" => "number",
+            "number_min" => 0,
+            "number_max" => 100,
+            "step" => 0.001
+        ])
         <div wire:loading.remove wire:target="month,year">
             <p> Puedes configurar el precio de kWh para los diferentes estratos
                 <br>

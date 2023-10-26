@@ -28,6 +28,7 @@ class PricePhotovoltaicConfig extends Component
     public $years;
     public $month;
     public $year;
+    public $default_rate;
     public $date_picked;
 
     private $priceConfiguratioNetworkOperatorService;
@@ -41,6 +42,10 @@ class PricePhotovoltaicConfig extends Component
     public function mount(NetworkOperator $networkOperator)
     {
         return $this->priceConfiguratioNetworkOperatorService->mount($this, $networkOperator);
+    }
+    public function updatedDefaultRate($value)
+    {
+        $this->priceConfiguratioNetworkOperatorService->updatedDefaultRate($this, $value);
     }
 
     public function changeSubsidy($event, $stratum_id)

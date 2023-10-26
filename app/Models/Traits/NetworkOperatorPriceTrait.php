@@ -6,6 +6,9 @@ use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\ClientType;
 use App\Models\V1\Image;
 use App\Models\V1\PhotovoltaicPrice;
+use App\Models\V1\Stratum;
+use App\Models\V1\VoltageLevel;
+use Dotenv\Util\Str;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -127,10 +130,107 @@ trait NetworkOperatorPriceTrait
             $component->addError('date_picker_error', 'Debes seleccionar el mes y el año');
             return;
         }
+
         $component->date_picked = true;
         $component->model->refresh();
+        if ($component->client_type == ClientType::ZIN_CONVENTIONAL) {
+            if ($fee = $component->model->zniFees()->where([
+                "month" => $component->month,
+                "year" => $component->year
+            ])->first() ) {
+                $component->default_rate = $fee->default_rate;
+            }
+        } elseif ($component->client_type == ClientType::SIN_CONVENTIONAL){
+            if ($fee = $component->model->sinFees()->where([
+                "month" => $component->month,
+                "year" => $component->year
+            ])->first() ) {
+                $component->default_rate = $fee->default_rate;
+            }
+        } else {
+            if ($fee = $component->model->photovoltaicPrice()->where([
+                "month" => $component->month,
+                "year" => $component->year
+            ])->first() ) {
+                $component->default_rate = $fee->default_rate;
+            }
+        }
     }
 
+    public function updatedDefaultRate(Component $component, $value)
+    {
+
+        if ($component->client_type == ClientType::ZIN_CONVENTIONAL) {
+            if($component->model->zniFees()->where([
+                "month" => $component->month,
+                "year" => $component->year
+            ])->exists()) {
+            foreach ($component->model->zniFees()->where([
+                "month" => $component->month,
+                "year" => $component->year
+            ])->get() as $fee) {
+                $fee->default_rate = $value;
+                $fee->save();
+            }
+            } else{
+                foreach (VoltageLevel::get() as $level) {
+                    $component->model->zniFees()->create([
+                        "voltage_level_id" => $level->id,
+                        "default_rate" => $value,
+                        "month" => $component->month,
+                        "year" => $component->year,
+                    ]);
+                }
+            }
+        } elseif ($component->client_type == ClientType::SIN_CONVENTIONAL){
+            if($component->model->sinFees()->where([
+                "month" => $component->month,
+                "year" => $component->year
+            ])->exists()) {
+                foreach ($component->model->sinFees()->where([
+                    "month" => $component->month,
+                    "year" => $component->year
+                ])->get() as $fee) {
+                    $fee->default_rate = $value;
+                    $fee->save();
+                }
+            } else{
+                    foreach (VoltageLevel::get() as $level) {
+                        $component->model->sinFees()->create([
+                            "voltage_level_id" => $level->id,
+                            "default_rate" => $value,
+                            "month" => $component->month,
+                            "year" => $component->year,
+                        ]);
+                    }
+                }
+        } else {
+            if($component->model->photovoltaicPrice()->where([
+                "month" => $component->month,
+                "year" => $component->year
+            ])->exists()) {
+                foreach ($component->model->photovoltaicPrice()->where([
+                    "month" => $component->month,
+                    "year" => $component->year
+                ])->get() as $fee) {
+                    $fee->default_rate = $value;
+                    $fee->save();
+                }
+            } else{
+                foreach (Stratum::get() as $strata) {
+
+                    $component->model->photovoltaicPrice()->create([
+                        "stratum_id" => $strata->id,
+                        "default_rate" => $value,
+                        "month" => $component->month,
+                        "year" => $component->year,
+                    ]);
+                }
+            }
+        }
+        ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
+
+    }
 
     public function changeVaupesFeeType(Component $component, $fee, $clientVaupesType, $month, $year, $client_type)
     {
