@@ -33,13 +33,14 @@ class PqrChangeEquipmentManageService extends Singleton
 
     public function updatedSelectedRows(Component $component)
     {
-        $equipments = $component->equipmentToChange = Equipment::whereIn("id", $component->selectedRows)
-            ->where("status", "!=", Equipment::STATUS_REPAIR_PENDING)
+
+        $equipments = $component->equipmentToChange = Equipment::whereNotIn("id", $component->selectedRows)
             ->whereIn("id", $component->model->client->technician->first()->technician->equipments->pluck("id"))
             ->get();
         if (!count($equipments)) {
             ToastEvent::launchToast($component, "show", "error", "No se encontraron equipos sustitutos");
         }
+
         return $equipments;
     }
 
@@ -54,10 +55,7 @@ class PqrChangeEquipmentManageService extends Singleton
 
     public function confirmEquipmentChange(Component $component, $equipmentId)
     {
-        if ($component->model->has_equipment_changed) {
-            ToastEvent::launchToast($component, "show", "error", "Ya se realizo un cambio usando este PQR");
-            return;
-        }
+
         DB::transaction(function () use ($component, $equipmentId) {
             $equipment = Equipment::find($equipmentId);
             $equipmentSelectedToChange = $component->equipmentToChange

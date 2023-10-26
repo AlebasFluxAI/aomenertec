@@ -19,9 +19,11 @@ class UserCratedMail extends Mailable
      * @return void
      */
     private $user;
+    private $subdomain;
 
-    public function __construct(User $user)
+    public function __construct(User $user, $subdomain)
     {
+        $this->subdomain = $subdomain;
         $this->user = $user;
     }
 
@@ -34,7 +36,8 @@ class UserCratedMail extends Mailable
     public function build()
     {
         return $this->markdown('mail.v1.user_created', [
-            "data" => $this->user
+            "data" => $this->user,
+            "subdomain" => $this->subdomain
         ])->subject("Bienvenido a Enertec")
             ->to($this->user->email);
     }
