@@ -32,6 +32,17 @@ class WorkOrderClient extends Component
         $this->workOrderClientService->mount($this, $client);
     }
 
+    public function downloadReport($id)
+    {
+        return $this->workOrderClientService->downloadReport($this, $id);
+
+    }
+    public function canDownloadReport($id)
+    {
+        return $this->workOrderClientService->canDownloadReport($this, $id);
+
+    }
+
     public function render()
     {
         return view('livewire.v1.admin.client.work-order-client', [

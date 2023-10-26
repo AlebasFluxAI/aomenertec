@@ -111,6 +111,8 @@
                      "placeholder"=>"Ingrese acumulado de consumo activo",
                      "col_with"=>4,
                      "input_type"=>"number",
+                     "number_min" => 0,
+                     "number_step" => 0.0001,
                      "required"=>true
             ])
 
@@ -121,6 +123,8 @@
                     "placeholder"=>"Ingrese acumulado de consumo reactivo",
                     "col_with"=>4,
                     "input_type"=>"number",
+                    "number_min" => 0,
+                    "number_step" => 0.0001,
                     "required"=>true
            ])
 
