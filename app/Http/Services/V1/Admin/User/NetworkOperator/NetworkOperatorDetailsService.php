@@ -209,4 +209,5 @@ class NetworkOperatorDetailsService extends Singleton
         $equipment = Equipment::find($id);
         $equipment->deprecate();
     }
+
 }
