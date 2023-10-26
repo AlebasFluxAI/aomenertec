@@ -315,6 +315,7 @@ return [
         Permissions::PQR_EQUIPMENT_CHANGE_MANAGE,
         Permissions::WORK_ORDER_CREATE,
         Permissions::CLIENT_WORK_ORDER,
+        Permissions::WORK_ORDER_SHOW
     ],
     // Soporte
     Support::class => [
