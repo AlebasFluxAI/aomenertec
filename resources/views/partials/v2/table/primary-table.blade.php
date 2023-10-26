@@ -203,6 +203,20 @@
                                                                      "button_subdomain"=>array_key_exists("button_subdomain",$custom)?$custom["button_subdomain"]:\Illuminate\Support\Facades\Route::input("subdomain")
                                                                  ])
                                                         @else
+                                                            @if(array_key_exists("payment_button",$custom))
+                                                                @include("partials.v1.payment.payment_button_only_form",[
+                                                                    "total"=>$table_row->total,
+                                                                    "reference"=>$table_row->code,
+                                                                    "email"=>$table_row->client->email,
+                                                                    "customer_last_name"=>$table_row->client->last_name,
+                                                                    "customer_name"=>$table_row->client->name,
+                                                                    "customer_phone"=>$table_row->client->phone,
+                                                                    "customer_identification"=>$table_row->client->identification,
+                                                                    "customer_identification_type"=>$table_row->client->identification_type,
+                                                                    "public_key"=>$table_row->client->networkOperator->wompiCredentials?$table_row->client->networkOperator->wompiCredentials->wompiSecret:config("wompi.wompi_default_public")
+                                                                 ])
+                                                                @continue
+                                                            @endif
                                                             @if(array_key_exists("modal",$custom))
                                                                 @include("partials.v1.table.table-action-button",[
                                                                      "button_action"=>$custom["function"],
