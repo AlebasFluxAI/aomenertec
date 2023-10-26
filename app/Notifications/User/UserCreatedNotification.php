@@ -17,9 +17,11 @@ class UserCreatedNotification extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    private $subdomain;
+
+    public function __construct($subdomain)
     {
-        //
+        $this->subdomain = $subdomain;
     }
 
     /**
@@ -41,7 +43,7 @@ class UserCreatedNotification extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new UserCratedMail($notifiable));
+        return (new UserCratedMail($notifiable, $this->subdomain));
     }
 
     /**

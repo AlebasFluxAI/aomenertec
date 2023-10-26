@@ -27,7 +27,7 @@ class WorkOrderEditService extends Singleton
             "model" => $workOrder,
             "technician_id" => $component->technician_id,
             "description" => $component->description,
-            "type" => $component->type,
+            "type" => $component->type ?? WorkOrder::getTypeAsKeyValue()[0]["value"],
             "types" => WorkOrder::getTypeAsKeyValue(),
             "technicians" => $this->getTechnicians($component),
         ]);
@@ -50,7 +50,7 @@ class WorkOrderEditService extends Singleton
             $component->model->update([
                 "technician_id" => $component->technician_id,
                 "description" => $component->description,
-                "type" => $component->description
+                "type" => $component->type
             ]);
             $component->redirectRoute("administrar.v1.ordenes_de_servicio.detalle", ["workOrder" => $component->model->id]);
         });

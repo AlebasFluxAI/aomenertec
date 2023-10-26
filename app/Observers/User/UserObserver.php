@@ -11,6 +11,7 @@ use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Notifications\User\UserCreatedNotification;
+use Illuminate\Support\Facades\Route;
 
 class UserObserver
 {
@@ -47,6 +48,6 @@ class UserObserver
                 $user->assignRole(Admin::getRole());
         }
 
-        $user->notify(new UserCreatedNotification());
+        $user->notifyNow(new UserCreatedNotification(Route::input("subdomain") ?? "aom"));
     }
 }
