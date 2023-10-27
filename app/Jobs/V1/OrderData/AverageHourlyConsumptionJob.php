@@ -81,8 +81,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
             if ($previous_hour_data == null);
             {
                 $previous_hour_data = MicrocontrollerData::whereClientId($this->client->id)
-                    ->where('source_timestamp', '<' ,$previous_hour->format('Y-m-d H:00:00'))
-                    ->orderBy('source_timestamp', 'desc')
+                    ->whereBetween('source_timestamp', [$previous_hour->copy()->subDays(15)->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59') ])
                     ->first();
             }
             if ($previous_hour_data) {
