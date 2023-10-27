@@ -51,7 +51,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 ->first();
             if ($reference_data_first == null){
                 $reference_data_first = $this->client->microcontrollerData()
-                    ->where('source_timestamp', '<', $this->day_reference->format('Y-m-d 00:00:00'))
+                    ->whereBetween('source_timestamp', [$this->day_reference->copy()->subDays(15)->format('Y-m-d 00:00:00'), $this->day_reference->copy()->subDay()->format('Y-m-d 23:59:59')])
                     ->orderBy('source_timestamp', 'desc')
                     ->first();
                 if($reference_data_first == null) {
@@ -61,50 +61,50 @@ class AverageDailyConsumptionJob implements ShouldQueue
                         ->first();
                 }
             }
+            if ($reference_data_first) {
+                $json = json_decode($reference_data->raw_json, true);
+                $penalizable_inductive_day = 0;
+                $penalizable_capacitive_day = 0;
+                $interval_active_day = $reference_data->accumulated_real_consumption - $reference_data_first->accumulated_real_consumption;
+                $interval_capacitive_day = $reference_data->accumulated_reactive_capacitive_consumption - $reference_data_first->accumulated_reactive_capacitive_consumption;
+                $interval_inductive_day = $reference_data->accumulated_reactive_inductive_consumption - $reference_data_first->accumulated_reactive_inductive_consumption;
+                foreach ($data_day as $item) {
+                    $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
+                    $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
+                }
+                $json_first = json_decode($reference_data_first->raw_json, true);
+                $json['kwh_interval'] = $json['import_wh'] - $json_first['import_wh'];
+                $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $json_first['ph1_import_kwh'];
+                $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $json_first['ph2_import_kwh'];
+                $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $json_first['ph3_import_kwh'];
+                $json['varh_interval'] = $json['import_VArh'] - $json_first['import_VArh'];
+                $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $json_first['ph1_import_kvarh'];
+                $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $json_first['ph2_import_kvarh'];
+                $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $json_first['ph3_import_kvarh'];
+                $json['varCh_interval'] = $json['varCh_acumm'] - $json_first['varCh_acumm'];
+                $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $json_first['ph1_varCh_acumm'];
+                $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $json_first['ph2_varCh_acumm'];
+                $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $json_first['ph3_varCh_acumm'];
+                $json['varLh_interval'] = $json['varLh_acumm'] - $json_first['varLh_acumm'];
+                $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $json_first['ph1_varLh_acumm'];
+                $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $json_first['ph2_varLh_acumm'];
+                $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $json_first['ph3_varLh_acumm'];
 
-            $json = json_decode($reference_data->raw_json, true);
-            $penalizable_inductive_day = 0;
-            $penalizable_capacitive_day = 0;
-            $interval_active_day = $reference_data->accumulated_real_consumption - $reference_data_first->accumulated_real_consumption;
-            $interval_capacitive_day = $reference_data->accumulated_reactive_capacitive_consumption - $reference_data_first->accumulated_reactive_capacitive_consumption;
-            $interval_inductive_day = $reference_data->accumulated_reactive_inductive_consumption - $reference_data_first->accumulated_reactive_inductive_consumption;
-            foreach ($data_day as $item) {
-                $penalizable_inductive_day = $penalizable_inductive_day + $item->penalizable_reactive_inductive_consumption;
-                $penalizable_capacitive_day = $penalizable_capacitive_day + $item->penalizable_reactive_capacitive_consumption;
+                DailyMicrocontrollerData::updateOrCreate(
+                    [
+                        'year' => $this->day_reference->format('Y'),
+                        'month' => $this->day_reference->format('m'),
+                        'day' => $this->day_reference->format('d'),
+                        'client_id' => $this->client->id],
+                    ['microcontroller_data_id' => $reference_data->id,
+                        'interval_real_consumption' => $interval_active_day,
+                        'interval_reactive_capacitive_consumption' => $interval_capacitive_day,
+                        'interval_reactive_inductive_consumption' => $interval_inductive_day,
+                        'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_day,
+                        'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
+                        'raw_json' => json_encode($json)
+                    ]);
             }
-            $json_first = json_decode($reference_data_first->raw_json, true);
-            $json['kwh_interval'] = $json['import_wh'] - $json_first['import_wh'];
-            $json['ph1_kwh_interval'] = $json['ph1_import_kwh'] - $json_first['ph1_import_kwh'];
-            $json['ph2_kwh_interval'] = $json['ph2_import_kwh'] - $json_first['ph2_import_kwh'];
-            $json['ph3_kwh_interval'] = $json['ph3_import_kwh'] - $json_first['ph3_import_kwh'];
-            $json['varh_interval'] = $json['import_VArh'] - $json_first['import_VArh'];
-            $json['ph1_varh_interval'] = $json['ph1_import_kvarh'] - $json_first['ph1_import_kvarh'];
-            $json['ph2_varh_interval'] = $json['ph2_import_kvarh'] - $json_first['ph2_import_kvarh'];
-            $json['ph3_varh_interval'] = $json['ph3_import_kvarh'] - $json_first['ph3_import_kvarh'];
-            $json['varCh_interval'] = $json['varCh_acumm'] - $json_first['varCh_acumm'];
-            $json['ph1_varCh_interval'] = $json['ph1_varCh_acumm'] - $json_first['ph1_varCh_acumm'];
-            $json['ph2_varCh_interval'] = $json['ph2_varCh_acumm'] - $json_first['ph2_varCh_acumm'];
-            $json['ph3_varCh_interval'] = $json['ph3_varCh_acumm'] - $json_first['ph3_varCh_acumm'];
-            $json['varLh_interval'] = $json['varLh_acumm'] - $json_first['varLh_acumm'];
-            $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $json_first['ph1_varLh_acumm'];
-            $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $json_first['ph2_varLh_acumm'];
-            $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $json_first['ph3_varLh_acumm'];
-
-            $day_data = DailyMicrocontrollerData::updateOrCreate(
-                [
-                    'year' => $this->day_reference->format('Y'),
-                    'month' => $this->day_reference->format('m'),
-                    'day' => $this->day_reference->format('d'),
-                    'client_id' => $this->client->id],
-                ['microcontroller_data_id' => $reference_data->id,
-                    'interval_real_consumption' => $interval_active_day,
-                    'interval_reactive_capacitive_consumption' => $interval_capacitive_day,
-                    'interval_reactive_inductive_consumption' => $interval_inductive_day,
-                    'penalizable_reactive_capacitive_consumption' => $penalizable_capacitive_day,
-                    'penalizable_reactive_inductive_consumption' => $penalizable_inductive_day,
-                    'raw_json' => json_encode($json)
-                ]);
-
         } else {
             $last_day = $this->day_reference->copy()->subDay();
             $last_data = $this->client->hourlyMicrocontrollerData()
@@ -113,7 +113,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 ->where('day', $last_day->format('d'))->first();
             if($last_data == null){
                 $last_data = $this->client->hourlyMicrocontrollerData()
-                    ->where('source_timestamp', '<', $last_day->format('Y-m-d 00:00:00'))
+                    ->whereBetween('source_timestamp', [$last_day->copy()->subDays(15)->format('Y-m-d H:00:00'), $last_day->format('Y-m-d 23:59:59') ])
                     ->orderBy('source_timestamp', 'desc')
                     ->first();;
             }
@@ -145,7 +145,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 $raw_json['data_ph2_varLh_acumm'] = 0;
                 $raw_json['data_ph3_varLh_acumm'] = 0;
 
-                $day_data = DailyMicrocontrollerData::updateOrCreate(
+                DailyMicrocontrollerData::updateOrCreate(
                     ['year' => $this->day_reference->format('Y'),
                         'month' => $this->day_reference->format('m'),
                         'day' => $this->day_reference->format('d'),
@@ -162,6 +162,10 @@ class AverageDailyConsumptionJob implements ShouldQueue
             }
         }
 
+        $day_data =$this->client->dailyMicrocontrollerdata()
+            ->where('year', $this->day_reference->format('Y'))
+            ->where('month',$this->day_reference->format('m'))
+            ->where('day', $this->day_reference->format('d'))->first();
         if ($day_data) {
             $year =  $this->day_reference->copy()->subDay()->format('Y');
             $month = $this->day_reference->copy()->subDay()->format('m');
@@ -174,9 +178,17 @@ class AverageDailyConsumptionJob implements ShouldQueue
                     ->where('month', $month)
                     ->where('day', $day)
                     ->first();
+                if ($previous_day_data == null){
+                    $previous_day_data = $this->client->dailyMicrocontrollerData()
+                        ->whereHas('microcontrollerData', function ($query) {
+                            $query->whereBetween("source_timestamp", [$this->day_reference->copy()->subDays(15)->format('Y-m-d 00:00:00'), $this->day_reference->copy()->subDay()->format('Y-m-d 23:59:59')]);
+                        })
+                        ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                        ->first();
+                }
                 if ($previous_day_data) {
-                    if ($previous_day_data->interval_real_consumption == 0) {
-                        $data = DailyMicrocontrollerData::whereMicrocontrollerDataId($previous_day_data->microcontroller_data_id)->orderBy('year')->orderBy('month')->orderBy('day')->get();
+                    if ($previous_day_data->microcontroller_data_id != $day_data->microcontroller_data_id) {
+                        $data = DailyMicrocontrollerData::with('microcontrollerData')->whereMicrocontrollerDataId($previous_day_data->microcontroller_data_id)->orderBy('microcontrollerData.source_timestamp')->orderBy('year')->orderBy('month')->orderBy('day')->get();
                         if (count($data) > 1) {
                             $i = 0;
                             foreach ($data as $datum) {

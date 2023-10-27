@@ -76,12 +76,14 @@ class AverageHourlyConsumptionJob implements ShouldQueue
             $previous_hour = $this->hour_reference->copy()->subHour();
             $previous_hour_data = MicrocontrollerData::whereClientId($this->client->id)
                 ->whereBetween('source_timestamp', [$previous_hour->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59') ])
+                ->orderBy('source_timestamp', 'desc')
                 ->first();
             $data_frame = config('data-frame.data_frame');
             if ($previous_hour_data == null);
             {
                 $previous_hour_data = MicrocontrollerData::whereClientId($this->client->id)
                     ->whereBetween('source_timestamp', [$previous_hour->copy()->subDays(15)->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59') ])
+                    ->orderBy('source_timestamp', 'desc')
                     ->first();
             }
             if ($previous_hour_data) {
@@ -124,7 +126,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                             'interval_reactive_inductive_consumption' => 0,
                             'penalizable_reactive_capacitive_consumption' => 0,
                             'penalizable_reactive_inductive_consumption' => 0,
-                            'source_timestamp' => $source_timestamp->addHour()->format('Y-m-d H:i:s'),
+                            'source_timestamp' => $this->hour_reference->format('Y-m-d H:59:59'),
                             'raw_json' => json_encode($raw_json),
                         ]
                     );
@@ -142,7 +144,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                     ->first();
                 if ($previous_hour_data == null){
                     $previous_hour_data = $this->client->hourlyMicrocontrollerdata()
-                        ->where('source_timestamp', '<', $this->hour_reference->copy()->subHour()->format('Y-m-d H:00:00'))
+                        ->whereBetween('source_timestamp', [$this->hour_reference->copy()->subDays(15)->format('Y-m-d H:00:00'), $this->hour_reference->copy()->subHour()->format('Y-m-d H:59:59')])
                         ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
                         ->first();
                 }
