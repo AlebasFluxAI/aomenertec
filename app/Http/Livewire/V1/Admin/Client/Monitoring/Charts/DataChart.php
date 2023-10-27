@@ -143,7 +143,7 @@ class DataChart extends Component
             } elseif ($this->time_id == 2) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereBetween("source_timestamp", [$this->start, $this->end])
-                    ->orderBy('source_timestamp', 'desc')->orderBy('day', 'desc')->orderBy('hour', 'desc')
+                    ->orderBy('source_timestamp', 'desc')
                     ->limit(250)->get();
             } elseif ($this->time_id == 3) {
                 $data_chart = $this->client->dailyMicrocontrollerData()

@@ -18,14 +18,14 @@ class AverageDaylyConsumptionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'command:enertec:v1:order_data:average_hourly_consumption_command';
+    protected $signature = 'command:enertec:v1:order_data:average_daily_consumption_command';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'El comando se ejecuta cada dia a las 1:00. Se encarga de actualizar el consumo diario y de promediar los dias de no registro de datos';
+    protected $description = 'El comando se ejecuta cada dia a la 1:00. Se encarga de actualizar el consumo diario y de promediar los dias de no registro de datos';
 
 
     /**
@@ -47,19 +47,8 @@ class AverageDaylyConsumptionCommand extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $day_reference = Carbon::now()->subDay();
-        $billing_day = $day_reference->format('d');
-        if ($billing_day == $day_reference->format('t')){
-            $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-        } else{
-            $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
-        }
-        $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
-
-        if (count($clients_aux)>0) {
-            foreach ($clients_aux as $client) {
-                dispatch(new AverageMonthlyConsumptionJob($client->id, $day_reference))->onQueue('spot3');
-
-            }
+            foreach ($clients as $client) {
+                dispatch(new AverageDailyConsumptionJob($client->id, $day_reference))->onQueue('spot3');
         }
 
     }
