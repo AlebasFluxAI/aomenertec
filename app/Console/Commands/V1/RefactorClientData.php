@@ -7,6 +7,7 @@ use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataDayjob;
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
+use App\Jobs\V1\OrderData\AverageHourlyConsumptionJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
 use App\Models\V1\DailyMicrocontrollerData;
@@ -103,24 +104,25 @@ class RefactorClientData extends Command
 //                }
 //                $this->start_date->addHour();
 //            }
-//            while (true) {
-//                echo $start_date_copy->format('Y-m-d H-i') . "\n";
-//                dispatch(new SerializeMicrocontrollerDataJob($start_date_copy->format('Y-m-d H:00:00')))->onQueue('spot3');
-//                if ($start_date_copy->diffInHours($current_time) == 0) {
-//                    break;
-//                }
-//                $start_date_copy->addHour();
-//            }
-//
-//            while (true) {
-//                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
-//                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
-//                if ($end_date->diffInDays($this->current_time) == 0) {
-//                    break;
-//                }
-//
-//                $end_date->addDay();
-//            }
+            while (true) {
+                echo $start_date_copy->format('Y-m-d H-i') . "\n";
+                foreach ($clients as $cliente) {
+                    dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onQueue('spot3');
+                }                if ($start_date_copy->diffInHours($current_time) == 0) {
+                    break;
+                }
+                $start_date_copy->addHour();
+            }
+
+            while (true) {
+                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
+                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
+                if ($end_date->diffInDays($this->current_time) == 0) {
+                    break;
+                }
+
+                $end_date->addDay();
+            }
 
             // calculate monthly consumption
 
