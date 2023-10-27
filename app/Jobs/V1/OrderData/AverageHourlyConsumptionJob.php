@@ -46,12 +46,45 @@ class AverageHourlyConsumptionJob implements ShouldQueue
             ->whereBetween("source_timestamp", [$this->hour_reference->format('Y-m-d H:00:00'), $this->hour_reference->format('Y-m-d H:59:59')])
             ->orderBy('source_timestamp', 'desc')
             ->first();
-        if ($reference_data == null) {
+        if ($reference_data) {
+            if ($reference_data->interval_real_consumption == 0) {
+                $penalizable_inductive = $reference_data->interval_reactive_inductive_consumption;
+            } else {
+                $percent_penalizable_inductive = ($reference_data->interval_reactive_inductive_consumption * 100) / $reference_data->interval_real_consumption;
+                if ($percent_penalizable_inductive >= 50) {
+                    $penalizable_inductive = ($reference_data->interval_real_consumption * $percent_penalizable_inductive / 100) - ($reference_data->interval_real_consumption * 0.5);
+                } else {
+                    $penalizable_inductive = 0;
+                }
+            }
+            HourlyMicrocontrollerData::updateOrCreate(
+                ['year' => $year,
+                    'month' => $month,
+                    'day' => $day,
+                    'hour' => $hour,
+                    'client_id' => $reference_data->client_id],
+                ['microcontroller_data_id' => $reference_data->id,
+                    'interval_real_consumption' => $reference_data->interval_real_consumption,
+                    'interval_reactive_capacitive_consumption' => $reference_data->interval_reactive_capacitive_consumption,
+                    'interval_reactive_inductive_consumption' => $reference_data->interval_reactive_inductive_consumption,
+                    'penalizable_reactive_capacitive_consumption' => $reference_data->interval_reactive_capacitive_consumption,
+                    'penalizable_reactive_inductive_consumption' => $penalizable_inductive,
+                    'source_timestamp' => $reference_data->source_timestamp,
+                    'raw_json' => $reference_data->raw_json]
+            );
+        } else{
             $previous_hour = $this->hour_reference->copy()->subHour();
             $previous_hour_data = MicrocontrollerData::whereClientId($this->client->id)
                 ->whereBetween('source_timestamp', [$previous_hour->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59') ])
                 ->first();
             $data_frame = config('data-frame.data_frame');
+            if ($previous_hour_data == null);
+            {
+                $previous_hour_data = MicrocontrollerData::whereClientId($this->client->id)
+                    ->where('source_timestamp', '<' ,$previous_hour->format('Y-m-d H:00:00'))
+                    ->orderBy('source_timestamp', 'desc')
+                    ->first();
+            }
             if ($previous_hour_data) {
                 $raw_json = json_decode($previous_hour_data->raw_json, true);
                 if ($raw_json != null) {
@@ -80,7 +113,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                     $raw_json['data_ph2_varLh_acumm'] = 0;
                     $raw_json['data_ph3_varLh_acumm'] = 0;
                     $source_timestamp = new Carbon($previous_hour_data->source_timestamp);
-                    $reference_data = HourlyMicrocontrollerData::updateOrCreate(
+                    HourlyMicrocontrollerData::updateOrCreate(
                         ['year' => $year,
                             'month' => $month,
                             'day' => $day,
@@ -99,16 +132,26 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                 }
             }
         }
-
+        $reference_data = HourlyMicrocontrollerData::whereClientId($this->client->id)
+            ->whereBetween('source_timestamp', [$this->hour_reference->format('Y-m-d H:00:00'), $this->hour_reference->format('Y-m-d H:59:59') ])
+            ->first();
         if ($reference_data) {
             if ($reference_data->interval_real_consumption != 0) {
                 $last_raw_json = json_decode($reference_data->raw_json, true);
                 $previous_hour_data = $this->client->hourlyMicrocontrollerdata()
                     ->whereBetween('source_timestamp', [$this->hour_reference->copy()->subHour()->format('Y-m-d H:00:00'), $this->hour_reference->copy()->subHour()->format('Y-m-d H:59:59')])
                     ->first();
+                if ($previous_hour_data == null){
+                    $previous_hour_data = $this->client->hourlyMicrocontrollerdata()
+                        ->where('source_timestamp', '<', $this->hour_reference->copy()->subHour()->format('Y-m-d H:00:00'))
+                        ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                        ->first();
+                }
                 if ($previous_hour_data) {
-                    if ($previous_hour_data->interval_real_consumption == 0) {
-                        $data = HourlyMicrocontrollerData::whereMicrocontrollerDataId($previous_hour_data->microcontroller_data_id)->orderBy('source_timestamp')->get();
+                    if($previous_hour_data->microcontroller_data_id != $reference_data->microcontroller_data_id) {
+                        $data = HourlyMicrocontrollerData::whereMicrocontrollerDataId($previous_hour_data->microcontroller_data_id)
+                            ->orderBy('source_timestamp')->orderBy('year')->orderBy('month')->orderBy('day')
+                            ->get();
                         if (count($data) > 1) {
                             $i = 0;
                             foreach ($data as $datum) {
@@ -158,6 +201,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                             $reference_data->interval_real_consumption = $raw_json['kwh_interval'];
                             $reference_data->save();
                         }
+
                     }
                 }
             }

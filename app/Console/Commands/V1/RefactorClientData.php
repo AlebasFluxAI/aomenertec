@@ -7,6 +7,7 @@ use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataDayjob;
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
+use App\Jobs\V1\OrderData\AverageDailyConsumptionJob;
 use App\Jobs\V1\OrderData\AverageHourlyConsumptionJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
@@ -66,13 +67,13 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        $day_search = $this->current_time->copy()->subDay();
-        $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
-            ->min('source_timestamp');
+        $day_search = $this->current_time->copy()->subDays(8);
+//        $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
+//            ->min('source_timestamp');
 
-        if ($source_date) {
-            //$aux = new Carbon('2023-02-01 00:00:00');
-            $aux = new Carbon($source_date);
+        if (true) {
+            $aux = new Carbon('2023-09-18 00:00:00');
+            //$aux = new Carbon($source_date);
             $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
             $this->date_aux = new Carbon($date_init);
             // $this->unpackData();
@@ -107,46 +108,48 @@ class RefactorClientData extends Command
             while (true) {
                 echo $start_date_copy->format('Y-m-d H-i') . "\n";
                 foreach ($clients as $cliente) {
-                    dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onQueue('spot3');
-                }                if ($start_date_copy->diffInHours($current_time) == 0) {
+                        dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onConnection('sync');
+                }
+                if ($start_date_copy->diffInHours($current_time) == 0) {
                     break;
                 }
                 $start_date_copy->addHour();
             }
-
-            while (true) {
-                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
-                dispatch(new SerializeMicrocontrollerDataDayjob($end_date->format('Y-m-d H:00:00')))->onQueue('spot3');
-                if ($end_date->diffInDays($this->current_time) == 0) {
-                    break;
-                }
-
-                $end_date->addDay();
-            }
+//
+//            while (true) {
+//                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
+//                foreach ($clients as $cliente) {
+//                    dispatch(new AverageDailyConsumptionJob($cliente->id, $start_date_copy))->onQueue('spot3');
+//                }
+//                if ($end_date->diffInDays($this->current_time) == 0) {
+//                    break;
+//                }
+//                $end_date->addDay();
+//            }
 
             // calculate monthly consumption
 
-            $reference_date = $this->current_time->copy();
-            while (true) {
-                $reference_date->subDay();
-                echo "calc mes =" . $reference_date->format('Y-m-d') . "\n";
-                $billing_day = $reference_date->format('d');
-                if ($billing_day == $reference_date->format('t')){
-                    $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-                } else{
-                    $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
-                }
-                $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
-
-                if (count($clients_aux)>0) {
-                    foreach ($clients_aux as $client_aux) {
-                        dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00'), $client_aux))->onQueue('spot3');
-                    }
-                }
-                if ($reference_date->diffInDays($end_date_first) == 0) {
-                    break;
-                }
-            }
+//            $reference_date = $this->current_time->copy();
+//            while (true) {
+//                $reference_date->subDay();
+//                echo "calc mes =" . $reference_date->format('Y-m-d') . "\n";
+//                $billing_day = $reference_date->format('d');
+//                if ($billing_day == $reference_date->format('t')){
+//                    $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
+//                } else{
+//                    $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
+//                }
+//                $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
+//
+//                if (count($clients_aux)>0) {
+//                    foreach ($clients_aux as $client_aux) {
+//                        dispatch(new SerializeMicrocontrollerDataMonthJob($reference_date->format('Y-m-d H:00:00'), $client_aux))->onQueue('spot3');
+//                    }
+//                }
+//                if ($reference_date->diffInDays($end_date_first) == 0) {
+//                    break;
+//                }
+//            }
         }
     }
     private function unpackData(){
