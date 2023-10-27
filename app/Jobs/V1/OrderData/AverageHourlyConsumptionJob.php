@@ -104,7 +104,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
             if ($reference_data->interval_real_consumption != 0) {
                 $last_raw_json = json_decode($reference_data->raw_json, true);
                 $previous_hour_data = $this->client->hourlyMicrocontrollerdata()
-                    ->whereBetween('source_timestamp', [$this->hour_ref->copy()->subHour()->format('Y-m-d H:00:00'), $this->hour_ref->copy()->subHour()->format('Y-m-d H:59:59')])
+                    ->whereBetween('source_timestamp', [$this->hour_reference->copy()->subHour()->format('Y-m-d H:00:00'), $this->hour_reference->copy()->subHour()->format('Y-m-d H:59:59')])
                     ->first();
                 if ($previous_hour_data) {
                     if ($previous_hour_data->interval_real_consumption == 0) {
