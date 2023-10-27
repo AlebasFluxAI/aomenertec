@@ -72,7 +72,7 @@ class RefactorClientData extends Command
 //            ->min('source_timestamp');
 
         if (true) {
-            $aux = new Carbon('2023-09-18 00:00:00');
+            $aux = new Carbon('2023-09-01 00:00:00');
             //$aux = new Carbon($source_date);
             $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
             $this->date_aux = new Carbon($date_init);
@@ -108,7 +108,7 @@ class RefactorClientData extends Command
             while (true) {
                 echo $start_date_copy->format('Y-m-d H-i') . "\n";
                 foreach ($clients as $cliente) {
-                        dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onConnection('sync');
+                        dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onQueue('spot3');
                 }
                 if ($start_date_copy->diffInHours($current_time) == 0) {
                     break;
