@@ -43,6 +43,14 @@
                                                        "tooltip_title"=>"Detalles",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_DETAILS],
                                                  ],
+                                                 ["redirect"=>[
+                                                               "route"=>"v1.admin.client.hand_reading.crear",
+                                                         ],
+                                                       "icon"=>"fas fa-file-signature",
+                                                       "tooltip_title"=>"Registrar lectura",
+                                                       "conditional" => "conditionalManuallyCreate",
+                                                       "permission"=>[\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING_CREATE],
+                                                 ],
                                                  [
                                                         "function"=>"downloadReport",
                                                         "icon"=>"fas fa-file-download",
