@@ -37,11 +37,12 @@ class WorkOrderIndexService extends Singleton
         $pqr = WorkOrder::find($id);
         return !($pqr->status == WorkOrder::WORK_ORDER_STATUS_CLOSED);
     }
+
     public function downloadReport(Component $component, $id)
     {
         $work_order = WorkOrder::find($id);
         $network_operator = $work_order->client->networkOperator;
-        $pdf = PDF::loadView('reports.orden_work_report',[
+        $pdf = PDF::loadView('reports.orden_work_report', [
             'work_order' => $work_order,
             'client' => $work_order->client,
             'network_operator' => $network_operator,
@@ -50,7 +51,7 @@ class WorkOrderIndexService extends Singleton
         $pdf->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
-        }, 'work_order_report_'.$work_order->id.'.pdf');
+        }, 'work_order_report_' . $work_order->id . '.pdf');
     }
 
     public function adminWorkOrderConditional(Component $component, $workOrderId)
@@ -152,6 +153,12 @@ class WorkOrderIndexService extends Singleton
     {
         $workOrder = WorkOrder::find($modelId);
         return $workOrder->type == WorkOrder::WORK_ORDER_TYPE_READING;
+    }
+
+    public function conditionalStart(Component $component, $modelId)
+    {
+        $workOrder = WorkOrder::find($modelId);
+        return $workOrder->status == WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS;
     }
 
 

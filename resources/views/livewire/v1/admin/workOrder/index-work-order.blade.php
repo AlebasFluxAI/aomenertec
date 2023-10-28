@@ -69,7 +69,7 @@
                                                        "function"=>"setInProgress",
                                                        "icon"=>"fas fa-rotate-right",
                                                        "tooltip_title"=>"Iniciar orden de trabajo",
-                                                       "conditional" => "conditionalTypeReading",
+                                                       "conditional" => "conditionalStart",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::WORK_ORDER_IN_PROGRESS],
                                                  ],
                                                  [

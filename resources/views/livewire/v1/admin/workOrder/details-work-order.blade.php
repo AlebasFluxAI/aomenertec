@@ -117,12 +117,15 @@
                                                                           "redirect_value"=>$model->pqr?$model->pqr->id:1
                                                                      ],
                                                                       [
-                                                                          "key"=>"Equipo intervenido",
-                                                                          "value"=>$model->equipment()?$model->equipment()->equipment->id."-".$model->equipment()->equipment->serial:"",
-                                                                          "show_column"=>($model->equipment()!=null),
+                                                                          "key"=>"Equipos intervenidos",
+                                                                          "type"=>\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_ARRAY,
+                                                                          "array_property"=>"equipment",
+                                                                          "value"=>$model->equipments,
+                                                                          "show_column"=>(count($model->equipments)),
                                                                           "redirect_route"=>"administrar.v1.equipos.detalle",
                                                                           "redirect_binding"=>"equipment",
-                                                                          "redirect_value"=>$model->equipment()?$model->equipment()->equipment->id:1
+                                                                          "redirect_value"=>"id",
+
                                                                      ],
                                                                        [
                                                                           "key"=>"Recomencaciones finales",
