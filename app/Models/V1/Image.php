@@ -14,7 +14,7 @@ class Image extends Model
 
     public const URL_BASE = 'images/';
 
-    protected $fillable = ['name', 'title', 'alt', 'type'];
+    protected $fillable = ['name', 'title', 'alt', 'type', "description"];
 
     private $dataImage;
 

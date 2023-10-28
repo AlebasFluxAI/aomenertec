@@ -56,7 +56,8 @@
                                 @foreach($info["value"] as $image)
 
                                     @include("partials.v1.image",[
-                                                "image_url"=>$image->url
+                                                "image_url"=>$image->url,
+                                                "description"=>$image->description
                                            ])
                                 @endforeach
                             </td>

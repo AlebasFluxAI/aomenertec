@@ -116,15 +116,34 @@
                                 "title"=>"Puede agregar imagenes si es necesario"
                         ]
                        )
-                @include("partials.v1.form.form_input_file",[
-                                     "multiple"=>true,
-                                     "input_type"=>"file",
-                                     "input_model"=>"photos",
-                                     "icon_class"=>"fas fa-file",
-                                     "placeholder"=>"Puedes seleccionar varias imagenes",
-                                     "col_with"=>12,
-                                     "required"=>false,
-                                                    ])
+
+                @foreach($images as  $key=>$image)
+                    <div class="col-md-12">
+                        <div class="row">
+                            <br>
+                            @include("partials.v1.form.form_input_file",[
+                                                 "multiple"=>false,
+                                                 "input_type"=>"file",
+                                                 "input_model"=>$image,
+                                                 "icon_class"=>"fas fa-file",
+                                                 "placeholder"=>"Selecciona la imagen ".$key+1,
+                                                 "col_with"=>5,
+                                                 "required"=>false,
+                                                                ])
+                            @include("partials.v1.form.form_input_icon",[
+                                     "input_model"=>"description".$key+1,
+                                     "input_label"=>"Descripción de la imagen ".$key+1,
+                                     "icon_class"=>"fas fa-edit",
+                                     "placeholder"=>"Ingrese la descripcion de la imagen ".$key+1,
+                                     "col_with"=>5,
+                                     "input_type"=>"text",
+                                     "input_rows"=>2,
+                                     "required"=>false
+                               ])
+
+                        </div>
+                    </div>
+                @endforeach
 
                 @include("partials.v1.divider_title",[
                                          "title"=>"Asigne un tecnico para la orden de trabajo"
