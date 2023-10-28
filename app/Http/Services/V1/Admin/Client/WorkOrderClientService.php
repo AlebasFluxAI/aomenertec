@@ -18,6 +18,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use JetBrains\PhpStorm\NoReturn;
 use Livewire\Component;
 use Livewire\WithPagination;
 use PhpMqtt\Client\Facades\MQTT;
@@ -25,6 +26,51 @@ use PhpMqtt\Client\Facades\MQTT;
 class WorkOrderClientService extends Singleton
 {
     use WithPagination;
+
+    public function changeTool(Component $component, $value)
+    {
+        $this->validateArray($component->toolsListSelected, $value);
+        $this->validateOthers($component);
+    }
+
+    public function changeMaterials(Component $component, $value)
+    {
+        $this->validateArray($component->materialsListSelected, $value);
+        $this->validateOthers($component);
+    }
+
+    public function changeEquipment(Component $component, $value)
+    {
+        $this->validateArray($component->equipmentsListSelected, $value);
+    }
+
+    private function validateArray(&$arraySelected, $value)
+    {
+        $key = array_search($value, $arraySelected);
+
+        if ($key !== false) {
+            unset($arraySelected[$key]);
+
+        } else {
+            $arraySelected[] = $value;
+        }
+    }
+
+
+    private function validateOthers(Component $component)
+    {
+        if (in_array("Otras", $component->toolsListSelected)) {
+            $component->otherTool = true;
+        } else {
+            $component->otherTool = false;
+        }
+
+        if (in_array("Otros", $component->materialsListSelected)) {
+            $component->otherMaterials = true;
+        } else {
+            $component->otherMaterials = false;
+        }
+    }
 
     public function mount(Component $component, Client $client)
     {
@@ -34,7 +80,10 @@ class WorkOrderClientService extends Singleton
             "types" => WorkOrder::getTypeAsKeyValue(),
             "type" => WorkOrder::WORK_ORDER_TYPE_REPLACE,
             "technicians" => $this->getTechnicians($component),
-            "supports" => $this->getSupports($component)
+            "supports" => $this->getSupports($component),
+            "toolsList" => WorkOrder::getWorkOrderTools(),
+            "materialsList" => WorkOrder::getWorkOrderMaterials(),
+            "otherTool" => false
         ]);
     }
 
@@ -87,9 +136,9 @@ class WorkOrderClientService extends Singleton
 
     private function relateEquipment(Component $component, WorkOrder $workOrder)
     {
-        if ($component->equipment_id) {
+        foreach ($component->equipmentsListSelected as $equipment) {
             $workOrder->equipments()->create([
-                "equipment_id" => $component->equipment_id
+                "equipment_id" => $equipment
             ]);
         }
     }
@@ -99,11 +148,12 @@ class WorkOrderClientService extends Singleton
         $pqr = WorkOrder::find($id);
         return !($pqr->status == WorkOrder::WORK_ORDER_STATUS_CLOSED);
     }
+
     public function downloadReport(Component $component, $id)
     {
         $work_order = WorkOrder::find($id);
         $network_operator = $work_order->client->networkOperator;
-        $pdf = PDF::loadView('reports.orden_work_report',[
+        $pdf = PDF::loadView('reports.orden_work_report', [
             'work_order' => $work_order,
             'client' => $work_order->client,
             'network_operator' => $network_operator,
@@ -112,18 +162,19 @@ class WorkOrderClientService extends Singleton
         $pdf->setPaper('A4', 'portrait');
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
-        }, 'work_order_report_'.$work_order->id.'.pdf');
+        }, 'work_order_report_' . $work_order->id . '.pdf');
     }
 
     private function mapper(Component $component)
     {
+
         return [
             "description" => $component->description,
             "type" => $component->type,
             "technician_id" => $component->technician_id,
             "support_id" => $component->support_id,
-            "materials" => $component->materials,
-            "tools" => $component->tools,
+            "materials" => $component->materials . "," . implode(", ", $component->materialsListSelected),
+            "tools" => $component->tools . "," . implode(", ", $component->toolsListSelected),
             "days" => $component->days,
             "hours" => $component->hours,
             "minutes" => $component->minutes,
@@ -134,10 +185,12 @@ class WorkOrderClientService extends Singleton
     {
         return !(($modelId->microcontroller_data_id == null or $modelId->microcontroller_data_id == "") and $modelId->type == WorkOrder::WORK_ORDER_TYPE_READING);
     }
+
     public function conditionalManuallyCreate(Component $component, $modelId)
     {
-        return (($modelId->microcontroller_data_id == null or $modelId->microcontroller_data_id == "") and $modelId->type == WorkOrder::WORK_ORDER_TYPE_READING);
+        return false;
     }
+
     public function getData(Component $component)
     {
         return $component->model->workOrders()->pagination();

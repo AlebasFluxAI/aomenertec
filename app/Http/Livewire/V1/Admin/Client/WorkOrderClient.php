@@ -27,6 +27,11 @@ class WorkOrderClient extends Component
         $this->workOrderClientService = WorkOrderClientService::getInstance();
     }
 
+    public function conditionalManuallyCreate($workOrderId)
+    {
+        return $this->workOrderClientService->conditionalManuallyCreate($this, $workOrderId);
+    }
+
     public function mount(Client $client)
     {
         $this->workOrderClientService->mount($this, $client);
@@ -37,12 +42,12 @@ class WorkOrderClient extends Component
         return $this->workOrderClientService->downloadReport($this, $id);
 
     }
+
     public function canDownloadReport($id)
     {
         return $this->workOrderClientService->canDownloadReport($this, $id);
 
     }
-
 
 
     public function render()
