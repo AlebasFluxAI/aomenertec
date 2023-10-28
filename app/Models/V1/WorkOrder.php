@@ -38,6 +38,7 @@ class WorkOrder extends Model
     public const WORK_ORDER_LEVEL_1 = "level_1";
     public const WORK_ORDER_LEVEL_2 = "level_2";
 
+
     protected $fillable = [
         "client_id",
         "type",
@@ -74,10 +75,12 @@ class WorkOrder extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+
     public function createdBy()
     {
         return User::find($this->created_by_id);
     }
+
     public function closedBy()
     {
         return User::find($this->closed_by);
@@ -107,6 +110,29 @@ class WorkOrder extends Model
         ]);
     }
 
+    public static function getWorkOrderMaterials()
+    {
+        return [
+            ["value" => "Cable", "key" => "Cable"],
+            ["value" => "Alambre", "key" => "Alambre"],
+            ["value" => "Conectores solares", "key" => "Conectores solares"],
+            ["value" => "Otros", "key" => "Otros"],
+        ];
+    }
+
+    public static function getWorkOrderTools()
+    {
+        return [
+            ["value" => "Pinza voltiamperimetrica", "key" => "Pinza voltiamperimetrica"],
+            ["value" => "Multimetro", "key" => "Multimetro"],
+            ["value" => "Juego de llaves", "key" => "Juego de llaves"],
+            ["value" => "Juego de destornilladores", "key" => "Juego de destornilladores"],
+            ["value" => "Elementos EPP", "key" => "Elementos EPP"],
+            ["value" => "Elementos adicionales", "key" => "Elementos adicionales"],
+            ["value" => "Llaves de apertura de gabinete", "key" => "Llaves de apertura de gabinete"],
+            ["value" => "Otras", "key" => "Otras"],
+        ];
+    }
 
     public function support()
     {

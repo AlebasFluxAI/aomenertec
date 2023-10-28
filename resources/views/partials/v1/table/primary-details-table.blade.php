@@ -20,6 +20,29 @@
                             @else
                                 <td>{{$info["value"]}}</td>
                             @endisset
+                        @elseif($info["type"]==\App\Http\Resources\V1\ColTypeEnum::COL_TYPE_ARRAY)
+                            <td>
+                                @if(isset($info["redirect_route"]))
+                                    @foreach($info["value"] as $model)
+
+                                        <li class="link">
+                                            <a href="{{route($info["redirect_route"],[$info["redirect_binding"]=>$model->equipment->{$info["redirect_value"]}])}}">
+                                                Id: {{$model->equipment->id}} - Serial: {{$model->equipment->serial}}
+                                                - Nombre: {{$model->equipment->name}}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                @else
+                                    @foreach($info["value"] as $model)
+
+                                        <li>
+                                            Id: {{$model->equipment->id}} - Serial: {{$model->equipment->serial}}
+                                            - Nombre: {{$model->equipment->name}}
+                                        </li>
+                                    @endforeach
+                                @endif
+
+                            </td>
                         @elseif($info["type"]=="image")
 
                             <td>

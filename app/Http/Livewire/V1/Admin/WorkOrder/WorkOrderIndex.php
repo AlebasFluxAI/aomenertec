@@ -34,6 +34,7 @@ class WorkOrderIndex extends Component
         return $this->workOrderDetailsService->downloadReport($this, $id);
 
     }
+
     public function canDownloadReport($id)
     {
         return $this->workOrderDetailsService->canDownloadReport($this, $id);
@@ -71,6 +72,10 @@ class WorkOrderIndex extends Component
         $this->workOrderDetailsService->setOpen($workOrderId);
     }
 
+    public function conditionalStart($workOrderId)
+    {
+        return $this->workOrderDetailsService->conditionalStart($this, $workOrderId);
+    }
 
     public function setInProgress($workOrderId)
     {
@@ -89,15 +94,18 @@ class WorkOrderIndex extends Component
     {
         return $this->workOrderDetailsService->getData($this);
     }
+
     public function conditionalManuallyDetail($workOrderId)
     {
         return $this->workOrderDetailsService->conditionalManuallyDetail($this, $workOrderId);
 
     }
+
     public function conditionalManuallyCreate($workOrderId)
     {
         return $this->workOrderDetailsService->conditionalManuallyCreate($this, $workOrderId);
     }
+
     public function conditionalTypeReading($workOrderId)
     {
         return $this->workOrderDetailsService->conditionalTypeReading($this, $workOrderId);

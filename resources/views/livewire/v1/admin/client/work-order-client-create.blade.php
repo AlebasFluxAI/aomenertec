@@ -68,26 +68,49 @@
                                          "title"=>"Materiales y herramientas a utilizar"
                                  ]
                                 )
-                @include("partials.v1.form.form_input_icon",[
-                      "input_model"=>"tools",
-                      "input_label"=>"Agregar herramientas a utilizar (separadas por comas)",
-                      "icon_class"=>"fas fa-screwdriver-wrench",
-                      "placeholder"=>"Ingrese las herramientas necesarias",
-                      "col_with"=>12,
-                      "input_type"=>"text",
-                      "input_rows"=>2,
-                      "required"=>true
-             ])
-                @include("partials.v1.form.form_input_icon",[
-                     "input_model"=>"materials",
-                     "input_label"=>"Agregar materiales a utilizar (separadas por comas)",
-                     "icon_class"=>"fas fa-trowel-bricks",
-                     "placeholder"=>"Ingrese los materiales necesarios",
-                     "col_with"=>12,
-                     "input_type"=>"text",
-                     "input_rows"=>2,
-                     "required"=>true
-            ])
+
+                @include("partials.v1.checkbox_list",[
+                                    "label"=>"Seleccione las herramientas a utilizar",
+                                    "options_list"=>$toolsList,
+                                    "functionChanged"=>"changeTool"
+                ])
+
+                <br>
+
+                @if($otherTool)
+                    @include("partials.v1.form.form_input_icon",[
+                        "input_model"=>"tools",
+                        "input_label"=>"Agregar otras herramientas a utilizar (separadas por comas)",
+                        "icon_class"=>"fas fa-screwdriver-wrench",
+                        "placeholder"=>"Ingrese las herramientas necesarias",
+                        "col_with"=>12,
+                        "input_type"=>"text",
+                        "input_rows"=>2,
+                        "required"=>true
+               ])
+                @endif
+
+                @include("partials.v1.checkbox_list",[
+                                      "label"=>"Seleccione los materiales a utilizar",
+                                      "options_list"=>$materialsList,
+                                      "functionChanged"=>"changeMaterials"
+                  ])
+
+
+                <br>
+
+                @if($otherMaterials)
+                    @include("partials.v1.form.form_input_icon",[
+                         "input_model"=>"materials",
+                         "input_label"=>"Agregar otros materiales a utilizar (separadas por comas)",
+                         "icon_class"=>"fas fa-trowel-bricks",
+                         "placeholder"=>"Ingrese los otros materiales necesarios",
+                         "col_with"=>12,
+                         "input_type"=>"text",
+                         "input_rows"=>2,
+                         "required"=>true
+                ])
+                @endif
 
                 @include("partials.v1.divider_title",[
                                 "title"=>"Puede agregar imagenes si es necesario"
@@ -144,19 +167,11 @@
                                 "title"=>"Selecciona el equipo a intervenir (Opcional)"
                         ])
 
-                @include("partials.v1.form.form_list",[
-                      "col_with"=>8,
-                      "input_type"=>"text",
-                      "input_label"=>"Equipo a intervenir",
-                      "list_model" => "equipment_id",
-                      "list_default" => "Equipo...",
-                      "list_options" => $equipmentsBachelor,
-                      "list_option_value"=>"value",
-                      "list_option_view"=>"key",
-                      "list_option_title"=>"",
-                      "not_selection"=>"No registrar equipo",
-                      "required"=>false,
-                ])
+                @include("partials.v1.checkbox_list",[
+                                                 "label"=>"Seleccione los equipos a intervenir",
+                                                 "options_list"=>$equipmentsBachelor,
+                                                 "functionChanged"=>"changeEquipment"
+                             ])
 
                 @include("partials.v1.divider_title",[
                                "title"=>"Ingrese la estimación de tiempo ¿ Cuanto tiempo debe ser invertido para esta orden de trabajo?"

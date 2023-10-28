@@ -41,12 +41,33 @@ class WorkOrderClientCreate extends Component
     public $minutes;
     public $equipment_id;
     private $workOrderClientService;
-
+    public $toolsList;
+    public $materialsList;
+    public $toolsListSelected = [];
+    public $equipmentsListSelected = [];
+    public $materialsListSelected = [];
+    public $otherTool;
+    public $otherMaterials;
 
     public function __construct()
     {
         parent::__construct();
         $this->workOrderClientService = WorkOrderClientService::getInstance();
+    }
+
+    public function changeTool($value)
+    {
+        $this->workOrderClientService->changeTool($this, $value);
+    }
+
+    public function changeMaterials($value)
+    {
+        $this->workOrderClientService->changeMaterials($this, $value);
+    }
+
+    public function changeEquipment($value)
+    {
+        $this->workOrderClientService->changeEquipment($this, $value);
     }
 
     public function submitForm()
