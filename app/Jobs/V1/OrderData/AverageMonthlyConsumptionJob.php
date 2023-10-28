@@ -149,7 +149,8 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
             } else {
                 $last_month_data = $this->client->dailyMicrocontrollerData()
                     ->where('year', $previous_month_date->format('Y'))
-                    ->where('month', $previous_month_date->format('m'))->first();
+                    ->where('month', $previous_month_date->format('m'))
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->first();
                 if ($last_month_data == null) {
                     $last_month_data = $this->client->dailyMicrocontrollerData()
                         ->whereHas('microcontrollerData', function ($query) use ($previous_month_date) {
@@ -213,14 +214,14 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                         ->first();
                     if ($previous_month_data == null){
                         $previous_month_data = $this->client->monthlyMicrocontrollerData()
-                            ->where('year', $previous_month_date->copy()->subMonth(6)->format('y'))
-                            ->where('month', $previous_month_date->copy()->subMonth(6)->format('m'))
+                            ->where('year', $previous_month_date->copy()->subMonths(6)->format('y'))
+                            ->where('month', $previous_month_date->copy()->subMonths(6)->format('m'))
                             ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
                             ->first();
                     }
                     if ($previous_month_data) {
                         if ($previous_month_data->microcontroller_data_id != $month_data->microcontroller_data_id) {
-                            $data = MonthlyMicrocontrollerData::with('microcontrollerData')->whereMicrocontrollerDataId($previous_month_data->microcontroller_data_id)->orderBy('microcontrollerData.source_timestamp')->orderBy('year')->orderBy('month')->orderBy('day')->get();
+                            $data = MonthlyMicrocontrollerData::whereMicrocontrollerDataId($previous_month_data->microcontroller_data_id)->orderBy('year')->orderBy('month')->orderBy('day')->get();
                             if (count($data) > 1) {
                                 $i = 0;
                                 foreach ($data as $datum) {
