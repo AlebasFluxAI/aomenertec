@@ -106,32 +106,33 @@ class RefactorClientData extends Command
 //                $this->start_date->addHour();
 //            }
             $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5', 'reorder_data'];
-            while (true) {
-                echo $start_date_copy->format('Y-m-d H-i') . "\n";
-                $i=0;
-                foreach ($clients as $cliente) {
-                        dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onQueue($queues[$i]);
-                        $i++;
-                        if ($i==6){
-                            $i=0;
-                        }
-                }
-                if ($start_date_copy->diffInHours($current_time) == 0) {
-                    break;
-                }
-                $start_date_copy->addHour();
-            }
-//
 //            while (true) {
-//                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
+//                echo $start_date_copy->format('Y-m-d H-i') . "\n";
+//                $i=0;
 //                foreach ($clients as $cliente) {
-//                    dispatch(new AverageDailyConsumptionJob($cliente->id, $start_date_copy))->onQueue('spot3');
+//                        dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onQueue($queues[$i]);
+//                        $i++;
+//                        if ($i==6){
+//                            $i=0;
+//                        }
 //                }
-//                if ($end_date->diffInDays($this->current_time) == 0) {
+//                if ($start_date_copy->diffInHours($current_time) == 0) {
 //                    break;
 //                }
-//                $end_date->addDay();
+//                $start_date_copy->addHour();
 //            }
+//
+            while (true) {
+                echo "calc day =" . $end_date->format('Y-m-d') . "\n";
+                foreach ($clients as $cliente) {
+                        dispatch(new AverageDailyConsumptionJob($cliente->id, $end_date))->onQueue('spot3');
+
+                }
+                if ($end_date->diffInDays($this->current_time) == 0) {
+                    break;
+                }
+                $end_date->addDay();
+            }
 
             // calculate monthly consumption
 

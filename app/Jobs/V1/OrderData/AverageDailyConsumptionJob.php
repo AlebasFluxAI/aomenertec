@@ -44,7 +44,6 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 ->where('year', $this->day_reference->format('Y'))
                 ->where('month', $this->day_reference->format('m'))
                 ->where('day', $this->day_reference->format('d'))->get();
-
             $reference_data_first = $this->client->microcontrollerData()
                 ->whereBetween('source_timestamp', [$this->day_reference->copy()->subDay()->format('Y-m-d 00:00:00'), $this->day_reference->copy()->subDay()->format('Y-m-d 23:59:59')])
                 ->orderBy('source_timestamp', 'desc')
@@ -89,8 +88,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 $json['ph1_varLh_interval'] = $json['ph1_varLh_acumm'] - $json_first['ph1_varLh_acumm'];
                 $json['ph2_varLh_interval'] = $json['ph2_varLh_acumm'] - $json_first['ph2_varLh_acumm'];
                 $json['ph3_varLh_interval'] = $json['ph3_varLh_acumm'] - $json_first['ph3_varLh_acumm'];
-
-                DailyMicrocontrollerData::updateOrCreate(
+                $a = DailyMicrocontrollerData::updateOrCreate(
                     [
                         'year' => $this->day_reference->format('Y'),
                         'month' => $this->day_reference->format('m'),
@@ -110,12 +108,13 @@ class AverageDailyConsumptionJob implements ShouldQueue
             $last_data = $this->client->hourlyMicrocontrollerData()
                 ->where('year', $last_day->format('Y'))
                 ->where('month', $last_day->format('m'))
-                ->where('day', $last_day->format('d'))->first();
+                ->where('day', $last_day->format('d'))
+                ->orderBy('source_timestamp', 'desc')->first();
             if($last_data == null){
                 $last_data = $this->client->hourlyMicrocontrollerData()
                     ->whereBetween('source_timestamp', [$last_day->copy()->subDays(15)->format('Y-m-d H:00:00'), $last_day->format('Y-m-d 23:59:59') ])
                     ->orderBy('source_timestamp', 'desc')
-                    ->first();;
+                    ->first();
             }
             if ($last_data) {
                 $data_frame = config('data-frame.data_frame');
@@ -144,7 +143,6 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 $raw_json['data_ph1_varLh_acumm'] = 0;
                 $raw_json['data_ph2_varLh_acumm'] = 0;
                 $raw_json['data_ph3_varLh_acumm'] = 0;
-
                 DailyMicrocontrollerData::updateOrCreate(
                     ['year' => $this->day_reference->format('Y'),
                         'month' => $this->day_reference->format('m'),
@@ -188,7 +186,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 }
                 if ($previous_day_data) {
                     if ($previous_day_data->microcontroller_data_id != $day_data->microcontroller_data_id) {
-                        $data = DailyMicrocontrollerData::with('microcontrollerData')->whereMicrocontrollerDataId($previous_day_data->microcontroller_data_id)->orderBy('microcontrollerData.source_timestamp')->orderBy('year')->orderBy('month')->orderBy('day')->get();
+                        $data = DailyMicrocontrollerData::whereMicrocontrollerDataId($previous_day_data->microcontroller_data_id)->orderBy('year')->orderBy('month')->orderBy('day')->get();
                         if (count($data) > 1) {
                             $i = 0;
                             foreach ($data as $datum) {
