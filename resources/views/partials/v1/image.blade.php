@@ -1,5 +1,17 @@
-<img class="myImg" id="myImg.{{$image_url}}" src="{{$image_url}}" style="width:100%;max-width:300px">
+@if(isset($description))
+    <div class="row m-2">
+        <div class="col-md-3  m-1 p-2" style="background-color: #c3c3c3">
+            <img class="myImg" id="myImg.{{$image_url}}" src="{{$image_url}}" style="width:100%;max-width:300px">
 
+        </div>
+        <div class="col-md-6 text-left   m-1 p-2" style="background-color: #c3c3c3">
+
+            <p><b>Descripción:</b> {{$description}}</p>
+        </div>
+    </div>
+@else
+    <img class="myImg" id="myImg.{{$image_url}}" src="{{$image_url}}" style="width:100%;max-width:300px">
+@endif
 <!-- The Modal -->
 <div id="myModalImage" class="modalImg myImg">
     <span class="close">&times;</span>

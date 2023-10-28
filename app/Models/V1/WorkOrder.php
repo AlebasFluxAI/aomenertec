@@ -66,7 +66,8 @@ class WorkOrder extends Model
         "execution_time_hours",
         "execution_time_minutes",
         "microcontroller_data_id",
-        "final_recommendations"
+        "final_recommendations",
+        
 
     ];
 

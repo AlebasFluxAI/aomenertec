@@ -83,7 +83,8 @@ class WorkOrderClientService extends Singleton
             "supports" => $this->getSupports($component),
             "toolsList" => WorkOrder::getWorkOrderTools(),
             "materialsList" => WorkOrder::getWorkOrderMaterials(),
-            "otherTool" => false
+            "otherTool" => false,
+            "images" => ["image1", "image2", "image3", "image4"],
         ]);
     }
 
@@ -120,14 +121,15 @@ class WorkOrderClientService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $component->validate([
-            'photos.*' => 'image|max:1024', // 1MB Max
-        ]);
+
 
         DB::transaction(function () use ($component) {
             $workOrder = $component->model->workOrders()->create($this->mapper($component));
-            foreach ($component->photos as $photo) {
-                $workOrder->saveImageOnModelWithMorphMany($photo, "images");
+            foreach ($component->images as $key => $image) {
+                if (!$component->{$image}) {
+                    continue;
+                }
+                $workOrder->saveImageOnModelWithMorphMany($component->{$image}, "images", $component->{"description" . $key + 1});
             }
             $this->relateEquipment($component, $workOrder);
             $component->redirectRoute("administrar.v1.ordenes_de_servicio.detalle", ["workOrder" => $workOrder->id]);

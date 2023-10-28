@@ -48,6 +48,15 @@ class WorkOrderClientCreate extends Component
     public $materialsListSelected = [];
     public $otherTool;
     public $otherMaterials;
+    public $images = [];
+    public $image1;
+    public $image2;
+    public $image3;
+    public $image4;
+    public $description1;
+    public $description2;
+    public $description3;
+    public $description4;
 
     public function __construct()
     {
