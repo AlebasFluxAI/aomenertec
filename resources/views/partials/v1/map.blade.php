@@ -176,7 +176,7 @@
                         "input_on_change"=>"latitudeShow",
                         "col_with"=>8,
                         "input_type"=>"text",
-                        "required"=>true
+                        "required"=>false
                ])</li>
         <li>
             @include("partials.v1.form.form_input_icon",[
@@ -189,7 +189,7 @@
                         "placeholder"=>"longitude",
                         "col_with"=>8,
                         "input_type"=>"text",
-                        "required"=>true
+                        "required"=>false
                ])</li>
     </ul>
 </div>
