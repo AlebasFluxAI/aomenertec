@@ -72,9 +72,9 @@ class RefactorClientData extends Command
         $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
             ->min('source_timestamp');
 
-        if (true) {
-            $aux = new Carbon('2023-10-01 00:00:00');
-            //$aux = new Carbon($source_date);
+        if ($source_date) {
+            // $aux = new Carbon('2023-10-01 00:00:00');
+            $aux = new Carbon($source_date);
             $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
             $this->date_aux = new Carbon($date_init);
             $this->unpackData();

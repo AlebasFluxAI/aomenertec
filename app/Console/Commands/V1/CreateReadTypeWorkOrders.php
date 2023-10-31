@@ -54,10 +54,7 @@ class CreateReadTypeWorkOrders extends Command
             if(!($client->microcontrollerData()
                 ->where('source_timestamp', '>=', $limit_date)
                 ->exists())){
-                //Job para crear orden de trabajo tipo lectura
-
-                    dispatch(new CreateReadTypeWorkOrderJob($client->id))->onConnection('sync');
-
+                 dispatch(new CreateReadTypeWorkOrderJob($client->id))->onConnection('sync');
             }
         }
     }

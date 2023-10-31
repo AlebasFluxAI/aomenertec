@@ -87,9 +87,9 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             $publicTaxType = $otherFee ? $otherFee->tax_type : 0.0;
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         }
-
-        $year = "2023";
-        $month = "9";
+        $billing_date = Carbon::now()->subday();
+        $year = $billing_date->format('Y');
+        $month = $billing_date->format('m');
 
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))

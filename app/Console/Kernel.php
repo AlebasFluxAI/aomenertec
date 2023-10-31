@@ -7,6 +7,9 @@ use App\Console\Commands\V1\ClientInvoiceGeneration;
 use App\Console\Commands\V1\ClientInvoicingCommand;
 use App\Console\Commands\V1\ClientReport;
 use App\Console\Commands\V1\DeleteStopUnpackData;
+use App\Console\Commands\V1\OrderData\AverageDaylyConsumptionCommand;
+use App\Console\Commands\V1\OrderData\AverageHourlyConsumptionCommand;
+use App\Console\Commands\V1\OrderData\AverageMonthlyConsumptionCommand;
 use App\Console\Commands\V1\PqrSolvedValidation;
 use App\Console\Commands\V1\RefactorClientData;
 use App\Console\Commands\V1\ReorderDataClientMonth;
@@ -45,11 +48,15 @@ class Kernel extends ConsoleKernel
         ////unpack data
         $schedule->command(UpdateDataConsumption::class)->everyTenMinutes()->withoutOverlapping();
         $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
+        $schedule->command(AverageHourlyConsumptionCommand::class)->hourlyAt(35)->withoutOverlapping();
+        $schedule->command(AverageDaylyConsumptionCommand::class)->dailyAt('01:05')->withoutOverlapping();
+        $schedule->command(AverageMonthlyConsumptionCommand::class)->dailyAt('2:05')->withoutOverlapping();
+        // $schedule->command(RefactorClientData::class)->dailyAt('02:35')->withoutOverlapping(); // si se cambia la frecuencia revisar la hora en que se seleccionan los datos
+
         $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
         //$schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);
 
-        // $schedule->command(RefactorClientData::class)->twiceDailyAt(1, 13, 32)->withoutOverlapping(); // si se cambia la frecuencia revisar la hora en que se seleccionan los datos
-        $schedule->command(DeleteStopUnpackData::class)->everyThirtyMinutes();
+        $schedule->command(DeleteStopUnpackData::class)->hourlyAt(30);
 
         $schedule->command(ClientReport::class, [Client::MONTHLY_RATE])
             ->monthlyOn(1, '08:00')

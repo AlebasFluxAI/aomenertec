@@ -4,6 +4,7 @@ namespace App\Jobs\V1\Enertec\WorkOrder;
 
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,18 +36,22 @@ class CreateReadTypeWorkOrderJob implements ShouldQueue
     {
         $userModel = $this->client->networkOperator->user;
         $technician = $this->client->clientTechnician()->first();
+        $technicianModel = $technician->user;
         if($technician == null){
             $technician = $this->client->networkOperator->technicians()->first();
         }
         if ($technician) {
-            $this->client->workOrders()->create([
+            $a = $this->client->workOrders()->create([
                 "status" => WorkOrder::WORK_ORDER_STATUS_OPEN,
+                "open_at" => Carbon::now(),
+                "open_by" => $technicianModel->id,
                 "description" => "lectura",
                 "type" => WorkOrder::WORK_ORDER_TYPE_READING,
                 "technician_id" => $technician->id,
                 "created_by_type" => $userModel::class,
                 "created_by_id" => $userModel->id
             ]);
+            echo $a->id."\n";
         }
     }
 }

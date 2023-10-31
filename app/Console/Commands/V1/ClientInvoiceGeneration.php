@@ -6,6 +6,7 @@ use App\Jobs\V1\Enertec\ClientInvoiceGenerationJob;
 use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 
@@ -45,9 +46,13 @@ class ClientInvoiceGeneration extends Command
      */
     public function handle()
     {
-        $now_day = now()->day;
-        $billing_day = ($now_day == 29 or $now_day == 30 or $now_day == 31) ? 31 : $now_day;
-        $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->get()->pluck('client_id');
+        $now_day = Carbon::now()->subDay();;
+        $billing_day = $now_day->format('d');
+        if ($billing_day == $now_day->format('t')){
+            $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
+        } else{
+            $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
+        }
         $clients_id = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->get();
         if (count($clients_id)>0) {
             foreach ($clients_id as $client) {

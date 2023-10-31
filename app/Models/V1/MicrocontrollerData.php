@@ -4,6 +4,8 @@ namespace App\Models\V1;
 
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
+use App\Jobs\V1\OrderData\AverageDailyConsumptionJob;
+use App\Jobs\V1\OrderData\AverageHourlyConsumptionJob;
 use App\Models\Traits\ImageableManyTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Models\Traits\PaginatorTrait;
@@ -105,7 +107,7 @@ class MicrocontrollerData extends Model
         $json['ph3_varLh_acumm'] = $json['data_ph3_varLh_acumm'];
 
         $timestamp_unix = $json['timestamp'];
-        $current_time = $date->setTimestamp($timestamp_unix);
+        $current_time = $date->copy()->setTimestamp($timestamp_unix);
         $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
         $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
@@ -137,13 +139,13 @@ class MicrocontrollerData extends Model
                 return;
             }
         }else{
-            if (!$client->stopUnpackClient()->exists()) {
+            if (!($client->stopUnpackClient()->exists())) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
 
 
-        if (!MicrocontrollerData::whereClientId($client->id)->exists()) {
+        if (!(MicrocontrollerData::whereClientId($client->id)->exists())) {
             $json['kwh_interval'] = 0;
             $json['varh_interval'] = 0;
             $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
@@ -167,16 +169,17 @@ class MicrocontrollerData extends Model
                 $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
                     if (new Carbon($last_data->source_timestamp) >= $current_time) {
-                        $this->forceDelete();
+                        $this->delete();
+                        // alamacenar para reubicar dato
                         return;
                     }
                     $last_raw_json = json_decode($last_data->raw_json, true);
                     if ($json['import_wh'] <= 0) {
 
-//                        if ($last_raw_json['import_wh'] > 0) {
-//                            $this->forceDelete();
-//                            return;
-//                        }
+                        if ($last_raw_json['import_wh'] > 0) {
+                            $this->forceDelete();
+                            return;
+                        }
                     }
                 }
             } else{
@@ -187,13 +190,12 @@ class MicrocontrollerData extends Model
                         return;
                     }
                     $last_raw_json = json_decode($last_data->raw_json, true);
-//                    if ($json['import_wh'] <= 0) {
-//
-//                        if ($last_raw_json['import_wh'] > 0) {
-//                            $this->forceDelete();
-//                            return;
-//                        }
-//                    }
+                    if ($json['import_wh'] <= 0) {
+                        if ($last_raw_json['import_wh'] > 0) {
+                            $this->forceDelete();
+                            return;
+                        }
+                    }
                 } else{
                     $json['kwh_interval'] = 0;
                     $json['varh_interval'] = 0;
@@ -299,16 +301,16 @@ class MicrocontrollerData extends Model
             if ($equals){
                     foreach ($equals as $item){
                         if ($item->id != $this->id){
-                            if ($this->hourlyMicrocontrollerData()->exists()) {
-                                $this->hourlyMicrocontrollerData()->forceDelete();
+                            if ($item->hourlyMicrocontrollerData()->exists()) {
+                                $item->hourlyMicrocontrollerData()->forceDelete();
                             }
-                            if ($this->dailyMicrocontrollerData()->exists()) {
-                                $this->dailyMicrocontrollerData()->forceDelete();
+                            if ($item->dailyMicrocontrollerData()->exists()) {
+                                $item->dailyMicrocontrollerData()->forceDelete();
                             }
-                            if ($this->clientAlert()->exists()) {
-                                $this->clientAlert()->forceDelete();
+                            if ($item->clientAlert()->exists()) {
+                                $item->clientAlert()->forceDelete();
                             }
-                            $this->forceDelete();
+                            $item->forceDelete();
                             return;
                         }
                     }
@@ -317,6 +319,16 @@ class MicrocontrollerData extends Model
         }
         $this->saveQuietly();
         if ($flag) {
+            if($current_time->gt($date)){
+                if($current_time->diffInMinutes($date) >= 35) {
+                    dispatch(new AverageHourlyConsumptionJob($this->client->id, $current_time))->onQueue('spot3');
+                }
+                if($current_time->diffInDays($date) >= 1) {
+                    if ($current_time->diffInMinutes($date) >= 65) {
+                        dispatch(new AverageDailyConsumptionJob($this->client->id, $current_time))->onQueue('spot3');
+                    }
+                }
+            }
             dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
             $this->alertEnergyEvent();
         }
