@@ -2,7 +2,6 @@
 
 namespace App\Http\Services\V1\Admin\User;
 
-use App\Http\Livewire\V1\Admin\User\EditUser;
 use App\Http\Services\Singleton;
 use App\Models\V1\Consumer;
 use App\Models\V1\Seller;
@@ -143,6 +142,7 @@ class EditUserService extends Singleton
         $component->network_operator_id = $obj->id;
         $component->picked = true;
     }
+
     public function assignNetworkOperatorFirst(Component $component)
     {
         if (!empty($component->network_operator)) {
@@ -152,7 +152,7 @@ class EditUserService extends Singleton
                 ->first();
             if ($user) {
                 $component->network_operator = $user->identification;
-                $component->network_operator_id= $user->id;
+                $component->network_operator_id = $user->id;
             } else {
                 $component->network_operator = "...";
             }
@@ -168,7 +168,7 @@ class EditUserService extends Singleton
             $user->email = $component->email;
             $user->identification = $component->identification;
             $user->phone = $component->phone;
-            $role=$user->getRoleNames();
+            $role = $user->getRoleNames();
             $user->save();
             $user->syncRoles([$component->role]);
             $role_update = $user->getRoleNames();
@@ -203,7 +203,7 @@ class EditUserService extends Singleton
                     ['user_id' => $user->id],
                 );
             }
-            session()->flash('message', 'Usuario '.$component->name.' actualizado con exito. ');
+            session()->flash('message', 'Usuario ' . $component->name . ' actualizado con exito. ');
             $component->resetExcept('roles');
         }
     }
@@ -222,7 +222,7 @@ class EditUserService extends Singleton
                 $user->support->delete();
             }
             $user->delete();
-            session()->flash('eliminate', 'Usuario '.$component->name.' Eliminado con exito. ');
+            session()->flash('eliminate', 'Usuario ' . $component->name . ' Eliminado con exito. ');
             $component->resetExcept('roles');
         }
     }

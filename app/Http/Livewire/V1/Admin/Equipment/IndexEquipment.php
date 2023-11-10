@@ -2,17 +2,11 @@
 
 namespace App\Http\Livewire\V1\Admin\Equipment;
 
-use App\Events\ChatEvent;
-use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
 use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Models\Traits\FilterTrait;
 use App\Models\Traits\MenuTrait;
-use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Image;
 use Livewire\Component;
 use Livewire\WithPagination;
-use PhpMqtt\Client\Facades\MQTT;
 use function view;
 
 class IndexEquipment extends Component
@@ -110,6 +104,10 @@ class IndexEquipment extends Component
         )->extends('layouts.v1.app');
     }
 
+    public function getData()
+    {
+        return $this->indexEquipmentService->getData($this);
+    }
 
     public function getPermission()
     {
@@ -124,10 +122,5 @@ class IndexEquipment extends Component
     public function getConditionalRemoveEquipment()
     {
         return $this->indexEquipmentService->getConditionalRemoveEquipment($this);
-    }
-
-    public function getData()
-    {
-        return $this->indexEquipmentService->getData($this);
     }
 }

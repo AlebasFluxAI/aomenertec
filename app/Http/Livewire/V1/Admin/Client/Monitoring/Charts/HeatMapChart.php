@@ -2,16 +2,15 @@
 
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
+use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
+use App\ModulesAux\MQTT;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use App\Models\V1\Client;
-use App\ModulesAux\MQTT;
 
 class HeatMapChart extends Component
 {
-    protected $listeners = ['selectHeatMap', 'dateRangeHeatMap'];
     public $date_range_heat_map;
     public $start_heat_map;
     public $end_heat_map;
@@ -23,6 +22,7 @@ class HeatMapChart extends Component
     public $data_chart_heat_map;
     public $variable_heat_map_id;
     public $heatmap_title;
+    protected $listeners = ['selectHeatMap', 'dateRangeHeatMap'];
 
     public function mount(Client $client, $reactive_variables, $data_chart_heat_map)
     {
@@ -30,10 +30,10 @@ class HeatMapChart extends Component
         $this->end_heat_map = $this->end_day->format('Y-m-d');
         $this->start_day = Carbon::now()->subDay(7);
         $this->start_heat_map = $this->start_day->format('Y-m-d');
-        $this->date_range_heat_map = $this->start_heat_map." - ".$this->end_heat_map;
+        $this->date_range_heat_map = $this->start_heat_map . " - " . $this->end_heat_map;
         $this->client = $client;
         $edit_index = [];
-        $i=0;
+        $i = 0;
         foreach ($reactive_variables as $data) {
             $edit_index[$i] = $data;
             $i++;
@@ -51,58 +51,18 @@ class HeatMapChart extends Component
         $this->end_day = Carbon::create($end);
         $this->end_heat_map = $this->end_day->format('Y-m-d');
         $this->start_heat_map = $this->start_day->format('Y-m-d');
-        $this->date_range_heat_map = $this->start_heat_map." - ".$this->end_heat_map;
-        $this->chartRender();
-    }
-
-    public function updatedVariableHeatMapId()
-    {
-        if ($this->variable_heat_map_id == 2) {
-            $this->heatmap_title = "Activa (kWh)";
-        } elseif ($this->variable_heat_map_id == 14) {
-            $this->heatmap_title ="Reactiva Inductiva (kVArLh)";
-        } else {
-            $this->heatmap_title ="Reactiva Capacitiva (kVArCh)";
-        }
-        $this->start_day = Carbon::create($this->start_heat_map);
-        $this->end_day = Carbon::create($this->end_heat_map);
-        $this->chartRender();
-    }
-
-    public function selectHeatMap()
-    {
-        if($this->client->clientConfiguration()->first()->active_real_time) {
-                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-                if (RealTimeListener::whereUserId(Auth::user()->id)
-                    ->whereEquipmentId($equipment->id)->exists()) {
-                    RealTimeListener::whereUserId(Auth::user()->id)
-                        ->whereEquipmentId(
-                            $equipment->id
-                        )->delete();
-                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
-                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-                        $topic = 'mc/config/' . $equipment->serial;
-                        MQTT::publish($topic, $message);
-                        MQTT::disconnect();
-                    }
-                }
-        }
-        $this->end_day = new Carbon();
-        $this->end_heat_map = $this->end_day->format('Y-m-d');
-        $this->start_day = Carbon::now()->subDay(7);
-        $this->start_heat_map = $this->start_day->format('Y-m-d');
-        $this->date_range_heat_map = $this->start_heat_map." - ".$this->end_heat_map;
+        $this->date_range_heat_map = $this->start_heat_map . " - " . $this->end_heat_map;
         $this->chartRender();
     }
 
     private function chartRender()
     {
         $max_value = 0;
-        $aux=0;
+        $aux = 0;
         $aux_day = Carbon::create($this->end_heat_map);
         $days = $aux_day->diffInDays($this->start_day);
         $this->series_heat_map = [];
-        for ($i=0; $i<=$days; $i++) {
+        for ($i = 0; $i <= $days; $i++) {
             if ($i == 0) {
                 $data_chart = $this->client->hourlyMicrocontrollerData()
                     ->whereDate("source_timestamp", $this->end_day->format('Y-m-d'))
@@ -114,9 +74,9 @@ class HeatMapChart extends Component
                     ->orderBy('source_timestamp', 'desc')
                     ->get();
             }
-            if (count($data_chart)>0) {
+            if (count($data_chart) > 0) {
                 $array_aux = $data_chart;
-                $data_aux = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+                $data_aux = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                 $name = "";
                 foreach ($this->reactive_variables as $data) {
                     if ($data['variable_id'] == $this->variable_heat_map_id) {
@@ -142,7 +102,47 @@ class HeatMapChart extends Component
             }
         }
 
-        $this->emit('changeAxisHeatMap', ['series_heat_map' => $this->series_heat_map, 'max_value' => $max_value, 'title'=>$this->heatmap_title]);
+        $this->emit('changeAxisHeatMap', ['series_heat_map' => $this->series_heat_map, 'max_value' => $max_value, 'title' => $this->heatmap_title]);
+    }
+
+    public function updatedVariableHeatMapId()
+    {
+        if ($this->variable_heat_map_id == 2) {
+            $this->heatmap_title = "Activa (kWh)";
+        } elseif ($this->variable_heat_map_id == 14) {
+            $this->heatmap_title = "Reactiva Inductiva (kVArLh)";
+        } else {
+            $this->heatmap_title = "Reactiva Capacitiva (kVArCh)";
+        }
+        $this->start_day = Carbon::create($this->start_heat_map);
+        $this->end_day = Carbon::create($this->end_heat_map);
+        $this->chartRender();
+    }
+
+    public function selectHeatMap()
+    {
+        if ($this->client->clientConfiguration()->first()->active_real_time) {
+            $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+            if (RealTimeListener::whereUserId(Auth::user()->id)
+                ->whereEquipmentId($equipment->id)->exists()) {
+                RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId(
+                        $equipment->id
+                    )->delete();
+                if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                    $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                    $topic = 'mc/config/' . $equipment->serial;
+                    MQTT::publish($topic, $message);
+                    MQTT::disconnect();
+                }
+            }
+        }
+        $this->end_day = new Carbon();
+        $this->end_heat_map = $this->end_day->format('Y-m-d');
+        $this->start_day = Carbon::now()->subDay(7);
+        $this->start_heat_map = $this->start_day->format('Y-m-d');
+        $this->date_range_heat_map = $this->start_heat_map . " - " . $this->end_heat_map;
+        $this->chartRender();
     }
 
     public function render()

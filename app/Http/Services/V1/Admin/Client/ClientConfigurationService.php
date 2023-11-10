@@ -2,43 +2,19 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Channels\WhatsAppChannel;
 use App\Http\Resources\V1\ToastEvent;
-use App\Http\Services\V1\Admin\Client\AddClient;
 use App\Http\Services\Singleton;
-use App\Models\V1\AdminConfiguration;
-use App\Models\V1\AdminPrice;
 use App\Models\V1\AvailableChannel;
+use App\Models\V1\Client;
 use App\Models\V1\ClientAlertConfiguration;
 use App\Models\V1\ClientConfiguration;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
-use App\Models\V1\EquipmentClient;
-use App\Models\V1\ClientType;
-use App\Models\V1\Department;
-use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
-use App\Models\V1\Location;
-use App\Models\V1\LocationType;
-use App\Models\V1\Municipality;
-use App\Models\V1\NetworkOperator;
-use App\Models\V1\Seller;
-use App\Models\V1\Stratum;
-use App\Models\V1\SubsistenceConsumption;
-use App\Models\V1\Client;
-use App\Models\V1\Technician;
-use App\Models\V1\User;
-use App\Models\V1\VoltageLevel;
-use App\Notifications\Alert\AlertControlNotification;
-use Illuminate\Support\Str;
+use App\ModulesAux\MQTT;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
-use App\ModulesAux\MQTT;
 use PhpMqtt\Client\MqttClient;
-use Spatie\Permission\Models\Role;
-use function auth;
-use function bcrypt;
-use function session;
 
 class ClientConfigurationService extends Singleton
 {
@@ -441,7 +417,7 @@ class ClientConfigurationService extends Singleton
             }
             $message = base64_encode(implode($binary_data));
 
-           $mqtt->publish($topic, $message);
+            $mqtt->publish($topic, $message);
 
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
                 $json = json_decode($message, true);

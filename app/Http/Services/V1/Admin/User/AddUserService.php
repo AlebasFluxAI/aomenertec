@@ -2,7 +2,6 @@
 
 namespace App\Http\Services\V1\Admin\User;
 
-use App\Http\Livewire\V1\Admin\User\AddUser;
 use App\Http\Services\Singleton;
 use App\Models\V1\Consumer;
 use App\Models\V1\NetworkOperator;
@@ -50,6 +49,7 @@ class AddUserService extends Singleton
                 ->take(3)->get();
         }
     }
+
     public function assignNetworkOperator(Component $component, $network_operator)
     {
         $obj = json_decode($network_operator);
@@ -57,6 +57,7 @@ class AddUserService extends Singleton
         $component->network_operator_id = $obj->id;
         $component->picked = true;
     }
+
     public function assingnNetworkOperatorFirst(Component $component)
     {
         if (!empty($component->network_operator)) {
@@ -64,7 +65,7 @@ class AddUserService extends Singleton
                 ->first();
             if ($usuario) {
                 $component->network_operator = $usuario->identification;
-                $component->network_operator_id= $usuario->id;
+                $component->network_operator_id = $usuario->id;
             } else {
                 $component->network_operator = "...";
             }
@@ -114,7 +115,7 @@ class AddUserService extends Singleton
              Enviar email al usuario creado con la contraseña temporal
 
             */
-            session()->flash('message', 'Usuario '.$component->name.' creado con exito. Contraseña temporal: '.$component->password);
+            session()->flash('message', 'Usuario ' . $component->name . ' creado con exito. Contraseña temporal: ' . $component->password);
         }
     }
 }

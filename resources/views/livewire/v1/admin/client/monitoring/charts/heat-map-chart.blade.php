@@ -33,7 +33,7 @@
                ])
 
 
-        <div  class="col-12 mt-0">
+        <div class="col-12 mt-0">
             <div class="box shadow mt-4">
                 <div wire:loading>
                     Actualizando Grafica...
@@ -48,13 +48,12 @@
     <script>
 
 
-
         document.addEventListener('livewire:load', function () {
-            $(function() {
+            $(function () {
                 $('input[name="datetime_heat_map"]').daterangepicker({
                     applyButtonClasses: 'text-primary',
                     timePicker: false,
-                    maxSpan:{
+                    maxSpan: {
                         days: 15,
                     },
 
@@ -92,10 +91,10 @@
                     type: 'category',
                     categories: [],
                 },
-                legend:{
-                        show:true,
+                legend: {
+                    show: true,
                     position: 'bottom',
-                    },
+                },
                 title: {
                     text: 'Activa (kWh)',
                     align: 'center',
@@ -118,7 +117,7 @@
 
             chart_heat_map.render();
 
-        @this.on('changeAxisHeatMap',(e) =>{
+        @this.on('changeAxisHeatMap', (e) => {
             ApexCharts.exec('heat_map_chart', "updateOptions", {
                 series: e.series_heat_map,
                 xaxis: {
@@ -134,27 +133,27 @@
                             ranges: [
                                 {
                                     from: 0,
-                                    to: (e.max_value)*0.25,
+                                    to: (e.max_value) * 0.25,
                                     color: '#00A100',
                                     name: 'Bajo(>0)',
                                 },
                                 {
-                                    from: ((e.max_value)*0.25),
-                                    to: (e.max_value)*0.5,
+                                    from: ((e.max_value) * 0.25),
+                                    to: (e.max_value) * 0.5,
                                     color: '#ffcf63',
-                                    name: 'Medio(>'+((e.max_value)*0.25)+')',
+                                    name: 'Medio(>' + ((e.max_value) * 0.25) + ')',
                                 },
                                 {
-                                    from: ((e.max_value)*0.5),
-                                    to: (e.max_value)*0.75,
+                                    from: ((e.max_value) * 0.5),
+                                    to: (e.max_value) * 0.75,
                                     color: '#ff9100',
-                                    name: 'Alto(>'+((e.max_value)*0.5)+')',
+                                    name: 'Alto(>' + ((e.max_value) * 0.5) + ')',
                                 },
                                 {
-                                    from: ((e.max_value)*0.75),
+                                    from: ((e.max_value) * 0.75),
                                     to: e.max_value,
                                     color: '#ff0000',
-                                    name: 'Extremo(>'+((e.max_value)*0.75)+')',
+                                    name: 'Extremo(>' + ((e.max_value) * 0.75) + ')',
                                 }
                             ]
                         }
@@ -163,7 +162,7 @@
             });
         })
 
-        @this.on('loading8',(e) =>{
+        @this.on('loading8', (e) => {
             ApexCharts.exec('heat_map_chart', "updateOptions", {
                 series: [],
                 xaxis: {
@@ -174,8 +173,8 @@
                 }
             });
         })
-            $('input[name="datetime_heat_map"]').on('apply.daterangepicker', function(ev, picker) {
-            @this.emit('dateRangeHeatMap', picker.startDate.format('YYYY-MM-DD'),picker.endDate.format('YYYY-MM-DD'))
+            $('input[name="datetime_heat_map"]').on('apply.daterangepicker', function (ev, picker) {
+            @this.emit('dateRangeHeatMap', picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
             });
         })
     </script>

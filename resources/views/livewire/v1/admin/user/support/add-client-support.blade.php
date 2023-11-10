@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
 
     @include("partials.v1.title",[
@@ -21,7 +22,7 @@
                 ]
         ])
     {{----------------------------------Formulario--------------------------}}
-    
+
     @include("partials.v1.primary-card",[
             'card_title'=>"Usuario de soporte",
             'card_subtitle'=>$model->id,

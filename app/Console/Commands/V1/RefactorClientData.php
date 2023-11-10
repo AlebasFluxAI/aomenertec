@@ -3,43 +3,19 @@
 namespace App\Console\Commands\V1;
 
 use App\Jobs\V1\Enertec\JsonEdit;
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataDayjob;
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
-use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Jobs\V1\OrderData\AverageDailyConsumptionJob;
 use App\Jobs\V1\OrderData\AverageHourlyConsumptionJob;
 use App\Jobs\V1\OrderData\AverageMonthlyConsumptionJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
-use App\Models\V1\DailyMicrocontrollerData;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\MonthlyMicrocontrollerData;
 use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Bus;
 
 class RefactorClientData extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'command:enertec:v1:refactor_data_client_last_day';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
-
     /**
      * Create a new command instance.
      *
@@ -48,6 +24,19 @@ class RefactorClientData extends Command
     public $current_time;
     public $start_date;
     public $date_aux;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'command:enertec:v1:refactor_data_client_last_day';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
     public function __construct()
     {
         $this->current_time = new Carbon();
@@ -63,7 +52,7 @@ class RefactorClientData extends Command
     {
 
         $clients = Client::whereHasTelemetry(true)->get();
-        foreach ($clients as $client){
+        foreach ($clients as $client) {
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
@@ -72,10 +61,10 @@ class RefactorClientData extends Command
         $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
             ->min('source_timestamp');
 
-        if (true) {
-            $aux = new Carbon('2023-10-01 00:00:00');
-            //$aux = new Carbon($source_date);
-            $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'),0,0)->format('Y-m-d H:i:s');
+        if ($source_date) {
+            // $aux = new Carbon('2023-10-01 00:00:00');
+            $aux = new Carbon($source_date);
+            $date_init = Carbon::create($aux->format('Y'), $aux->format('m'), $aux->format('d'), $aux->format('H'), 0, 0)->format('Y-m-d H:i:s');
             $this->date_aux = new Carbon($date_init);
             $this->unpackData();
 
@@ -88,13 +77,13 @@ class RefactorClientData extends Command
             $end_date_first = new Carbon($date_init);
             $i = 0;
             $data = MicrocontrollerData::select('raw_json', 'id', 'source_timestamp')
-                ->where('source_timestamp','>=', $this->start_date->format('Y-m-d H:00:00'))
+                ->where('source_timestamp', '>=', $this->start_date->format('Y-m-d H:00:00'))
                 ->orderBy('source_timestamp')->limit(100000)->get();
             while (true) {
                 echo $this->start_date->format('Y-m-d H-i') . "\n";
-                $minute_data = $data->whereBetween('source_timestamp',[$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
-                                ->sortBy('source_timestamp')
-                                ->all();
+                $minute_data = $data->whereBetween('source_timestamp', [$this->start_date->format('Y-m-d H:00:00'), $this->start_date->format('Y-m-d H:59:59')])
+                    ->sortBy('source_timestamp')
+                    ->all();
                 if ($minute_data) {
                     echo "ok\n";
                     foreach ($minute_data as $datum) {
@@ -109,13 +98,13 @@ class RefactorClientData extends Command
             $queues = ['spot1', 'spot2', 'spot3', 'spot4', 'spot5', 'reorder_data'];
             while (true) {
                 echo $start_date_copy->format('Y-m-d H-i') . "\n";
-                $i=0;
+                $i = 0;
                 foreach ($clients as $cliente) {
-                        dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onQueue('spot3');
-                        $i++;
-                        if ($i==6){
-                            $i=0;
-                        }
+                    dispatch(new AverageHourlyConsumptionJob($cliente->id, $start_date_copy))->onQueue('spot3');
+                    $i++;
+                    if ($i == 6) {
+                        $i = 0;
+                    }
                 }
                 if ($start_date_copy->diffInHours($current_time) == 0) {
                     break;
@@ -126,7 +115,7 @@ class RefactorClientData extends Command
             while (true) {
                 echo "calc day =" . $end_date->format('Y-m-d') . "\n";
                 foreach ($clients as $cliente) {
-                        dispatch(new AverageDailyConsumptionJob($cliente->id, $end_date))->onQueue('spot3');
+                    dispatch(new AverageDailyConsumptionJob($cliente->id, $end_date))->onQueue('spot3');
 
                 }
                 if ($end_date->diffInDays($this->current_time) == 0) {
@@ -142,14 +131,14 @@ class RefactorClientData extends Command
                 $reference_date->subDay();
                 echo "calc mes =" . $reference_date->format('Y-m-d') . "\n";
                 $billing_day = $reference_date->format('d');
-                if ($billing_day == $reference_date->format('t')){
+                if ($billing_day == $reference_date->format('t')) {
                     $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-                } else{
+                } else {
                     $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
                 }
                 $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
 
-                if (count($clients_aux)>0) {
+                if (count($clients_aux) > 0) {
                     foreach ($clients_aux as $client_aux) {
                         dispatch(new AverageMonthlyConsumptionJob($client_aux, $reference_date))->onQueue('spot3');
                     }
@@ -160,14 +149,16 @@ class RefactorClientData extends Command
             }
         }
     }
-    private function unpackData(){
+
+    private function unpackData()
+    {
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         MicrocontrollerData::withTrashed()->whereNotNull('deleted_at')
-        ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
+            ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->restore();
-        $i=0;
-        $data_pack = MicrocontrollerData::select('id','raw_json', 'source_timestamp')
+        $i = 0;
+        $data_pack = MicrocontrollerData::select('id', 'raw_json', 'source_timestamp')
             ->whereNull('client_id')
             ->whereBetween("source_timestamp", [$this->date_aux->format('Y-m-d H:00:00'), $this->current_time->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp')
@@ -218,7 +209,7 @@ class RefactorClientData extends Command
 
                         $item->raw_json = $json;
                         $item->saveQuietly();
-                        echo $i."\n";
+                        echo $i . "\n";
                         $i++;
                     } else {
                         $item->forceDelete();
@@ -226,7 +217,7 @@ class RefactorClientData extends Command
                 } else {
                     $item->forceDelete();
                 }
-            } else{
+            } else {
                 $item->saveQuietly();
             }
         }

@@ -16,13 +16,12 @@ class AdminConfiguration extends Model
     use PaginatorTrait;
 
 
+    public const COP = 'cop';
+    public const USD = 'usd';
     protected $fillable = [
         'admin_id',
         'min_value',
         'min_clients',
         'coin'
     ];
-
-    public const COP = 'cop';
-    public const USD = 'usd';
 }

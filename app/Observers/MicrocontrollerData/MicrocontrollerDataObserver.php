@@ -3,8 +3,6 @@
 namespace App\Observers\MicrocontrollerData;
 
 
-use App\Jobs\V1\Enertec\JsonEdit;
-use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
 
 class MicrocontrollerDataObserver
@@ -18,7 +16,7 @@ class MicrocontrollerDataObserver
     public function created(MicrocontrollerData $microcontrollerData)
     {
         //AuxData::create([
-          //  'data' => $microcontrollerData->raw_json
+        //  'data' => $microcontrollerData->raw_json
         //]);
     }
 

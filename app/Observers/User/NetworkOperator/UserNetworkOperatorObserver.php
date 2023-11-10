@@ -34,24 +34,6 @@ class UserNetworkOperatorObserver
         $networkOperator->identification = $user->identification;
     }
 
-    public function updated(NetworkOperator $networkOperator)
-    {
-        $this->setHereMapJson($networkOperator);
-        $this->setInformation($networkOperator);
-        $user = $networkOperator->user;
-        if (!$user) {
-            return;
-        }
-
-        $user->update([
-            "name" => $networkOperator->name,
-            "last_name" => $networkOperator->last_name,
-            "email" => $networkOperator->email,
-            "phone" => $networkOperator->phone,
-            "identification" => $networkOperator->identification,
-        ]);
-    }
-
     public function setHereMapJson($model)
     {
         if (!$model->latitude or !$model->longitude) {
@@ -108,5 +90,23 @@ class UserNetworkOperatorObserver
             }
         } catch (Throwable $e) {
         }
+    }
+
+    public function updated(NetworkOperator $networkOperator)
+    {
+        $this->setHereMapJson($networkOperator);
+        $this->setInformation($networkOperator);
+        $user = $networkOperator->user;
+        if (!$user) {
+            return;
+        }
+
+        $user->update([
+            "name" => $networkOperator->name,
+            "last_name" => $networkOperator->last_name,
+            "email" => $networkOperator->email,
+            "phone" => $networkOperator->phone,
+            "identification" => $networkOperator->identification,
+        ]);
     }
 }

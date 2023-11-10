@@ -125,21 +125,10 @@ class Support extends Model
         ];
     }
 
-    public function getPhonePlusIndicativeAttribute()
-    {
-        return "(" . $this->indicative . ") " . $this->phone;
-    }
-
-    public function workOrders()
-    {
-        return $this->hasMany(WorkOrder::class);
-    }
-
     public static function getRole()
     {
         return User::TYPE_SUPPORT;
     }
-
 
     public static function getHome()
     {
@@ -149,6 +138,16 @@ class Support extends Model
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
     }
 
     public function user()

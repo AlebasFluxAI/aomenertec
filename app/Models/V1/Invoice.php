@@ -45,12 +45,15 @@ class Invoice extends Model
 
     ];
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
 
     public function paymentRecord()
     {
         return $this->hasOne(InvoicePaymentRegistration::class);
     }
-
 
     public function getAdminNameAttribute()
     {
@@ -92,10 +95,5 @@ class Invoice extends Model
     public function getModelAttribute()
     {
         return $this->admin ? $this->admin : $this->networkOperator;
-    }
-
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
     }
 }

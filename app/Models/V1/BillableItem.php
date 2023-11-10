@@ -44,13 +44,13 @@ class BillableItem extends Model
         "slug"
     ];
 
-    public function tax()
-    {
-        return $this->belongsTo(Tax::class);
-    }
-
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function tax()
+    {
+        return $this->belongsTo(Tax::class);
     }
 }

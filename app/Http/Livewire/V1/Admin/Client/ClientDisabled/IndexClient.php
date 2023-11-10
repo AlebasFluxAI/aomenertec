@@ -2,12 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\Client\ClientDisabled;
 
-use App\Http\Services\V1\Admin\Client\IndexClientService;
 use App\Http\Services\V1\Admin\ClientDisabled\IndexClientDisabledService;
-use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Models\Traits\FilterTrait;
-use App\Models\V1\Client;
-use App\Models\V1\Equipment;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,10 +13,10 @@ class IndexClient extends Component
     use FilterTrait;
 
 
-    private $indexClientDisabledService;
     public $clientType = "ZNI Sistema fotovoltaico";
     public $filterAuxColumn = "client_type_id";
     public $filterAuxValue = null;
+    private $indexClientDisabledService;
 
     public function __construct($id = null)
     {

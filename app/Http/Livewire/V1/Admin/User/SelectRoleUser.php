@@ -2,10 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\User;
 
-use App\Http\Services\V1\Admin\User\EditUserService;
-use App\Http\Services\V1\Admin\User\ProfileUserService;
 use App\Http\Services\V1\Admin\User\SelectRoleUserService;
-use Illuminate\Support\Facades\Request;
 use Livewire\Component;
 use function view;
 

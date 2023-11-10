@@ -3,11 +3,8 @@
 namespace App\Http\Livewire\V1\Admin\User\Support;
 
 use App\Http\Services\V1\Admin\User\Support\SupportEditService;
-use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
 use App\Models\V1\Support;
-use App\Models\V1\NetworkOperator;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class EditSupport extends Component
 {
@@ -19,10 +16,8 @@ class EditSupport extends Component
     public $message;
     public $person_types;
     public $identification_types;
-    private $editSupportService;
     public $indicatives;
     public $indicative;
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:6',
@@ -39,7 +34,7 @@ class EditSupport extends Component
         'model.indicative' => '',
 
     ];
-
+    private $editSupportService;
 
     public function __construct($id = null)
     {

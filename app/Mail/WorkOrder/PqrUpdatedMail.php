@@ -4,10 +4,7 @@ namespace App\Mail\WorkOrder;
 
 use App\Http\Resources\V1\Icon;
 use App\Models\V1\Pqr;
-use App\Models\V1\User;
-use App\Models\V1\WorkOrder;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 

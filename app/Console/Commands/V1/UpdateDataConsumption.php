@@ -4,14 +4,8 @@ namespace App\Console\Commands\V1;
 
 
 use App\Jobs\V1\Enertec\UnpackDataJob;
-use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
-use App\Models\V1\ClientAlert;
-use App\Models\V1\ClientConfiguration;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
-use http\Client;
 use Illuminate\Console\Command;
 
 class UpdateDataConsumption extends Command
@@ -47,8 +41,8 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-        $now =new Carbon();
-        $j=0;
+        $now = new Carbon();
+        $j = 0;
         $i = 0;
         $queues = ['spot1', 'spot2', 'spot4', 'spot5'];
         foreach (MicrocontrollerData::select('id', 'source_timestamp', 'raw_json')

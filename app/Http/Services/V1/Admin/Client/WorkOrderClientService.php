@@ -4,24 +4,16 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Image;
 use App\Models\V1\NetworkOperator;
-use App\Models\V1\RealTimeListener;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
-use App\Scope\PaginationScope;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use JetBrains\PhpStorm\NoReturn;
 use Livewire\Component;
 use Livewire\WithPagination;
-use PhpMqtt\Client\Facades\MQTT;
 
 class WorkOrderClientService extends Singleton
 {
@@ -31,17 +23,6 @@ class WorkOrderClientService extends Singleton
     {
         $this->validateArray($component->toolsListSelected, $value);
         $this->validateOthers($component);
-    }
-
-    public function changeMaterials(Component $component, $value)
-    {
-        $this->validateArray($component->materialsListSelected, $value);
-        $this->validateOthers($component);
-    }
-
-    public function changeEquipment(Component $component, $value)
-    {
-        $this->validateArray($component->equipmentsListSelected, $value);
     }
 
     private function validateArray(&$arraySelected, $value)
@@ -55,7 +36,6 @@ class WorkOrderClientService extends Singleton
             $arraySelected[] = $value;
         }
     }
-
 
     private function validateOthers(Component $component)
     {
@@ -72,6 +52,17 @@ class WorkOrderClientService extends Singleton
         }
     }
 
+    public function changeMaterials(Component $component, $value)
+    {
+        $this->validateArray($component->materialsListSelected, $value);
+        $this->validateOthers($component);
+    }
+
+    public function changeEquipment(Component $component, $value)
+    {
+        $this->validateArray($component->equipmentsListSelected, $value);
+    }
+
     public function mount(Component $component, Client $client)
     {
         $component->model = $client;
@@ -86,18 +77,6 @@ class WorkOrderClientService extends Singleton
             "otherTool" => false,
             "images" => ["image1", "image2", "image3", "image4"],
         ]);
-    }
-
-
-    public function getSupports($component)
-    {
-        $component->support_select_disabled = false;
-        return Support::get()->map(function ($support) {
-            return [
-                "key" => $support->id . " - " . $support->name . " - " . $support->identification,
-                "value" => $support->id
-            ];
-        })->toArray();
     }
 
     public function getTechnicians($component)
@@ -119,6 +98,17 @@ class WorkOrderClientService extends Singleton
         })->toArray();
     }
 
+    public function getSupports($component)
+    {
+        $component->support_select_disabled = false;
+        return Support::get()->map(function ($support) {
+            return [
+                "key" => $support->id . " - " . $support->name . " - " . $support->identification,
+                "value" => $support->id
+            ];
+        })->toArray();
+    }
+
     public function submitForm(Component $component)
     {
 
@@ -134,6 +124,22 @@ class WorkOrderClientService extends Singleton
             $this->relateEquipment($component, $workOrder);
             $component->redirectRoute("administrar.v1.ordenes_de_servicio.detalle", ["workOrder" => $workOrder->id]);
         });
+    }
+
+    private function mapper(Component $component)
+    {
+
+        return [
+            "description" => $component->description,
+            "type" => $component->type,
+            "technician_id" => $component->technician_id,
+            "support_id" => $component->support_id,
+            "materials" => $component->materials . "," . implode(", ", $component->materialsListSelected),
+            "tools" => $component->tools . "," . implode(", ", $component->toolsListSelected),
+            "days" => $component->days,
+            "hours" => $component->hours,
+            "minutes" => $component->minutes,
+        ];
     }
 
     private function relateEquipment(Component $component, WorkOrder $workOrder)
@@ -165,22 +171,6 @@ class WorkOrderClientService extends Singleton
         return response()->streamDownload(function () use ($pdf) {
             echo $pdf->stream();
         }, 'work_order_report_' . $work_order->id . '.pdf');
-    }
-
-    private function mapper(Component $component)
-    {
-
-        return [
-            "description" => $component->description,
-            "type" => $component->type,
-            "technician_id" => $component->technician_id,
-            "support_id" => $component->support_id,
-            "materials" => $component->materials . "," . implode(", ", $component->materialsListSelected),
-            "tools" => $component->tools . "," . implode(", ", $component->toolsListSelected),
-            "days" => $component->days,
-            "hours" => $component->hours,
-            "minutes" => $component->minutes,
-        ];
     }
 
     public function conditionalManuallyDetail(Component $component, $modelId)

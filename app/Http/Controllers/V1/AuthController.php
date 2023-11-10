@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Controllers\V1\Controller;
 use App\Models\V1\Client;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -27,10 +25,26 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-        if (! $token = auth("api")->attempt($credentials)) {
+        if (!$token = auth("api")->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         return $this->respondWithToken($token);
+    }
+
+    /**
+     * Get the token array structure.
+     *
+     * @param string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 1
+        ]);
     }
 
     /**
@@ -42,7 +56,6 @@ class AuthController extends Controller
     {
         return response()->json(auth()->user());
     }
-
 
     /**
      * Log the user out (Invalidate the token).
@@ -65,21 +78,6 @@ class AuthController extends Controller
         return $this->respondWithToken(auth("api")->refresh());
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 1
-        ]);
-    }
     public function joblist()
     {
         $user = auth("api")->user();
@@ -89,30 +87,31 @@ class AuthController extends Controller
         $pass1 = "jkdhjk54858DDS55";
         $response = [];
 
-        foreach ($clients as $client){
+        foreach ($clients as $client) {
 
             array_push($response, [
-                'uid'=>$client->networkOperator->identification,
-                'did'=>($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
-                'ssid'=>'wifi_'.($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
-                'password'=>$client->identification,
-                'nombre'=>($client->alias ?? $client->name),
-                'codigo_cliente'=>$client->code,
-                'ubicacion'=> json_decode($client->addresses()->first()->here_maps),
-                'celular'=>$client->phone,
-                "fecha_lectura"=>"25/12/2021",
-                "estado"=>"habilitado",
-                "orden"=>"lectura",
-                "pass"=>$pass,
+                'uid' => $client->networkOperator->identification,
+                'did' => ($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
+                'ssid' => 'wifi_' . ($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
+                'password' => $client->identification,
+                'nombre' => ($client->alias ?? $client->name),
+                'codigo_cliente' => $client->code,
+                'ubicacion' => json_decode($client->addresses()->first()->here_maps),
+                'celular' => $client->phone,
+                "fecha_lectura" => "25/12/2021",
+                "estado" => "habilitado",
+                "orden" => "lectura",
+                "pass" => $pass,
                 "equipments" => $this->clientEquipment($client)
             ]);
         }
         return response()->json($response);
     }
 
-    private function clientEquipment(Client $client){
+    private function clientEquipment(Client $client)
+    {
         $equipment_serial = [];
-        foreach ($client->equipments as $equipment){
+        foreach ($client->equipments as $equipment) {
             array_push($equipment_serial, ['type' => $equipment->equipmentType->type, 'serial' => $equipment->serial]);
         }
         return $equipment_serial;

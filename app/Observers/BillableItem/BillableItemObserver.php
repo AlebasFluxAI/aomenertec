@@ -3,8 +3,6 @@
 namespace App\Observers\BillableItem;
 
 use App\Models\V1\BillableItem;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 
 class BillableItemObserver
 {

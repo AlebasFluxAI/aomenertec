@@ -3,21 +3,14 @@
 namespace App\Jobs\V1\Enertec;
 
 use App\Models\V1\Client;
-use App\Models\V1\ClientAlert;
-use App\Models\V1\ClientConfiguration;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\StopUnpackDataClient;
 use Carbon\Carbon;
-use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use PHPUnit\Exception;
 
 class SerializeMicrocontrollerDataJob implements ShouldQueue
 {
@@ -29,6 +22,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
      * @return void
      */
     public $hour_ref;
+
     public function __construct($hour_ref)
     {
         $this->hour_ref = new Carbon($hour_ref);
@@ -44,12 +38,13 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
         $this->calculateConsumptionHourly();
     }
 
-    public function calculateConsumptionHourly(){
+    public function calculateConsumptionHourly()
+    {
         $data_frame = config('data-frame.data_frame');
-        $year =  $this->hour_ref->format('Y');
+        $year = $this->hour_ref->format('Y');
         $month = $this->hour_ref->format('m');
-        $day =   $this->hour_ref->format('d');
-        $hour =  $this->hour_ref->format('H');
+        $day = $this->hour_ref->format('d');
+        $hour = $this->hour_ref->format('H');
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
             $reference_data = MicrocontrollerData::whereClientId($client->id)
@@ -85,7 +80,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
             } else {
                 $last_hour = $this->hour_ref->copy()->subHour();
                 $last_data = HourlyMicrocontrollerData::whereClientId($client->id)
-                    ->whereBetween('source_timestamp', [$last_hour->format('Y-m-d H:00:00'), $last_hour->format('Y-m-d H:59:59') ])
+                    ->whereBetween('source_timestamp', [$last_hour->format('Y-m-d H:00:00'), $last_hour->format('Y-m-d H:59:59')])
                     ->first();
                 if ($last_data) {
                     $raw_json = json_decode($last_data->raw_json, true);
@@ -135,7 +130,7 @@ class SerializeMicrocontrollerDataJob implements ShouldQueue
                 }
             }
             $hour_data = HourlyMicrocontrollerData::whereClientId($client->id)
-                ->whereBetween('source_timestamp', [$this->hour_ref->format('Y-m-d H:00:00'), $this->hour_ref->format('Y-m-d H:59:59') ])
+                ->whereBetween('source_timestamp', [$this->hour_ref->format('Y-m-d H:00:00'), $this->hour_ref->format('Y-m-d H:59:59')])
                 ->first();
             if ($hour_data) {
                 if ($hour_data->interval_real_consumption != 0) {

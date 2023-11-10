@@ -2,22 +2,13 @@
 
 namespace App\Observers\Pqr;
 
-use App\Events\UserNotificationEvent;
-use App\Http\Resources\V1\NotificationTypes;
-use App\Http\Resources\V1\UserNotificationPayload;
-use App\Jobs\V1\Enertec\Pqr\AssignSupportUserToPqr;
 use App\Models\V1\Client;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrMessage;
 use App\Models\V1\PqrUser;
-use App\Models\V1\SuperAdmin;
 use App\Models\V1\Support;
-use App\Models\V1\User;
-use App\Notifications\Alert\AlertNotification;
-use App\Notifications\Alert\PqrNotification;
 use App\Notifications\Alert\PqrUpdatedNotification;
 use Illuminate\Support\Facades\Auth;
-use function Psy\debug;
 
 class PqrObserver
 {
@@ -65,6 +56,32 @@ class PqrObserver
 
     }
 
+    public function created(Pqr $pqr)
+    {
+
+        $user_id = $this->getUserId($pqr);
+
+        $this->createPqrUser($pqr, $user_id);
+
+        $pqr->messages()->create([
+            "sender_type" => $this->getSenderType($pqr),
+            "sent_by" => $this->getSenderId($pqr),
+            "message" => $pqr->description
+        ]);
+    }
+
+    private function getUserId(Pqr $pqr)
+    {
+        if (!$client = $pqr->client) {
+            return;
+        }
+
+        if ($pqr->client->technician->first()) {
+            return $pqr->client->technician->first()->technician->user_id;
+        }
+        return ($pqr->client->networkOperator ? $pqr->client->networkOperator->user_id : null);
+    }
+
     private function createPqrUser($pqr, $user_id)
     {
         if ($user_id) {
@@ -100,50 +117,6 @@ class PqrObserver
         }
     }
 
-    private function getSupport()
-    {
-        if (!$support = Support::wherePqrAvailable(true)->inRandomOrder()->first()) {
-            return null;
-        }
-
-        return $support->id;
-    }
-
-    private function getSupportUser()
-    {
-        if (!$support = Support::wherePqrAvailable(true)->inRandomOrder()->first()) {
-            return null;
-        }
-
-        return $support->user_id;
-    }
-
-    public function created(Pqr $pqr)
-    {
-
-        $user_id = $this->getUserId($pqr);
-
-        $this->createPqrUser($pqr, $user_id);
-
-        $pqr->messages()->create([
-            "sender_type" => $this->getSenderType($pqr),
-            "sent_by" => $this->getSenderId($pqr),
-            "message" => $pqr->description
-        ]);
-    }
-
-    private function getUserId(Pqr $pqr)
-    {
-        if (!$client = $pqr->client) {
-            return;
-        }
-
-        if ($pqr->client->technician->first()) {
-            return $pqr->client->technician->first()->technician->user_id;
-        }
-        return ($pqr->client->networkOperator ? $pqr->client->networkOperator->user_id : null);
-    }
-
     private function getSenderType($pqr)
     {
 
@@ -165,5 +138,23 @@ class PqrObserver
             return $pqr->network_operator_id;
         }
         return $pqr->client_id;
+    }
+
+    private function getSupport()
+    {
+        if (!$support = Support::wherePqrAvailable(true)->inRandomOrder()->first()) {
+            return null;
+        }
+
+        return $support->id;
+    }
+
+    private function getSupportUser()
+    {
+        if (!$support = Support::wherePqrAvailable(true)->inRandomOrder()->first()) {
+            return null;
+        }
+
+        return $support->user_id;
     }
 }

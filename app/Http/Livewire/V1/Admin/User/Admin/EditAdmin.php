@@ -3,11 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\AdminEditService;
-use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
-use App\Models\Traits\AddUserFormTrait;
-use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Admin;
-use App\Models\V1\NetworkOperator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -27,9 +23,6 @@ class EditAdmin extends Component
     public $identification_types;
     public $indicatives;
     public $indicative;
-
-    private $editAdminService;
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:6',
@@ -46,6 +39,7 @@ class EditAdmin extends Component
         'model.person_type' => 'required',
         'model.identification_type' => 'required',
     ];
+    private $editAdminService;
 
     public function __construct($id = null)
     {

@@ -2,9 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\EquipmentAlert;
 
-use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertAddService;
 use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertEditService;
-use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentAlert;
 use Livewire\Component;
 use function view;

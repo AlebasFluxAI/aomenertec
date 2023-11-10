@@ -3,10 +3,8 @@
 namespace App\Console\Commands\V1;
 
 use App\Models\V1\AuxData;
-use App\Models\V1\Client;
 use App\Models\V1\MicrocontrollerData;
 use Illuminate\Console\Command;
-use PhpMqtt\Client\Facades\MQTT;
 
 class EditDataReceived extends Command
 {

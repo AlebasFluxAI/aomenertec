@@ -15,7 +15,6 @@ use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
 
 class NetworkOperator extends Model
 {
@@ -67,27 +66,6 @@ class NetworkOperator extends Model
         "billing_day",
 
     ];
-
-
-    public function networkOperatorClientPrices()
-    {
-        return $this->hasMany(NetworkOperatorClientPrice::class)->orderBy("client_type_id");
-    }
-
-    public function getCurrentEnabledClients()
-    {
-        return $this->clients();
-    }
-
-    public function billableServices()
-    {
-        return $this->hasOne(BillingService::class);
-    }
-
-    public function timelyPayment()
-    {
-        return $this->hasOne(NetworkOperatorTimelyPayment::class);
-    }
 
     public static function menu()
     {
@@ -214,32 +192,6 @@ class NetworkOperator extends Model
         ];
     }
 
-    public function getPhonePlusIndicativeAttribute()
-    {
-        return "(" . $this->indicative . ") " . $this->phone;
-    }
-
-    public function zniFees()
-    {
-        return $this->hasMany(ZniLevelFee::class);
-    }
-
-    public function sinFees()
-    {
-        return $this->hasMany(SinLevelFee::class);
-    }
-
-
-    public function sinOtherFees()
-    {
-        return $this->hasMany(SinOtherFee::class);
-    }
-
-    public function zniOtherFees()
-    {
-        return $this->hasMany(ZniOtherFee::class);
-    }
-
     public static function priceOtionalType()
     {
         return [
@@ -270,6 +222,71 @@ class NetworkOperator extends Model
             ZniLevelFee::LEVEL_2,
             ZniLevelFee::LEVEL_3,
         ];
+    }
+
+    public static function getHome()
+    {
+        return "livewire.v1.admin.user.network-operator.profile-network-operator";
+    }
+
+    public static function getRole()
+    {
+        return User::TYPE_NETWORK_OPERATOR;
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function networkOperatorClientPrices()
+    {
+        return $this->hasMany(NetworkOperatorClientPrice::class)->orderBy("client_type_id");
+    }
+
+    public function getCurrentEnabledClients()
+    {
+        return $this->clients();
+    }
+
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
+
+    public function billableServices()
+    {
+        return $this->hasOne(BillingService::class);
+    }
+
+    public function timelyPayment()
+    {
+        return $this->hasOne(NetworkOperatorTimelyPayment::class);
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
+    }
+
+    public function zniFees()
+    {
+        return $this->hasMany(ZniLevelFee::class);
+    }
+
+    public function sinFees()
+    {
+        return $this->hasMany(SinLevelFee::class);
+    }
+
+    public function sinOtherFees()
+    {
+        return $this->hasMany(SinOtherFee::class);
+    }
+
+    public function zniOtherFees()
+    {
+        return $this->hasMany(ZniOtherFee::class);
     }
 
     public function getClientTypeForPrice()
@@ -335,24 +352,9 @@ class NetworkOperator extends Model
         return $this->hasMany(PhotovoltaicPrice::class);
     }
 
-    public static function getHome()
-    {
-        return "livewire.v1.admin.user.network-operator.profile-network-operator";
-    }
-
-    public static function getRole()
-    {
-        return User::TYPE_NETWORK_OPERATOR;
-    }
-
     public function getWorkOrdersAttribute()
     {
         return WorkOrder::whereIn("client_id", $this->clients->pluck("id"));
-    }
-
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
     }
 
     public function techniciansAsKeyValue()
@@ -389,12 +391,6 @@ class NetworkOperator extends Model
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
-    }
-
-
-    public function clients()
-    {
-        return $this->hasMany(Client::class);
     }
 
     public function allClients()
@@ -436,6 +432,11 @@ class NetworkOperator extends Model
         ));
     }
 
+    public function equipments()
+    {
+        return $this->hasMany(Equipment::class);
+    }
+
     public function equipmentTypesAsKeyValue()
     {
         return (array_merge(
@@ -451,11 +452,5 @@ class NetworkOperator extends Model
                 ];
             }))->toArray()
         ));
-    }
-
-
-    public function equipments()
-    {
-        return $this->hasMany(Equipment::class);
     }
 }

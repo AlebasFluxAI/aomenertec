@@ -24,8 +24,6 @@ class EditUser extends Component
     public $pickedU;
     public $messageU;
     public $users = [];
-    private $editUserService;
-
     protected $rules = [
         'network_operator' => 'required|min:2',
         'identification' => 'required|min:6',
@@ -34,11 +32,12 @@ class EditUser extends Component
         'email' => 'required|email',
         'user' => 'required|min:2',
     ];
+    private $editUserService;
 
     public function __construct()
     {
         parent::__construct();
-        $this->editUserService= EditUserService::getInstance();
+        $this->editUserService = EditUserService::getInstance();
     }
 
     public function updated($propertyName)
@@ -50,14 +49,17 @@ class EditUser extends Component
     {
         $this->editUserService->mount($this);
     }
+
     public function updatedUser()
     {
         $this->editUserService->updatedUser($this);
     }
+
     public function assignUser($user)
     {
         $this->editUserService->assignUser($this, $user);
     }
+
     public function assignUserFirst()
     {
         $this->editUserService->assignUserFirst($this);
@@ -67,10 +69,12 @@ class EditUser extends Component
     {
         $this->editUserService->updatedNetworkOperator($this);
     }
+
     public function assignNetworkOperator($network_operator)
     {
         $this->editUserService->assignNetworkOperator($this, $network_operator);
     }
+
     public function assignNetworkOperatorFirst()
     {
         $this->editUserService->assignNetworkOperatorFirst($this);
@@ -80,10 +84,12 @@ class EditUser extends Component
     {
         $this->editUserService->edit($this);
     }
+
     public function delete()
     {
         $this->editUserService->delete($this);
     }
+
     public function render()
     {
         return view('livewire.v1.admin.user.edit-user')

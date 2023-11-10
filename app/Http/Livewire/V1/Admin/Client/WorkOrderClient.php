@@ -4,14 +4,8 @@ namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\WorkOrderClientService;
 use App\Models\V1\Client;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\RealTimeListener;
-use App\Models\V1\WorkOrder;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
-use PhpMqtt\Client\Facades\MQTT;
 
 class WorkOrderClient extends Component
 {

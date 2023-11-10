@@ -6,27 +6,20 @@ use App\Http\Resources\V1\Icon;
 use App\Models\V1\BillableItem;
 use App\Models\V1\Client;
 use App\Models\V1\ClientType;
-use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\Invoice;
-use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\SinOtherFee;
 use App\Models\V1\SubsistenceConsumption;
-use App\Models\V1\ZniLevelFee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
-use function PHPUnit\Framework\isEmpty;
 
 class ClientInvoiceGenerationJob implements ShouldQueue
 {
@@ -87,9 +80,9 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             $publicTaxType = $otherFee ? $otherFee->tax_type : 0.0;
             $publicTax = $otherFee ? $otherFee->tax : 0.0;
         }
-
-        $year = "2023";
-        $month = "9";
+        $billing_date = Carbon::now()->subday();
+        $year = $billing_date->format('Y');
+        $month = $billing_date->format('m');
 
         $total_consumption = $invoice->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))

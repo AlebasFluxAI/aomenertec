@@ -4,10 +4,12 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
+use App\ModulesAux\MQTT;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Carbon\Carbon;
-use App\ModulesAux\MQTT;;
+
+;
 
 class RealTimeChart extends Component
 {
@@ -72,7 +74,7 @@ class RealTimeChart extends Component
         $aux = [];
         $var_data_frame = $this->data_frame_rt->where('variable_id', $value)->all();
         foreach ($var_data_frame as $item) {
-            if (count($this->last_data)>0) {
+            if (count($this->last_data) > 0) {
                 $item['value'] = round($this->last_data[$item['variable_name']], 2);
             } else {
                 $item['value'] = 0;
@@ -108,7 +110,7 @@ class RealTimeChart extends Component
             $data_aux[$index] = [];
             foreach ($this->data_real_time as $item) {
                 $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
-                if ($variable['start']<=430) {
+                if ($variable['start'] <= 430) {
                     array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
                 }
             }
@@ -120,25 +122,25 @@ class RealTimeChart extends Component
 
     public function selectRealTime()
     {
-        if($this->client->clientConfiguration()->first()->active_real_time) {
+        if ($this->client->clientConfiguration()->first()->active_real_time) {
 
 
-                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-                if (!RealTimeListener::whereUserId(Auth::user()->id)
-                    ->whereEquipmentId($equipment->id)->exists()) {
-                    $new = RealTimeListener::create([
-                        "user_id" => Auth::user()->id,
-                        "equipment_id" => $equipment->id
-                    ]);
-                    if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
-                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
-                        $topic = 'mc/config/' . $equipment->serial;
-                        MQTT::publish($topic, $message);
-                        MQTT::disconnect();
-                    }
+            $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+            if (!RealTimeListener::whereUserId(Auth::user()->id)
+                ->whereEquipmentId($equipment->id)->exists()) {
+                $new = RealTimeListener::create([
+                    "user_id" => Auth::user()->id,
+                    "equipment_id" => $equipment->id
+                ]);
+                if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
+                    $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
+                    $topic = 'mc/config/' . $equipment->serial;
+                    MQTT::publish($topic, $message);
+                    MQTT::disconnect();
                 }
-        }else{
-            $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data'=> 'El dispositivo no cuenta con conexión wifi...']);
+            }
+        } else {
+            $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data' => 'El dispositivo no cuenta con conexión wifi...']);
         }
     }
 
@@ -155,8 +157,8 @@ class RealTimeChart extends Component
         foreach ($this->variables_selected_real_time as $variable) {
             $data_aux[$index] = [];
             foreach ($this->data_real_time as $item) {
-                    $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
-                    array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
+                $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
+                array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
             }
             $this->series_real_time[$index] = ["name" => $variable['display_name'], "data" => $data_aux[$index]];
             $index++;
@@ -166,29 +168,29 @@ class RealTimeChart extends Component
             $aux = [];
             $var_data_frame = $this->data_frame_rt->where('variable_id', $card['id'])->all();
             foreach ($var_data_frame as $item) {
-                    $item['value'] = round($this->last_data[$item['variable_name']], 2);
-                    array_push($aux, $item);
+                $item['value'] = round($this->last_data[$item['variable_name']], 2);
+                array_push($aux, $item);
             }
             $this->cards_real_time[$index]["variables_selected"] = $aux;
         }
-        if ($data['data']['total_phase_angle']<0){
+        if ($data['data']['total_phase_angle'] < 0) {
             $sum_angle_2 = -120;
             $sum_angle_3 = -240;
-        } else{
+        } else {
             $sum_angle_2 = 240;
             $sum_angle_3 = 120;
         }
-        $this->select_data = ['tittle'=>'phasor', 'lineFrecuency'=>60, 'samplesPerCycle'=>32, 'percent_volt'=>($data['data']['ph1_ph2_volt'] == 0)?0:round($data['data']['ph2_ph3_volt']/$data['data']['ph1_ph2_volt'],3), 'percent_curr'=>($data['data']['ph1_current'] == 0)?0:round($data['data']['ph2_current']/$data['data']['ph1_current'],3),
-            'data'=>[
-                ['label'=>'V1', 'unit'=>'Voltage', 'phase'=>'1', 'relationship_degrees'=> round($data['data']['ph1_phase_angle'],3),'degrees'=>0 ,'angle'=>round((0 * pi()) / 180, 3), 'magnitude'=>round($data['data']['ph1_ph2_volt'],3), 'system_type'=>($data['data']['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'V2', 'unit'=>'Voltage', 'phase'=>'2', 'relationship_degrees'=> round($data['data']['ph2_phase_angle'],3),'degrees'=>240 ,'angle'=>round((240 * pi()) / 180,3), 'magnitude'=>round($data['data']['ph2_ph3_volt'],3), 'system_type'=>($data['data']['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'V3', 'unit'=>'Voltage', 'phase'=>'3', 'relationship_degrees'=> round($data['data']['ph3_phase_angle'],3),'degrees'=>120 ,'angle'=>round((120 * pi()) / 180, 3), 'magnitude'=>round($data['data']['ph3_ph1_volt'],3), 'system_type'=>($data['data']['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'I1', 'unit'=>'Current', 'phase'=>'1', 'relationship_degrees'=> round($data['data']['ph1_phase_angle'],3),'degrees'=>round($data['data']['ph1_phase_angle'],3) ,'angle'=>round(($data['data']['ph1_phase_angle'] * pi()) / 180,3), 'magnitude'=>round($data['data']['ph1_current'],3), 'system_type'=>($data['data']['ph1_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'I2', 'unit'=>'Current', 'phase'=>'2', 'relationship_degrees'=> round($data['data']['ph2_phase_angle'],3),'degrees'=>round($data['data']['ph2_phase_angle'] + $sum_angle_2, 3) ,'angle'=>round((($data['data']['ph2_phase_angle'] + $sum_angle_2) * pi()) / 180,3) , 'magnitude'=>round($data['data']['ph2_current'],3), 'system_type'=>($data['data']['ph2_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO'],
-                ['label'=>'I3', 'unit'=>'Current', 'phase'=>'3', 'relationship_degrees'=> round($data['data']['ph3_phase_angle'],3),'degrees'=>round($data['data']['ph3_phase_angle'] + $sum_angle_3, 3) ,'angle'=>round((($data['data']['ph3_phase_angle'] + $sum_angle_3) * pi()) / 180,3) , 'magnitude'=>round($data['data']['ph3_current'],3), 'system_type'=>($data['data']['ph3_phase_angle']>0)?'INDUCTIVO':'CAPACITIVO']
+        $this->select_data = ['tittle' => 'phasor', 'lineFrecuency' => 60, 'samplesPerCycle' => 32, 'percent_volt' => ($data['data']['ph1_ph2_volt'] == 0) ? 0 : round($data['data']['ph2_ph3_volt'] / $data['data']['ph1_ph2_volt'], 3), 'percent_curr' => ($data['data']['ph1_current'] == 0) ? 0 : round($data['data']['ph2_current'] / $data['data']['ph1_current'], 3),
+            'data' => [
+                ['label' => 'V1', 'unit' => 'Voltage', 'phase' => '1', 'relationship_degrees' => round($data['data']['ph1_phase_angle'], 3), 'degrees' => 0, 'angle' => round((0 * pi()) / 180, 3), 'magnitude' => round($data['data']['ph1_ph2_volt'], 3), 'system_type' => ($data['data']['ph1_phase_angle'] > 0) ? 'INDUCTIVO' : 'CAPACITIVO'],
+                ['label' => 'V2', 'unit' => 'Voltage', 'phase' => '2', 'relationship_degrees' => round($data['data']['ph2_phase_angle'], 3), 'degrees' => 240, 'angle' => round((240 * pi()) / 180, 3), 'magnitude' => round($data['data']['ph2_ph3_volt'], 3), 'system_type' => ($data['data']['ph2_phase_angle'] > 0) ? 'INDUCTIVO' : 'CAPACITIVO'],
+                ['label' => 'V3', 'unit' => 'Voltage', 'phase' => '3', 'relationship_degrees' => round($data['data']['ph3_phase_angle'], 3), 'degrees' => 120, 'angle' => round((120 * pi()) / 180, 3), 'magnitude' => round($data['data']['ph3_ph1_volt'], 3), 'system_type' => ($data['data']['ph3_phase_angle'] > 0) ? 'INDUCTIVO' : 'CAPACITIVO'],
+                ['label' => 'I1', 'unit' => 'Current', 'phase' => '1', 'relationship_degrees' => round($data['data']['ph1_phase_angle'], 3), 'degrees' => round($data['data']['ph1_phase_angle'], 3), 'angle' => round(($data['data']['ph1_phase_angle'] * pi()) / 180, 3), 'magnitude' => round($data['data']['ph1_current'], 3), 'system_type' => ($data['data']['ph1_phase_angle'] > 0) ? 'INDUCTIVO' : 'CAPACITIVO'],
+                ['label' => 'I2', 'unit' => 'Current', 'phase' => '2', 'relationship_degrees' => round($data['data']['ph2_phase_angle'], 3), 'degrees' => round($data['data']['ph2_phase_angle'] + $sum_angle_2, 3), 'angle' => round((($data['data']['ph2_phase_angle'] + $sum_angle_2) * pi()) / 180, 3), 'magnitude' => round($data['data']['ph2_current'], 3), 'system_type' => ($data['data']['ph2_phase_angle'] > 0) ? 'INDUCTIVO' : 'CAPACITIVO'],
+                ['label' => 'I3', 'unit' => 'Current', 'phase' => '3', 'relationship_degrees' => round($data['data']['ph3_phase_angle'], 3), 'degrees' => round($data['data']['ph3_phase_angle'] + $sum_angle_3, 3), 'angle' => round((($data['data']['ph3_phase_angle'] + $sum_angle_3) * pi()) / 180, 3), 'magnitude' => round($data['data']['ph3_current'], 3), 'system_type' => ($data['data']['ph3_phase_angle'] > 0) ? 'INDUCTIVO' : 'CAPACITIVO']
             ]
         ];
-        $this->emit('addPointRealTime', ['data' => $this->select_data, 'series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data'=> 'No hay datos']);
+        $this->emit('addPointRealTime', ['data' => $this->select_data, 'series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data' => 'No hay datos']);
         //$this->emit('addPointRealTime', [ 'series' => $this->series_real_time, 'title' => $this->chart_title, 'no_data'=> 'No hay datos']);
         $this->emit('animatedRealTime');
     }

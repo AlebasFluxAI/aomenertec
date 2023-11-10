@@ -1,5 +1,6 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
     @include("partials.v1.title",[
             "second_title"=>"de equipos",

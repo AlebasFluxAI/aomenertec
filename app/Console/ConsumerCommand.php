@@ -4,12 +4,11 @@ namespace App\Console;
 
 
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
-use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SaveAlertDataJob;
-use App\Jobs\V1\SetClientStopUnpackDataJob;
+use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
 use App\Jobs\V1\SetConfigJob;
-use Illuminate\Console\Command;
 use App\ModulesAux\MQTT;
+use Illuminate\Console\Command;
 
 class ConsumerCommand extends Command
 {
@@ -36,10 +35,10 @@ class ConsumerCommand extends Command
     public function handle()
     {
         $mqtt = MQTT::connection('default', 'client_consumer_princi');
-        $mqtt->subscribe('mc/real_time/v1', function (string $topic, string $message)  {
+        $mqtt->subscribe('mc/real_time/v1', function (string $topic, string $message) {
             dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
         }, 1);
-       $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
+        $mqtt->subscribe('mc/data/v1', function (string $topic, string $message) {
             dispatch(new SaveMicrocontrollerDataJob($message, false))->onQueue('spot');
         }, 1);
         $mqtt->subscribe('mc/alert/v1', function (string $topic, string $message) {
@@ -56,9 +55,9 @@ class ConsumerCommand extends Command
             //echo "msj ALERTA test= ".$message."\n";
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) use ($mqtt) {
-            echo $message."\n";
+            echo $message . "\n";
             dispatch(new SaveMicrocontrollerDataJob($message, false))->onQueue('spot');
-        },2);
+        }, 2);
         $mqtt->subscribe('mc/alert', function (string $topic, string $message) {
             //echo "msj ALERTA = ".$message."\n";
             dispatch(new SaveMicrocontrollerDataJob($message, true))->onQueue('spot');

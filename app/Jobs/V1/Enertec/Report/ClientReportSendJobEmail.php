@@ -74,15 +74,6 @@ class ClientReportSendJobEmail implements ShouldQueue
 
     }
 
-    private function timeRange($client): array
-    {
-        if ($client->report_rate == Client::DAILY_RATE) {
-            return [now()->startOfDay(), now()->endOfDay()];
-        } else {
-            return [now()->subMonth(), now()];
-        }
-    }
-
     private function arrayCreate($client, $variables, $report_time_id)
     {
         $variables = explode(",", str_replace(array('[', ']', '"'), '', $variables));
@@ -160,6 +151,15 @@ class ClientReportSendJobEmail implements ShouldQueue
                 }
             }
             return $array_report;
+        }
+    }
+
+    private function timeRange($client): array
+    {
+        if ($client->report_rate == Client::DAILY_RATE) {
+            return [now()->startOfDay(), now()->endOfDay()];
+        } else {
+            return [now()->subMonth(), now()];
         }
     }
 }

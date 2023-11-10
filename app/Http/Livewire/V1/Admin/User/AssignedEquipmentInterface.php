@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire\V1\Admin\User;
 
-use Livewire\Component;
-
 interface AssignedEquipmentInterface
 {
     public function getPageTitle();

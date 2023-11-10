@@ -78,14 +78,47 @@ class Pqr extends Model
         "status_" . self::STATUS_CLOSED . "_by",
     ];
 
-    public function hasClient()
+    static public function indexTableHeaders()
     {
-        return $this->client != null;
+        return [
+            [
+                "col_name" => "ID",
+                "col_data" => "id",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Cliente",
+                "col_data" => "client.name",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Tipo",
+                "col_translate" => "pqr",
+                "col_data" => "type",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Estado",
+                "col_translate" => "pqr",
+                "col_data" => "status",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Descripción",
+                "col_data" => "description",
+                "col_filter" => false
+            ],
+        ];
     }
 
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function hasClient()
+    {
+        return $this->client != null;
     }
 
     public function workOrder()
@@ -123,7 +156,6 @@ class Pqr extends Model
         return $this->belongsTo(Supervisor::class);
     }
 
-
     public function messages()
     {
         return $this->hasMany(PqrMessage::class)->whereType(PqrMessage::MESSAGE_TYPE_REGULAR);
@@ -133,8 +165,8 @@ class Pqr extends Model
     {
         $messages = $this->messages;
         $images = [];
-        foreach ($messages as $index => $message){
-            if ($message->attach){
+        foreach ($messages as $index => $message) {
+            if ($message->attach) {
                 $images[$index] = $message->attach->url;
             }
         }
@@ -187,39 +219,6 @@ class Pqr extends Model
     public function equipmentChangeHistorical()
     {
         return $this->hasMany(HistoricalClientEquipment::class);
-    }
-
-    static public function indexTableHeaders()
-    {
-        return [
-            [
-                "col_name" => "ID",
-                "col_data" => "id",
-                "col_filter" => false
-            ],
-            [
-                "col_name" => "Cliente",
-                "col_data" => "client.name",
-                "col_filter" => false
-            ],
-            [
-                "col_name" => "Tipo",
-                "col_translate" => "pqr",
-                "col_data" => "type",
-                "col_filter" => false
-            ],
-            [
-                "col_name" => "Estado",
-                "col_translate" => "pqr",
-                "col_data" => "status",
-                "col_filter" => false
-            ],
-            [
-                "col_name" => "Descripción",
-                "col_data" => "description",
-                "col_filter" => false
-            ],
-        ];
     }
 
     public function sender()

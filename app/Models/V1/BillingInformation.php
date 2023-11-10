@@ -16,10 +16,10 @@ class BillingInformation extends Model
     use PaginatorTrait;
 
 
-    protected $table = "billing_informations";
     public const BILLING_TYPE_PREPAID = "prepaid";
     public const BILLING_TYPE_POSTPAID = "postpaid";
     public const BILLING_TYPE_NONE = "none";
+    protected $table = "billing_informations";
     protected $fillable = [
         "client_id",
         "name",

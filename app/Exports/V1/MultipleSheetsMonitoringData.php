@@ -8,14 +8,17 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 class MultipleSheetsMonitoringData implements WithMultipleSheets
 {
     use Exportable;
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     protected $arrays;
+
     public function __construct(array $array)
     {
         $this->arrays = $array;
     }
+
     public function sheets(): array
     {
         $sheets = [];

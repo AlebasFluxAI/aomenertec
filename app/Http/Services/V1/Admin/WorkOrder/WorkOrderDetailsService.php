@@ -3,19 +3,9 @@
 namespace App\Http\Services\V1\Admin\WorkOrder;
 
 use App\Http\Services\Singleton;
-use App\Models\V1\Client;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Image;
-use App\Models\V1\RealTimeListener;
-use App\Models\V1\Technician;
-use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
-use PhpMqtt\Client\Facades\MQTT;
 
 class WorkOrderDetailsService extends Singleton
 {

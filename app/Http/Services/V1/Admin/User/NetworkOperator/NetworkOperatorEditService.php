@@ -6,7 +6,6 @@ use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Services\Singleton;
 use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\NetworkOperator;
-use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;

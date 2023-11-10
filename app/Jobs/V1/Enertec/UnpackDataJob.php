@@ -6,7 +6,6 @@ use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,6 +21,7 @@ class UnpackDataJob implements ShouldQueue
      * @return void
      */
     public $item;
+
     public function __construct($item)
     {
         $this->item = MicrocontrollerData::find($item);
@@ -90,7 +90,7 @@ class UnpackDataJob implements ShouldQueue
                                         } else {
                                             if ($last_data) {
                                                 if ($data['start'] >= 450) {
-                                                    $json[$data['variable_name']] = $last_raw_json[$data["data_" .'variable_name']];
+                                                    $json[$data['variable_name']] = $last_raw_json[$data["data_" . 'variable_name']];
                                                 } else {
                                                     $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                 }
@@ -131,23 +131,23 @@ class UnpackDataJob implements ShouldQueue
                     }
                     $this->item->raw_json = $json;
 
-//                    if ($json['import_wh'] <= 0) {
-//                        if ($last_data) {
-//                            if ($last_raw_json['import_wh']>0) {
-//                                $this->item->updateQuietly();
-//                                $this->item->forceDelete();
-//                                return;
-//                            }
-//                        }
-//                    }
+                    if ($json['import_wh'] <= 0) {
+                        if ($last_data) {
+                            if ($last_raw_json['import_wh'] > 0) {
+                                $this->item->updateQuietly();
+                                $this->item->forceDelete();
+                                return;
+                            }
+                        }
+                    }
 
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {
 
                         $this->item->save();
-                            //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
+                        //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
-                    } else{
+                    } else {
                         $this->item->forceDelete();
                     }
                 } else {
@@ -156,14 +156,14 @@ class UnpackDataJob implements ShouldQueue
             } else {
                 $this->item->forceDelete();
             }
-        }else {
-            $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ;
-            $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ;
-            $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ;
-            $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'] ;
-            $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ;
-            $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ;
-            if($this->item->manually){
+        } else {
+            $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
+            $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
+            $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'];
+            $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'];
+            $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'];
+            $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
+            if ($this->item->manually) {
                 $this->item->interval_real_consumption = 1;
             }
             $this->item->raw_json = json_encode($raw_json);

@@ -2,32 +2,11 @@
 
 namespace App\Http\Services\V1\Admin\User\Purchase;
 
-use App\Events\ChatEvent;
-use App\Http\Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent;
 use App\Http\Services\Singleton;
-use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
-use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
-use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertIndexService;
-use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
-use App\Http\Services\V1\Admin\Pqr\AddPqrGuestClientService;
-use App\Http\Services\V1\Admin\Pqr\PqrIndexService;
 use App\Models\Traits\CreateRechargeTrait;
-use App\Models\Traits\PassTrait;
-use App\Models\V1\AlertType;
 use App\Models\V1\ClientRecharge;
-use App\Models\V1\Equipment;
-
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Image;
-use App\Models\V1\Pqr;
-use App\Models\V1\User;
-use Crc16\Crc16;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;
-use App\Models\V1\Client;
-use function view;
 
 class PurchaseGuestCreateService extends Singleton
 {
@@ -48,7 +27,7 @@ class PurchaseGuestCreateService extends Singleton
                 "total" => $component->total,
                 "reference" => $component->reference,
                 "status" => ClientRecharge::PURCHASE_PAYMENT_STATUS_PENDING,
-                "recharge_code"=> $component->recharge_code,
+                "recharge_code" => $component->recharge_code,
                 "consecutive" => $component->client->lastConsecutiveRecharge() + 1
             ]);
         });

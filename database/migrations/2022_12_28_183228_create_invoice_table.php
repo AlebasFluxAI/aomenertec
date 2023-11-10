@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\V1\Invoice;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\V1\Invoice;
 
 class CreateInvoiceTable extends Migration
 {

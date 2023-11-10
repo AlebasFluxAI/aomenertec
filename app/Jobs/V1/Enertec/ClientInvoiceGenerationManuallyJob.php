@@ -2,27 +2,22 @@
 
 namespace App\Jobs\V1\Enertec;
 
-use App\Http\Resources\V1\Icon;
 use App\Models\V1\BillableItem;
 use App\Models\V1\Client;
 use App\Models\V1\ClientType;
 use App\Models\V1\Invoice;
 use App\Models\V1\SinOtherFee;
 use App\Models\V1\SubsistenceConsumption;
-use App\Models\V1\ZniLevelFee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
-use function PHPUnit\Framework\isEmpty;
 
 class ClientInvoiceGenerationManuallyJob implements ShouldQueue
 {
@@ -231,11 +226,11 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             $others_data['periodo_facturado'] = $date_last_month == null ? $date_month->format('Y-m-d') . ' - ' . $date_month->format('Y-m-01') : $date_month->format('Y-m-d') . ' - ' . $date_last_month->format('Y-m-d');
             $others_data['dias_facturados'] = $date_last_month == null ? $date_month->format('d') : $date_month->diffInDays($date_last_month);
             $others_data['numero_factura'] = $date_month->format('y') . $date_month->format('m') . $client->code;
-            $bar_code =  $others_data['numero_factura'] . str_replace("-", "",  $others_data['pago_oportuno']) . $value->total;
+            $bar_code = $others_data['numero_factura'] . str_replace("-", "", $others_data['pago_oportuno']) . $value->total;
             $generadorDeCodigoDeBarras = new DNS1D();
             $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG($bar_code, 'C39');
             $generate_qr_code = new DNS2D();
-            $qr_code = $generate_qr_code->getBarcodePNG('https://aom.enerteclatam.com/clientes/invitados/facturas/cliente/factura/'.$invoice->id, 'QRCODE');
+            $qr_code = $generate_qr_code->getBarcodePNG('https://aom.enerteclatam.com/clientes/invitados/facturas/cliente/factura/' . $invoice->id, 'QRCODE');
 
             $value_aux = [
                 'value_active' => $value->value_active,

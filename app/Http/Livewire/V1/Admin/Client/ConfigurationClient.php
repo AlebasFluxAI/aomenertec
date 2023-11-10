@@ -3,12 +3,8 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\ClientConfigurationService;
-use App\Http\Services\V1\Admin\Client\IndexClientService;
-use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Models\V1\Client;
-use App\Models\V1\Equipment;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class ConfigurationClient extends Component
 {
@@ -55,11 +51,6 @@ class ConfigurationClient extends Component
         $this->configurationClientService->submitFormInvoicing($this);
     }
 
-    protected function rules()
-    {
-        return $this->configurationClientService->rules($this);
-    }
-
     public function submitReportRate()
     {
         $this->configurationClientService->submitReportRate($this);
@@ -85,7 +76,6 @@ class ConfigurationClient extends Component
         $this->configurationClientService->updatedClientConfig($this, $value, $key);
     }
 
-
     public function submitFormConection()
     {
         $this->configurationClientService->submitFormConection($this);
@@ -101,9 +91,13 @@ class ConfigurationClient extends Component
         $this->configurationClientService->blinkChannel($this, $channel);
     }
 
-
     public function render()
     {
         return view('livewire.v1.admin.client.configuration-client')->extends('layouts.v1.app');
+    }
+
+    protected function rules()
+    {
+        return $this->configurationClientService->rules($this);
     }
 }

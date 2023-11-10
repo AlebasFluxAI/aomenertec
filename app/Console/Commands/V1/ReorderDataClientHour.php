@@ -3,9 +3,7 @@
 namespace App\Console\Commands\V1;
 
 use App\Models\V1\Client;
-use App\Models\V1\DailyMicrocontrollerData;
 use App\Models\V1\HourlyMicrocontrollerData;
-use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -44,26 +42,26 @@ class ReorderDataClientHour extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2023,01, 8, 0,0,0);
+        $end_date = Carbon::create(2023, 01, 8, 0, 0, 0);
         $end_date_copy = $end_date->copy();
         $data_frame = config('data-frame.data_frame');
         while (true) {
             $end_date->addHour();
-            echo $end_date->format('Y-m-d H')."\n";
+            echo $end_date->format('Y-m-d H') . "\n";
             foreach ($clients as $client) {
-                $year =  $end_date->format('Y');
+                $year = $end_date->format('Y');
                 $month = $end_date->format('m');
-                $day =   $end_date->format('d');
-                $hour =  $end_date->format('H');
+                $day = $end_date->format('d');
+                $hour = $end_date->format('H');
                 $hour_data_client = $client->hourlyMicrocontrollerData()
-                                    ->where([
-                                        ['year', '=', $year],
-                                        ['month', '=', $month],
-                                        ['day', '=', $day],
-                                        ['hour', '=', $hour],
-                                    ])->get();
-                if (count($hour_data_client)>0){
-                    foreach ($hour_data_client as $datum){
+                    ->where([
+                        ['year', '=', $year],
+                        ['month', '=', $month],
+                        ['day', '=', $day],
+                        ['hour', '=', $hour],
+                    ])->get();
+                if (count($hour_data_client) > 0) {
+                    foreach ($hour_data_client as $datum) {
                         $datum->forceDelete();
                     }
                 }
@@ -100,13 +98,13 @@ class ReorderDataClientHour extends Command
                 } else {
                     $last_hour = $end_date->copy()->subHour();
                     $last_data = $client->hourlyMicrocontrollerData()
-                                                        ->where('year', $last_hour->format('Y'))
-                                                        ->where('month', $last_hour->format('m'))
-                                                        ->where('day', $last_hour->format('d'))
-                                                        ->where('hour', $last_hour->format('H'))->first();
+                        ->where('year', $last_hour->format('Y'))
+                        ->where('month', $last_hour->format('m'))
+                        ->where('day', $last_hour->format('d'))
+                        ->where('hour', $last_hour->format('H'))->first();
                     if ($last_data) {
                         $raw_json = json_decode($last_data->raw_json, true);
-                        foreach ($data_frame as $item){
+                        foreach ($data_frame as $item) {
                             if ($item['start'] >= 72) {
                                 if ($item['variable_name'] != 'Wh_calc') {
                                     if ($item['variable_name'] != 'import_wh' and $item['variable_name'] != 'export_wh' and $item['variable_name'] != 'import_VArh' and $item['variable_name'] != 'export_VArh'
@@ -150,20 +148,20 @@ class ReorderDataClientHour extends Command
                     }
                 }
             }
-            if ($end_date->diffInHours($reference_date)==0){
+            if ($end_date->diffInHours($reference_date) == 0) {
                 break;
             }
         }
         while (true) {
             $reference_date->subHour();
             foreach ($clients as $client) {
-                $year =  $reference_date->format('Y');
+                $year = $reference_date->format('Y');
                 $month = $reference_date->format('m');
-                $day =   $reference_date->format('d');
-                $hour =  $reference_date->format('H');
-                $hour_data =$client->hourlyMicrocontrollerdata()
+                $day = $reference_date->format('d');
+                $hour = $reference_date->format('H');
+                $hour_data = $client->hourlyMicrocontrollerdata()
                     ->where('year', $year)
-                    ->where('month',$month)
+                    ->where('month', $month)
                     ->where('day', $day)
                     ->where('hour', $hour)
                     ->first();
@@ -172,23 +170,23 @@ class ReorderDataClientHour extends Command
                     $previous_hour_data = $client->hourlyMicrocontrollerdata()
                         ->whereBetween('source_timestamp', [$reference_date->copy()->subHour()->format('Y-m-d H:00:00'), $reference_date->copy()->subHour()->format('Y-m-d H:59:59')])
                         ->first();
-                    if ($previous_hour_data){
-                        if ($previous_hour_data->interval_real_consumption == 0){
+                    if ($previous_hour_data) {
+                        if ($previous_hour_data->interval_real_consumption == 0) {
                             $data = HourlyMicrocontrollerData::whereMicrocontrollerDataId($previous_hour_data->microcontroller_data_id)->orderBy('source_timestamp')->get();
-                            if (count($data) > 1){
-                                $i=0;
-                                foreach ($data as $datum){
-                                    if ($i == 0){
+                            if (count($data) > 1) {
+                                $i = 0;
+                                foreach ($data as $datum) {
+                                    if ($i == 0) {
                                         $first_raw_json = json_decode($datum->raw_json, true);
-                                        $average_accumulated_real_consumption = ($last_raw_json['import_wh'] - $first_raw_json['import_wh'])/count($data);
-                                        $average_accumulated_real_consumption_ph1 = ($last_raw_json['ph1_import_kwh'] - $first_raw_json['ph1_import_kwh'])/count($data);
-                                        $average_accumulated_real_consumption_ph2 = ($last_raw_json['ph2_import_kwh'] - $first_raw_json['ph2_import_kwh'])/count($data);
-                                        $average_accumulated_real_consumption_ph3 = ($last_raw_json['ph3_import_kwh'] - $first_raw_json['ph3_import_kwh'])/count($data);
-                                        $average_accumulated_reactive_consumption = ($last_raw_json['import_VArh'] - $first_raw_json['import_VArh'])/count($data);
-                                        $average_accumulated_reactive_consumption_ph1 = ($last_raw_json['ph1_import_kvarh'] - $first_raw_json['ph1_import_kvarh'])/count($data);
-                                        $average_accumulated_reactive_consumption_ph2 = ($last_raw_json['ph2_import_kvarh'] - $first_raw_json['ph2_import_kvarh'])/count($data);
-                                        $average_accumulated_reactive_consumption_ph3 = ($last_raw_json['ph3_import_kvarh'] - $first_raw_json['ph3_import_kvarh'])/count($data);
-                                    } else{
+                                        $average_accumulated_real_consumption = ($last_raw_json['import_wh'] - $first_raw_json['import_wh']) / count($data);
+                                        $average_accumulated_real_consumption_ph1 = ($last_raw_json['ph1_import_kwh'] - $first_raw_json['ph1_import_kwh']) / count($data);
+                                        $average_accumulated_real_consumption_ph2 = ($last_raw_json['ph2_import_kwh'] - $first_raw_json['ph2_import_kwh']) / count($data);
+                                        $average_accumulated_real_consumption_ph3 = ($last_raw_json['ph3_import_kwh'] - $first_raw_json['ph3_import_kwh']) / count($data);
+                                        $average_accumulated_reactive_consumption = ($last_raw_json['import_VArh'] - $first_raw_json['import_VArh']) / count($data);
+                                        $average_accumulated_reactive_consumption_ph1 = ($last_raw_json['ph1_import_kvarh'] - $first_raw_json['ph1_import_kvarh']) / count($data);
+                                        $average_accumulated_reactive_consumption_ph2 = ($last_raw_json['ph2_import_kvarh'] - $first_raw_json['ph2_import_kvarh']) / count($data);
+                                        $average_accumulated_reactive_consumption_ph3 = ($last_raw_json['ph3_import_kvarh'] - $first_raw_json['ph3_import_kvarh']) / count($data);
+                                    } else {
                                         $raw_json = json_decode($datum->raw_json, true);
                                         $raw_json['import_wh'] = $first_raw_json['import_wh'] + ($average_accumulated_real_consumption * $i);
                                         $raw_json['kwh_interval'] = $average_accumulated_real_consumption;
@@ -228,7 +226,7 @@ class ReorderDataClientHour extends Command
                     }
                 }
             }
-            if ($end_date_copy->diffInHours($reference_date)==0){
+            if ($end_date_copy->diffInHours($reference_date) == 0) {
                 break;
             }
         }

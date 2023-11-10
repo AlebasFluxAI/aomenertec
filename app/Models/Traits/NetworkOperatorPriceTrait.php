@@ -4,15 +4,9 @@ namespace App\Models\Traits;
 
 use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\ClientType;
-use App\Models\V1\Image;
 use App\Models\V1\PhotovoltaicPrice;
 use App\Models\V1\Stratum;
 use App\Models\V1\VoltageLevel;
-use Dotenv\Util\Str;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Request;
 use Livewire\Component;
 
 trait NetworkOperatorPriceTrait
@@ -137,21 +131,21 @@ trait NetworkOperatorPriceTrait
             if ($fee = $component->model->zniFees()->where([
                 "month" => $component->month,
                 "year" => $component->year
-            ])->first() ) {
+            ])->first()) {
                 $component->default_rate = $fee->default_rate;
             }
-        } elseif ($component->client_type == ClientType::SIN_CONVENTIONAL){
+        } elseif ($component->client_type == ClientType::SIN_CONVENTIONAL) {
             if ($fee = $component->model->sinFees()->where([
                 "month" => $component->month,
                 "year" => $component->year
-            ])->first() ) {
+            ])->first()) {
                 $component->default_rate = $fee->default_rate;
             }
         } else {
             if ($fee = $component->model->photovoltaicPrice()->where([
                 "month" => $component->month,
                 "year" => $component->year
-            ])->first() ) {
+            ])->first()) {
                 $component->default_rate = $fee->default_rate;
             }
         }
@@ -161,18 +155,18 @@ trait NetworkOperatorPriceTrait
     {
 
         if ($component->client_type == ClientType::ZIN_CONVENTIONAL) {
-            if($component->model->zniFees()->where([
+            if ($component->model->zniFees()->where([
                 "month" => $component->month,
                 "year" => $component->year
             ])->exists()) {
-            foreach ($component->model->zniFees()->where([
-                "month" => $component->month,
-                "year" => $component->year
-            ])->get() as $fee) {
-                $fee->default_rate = $value;
-                $fee->save();
-            }
-            } else{
+                foreach ($component->model->zniFees()->where([
+                    "month" => $component->month,
+                    "year" => $component->year
+                ])->get() as $fee) {
+                    $fee->default_rate = $value;
+                    $fee->save();
+                }
+            } else {
                 foreach (VoltageLevel::get() as $level) {
                     $component->model->zniFees()->create([
                         "voltage_level_id" => $level->id,
@@ -182,8 +176,8 @@ trait NetworkOperatorPriceTrait
                     ]);
                 }
             }
-        } elseif ($component->client_type == ClientType::SIN_CONVENTIONAL){
-            if($component->model->sinFees()->where([
+        } elseif ($component->client_type == ClientType::SIN_CONVENTIONAL) {
+            if ($component->model->sinFees()->where([
                 "month" => $component->month,
                 "year" => $component->year
             ])->exists()) {
@@ -194,18 +188,18 @@ trait NetworkOperatorPriceTrait
                     $fee->default_rate = $value;
                     $fee->save();
                 }
-            } else{
-                    foreach (VoltageLevel::get() as $level) {
-                        $component->model->sinFees()->create([
-                            "voltage_level_id" => $level->id,
-                            "default_rate" => $value,
-                            "month" => $component->month,
-                            "year" => $component->year,
-                        ]);
-                    }
+            } else {
+                foreach (VoltageLevel::get() as $level) {
+                    $component->model->sinFees()->create([
+                        "voltage_level_id" => $level->id,
+                        "default_rate" => $value,
+                        "month" => $component->month,
+                        "year" => $component->year,
+                    ]);
                 }
+            }
         } else {
-            if($component->model->photovoltaicPrice()->where([
+            if ($component->model->photovoltaicPrice()->where([
                 "month" => $component->month,
                 "year" => $component->year
             ])->exists()) {
@@ -216,7 +210,7 @@ trait NetworkOperatorPriceTrait
                     $fee->default_rate = $value;
                     $fee->save();
                 }
-            } else{
+            } else {
                 foreach (Stratum::get() as $strata) {
 
                     $component->model->photovoltaicPrice()->create([

@@ -14,10 +14,9 @@ class EditSeller extends Component
     public $phone;
     public $email;
     public $identification;
-    private $editSellerService;
     public $indicatives;
     public $indicative;
-
+    private $editSellerService;
 
     public function __construct($id = null)
     {

@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\V1\ClientTypeEquipmentTypes;
-use Illuminate\Database\Seeder;
 use App\Models\V1\Seeder as SeederModel;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UsersTableSeeder::class,
             PermissionsTableSeeder::class,
             SuperAdminsTableSeeder::class,
-           AdminsTableSeeder::class,
+            AdminsTableSeeder::class,
             NetworkOperatorsTableSeeder::class,
             SellersTableSeeder::class,
             TechniciansTableSeeder::class,

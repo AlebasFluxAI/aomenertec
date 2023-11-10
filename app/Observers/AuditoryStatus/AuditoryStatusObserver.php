@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuditoryStatusObserver
 {
-   
+
 
     public function updating(Pqr $models)
     {
