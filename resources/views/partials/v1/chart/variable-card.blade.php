@@ -25,13 +25,15 @@
                         <div
                             class="d-flex flex-md-column flex-xl-row align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end
                                     @if($real_time_flag??false)animated-element @endif">
-                            <h3 wire:loading.remove wire:target="{{$list_model_variable}}" class="mb-0 mb-md-1 mb-lg-0 mr-1">{{ $option['value'] }}</h3>
-                            <small wire:loading.remove wire:target="{{$list_model_variable}}" class="mb-0">{{ $option['key'] }}</small>
+                            <h3 wire:loading.remove wire:target="{{$list_model_variable}}"
+                                class="mb-0 mb-md-1 mb-lg-0 mr-1">{{ $option['value'] }}</h3>
+                            <small wire:loading.remove wire:target="{{$list_model_variable}}"
+                                   class="mb-0">{{ $option['key'] }}</small>
                         </div>
                     @endforeach
                     <div
                         class="d-flex flex-md-column flex-xl-row  align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end">
-                        <small wire:loading wire:target="{{$list_model_variable}}"class="mb-0">Actualizando...</small>
+                        <small wire:loading wire:target="{{$list_model_variable}}" class="mb-0">Actualizando...</small>
                     </div>
 
 

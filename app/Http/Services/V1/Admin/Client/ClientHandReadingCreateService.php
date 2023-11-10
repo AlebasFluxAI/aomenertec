@@ -3,16 +3,11 @@
 namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Services\Singleton;
-use App\Models\V1\Client;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\RealTimeListener;
 use App\Models\V1\WorkOrder;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
-use PhpMqtt\Client\Facades\MQTT;
 
 class ClientHandReadingCreateService extends Singleton
 {
@@ -75,11 +70,11 @@ class ClientHandReadingCreateService extends Singleton
                 } else {
                     if ($data['variable_name'] == "equipment_id") {
                         $json[$data['variable_name']] = $equipment->serial;
-                    } elseif ($data['variable_name'] == "import_wh"){
+                    } elseif ($data['variable_name'] == "import_wh") {
                         $json[$data['variable_name']] = $component->model->microcontrollerData['accumulated_real_consumption'];
-                    } elseif ($data['variable_name'] == "timestamp"){
+                    } elseif ($data['variable_name'] == "timestamp") {
                         $json[$data['variable_name']] = $unix;
-                    } elseif ($data['variable_name'] == "import_VArh"){
+                    } elseif ($data['variable_name'] == "import_VArh") {
                         $json[$data['variable_name']] = $component->model->microcontrollerData['accumulated_reactive_consumption'];
                     } else {
                         $json[$data['variable_name']] = 0;
@@ -95,7 +90,6 @@ class ClientHandReadingCreateService extends Singleton
             $component->validate([
                 'evidences.*' => 'image|max:1024', // 1MB Max
             ]);
-
 
 
             $microcontrollerData = $component->model->microcontrollerData()->create([

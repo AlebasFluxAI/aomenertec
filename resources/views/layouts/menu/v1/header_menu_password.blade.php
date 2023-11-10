@@ -36,7 +36,8 @@
                     </li>
                 </ul>
                 <div class="mt-4 mb-4">
-                    @auth                        @include("layouts.menu.v1.profile")
+                    @auth
+                        @include("layouts.menu.v1.profile")
 
                     @endauth
                 </div>

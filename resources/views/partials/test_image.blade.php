@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Photo Album Viewer</h1>
-<div id="viewere" />
+<div id="viewere"/>
 <script>
     // **DO THIS**:
     //   Replace BUCKET_NAME with the bucket name.
@@ -37,11 +37,11 @@
 
     // List the photo albums that exist in the bucket.
     function listAlbums() {
-        s3.listObjects({Delimiter: '/'}, function(err, data) {
+        s3.listObjects({Delimiter: '/'}, function (err, data) {
             if (err) {
                 return alert('There was an error listing your albums: ' + err.message);
             } else {
-                var albums = data.CommonPrefixes.map(function(commonPrefix) {
+                var albums = data.CommonPrefixes.map(function (commonPrefix) {
                     var prefix = commonPrefix.Prefix;
                     var albumName = decodeURIComponent(prefix.replace('/', ''));
                     return getHtml([
@@ -68,10 +68,11 @@
             }
         });
     }
+
     // Show the photos that exist in an album.
     function viewAlbum(albumName) {
         var albumPhotosKey = encodeURIComponent(albumName) + '/';
-        s3.listObjects({Prefix: albumPhotosKey}, function(err, data) {
+        s3.listObjects({Prefix: albumPhotosKey}, function (err, data) {
             if (err) {
                 return alert('There was an error viewing your album: ' + err.message);
             }
@@ -79,7 +80,7 @@
             var href = this.request.httpRequest.endpoint.href;
             var bucketUrl = href + albumBucketName + '/';
 
-            var photos = data.Contents.map(function(photo) {
+            var photos = data.Contents.map(function (photo) {
                 var photoKey = photo.Key;
                 var photoUrl = bucketUrl + encodeURIComponent(photoKey);
                 return getHtml([
@@ -128,12 +129,12 @@
 
     function listSubfolders() {
         // List objects in the "Rorro" folder
-        s3.listObjects({ Prefix: 'Rorro/' }, function(err, data) {
+        s3.listObjects({Prefix: 'Rorro/'}, function (err, data) {
             if (err) {
                 return alert('There was an error listing subfolders: ' + err.message);
             } else {
                 // Get the contents (subfolders) of "Rorro"
-                var subfolders = data.CommonPrefixes.map(function(commonPrefix) {
+                var subfolders = data.CommonPrefixes.map(function (commonPrefix) {
                     var prefix = commonPrefix.Prefix;
                     var folderName = decodeURIComponent(prefix.replace('Rorro/', ''));
                     return getHtml([
@@ -162,16 +163,17 @@
             }
         });
     }
+
     function viewSubfolder(subfolderName) {
         var subfolderKey = 'Rorro/' + subfolderName + '/';
-        s3.listObjects({ Prefix: subfolderKey }, function(err, data) {
+        s3.listObjects({Prefix: subfolderKey}, function (err, data) {
             if (err) {
                 return alert('There was an error viewing the subfolder: ' + err.message);
             }
 
-            var photos = data.Contents.map(function(photo) {
+            var photos = data.Contents.map(function (photo) {
                 var photoKey = photo.Key;
-                var photoUrl = s3.getSignedUrl('getObject', { Bucket: albumBucketName, Key: photoKey });
+                var photoUrl = s3.getSignedUrl('getObject', {Bucket: albumBucketName, Key: photoKey});
                 return getHtml([
                     '<span>',
                     '<div>',

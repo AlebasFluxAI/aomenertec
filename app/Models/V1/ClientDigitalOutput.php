@@ -2,7 +2,6 @@
 
 namespace App\Models\V1;
 
-use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +28,7 @@ class ClientDigitalOutput extends Model
         'status',
         'control_type',
     ];
+
     public function clientAlertConfiguration()
     {
         return $this->belongsToMany(ClientAlertConfiguration::class, 'client_digital_output_alert_configurations', 'client_alert_configuration_id', 'client_digital_output_id')

@@ -2,9 +2,6 @@
 
 namespace App\Http\Resources\V1;
 
-use App\Events\UserNotificationEvent;
-use ArrayAccess;
-
 class NotificationTypes
 {
     public const NOTIFICATION_CREATED = "notification_created";

@@ -2,14 +2,9 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Notification;
 
-use App\Http\Resources\V1\NotificationTypes;
 use App\Http\Services\V1\Admin\User\Notification\NotificationHeaderService;
-use App\Http\Services\V1\Admin\User\Technician\TechnicianAddService;
-use App\Models\Traits\AddUserFormTrait;
-use App\Models\Traits\ValidateUserFormTrait;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class NotificationHeader extends Component
 {

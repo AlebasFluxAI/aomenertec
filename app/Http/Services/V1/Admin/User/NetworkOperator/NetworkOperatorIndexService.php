@@ -2,12 +2,9 @@
 
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
-use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
 use App\Models\V1\NetworkOperator;
-use App\Models\V1\User;
-use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 

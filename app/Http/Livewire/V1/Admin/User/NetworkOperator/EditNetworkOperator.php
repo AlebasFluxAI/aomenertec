@@ -3,8 +3,6 @@
 namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
-use App\Models\Traits\AddUserFormTrait;
-use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\NetworkOperator;
 use Livewire\Component;
 
@@ -20,9 +18,6 @@ class EditNetworkOperator extends Component
     public $identification_types;
     public $indicatives;
     public $indicative;
-
-    private $editNetworkOperatorService;
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:6',
@@ -39,6 +34,7 @@ class EditNetworkOperator extends Component
         'model.admin_id' => 'required',
         'model.indicative' => '',
     ];
+    private $editNetworkOperatorService;
 
     public function __construct($id = null)
     {

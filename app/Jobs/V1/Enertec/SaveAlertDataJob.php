@@ -2,13 +2,11 @@
 
 namespace App\Jobs\V1\Enertec;
 
-use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -80,7 +78,7 @@ class SaveAlertDataJob implements ShouldQueue
                     } else {
                         $value = $this->calculateValueAlert($item['variable_id'], $decode);
 
-                        if($alert) {
+                        if ($alert) {
                             if ($alert->active_control) {
                                 if ($alert->min_alert != 0) {
                                     if ($value < $alert->min_alert) {

@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Models\V1\ClientAddress;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Http;
 

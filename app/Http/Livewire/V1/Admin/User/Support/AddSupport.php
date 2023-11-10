@@ -3,11 +3,8 @@
 namespace App\Http\Livewire\V1\Admin\User\Support;
 
 use App\Http\Services\V1\Admin\User\Support\SupportAddService;
-use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\PassTrait;
-use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class AddSupport extends Component
 {
@@ -30,11 +27,6 @@ class AddSupport extends Component
     public $identification_types;
     public $admins;
     public $admin_id;
-
-
-    private $superSupportAddService;
-
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:6',
@@ -49,7 +41,7 @@ class AddSupport extends Component
         'model.person_type' => 'required',
         'model.identification_type' => 'required',
     ];
-
+    private $superSupportAddService;
 
     public function __construct($id = null)
     {

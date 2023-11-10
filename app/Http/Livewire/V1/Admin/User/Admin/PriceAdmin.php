@@ -4,7 +4,6 @@ namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\PriceAdminService;
 use App\Models\V1\Admin;
-use App\Models\V1\AdminConfiguration;
 use Livewire\Component;
 
 class PriceAdmin extends Component
@@ -24,9 +23,6 @@ class PriceAdmin extends Component
     public $invoicing_day;
     public $annually_client_cost;
     public $annually_client_invoicing_month;
-
-    private $priceAdminService;
-
     protected $rules = [
 
         'prices.*.value' => 'required',
@@ -34,6 +30,7 @@ class PriceAdmin extends Component
         'config.min_value' => 'required',
         'config.coin' => 'required',
     ];
+    private $priceAdminService;
 
     public function __construct($id = null)
     {

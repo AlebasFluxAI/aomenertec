@@ -3,13 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\Notification;
 
 use App\Http\Services\Singleton;
-use App\Models\V1\Admin;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\NetworkOperator;
-use App\Models\V1\SuperAdmin;
-use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
 class NotificationHeaderService extends Singleton

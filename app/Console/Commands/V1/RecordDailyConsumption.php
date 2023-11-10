@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
-use App\Models\V1\AuxData;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
-use App\Models\V1\DailyMicrocontrollerData;
-use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\MonthlyMicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -45,58 +41,58 @@ class RecordDailyConsumption extends Command
      */
     public function handle()
     {
-        $day_ref = Carbon::create(2023, 03,31);
+        $day_ref = Carbon::create(2023, 03, 31);
         $billing_day = $day_ref->format('d');
-        if ($billing_day == $day_ref->format('t')){
+        if ($billing_day == $day_ref->format('t')) {
             $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-        } else{
+        } else {
             $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
         }
         $clients_aux = Client::find($billing_day_clients);
 
         $clients = $clients_aux->where('has_telemetry', true)->all();
-        if (count($clients)>0) {
+        if (count($clients) > 0) {
             if ($day_ref->format('m') == '01') {
                 $month_aux = 12;
                 $year_aux = $day_ref->format('Y') - 1;
             } else {
                 $month_aux = $day_ref->format('m') - 1;
-                if ($month_aux<10) {
-                    $month_aux = '0'.$month_aux;
+                if ($month_aux < 10) {
+                    $month_aux = '0' . $month_aux;
                 }
                 $year_aux = $day_ref->format('Y');
             }
-            if ($billing_day == $day_ref->format('t')){
+            if ($billing_day == $day_ref->format('t')) {
                 $date_aux = Carbon::create($year_aux, $month_aux, 2);
                 $start_date = Carbon::create($year_aux, $month_aux, $date_aux->format('t'), 23, 59, 59);
                 $end_date = Carbon::create($day_ref->format('Y'), $day_ref->format('m'), $day_ref->format('t'), 23, 59, 59);
-            } else{
+            } else {
                 $start_date = Carbon::create($year_aux, $month_aux, ($billing_day), 23, 59, 59);
                 $end_date = Carbon::create($day_ref->format('Y'), $day_ref->format('m'), $billing_day, "23", "59", 59);
             }
             foreach ($clients as $client_aux) {
                 $client = Client::find($client_aux->id);
-                echo $client->id."\n";
-                if ($billing_day == $day_ref->format('t')){
+                echo $client->id . "\n";
+                if ($billing_day == $day_ref->format('t')) {
 
                     $data_month = $client->dailyMicrocontrollerData()
                         ->where('year', $day_ref->format('Y'))
                         ->where('month', $day_ref->format('m'))
                         ->whereBetween('day', ['01', $billing_day])
                         ->get();
-                    echo "ok"."\n";;
-                } else{
+                    echo "ok" . "\n";;
+                } else {
                     $data_aux = $client->dailyMicrocontrollerData()
                         ->where('year', $year_aux)
                         ->where('month', ($month_aux))
-                        ->whereBetween('day', [str_pad((strval(($billing_day+1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
+                        ->whereBetween('day', [str_pad((strval(($billing_day + 1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
                     $data_month = $client->dailyMicrocontrollerData()
                         ->where('year', $day_ref->format('Y'))
                         ->where('month', $day_ref->format('m'))
                         ->whereBetween('day', ['01', $billing_day])
                         ->union($data_aux)
                         ->get();
-                    echo "ok 2"."\n";;
+                    echo "ok 2" . "\n";;
 
                 }
                 if (count($data_month) > 0) {
@@ -110,12 +106,12 @@ class RecordDailyConsumption extends Command
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
 
-                    if (empty($start_data)){
+                    if (empty($start_data)) {
                         $start_data = $client->microcontrollerData()
                             ->whereDate('source_timestamp', '<', $start_date->format('Y-m-d 00:00:00'))
                             ->orderBy('source_timestamp', 'desc')
                             ->first();
-                        if (empty($start_data)){
+                        if (empty($start_data)) {
                             $start_data = $client->microcontrollerData()
                                 ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                                 ->orderBy('source_timestamp')
@@ -124,7 +120,7 @@ class RecordDailyConsumption extends Command
                     }
 
                     if ($end_data) {
-                        echo $start_data->id."\n";
+                        echo $start_data->id . "\n";
                         $reference_data = $end_data;
                         $json = json_decode($reference_data->raw_json, true);
                         $penalizable_inductive_month = 0;

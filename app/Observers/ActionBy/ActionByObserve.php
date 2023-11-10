@@ -3,7 +3,6 @@
 namespace App\Observers\ActionBy;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 
 class ActionByObserve
 {

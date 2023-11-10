@@ -2,12 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\V1\NetworkOperator;
-use Illuminate\Database\Seeder;
-use App\Models\V1\User;
 use App\Models\V1\Admin;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+use App\Models\V1\NetworkOperator;
+use App\Models\V1\User;
+use Illuminate\Database\Seeder;
 
 class NetworkOperatorsTableSeeder extends Seeder
 {

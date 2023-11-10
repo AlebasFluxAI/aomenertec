@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\ModulesAux;
 
 use Illuminate\Support\Facades\Facade;
-use App\ModulesAux\ConnectionManager;
 use PhpMqtt\Client\Contracts\MqttClient;
 
 /**

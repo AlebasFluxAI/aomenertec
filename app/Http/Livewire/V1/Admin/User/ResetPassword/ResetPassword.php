@@ -2,12 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\User\ResetPassword;
 
-use App\Http\Services\V1\Admin\User\AddUserService;
-use App\Http\Services\V1\Admin\User\Notification\NotificationHeaderService;
 use App\Http\Services\V1\Admin\User\ResetPassword\ResetPasswordService;
 use Livewire\Component;
-use Spatie\Permission\Models\Role;
-
 use function view;
 
 class ResetPassword extends Component

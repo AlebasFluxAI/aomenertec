@@ -2,14 +2,8 @@
 
 namespace App\Models\Traits;
 
-use App\Models\V1\Admin;
-use App\Models\V1\Image;
 use App\Models\V1\User;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
 use Livewire\Component;
 
 trait AddUserFormTrait
@@ -32,46 +26,6 @@ trait AddUserFormTrait
     public $admin_id;
     public $network_operators;
     public $network_operator_id;
-
-    private function identificationTypes($person_type)
-    {
-        if ($person_type == User::PERSON_TYPE_NATURAL) {
-            return [
-                [
-                    "key" => User::IDENTIFICATION_TYPE_CC,
-                    "value" => User::IDENTIFICATION_TYPE_CC,
-                ],
-                [
-                    "key" => User::IDENTIFICATION_TYPE_CE,
-                    "value" => User::IDENTIFICATION_TYPE_CE,
-                ],
-                [
-                    "key" => User::IDENTIFICATION_TYPE_PEP,
-                    "value" => User::IDENTIFICATION_TYPE_PEP,
-                ],
-                [
-                    "key" => User::IDENTIFICATION_TYPE_PP,
-                    "value" => User::IDENTIFICATION_TYPE_PP,
-                ],
-                [
-                    "key" => User::IDENTIFICATION_TYPE_NIT,
-                    "value" => User::IDENTIFICATION_TYPE_NIT,
-                ],
-            ];
-        } else {
-            return [
-                [
-                    "key" => User::IDENTIFICATION_TYPE_NIT,
-                    "value" => User::IDENTIFICATION_TYPE_NIT,
-                ],
-                [
-                    "key" => User::IDENTIFICATION_TYPE_OTHER,
-                    "value" => "OTRO"
-                ],
-
-            ];
-        }
-    }
 
     public function updatedLatitude(Component $component)
     {
@@ -212,5 +166,45 @@ trait AddUserFormTrait
     public function updated(Component $component, $propertyName)
     {
         $component->validateOnly($propertyName);
+    }
+
+    private function identificationTypes($person_type)
+    {
+        if ($person_type == User::PERSON_TYPE_NATURAL) {
+            return [
+                [
+                    "key" => User::IDENTIFICATION_TYPE_CC,
+                    "value" => User::IDENTIFICATION_TYPE_CC,
+                ],
+                [
+                    "key" => User::IDENTIFICATION_TYPE_CE,
+                    "value" => User::IDENTIFICATION_TYPE_CE,
+                ],
+                [
+                    "key" => User::IDENTIFICATION_TYPE_PEP,
+                    "value" => User::IDENTIFICATION_TYPE_PEP,
+                ],
+                [
+                    "key" => User::IDENTIFICATION_TYPE_PP,
+                    "value" => User::IDENTIFICATION_TYPE_PP,
+                ],
+                [
+                    "key" => User::IDENTIFICATION_TYPE_NIT,
+                    "value" => User::IDENTIFICATION_TYPE_NIT,
+                ],
+            ];
+        } else {
+            return [
+                [
+                    "key" => User::IDENTIFICATION_TYPE_NIT,
+                    "value" => User::IDENTIFICATION_TYPE_NIT,
+                ],
+                [
+                    "key" => User::IDENTIFICATION_TYPE_OTHER,
+                    "value" => "OTRO"
+                ],
+
+            ];
+        }
     }
 }

@@ -6,12 +6,11 @@ use App\Models\V1\Client;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
+use App\ModulesAux\MQTT;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use App\ModulesAux\MQTT;
+use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\MqttClient;
-use Psr\Log\LogLevel;
-use PhpMqtt\Client\Exceptions\MqttClientException;use function PHPUnit\Framework\once;
 
 class Control extends Component
 {
@@ -44,14 +43,14 @@ class Control extends Component
             $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
         }
         try {
-            $mqtt=MQTT::connection('default','default');
+            $mqtt = MQTT::connection('default', 'default');
             $mqtt->publish($topic, $message);
 
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
                 if ($elapsedTime >= 20) {
                     $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
                     $mqtt->interrupt();
-                    $this->emit('changeCheck', ['index'=>$index, 'flag'=>false]);
+                    $this->emit('changeCheck', ['index' => $index, 'flag' => false]);
                 }
             });
             $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($index, $mqtt, &$result) {
@@ -67,7 +66,7 @@ class Control extends Component
                                 $this->coils[$index]['status'] = !$this->coils[$index]['status'];
                                 $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
                                 $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
-                                $this->emit('changeCheck', ['index'=>$coil->id, 'flag'=>true]);
+                                $this->emit('changeCheck', ['index' => $coil->id, 'flag' => true]);
                                 $coil->status = $this->coils[$index]['status'];
                                 $coil->save();
                                 //$this->coils = $this->client->coils;

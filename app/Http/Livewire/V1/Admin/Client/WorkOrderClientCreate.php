@@ -4,14 +4,9 @@ namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\WorkOrderClientService;
 use App\Models\V1\Client;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\RealTimeListener;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use PhpMqtt\Client\Facades\MQTT;
 
 class WorkOrderClientCreate extends Component
 {
@@ -40,7 +35,6 @@ class WorkOrderClientCreate extends Component
     public $hours;
     public $minutes;
     public $equipment_id;
-    private $workOrderClientService;
     public $toolsList;
     public $materialsList;
     public $toolsListSelected = [];
@@ -57,6 +51,7 @@ class WorkOrderClientCreate extends Component
     public $description2;
     public $description3;
     public $description4;
+    private $workOrderClientService;
 
     public function __construct()
     {

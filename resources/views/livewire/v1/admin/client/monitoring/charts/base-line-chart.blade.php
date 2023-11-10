@@ -1,4 +1,3 @@
-
 <div class="row pt-3">
     @include("partials.v1.form.form_input_icon_button",[
                     "mt"=>4,
@@ -74,7 +73,7 @@
     </div>
     <script>
 
-        $(function() {
+        $(function () {
             $('input[name="datetimes_baseline_reference"]').daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
@@ -85,7 +84,7 @@
             });
 
         });
-        $(function() {
+        $(function () {
             $('input[name="datetimes_baseline_result"]').daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
@@ -104,16 +103,16 @@
                     id: 'baseline_chart',
                     type: @js($chart_type),
                     height: '550px',
-                    animations:{
-                        enabled:false
+                    animations: {
+                        enabled: false
                     },
                     events: {
-                        click: function(event, chartContext, config) {
-                            if (((config.config.series[0].data[config.dataPointIndex])-(config.config.series[1].data[config.dataPointIndex])).toFixed(2)>=0){
-                                var text = 'Ahorro: '+ ((config.config.series[0].data[config.dataPointIndex])-(config.config.series[1].data[config.dataPointIndex])).toFixed(2)
+                        click: function (event, chartContext, config) {
+                            if (((config.config.series[0].data[config.dataPointIndex]) - (config.config.series[1].data[config.dataPointIndex])).toFixed(2) >= 0) {
+                                var text = 'Ahorro: ' + ((config.config.series[0].data[config.dataPointIndex]) - (config.config.series[1].data[config.dataPointIndex])).toFixed(2)
                                 var color = '#4CAF50'
-                            }else {
-                                var text = 'Extra consumo: '+ ((config.config.series[0].data[config.dataPointIndex])-(config.config.series[1].data[config.dataPointIndex])).toFixed(2)
+                            } else {
+                                var text = 'Extra consumo: ' + ((config.config.series[0].data[config.dataPointIndex]) - (config.config.series[1].data[config.dataPointIndex])).toFixed(2)
                                 var color = '#D4526E'
                             }
                             chart_baseline.addXaxisAnnotation({
@@ -134,8 +133,8 @@
 
 
                 },
-                legend:{
-                    show:true,
+                legend: {
+                    show: true,
                     position: 'top',
                 },
                 colors: ['#2E93fA', '#546E7A'],
@@ -151,27 +150,26 @@
                 },
 
 
-
             }
 
             var chart_baseline = new ApexCharts(document.querySelector("#chart_baseline"), options);
 
             chart_baseline.render();
-                var pos1 = 0;
-                var pos2 = @js($series)[0].data[0];
+            var pos1 = 0;
+            var pos2 = @js($series)[0].data[0];
 
-            @js($series)
-                [0].data.forEach(function (element) {
-                    if (pos1 < element) {
-                        pos1 = element
-                    }
-                });
-            @js($series)
-                [1].data.forEach(function (element) {
-                    if (pos2 > element) {
-                        pos2 = element
-                    }
-                });
+                @js($series)
+            [0].data.forEach(function (element) {
+                if (pos1 < element) {
+                    pos1 = element
+                }
+            });
+                @js($series)
+            [1].data.forEach(function (element) {
+                if (pos2 > element) {
+                    pos2 = element
+                }
+            });
             ApexCharts.exec('baseline_chart', "updateOptions", {
                 series: @js($series),
                 xaxis: {
@@ -204,17 +202,17 @@
                                         bottom: 3,
                                     }
                                 },
-                                text:(@js($series)[0].data.reduce((a, b) => a + b, 0)).toFixed(2)
+                                text: (@js($series)[0].data.reduce((a, b) => a + b, 0)).toFixed(2)
                             }
                         },
                         {
-                            y: (pos1+pos2)/2,
-                            borderColor: ((@js($series)[0].data.reduce((a, b) => a + b, 0))>=(@js($series)[1].data.reduce((a, b) => a + b, 0)))?'#4CAF50':'#D4526E',
+                            y: (pos1 + pos2) / 2,
+                            borderColor: ((@js($series)[0].data.reduce((a, b) => a + b, 0)) >= (@js($series)[1].data.reduce((a, b) => a + b, 0))) ? '#4CAF50' : '#D4526E',
                             label: {
-                                borderColor: ((@js($series)[0].data.reduce((a, b) => a + b, 0))>=(@js($series)[1].data.reduce((a, b) => a + b, 0)))?'#4CAF50':'#D4526E',
+                                borderColor: ((@js($series)[0].data.reduce((a, b) => a + b, 0)) >= (@js($series)[1].data.reduce((a, b) => a + b, 0))) ? '#4CAF50' : '#D4526E',
                                 style: {
                                     color: '#fff',
-                                    background: ((@js($series)[0].data.reduce((a, b) => a + b, 0))>=(@js($series)[1].data.reduce((a, b) => a + b, 0)))?'#4CAF50':'#D4526E',
+                                    background: ((@js($series)[0].data.reduce((a, b) => a + b, 0)) >= (@js($series)[1].data.reduce((a, b) => a + b, 0))) ? '#4CAF50' : '#D4526E',
                                     padding: {
                                         left: 5,
                                         right: 5,
@@ -222,7 +220,7 @@
                                         bottom: 3,
                                     }
                                 },
-                                text:((@js($series)[0].data.reduce((a, b) => a + b, 0))>=(@js($series)[1].data.reduce((a, b) => a + b, 0)))?'Ahorro: '+ (100 - ((@js($series)[1].data.reduce((a, b) => a + b, 0))*100/(@js($series)[0].data.reduce((a, b) => a + b, 0)))).toFixed(3)+"%":'Extra consumo: '+ (100 - ((@js($series)[1].data.reduce((a, b) => a + b, 0))*100/(@js($series)[0].data.reduce((a, b) => a + b, 0)))).toFixed(3) +"%"
+                                text: ((@js($series)[0].data.reduce((a, b) => a + b, 0)) >= (@js($series)[1].data.reduce((a, b) => a + b, 0))) ? 'Ahorro: ' + (100 - ((@js($series)[1].data.reduce((a, b) => a + b, 0)) * 100 / (@js($series)[0].data.reduce((a, b) => a + b, 0)))).toFixed(3) + "%" : 'Extra consumo: ' + (100 - ((@js($series)[1].data.reduce((a, b) => a + b, 0)) * 100 / (@js($series)[0].data.reduce((a, b) => a + b, 0)))).toFixed(3) + "%"
                             }
                         },
                         {
@@ -247,21 +245,21 @@
                 }
 
             });
-        @this.on('changeAxis',(e) =>{
+        @this.on('changeAxis', (e) => {
             var pos1 = 0;
             var pos2 = e.series[1].data[0];
-            var value_pos2 = (e.accumulated_result[1]-e.accumulated_result[0]).toFixed(2)
-            var value_pos1 = (e.accumulated_reference[1]-e.accumulated_reference[0]).toFixed(2)
-            e.series[0].data.forEach(function (element){
-                if (pos1<element){
+            var value_pos2 = (e.accumulated_result[1] - e.accumulated_result[0]).toFixed(2)
+            var value_pos1 = (e.accumulated_reference[1] - e.accumulated_reference[0]).toFixed(2)
+            e.series[0].data.forEach(function (element) {
+                if (pos1 < element) {
                     pos1 = element
                 }
-            }  );
-            e.series[1].data.forEach(function (element){
-                if (pos2>element){
+            });
+            e.series[1].data.forEach(function (element) {
+                if (pos2 > element) {
                     pos2 = element
                 }
-            }  );
+            });
 
 
             ApexCharts.exec('baseline_chart', "updateOptions", {
@@ -275,7 +273,7 @@
                 annotations: {
                     yaxis: [
                         {
-                            y:pos1,
+                            y: pos1,
                             borderColor: '#2E93fA',
                             label: {
                                 borderColor: '#2E93fA',
@@ -289,18 +287,18 @@
                                         bottom: 3,
                                     }
                                 },
-                                text:value_pos1
+                                text: value_pos1
                             }
                         },
 
                         {
-                            y: (pos1+pos2)/2,
-                            borderColor: ((value_pos1)>=(value_pos2))?'#4CAF50':'#D4526E',
+                            y: (pos1 + pos2) / 2,
+                            borderColor: ((value_pos1) >= (value_pos2)) ? '#4CAF50' : '#D4526E',
                             label: {
-                                borderColor: ((value_pos1)>=(value_pos2))?'#4CAF50':'#D4526E',
+                                borderColor: ((value_pos1) >= (value_pos2)) ? '#4CAF50' : '#D4526E',
                                 style: {
                                     color: '#fff',
-                                    background: ((value_pos1)>=(value_pos2))?'#4CAF50':'#D4526E',
+                                    background: ((value_pos1) >= (value_pos2)) ? '#4CAF50' : '#D4526E',
                                     padding: {
                                         left: 5,
                                         right: 5,
@@ -308,7 +306,7 @@
                                         bottom: 3,
                                     }
                                 },
-                                text:((value_pos1)>=(value_pos2))?'Ahorro: '+ (100 - (value_pos2*100/(value_pos1))).toFixed(3)+"%":'Extra consumo: '+ (100 - (value_pos2*100/(value_pos1))).toFixed(3) +"%"
+                                text: ((value_pos1) >= (value_pos2)) ? 'Ahorro: ' + (100 - (value_pos2 * 100 / (value_pos1))).toFixed(3) + "%" : 'Extra consumo: ' + (100 - (value_pos2 * 100 / (value_pos1))).toFixed(3) + "%"
                             }
                         },
                         {
@@ -333,7 +331,7 @@
                 }
             });
         })
-        @this.on('loading',(e) =>{
+        @this.on('loading', (e) => {
             ApexCharts.exec('baseline_chart', "updateOptions", {
                 series: [],
                 xaxis: {
@@ -344,11 +342,11 @@
                 }
             });
         })
-            $('input[name="datetimes_baseline_result"]').on('apply.daterangepicker', function(ev, picker) {
-            @this.emit('changeDateRangeResult', picker.startDate.format('YYYY-MM-DD 00:00:00'),picker.endDate.format('YYYY-MM-DD 23:59:59'))
+            $('input[name="datetimes_baseline_result"]').on('apply.daterangepicker', function (ev, picker) {
+            @this.emit('changeDateRangeResult', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'))
             });
-            $('input[name="datetimes_baseline_reference"]').on('apply.daterangepicker', function(ev, picker) {
-            @this.emit('changeDateRangeReference', picker.startDate.format('YYYY-MM-DD 00:00:00'),picker.endDate.format('YYYY-MM-DD 23:59:59'))
+            $('input[name="datetimes_baseline_reference"]').on('apply.daterangepicker', function (ev, picker) {
+            @this.emit('changeDateRangeReference', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'))
             });
         })
     </script>

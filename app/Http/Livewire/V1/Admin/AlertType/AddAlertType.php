@@ -2,16 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\AlertType;
 
-use App\Events\ChatEvent;
 use App\Http\Services\V1\Admin\AlertType\AlertTypeAddService;
-use App\Http\Services\V1\Admin\Equipment\EquipmentAddService;
-use App\Http\Services\V1\Admin\EquipmentAlert\EquipmentAlertAddService;
-use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeAddService;
-use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Image;
 use Livewire\Component;
-use Livewire\WithPagination;
 use function view;
 
 class AddAlertType extends Component

@@ -2,37 +2,11 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Events\RealTimeMonitoringEvent;
-use App\Events\UserNotificationEvent;
-use App\Http\Resources\V1\NotificationTypes;
-use App\Jobs\V1\Enertec\JsonEdit;
-use App\Jobs\V1\Enertec\SaveAlertDataJob;
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataJob;
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
-use App\Mail\User\UserCratedMail;
-use App\Mail\User\UserResetPasswordMail;
-use App\Mail\WorkOrder\WorkOrderUpdatedMail;
 use App\Models\V1\AuxData;
-use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
-use App\Models\V1\ClientConfiguration;
-use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\MonthlyMicrocontrollerData;
-use App\Models\V1\User;
-use App\Models\V1\WorkOrder;
-use App\Notifications\Alert\AlertControlNotification;
-use App\Notifications\Alert\AlertNotification;
-use App\Notifications\User\UserCreatedNotification;
-use App\Notifications\User\UserResetPasswordNotification;
 use Carbon\Carbon;
-use Crc16\Crc16;
-use Illuminate\Http\Request;
-use Illuminate\Notifications\Messages\MailMessage;
-use PhpMqtt\Client\Exceptions\MqttClientException;
-use PhpMqtt\Client\Facades\MQTT;
-use PhpMqtt\Client\MqttClient;
 
 class MailTestController
 {
@@ -43,13 +17,14 @@ class MailTestController
     {
         return view('partials.test_image');
     }
+
     public function userCreatedNotification()
     {
         $data = AuxData::where('created_at', '>', '2023-08-01')->where('data', 'LIKE', '%UsWo9wEAAAAWA%')->get();
 
-        foreach ($data as $item){
+        foreach ($data as $item) {
             MicrocontrollerData::create([
-                'raw_json'=>$item->data
+                'raw_json' => $item->data
             ]);
         }
     }
@@ -106,7 +81,7 @@ class MailTestController
                                         }
                                     }
                                 }
-                                if($data['variable_name'] == 'timestamp'){
+                                if ($data['variable_name'] == 'timestamp') {
                                     $date_aux = new Carbon();
                                     $timestamp_unix = $json[$data['variable_name']];
                                     $date_aux->setTimestamp($timestamp_unix);
@@ -179,7 +154,7 @@ class MailTestController
                         $item->save();
                         //dispatch(new JsonEdit($item->id, true))->onQueue($this->queue);
                         //}
-                    } else{
+                    } else {
                         $item->forceDelete();
                     }
                 } else {
@@ -191,58 +166,58 @@ class MailTestController
         }
 
     }
-        //$this->alertVariableEvent();
+    //$this->alertVariableEvent();
 
 
-        /*$frame = [10=> ['ssid', 'password', 'variable']];
-        $raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAEgAAAAAAFAijI9j5WH1Qp9r90K/MPVCJZKOPgFuDD51y6E+++1rQX86JEGhp/NBREgJQvElh0FWQxtCuEL4waoLVcHAoMHBAY7YPpzXIT+eWEk/FUghPwVXgsKZW03C/PAawloTTcLGfl5CxK2JwpfYb0Jyg5VFAAAAALDCHURB6L9EBW9VQ59TVUMqbVRDAAAAAAAAAAAAAAAAv7riRHOOSURJHE1FAAAAAAAAAAAAAAAAINgBRX5Or0QKD6NE5TCVQ5WjKkNgBSJDYY+4PQAAAAC+MR49AAAAABr5kD0AAAAA';
-        $ssid = "holaaaaaaaaaaaxxxx";
-        $pass = "123456789015";
-        $float = pack('f', 110.26);
-        $event_id = pack('C', 10);
-        $q = pack('C', ord('Q'));
-        $l = pack('C', ord('l'));
-        $f = pack('C', ord('f'));
-        $message = $event_id.pack('C', strlen($ssid)).$ssid.pack('C', strlen($pass)).$pass.$f.$float;
-        $crc = Crc16::XMODEM($message);
-        $crc_pack = pack('f', $crc);
-        $message = $message.$crc_pack;
-        ///////////////////////////////////////////////////
-        $crc_unpack = unpack('f', substr($message,-4))[1];
-        $data_crc = substr($message, 0, -4);
-        $event = unpack('C', $message[0])[1];
-        if (Crc16::XMODEM($data_crc) == $crc_unpack){
-            $i=1;
-            $j=0;
-            $json = [];
-            $event_keys = $frame[$event];
-            while (true){
-                $format = $data_crc[$i];
-                $i++;
-                if ($format == 'f'){
-                    $size = 4;
-                    $datum = unpack('f', substr($data_crc, $i, 4))[1];
-                } elseif ($format == 'l'){
-                    $size = 8;
-                    $datum = unpack('l', substr($data_crc, $i, 8))[1];
-                } elseif ($format == 'Q'){
-                    $size = 16;
-                    $datum = unpack('Q', substr($data_crc, $i, 16))[1];
-                } else{
-                    $size = unpack('C', $format)[1];
-                    $datum = substr($data_crc, $i, $size);
-                }
-                $i = $i + $size;
-                $json[$event_keys[$j]] = $datum;
-                $j++;
-                if ($i >= strlen($data_crc)){
-                    break;
-                }
+    /*$frame = [10=> ['ssid', 'password', 'variable']];
+    $raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAEgAAAAAAFAijI9j5WH1Qp9r90K/MPVCJZKOPgFuDD51y6E+++1rQX86JEGhp/NBREgJQvElh0FWQxtCuEL4waoLVcHAoMHBAY7YPpzXIT+eWEk/FUghPwVXgsKZW03C/PAawloTTcLGfl5CxK2JwpfYb0Jyg5VFAAAAALDCHURB6L9EBW9VQ59TVUMqbVRDAAAAAAAAAAAAAAAAv7riRHOOSURJHE1FAAAAAAAAAAAAAAAAINgBRX5Or0QKD6NE5TCVQ5WjKkNgBSJDYY+4PQAAAAC+MR49AAAAABr5kD0AAAAA';
+    $ssid = "holaaaaaaaaaaaxxxx";
+    $pass = "123456789015";
+    $float = pack('f', 110.26);
+    $event_id = pack('C', 10);
+    $q = pack('C', ord('Q'));
+    $l = pack('C', ord('l'));
+    $f = pack('C', ord('f'));
+    $message = $event_id.pack('C', strlen($ssid)).$ssid.pack('C', strlen($pass)).$pass.$f.$float;
+    $crc = Crc16::XMODEM($message);
+    $crc_pack = pack('f', $crc);
+    $message = $message.$crc_pack;
+    ///////////////////////////////////////////////////
+    $crc_unpack = unpack('f', substr($message,-4))[1];
+    $data_crc = substr($message, 0, -4);
+    $event = unpack('C', $message[0])[1];
+    if (Crc16::XMODEM($data_crc) == $crc_unpack){
+        $i=1;
+        $j=0;
+        $json = [];
+        $event_keys = $frame[$event];
+        while (true){
+            $format = $data_crc[$i];
+            $i++;
+            if ($format == 'f'){
+                $size = 4;
+                $datum = unpack('f', substr($data_crc, $i, 4))[1];
+            } elseif ($format == 'l'){
+                $size = 8;
+                $datum = unpack('l', substr($data_crc, $i, 8))[1];
+            } elseif ($format == 'Q'){
+                $size = 16;
+                $datum = unpack('Q', substr($data_crc, $i, 16))[1];
+            } else{
+                $size = unpack('C', $format)[1];
+                $datum = substr($data_crc, $i, $size);
             }
-            $json['msj_init']= $message;
-            dd($json);
+            $i = $i + $size;
+            $json[$event_keys[$j]] = $datum;
+            $j++;
+            if ($i >= strlen($data_crc)){
+                break;
+            }
+        }
+        $json['msj_init']= $message;
+        dd($json);
 
-        }*/
+    }*/
     //}
     private function alertVariableEvent()
     {
@@ -276,7 +251,7 @@ class MailTestController
                         $type = ClientAlert::ALERT;
                     } else {
                         $value = $this->calculateValueAlert($item['variable_id'], $decode);
-                        if($alert) {
+                        if ($alert) {
                             if ($alert->active_control) {
                                 if ($alert->min_alert != 0) {
                                     if ($value < $alert->min_alert) {

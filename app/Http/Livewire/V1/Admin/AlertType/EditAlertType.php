@@ -3,9 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\AlertType;
 
 use App\Http\Services\V1\Admin\AlertType\AlertTypeEditService;
-use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeEditService;
 use App\Models\V1\AlertType;
-use App\Models\V1\Equipment;
 use Livewire\Component;
 use function view;
 

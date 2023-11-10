@@ -6,7 +6,6 @@ use App\Models\V1\Client;
 use App\Models\V1\DailyMicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,6 +21,7 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
      * @return void
      */
     public $day_ref;
+
     public function __construct($day_ref)
     {
         $this->day_ref = new Carbon($day_ref);
@@ -50,19 +50,19 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
                     ->first();
 
                 if ($client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$this->day_ref->copy()->subDay()->format('Y-m-d 00:00:00'), $this->day_ref->copy()->subDay()->format('Y-m-d 23:59:59')])->exists()){
+                    ->whereBetween('source_timestamp', [$this->day_ref->copy()->subDay()->format('Y-m-d 00:00:00'), $this->day_ref->copy()->subDay()->format('Y-m-d 23:59:59')])->exists()) {
                     $reference_data_first = $client->microcontrollerData()
                         ->whereBetween('source_timestamp', [$this->day_ref->copy()->subDay()->format('Y-m-d 00:00:00'), $this->day_ref->copy()->subDay()->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
-                } else{
-                    if($client->microcontrollerData()
+                } else {
+                    if ($client->microcontrollerData()
                         ->where('source_timestamp', '<', $this->day_ref->format('Y-m-d 00:00:00'))->exists()) {
                         $reference_data_first = $client->microcontrollerData()
                             ->where('source_timestamp', '<', $this->day_ref->format('Y-m-d 00:00:00'))
                             ->orderBy('source_timestamp', 'desc')
                             ->first();
-                    } else{
+                    } else {
                         $reference_data_first = $client->microcontrollerData()
                             ->whereBetween('source_timestamp', [$this->day_ref->format('Y-m-d 00:00:00'), $this->day_ref->format('Y-m-d 23:59:59')])
                             ->orderBy('source_timestamp')
@@ -121,7 +121,7 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
                     ->where('day', $last_day->format('d'))->first();
                 if ($last_data) {
                     $raw_json = json_decode($last_data->raw_json, true);
-                    foreach ($data_frame as $item){
+                    foreach ($data_frame as $item) {
                         if ($item['start'] >= 72) {
                             if ($item['variable_name'] != 'Wh_calc') {
                                 if ($item['variable_name'] != 'import_wh' and $item['variable_name'] != 'export_wh' and $item['variable_name'] != 'import_VArh' and $item['variable_name'] != 'export_VArh'
@@ -162,13 +162,13 @@ class SerializeMicrocontrollerDataDayjob implements ShouldQueue
                     );
                 }
             }
-            $year =  $this->day_ref->format('Y');
+            $year = $this->day_ref->format('Y');
             $month = $this->day_ref->format('m');
-            $day =   $this->day_ref->format('d');
-            $hour =  $this->day_ref->format('H');
-            $day_data =$client->dailyMicrocontrollerdata()
+            $day = $this->day_ref->format('d');
+            $hour = $this->day_ref->format('H');
+            $day_data = $client->dailyMicrocontrollerdata()
                 ->where('year', $year)
-                ->where('month',$month)
+                ->where('month', $month)
                 ->where('day', $day)->first();
             if ($day_data) {
                 if ($day_data->interval_real_consumption != 0) {

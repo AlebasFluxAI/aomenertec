@@ -9,8 +9,6 @@ use Illuminate\Notifications\Notification;
 
 class AlertNotification extends Notification
 {
-    private $code;
-
     /**
      * Get the notification's delivery channels.
      *
@@ -18,6 +16,7 @@ class AlertNotification extends Notification
      */
     public $clientAlert;
     public $client;
+    private $code;
 
     public function __construct($clientAlert)
     {

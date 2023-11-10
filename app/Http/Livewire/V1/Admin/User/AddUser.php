@@ -4,8 +4,6 @@ namespace App\Http\Livewire\V1\Admin\User;
 
 use App\Http\Services\V1\Admin\User\AddUserService;
 use Livewire\Component;
-use Spatie\Permission\Models\Role;
-
 use function view;
 
 class AddUser extends Component
@@ -22,8 +20,6 @@ class AddUser extends Component
     public $picked;
     public $message;
     public $network_operator;
-    private $addUserService;
-
     protected $rules = [
         'network_operator' => 'required|min:2',
         'identification' => 'required|min:6|unique:users,identification',
@@ -32,6 +28,7 @@ class AddUser extends Component
         'email' => 'required|email|unique:users,email',
         'role' => 'required',
     ];
+    private $addUserService;
 
     public function __construct()
     {
@@ -59,6 +56,7 @@ class AddUser extends Component
         $this->addUserService->save($this);
         $this->resetExcept('roles');
     }
+
     public function render()
     {
         return view('livewire.v1.admin.user.add-user')

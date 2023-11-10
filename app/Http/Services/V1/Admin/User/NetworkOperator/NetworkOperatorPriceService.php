@@ -2,25 +2,16 @@
 
 namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 
-use App\Http\Livewire\V1\Admin\User\AssignedEquipmentInterface;
-use App\Http\Livewire\V1\Admin\User\NetworkOperator\PriceClientTypePriceNetworkOperator;
 use App\Http\Resources\V1\MonthsYears;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\Traits\NetworkOperatorPriceTrait;
-use App\Models\V1\AdminEquipmentType;
 use App\Models\V1\ClientType;
-use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\Stratum;
 use App\Models\V1\User;
 use App\Models\V1\ZniLevelFee;
-use App\Models\V1\ZniOtherFee;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use function Livewire\str;
 
 class NetworkOperatorPriceService extends Singleton
 {
@@ -71,12 +62,96 @@ class NetworkOperatorPriceService extends Singleton
         $this->changeFeeFunction($component, $value, $level, $type, $client_type);
     }
 
+    public function changeFeeFunction(Component $component, $value, $level, $type, $client_type)
+    {
+        if ($client_type == ClientType::ZIN_CONVENTIONAL) {
+            if ($fee = $component->model->zniFees()->where([
+                "voltage_level_id" => $level,
+                "month" => $component->month,
+                "year" => $component->year,
+            ])->first()) {
+                if ($type == "generation") {
+                    $fee->update([
+                        $type => $value,
+                        "lost" => ($value / 0.9) - $value
+                    ]);
+                } else {
+                    $fee->update([
+                        $type => $value
+                    ]);
+                }
+
+
+            } else {
+                if ($type == "generation") {
+                    $component->model->zniFees()->create([
+                        "voltage_level_id" => $level,
+                        "month" => $component->month,
+                        "year" => $component->year,
+                        "lost" => ($value / 0.9) - $value,
+                        $type => $value
+                    ]);
+                } else {
+                    $component->model->zniFees()->create([
+                        "voltage_level_id" => $level,
+                        "month" => $component->month,
+                        "year" => $component->year,
+                        $type => $value
+                    ]);
+                }
+
+
+            }
+        } else {
+            if ($fee = $component->model->sinFees()->where([
+                "voltage_level_id" => $level,
+                "month" => $component->month,
+                "year" => $component->year,
+            ])->first()) {
+                $fee->update([
+                    $type => $value
+                ]);
+            } else {
+                $component->model->sinFees()->create([
+                    "voltage_level_id" => $level,
+                    "month" => $component->month,
+                    "year" => $component->year,
+                    $type => $value
+                ]);
+            }
+        }
+        ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
+
+    }
 
     public function getOptionalFee(Component $component, $value, $level, $type)
     {
         return $this->getFeeFunction($component, $value, $level, $type);
     }
 
+    private function getFeeFunction(Component $component, $value, $level, $type)
+    {
+        if ($type == ClientType::ZIN_CONVENTIONAL) {
+            $fee = $component->model->zniFees()->where([
+                "voltage_level_id" => $value,
+                "month" => $component->month,
+                "year" => $component->year,
+            ])->first();
+            if ($fee) {
+                return $fee->{$level};
+            }
+            return 0.0;
+        }
+        $fee = $component->model->sinFees()->where([
+            "voltage_level_id" => $value,
+            "month" => $component->month,
+            "year" => $component->year,
+        ])->first();
+        if ($fee) {
+            return $fee->{$level};
+        }
+        return 0.0;
+    }
 
     public function changeFee(Component $component, $value, $level, $type, $client_type)
     {
@@ -220,93 +295,6 @@ class NetworkOperatorPriceService extends Singleton
             return $fee->{$value};
         }
         return 0.0;
-    }
-
-
-    private function getFeeFunction(Component $component, $value, $level, $type)
-    {
-        if ($type == ClientType::ZIN_CONVENTIONAL) {
-            $fee = $component->model->zniFees()->where([
-                "voltage_level_id" => $value,
-                "month" => $component->month,
-                "year" => $component->year,
-            ])->first();
-            if ($fee) {
-                return $fee->{$level};
-            }
-            return 0.0;
-        }
-        $fee = $component->model->sinFees()->where([
-            "voltage_level_id" => $value,
-            "month" => $component->month,
-            "year" => $component->year,
-        ])->first();
-        if ($fee) {
-            return $fee->{$level};
-        }
-        return 0.0;
-    }
-
-    public function changeFeeFunction(Component $component, $value, $level, $type, $client_type)
-    {
-        if ($client_type == ClientType::ZIN_CONVENTIONAL) {
-            if ($fee = $component->model->zniFees()->where([
-                "voltage_level_id" => $level,
-                "month" => $component->month,
-                "year" => $component->year,
-            ])->first()) {
-                if ($type == "generation") {
-                    $fee->update([
-                        $type => $value,
-                        "lost" => ($value/0.9) - $value
-                    ]);
-                } else {
-                    $fee->update([
-                        $type => $value
-                    ]);
-                }
-
-
-            } else {
-                if ($type == "generation") {
-                    $component->model->zniFees()->create([
-                        "voltage_level_id" => $level,
-                        "month" => $component->month,
-                        "year" => $component->year,
-                        "lost" => ($value/0.9) - $value,
-                        $type => $value
-                    ]);
-                } else {
-                    $component->model->zniFees()->create([
-                        "voltage_level_id" => $level,
-                        "month" => $component->month,
-                        "year" => $component->year,
-                        $type => $value
-                    ]);
-                }
-
-
-            }
-        } else {
-            if ($fee = $component->model->sinFees()->where([
-                "voltage_level_id" => $level,
-                "month" => $component->month,
-                "year" => $component->year,
-            ])->first()) {
-                $fee->update([
-                    $type => $value
-                ]);
-            } else {
-                $component->model->sinFees()->create([
-                    "voltage_level_id" => $level,
-                    "month" => $component->month,
-                    "year" => $component->year,
-                    $type => $value
-                ]);
-            }
-        }
-        ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
-
     }
 
 

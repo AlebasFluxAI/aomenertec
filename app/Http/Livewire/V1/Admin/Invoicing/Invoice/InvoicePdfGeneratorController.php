@@ -2,26 +2,17 @@
 
 namespace App\Http\Livewire\V1\Admin\Invoicing\Invoice;
 
-use App\Events\ChatEvent;
-use App\Http\Resources\V1\Menu;
-use App\Http\Resources\V1\Subdomain;
 use App\Models\V1\Client;
 use App\Models\V1\Invoice;
 use App\Models\V1\NetworkOperator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
-use function view;
 
 class InvoicePdfGeneratorController extends Component
 {
     public function getPdf(Invoice $invoice)
     {
 
-        return $this->downloadFile($invoice);
-    }
-
-    public function getPdfId($subdomain, Invoice $invoice)
-    {
         return $this->downloadFile($invoice);
     }
 
@@ -45,6 +36,11 @@ class InvoicePdfGeneratorController extends Component
         ]); //load view page
         $pdf->setPaper('A4', 'portrait');
         return $pdf->download('Factura-' . $invoice->code . '.pdf');
+    }
+
+    public function getPdfId($subdomain, Invoice $invoice)
+    {
+        return $this->downloadFile($invoice);
     }
 
 }

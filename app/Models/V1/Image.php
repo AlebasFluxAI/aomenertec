@@ -18,6 +18,16 @@ class Image extends Model
 
     private $dataImage;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('order', 'ASC')
+                ->orderBy('name', 'ASC');
+        });
+    }
+
     public function imageable()
     {
         return $this->morphTo();
@@ -32,14 +42,14 @@ class Image extends Model
         return null;
     }
 
-    public function setDataImage($dataImage)
-    {
-        $this->dataImage = $dataImage;
-    }
-
     public function getDataImage()
     {
         return $this->dataImage;
+    }
+
+    public function setDataImage($dataImage)
+    {
+        $this->dataImage = $dataImage;
     }
 
     public function setUrlAttribute($value)
@@ -52,23 +62,13 @@ class Image extends Model
         $this->attributes['name'] = $this->escape_space($value);
     }
 
-    public function setPathAttribute($value)
-    {
-        $this->attributes['path'] = $this->escape_space($value);
-    }
-
     public function escape_space($value)
     {
         return preg_replace('/ |\\|\//', '_', $value);
     }
 
-    protected static function boot()
+    public function setPathAttribute($value)
     {
-        parent::boot();
-
-        static::addGlobalScope('order', function ($builder) {
-            $builder->orderBy('order', 'ASC')
-                ->orderBy('name', 'ASC');
-        });
+        $this->attributes['path'] = $this->escape_space($value);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Models\V1\EquipmentType;
-use App\Models\V1\PriceConventional;
 use Illuminate\Console\Command;
 
 class OutageServiceNotification extends Command

@@ -4,7 +4,6 @@ namespace App\Observers\User\Admin;
 
 use App\Models\V1\Admin;
 use App\Models\V1\TabPermission;
-use App\Models\V1\User;
 use Illuminate\Support\Facades\Http;
 
 class UserAdminObserver
@@ -29,16 +28,6 @@ class UserAdminObserver
         $admin->last_name = $user->last_name;
         $admin->phone = $user->phone;
         $admin->identification = $user->identification;
-    }
-
-    public function created(Admin $admin)
-    {
-        $tabPermissionId = TabPermission::wherePermission(TabPermission::CLIENT_BILLING_CONFIG)->first()->id;
-
-        $admin->tabPermissions()->create([
-            "tab_permission_id" => $tabPermissionId
-        ]);
-
     }
 
     public function setHereMapJson($model)
@@ -99,6 +88,15 @@ class UserAdminObserver
         }
     }
 
+    public function created(Admin $admin)
+    {
+        $tabPermissionId = TabPermission::wherePermission(TabPermission::CLIENT_BILLING_CONFIG)->first()->id;
+
+        $admin->tabPermissions()->create([
+            "tab_permission_id" => $tabPermissionId
+        ]);
+
+    }
 
     /**
      * Handle the SuperAdmin "updated" event.

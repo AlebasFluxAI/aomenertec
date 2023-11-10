@@ -4,20 +4,17 @@ use App\Http\Controllers\testFile;
 use App\Http\Controllers\V1\HomeController;
 use App\Http\Controllers\V1\MailTestController;
 use App\Http\Livewire;
-use App\Http\Livewire\Index;
 use App\Http\Livewire\V1\Admin\User\AddUser;
 use App\Http\Livewire\V1\Admin\User\EditUser;
-use App\Http\Services\V1\Admin\Client\AddClient;
-use App\Http\Services\V1\Admin\Client\EditClient;
-use App\Http\Services\V1\Admin\Client\IndexClient;
-use App\Http\Services\V1\Admin\Client\DetailClient;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
-use Laravel\Fortify\Http\Controllers\NewPasswordController;
-use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Resources\V1\Permissions;
 use App\Http\Resources\V1\PermissionsRouteWard;
+use App\Http\Services\V1\Admin\Client\AddClient;
+use App\Http\Services\V1\Admin\Client\DetailClient;
+use App\Http\Services\V1\Admin\Client\EditClient;
+use App\Http\Services\V1\Admin\Client\IndexClient;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------

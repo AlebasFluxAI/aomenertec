@@ -2,15 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
-use App\Http\Controllers\testFile;
-use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
-use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorPriceService;
-use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
-use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\ClientFormTrait;
-use App\Models\Traits\ValidateUserFormTrait;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class PriceClientTypePriceNetworkOperator extends Component
@@ -19,8 +12,6 @@ class PriceClientTypePriceNetworkOperator extends Component
 
     public $model;
     public $taxType = [];
-
-    private $networkOperatorPriceService;
     public $months;
     public $years;
     public $month;
@@ -28,7 +19,7 @@ class PriceClientTypePriceNetworkOperator extends Component
     public $default_rate;
     public $date_picked;
     public $client_type;
-
+    private $networkOperatorPriceService;
 
     function __construct($id = null)
     {
@@ -45,11 +36,11 @@ class PriceClientTypePriceNetworkOperator extends Component
     {
         $this->networkOperatorPriceService->mount($this, $client_type);
     }
+
     public function updatedDefaultRate($value)
     {
         $this->networkOperatorPriceService->updatedDefaultRate($this, $value);
     }
-
 
 
     public function changeVaupesFeeType($fee, $clientType, $month, $year, $client_type)

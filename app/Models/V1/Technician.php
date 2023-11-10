@@ -46,11 +46,6 @@ class Technician extends Model
         "indicative"
     ];
 
-    public function workOrders()
-    {
-        return $this->hasMany(WorkOrder::class);
-    }
-
     public static function menu()
     {
         return [
@@ -104,16 +99,6 @@ class Technician extends Model
         ];
     }
 
-    public function sign()
-    {
-        return $this->morphOne(Image::class, "imageable");
-    }
-
-    public function getPhonePlusIndicativeAttribute()
-    {
-        return "(" . $this->indicative . ") " . $this->phone;
-    }
-
     public static function getHome()
     {
         return "livewire.v1.admin.user.technician.profile-technician";
@@ -127,6 +112,21 @@ class Technician extends Model
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
+
+    public function sign()
+    {
+        return $this->morphOne(Image::class, "imageable");
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
     }
 
     public function user()

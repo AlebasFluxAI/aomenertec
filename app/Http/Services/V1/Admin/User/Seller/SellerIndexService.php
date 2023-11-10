@@ -4,7 +4,6 @@ namespace App\Http\Services\V1\Admin\User\Seller;
 
 use App\Http\Services\Singleton;
 use App\Models\V1\Seller;
-use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 

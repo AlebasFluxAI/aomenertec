@@ -6,27 +6,20 @@ use App\Http\Resources\V1\Icon;
 use App\Models\V1\BillableItem;
 use App\Models\V1\Client;
 use App\Models\V1\ClientType;
-use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\Invoice;
-use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\SinOtherFee;
 use App\Models\V1\SubsistenceConsumption;
-use App\Models\V1\ZniLevelFee;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
-use function PHPUnit\Framework\isEmpty;
 
 class ClientInvoiceGenerationJob implements ShouldQueue
 {

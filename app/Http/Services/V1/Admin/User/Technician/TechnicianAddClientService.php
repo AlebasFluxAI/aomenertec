@@ -6,7 +6,6 @@ use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
 use App\Models\V1\Technician;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

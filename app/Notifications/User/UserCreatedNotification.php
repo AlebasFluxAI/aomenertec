@@ -5,7 +5,6 @@ namespace App\Notifications\User;
 use App\Mail\User\UserCratedMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class UserCreatedNotification extends Notification implements ShouldQueue

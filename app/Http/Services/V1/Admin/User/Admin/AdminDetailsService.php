@@ -40,6 +40,13 @@ class AdminDetailsService extends Singleton
         $operator->delete();
     }
 
+    public function delete(Component $component, $clientId)
+    {
+        Client::find($clientId)->delete();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
+        $component->reset();
+    }
+
     public function disableNetworkOperator(Component $component, $modelId)
     {
         $operator = NetworkOperator::find($modelId);
@@ -109,13 +116,6 @@ class AdminDetailsService extends Singleton
     {
         Equipment::find($equipmentId)->delete();
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
-        $component->reset();
-    }
-
-    public function delete(Component $component, $clientId)
-    {
-        Client::find($clientId)->delete();
-        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
         $component->reset();
     }
 

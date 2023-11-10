@@ -5,7 +5,6 @@ namespace App\Http\Services\V1\Admin\User\Supervisor;
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
 use App\Models\V1\Supervisor;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
