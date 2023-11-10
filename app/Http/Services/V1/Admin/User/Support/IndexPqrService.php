@@ -38,7 +38,7 @@ class IndexPqrService extends Singleton
 
     public function getData(Component $component)
     {
-        return Pqr::whereTaken(false)->whereLevel(Pqr::PQR_LEVEL_2)->pagination();
+        return Pqr::whereTaken(false)->where("status","!=",Pqr::STATUS_CLOSED)->whereLevel(Pqr::PQR_LEVEL_2)->pagination();
     }
 
 
