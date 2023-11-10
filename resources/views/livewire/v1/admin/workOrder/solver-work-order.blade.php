@@ -118,7 +118,7 @@
                                  "col_with"=>12,
                                  "required"=>false,
                                                 ])
-            @if($model->type==\App\Models\V1\WorkOrder::WORK_ORDER_TYPE_REPLACE)
+            @if(false)
                 <div class="row pl-5 pr-3">
 
                     @include("partials.v1.divider_title",[
