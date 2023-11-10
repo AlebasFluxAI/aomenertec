@@ -4,17 +4,11 @@ namespace App\Models\Traits;
 
 use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\Client;
-use App\Models\V1\Image;
 use App\Models\V1\Pqr;
 use App\Models\V1\PqrMessage;
 use App\Models\V1\Supervisor;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Request;
 use Livewire\Component;
 
 trait PqrTypesTrait

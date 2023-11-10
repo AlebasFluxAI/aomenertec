@@ -2,14 +2,8 @@
 
 namespace App\Jobs\V1\Enertec;
 
-use App\Models\V1\Client;
-use App\Models\V1\ClientAlert;
-use App\Models\V1\ClientConfiguration;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -26,6 +20,7 @@ class JsonEdit implements ShouldQueue
      */
     public $model;
     public $flag;
+
     public function __construct(MicrocontrollerData $model, $flag)
     {
         $this->model = $model->withoutRelations();

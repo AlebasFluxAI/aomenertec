@@ -1,6 +1,6 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
-      xmlns:o="urn:schemas-microsoft-com:office:office">
+<html xmlns="http://www.w3.org/1999/xhtml"
+>
 
 <head>
     <title>
@@ -45,19 +45,19 @@
     </style>
     <!--[if mso]>
     <noscript>
-    <xml>
-        <o:OfficeDocumentSettings>
-            <o:AllowPNG/>
-            <o:PixelsPerInch>96</o:PixelsPerInch>
-        </o:OfficeDocumentSettings>
-    </xml>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:AllowPNG/>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
     </noscript>
     <![endif]-->
     <!--[if lte mso 11]>
     <style type="text/css">
-    .mj-outlook-group-fix {
-        width: 100% !important;
-    }
+        .mj-outlook-group-fix {
+            width: 100% !important;
+        }
     </style>
     <![endif]-->
     <!--[if !mso]><!-->
@@ -118,8 +118,8 @@
     <!--[if mso | IE]>
     <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
            bgcolor="#c3c3c3">
-    <tr>
-        <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+        <tr>
+            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
     <div style="background:#000000;background-color:#000000;margin:0px auto;max-width:600px;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                style="background:#000000;background-color:#000000;width:100%;">
@@ -128,8 +128,8 @@
                 <td style="direction:ltr;font-size:0px;padding:10px 0;text-align:center;">
                     <!--[if mso | IE]>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="" style="vertical-align:top;width:198px;"><![endif]-->
+                        <tr>
+                            <td class="" style="vertical-align:top;width:198px;"><![endif]-->
                     <div class="mj-column-per-33 mj-outlook-group-fix"
                          style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
                         <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
@@ -200,8 +200,8 @@
     <!--[if mso | IE]></td></tr></table>
     <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
            bgcolor="#ffffff">
-    <tr>
-        <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+        <tr>
+            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
     <div style="background:#ffffff;background-color:#ffffff;margin:0px auto;max-width:600px;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                style="background:#ffffff;background-color:#ffffff;width:100%;">
@@ -210,8 +210,8 @@
                 <td style="direction:ltr;font-size:0px;padding:0px;padding-top:20px;text-align:center;">
                     <!--[if mso | IE]>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="" style="vertical-align:top;width:600px;"><![endif]-->
+                        <tr>
+                            <td class="" style="vertical-align:top;width:600px;"><![endif]-->
                     <div class="mj-column-per-100 mj-outlook-group-fix"
                          style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
                         <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
@@ -283,8 +283,8 @@
     <!--[if mso | IE]></td></tr></table>
     <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
            bgcolor="#ffffff">
-    <tr>
-        <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+        <tr>
+            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
     <div style="background:#ffffff;background-color:#ffffff;margin:0px auto;max-width:600px;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                style="background:#ffffff;background-color:#ffffff;width:100%;">
@@ -293,8 +293,8 @@
                 <td style="direction:ltr;font-size:0px;padding:0px;text-align:center;">
                     <!--[if mso | IE]>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="" style="vertical-align:top;width:600px;"><![endif]-->
+                        <tr>
+                            <td class="" style="vertical-align:top;width:600px;"><![endif]-->
                     <div class="mj-column-per-100 mj-outlook-group-fix"
                          style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
                         <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
@@ -329,8 +329,8 @@
     <!--[if mso | IE]></td></tr></table>
     <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
            bgcolor="#e67219">
-    <tr>
-        <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+        <tr>
+            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
     <div style="background:#e67219;background-color:#e67219;margin:0px auto;max-width:600px;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                style="background:#e67219;background-color:#e67219;width:100%;">
@@ -339,7 +339,7 @@
                 <td style="direction:ltr;font-size:0px;padding:2px;text-align:center;">
                     <!--[if mso | IE]>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                    <tr></tr>
+                        <tr></tr>
                     </table><![endif]-->
                 </td>
             </tr>
@@ -349,8 +349,8 @@
     <!--[if mso | IE]></td></tr></table>
     <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
            bgcolor="#000000">
-    <tr>
-        <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
+        <tr>
+            <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
     <div style="background:#000000;background-color:#000000;margin:0px auto;max-width:600px;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
                style="background:#000000;background-color:#000000;width:100%;">
@@ -359,8 +359,8 @@
                 <td style="direction:ltr;font-size:0px;padding:10px;text-align:center;">
                     <!--[if mso | IE]>
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td class="" style="vertical-align:top;width:580px;"><![endif]-->
+                        <tr>
+                            <td class="" style="vertical-align:top;width:580px;"><![endif]-->
                     <div class="mj-column-per-100 mj-outlook-group-fix"
                          style="font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-align:top;width:100%;">
                         <table border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">

@@ -3,13 +3,9 @@
 namespace App\Http\Services\V1\Admin\User;
 
 use App\Http\Services\Singleton;
-use App\Http\Services\V1\Admin\User\EditUserService;
-use App\Http\Services\V1\Admin\User\ProfileUserService;
 use App\Models\V1\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Livewire\Component;
-use function view;
 
 class SelectRoleUserService extends Singleton
 {

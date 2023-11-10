@@ -41,20 +41,20 @@ class CreateReadTypeWorkOrders extends Command
      */
     public function handle()
     {
-        $now = Carbon::create(2023,10,29);
+        $now = Carbon::create(2023, 10, 29);
         $billing_date = $now->copy()->addDays(2);
-        if ($billing_date->format('d') == $billing_date->format('t')){
+        if ($billing_date->format('d') == $billing_date->format('t')) {
             $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-        } else{
+        } else {
             $billing_day_clients = ClientConfiguration::whereBillingDay($billing_date->format('d'))->orderBy('client_id')->get()->pluck('client_id');
         }
         $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get();
         $limit_date = $billing_date->copy()->subDays(2);
-        foreach ($clients_aux as $client){
-            if(!($client->microcontrollerData()
+        foreach ($clients_aux as $client) {
+            if (!($client->microcontrollerData()
                 ->where('source_timestamp', '>=', $limit_date)
-                ->exists())){
-                 dispatch(new CreateReadTypeWorkOrderJob($client->id))->onConnection('sync');
+                ->exists())) {
+                dispatch(new CreateReadTypeWorkOrderJob($client->id))->onConnection('sync');
             }
         }
     }

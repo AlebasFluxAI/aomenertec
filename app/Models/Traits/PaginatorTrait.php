@@ -2,7 +2,6 @@
 
 namespace App\Models\Traits;
 
-use App\Models\V1\Change;
 use App\Scope\PaginationScope;
 
 trait PaginatorTrait

@@ -7,7 +7,6 @@ use App\Models\Traits\PaginatorTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ClientType extends Model
 {
@@ -28,16 +27,6 @@ class ClientType extends Model
         'description',
     ];
 
-    public function clients()
-    {
-        return $this->hasMany(Client::class);
-    }
-
-    public function equipmentTypes()
-    {
-        return $this->belongsToMany(EquipmentType::class, 'client_type_equipment_types');
-    }
-
     public static function clientTypesAsKeyValue()
     {
         return (array_merge(
@@ -52,5 +41,15 @@ class ClientType extends Model
                 ];
             }))->toArray()
         ));
+    }
+
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
+
+    public function equipmentTypes()
+    {
+        return $this->belongsToMany(EquipmentType::class, 'client_type_equipment_types');
     }
 }

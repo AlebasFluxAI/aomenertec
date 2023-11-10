@@ -1,10 +1,11 @@
 <div class="login" style=" border-color: #f2f2f2;border-width: 2px;padding: 15px;border-radius: 15px">
 
-    @section("header") {{--extended app.blade--}}
-    @auth
-    @else
-        @include("layouts.menu.v1.header_menu_password")
-    @endauth
+    @section("header")
+        {{--extended app.blade--}}
+        @auth
+        @else
+            @include("layouts.menu.v1.header_menu_password")
+        @endauth
     @endsection
 
 

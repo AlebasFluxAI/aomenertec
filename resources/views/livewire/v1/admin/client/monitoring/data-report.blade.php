@@ -57,15 +57,15 @@
                                 "button_content" => 'Exportar XLSX',
 
                         ])
-              @include("partials.v1.primary_button",[
-                              "col_with" => 'auto',
-                              "button_align" => 'center',
-                              "click_action" => 'reportPdf',
-                              "class_button" => 'danger',
-                              "button_icon" => 'fas fa-file-pdf',
-                              "button_content" => 'Exportar PDF',
+            @include("partials.v1.primary_button",[
+                            "col_with" => 'auto',
+                            "button_align" => 'center',
+                            "click_action" => 'reportPdf',
+                            "class_button" => 'danger',
+                            "button_icon" => 'fas fa-file-pdf',
+                            "button_content" => 'Exportar PDF',
 
-                      ])
+                    ])
             <div wire:loading wire:target="reportCsv">
                 <label>Generando archivo excel...</label>
             </div>

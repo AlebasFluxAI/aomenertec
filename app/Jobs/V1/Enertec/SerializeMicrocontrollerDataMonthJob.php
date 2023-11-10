@@ -3,11 +3,9 @@
 namespace App\Jobs\V1\Enertec;
 
 use App\Models\V1\Client;
-use App\Models\V1\ClientConfiguration;
 use App\Models\V1\MonthlyMicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -24,6 +22,7 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
      */
     public $day_ref;
     public $client;
+
     public function __construct($day_ref, $client_id)
     {
         $this->day_ref = new Carbon($day_ref);
@@ -43,30 +42,30 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
             $year_aux = $this->day_ref->format('Y') - 1;
         } else {
             $month_aux = $this->day_ref->format('m') - 1;
-            if ($month_aux<10) {
-                $month_aux = '0'.$month_aux;
+            if ($month_aux < 10) {
+                $month_aux = '0' . $month_aux;
             }
             $year_aux = $this->day_ref->format('Y');
         }
-        if ($billing_day == $this->day_ref->format('t')){
+        if ($billing_day == $this->day_ref->format('t')) {
             $date_aux = Carbon::create($year_aux, $month_aux, 2);
             $start_date = Carbon::create($year_aux, $month_aux, $date_aux->format('t'), 23, 59, 59);
             $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $this->day_ref->format('t'), 23, 59, 59);
-        } else{
+        } else {
             $start_date = Carbon::create($year_aux, $month_aux, ($billing_day), 23, 59, 59);
             $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $billing_day, "23", "59", 59);
         }
-        if ($billing_day == $this->day_ref->format('t')){
+        if ($billing_day == $this->day_ref->format('t')) {
             $data_month = $this->client->dailyMicrocontrollerData()
                 ->where('year', $this->day_ref->format('Y'))
                 ->where('month', $this->day_ref->format('m'))
                 ->whereBetween('day', ['01', $billing_day])
                 ->get();
-        } else{
+        } else {
             $data_aux = $this->client->dailyMicrocontrollerData()
                 ->where('year', $year_aux)
                 ->where('month', ($month_aux))
-                ->whereBetween('day', [str_pad((strval(($billing_day+1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
+                ->whereBetween('day', [str_pad((strval(($billing_day + 1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
             $data_month = $this->client->dailyMicrocontrollerData()
                 ->where('year', $this->day_ref->format('Y'))
                 ->where('month', $this->day_ref->format('m'))
@@ -80,7 +79,7 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
             $date_end_data = new Carbon($end_data->source_timestamp);
-            if($date_end_data->isSameDay($this->day_ref)) {
+            if ($date_end_data->isSameDay($this->day_ref)) {
 
                 $start_data_aux = $this->client->monthlyMicrocontrollerData()
                     ->where('year', $start_date->format('Y'))
@@ -149,7 +148,7 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                             'raw_json' => json_encode($json),
                         ]);
                 }
-            } else{
+            } else {
                 // generar orden de trabajo de lectura para este cliente
             }
         }

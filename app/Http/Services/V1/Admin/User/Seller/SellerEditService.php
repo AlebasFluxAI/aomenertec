@@ -5,7 +5,6 @@ namespace App\Http\Services\V1\Admin\User\Seller;
 use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Services\Singleton;
 use App\Models\V1\Seller;
-use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 
 class SellerEditService extends Singleton

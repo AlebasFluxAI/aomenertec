@@ -5,7 +5,6 @@ namespace App\Jobs\V1\OrderData;
 use App\Models\V1\DailyMicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,6 +21,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
      */
     public $client;
     public $day_reference;
+
     public function __construct($client_id, Carbon $day_reference)
     {
         $this->client = \App\Models\V1\Client::find($client_id);
@@ -48,12 +48,12 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 ->whereBetween('source_timestamp', [$this->day_reference->copy()->subDay()->format('Y-m-d 00:00:00'), $this->day_reference->copy()->subDay()->format('Y-m-d 23:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
-            if ($reference_data_first == null){
+            if ($reference_data_first == null) {
                 $reference_data_first = $this->client->microcontrollerData()
                     ->whereBetween('source_timestamp', [$this->day_reference->copy()->subDays(15)->format('Y-m-d 00:00:00'), $this->day_reference->copy()->subDay()->format('Y-m-d 23:59:59')])
                     ->orderBy('source_timestamp', 'desc')
                     ->first();
-                if($reference_data_first == null) {
+                if ($reference_data_first == null) {
                     $reference_data_first = $this->client->microcontrollerData()
                         ->whereBetween('source_timestamp', [$this->day_reference->format('Y-m-d 00:00:00'), $this->day_reference->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp')
@@ -110,16 +110,16 @@ class AverageDailyConsumptionJob implements ShouldQueue
                 ->where('month', $last_day->format('m'))
                 ->where('day', $last_day->format('d'))
                 ->orderBy('source_timestamp', 'desc')->first();
-            if($last_data == null){
+            if ($last_data == null) {
                 $last_data = $this->client->hourlyMicrocontrollerData()
-                    ->whereBetween('source_timestamp', [$last_day->copy()->subDays(15)->format('Y-m-d H:00:00'), $last_day->format('Y-m-d 23:59:59') ])
+                    ->whereBetween('source_timestamp', [$last_day->copy()->subDays(15)->format('Y-m-d H:00:00'), $last_day->format('Y-m-d 23:59:59')])
                     ->orderBy('source_timestamp', 'desc')
                     ->first();
             }
             if ($last_data) {
                 $data_frame = config('data-frame.data_frame');
                 $raw_json = json_decode($last_data->raw_json, true);
-                foreach ($data_frame as $item){
+                foreach ($data_frame as $item) {
                     if ($item['start'] >= 72) {
                         if ($item['variable_name'] != 'Wh_calc') {
                             if ($item['variable_name'] != 'import_wh' and $item['variable_name'] != 'export_wh' and $item['variable_name'] != 'import_VArh' and $item['variable_name'] != 'export_VArh'
@@ -160,15 +160,15 @@ class AverageDailyConsumptionJob implements ShouldQueue
             }
         }
 
-        $day_data =$this->client->dailyMicrocontrollerdata()
+        $day_data = $this->client->dailyMicrocontrollerdata()
             ->where('year', $this->day_reference->format('Y'))
-            ->where('month',$this->day_reference->format('m'))
+            ->where('month', $this->day_reference->format('m'))
             ->where('day', $this->day_reference->format('d'))->first();
         if ($day_data) {
-            $year =  $this->day_reference->copy()->subDay()->format('Y');
+            $year = $this->day_reference->copy()->subDay()->format('Y');
             $month = $this->day_reference->copy()->subDay()->format('m');
-            $day =   $this->day_reference->copy()->subDay()->format('d');
-            $hour =  $this->day_reference->copy()->subDay()->format('H');
+            $day = $this->day_reference->copy()->subDay()->format('d');
+            $hour = $this->day_reference->copy()->subDay()->format('H');
             if ($day_data->interval_real_consumption != 0) {
                 $last_raw_json = json_decode($day_data->raw_json, true);
                 $previous_day_data = $this->client->dailyMicrocontrollerdata()
@@ -176,7 +176,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                     ->where('month', $month)
                     ->where('day', $day)
                     ->first();
-                if ($previous_day_data == null){
+                if ($previous_day_data == null) {
                     $previous_day_data = $this->client->dailyMicrocontrollerData()
                         ->whereHas('microcontrollerData', function ($query) {
                             $query->whereBetween("source_timestamp", [$this->day_reference->copy()->subDays(15)->format('Y-m-d 00:00:00'), $this->day_reference->copy()->subDay()->format('Y-m-d 23:59:59')]);

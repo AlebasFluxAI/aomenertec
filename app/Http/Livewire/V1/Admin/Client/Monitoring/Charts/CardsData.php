@@ -23,10 +23,10 @@ class CardsData extends Component
     {
         $this->variables = $variables;
         $this->data_frame = $data_frame;
-        $this->client =  $client;
+        $this->client = $client;
         $last_data = $this->client->microcontrollerData()->latest()->first();
-       // if ($last_data == null){
-         //   $last_data = $this->client->hourlyMicrocontrollerData()->latest()->first();
+        // if ($last_data == null){
+        //   $last_data = $this->client->hourlyMicrocontrollerData()->latest()->first();
         //}
         if ($last_data) {
             $this->last_data = collect(json_decode($last_data->raw_json, true));

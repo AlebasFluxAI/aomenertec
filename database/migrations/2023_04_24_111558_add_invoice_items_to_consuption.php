@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
 use App\Models\V1\BillableItem;
 use App\Models\V1\Tax;
+use Illuminate\Database\Migrations\Migration;
 
 class AddInvoiceItemsToConsuption extends Migration
 {

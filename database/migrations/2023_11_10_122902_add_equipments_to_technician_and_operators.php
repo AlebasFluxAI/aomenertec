@@ -1,9 +1,10 @@
 <?php
 
+use App\Models\V1\Client;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\V1\Client;
+
 class AddEquipmentsToTechnicianAndOperators extends Migration
 {
     /**
@@ -13,14 +14,13 @@ class AddEquipmentsToTechnicianAndOperators extends Migration
      */
     public function up()
     {
-        foreach (Client::get() as $client){
-           foreach ($client->equipments as $equipment)
-           {
-           $equipment->update([
-               "technician_id"=>$client->technician_id,
-               "network_operator_id"=>$client->technician->first()?$client->technician->first()->technician->network_operator_id:null,
-           ]);
-           }
+        foreach (Client::get() as $client) {
+            foreach ($client->equipments as $equipment) {
+                $equipment->update([
+                    "technician_id" => $client->technician_id,
+                    "network_operator_id" => $client->technician->first() ? $client->technician->first()->technician->network_operator_id : null,
+                ]);
+            }
         }
     }
 

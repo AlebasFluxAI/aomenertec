@@ -3,13 +3,10 @@
 namespace App\Http\Services\V1\Admin\User\Supervisor;
 
 use App\Http\Resources\V1\IndicativeHelper;
-use App\Http\Resources\V1\Menu;
 use App\Http\Services\Singleton;
 use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Admin;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\Supervisor;
-use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;

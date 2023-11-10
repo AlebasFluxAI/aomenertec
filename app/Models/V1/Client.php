@@ -7,11 +7,10 @@ use App\Models\Traits\AvailableChannelTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Scope\ClientEnabledScope;
 use App\Scope\OrderIdScope;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 class Client extends Model
@@ -91,13 +90,6 @@ class Client extends Model
         "vaupes_stratification_type"
     ];
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
-
-        static::addGlobalScope(new ClientEnabledScope());
-    }
-
     public static function getReportVariableFromId($variable_id)
     {
         $array = collect(config('data-frame.variables'));
@@ -106,11 +98,6 @@ class Client extends Model
                 return $element["display_name"];
             }
         }
-    }
-
-    public function invoices()
-    {
-        return $this->hasMany(Invoice::class);
     }
 
     public static function vaupesClientStratification()
@@ -126,6 +113,18 @@ class Client extends Model
             self::COMMERCIAL_3_43C => "commercial_3_43c",
             self::SUSPENDED_R1_R2 => "suspended_r1_r2",
         ];
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+
+        static::addGlobalScope(new ClientEnabledScope());
+    }
+
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class);
     }
 
     public function navigatorDropdownOptions()
@@ -544,15 +543,22 @@ class Client extends Model
         return $this->hasMany(Pqr::class);
     }
 
-    public function recharges()
-    {
-        return $this->hasMany(ClientRecharge::class);
-    }
-
     public function getSerialMeter()
     {
         $meter = $this->equipments()->whereEquipmentTypeId(1)->first();
         return $meter->serial;
+    }
+
+    public function equipments()
+    {
+        return $this->belongsToMany(
+            Equipment::class,
+            'equipment_clients',
+            'client_id',
+            'equipment_id'
+        )
+            ->where("current_assigned", true)
+            ->whereNull("equipment_clients.deleted_at");
     }
 
     public function getSerialGabinete()
@@ -565,6 +571,11 @@ class Client extends Model
     {
         $last = $this->recharges()->orderBy("consecutive", 'desc')->first();
         return ($last == null) ? 1 : $last->consecutive;
+    }
+
+    public function recharges()
+    {
+        return $this->hasMany(ClientRecharge::class);
     }
 
     public function supervisors()
@@ -627,18 +638,6 @@ class Client extends Model
                 ];
             }))->toArray()
         );
-    }
-
-    public function equipments()
-    {
-        return $this->belongsToMany(
-            Equipment::class,
-            'equipment_clients',
-            'client_id',
-            'equipment_id'
-        )
-            ->where("current_assigned", true)
-            ->whereNull("equipment_clients.deleted_at");
     }
 
     public function addresses()

@@ -16,7 +16,7 @@ return [
 
     'driver' => 'gd',
     // public aws url are in the format: <bucket>.s3.<region>.amazonaws.com/<file_path>
-    'publicUrl' => 'https://'.env('AWS_BUCKET', '<bucket>').'.s3.'.env('AWS_DEFAULT_REGION', '<region>').'.amazonaws.com/',
+    'publicUrl' => 'https://' . env('AWS_BUCKET', '<bucket>') . '.s3.' . env('AWS_DEFAULT_REGION', '<region>') . '.amazonaws.com/',
 
     // Defines the optimize image quality, just apply to the intervention encoder
     'quality' => 90,

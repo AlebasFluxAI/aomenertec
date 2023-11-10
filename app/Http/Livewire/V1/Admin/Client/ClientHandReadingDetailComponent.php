@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\ClientHandReadingDetailService;
-use App\Models\V1\Client;
 use App\Models\V1\MicrocontrollerData;
 use Livewire\Component;
 
@@ -12,6 +11,7 @@ class ClientHandReadingDetailComponent extends Component
     public $model;
     public $client;
     private $clientHandReadingDetailService;
+
     public function __construct()
     {
         parent::__construct();

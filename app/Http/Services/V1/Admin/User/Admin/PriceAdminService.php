@@ -2,7 +2,6 @@
 
 namespace App\Http\Services\V1\Admin\User\Admin;
 
-use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
 use App\Http\Resources\V1\MonthsYears;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
@@ -12,8 +11,6 @@ use App\Models\V1\AdminPrice;
 use App\Models\V1\AvailableChannel;
 use App\Models\V1\ClientType;
 use App\Models\V1\TabPermissionAdmin;
-use Illuminate\Support\Facades\DB;
-use Intervention\Image\Facades\Image;
 use Livewire\Component;
 
 class PriceAdminService extends Singleton

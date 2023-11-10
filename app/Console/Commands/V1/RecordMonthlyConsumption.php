@@ -68,11 +68,11 @@ class RecordMonthlyConsumption extends Command
             $end_date = Carbon::create($data->year, $data->month, $billing_day);
             if (count($data_month) > 0) {
                 $end_data = $data->client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'),$end_date->format('Y-m-d 23:59:59')])
+                    ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
                     ->orderBy('source_timestamp', 'desc')
                     ->first();
                 $start_data = $data->client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'),$end_date->format('Y-m-d 23:59:59')])
+                    ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
                     ->orderBy('source_timestamp')
                     ->first();
                 $reference_data = $end_data->dailyMicrocontrollerData;
@@ -129,7 +129,7 @@ class RecordMonthlyConsumption extends Command
         $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->get()->pluck('client_id');
         $clients_aux = Client::find($billing_day_clients);
         $clients = $clients_aux->where('has_telemetry', true)->all();
-        if (count($clients)>0) {
+        if (count($clients) > 0) {
             foreach ($clients as $client_aux) {
                 $client = Client::find($client_aux->id);
                 if ($reference_date->format('m') == '01') {
@@ -137,8 +137,8 @@ class RecordMonthlyConsumption extends Command
                     $year_aux = $reference_date->format('Y') - 1;
                 } else {
                     $month_aux = $reference_date->format('m') - 1;
-                    if ($month_aux<10) {
-                        $month_aux = '0'.$month_aux;
+                    if ($month_aux < 10) {
+                        $month_aux = '0' . $month_aux;
                     }
                     $year_aux = $reference_date->format('Y');
                 }

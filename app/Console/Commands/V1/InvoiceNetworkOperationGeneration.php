@@ -3,9 +3,7 @@
 namespace App\Console\Commands\V1;
 
 use App\Jobs\GenerateNetworkOperationInvoiceJob;
-use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class InvoiceNetworkOperationGeneration extends Command

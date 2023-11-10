@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Image as ImageResize;
 use Intervention\Image\ImageManagerStatic as ImageManager;
-use Throwable;
 
 class ImageObserver
 {

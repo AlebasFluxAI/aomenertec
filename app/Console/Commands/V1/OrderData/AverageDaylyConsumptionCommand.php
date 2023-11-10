@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands\V1\OrderData;
 
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
 use App\Jobs\V1\OrderData\AverageDailyConsumptionJob;
-use App\Jobs\V1\OrderData\AverageHourlyConsumptionJob;
-use App\Jobs\V1\OrderData\AverageMonthlyConsumptionJob;
 use App\Models\V1\Client;
-use App\Models\V1\ClientConfiguration;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -47,8 +43,8 @@ class AverageDaylyConsumptionCommand extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $day_reference = Carbon::now()->subDay();
-            foreach ($clients as $client) {
-                dispatch(new AverageDailyConsumptionJob($client->id, $day_reference))->onQueue('spot3');
+        foreach ($clients as $client) {
+            dispatch(new AverageDailyConsumptionJob($client->id, $day_reference))->onQueue('spot3');
         }
 
     }

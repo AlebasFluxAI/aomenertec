@@ -4,9 +4,6 @@ namespace App\Http\Livewire\V1\Admin\User\SuperAdmin;
 
 use App\Http\Services\V1\Admin\User\SuperAdmin\SuperAdminIndexService;
 use App\Models\Traits\FilterTrait;
-use App\Models\Traits\ValidateUserFormTrait;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 use Livewire\WithPagination;
 

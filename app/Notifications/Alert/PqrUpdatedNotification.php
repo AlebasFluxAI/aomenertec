@@ -3,9 +3,7 @@
 namespace App\Notifications\Alert;
 
 use App\Channels\WhatsAppChannel;
-use App\Http\Resources\V1\UserNotificationPayload;
 use App\Mail\WorkOrder\PqrUpdatedMail;
-use App\Mail\WorkOrder\WorkOrderUpdatedMail;
 use App\Notifications\WhatsAppMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Request;

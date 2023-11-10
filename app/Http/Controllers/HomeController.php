@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\V1\Controller;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {

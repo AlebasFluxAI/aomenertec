@@ -2,13 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Support;
 
-use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Support\SupportIndexService;
 use App\Models\Traits\FilterTrait;
-use App\Models\Traits\ValidateUserFormTrait;
-use App\Models\V1\Support;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Admin;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -56,9 +51,9 @@ class IndexSupport extends Component
         )->extends('layouts.v1.app');
     }
 
-    public function supportPqrDisabled($support)
+    public function getData()
     {
-        return $this->indexEquipmentService->supportPqrDisabled($this, $support);
+        return $this->indexEquipmentService->getData($this);
     }
 
     public function supportPqrEnabled($support)
@@ -66,9 +61,9 @@ class IndexSupport extends Component
         return !($this->indexEquipmentService->supportPqrDisabled($this, $support));
     }
 
-    public function enablePqrSupport($support)
+    public function supportPqrDisabled($support)
     {
-        return $this->indexEquipmentService->enablePqrSupport($this, $support);
+        return $this->indexEquipmentService->supportPqrDisabled($this, $support);
     }
 
     public function disablePqrSupport($support)
@@ -76,8 +71,8 @@ class IndexSupport extends Component
         return $this->indexEquipmentService->enablePqrSupport($this, $support);
     }
 
-    public function getData()
+    public function enablePqrSupport($support)
     {
-        return $this->indexEquipmentService->getData($this);
+        return $this->indexEquipmentService->enablePqrSupport($this, $support);
     }
 }

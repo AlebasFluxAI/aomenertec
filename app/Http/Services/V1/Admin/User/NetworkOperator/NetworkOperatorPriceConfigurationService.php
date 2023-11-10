@@ -5,12 +5,7 @@ namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 use App\Http\Resources\V1\MonthsYears;
 use App\Http\Services\Singleton;
 use App\Models\Traits\NetworkOperatorPriceTrait;
-use App\Models\V1\Client;
-use App\Models\V1\NetworkOperator;
-use App\Models\V1\PhotovoltaicPrice;
 use App\Models\V1\Stratum;
-use App\Models\V1\User;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class NetworkOperatorPriceConfigurationService extends Singleton

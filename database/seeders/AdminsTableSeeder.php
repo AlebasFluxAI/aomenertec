@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\V1\User;
 use Illuminate\Database\Seeder;
-use App\Models\V1\Admin;
-use Faker;
 
 class AdminsTableSeeder extends Seeder
 {

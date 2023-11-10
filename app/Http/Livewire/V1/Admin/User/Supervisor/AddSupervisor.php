@@ -4,9 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\Supervisor;
 
 use App\Http\Services\V1\Admin\User\SuperAdmin\NetworkOperatorAddService;
 use App\Http\Services\V1\Admin\User\Supervisor\SupervisorAddService;
-use App\Models\Traits\AddUserFormTrait;
 use App\Models\Traits\PassTrait;
-use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -30,9 +28,6 @@ class AddSupervisor extends Component
     public $indicatives;
     public $indicative;
     public $sign;
-
-    private $supervisorAddService;
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:2',
@@ -48,6 +43,7 @@ class AddSupervisor extends Component
         'model.identification_type' => 'required',
         'model.network_operator_id' => 'required',
     ];
+    private $supervisorAddService;
 
     public function __construct($id = null)
     {

@@ -2,12 +2,10 @@
 
 namespace App\Http\Services\V1\Admin\Equipment;
 
-use App\Http\Livewire\V1\Admin\Equipment\AddEquipment;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\Client;
 use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\Technician;

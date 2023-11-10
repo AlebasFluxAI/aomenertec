@@ -5,13 +5,11 @@ namespace App\Models\V1;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\UserMenuHomeTrait;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -103,25 +101,15 @@ class User extends Authenticatable implements JWTSubject
         'profile_photo_url',
     ];
 
-    public function getJWTIdentifier()
+    public static function getUserModel()
     {
-        return $this->getKey();
-    }
+        $user = Request::session()->get(User::SESSION_USER_AUTH) ?? Auth::user();
+        if (!Request::session()->get(User::SESSION_USER_AUTH)) {
+            Request::session()->put(User::SESSION_USER_AUTH, $user);
+        }
+        $userRole = Request::session()->get(User::SESSION_ROLE_SELECTED) ?? User::getUserRoles()[0]["rol"];
+        return $user->{$userRole};
 
-    public function getPhonePlusIndicativeAttribute()
-    {
-        return "(" . $this->indicative . ") " . $this->phone;
-    }
-
-
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
-
-    public function setEmailAttribute($value)
-    {
-        $this->attributes['email'] = strtolower($value);
     }
 
     public static function getUserRoles()
@@ -150,15 +138,24 @@ class User extends Authenticatable implements JWTSubject
 
     }
 
-    public static function getUserModel()
+    public function getJWTIdentifier()
     {
-        $user = Request::session()->get(User::SESSION_USER_AUTH) ?? Auth::user();
-        if (!Request::session()->get(User::SESSION_USER_AUTH)) {
-            Request::session()->put(User::SESSION_USER_AUTH, $user);
-        }
-        $userRole = Request::session()->get(User::SESSION_ROLE_SELECTED) ?? User::getUserRoles()[0]["rol"];
-        return $user->{$userRole};
+        return $this->getKey();
+    }
 
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
     }
 
     public function otpUsers()

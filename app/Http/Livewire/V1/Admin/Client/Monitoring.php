@@ -3,19 +3,17 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Models\V1\Client;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
+use App\ModulesAux\MQTT;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\ModulesAux\MQTT;
 
 class Monitoring extends Component
 {
     use WithPagination;
 
-    protected $listeners = ['tabChange'];
     public $data_chart;
     public $data_frame;
     public $variables;
@@ -26,7 +24,7 @@ class Monitoring extends Component
     public $clientAlerts;
     public $data_chart_result;
     public $model;
-
+    protected $listeners = ['tabChange'];
 
     public function mount(Client $client)
     {

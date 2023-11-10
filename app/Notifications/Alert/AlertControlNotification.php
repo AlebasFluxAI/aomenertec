@@ -8,15 +8,10 @@ use App\Mail\Alert\ControlErrorAlertMail;
 use App\Mail\Alert\ControlSuccessAlertMail;
 use App\Notifications\WhatsAppMessage;
 use Carbon\Carbon;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class AlertControlNotification extends Notification
 {
-    private $code;
-
     /**
      * Create a new notification instance.
      *
@@ -27,6 +22,7 @@ class AlertControlNotification extends Notification
     public $template;
     public $outputs;
     public $client_alert_configuration;
+    private $code;
 
     public function __construct($clientAlert, $template)
     {

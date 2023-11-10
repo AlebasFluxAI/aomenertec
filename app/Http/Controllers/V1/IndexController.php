@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\V1;
 
 use App\Http\Resources\V1\Subdomain;
-use Illuminate\Http\Request;
-use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 

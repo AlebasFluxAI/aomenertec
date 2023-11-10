@@ -2,9 +2,7 @@
 
 namespace App\Http\Livewire\V1\Admin\User;
 
-use App\Http\Services\V1\Admin\User\EditUserService;
 use App\Http\Services\V1\Admin\User\ProfileUserService;
-use App\Models\V1\Equipment;
 use Livewire\Component;
 use function view;
 
@@ -205,6 +203,11 @@ class ProfileUser extends Component
         return $this->profileUserService->getSubsidy($this, $event, $stratum_id);
     }
 
+    public function getSubsidy($stratum_id)
+    {
+        return $this->profileUserService->getSubsidy($this, $stratum_id);
+    }
+
     public function changeCredit($event, $stratum_id)
     {
         return $this->profileUserService->changeCredit($this, $event, $stratum_id);
@@ -213,11 +216,6 @@ class ProfileUser extends Component
     public function changeValue($event, $stratum_id)
     {
         return $this->profileUserService->changeValue($this, $event, $stratum_id);
-    }
-
-    public function getSubsidy($stratum_id)
-    {
-        return $this->profileUserService->getSubsidy($this, $stratum_id);
     }
 
     public function getCredit($stratum_id)

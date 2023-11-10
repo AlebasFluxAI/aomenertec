@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Resources\V1\AlterEnumHelper;
+use App\Models\V1\WorkOrder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Http\Resources\V1\AlterEnumHelper;
-use App\Models\V1\WorkOrder;
 
 class AddTypeDisableClientToWorkOrders extends Migration
 {

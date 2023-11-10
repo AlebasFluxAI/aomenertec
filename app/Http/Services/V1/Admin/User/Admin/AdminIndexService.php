@@ -5,7 +5,6 @@ namespace App\Http\Services\V1\Admin\User\Admin;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\NetworkOperator;
-use App\Scope\PaginationScope;
 use Livewire\Component;
 
 class AdminIndexService extends Singleton

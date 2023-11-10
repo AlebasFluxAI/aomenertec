@@ -49,6 +49,19 @@ class SmsChannel
         $response->throw('login Sms sending error');
     }
 
+    public function checkCellphone($cellphone)
+    {
+        if ('EC' == config('country.code') && '0' == substr($cellphone, 0, 1)) {
+            $cellphone = substr($cellphone, 1);
+        }
+
+        if (strlen($cellphone) <= config('country.sms-gateway.digits')) {
+            return config('country.sms-gateway.prefix') . $cellphone;
+        }
+
+        return $cellphone;
+    }
+
     public function yesbpo($toSms)
     {
         if (!config('yesbpo.username') || !config('yesbpo.password')) {
@@ -93,18 +106,5 @@ class SmsChannel
             'Message' => $toSms->message,
             'PhoneNumber' => $this->checkCellphone($toSms->to),
         ]);
-    }
-
-    public function checkCellphone($cellphone)
-    {
-        if ('EC' == config('country.code') && '0' == substr($cellphone, 0, 1)) {
-            $cellphone = substr($cellphone, 1);
-        }
-
-        if (strlen($cellphone) <= config('country.sms-gateway.digits')) {
-            return config('country.sms-gateway.prefix').$cellphone;
-        }
-
-        return $cellphone;
     }
 }

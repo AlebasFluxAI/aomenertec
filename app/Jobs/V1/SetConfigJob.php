@@ -4,9 +4,7 @@ namespace App\Jobs\V1;
 
 use App\Models\V1\ClientAlertConfiguration;
 use App\Models\V1\EquipmentType;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -26,6 +24,7 @@ class SetConfigJob implements ShouldQueue
      * @return void
      */
     public $json;
+
     public function __construct($json)
     {
         $this->json = $json;
@@ -44,7 +43,7 @@ class SetConfigJob implements ShouldQueue
         if ($equipment) {
             $client = $equipment->clients()->first();
             if ($client) {
-                if ($this->json['config_get']){
+                if ($this->json['config_get']) {
                     $alert_config_frame = config('data-frame.alert_config_frame');
                     if (!$client->clientAlertConfiguration()->exists()) {
                         $flags_frame = collect(config('data-frame.flags_frame'));

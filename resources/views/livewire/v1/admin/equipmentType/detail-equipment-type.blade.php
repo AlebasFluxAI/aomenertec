@@ -1,4 +1,5 @@
-@section("header") {{--extended app.blade--}}
+@section("header")
+    {{--extended app.blade--}}
 @endsection
 <div class="login">
     @include("partials.v1.title",[

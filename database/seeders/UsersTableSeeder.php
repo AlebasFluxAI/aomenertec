@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use App\Models\V1\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class UsersTableSeeder extends Seeder
 {

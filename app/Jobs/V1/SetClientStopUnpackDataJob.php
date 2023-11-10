@@ -5,7 +5,6 @@ namespace App\Jobs\V1;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\StopUnpackDataClient;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,6 +20,7 @@ class SetClientStopUnpackDataJob implements ShouldQueue
      * @return void
      */
     public $json;
+
     public function __construct($json)
     {
         $this->json = $json;
@@ -39,11 +39,11 @@ class SetClientStopUnpackDataJob implements ShouldQueue
         if ($equipment) {
             $client = $equipment->clients()->first();
             if ($client) {
-                if ($this->json['frame_save']){
+                if ($this->json['frame_save']) {
                     if (!$client->stopUnpackClient()->exists()) {
                         StopUnpackDataClient::create(['client_id' => $client->id]);
                     }
-                } else{
+                } else {
                     if ($client->stopUnpackClient()->exists()) {
                         $client->stopUnpackClient->delete();
                     }

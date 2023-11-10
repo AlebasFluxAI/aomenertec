@@ -93,6 +93,94 @@ class ClientImportationJob implements ShouldQueue
         }
     }
 
+    private function createClient($importValues, $admin, &$errors)
+    {
+        while (true) {
+            $code = $this->clientCode();
+            if (!(Client::whereCode($code)->exists())) {
+                break;
+            }
+        }
+        $clientArray = $this->getModelArray($this->mapHeadersClientBase(), $importValues);
+        if (!array_key_exists("code", $clientArray)) {
+            $clientArray = array_merge($clientArray, ["code" => $code]);
+        }
+        $clientArray = array_merge($clientArray, ["admin_id" => $admin]);
+        if ($this->networkOperator) {
+            $clientArray = array_merge($clientArray, ["network_operator_id" => $this->networkOperator->id]);
+        }
+
+
+        if (!$this->validateClientData($importValues, $errors)) {
+            return null;
+        }
+        return Client::create($clientArray);
+    }
+
+    public function clientCode($input = '0123456789', $strength = 10)
+    {
+        $input_length = strlen($input);
+        $random_codigo = "";
+        for ($i = 0; $i < $strength; $i++) {
+            $random_character = $input[mt_rand(0, $input_length - 1)];
+            $random_codigo .= $random_character;
+        }
+        return $random_codigo;
+    }
+
+    private function getModelArray($modelMapper, $importValues)
+    {
+        $resultArray = [];
+        foreach ($modelMapper as $key => $value) {
+            if (!array_key_exists($key, $importValues)) {
+                continue;
+            }
+            $fieldValue = $importValues[$key];
+            if ($value == "person_type") {
+                $fieldValue = $fieldValue == "JURIDICA" ? "juridical" : strtolower($fieldValue);
+            }
+            $resultArray = array_merge($resultArray, [$value => $fieldValue]);
+        }
+        return $resultArray;
+    }
+
+    private function mapHeadersClientBase()
+    {
+        return [
+            "NOMBRE" => "name",
+            "CODE" => "code",
+            "APELLIDO" => "last_name",
+            "ALIAS" => "alias",
+            "TELEFONO" => "phone",
+            "INDICATIVO_TELEFONO" => "indicative",
+            "EMAIL" => "email",
+            "TIPO_PERSONA" => "person_type",
+            "TIPO_IDENTIFICACION" => "identification_type",
+            "IDENTIFICACION" => "identification",
+
+        ];
+    }
+
+    private function validateClientData($importValues, &$errors): bool
+    {
+        $clientArray = $this->getModelArray($this->mapHeadersClientBase(), $importValues);
+        $flag = true;
+        if (Client::whereIdentification($clientArray["identification"])->exists()) {
+            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de identificacion {$clientArray["identification"]} ya es usado por otro cliente"]);
+            $flag = false;
+        }
+        if (Client::wherePhone($clientArray["phone"])->exists()) {
+            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de telefono {$clientArray["phone"]} ya es usado por otro cliente"]);
+            $flag = false;
+        }
+        return $flag;
+    }
+
+    private function addErrorToArray(&$errors, array $message)
+    {
+        $errors = array_merge($errors, $message);
+    }
+
     private function linkConnectionInformation(Client $client, $importValues, &$errors)
     {
         try {
@@ -119,40 +207,98 @@ class ClientImportationJob implements ShouldQueue
         }
     }
 
-    private function linkEquipments(Client $client, $importValues, &$errors)
+    private function mapHeadersNetworkTopologyInformation()
     {
-        $equipmentInformation = $this->getModelArray($this->mapHeadersCreateEquipment(), $importValues);
-        $equipmentTypeId = explode("/", $equipmentInformation["equipments_serial_type"]);
-        $equipmentSerials = explode("/", $equipmentInformation["equipments_serial"]);
-        if (count($equipmentTypeId) != count($equipmentSerials)) {
-            $this->addErrorToArray($errors, ["Error al asociar equipos" => "La cantidad de tipos de equipo no coincide con el serial de los equipos"]);
-            return;
-        }
-        foreach ($equipmentSerials as $key => $serial) {
-            $equipment = Equipment::whereSerial($serial)->whereEquipmentTypeId($equipmentTypeId[$key])->first();
-            if (!$equipment) {
-                $this->addErrorToArray($errors, ["Error al asociar equipos" => "Equipo $serial no existe"]);
-                return;
-            }
-            if ($equipment->assigned) {
-                $this->addErrorToArray($errors, ["Error al asociar equipos" => "Equipo $serial asignado"]);
-            }
-            try {
-                EquipmentClient::create([
-                    'client_id' => $client->id,
-                    'equipment_id' => $equipment->id,
-                    'current_assigned' => true,
-                ]);
-                $equipment->update(['assigned' => true]);
-            } catch (\Throwable $error) {
+        return [
+            "TOPOLOGIA_RED" => "network_topology",
+            "TIPO_CONEXION" => "client_type",
+            "CLIENTE_CON_CONTRIBUCION" => "contribution",
+            "CLIENTE_CON_IMPUESTO_ALUMBRADO" => "public_lighting_tax",
+            "TIPO_DE_SUBSIDIO" => "subsistence_consumption"
+        ];
 
-            }
+    }
+
+    private function mapValuesNetworkConnectionInformation()
+    {
+        return [
+            "MONO" => Client::MONOPHASIC,
+            "BI" => Client::BIPHASIC,
+            "TRI" => Client::TRIPHASIC,
+            "ZNI_CONV" => ClientType::ZIN_CONVENTIONAL,
+            "ZNI_FOTO" => ClientType::ZIN_PHOTOVOLTAIC,
+            "ZNI_RURAL" => ClientType::ZIN_RURAL,
+            "SIN_CONV" => ClientType::SIN_CONVENTIONAL,
+            "MON" => ClientType::MONITORING
+        ];
+
+    }
+
+    private function linkBillingInformation(Client $client, $importValues, &$errors)
+    {
+        try {
+            $billingInformationArray = $this->getModelArray($this->mapHeadersBillingInformation(), $importValues);
+            $billingInformationArray = array_merge($billingInformationArray, ["default" => true]);
+            $billingInformationArray = array_merge($billingInformationArray, ["type" => $this->mapValuesBillingInformation()[$billingInformationArray["type"]]]);
+            $client->billingInformation()->create($billingInformationArray);
+        } catch (\Throwable $error) {
+            $this->addErrorToArray($errors, ["Error en creacion de informacion de facturacion" => $error->getMessage()]);
         }
     }
 
-    private function addErrorToArray(&$errors, array $message)
+    private function mapHeadersBillingInformation()
     {
-        $errors = array_merge($errors, $message);
+        return [
+            "TIPO_PERSONA_FACTURACION" => "person_type",
+            "TIPO_IDENTIFICACION_FACTURACION" => "identification_type",
+            "IDENTIFICACION_FACTURACION" => "identification",
+            "TIPO_FACTURACION" => "type",
+            "DIRECCION_FACTURACION" => "address",
+            "RAZON_SOCIAL" => "name"
+        ];
+
+    }
+
+    private function mapValuesBillingInformation()
+    {
+        return [
+            "PREPAGO" => BillingInformation::BILLING_TYPE_PREPAID,
+            "POSTPAGO" => BillingInformation::BILLING_TYPE_POSTPAID,
+        ];
+
+    }
+
+    private function linkTechnician(Client $client, $importValues, $item, &$errors)
+    {
+        $technicianInformation = $this->getModelArray($this->mapHeadersTechnicianInformation(), $importValues);
+        if (!($technicianInformation["technician_id"])) {
+            return;
+        }
+        $technician = Technician::find($technicianInformation["technician_id"]);
+        $networkOperatorId = $technicianInformation["network_operator_id"];
+        if (!$networkOperator = NetworkOperator::find($networkOperatorId)) {
+            $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Operador de red con identificador $networkOperatorId no existe"]);
+        }
+
+        if ($networkOperator->admin_id != $this->admin) {
+            $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Operador de red con identificador $networkOperatorId no pertenece al administrador {$this->admin}"]);
+        }
+        if ($technician->network_operator_id != $networkOperatorId) {
+            $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Tecnico no pertecene a operador de red"]);
+            return;
+        }
+        $client->update(["network_operator_id" => $networkOperator->id]);
+        $client->technician()->create($technicianInformation);
+    }
+
+    private function mapHeadersTechnicianInformation()
+    {
+        return [
+            "ASOCIAR_TECNICO" => "technician_id",
+            "ASOCIAR_OPERADOR_DE_RED" => "network_operator_id",
+
+        ];
+
     }
 
     private function linkSupervisor(Client $client, $importValues, &$errors)
@@ -203,39 +349,13 @@ class ClientImportationJob implements ShouldQueue
 
     }
 
-    private function linkTechnician(Client $client, $importValues, $item, &$errors)
+    private function mapHeadersCreateSupervisor()
     {
-        $technicianInformation = $this->getModelArray($this->mapHeadersTechnicianInformation(), $importValues);
-        if (!($technicianInformation["technician_id"])) {
-            return;
-        }
-        $technician = Technician::find($technicianInformation["technician_id"]);
-        $networkOperatorId = $technicianInformation["network_operator_id"];
-        if (!$networkOperator = NetworkOperator::find($networkOperatorId)) {
-            $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Operador de red con identificador $networkOperatorId no existe"]);
-        }
+        return [
+            "CREAR_SUPERVISOR" => "create_supervisor",
+            "TIENE_TELEMETRIA" => "has_telemetry",
+        ];
 
-        if ($networkOperator->admin_id != $this->admin) {
-            $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Operador de red con identificador $networkOperatorId no pertenece al administrador {$this->admin}"]);
-        }
-        if ($technician->network_operator_id != $networkOperatorId) {
-            $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Tecnico no pertecene a operador de red"]);
-            return;
-        }
-        $client->update(["network_operator_id" => $networkOperator->id]);
-        $client->technician()->create($technicianInformation);
-    }
-
-    private function linkBillingInformation(Client $client, $importValues, &$errors)
-    {
-        try {
-            $billingInformationArray = $this->getModelArray($this->mapHeadersBillingInformation(), $importValues);
-            $billingInformationArray = array_merge($billingInformationArray, ["default" => true]);
-            $billingInformationArray = array_merge($billingInformationArray, ["type" => $this->mapValuesBillingInformation()[$billingInformationArray["type"]]]);
-            $client->billingInformation()->create($billingInformationArray);
-        } catch (\Throwable $error) {
-            $this->addErrorToArray($errors, ["Error en creacion de informacion de facturacion" => $error->getMessage()]);
-        }
     }
 
     private function linkAddressInformation(Client $client, $importValues, &$errors)
@@ -249,78 +369,6 @@ class ClientImportationJob implements ShouldQueue
         }
     }
 
-    private function createClient($importValues, $admin, &$errors)
-    {
-        while (true) {
-            $code = $this->clientCode();
-            if (!(Client::whereCode($code)->exists())) {
-                break;
-            }
-        }
-        $clientArray = $this->getModelArray($this->mapHeadersClientBase(), $importValues);
-        if (!array_key_exists("code", $clientArray)) {
-            $clientArray = array_merge($clientArray, ["code" => $code]);
-        }
-        $clientArray = array_merge($clientArray, ["admin_id" => $admin]);
-        if ($this->networkOperator) {
-            $clientArray = array_merge($clientArray, ["network_operator_id" => $this->networkOperator->id]);
-        }
-
-
-        if (!$this->validateClientData($importValues, $errors)) {
-            return null;
-        }
-        return Client::create($clientArray);
-    }
-
-    private function validateClientData($importValues, &$errors): bool
-    {
-        $clientArray = $this->getModelArray($this->mapHeadersClientBase(), $importValues);
-        $flag = true;
-        if (Client::whereIdentification($clientArray["identification"])->exists()) {
-            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de identificacion {$clientArray["identification"]} ya es usado por otro cliente"]);
-            $flag = false;
-        }
-        if (Client::wherePhone($clientArray["phone"])->exists()) {
-            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de telefono {$clientArray["phone"]} ya es usado por otro cliente"]);
-            $flag = false;
-        }
-        return $flag;
-    }
-
-    private function getModelArray($modelMapper, $importValues)
-    {
-        $resultArray = [];
-        foreach ($modelMapper as $key => $value) {
-            if (!array_key_exists($key, $importValues)) {
-                continue;
-            }
-            $fieldValue = $importValues[$key];
-            if ($value == "person_type") {
-                $fieldValue = $fieldValue == "JURIDICA" ? "juridical" : strtolower($fieldValue);
-            }
-            $resultArray = array_merge($resultArray, [$value => $fieldValue]);
-        }
-        return $resultArray;
-    }
-
-    private function mapHeadersClientBase()
-    {
-        return [
-            "NOMBRE" => "name",
-            "CODE" => "code",
-            "APELLIDO" => "last_name",
-            "ALIAS" => "alias",
-            "TELEFONO" => "phone",
-            "INDICATIVO_TELEFONO" => "indicative",
-            "EMAIL" => "email",
-            "TIPO_PERSONA" => "person_type",
-            "TIPO_IDENTIFICACION" => "identification_type",
-            "IDENTIFICACION" => "identification",
-
-        ];
-    }
-
     private function mapHeadersAddressInformation()
     {
         return [
@@ -332,6 +380,37 @@ class ClientImportationJob implements ShouldQueue
 
     }
 
+    private function linkEquipments(Client $client, $importValues, &$errors)
+    {
+        $equipmentInformation = $this->getModelArray($this->mapHeadersCreateEquipment(), $importValues);
+        $equipmentTypeId = explode("/", $equipmentInformation["equipments_serial_type"]);
+        $equipmentSerials = explode("/", $equipmentInformation["equipments_serial"]);
+        if (count($equipmentTypeId) != count($equipmentSerials)) {
+            $this->addErrorToArray($errors, ["Error al asociar equipos" => "La cantidad de tipos de equipo no coincide con el serial de los equipos"]);
+            return;
+        }
+        foreach ($equipmentSerials as $key => $serial) {
+            $equipment = Equipment::whereSerial($serial)->whereEquipmentTypeId($equipmentTypeId[$key])->first();
+            if (!$equipment) {
+                $this->addErrorToArray($errors, ["Error al asociar equipos" => "Equipo $serial no existe"]);
+                return;
+            }
+            if ($equipment->assigned) {
+                $this->addErrorToArray($errors, ["Error al asociar equipos" => "Equipo $serial asignado"]);
+            }
+            try {
+                EquipmentClient::create([
+                    'client_id' => $client->id,
+                    'equipment_id' => $equipment->id,
+                    'current_assigned' => true,
+                ]);
+                $equipment->update(['assigned' => true]);
+            } catch (\Throwable $error) {
+
+            }
+        }
+    }
+
     private function mapHeadersCreateEquipment()
     {
         return [
@@ -339,85 +418,5 @@ class ClientImportationJob implements ShouldQueue
             "TIPO_EQUIPOS_ASOCIADOS" => "equipments_serial_type",
         ];
 
-    }
-
-    private function mapHeadersCreateSupervisor()
-    {
-        return [
-            "CREAR_SUPERVISOR" => "create_supervisor",
-            "TIENE_TELEMETRIA" => "has_telemetry",
-        ];
-
-    }
-
-    private function mapHeadersTechnicianInformation()
-    {
-        return [
-            "ASOCIAR_TECNICO" => "technician_id",
-            "ASOCIAR_OPERADOR_DE_RED" => "network_operator_id",
-
-        ];
-
-    }
-
-
-    private function mapValuesNetworkConnectionInformation()
-    {
-        return [
-            "MONO" => Client::MONOPHASIC,
-            "BI" => Client::BIPHASIC,
-            "TRI" => Client::TRIPHASIC,
-            "ZNI_CONV" => ClientType::ZIN_CONVENTIONAL,
-            "ZNI_FOTO" => ClientType::ZIN_PHOTOVOLTAIC,
-            "ZNI_RURAL" => ClientType::ZIN_RURAL,
-            "SIN_CONV" => ClientType::SIN_CONVENTIONAL,
-            "MON" => ClientType::MONITORING
-        ];
-
-    }
-
-    private function mapHeadersNetworkTopologyInformation()
-    {
-        return [
-            "TOPOLOGIA_RED" => "network_topology",
-            "TIPO_CONEXION" => "client_type",
-            "CLIENTE_CON_CONTRIBUCION" => "contribution",
-            "CLIENTE_CON_IMPUESTO_ALUMBRADO" => "public_lighting_tax",
-            "TIPO_DE_SUBSIDIO" => "subsistence_consumption"
-        ];
-
-    }
-
-    private function mapValuesBillingInformation()
-    {
-        return [
-            "PREPAGO" => BillingInformation::BILLING_TYPE_PREPAID,
-            "POSTPAGO" => BillingInformation::BILLING_TYPE_POSTPAID,
-        ];
-
-    }
-
-    private function mapHeadersBillingInformation()
-    {
-        return [
-            "TIPO_PERSONA_FACTURACION" => "person_type",
-            "TIPO_IDENTIFICACION_FACTURACION" => "identification_type",
-            "IDENTIFICACION_FACTURACION" => "identification",
-            "TIPO_FACTURACION" => "type",
-            "DIRECCION_FACTURACION" => "address",
-            "RAZON_SOCIAL" => "name"
-        ];
-
-    }
-
-    public function clientCode($input = '0123456789', $strength = 10)
-    {
-        $input_length = strlen($input);
-        $random_codigo = "";
-        for ($i = 0; $i < $strength; $i++) {
-            $random_character = $input[mt_rand(0, $input_length - 1)];
-            $random_codigo .= $random_character;
-        }
-        return $random_codigo;
     }
 }

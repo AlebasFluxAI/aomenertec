@@ -5,7 +5,6 @@ namespace App\Jobs\V1\OrderData;
 use App\Models\V1\MonthlyMicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,6 +21,7 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
      */
     public $client;
     public $day_reference;
+
     public function __construct($client_id, Carbon $day_reference)
     {
         $this->client = \App\Models\V1\Client::find($client_id);
@@ -40,7 +40,7 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
         $year_aux = $previous_month_date->format('Y');
         $month_aux = $previous_month_date->format('m');
 
-        if ($billing_day == $this->day_reference->format('t')){
+        if ($billing_day == $this->day_reference->format('t')) {
             $start_date = Carbon::create($year_aux, $month_aux, $previous_month_date->format('t'), 23, 59, 59);
             $end_date = Carbon::create($this->day_reference->format('Y'), $this->day_reference->format('m'), $this->day_reference->format('t'), 23, 59, 59);
             $data_month = $this->client->dailyMicrocontrollerData()
@@ -48,27 +48,27 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                 ->where('month', $this->day_reference->format('m'))
                 ->whereBetween('day', ['01', $billing_day])
                 ->get();
-        } else{
+        } else {
             $start_date = Carbon::create($year_aux, $month_aux, ($billing_day), 23, 59, 59);
             $end_date = Carbon::create($this->day_reference->format('Y'), $this->day_reference->format('m'), $billing_day, "23", "59", 59);
             $data_aux = $this->client->dailyMicrocontrollerData()
                 ->where('year', $year_aux)
                 ->where('month', ($month_aux))
-                ->whereBetween('day', [str_pad((strval(($billing_day+1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
+                ->whereBetween('day', [str_pad((strval(($billing_day + 1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
             $data_month = $this->client->dailyMicrocontrollerData()
                 ->where('year', $this->day_reference->format('Y'))
                 ->where('month', $this->day_reference->format('m'))
                 ->whereBetween('day', ['01', $billing_day])
                 ->union($data_aux)
                 ->get();
-            }
+        }
 
         if (count($data_month) > 0) {
             $reference_data = $this->client->microcontrollerData()
                 ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
-            if($reference_data) {
+            if ($reference_data) {
                 $date_reference_data = new Carbon($reference_data->source_timestamp);
                 if ($this->day_reference->diffInDays($date_reference_data) <= 4) {
                     $start_data_aux = $this->client->monthlyMicrocontrollerData()
@@ -202,17 +202,17 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                     );
                 }
             }
-            $month_data =$this->client->monthlyMicrocontrollerdata()
+            $month_data = $this->client->monthlyMicrocontrollerdata()
                 ->where('year', $this->day_reference->format('Y'))
-                ->where('month',$this->day_reference->format('m'))->first();
-            if($month_data){
+                ->where('month', $this->day_reference->format('m'))->first();
+            if ($month_data) {
                 if ($month_data->interval_real_consumption != 0) {
                     $last_raw_json = json_decode($month_data->raw_json, true);
                     $previous_month_data = $this->client->monthlyMicrocontrollerdata()
                         ->where('year', $year_aux)
                         ->where('month', $month_aux)
                         ->first();
-                    if ($previous_month_data == null){
+                    if ($previous_month_data == null) {
                         $previous_month_data = $this->client->monthlyMicrocontrollerData()
                             ->where('year', $previous_month_date->copy()->subMonths(6)->format('y'))
                             ->where('month', $previous_month_date->copy()->subMonths(6)->format('m'))

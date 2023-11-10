@@ -12,7 +12,7 @@ class InvoicePaymentRegistration extends Model
     use HasFactory;
     use SoftDeletes;
     use ImageableTrait;
-    
+
 
     public const PAYMENT_METHOD_TRANSFER = "transfer";
     public const PAYMENT_METHOD_CASH = "cash";
@@ -27,16 +27,6 @@ class InvoicePaymentRegistration extends Model
         "other_method",
         "invoice_id"
     ];
-
-    public function registrable()
-    {
-        return $this->morphTo();
-    }
-
-    public function invoice()
-    {
-        return $this->belongsTo(Invoice::class);
-    }
 
     public static function paymentMethodKeyValue()
     {
@@ -59,6 +49,16 @@ class InvoicePaymentRegistration extends Model
             ],
 
         ];
+    }
+
+    public function registrable()
+    {
+        return $this->morphTo();
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 
     public function evidence()

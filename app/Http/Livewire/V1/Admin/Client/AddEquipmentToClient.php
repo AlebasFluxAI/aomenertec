@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\AddClientEquipmentService;
-use App\Http\Services\V1\Admin\Client\AddClientService;
 use App\Models\Traits\ClientFormTrait;
 use App\Models\V1\Client;
 use Livewire\Component;

@@ -2,38 +2,14 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Http\Services\V1\Admin\Client\AddClient;
-use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
-use App\Models\V1\BillingInformation;
-use App\Models\V1\ClientSupervisor;
-use App\Models\V1\EquipmentClient;
-use App\Models\V1\ClientType;
-use App\Models\V1\Department;
-use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Location;
-use App\Models\V1\LocationType;
-use App\Models\V1\Municipality;
-use App\Models\V1\NetworkOperator;
-use App\Models\V1\Seller;
-use App\Models\V1\Stratum;
-use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\Client;
-use App\Models\V1\Supervisor;
-use App\Models\V1\Technician;
-use App\Models\V1\User;
-use App\Models\V1\VoltageLevel;
-use Illuminate\Support\Facades\Auth;
+use App\Models\V1\Equipment;
+use App\Models\V1\EquipmentClient;
+use App\Models\V1\EquipmentType;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 use Livewire\Component;
-use Spatie\Permission\Models\Role;
-use function auth;
-use function bcrypt;
-use function session;
 
 class AddClientEquipmentService extends Singleton
 {
@@ -138,6 +114,13 @@ class AddClientEquipmentService extends Singleton
         }
     }
 
+    public function save(Component $component)
+    {
+        DB::transaction(function () use ($component) {
+            $this->linkEquipments($component, $component->client);
+            $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
+        });
+    }
 
     private function linkEquipments(Component $component, Client $client)
     {
@@ -152,13 +135,5 @@ class AddClientEquipmentService extends Singleton
             ]);
             Equipment::find($item['id'])->update(['assigned' => true]);
         }
-    }
-
-    public function save(Component $component)
-    {
-        DB::transaction(function () use ($component) {
-            $this->linkEquipments($component, $component->client);
-            $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
-        });
     }
 }
