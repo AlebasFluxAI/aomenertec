@@ -27,7 +27,7 @@ class NetworkOperatorPriceService extends Singleton
             'years' => MonthsYears::years(),
             "date_picked" => false,
             "client_type" => $client_type,
-
+            "has_invoice_generation" => false
         ]);
         $this->fillStrataArray($component);
 
@@ -50,6 +50,11 @@ class NetworkOperatorPriceService extends Singleton
         foreach ($component->model->sinOtherFees()->get() as $sinFees) {
             $component->taxType[ClientType::SIN_CONVENTIONAL][strval($sinFees->strata_id)] = $sinFees->tax_type;
         }
+    }
+
+    public function generateOtherClientInvoicing()
+    {
+        dd("others");
     }
 
     public function getPercentageOption(Component $component, $strata, $clientType)
@@ -212,6 +217,7 @@ class NetworkOperatorPriceService extends Singleton
             }
         }
         ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
+
     }
 
     public function changeOtherFee(Component $component, $type, $value, $strata, $client_type)
@@ -269,6 +275,8 @@ class NetworkOperatorPriceService extends Singleton
             }
         }
         ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
+
+
     }
 
     public function getOtherFee(Component $component, $value, $strata, $type)

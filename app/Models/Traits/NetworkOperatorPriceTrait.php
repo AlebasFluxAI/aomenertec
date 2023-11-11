@@ -4,15 +4,19 @@ namespace App\Models\Traits;
 
 use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\ClientType;
+use App\Models\V1\Invoice;
 use App\Models\V1\PhotovoltaicPrice;
 use App\Models\V1\Stratum;
 use App\Models\V1\VoltageLevel;
+use DateTime;
 use Livewire\Component;
 
 trait NetworkOperatorPriceTrait
 {
+
     public function changeSubsidy(Component $component, $event, $stratum_id)
     {
+
         if ($price = PhotovoltaicPrice::whereNetworkOperatorId($component->model->id)
             ->where("month", $component->month)
             ->where("year", $component->year)
@@ -34,6 +38,8 @@ trait NetworkOperatorPriceTrait
         }
 
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
+
+
     }
 
     public function changeCredit(Component $component, $event, $stratum_id)
@@ -58,6 +64,8 @@ trait NetworkOperatorPriceTrait
             ]);
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
+
+
     }
 
     public function changeValue(Component $component, $event, $stratum_id)
@@ -82,6 +90,8 @@ trait NetworkOperatorPriceTrait
             ]);
         }
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Valor actualizado"]);
+
+
     }
 
     public function getSubsidy(Component $component, $stratum_id)
@@ -126,6 +136,7 @@ trait NetworkOperatorPriceTrait
         }
 
         $component->date_picked = true;
+        $this->validateHasInvoicing($component);
         $component->model->refresh();
         if ($component->client_type == ClientType::ZIN_CONVENTIONAL) {
             if ($fee = $component->model->zniFees()->where([
@@ -149,6 +160,33 @@ trait NetworkOperatorPriceTrait
                 $component->default_rate = $fee->default_rate;
             }
         }
+    }
+
+    public function validateHasInvoicing(Component $component)
+    {
+
+        if (!$component->date_picked) {
+            $component->has_invoice_generation = false;
+            return;
+        }
+        $inputDate = new DateTime("$component->year-$component->month-01");
+
+        if ($inputDate > now()) {
+            $component->has_invoice_generation = false;
+            return;
+        }
+
+        $component->has_invoice_generation = !$this->getClientInvoice($component, $component->month, $component->year, $component->client_type);
+    }
+
+    private function getClientInvoice(Component $component, $month, $year, $client_type)
+    {
+        return Invoice::whereIn("client_id", $component->model->clients()
+            ->whereClientTypeId(ClientType::whereType($client_type)->first()->id)
+            ->get()->pluck("id"))
+            ->whereMonth("created_at", $month)
+            ->whereYear("created_at", $year)
+            ->exists();
     }
 
     public function updatedDefaultRate(Component $component, $value)

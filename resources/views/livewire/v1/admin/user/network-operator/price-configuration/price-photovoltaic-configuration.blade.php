@@ -95,5 +95,16 @@
         @include("livewire.v1.admin.user.network-operator.price-configuration.vaupes-client-type-price-calculator")
 
     @endif
+    <br>
+
+    @if($has_invoice_generation)
+        @include("partials.v1.modal-confirm",[
+            "button_icon"=>"fas fa-cash-register",
+            "button_content"=>"Generar facturacion automatica",
+            "modal_target"=>"photovoltaicModal",
+            "modal_content"=>"Existen clientes de las fechas configuradas sin facturas generadas, ¿Desea generar esta facturación con las tarifas asignadas?",
+            "function"=>"generatePhotovoltaicInvoicing"
+        ])
+    @endif
 
 </div>
