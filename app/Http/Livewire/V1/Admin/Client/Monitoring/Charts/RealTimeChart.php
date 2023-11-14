@@ -123,21 +123,20 @@ class RealTimeChart extends Component
     public function selectRealTime()
     {
         if ($this->client->clientConfiguration()->first()->active_real_time) {
-
-
-            $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-            if (!RealTimeListener::whereUserId(Auth::user()->id)
-                ->whereEquipmentId($equipment->id)->exists()) {
-                $new = RealTimeListener::create([
-                    "user_id" => Auth::user()->id,
-                    "equipment_id" => $equipment->id
-                ]);
-                if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
-                    $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
-                    $topic = 'mc/config/' . $equipment->serial;
-                    MQTT::publish($topic, $message);
-                    MQTT::disconnect();
-                }
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (!RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    $new = RealTimeListener::create([
+                        "user_id" => Auth::user()->id,
+                        "equipment_id" => $equipment->id
+                    ]);
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        $mqtt = MQTT::connection('default', 'null');
+                        $mqtt->publish($topic, $message);
+                        $mqtt->disconnect();
+                    }
             }
         } else {
             $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data' => 'El dispositivo no cuenta con conexión wifi...']);

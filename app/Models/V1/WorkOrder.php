@@ -124,6 +124,11 @@ class WorkOrder extends Model
                 "col_filter" => false
             ],
             [
+                "col_name" => "Alias",
+                "col_data" => "client.alias",
+                "col_filter" => false
+            ],
+            [
                 "col_name" => "Tipo",
                 "col_translate" => "work_order",
                 "col_data" => "type",

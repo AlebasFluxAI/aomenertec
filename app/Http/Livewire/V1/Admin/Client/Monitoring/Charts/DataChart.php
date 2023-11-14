@@ -59,6 +59,76 @@ class DataChart extends Component
         $this->chartRender(true);
     }
 
+    public function restartDateRange()
+    {
+        if ($this->time_id == 1) {
+            $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
+        } elseif ($this->time_id == 2) {
+            $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
+        } elseif ($this->time_id == 3) {
+            $this->data_chart = $this->client->dailyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(31)->get();
+        } else {
+            $this->data_chart = $this->client->monthlyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(12)->get();
+        }
+        if (count($this->data_chart)>0) {
+            if ($this->time_id == 1) {
+                $this->end = $this->data_chart->first()->source_timestamp;
+                $this->start = $this->data_chart->last()->source_timestamp;
+            } else {
+                $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
+                $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+            }
+            $this->date_range = $this->start . " - " . $this->end;
+        }
+        $this->chartRender(true);
+    }
+
+    public function selectHistory()
+    {
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    RealTimeListener::whereUserId(Auth::user()->id)
+                        ->whereEquipmentId(
+                            $equipment->id
+                        )->delete();
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        $mqtt = MQTT::connection('default', 'null');
+                        $mqtt->publish($topic, $message);
+                        $mqtt->disconnect();
+                    }
+                }
+        }
+        $this->restartDateRange();
+    }
+
+    public function changeDateRange($start, $end)
+    {
+        $this->start = $start;
+        $this->end = $end;
+        $this->date_range = $this->start . " - " . $this->end;
+        $this->chartRender(false);
+    }
+
+    public function updatedTimeId()
+    {
+        $this->chartRender(false);
+    }
+
+    public function updatedVariableChartId()
+    {
+        $variable = $this->variables->where('id', $this->variable_chart_id)->first();
+        $this->chart_type = $variable['chart_type'];
+        $this->chart_title = $variable['display_name'];
+        $this->variables_selected = $this->data_frame->where('variable_id', $this->variable_chart_id);
+        $this->chartRender(false);
+    }
+
+
+
     private function chartRender($flag)
     {
         if ($flag) {
@@ -150,73 +220,6 @@ class DataChart extends Component
         } else {
             $this->emit('changeAxis', ['series' => [], 'x_axis' => [], 'title' => $this->chart_title]);
         }
-    }
-
-    public function selectHistory()
-    {
-        if ($this->client->clientConfiguration()->first()->active_real_time) {
-            $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-            if (RealTimeListener::whereUserId(Auth::user()->id)
-                ->whereEquipmentId($equipment->id)->exists()) {
-                RealTimeListener::whereUserId(Auth::user()->id)
-                    ->whereEquipmentId(
-                        $equipment->id
-                    )->delete();
-                if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
-                    $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-                    $topic = 'mc/config/' . $equipment->serial;
-                    MQTT::publish($topic, $message);
-                    MQTT::disconnect();
-                }
-            }
-        }
-        $this->restartDateRange();
-    }
-
-    public function restartDateRange()
-    {
-        if ($this->time_id == 1) {
-            $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
-        } elseif ($this->time_id == 2) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
-        } elseif ($this->time_id == 3) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(31)->get();
-        } else {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(12)->get();
-        }
-        if (count($this->data_chart) > 0) {
-            if ($this->time_id == 1) {
-                $this->end = $this->data_chart->first()->source_timestamp;
-                $this->start = $this->data_chart->last()->source_timestamp;
-            } else {
-                $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-                $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
-            }
-            $this->date_range = $this->start . " - " . $this->end;
-        }
-        $this->chartRender(true);
-    }
-
-    public function changeDateRange($start, $end)
-    {
-        $this->start = $start;
-        $this->end = $end;
-        $this->date_range = $this->start . " - " . $this->end;
-        $this->chartRender(false);
-    }
-
-    public function updatedTimeId()
-    {
-        $this->chartRender(false);
-    }
-
-    public function updatedVariableChartId()
-    {
-        $variable = $this->variables->where('id', $this->variable_chart_id)->first();
-        $this->chart_type = $variable['chart_type'];
-        $this->chart_title = $variable['display_name'];
-        $this->variables_selected = $this->data_frame->where('variable_id', $this->variable_chart_id);
-        $this->chartRender(false);
     }
 
     public function setPointPhasor($point)

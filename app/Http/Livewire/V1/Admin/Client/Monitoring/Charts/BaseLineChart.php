@@ -59,6 +59,84 @@ class BaseLineChart extends Component
         $this->chartRender(true);
     }
 
+    public function restartDateRange()
+    {
+        if ($this->time_id_baseline == 2) {
+            $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
+        } elseif ($this->time_id_baseline == 3) {
+            $this->data_chart_result = $this->client->dailyMicrocontrollerData()
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(31)->get();
+        } else {
+            $this->data_chart_result = $this->client->monthlyMicrocontrollerData()
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(12)->get();
+        }
+        if (count($this->data_chart_result)>0) {
+            $this->end_result = $this->data_chart_result->first()->microcontrollerData->source_timestamp;
+            $this->start_result = $this->data_chart_result->last()->microcontrollerData->source_timestamp;
+            $this->date_range_result = $this->start_result . " - " . $this->end_result;
+        }
+        $end_reference = Carbon::create($this->end_result);
+        $this->end_reference = $end_reference->subDays(2);
+        $start_reference = Carbon::create($this->start_result);
+        $this->start_reference = $start_reference->subDays(2);
+        $this->date_range_reference = $this->start_reference . " - " . $this->end_reference;
+        $this->chartRender(true);
+    }
+
+    public function selectBaseLine()
+    {
+        if($this->client->clientConfiguration()->first()->active_real_time) {
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                if (RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists()) {
+                    RealTimeListener::whereUserId(Auth::user()->id)
+                        ->whereEquipmentId(
+                            $equipment->id
+                        )->delete();
+                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
+                        $topic = 'mc/config/' . $equipment->serial;
+                        $mqtt = MQTT::connection('default', 'null');
+                        $mqtt->publish($topic, $message);
+                        $mqtt->disconnect();
+                    }
+                }
+        }
+        $this->restartDateRange();
+    }
+
+    public function changeDateRangeResult($start, $end)
+    {
+        $this->start_result = $start;
+        $this->end_result = $end;
+        $this->date_range_result = $this->start_result . " - " . $this->end_result;
+        $this->chartRender(false);
+    }
+
+    public function changeDateRangeReference($start, $end)
+    {
+        $this->start_reference = $start;
+        $this->end_reference = $end;
+        $this->date_range_reference = $this->start_reference . " - " . $this->end_reference;
+        $this->chartRender(false);
+    }
+
+    public function updatedTimeIdBaseline()
+    {
+        $this->chartRender(false);
+    }
+
+    public function updatedVariableChartId()
+    {
+        $variable = $this->variables->where('id', $this->variable_chart_id)->first();
+        $this->chart_type = $variable['chart_type'];
+        $this->chart_title = $variable['display_name'];
+        $this->variables_selected = $this->data_frame->where('variable_id', $this->variable_chart_id);
+        $this->chartRender(false);
+    }
+
     private function chartRender($flag)
     {
         if ($flag) {
@@ -215,83 +293,6 @@ class BaseLineChart extends Component
         } else {
             $this->emit('changeAxis', ['series' => [], 'x_axis' => [], 'title' => $this->chart_title]);
         }
-    }
-
-    public function selectBaseLine()
-    {
-        if ($this->client->clientConfiguration()->first()->active_real_time) {
-            $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-            if (RealTimeListener::whereUserId(Auth::user()->id)
-                ->whereEquipmentId($equipment->id)->exists()) {
-                RealTimeListener::whereUserId(Auth::user()->id)
-                    ->whereEquipmentId(
-                        $equipment->id
-                    )->delete();
-                if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
-                    $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
-                    $topic = 'mc/config/' . $equipment->serial;
-                    MQTT::publish($topic, $message);
-                    MQTT::disconnect();
-                }
-            }
-        }
-        $this->restartDateRange();
-    }
-
-    public function restartDateRange()
-    {
-        if ($this->time_id_baseline == 2) {
-            $this->data_chart_result = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
-        } elseif ($this->time_id_baseline == 3) {
-            $this->data_chart_result = $this->client->dailyMicrocontrollerData()
-                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
-                ->limit(31)->get();
-        } else {
-            $this->data_chart_result = $this->client->monthlyMicrocontrollerData()
-                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
-                ->limit(12)->get();
-        }
-        if (count($this->data_chart_result) > 0) {
-            $this->end_result = $this->data_chart_result->first()->microcontrollerData->source_timestamp;
-            $this->start_result = $this->data_chart_result->last()->microcontrollerData->source_timestamp;
-            $this->date_range_result = $this->start_result . " - " . $this->end_result;
-        }
-        $end_reference = Carbon::create($this->end_result);
-        $this->end_reference = $end_reference->subDays(2);
-        $start_reference = Carbon::create($this->start_result);
-        $this->start_reference = $start_reference->subDays(2);
-        $this->date_range_reference = $this->start_reference . " - " . $this->end_reference;
-        $this->chartRender(true);
-    }
-
-    public function changeDateRangeResult($start, $end)
-    {
-        $this->start_result = $start;
-        $this->end_result = $end;
-        $this->date_range_result = $this->start_result . " - " . $this->end_result;
-        $this->chartRender(false);
-    }
-
-    public function changeDateRangeReference($start, $end)
-    {
-        $this->start_reference = $start;
-        $this->end_reference = $end;
-        $this->date_range_reference = $this->start_reference . " - " . $this->end_reference;
-        $this->chartRender(false);
-    }
-
-    public function updatedTimeIdBaseline()
-    {
-        $this->chartRender(false);
-    }
-
-    public function updatedVariableChartId()
-    {
-        $variable = $this->variables->where('id', $this->variable_chart_id)->first();
-        $this->chart_type = $variable['chart_type'];
-        $this->chart_title = $variable['display_name'];
-        $this->variables_selected = $this->data_frame->where('variable_id', $this->variable_chart_id);
-        $this->chartRender(false);
     }
 
     public function render()
