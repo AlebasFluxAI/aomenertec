@@ -2,9 +2,6 @@
 
 namespace App\Http\Resources\V1;
 
-use App\Events\UserNotificationEvent;
-use ArrayAccess;
-
 class Permissions
 {
     public const SUPER_ADMIN_CREATE = "super_admin.create";

@@ -5,7 +5,6 @@ namespace App\Http\Livewire\V1\Admin\Client;
 use App\Http\Services\V1\Admin\Client\EditClientService;
 use App\Models\Traits\ClientFormTrait;
 use App\Models\V1\Client;
-use App\Models\V1\Equipment;
 use Livewire\Component;
 
 class EditClient extends Component

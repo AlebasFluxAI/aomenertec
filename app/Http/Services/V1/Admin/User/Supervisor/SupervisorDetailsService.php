@@ -22,10 +22,12 @@ class SupervisorDetailsService extends Singleton
         $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
         $component->reset();
     }
+
     public function conditionalMonitoring(Component $component, $modelId)
     {
         return !MicrocontrollerData::whereClientId($modelId)->exists();
     }
+
     public function conditionalDeleteClient(Component $component, $modelId)
     {
         return MicrocontrollerData::whereClientId($modelId)->exists();

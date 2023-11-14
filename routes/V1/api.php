@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\MqttInput\MqttInputController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\V1\AuthController;
 
 /*
 |--------------------------------------------------------------------------

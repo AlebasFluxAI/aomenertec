@@ -2,21 +2,11 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\V1\Enertec\ClientInvoiceGenerationJob;
 use App\Jobs\V1\Enertec\ClientInvoiceGenerationManuallyJob;
 use App\Models\V1\Client;
-use App\Models\V1\ClientAlert;
 use App\Models\V1\ClientConfiguration;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
-use Illuminate\Bus\Queueable;
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class ClientInvoicingCommand extends Command
 {
@@ -59,7 +49,7 @@ class ClientInvoicingCommand extends Command
         $clients_id = $this->argument('clients_id');
         $billing_day = ($now_day->format('d') == 29 or $now_day->format('d') == 30 or $now_day->format('d') == 31) ? 31 : $now_day->format('d');
         $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->get()->pluck('client_id');
-        if(count($clients_id)>0){
+        if (count($clients_id) > 0) {
             $clients_aux = [];
 
             foreach ($billing_day_clients as $elemento1) {
@@ -71,11 +61,11 @@ class ClientInvoicingCommand extends Command
                 }
             }
             $clients = Client::find($clients_aux);
-        }else {
+        } else {
             $clients = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->get();
         }
         $now_day->addDay();
-        if (count($clients)>0) {
+        if (count($clients) > 0) {
             foreach ($clients as $client) {
                 dispatch(new ClientInvoiceGenerationManuallyJob($client, $now_day))->onQueue('default');
             }

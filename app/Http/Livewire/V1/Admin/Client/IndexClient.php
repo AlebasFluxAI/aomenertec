@@ -3,10 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\IndexClientService;
-use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Models\Traits\FilterTrait;
-use App\Models\V1\Client;
-use App\Models\V1\Equipment;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -65,13 +62,13 @@ class IndexClient extends Component
         ])->extends('layouts.v1.app');
     }
 
-    public function setFilter($filterValue)
-    {
-        return $this->indexClientService->setFilter($this, $filterValue);
-    }
-
     public function getData()
     {
         return ($this->indexClientService->getData($this));
+    }
+
+    public function setFilter($filterValue)
+    {
+        return $this->indexClientService->setFilter($this, $filterValue);
     }
 }

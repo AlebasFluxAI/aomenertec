@@ -2,7 +2,6 @@
 
 namespace App\Observers\User\Supervisor;
 
-use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use Illuminate\Support\Facades\Http;
 
@@ -21,25 +20,6 @@ class UserSupervisorObserver
         $supervisor->last_name = $user->last_name;
         $supervisor->phone = $user->phone;
         $supervisor->identification = $user->identification;
-    }
-
-
-    public function updated(Supervisor $supervisor)
-    {
-        $this->setHereMapJson($supervisor);
-        $this->setInformation($supervisor);
-        $user = $supervisor->user;
-        if (!$user) {
-            return;
-        }
-
-        $user->update([
-            "name" => $supervisor->name,
-            "last_name" => $supervisor->last_name,
-            "email" => $supervisor->email,
-            "phone" => $supervisor->phone,
-            "identification" => $supervisor->identification,
-        ]);
     }
 
     public function setHereMapJson($model)
@@ -98,5 +78,23 @@ class UserSupervisorObserver
             }
         } catch (Throwable $e) {
         }
+    }
+
+    public function updated(Supervisor $supervisor)
+    {
+        $this->setHereMapJson($supervisor);
+        $this->setInformation($supervisor);
+        $user = $supervisor->user;
+        if (!$user) {
+            return;
+        }
+
+        $user->update([
+            "name" => $supervisor->name,
+            "last_name" => $supervisor->last_name,
+            "email" => $supervisor->email,
+            "phone" => $supervisor->phone,
+            "identification" => $supervisor->identification,
+        ]);
     }
 }

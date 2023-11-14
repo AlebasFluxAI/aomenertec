@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\V1\Tax;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\V1\Tax;
 
 class AddTaxTable extends Migration
 {

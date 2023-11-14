@@ -5,9 +5,7 @@ namespace App\Jobs\V1\OrderData;
 use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
-use http\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -38,10 +36,10 @@ class AverageHourlyConsumptionJob implements ShouldQueue
      */
     public function handle()
     {
-        $year =  $this->hour_reference->format('Y');
+        $year = $this->hour_reference->format('Y');
         $month = $this->hour_reference->format('m');
-        $day =   $this->hour_reference->format('d');
-        $hour =  $this->hour_reference->format('H');
+        $day = $this->hour_reference->format('d');
+        $hour = $this->hour_reference->format('H');
         $reference_data = MicrocontrollerData::whereClientId($this->client->id)
             ->whereBetween("source_timestamp", [$this->hour_reference->format('Y-m-d H:00:00'), $this->hour_reference->format('Y-m-d H:59:59')])
             ->orderBy('source_timestamp', 'desc')
@@ -72,17 +70,17 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                     'source_timestamp' => $reference_data->source_timestamp,
                     'raw_json' => $reference_data->raw_json]
             );
-        } else{
+        } else {
             $previous_hour = $this->hour_reference->copy()->subHour();
             $previous_hour_data = MicrocontrollerData::whereClientId($this->client->id)
-                ->whereBetween('source_timestamp', [$previous_hour->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59') ])
+                ->whereBetween('source_timestamp', [$previous_hour->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
             $data_frame = config('data-frame.data_frame');
-            if ($previous_hour_data == null);
+            if ($previous_hour_data == null) ;
             {
                 $previous_hour_data = MicrocontrollerData::whereClientId($this->client->id)
-                    ->whereBetween('source_timestamp', [$previous_hour->copy()->subDays(15)->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59') ])
+                    ->whereBetween('source_timestamp', [$previous_hour->copy()->subDays(15)->format('Y-m-d H:00:00'), $previous_hour->format('Y-m-d H:59:59')])
                     ->orderBy('source_timestamp', 'desc')
                     ->first();
             }
@@ -134,7 +132,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
             }
         }
         $reference_data = HourlyMicrocontrollerData::whereClientId($this->client->id)
-            ->whereBetween('source_timestamp', [$this->hour_reference->format('Y-m-d H:00:00'), $this->hour_reference->format('Y-m-d H:59:59') ])
+            ->whereBetween('source_timestamp', [$this->hour_reference->format('Y-m-d H:00:00'), $this->hour_reference->format('Y-m-d H:59:59')])
             ->first();
         if ($reference_data) {
             if ($reference_data->interval_real_consumption != 0) {
@@ -142,14 +140,14 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                 $previous_hour_data = $this->client->hourlyMicrocontrollerdata()
                     ->whereBetween('source_timestamp', [$this->hour_reference->copy()->subHour()->format('Y-m-d H:00:00'), $this->hour_reference->copy()->subHour()->format('Y-m-d H:59:59')])
                     ->first();
-                if ($previous_hour_data == null){
+                if ($previous_hour_data == null) {
                     $previous_hour_data = $this->client->hourlyMicrocontrollerdata()
                         ->whereBetween('source_timestamp', [$this->hour_reference->copy()->subDays(15)->format('Y-m-d H:00:00'), $this->hour_reference->copy()->subHour()->format('Y-m-d H:59:59')])
                         ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
                         ->first();
                 }
                 if ($previous_hour_data) {
-                    if($previous_hour_data->microcontroller_data_id != $reference_data->microcontroller_data_id) {
+                    if ($previous_hour_data->microcontroller_data_id != $reference_data->microcontroller_data_id) {
                         $data = HourlyMicrocontrollerData::whereMicrocontrollerDataId($previous_hour_data->microcontroller_data_id)
                             ->orderBy('source_timestamp')->orderBy('year')->orderBy('month')->orderBy('day')
                             ->get();

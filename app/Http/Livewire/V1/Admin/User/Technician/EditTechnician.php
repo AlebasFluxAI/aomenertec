@@ -3,10 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\User\Technician;
 
 use App\Http\Services\V1\Admin\User\Technician\TechnicianEditService;
-use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorEditService;
-use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Technician;
-use App\Models\V1\NetworkOperator;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -22,11 +19,9 @@ class EditTechnician extends Component
     public $message;
     public $person_types;
     public $identification_types;
-    private $editTechnicianService;
     public $indicatives;
     public $indicative;
     public $sign;
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:6',
@@ -43,6 +38,7 @@ class EditTechnician extends Component
         'model.indicative' => '',
 
     ];
+    private $editTechnicianService;
 
     public function __construct($id = null)
     {

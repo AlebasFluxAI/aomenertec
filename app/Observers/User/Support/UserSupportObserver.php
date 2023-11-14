@@ -2,7 +2,6 @@
 
 namespace App\Observers\User\Support;
 
-use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 
 class UserSupportObserver

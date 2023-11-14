@@ -3,7 +3,6 @@
 namespace App\Http\Services\V1\Admin\User\SuperAdmin;
 
 use App\Http\Services\Singleton;
-use App\Models\V1\Admin;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\DB;

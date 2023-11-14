@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands\V1;
 
-use Illuminate\Console\Command;
-use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class UpdateTimestampDataConsumption extends Command
 {
@@ -44,7 +43,7 @@ class UpdateTimestampDataConsumption extends Command
             ->whereNull('client_id')->get();
         if ($data) {
             foreach ($data as $item) {
-                echo $item->id."\n";
+                echo $item->id . "\n";
                 if (json_decode($item->raw_json, true) == null) {
                     if (strlen($item->raw_json) > 20) {
                         $decode = bin2hex(base64_decode($item->raw_json));

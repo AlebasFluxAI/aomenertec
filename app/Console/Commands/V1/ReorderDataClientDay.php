@@ -4,7 +4,6 @@ namespace App\Console\Commands\V1;
 
 use App\Models\V1\Client;
 use App\Models\V1\DailyMicrocontrollerData;
-use App\Models\V1\HourlyMicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -43,12 +42,12 @@ class ReorderDataClientDay extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $reference_date = new Carbon();
-        $end_date= Carbon::create(2022,07,15);
-        $end_date_copy = Carbon::create(2022,07,15);
+        $end_date = Carbon::create(2022, 07, 15);
+        $end_date_copy = Carbon::create(2022, 07, 15);
         $data_frame = config('data-frame.data_frame');
         while (true) {
             $end_date->addDay();
-            echo $end_date->format('Y-m-d')."\n";
+            echo $end_date->format('Y-m-d') . "\n";
             foreach ($clients as $client) {
 
                 if ($client->microcontrollerData()
@@ -63,19 +62,19 @@ class ReorderDataClientDay extends Command
                         ->first();
 
                     if ($client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$end_date->copy()->subDay()->format('Y-m-d 00:00:00'), $end_date->copy()->subDay()->format('Y-m-d 23:59:59')])->exists()){
+                        ->whereBetween('source_timestamp', [$end_date->copy()->subDay()->format('Y-m-d 00:00:00'), $end_date->copy()->subDay()->format('Y-m-d 23:59:59')])->exists()) {
                         $reference_data_first = $client->microcontrollerData()
                             ->whereBetween('source_timestamp', [$end_date->copy()->subDay()->format('Y-m-d 00:00:00'), $end_date->copy()->subDay()->format('Y-m-d 23:59:59')])
                             ->orderBy('source_timestamp', 'desc')
                             ->first();
-                    } else{
-                        if($client->microcontrollerData()
+                    } else {
+                        if ($client->microcontrollerData()
                             ->where('source_timestamp', '<=', $end_date->format('Y-m-d 00:00:00'))->exists()) {
                             $reference_data_first = $client->microcontrollerData()
                                 ->where('source_timestamp', '<=', $end_date->format('Y-m-d 00:00:00'))
                                 ->orderBy('source_timestamp', 'desc')
                                 ->first();
-                        } else{
+                        } else {
                             $reference_data_first = $client->microcontrollerData()
                                 ->whereBetween('source_timestamp', [$end_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
                                 ->orderBy('source_timestamp')
@@ -134,7 +133,7 @@ class ReorderDataClientDay extends Command
                         ->where('day', $last_day->format('d'))->first();
                     if ($last_data) {
                         $raw_json = json_decode($last_data->raw_json, true);
-                        foreach ($data_frame as $item){
+                        foreach ($data_frame as $item) {
                             if ($item['start'] >= 72) {
                                 if ($item['variable_name'] != 'Wh_calc') {
                                     if ($item['variable_name'] != 'import_wh' and $item['variable_name'] != 'export_wh' and $item['variable_name'] != 'import_VArh' and $item['variable_name'] != 'export_VArh'
@@ -176,22 +175,22 @@ class ReorderDataClientDay extends Command
                     }
                 }
             }
-            if ($end_date->diffInDays($reference_date)==2){
+            if ($end_date->diffInDays($reference_date) == 2) {
                 break;
             }
         }
         while (true) {
             $reference_date->subDay();
-            echo $reference_date->format('Y-m-d')."\n";
+            echo $reference_date->format('Y-m-d') . "\n";
 
             foreach ($clients as $client) {
-                $year =  $reference_date->format('Y');
+                $year = $reference_date->format('Y');
                 $month = $reference_date->format('m');
-                $day =   $reference_date->format('d');
-                $hour =  $reference_date->format('H');
-                $day_data =$client->dailyMicrocontrollerdata()
+                $day = $reference_date->format('d');
+                $hour = $reference_date->format('H');
+                $day_data = $client->dailyMicrocontrollerdata()
                     ->where('year', $year)
-                    ->where('month',$month)
+                    ->where('month', $month)
                     ->where('day', $day)
                     ->first();
                 if ($day_data) {
@@ -259,7 +258,7 @@ class ReorderDataClientDay extends Command
                     }
                 }
             }
-            if ($end_date_copy->diffInDays($reference_date)==0){
+            if ($end_date_copy->diffInDays($reference_date) == 0) {
                 break;
             }
         }

@@ -4,19 +4,18 @@ namespace App\Http\Livewire\V1\Admin\Invoicing\Invoice;
 
 
 use App\Http\Services\V1\Admin\Invoicing\Invoice\InvoiceGuestClientService;
-
 use Illuminate\Support\Facades\Route;
 use Livewire\Component;
 use function view;
 
 class InvoiceGuestClientComponent extends Component
 {
-    private $invoiceGuestClientService;
     public $has_client_code;
     public $client_code;
     public $contact_identification;
     public $model;
     public $subdomain;
+    private $invoiceGuestClientService;
 
     public function __construct($id = null)
     {

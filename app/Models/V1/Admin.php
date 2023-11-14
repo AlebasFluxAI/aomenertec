@@ -2,21 +2,16 @@
 
 namespace App\Models\V1;
 
-use App\Http\Livewire\V1\Admin\User\Admin\PriceAdmin;
 use App\Http\Resources\V1\PermissionInterface;
-use App\Http\Resources\V1\Permissions;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\AvailableChannelTrait;
+use App\Models\Traits\ImageableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\UserPermissionableTrait;
-use App\Models\Traits\ValidateUserFormTrait;
-use App\Models\Traits\ImageableTrait;
 use App\Scope\OrderIdScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Jetstream\Role;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasPermissions;
 
@@ -61,23 +56,10 @@ class Admin extends Model
         "annually_client_invoicing_month",
     ];
 
-    public function getCurrentEnabledClients()
-    {
-
-        return Client::whereIn('network_operator_id', $this->networkOperators()->pluck('id'))
-            ->orWhere("admin_id", $this->id);
-    }
-
     public static function getRole()
     {
         return "administrator";
     }
-
-    public function getPhonePlusIndicativeAttribute()
-    {
-        return "(" . $this->indicative . ") " . $this->phone;
-    }
-
 
     public static function menu()
     {
@@ -292,6 +274,23 @@ class Admin extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function getCurrentEnabledClients()
+    {
+
+        return Client::whereIn('network_operator_id', $this->networkOperators()->pluck('id'))
+            ->orWhere("admin_id", $this->id);
+    }
+
+    public function networkOperators()
+    {
+        return $this->hasMany(NetworkOperator::class);
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -329,11 +328,6 @@ class Admin extends Model
     public function getClientsAttribute()
     {
         return Client::whereIn("network_operator_id", $this->networkOperators()->pluck("id"))->get();
-    }
-
-    public function networkOperators()
-    {
-        return $this->hasMany(NetworkOperator::class);
     }
 
     public function adminEquipmentToNetworkOperatorsAsKeyValue()

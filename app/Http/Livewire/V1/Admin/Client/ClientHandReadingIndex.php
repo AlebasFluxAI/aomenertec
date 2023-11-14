@@ -26,15 +26,15 @@ class ClientHandReadingIndex extends Component
         $this->clientHandReadingIndexService->mount($this, $client);
     }
 
-    public function getData()
-    {
-        return $this->clientHandReadingIndexService->getData($this);
-    }
-
     public function render()
     {
         return view('livewire.v1.admin.client.client-hand-reading', [
             "data" => $this->getData()
         ])->extends('layouts.v1.app');
+    }
+
+    public function getData()
+    {
+        return $this->clientHandReadingIndexService->getData($this);
     }
 }

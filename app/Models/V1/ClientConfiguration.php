@@ -7,8 +7,6 @@ use App\Models\Traits\PaginatorTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PhpMqtt\Client\Facades\MQTT;
-use PhpMqtt\Client\MqttClient;
 
 class ClientConfiguration extends Model
 {

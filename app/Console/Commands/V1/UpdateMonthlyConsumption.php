@@ -53,7 +53,7 @@ class UpdateMonthlyConsumption extends Command
             $accum_variable = $data_frame->where('bolean_accum', true);
             $month_data = $client->monthlyMicrocontrollerData()
                 ->where('year', $reference_date->format('Y'))
-                ->whereBetween('month', [$month_date->format('m'),$reference_date->format('m')])
+                ->whereBetween('month', [$month_date->format('m'), $reference_date->format('m')])
                 ->get();
             if (count($month_data) > 0) {
                 foreach ($month_data as $monthly_data) {
@@ -62,19 +62,19 @@ class UpdateMonthlyConsumption extends Command
                         $year_aux = $monthly_data->year - 1;
                     } else {
                         $month_aux = $monthly_data->month - 1;
-                        if ($month_aux<10) {
-                            $month_aux = '0'.$month_aux;
+                        if ($month_aux < 10) {
+                            $month_aux = '0' . $month_aux;
                         }
                         $year_aux = $monthly_data->year;
                     }
                     $start_date = Carbon::create($year_aux, $month_aux, ($billing_day + 1));
                     $end_date = Carbon::create($monthly_data->year, $monthly_data->month, $billing_day);
                     $end_data = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'),$end_date->format('Y-m-d 23:59:59')])
+                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp', 'desc')
                         ->first();
                     $start_data = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'),$end_date->format('Y-m-d 23:59:59')])
+                        ->whereBetween('source_timestamp', [$start_date->format('Y-m-d 00:00:00'), $end_date->format('Y-m-d 23:59:59')])
                         ->orderBy('source_timestamp')
                         ->first();
                     if ($end_data) {
@@ -99,7 +99,7 @@ class UpdateMonthlyConsumption extends Command
                                 $interval_inductive_month = $end_data->accumulated_reactive_inductive_consumption - $start_data->accumulated_reactive_inductive_consumption;
                                 foreach ($data_month as $item) {
                                     $raw_json = json_decode($item->raw_json, true);
-                                    foreach ($accum_variable as $index=>$variable) {
+                                    foreach ($accum_variable as $index => $variable) {
                                         if ($item->microcontroller_data_id != $reference_data->microcontroller_data_id) {
                                             $json[$variable['variable_name']] = $json[$variable['variable_name']] + $raw_json[$variable['variable_name']];
                                         }

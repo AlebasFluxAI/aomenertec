@@ -42,7 +42,7 @@ class AverageHourlyConsumptionCommand extends Command
     {
         $clients = Client::whereHasTelemetry(true)->get();
         $hour_reference = Carbon::now()->subHour();
-        foreach ($clients as $client){
+        foreach ($clients as $client) {
             dispatch(new AverageHourlyConsumptionJob($client->id, $hour_reference))->onQueue('spot3');
         }
     }

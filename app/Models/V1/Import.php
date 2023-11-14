@@ -28,14 +28,14 @@ class Import extends Model
         "file_name"
     ];
 
-    public function items()
-    {
-        return $this->hasMany(ImportItem::class);
-    }
-
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function items()
+    {
+        return $this->hasMany(ImportItem::class);
     }
 
 }

@@ -4,12 +4,7 @@ namespace App\Models\Traits;
 
 use App\Http\Livewire\V1\Admin\Purchase\PurchaseGuestCreateComponent;
 use App\Models\V1\Client;
-use App\Models\V1\Image;
 use Crc16\Crc16;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Str;
 use Livewire\Component;
 
@@ -35,27 +30,27 @@ trait CreateRechargeTrait
 
     public function updatedKwhQuantity(Component $component)
     {
-        if ($component->purchase_type == "kwh" ) {
+        if ($component->purchase_type == "kwh") {
             if ($component->kwh_quantity != "") {
                 $component->total = $component->price->price * $component->kwh_quantity;
-            }
-            else{
+            } else {
                 $component->kwh_quantity = 0;
                 $component->total = 0;
             }
-        } else{
+        } else {
             $component->total = $component->kwh_quantity / $component->price->price;
         }
     }
+
     public function updatedTotal(Component $component)
     {
-        if ($component->purchase_type == "kwh" ) {
+        if ($component->purchase_type == "kwh") {
             $component->total = $component->price->price * $component->kwh_quantity;
-        } else{
+        } else {
             if ($component->total != "") {
 
                 $component->kwh_quantity = $component->total / $component->price->price;
-            }else{
+            } else {
                 $component->total = 0;
                 $component->kwh_quantity = 0;
             }
@@ -108,54 +103,6 @@ trait CreateRechargeTrait
             "purchase_type" => PurchaseGuestCreateComponent::PURCHASE_TYPE_CASH,
         ]);
     }
-    public function createRechargeCode(Component $component)
-    {
-        $key = ($component->client->equipments()->whereEquipmentTypeId(1)->first())->serial . $component->client->networkOperator->identification;
-        $cons = $component->client->lastConsecutiveRecharge() + 1;
-        $kw = $this->byteArray($component->kwh_quantity*100);
-        $consecutivo = $this->byteArray1($cons);
-        $crcin = [$consecutivo[1],$consecutivo[0],$kw[3],$kw[2],$kw[1],$kw[0]];
-        $crc = Crc16::XMODEM(implode("", $crcin));
-        $aux = dechex($crc);
-        $crc4 = str_pad($aux, 4, "0", STR_PAD_LEFT);
-        $intcrc1 = hexdec((str_split($crc4, 2)[0]));
-        $intcrc2 = hexdec((str_split($crc4, 2)[1]));
-        $crckey = Crc16::XMODEM($key.$crc4);
-        $aux2 = dechex($crckey);
-        $crckey4 = str_pad($aux2, 4, "0", STR_PAD_LEFT);
-        $intcrck1 = hexdec((str_split($crckey4, 2)[0]));
-        $intcrck2 = hexdec((str_split($crckey4, 2)[1]));
-        array_push($crcin, $intcrc1, $intcrc2, $intcrck1, $intcrck2);
-        for ($index = 0; $index<10; $index++) {
-            $hex = dechex($crcin[$index]);
-            $crcin[$index] = str_pad($hex, 2, "0", STR_PAD_LEFT);
-        }
-        $encrypt = implode("", $crcin);
-        $f=str_replace("f", "#", $encrypt);
-        $e=str_replace("e", "*", $f);
-        return strtoupper($e);
-    }
-    public function byteArray($val)
-    {
-        $byteArr =[0,0,0,0];
-        for ($index = 0; $index < 4; $index++) {
-            $byte = $val & 0xff;
-            $byteArr[$index] = $byte;
-            $val = ($val - $byte) / 256 ;
-        }
-        return $byteArr;
-    }
-    public function byteArray1($val)
-    {
-        $byteArr1 =[0,0];
-        for ($index = 0; $index < 2; $index++) {
-            $byte = $val & 0xff;
-            $byteArr1[$index] = $byte;
-            $val = ($val - $byte) / 256 ;
-        }
-        return $byteArr1;
-    }
-
 
     private function getPurchaseType()
     {
@@ -169,5 +116,55 @@ trait CreateRechargeTrait
                 "value" => PurchaseGuestCreateComponent::PURCHASE_TYPE_KWH,
             ],
         ];
+    }
+
+    public function createRechargeCode(Component $component)
+    {
+        $key = ($component->client->equipments()->whereEquipmentTypeId(1)->first())->serial . $component->client->networkOperator->identification;
+        $cons = $component->client->lastConsecutiveRecharge() + 1;
+        $kw = $this->byteArray($component->kwh_quantity * 100);
+        $consecutivo = $this->byteArray1($cons);
+        $crcin = [$consecutivo[1], $consecutivo[0], $kw[3], $kw[2], $kw[1], $kw[0]];
+        $crc = Crc16::XMODEM(implode("", $crcin));
+        $aux = dechex($crc);
+        $crc4 = str_pad($aux, 4, "0", STR_PAD_LEFT);
+        $intcrc1 = hexdec((str_split($crc4, 2)[0]));
+        $intcrc2 = hexdec((str_split($crc4, 2)[1]));
+        $crckey = Crc16::XMODEM($key . $crc4);
+        $aux2 = dechex($crckey);
+        $crckey4 = str_pad($aux2, 4, "0", STR_PAD_LEFT);
+        $intcrck1 = hexdec((str_split($crckey4, 2)[0]));
+        $intcrck2 = hexdec((str_split($crckey4, 2)[1]));
+        array_push($crcin, $intcrc1, $intcrc2, $intcrck1, $intcrck2);
+        for ($index = 0; $index < 10; $index++) {
+            $hex = dechex($crcin[$index]);
+            $crcin[$index] = str_pad($hex, 2, "0", STR_PAD_LEFT);
+        }
+        $encrypt = implode("", $crcin);
+        $f = str_replace("f", "#", $encrypt);
+        $e = str_replace("e", "*", $f);
+        return strtoupper($e);
+    }
+
+    public function byteArray($val)
+    {
+        $byteArr = [0, 0, 0, 0];
+        for ($index = 0; $index < 4; $index++) {
+            $byte = $val & 0xff;
+            $byteArr[$index] = $byte;
+            $val = ($val - $byte) / 256;
+        }
+        return $byteArr;
+    }
+
+    public function byteArray1($val)
+    {
+        $byteArr1 = [0, 0];
+        for ($index = 0; $index < 2; $index++) {
+            $byte = $val & 0xff;
+            $byteArr1[$index] = $byte;
+            $val = ($val - $byte) / 256;
+        }
+        return $byteArr1;
     }
 }

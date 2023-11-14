@@ -23,6 +23,11 @@ class AvailableChannel extends Model
         "channel_class"
     ];
 
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
+
     public function blink()
     {
         $this->update([
@@ -42,10 +47,5 @@ class AvailableChannel extends Model
         $this->update([
             "enabled" => false
         ]);
-    }
-
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
     }
 }

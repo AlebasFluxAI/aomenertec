@@ -3,9 +3,6 @@
 namespace App\Http\Livewire\V1\Admin\User\Seller;
 
 use App\Http\Services\V1\Admin\User\Seller\SellerAddService;
-use App\Models\Traits\AddUserFormTrait;
-use App\Models\Traits\PassTrait;
-use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 
 class AddSeller extends Component

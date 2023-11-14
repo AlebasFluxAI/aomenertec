@@ -8,7 +8,6 @@ use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\PermissionTrait;
 use App\Models\Traits\UserPermissionableTrait;
 use App\Scope\OrderIdScope;
-use Database\Seeders\ClientsTableSeeder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -87,16 +86,6 @@ class Supervisor extends Model
         ];
     }
 
-    public function sign()
-    {
-        return $this->morphOne(Image::class, "imageable");
-    }
-    
-    public function getPhonePlusIndicativeAttribute()
-    {
-        return "(" . $this->indicative . ") " . $this->phone;
-    }
-
     public static function getHome()
     {
         return "livewire.v1.admin.user.supervisor.profile-supervisor";
@@ -110,6 +99,16 @@ class Supervisor extends Model
     protected static function booted()
     {
         static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function sign()
+    {
+        return $this->morphOne(Image::class, "imageable");
+    }
+
+    public function getPhonePlusIndicativeAttribute()
+    {
+        return "(" . $this->indicative . ") " . $this->phone;
     }
 
     public function user()

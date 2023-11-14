@@ -8,7 +8,6 @@ use App\Models\Traits\AddUserFormTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\DB;
-use Intervention\Image\Facades\Image;
 use Livewire\Component;
 
 class AdminEditService extends Singleton

@@ -3,12 +3,8 @@
 namespace App\Http\Livewire\V1\Admin\User\Technician;
 
 use App\Http\Services\V1\Admin\User\Technician\TechnicianAddClientService;
-use App\Http\Services\V1\Admin\User\Technician\TechnicianAddService;
-use App\Http\Services\V1\Admin\User\Technician\TechnicianEditService;
-use App\Models\Traits\ValidateUserFormTrait;
 use App\Models\V1\Technician;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class AddClientTechnician extends Component
 {

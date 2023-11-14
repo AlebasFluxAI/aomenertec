@@ -7,11 +7,7 @@ use App\Models\V1\Admin;
 use App\Models\V1\BillableItem;
 use App\Models\V1\Client;
 use App\Models\V1\Invoice;
-use App\Models\V1\Pqr;
-use App\Models\V1\User;
-use App\Notifications\Alert\ServerAlertNotification;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class AdminClientEnabledAnnuallyCronjob extends Command
 {

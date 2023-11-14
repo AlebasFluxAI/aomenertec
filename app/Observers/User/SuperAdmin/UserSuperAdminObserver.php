@@ -2,9 +2,7 @@
 
 namespace App\Observers\User\SuperAdmin;
 
-use App\Models\V1\Seller;
 use App\Models\V1\SuperAdmin;
-use App\Models\V1\User;
 
 class UserSuperAdminObserver
 {
@@ -37,6 +35,7 @@ class UserSuperAdminObserver
             "identification" => $superAdmin->identification,
         ]);
     }
+
     public function deleted(SuperAdmin $superAdmin)
     {
     }

@@ -7,7 +7,6 @@ use App\Models\V1\Admin;
 use App\Models\V1\Client;
 use App\Models\V1\Equipment;
 use App\Models\V1\MicrocontrollerData;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
 use Livewire\Component;
@@ -39,6 +38,13 @@ class TechnicianDetailsService extends Singleton
         $component->reset();
     }
 
+    public function delete(Component $component, $clientId)
+    {
+        Client::find($clientId)->delete();
+        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
+        $component->reset();
+    }
+
     public function conditionalRemoveEquipmentTechnician(Component $component, $id)
     {
         if (Equipment::find($id)->has_clients) {
@@ -56,13 +62,6 @@ class TechnicianDetailsService extends Singleton
         $equipment->technician_id = null;
         $equipment->save();
         $component->emitTo('livewire-toast', 'show', "Equipo {$id} removido exitosamente de {$model->name}");
-    }
-
-    public function delete(Component $component, $clientId)
-    {
-        Client::find($clientId)->delete();
-        $component->emitTo('livewire-toast', 'show', "Equipo {$clientId} eliminado exitosamente");
-        $component->reset();
     }
 
     public function conditionalMonitoring(Component $component, $modelId)

@@ -2,27 +2,15 @@
 
 namespace App\Models\V1;
 
-use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\UpdatedMicrocontrollerDataJob;
 use App\Jobs\V1\OrderData\AverageDailyConsumptionJob;
 use App\Jobs\V1\OrderData\AverageHourlyConsumptionJob;
-use App\Models\Traits\ImageableManyTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Models\Traits\PaginatorTrait;
-use App\Models\V1\AlertHistory;
-use App\Models\V1\Client;
 use Carbon\Carbon;
-use DateTime;
-use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use PhpMqtt\Client\Facades\MQTT;
-use App\Models\V1\Equipment;
-use App\Models\V1\ClientConfiguration;
-
-use Illuminate\Support\Facades\Config;
-use PhpOption\None;
 
 class MicrocontrollerData extends Model
 {
@@ -63,19 +51,10 @@ class MicrocontrollerData extends Model
     {
         return $this->morphMany(Image::class, "imageable")->whereType("evidences");
     }
+
     public function alertHistories()
     {
         return $this->hasMany(AlertHistory::class);
-    }
-
-    public function dailyMicrocontrollerData()
-    {
-        return $this->hasOne(DailyMicrocontrollerData::class);
-    }
-
-    public function hourlyMicrocontrollerData()
-    {
-        return $this->hasOne(HourlyMicrocontrollerData::class);
     }
 
     public function monthlyMicrocontrollerData()
@@ -83,17 +62,12 @@ class MicrocontrollerData extends Model
         return $this->hasOne(MonthlyMicrocontrollerData::class);
     }
 
-    public function clientAlert()
-    {
-        return $this->hasOne(ClientAlert::class);
-    }
-
     public function jsonEdit($flag)
     {
         $date = new Carbon();
         if (is_string($this->raw_json)) {
             $json = json_decode($this->raw_json, true);
-            if ($json == null){
+            if ($json == null) {
                 return;
             }
         } elseif (is_array($this->raw_json)) {
@@ -126,19 +100,19 @@ class MicrocontrollerData extends Model
                 return;
             }
             if (MicrocontrollerData::where('client_id', $client->id)->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->exists()) {
-                if ($this->hourlyMicrocontrollerData()->exists()){
+                if ($this->hourlyMicrocontrollerData()->exists()) {
                     $this->hourlyMicrocontrollerData()->forceDelete();
                 }
-                if ($this->dailyMicrocontrollerData()->exists()){
+                if ($this->dailyMicrocontrollerData()->exists()) {
                     $this->dailyMicrocontrollerData()->forceDelete();
                 }
-                if ($this->clientAlert()->exists()){
+                if ($this->clientAlert()->exists()) {
                     $this->clientAlert()->forceDelete();
                 }
                 $this->forceDelete();
                 return;
             }
-        }else{
+        } else {
             if (!($client->stopUnpackClient()->exists())) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
@@ -182,7 +156,7 @@ class MicrocontrollerData extends Model
                         }
                     }
                 }
-            } else{
+            } else {
                 $last_data = $client->microcontrollerData()->where('source_timestamp', '<', $current_time->format('Y-m-d H:i:s'))->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
                     if (new Carbon($last_data->source_timestamp) >= $current_time) {
@@ -196,7 +170,7 @@ class MicrocontrollerData extends Model
                             return;
                         }
                     }
-                } else{
+                } else {
                     $json['kwh_interval'] = 0;
                     $json['varh_interval'] = 0;
                     $json['varCh_acumm'] = floatval($json['ph1_varCh_acumm']) + floatval($json['ph2_varCh_acumm']) + floatval($json['ph3_varCh_acumm']);
@@ -298,32 +272,32 @@ class MicrocontrollerData extends Model
         $this->raw_json = $json;
         if (!$flag) {
             $equals = $client->microcontrollerData()->where('source_timestamp', $current_time->format('Y-m-d H:i:s'))->get();
-            if ($equals){
-                    foreach ($equals as $item){
-                        if ($item->id != $this->id){
-                            if ($item->hourlyMicrocontrollerData()->exists()) {
-                                $item->hourlyMicrocontrollerData()->forceDelete();
-                            }
-                            if ($item->dailyMicrocontrollerData()->exists()) {
-                                $item->dailyMicrocontrollerData()->forceDelete();
-                            }
-                            if ($item->clientAlert()->exists()) {
-                                $item->clientAlert()->forceDelete();
-                            }
-                            $item->forceDelete();
-                            return;
+            if ($equals) {
+                foreach ($equals as $item) {
+                    if ($item->id != $this->id) {
+                        if ($item->hourlyMicrocontrollerData()->exists()) {
+                            $item->hourlyMicrocontrollerData()->forceDelete();
                         }
+                        if ($item->dailyMicrocontrollerData()->exists()) {
+                            $item->dailyMicrocontrollerData()->forceDelete();
+                        }
+                        if ($item->clientAlert()->exists()) {
+                            $item->clientAlert()->forceDelete();
+                        }
+                        $item->forceDelete();
+                        return;
                     }
+                }
 
             }
         }
         $this->saveQuietly();
         if ($flag) {
-            if($current_time->gt($date)){
-                if($current_time->diffInMinutes($date) >= 35) {
+            if ($current_time->gt($date)) {
+                if ($current_time->diffInMinutes($date) >= 35) {
                     dispatch(new AverageHourlyConsumptionJob($this->client->id, $current_time))->onQueue('spot3');
                 }
-                if($current_time->diffInDays($date) >= 1) {
+                if ($current_time->diffInDays($date) >= 1) {
                     if ($current_time->diffInMinutes($date) >= 65) {
                         dispatch(new AverageDailyConsumptionJob($this->client->id, $current_time))->onQueue('spot3');
                     }
@@ -332,6 +306,21 @@ class MicrocontrollerData extends Model
             dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
             $this->alertEnergyEvent();
         }
+    }
+
+    public function hourlyMicrocontrollerData()
+    {
+        return $this->hasOne(HourlyMicrocontrollerData::class);
+    }
+
+    public function dailyMicrocontrollerData()
+    {
+        return $this->hasOne(DailyMicrocontrollerData::class);
+    }
+
+    public function clientAlert()
+    {
+        return $this->hasOne(ClientAlert::class);
     }
 
     public function alertEnergyEvent()
@@ -346,7 +335,7 @@ class MicrocontrollerData extends Model
         } else {
             $is_wifi = false;
         }
-        $offset_outputs = [0,3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        $offset_outputs = [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         if ($client->digitalOutputs()->exists()) {
             $client_outputs = $client->digitalOutputs()->get();
             foreach ($client_outputs as $output) {
@@ -437,7 +426,7 @@ class MicrocontrollerData extends Model
     public function calculateValueAlert($flag_id, $energy_month, $energy_hour)
     {
         $value = 0;
-        if($energy_month) {
+        if ($energy_month) {
             if ($flag_id == 50) {
                 $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
             } elseif ($flag_id == 51) {
@@ -455,7 +444,7 @@ class MicrocontrollerData extends Model
                 $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
             }
         }
-        if($flag_id == 56) {
+        if ($flag_id == 56) {
             if ($this->interval_real_consumption != 0) {
                 $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
             } else {

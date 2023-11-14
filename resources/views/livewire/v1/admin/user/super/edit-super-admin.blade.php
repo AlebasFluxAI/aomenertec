@@ -1,11 +1,12 @@
 <div class="login">
-    @section("header") {{--extended app.blade--}}
+    @section("header")
+        {{--extended app.blade--}}
     @endsection
 
-        @include("partials.v1.title",[
-                "first_title"=>"Editar Super administrador",
-                "second_title"=>$model->user->name
-            ])
+    @include("partials.v1.title",[
+            "first_title"=>"Editar Super administrador",
+            "second_title"=>$model->user->name
+        ])
 
     {{--optiones de cabecera de formulario--}}
 

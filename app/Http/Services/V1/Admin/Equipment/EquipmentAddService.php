@@ -2,12 +2,10 @@
 
 namespace App\Http\Services\V1\Admin\Equipment;
 
-use App\Http\Livewire\V1\Admin\Equipment\AddEquipment;
 use App\Http\Services\Singleton;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\User;
-use App\Scope\PaginationScope;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -43,7 +41,7 @@ class EquipmentAddService extends Singleton
 
     public function submitForm(Component $component)
     {
-       
+
         $component->validate();
         $equipment = Equipment::create($this->mapper($component));
         $component->redirectRoute("administrar.v1.equipos.detalle", ["equipment" => $equipment->id]);

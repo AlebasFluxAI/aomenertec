@@ -21,6 +21,7 @@ class VoltageLevel extends Model
         'description'
     ];
     protected $table = 'voltage_levels';
+
     public function clients()
     {
         return $this->hasMany(Client::class);

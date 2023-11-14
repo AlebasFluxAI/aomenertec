@@ -2,10 +2,7 @@
 
 namespace App\Mail\Alert;
 
-use App\Http\Resources\V1\Subdomain;
-use App\Models\V1\User;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 

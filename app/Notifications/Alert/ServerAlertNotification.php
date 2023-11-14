@@ -3,7 +3,6 @@
 namespace App\Notifications\Alert;
 
 use App\Channels\WhatsAppChannel;
-use App\Http\Resources\V1\UserNotificationPayload;
 use App\Notifications\WhatsAppMessage;
 use Illuminate\Notifications\Notification;
 

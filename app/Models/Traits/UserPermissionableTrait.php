@@ -17,6 +17,10 @@ trait UserPermissionableTrait
         ]);
     }
 
+    public function tabPermissions()
+    {
+        return $this->morphMany(TabPermissionUser::class, "permissionable");
+    }
 
     public function removeTabPermissionPlusConditional($tabPermissionId, $conditionalModel)
     {
@@ -25,11 +29,6 @@ trait UserPermissionableTrait
             "conditionable_type" => $conditionalModel::class,
             "conditionable_id" => $conditionalModel->id,
         ])->delete();
-    }
-
-    public function tabPermissions()
-    {
-        return $this->morphMany(TabPermissionUser::class, "permissionable");
     }
 
     public function addTabPermission($tabPermissionId)
@@ -53,7 +52,7 @@ trait UserPermissionableTrait
     {
 
         $tabPermission = TabPermission::wherePermission($permissionName)->first()->id;
-        
+
         return $this->tabPermissions()
             ->whereConditionableId($model->id)
             ->whereConditionableType($model::class)

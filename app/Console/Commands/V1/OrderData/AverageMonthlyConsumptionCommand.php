@@ -43,13 +43,13 @@ class AverageMonthlyConsumptionCommand extends Command
     {
         $day_reference = Carbon::now()->subDay();
         $billing_day = $day_reference->format('d');
-        if ($billing_day == $day_reference->format('t')){
+        if ($billing_day == $day_reference->format('t')) {
             $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-        } else{
+        } else {
             $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
         }
         $clients_aux = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
-        if (count($clients_aux)>0) {
+        if (count($clients_aux) > 0) {
             foreach ($clients_aux as $client) {
                 dispatch(new AverageMonthlyConsumptionJob($client, $day_reference))->onQueue('spot3');
             }

@@ -2,17 +2,9 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\GenerateNetworkOperationInvoiceJob;
-use App\Models\V1\Admin;
-use App\Models\V1\Client;
-use App\Models\V1\HourlyMicrocontrollerData;
-use App\Models\V1\User;
-use App\Notifications\Alert\ServerAlertNotification;
-use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 class ProcessFailedJob extends Command
 {

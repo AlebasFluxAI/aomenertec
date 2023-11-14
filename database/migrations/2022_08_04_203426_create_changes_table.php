@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\V1\Change;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\V1\Change;
 
 class CreateChangesTable extends Migration
 {

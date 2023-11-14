@@ -4,7 +4,6 @@ namespace App\Http\Livewire\V1\Admin\User\Admin;
 
 use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
 use App\Models\Traits\AddUserTypeTrait;
-use App\Models\Traits\ValidateUserFormTrait;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -25,10 +24,6 @@ class AddAdmin extends Component
     public $identification_types;
     public $indicatives;
     public $indicative;
-
-
-    private $adminAddService;
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:6',
@@ -45,6 +40,7 @@ class AddAdmin extends Component
         'model.identification_type' => 'required',
         'model.indicative' => 'required',
     ];
+    private $adminAddService;
 
     public function __construct($id = null)
     {

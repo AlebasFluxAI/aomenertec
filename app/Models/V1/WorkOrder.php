@@ -3,7 +3,6 @@
 namespace App\Models\V1;
 
 use App\Models\Traits\AuditableTrait;
-use App\Models\Traits\ImageableManyTrait;
 use App\Models\Traits\ImageableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Scope\ClientEnabledScope;
@@ -71,23 +70,6 @@ class WorkOrder extends Model
 
     ];
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new OrderIdScope());
-    }
-
-
-    public function createdBy()
-    {
-        return User::find($this->created_by_id);
-    }
-
-    public function closedBy()
-    {
-        return User::find($this->closed_by);
-    }
-
-
     public static function createFromPqr(Pqr $pqr)
     {
         return DB::transaction(function () use ($pqr) {
@@ -102,13 +84,6 @@ class WorkOrder extends Model
             ]);
         });
 
-    }
-
-    public function setInProgress()
-    {
-        $this->update([
-            "status" => WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS
-        ]);
     }
 
     public static function getWorkOrderMaterials()
@@ -133,21 +108,6 @@ class WorkOrder extends Model
             ["value" => "Llaves de apertura de gabinete", "key" => "Llaves de apertura de gabinete"],
             ["value" => "Otras", "key" => "Otras"],
         ];
-    }
-
-    public function support()
-    {
-        return $this->belongsTo(Support::class);
-    }
-
-    public function equipments()
-    {
-        return $this->hasMany(WorkOrderEquipment::class);
-    }
-
-    public function equipment()
-    {
-        return $this->hasMany(WorkOrderEquipment::class)->first();
     }
 
     static public function indexTableHeaders()
@@ -205,45 +165,6 @@ class WorkOrder extends Model
         ];
     }
 
-    public function pqr()
-    {
-        return $this->belongsTo(Pqr::class);
-    }
-
-    public function microcontrollerData()
-    {
-        return $this->belongsTo(MicrocontrollerData::class);
-    }
-
-    public function setOpen()
-    {
-        $this->update([
-            "status" => WorkOrder::WORK_ORDER_STATUS_OPEN
-        ]);
-    }
-
-
-    public function evidences()
-    {
-        return $this->morphMany(Image::class, "imageable")->whereType("evidences");
-    }
-
-    public function images()
-    {
-        return $this->morphMany(Image::class, "imageable")->whereType("images");
-    }
-
-
-    public function technician()
-    {
-        return $this->belongsTo(Technician::class);
-    }
-
-    public function client()
-    {
-        return $this->belongsTo(Client::class)->withoutGlobalScope(ClientEnabledScope::class);
-    }
-
     public static function getTypeAsKeyValue()
     {
         return [
@@ -268,5 +189,79 @@ class WorkOrder extends Model
                 "key" => __("work_order." . self::WORK_ORDER_TYPE_DISABLE_CLIENT)
             ]
         ];
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new OrderIdScope());
+    }
+
+    public function createdBy()
+    {
+        return User::find($this->created_by_id);
+    }
+
+    public function closedBy()
+    {
+        return User::find($this->closed_by);
+    }
+
+    public function setInProgress()
+    {
+        $this->update([
+            "status" => WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS
+        ]);
+    }
+
+    public function support()
+    {
+        return $this->belongsTo(Support::class);
+    }
+
+    public function equipments()
+    {
+        return $this->hasMany(WorkOrderEquipment::class);
+    }
+
+    public function equipment()
+    {
+        return $this->hasMany(WorkOrderEquipment::class)->first();
+    }
+
+    public function pqr()
+    {
+        return $this->belongsTo(Pqr::class);
+    }
+
+    public function microcontrollerData()
+    {
+        return $this->belongsTo(MicrocontrollerData::class);
+    }
+
+    public function setOpen()
+    {
+        $this->update([
+            "status" => WorkOrder::WORK_ORDER_STATUS_OPEN
+        ]);
+    }
+
+    public function evidences()
+    {
+        return $this->morphMany(Image::class, "imageable")->whereType("evidences");
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, "imageable")->whereType("images");
+    }
+
+    public function technician()
+    {
+        return $this->belongsTo(Technician::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class)->withoutGlobalScope(ClientEnabledScope::class);
     }
 }

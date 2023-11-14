@@ -11,9 +11,10 @@ class ClientHandReadingCreateComponent extends Component
 {
     use WithFileUploads;
 
-    private $clientHandReadingCreateService;
     public $model;
     public $evidences = [];
+    private $clientHandReadingCreateService;
+
     public function __construct()
     {
         parent::__construct();
@@ -25,18 +26,18 @@ class ClientHandReadingCreateComponent extends Component
         $this->clientHandReadingCreateService->submitForm($this);
     }
 
-    public function mount(WorkOrder $work_order=null)
+    public function mount(WorkOrder $work_order = null)
     {
         $this->clientHandReadingCreateService->mount($this, $work_order);
-    }
-
-    protected function rules()
-    {
-        return $this->clientHandReadingCreateService->rules($this);
     }
 
     public function render()
     {
         return view('livewire.v1.admin.client.client-hand-reading-create-component')->extends('layouts.v1.app');
+    }
+
+    protected function rules()
+    {
+        return $this->clientHandReadingCreateService->rules($this);
     }
 }

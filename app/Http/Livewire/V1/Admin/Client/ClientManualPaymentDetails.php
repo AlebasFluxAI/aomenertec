@@ -2,15 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\Client;
 
-use App\Http\Services\V1\Admin\Client\ClientAlertIndexService;
 use App\Http\Services\V1\Admin\Client\ClientManualPaymentRegisterDetails;
-use App\Http\Services\V1\Admin\Client\ClientManualPaymentRegisterService;
-use App\Http\Services\V1\Admin\Client\ClientManualPaymentService;
-use App\Http\Services\V1\Admin\Client\IndexClientService;
-use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
 use App\Models\Traits\FilterTrait;
-use App\Models\V1\Client;
-use App\Models\V1\Equipment;
 use App\Models\V1\Invoice;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -27,7 +20,7 @@ class ClientManualPaymentDetails extends Component
     public $evidence;
     public $client;
     public $register;
-    
+
     private $clientManualPaymentRegisterDetails;
 
     public function __construct($id = null)

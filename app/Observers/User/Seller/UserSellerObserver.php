@@ -2,7 +2,6 @@
 
 namespace App\Observers\User\Seller;
 
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\Seller;
 
 class UserSellerObserver

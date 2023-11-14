@@ -3,12 +3,8 @@
 namespace App\Jobs;
 
 use App\Models\V1\Change;
-use App\Models\V1\User;
-use App\Observers\V1\Change\ChangeObserver;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;

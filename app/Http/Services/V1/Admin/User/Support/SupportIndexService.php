@@ -5,7 +5,6 @@ namespace App\Http\Services\V1\Admin\User\Support;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\V1\Support;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 

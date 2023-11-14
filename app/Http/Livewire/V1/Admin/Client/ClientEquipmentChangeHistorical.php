@@ -3,13 +3,8 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Http\Services\V1\Admin\Client\ClientEquipmentChangeHistoricalService;
-use App\Http\Services\V1\Admin\Client\IndexClientService;
-use App\Http\Services\V1\Admin\Equipment\EquipmentIndexService;
-use App\Models\Traits\FilterTrait;
 use App\Models\V1\Client;
-use App\Models\V1\Equipment;
 use Livewire\Component;
-use Livewire\WithPagination;
 
 class ClientEquipmentChangeHistorical extends Component
 {

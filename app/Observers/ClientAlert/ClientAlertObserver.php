@@ -3,19 +3,7 @@
 namespace App\Observers\ClientAlert;
 
 use App\Jobs\V1\Enertec\AlertNotificationJob;
-use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
-use App\Models\V1\ClientDigitalOutput;
-use App\Models\V1\ClientDigitalOutputAlertConfiguration;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\User;
-use App\Notifications\Alert\AlertControlNotification;
-use App\Notifications\Alert\AlertNotification;
-use App\Events\UserNotificationEvent;
-use App\Http\Resources\V1\NotificationTypes;
-use PhpMqtt\Client\Exceptions\MqttClientException;
-use PhpMqtt\Client\Facades\MQTT;
-use PhpMqtt\Client\MqttClient;
 
 class ClientAlertObserver
 {

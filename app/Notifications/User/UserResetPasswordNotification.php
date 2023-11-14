@@ -2,11 +2,9 @@
 
 namespace App\Notifications\User;
 
-use App\Mail\User\UserCratedMail;
 use App\Mail\User\UserResetPasswordMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class UserResetPasswordNotification extends Notification implements ShouldQueue

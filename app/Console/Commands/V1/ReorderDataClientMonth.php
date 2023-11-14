@@ -2,30 +2,14 @@
 
 namespace App\Console\Commands\V1;
 
-use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
-use App\Models\V1\DailyMicrocontrollerData;
 use App\Models\V1\MonthlyMicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class ReorderDataClientMonth extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'command:enertec:v1:reorder_monthly_data_client {date_init} {clients_id?*}';
-
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
-
     /**
      * Create a new command instance.
      *
@@ -34,6 +18,19 @@ class ReorderDataClientMonth extends Command
 
     public $current_time;
     public $date_init;
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'command:enertec:v1:reorder_monthly_data_client {date_init} {clients_id?*}';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
     public function __construct()
     {
         parent::__construct();
@@ -53,13 +50,13 @@ class ReorderDataClientMonth extends Command
             $this->date_init->addDay();
             echo "calc mes =" . $this->date_init->format('Y-m-d') . "\n";
             $billing_day = $this->date_init->format('d');
-            if ($billing_day == $this->date_init->format('t')){
+            if ($billing_day == $this->date_init->format('t')) {
                 $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
-            } else{
+            } else {
                 $billing_day_clients = ClientConfiguration::whereBillingDay($billing_day)->orderBy('client_id')->get()->pluck('client_id');
             }
             $clients_aux_total = Client::whereIn('id', $billing_day_clients)->whereHasTelemetry(true)->select('id')->get()->pluck('id');
-            if(count($clients_id)>0){
+            if (count($clients_id) > 0) {
                 $clients_aux = [];
 
                 foreach ($clients_aux_total as $elemento1) {
@@ -70,14 +67,20 @@ class ReorderDataClientMonth extends Command
                         }
                     }
                 }
-            }else {
+            } else {
                 $clients_aux = $clients_aux_total;
             }
-            if (count($clients_aux)>0) {
+            if (count($clients_aux) > 0) {
                 foreach ($clients_aux as $client_aux) {
+<<<<<<< HEAD
                     echo $client_aux."\n";
                     $this->data($this->date_init->format('Y-m-d H:00:00'),$client_aux);
                     dispatch(new SerializeMicrocontrollerDataMonthJob($this->date_init->format('Y-m-d H:00:00'), $client_aux))->onQueue('spot3');
+=======
+                    echo $client_aux . "\n";
+                    $this->data($this->date_init->format('Y-m-d H:00:00'), $client_aux);
+                    // dispatch(new SerializeMicrocontrollerDataMonthJob($this->date_init->format('Y-m-d H:00:00'), $client_aux))->onQueue('spot3');
+>>>>>>> 2aca32207b8b3dd684abb675d09f4a3b8cbd854c
                 }
             }
             if ($this->date_init->diffInDays($this->current_time) == 0) {
@@ -89,37 +92,37 @@ class ReorderDataClientMonth extends Command
     public function data($date, $client_id)
     {
         $day_ref = new Carbon($date);
-        $client =  Client::find($client_id);
+        $client = Client::find($client_id);
         $billing_day = $day_ref->format('d');
         if ($day_ref->format('m') == '01') {
             $month_aux = 12;
             $year_aux = $day_ref->format('Y') - 1;
         } else {
             $month_aux = $day_ref->format('m') - 1;
-            if ($month_aux<10) {
-                $month_aux = '0'.$month_aux;
+            if ($month_aux < 10) {
+                $month_aux = '0' . $month_aux;
             }
             $year_aux = $day_ref->format('Y');
         }
-        if ($billing_day == $day_ref->format('t')){
+        if ($billing_day == $day_ref->format('t')) {
             $date_aux = Carbon::create($year_aux, $month_aux, 2);
             $start_date = Carbon::create($year_aux, $month_aux, $date_aux->format('t'), 23, 59, 59);
             $end_date = Carbon::create($day_ref->format('Y'), $day_ref->format('m'), $day_ref->format('t'), 23, 59, 59);
-        } else{
+        } else {
             $start_date = Carbon::create($year_aux, $month_aux, ($billing_day), 23, 59, 59);
             $end_date = Carbon::create($day_ref->format('Y'), $day_ref->format('m'), $billing_day, "23", "59", 59);
         }
-        if ($billing_day == $day_ref->format('t')){
+        if ($billing_day == $day_ref->format('t')) {
             $data_month = $client->dailyMicrocontrollerData()
                 ->where('year', $day_ref->format('Y'))
                 ->where('month', $day_ref->format('m'))
                 ->whereBetween('day', ['01', $billing_day])
                 ->get();
-        } else{
+        } else {
             $data_aux = $client->dailyMicrocontrollerData()
                 ->where('year', $year_aux)
                 ->where('month', ($month_aux))
-                ->whereBetween('day', [str_pad((strval(($billing_day+1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
+                ->whereBetween('day', [str_pad((strval(($billing_day + 1))), 2, "0", STR_PAD_LEFT), ($start_date->format('t'))]);
             $data_month = $client->dailyMicrocontrollerData()
                 ->where('year', $day_ref->format('Y'))
                 ->where('month', $day_ref->format('m'))
@@ -132,12 +135,12 @@ class ReorderDataClientMonth extends Command
                 ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
-            if ($end_data){
+            if ($end_data) {
 
                 $date_end_data = new Carbon($end_data->source_timestamp);
                 $start_data_aux = $client->monthlyMicrocontrollerData()
-                ->where('year', $start_date->format('Y'))
-                ->where('month', $start_date->format('m'))->first();
+                    ->where('year', $start_date->format('Y'))
+                    ->where('month', $start_date->format('m'))->first();
                 if (empty($start_data_aux)) {
                     $start_data = $client->microcontrollerData()
                         ->whereDate('source_timestamp', '<', $start_date->format('Y-m-d 23:59:59'))
@@ -150,7 +153,7 @@ class ReorderDataClientMonth extends Command
                             ->first();
                     } else {
                         $date_start_data = new Carbon($start_data->source_timestamp);
-                        if($date_start_data->diffInDays($day_ref) > 40){
+                        if ($date_start_data->diffInDays($day_ref) > 40) {
                             $start_data = $client->microcontrollerData()
                                 ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                                 ->orderBy('source_timestamp')
@@ -163,7 +166,7 @@ class ReorderDataClientMonth extends Command
                 }
                 if ($end_data) {
                     $interval_active_month = $end_data->accumulated_real_consumption - $start_data->accumulated_real_consumption;
-                    if($interval_active_month < 0){
+                    if ($interval_active_month < 0) {
                         $start_data = $client->microcontrollerData()
                             ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                             ->orderBy('source_timestamp')

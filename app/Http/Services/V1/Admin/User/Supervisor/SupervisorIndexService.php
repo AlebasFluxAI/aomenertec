@@ -3,9 +3,7 @@
 namespace App\Http\Services\V1\Admin\User\Supervisor;
 
 use App\Http\Services\Singleton;
-use App\Models\V1\Seller;
 use App\Models\V1\Supervisor;
-use App\Models\V1\Technician;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 

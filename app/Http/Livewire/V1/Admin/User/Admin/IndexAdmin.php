@@ -2,13 +2,8 @@
 
 namespace App\Http\Livewire\V1\Admin\User\Admin;
 
-use App\Http\Services\V1\Admin\EquipmentType\EquipmentTypeIndexService;
 use App\Http\Services\V1\Admin\User\Admin\AdminIndexService;
 use App\Models\Traits\FilterTrait;
-use App\Models\Traits\ValidateUserFormTrait;
-use App\Models\V1\Admin;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -26,12 +21,10 @@ class IndexAdmin extends Component
     }
 
 
-
     public function deleteAdmin($id)
     {
         $this->indexAdminService->deleteAdmin($this, $id);
     }
-
 
 
     public function conditionalDeleteAdmin($id)

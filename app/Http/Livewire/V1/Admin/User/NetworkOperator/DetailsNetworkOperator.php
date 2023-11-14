@@ -4,9 +4,7 @@ namespace App\Http\Livewire\V1\Admin\User\NetworkOperator;
 
 use App\Http\Services\V1\Admin\User\NetworkOperator\NetworkOperatorDetailsService;
 use App\Models\V1\NetworkOperator;
-use App\Models\V1\Pqr;
 use Livewire\Component;
-use App\Models\Traits\PqrStatusTrait;
 
 class DetailsNetworkOperator extends Component
 {
@@ -184,11 +182,13 @@ class DetailsNetworkOperator extends Component
     {
         return $this->detailsNetworkOperatorService->repairEquipment($id);
     }
+
     public function downloadReport($id)
     {
         return $this->detailsNetworkOperatorService->downloadReport($this, $id);
 
     }
+
     public function canDownloadReport($id)
     {
         return $this->detailsNetworkOperatorService->canDownloadReport($this, $id);

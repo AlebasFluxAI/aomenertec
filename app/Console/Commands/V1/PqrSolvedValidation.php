@@ -4,10 +4,7 @@ namespace App\Console\Commands\V1;
 
 
 use App\Models\V1\Pqr;
-use App\Models\V1\User;
-use App\Notifications\Alert\ServerAlertNotification;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class PqrSolvedValidation extends Command
 {

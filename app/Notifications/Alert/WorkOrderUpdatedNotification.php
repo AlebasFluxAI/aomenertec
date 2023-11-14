@@ -4,9 +4,7 @@ namespace App\Notifications\Alert;
 
 use App\Channels\WhatsAppChannel;
 use App\Http\Resources\V1\UserNotificationPayload;
-use App\Mail\User\UserResetPasswordMail;
 use App\Mail\WorkOrder\WorkOrderUpdatedMail;
-use App\Models\V1\User;
 use App\Notifications\WhatsAppMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Request;

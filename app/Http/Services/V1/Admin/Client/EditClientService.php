@@ -2,33 +2,21 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
-use App\Http\Livewire\V1\Admin\User\EditUser;
 use App\Http\Resources\V1\IndicativeHelper;
 use App\Http\Resources\V1\TimeZoneHelper;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
 use App\Models\V1\Client;
-use App\Models\V1\ClientType;
 use App\Models\V1\Consumer;
-use App\Models\V1\Department;
-use App\Models\V1\Equipment;
-use App\Models\V1\EquipmentType;
-use App\Models\V1\Location;
-use App\Models\V1\LocationType;
 use App\Models\V1\NetworkOperator;
-use App\Models\V1\Seller;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
-use App\Models\V1\Support;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use Spatie\Permission\Models\Role;
-use function auth;
-use function session;
 
 class EditClientService extends Singleton
 {
@@ -104,27 +92,6 @@ class EditClientService extends Singleton
         ]);
     }
 
-    private function getNetworkOperators($component)
-    {
-        if (Auth::user()->networkOperator) {
-            $component->network_operator_id = Auth::user()->networkOperator->id;
-            return [];
-        }
-        $admin = User::getUserModel();
-
-        return $admin->networkOperatorsAsKeyValue();
-    }
-
-    public function updatedNetworkOperatorId(Component $component)
-    {
-        if (!$component->network_operator_id) {
-            return;
-        }
-        $component->technician_select_disabled = false;
-        $component->technicians = NetworkOperator::find($component->network_operator_id)->techniciansAsKeyValue();
-        $component->technician_id = null;
-    }
-
     public function getTechnicians($component)
     {
         if (Auth::user()->networkOperator) {
@@ -153,6 +120,26 @@ class EditClientService extends Singleton
         return $admin->clientTypesAsKeyValue();
     }
 
+    private function getNetworkOperators($component)
+    {
+        if (Auth::user()->networkOperator) {
+            $component->network_operator_id = Auth::user()->networkOperator->id;
+            return [];
+        }
+        $admin = User::getUserModel();
+
+        return $admin->networkOperatorsAsKeyValue();
+    }
+
+    public function updatedNetworkOperatorId(Component $component)
+    {
+        if (!$component->network_operator_id) {
+            return;
+        }
+        $component->technician_select_disabled = false;
+        $component->technicians = NetworkOperator::find($component->network_operator_id)->techniciansAsKeyValue();
+        $component->technician_id = null;
+    }
 
     public function updatedNetworkOperator(Component $component)
     {
@@ -185,17 +172,6 @@ class EditClientService extends Singleton
         });
     }
 
-    private function linkTechnician(Component $component, Client $client)
-    {
-        if (!$component->technician_id) {
-            return;
-        }
-        $client->technician()->delete();
-        $client->technician()->create([
-            "technician_id" => $component->technician_id
-        ]);
-    }
-
     private function mapper(Component $component)
     {
         return [
@@ -217,6 +193,17 @@ class EditClientService extends Singleton
             'stratum_id' => $component->stratum_id,
             "vaupes_stratification_type" => $component->stratification_name,
         ];
+    }
+
+    private function linkTechnician(Component $component, Client $client)
+    {
+        if (!$component->technician_id) {
+            return;
+        }
+        $client->technician()->delete();
+        $client->technician()->create([
+            "technician_id" => $component->technician_id
+        ]);
     }
 
     private function linkAddress(Component $component, Client $client)

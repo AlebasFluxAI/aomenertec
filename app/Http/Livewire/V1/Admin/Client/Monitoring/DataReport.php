@@ -3,23 +3,16 @@
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
 use App\Exports\V1\MultipleSheetsMonitoringData;
-use App\Http\Resources\V1\Formatter;
 use App\Http\Resources\V1\ToastEvent;
 use App\Models\V1\Client;
-use App\Models\V1\Pqr;
 use App\Models\V1\RealTimeListener;
-use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
+use App\ModulesAux\MQTT;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use App\Exports\V1\MonitoringDataExport;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
-use App\ModulesAux\MQTT;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class DataReport extends Component
 {
@@ -94,6 +87,11 @@ class DataReport extends Component
         $this->end_report = $end;
     }
 
+    public function simulateFee()
+    {
+        $this->dateRangeSimulator($this->aux_start, $this->aux_end);
+    }
+
     public function dateRangeSimulator($start, $end)
     {
         try {
@@ -120,11 +118,6 @@ class DataReport extends Component
             ToastEvent::launchToast($this, "show", "error", "Ocurrio un error al calcular tarifa");
         }
 
-    }
-
-    public function simulateFee()
-    {
-        $this->dateRangeSimulator($this->aux_start, $this->aux_end);
     }
 
     public function reportCsv()
@@ -285,7 +278,7 @@ class DataReport extends Component
         //$array = $this->arrayCreate();
         $work_order = WorkOrder::find(27);
         $network_operator = $work_order->client->networkOperator;
-        $pdf = PDF::loadView('reports.orden_work_report',[
+        $pdf = PDF::loadView('reports.orden_work_report', [
             'work_order' => $work_order,
             'client' => $work_order->client,
             'network_operator' => $network_operator,

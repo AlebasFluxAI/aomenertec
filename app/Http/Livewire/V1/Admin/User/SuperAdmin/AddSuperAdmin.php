@@ -2,19 +2,13 @@
 
 namespace App\Http\Livewire\V1\Admin\User\SuperAdmin;
 
-use App\Http\Services\V1\Admin\User\Admin\AdminAddService;
 use App\Http\Services\V1\Admin\User\SuperAdmin\SuperAdminAddService;
-use App\Models\Traits\ValidateUserFormTrait;
-use App\Models\V1\SuperAdmin;
 use Livewire\Component;
 
 class AddSuperAdmin extends Component
 {
     public $model;
     public $message;
-
-    private $superAdminAddService;
-
     protected $rules = [
         'model.identification' => 'required|min:6|unique:users,identification',
         'model.name' => 'required|min:6',
@@ -22,6 +16,7 @@ class AddSuperAdmin extends Component
         'model.phone' => 'min:7|unique:users,phone',
         'model.email' => 'required|email|unique:users,email',
     ];
+    private $superAdminAddService;
 
     public function __construct($id = null)
     {

@@ -16,7 +16,7 @@ class TechniciansTableSeeder extends Seeder
     public function run()
     {
         $technician = User::where("name", "like", '%' . "Tecnico" . "%")->get();
-        $i=1;
+        $i = 1;
         foreach ($technician as $item) {
             Technician::create([
                 'user_id' => $item->id,
