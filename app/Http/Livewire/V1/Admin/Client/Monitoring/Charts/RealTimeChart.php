@@ -133,8 +133,9 @@ class RealTimeChart extends Component
                     if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
                         $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
                         $topic = 'mc/config/' . $equipment->serial;
-                        MQTT::publish($topic, $message);
-                        MQTT::disconnect();
+                        $mqtt = MQTT::connection('default', 'null');
+                        $mqtt->publish($topic, $message);
+                        $mqtt->disconnect();
                     }
                 }
         }else{

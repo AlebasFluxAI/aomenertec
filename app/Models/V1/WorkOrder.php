@@ -67,7 +67,7 @@ class WorkOrder extends Model
         "execution_time_minutes",
         "microcontroller_data_id",
         "final_recommendations",
-        
+
 
     ];
 
@@ -161,6 +161,11 @@ class WorkOrder extends Model
             [
                 "col_name" => "Cliente",
                 "col_data" => "client.name",
+                "col_filter" => false
+            ],
+            [
+                "col_name" => "Alias",
+                "col_data" => "client.alias",
                 "col_filter" => false
             ],
             [

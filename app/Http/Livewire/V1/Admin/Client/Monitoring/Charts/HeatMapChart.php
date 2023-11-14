@@ -82,8 +82,9 @@ class HeatMapChart extends Component
                     if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
                         $message = "{'did':" . $equipment->serial . ",'realTimeFlag':false}";
                         $topic = 'mc/config/' . $equipment->serial;
-                        MQTT::publish($topic, $message);
-                        MQTT::disconnect();
+                        $mqtt = MQTT::connection('default', 'null');
+                        $mqtt->publish($topic, $message);
+                        $mqtt->disconnect();
                     }
                 }
         }
