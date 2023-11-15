@@ -23,6 +23,7 @@ class PricePhotovoltaicConfig extends Component
     public $year;
     public $default_rate;
     public $date_picked;
+    public $has_invoice_generation;
 
     private $priceConfiguratioNetworkOperatorService;
 
@@ -32,8 +33,15 @@ class PricePhotovoltaicConfig extends Component
         parent::__construct($id);
     }
 
+    public function updated()
+    {
+        $this->priceConfiguratioNetworkOperatorService->validateHasInvoicing($this);
+
+    }
+
     public function mount(NetworkOperator $networkOperator)
     {
+
         return $this->priceConfiguratioNetworkOperatorService->mount($this, $networkOperator);
     }
 
@@ -42,9 +50,14 @@ class PricePhotovoltaicConfig extends Component
         $this->priceConfiguratioNetworkOperatorService->updatedDefaultRate($this, $value);
     }
 
+    public function generatePhotovoltaicInvoicing()
+    {
+        $this->priceConfiguratioNetworkOperatorService->generatePhotovoltaicInvoicing($this);
+    }
+
     public function changeSubsidy($event, $stratum_id)
     {
-        return $this->priceConfiguratioNetworkOperatorService->getSubsidy($this, $event, $stratum_id);
+        return $this->priceConfiguratioNetworkOperatorService->changeSubsidy($this, $event, $stratum_id);
     }
 
     public function getSubsidy($stratum_id)

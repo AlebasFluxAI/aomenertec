@@ -17,5 +17,5 @@
                            "tab_contents"=> $model->getTabContentForPrice()
         ])
 
-
 </div>
+

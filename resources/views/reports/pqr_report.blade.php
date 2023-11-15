@@ -129,38 +129,39 @@
     </tr>
 
 </table>
-
-<table class="large-container" style="margin-top: 150px;">
-    <tr class="flex-row">
-        <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
-            colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
-    </tr>
-    <tr class="flex-row">
-        <td class="flex-item" style="padding: 6px;" colspan="4"></td>
-    </tr>
-    <tr class="flex-row">
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Razón social:</strong></td>
-        <td class="flex-item" style="padding:2px;" colspan="2">{{$client->name. ' '. $client->last_name}}</td>
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Ciudad y Depto</strong></td>
-        <td class="flex-item" style="padding:2px;"
-            colspan="2">{{$client->address->city.', '.$client->address->state }}</td>
-    </tr>
-    <tr class="flex-row">
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>{{$client->identification_type}}:</strong>
-        </td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->identification}}</td>
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Dirección:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->address->address}}</td>
-    </tr>
-    <tr class="flex-row">
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Teléfono:</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->phone}}</td>
-        <td class="flex-item" style="padding:2px; text-align: right;"><strong>Código cliente</strong></td>
-        <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->code}}</td>
-    </tr>
-</table>
-
+@if($client)
+    <table class="large-container" style="margin-top: 150px;">
+        <tr class="flex-row">
+            <td class="flex-item"
+                style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
+        </tr>
+        <tr class="flex-row">
+            <td class="flex-item" style="padding: 6px;" colspan="4"></td>
+        </tr>
+        <tr class="flex-row">
+            <td class="flex-item" style="padding:2px; text-align: right;"><strong>Razón social:</strong></td>
+            <td class="flex-item" style="padding:2px;" colspan="2">{{$client->name. ' '. $client->last_name}}</td>
+            <td class="flex-item" style="padding:2px; text-align: right;"><strong>Ciudad y Depto</strong></td>
+            <td class="flex-item" style="padding:2px;"
+                colspan="2">{{$client->address->city.', '.$client->address->state }}</td>
+        </tr>
+        <tr class="flex-row">
+            <td class="flex-item" style="padding:2px; text-align: right;"><strong>{{$client->identification_type}}
+                    :</strong>
+            </td>
+            <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->identification}}</td>
+            <td class="flex-item" style="padding:2px; text-align: right;"><strong>Dirección:</strong></td>
+            <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->address->address}}</td>
+        </tr>
+        <tr class="flex-row">
+            <td class="flex-item" style="padding:2px; text-align: right;"><strong>Teléfono:</strong></td>
+            <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->phone}}</td>
+            <td class="flex-item" style="padding:2px; text-align: right;"><strong>Código cliente</strong></td>
+            <td class="flex-item" style="padding:2px; text-align: left;" colspan="2">{{$client->code}}</td>
+        </tr>
+    </table>
+@endif
 
 <table class="large-container" style="margin-top: 20px; margin-right: 5px;">
     <tr class="flex-row">

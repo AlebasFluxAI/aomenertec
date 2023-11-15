@@ -12,6 +12,7 @@ class PriceNetworkOperatorWrap extends Component
         $this->model = User::getUserModel();
     }
 
+
     public function render()
     {
         return view('livewire.v1.admin.user.network-operator.price-configuration.price-network-operator-wrap')

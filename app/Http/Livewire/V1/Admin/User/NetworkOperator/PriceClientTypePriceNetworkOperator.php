@@ -19,6 +19,7 @@ class PriceClientTypePriceNetworkOperator extends Component
     public $default_rate;
     public $date_picked;
     public $client_type;
+    public $has_invoice_generation;
     private $networkOperatorPriceService;
 
     function __construct($id = null)
@@ -30,6 +31,13 @@ class PriceClientTypePriceNetworkOperator extends Component
     public function updated()
     {
         $this->emit('somethingUpdated', $this->month, $this->year);
+        $this->networkOperatorPriceService->validateHasInvoicing($this);
+
+    }
+
+    public function generateOtherClientInvoicing()
+    {
+        $this->networkOperatorPriceService->generateOtherClientInvoicing($this);
     }
 
     public function mount($client_type)
