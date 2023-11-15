@@ -123,16 +123,20 @@ trait PqrStatusTrait
     {
         $pqr = Pqr::find($id);
         $pqr_messages_file = $pqr->messagesFile();
-        $network_operator = $pqr->client->networkOperator;
+        if (!$pqr->client) {
+            $network_operator = $pqr->networkOperator;
+        } else {
+            $network_operator = $pqr->client->networkOperator;
+        }
         $pdf = PDF::loadView('reports.pqr_report', [
             'pqr' => $pqr,
             'client' => $pqr->client,
             'network_operator' => $network_operator,
             'admin' => $network_operator->admin,
             'files' => $pqr_messages_file,
-            'created_by' => $pqr->status_created_by == null ? $pqr->client : User::find($pqr->status_created_by),
-            'closed_by' => $pqr->status_closed_by == null ? $pqr->client : User::find($pqr->status_closed_by),
-            'resolved_by' => $pqr->client->clientTechnician()->first(),
+            'created_by' => $pqr->status_created_by == null ? ($pqr->client ? $pqr->client : $network_operator) : User::find($pqr->status_created_by),
+            'closed_by' => $pqr->status_closed_by == null ? ($pqr->client ? $pqr->client : $network_operator) : User::find($pqr->status_closed_by),
+            'resolved_by' => $pqr->client ? $pqr->client->clientTechnician()->first() : $network_operator,
             'close_message' => $pqr->closeMessage
         ]);
         $pdf->setPaper('A4', 'portrait');

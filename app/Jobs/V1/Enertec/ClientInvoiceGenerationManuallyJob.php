@@ -218,8 +218,8 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             }";
             $chartUrl = 'https://quickchart.io/chart?w=500&h=300&c=' . urlencode($chartConfig);
             $promedio = $promedio / 6;
-            $others_data['pago_oportuno'] = $fechaActual->copy()->addDays(15)->format('Y-m-d');
-            $others_data['suspension'] = $fechaActual->copy()->addDays(20)->format('Y-m-d');
+            $others_data['pago_oportuno'] = $client->networkOperator->timelyPayment ? $fechaActual->copy()->addDays($client->networkOperator->timelyPayment->days_to_payment)->format('Y-m-d') : $fechaActual->copy()->addDays(15)->format('Y-m-d');
+            $others_data['suspension'] = $client->networkOperator->timelyPayment ? $fechaActual->copy()->addDays($client->networkOperator->timelyPayment->days_to_disconnection)->format('Y-m-d') : $fechaActual->copy()->addDays(20)->format('Y-m-d');
             $others_data['serial_meter'] = $client->getSerialMeter();
             $others_data['promedio'] = $promedio;
             $others_data['last_month'] = $last_month;
