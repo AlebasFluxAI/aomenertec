@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\User\NetworkOperator;
 use App\Http\Resources\V1\MonthsYears;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
+use App\Jobs\V1\Enertec\ClientInvoiceGenerationMonthYearJob;
 use App\Models\Traits\EquipmentAssignationTrait;
 use App\Models\Traits\NetworkOperatorPriceTrait;
 use App\Models\V1\ClientType;
@@ -27,7 +28,7 @@ class NetworkOperatorPriceService extends Singleton
             'years' => MonthsYears::years(),
             "date_picked" => false,
             "client_type" => $client_type,
-
+            "has_invoice_generation" => false
         ]);
         $this->fillStrataArray($component);
 
@@ -50,6 +51,15 @@ class NetworkOperatorPriceService extends Singleton
         foreach ($component->model->sinOtherFees()->get() as $sinFees) {
             $component->taxType[ClientType::SIN_CONVENTIONAL][strval($sinFees->strata_id)] = $sinFees->tax_type;
         }
+    }
+
+    public function generateOtherClientInvoicing(Component $component)
+    {
+        $clients = $component->model->clients()->whereClientTypeId(ClientType::whereType($component->client_type)->first()->id)->get();
+        foreach ($clients as $clients) {
+            dispatch(new ClientInvoiceGenerationMonthYearJob($clients, $component->year, $component->month));
+        }
+        ToastEvent::launchToast($component, "show", "success", "Facturas generadas correctamente");
     }
 
     public function getPercentageOption(Component $component, $strata, $clientType)
@@ -212,6 +222,7 @@ class NetworkOperatorPriceService extends Singleton
             }
         }
         ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
+
     }
 
     public function changeOtherFee(Component $component, $type, $value, $strata, $client_type)
@@ -269,6 +280,8 @@ class NetworkOperatorPriceService extends Singleton
             }
         }
         ToastEvent::launchToast($component, "show", "success", "Valor actualizado");
+
+
     }
 
     public function getOtherFee(Component $component, $value, $strata, $type)
