@@ -72,10 +72,9 @@ class ReorderDataClientMonth extends Command
             }
             if (count($clients_aux) > 0) {
                 foreach ($clients_aux as $client_aux) {
-                    echo $client_aux."\n";
-                    $this->data($this->date_init->format('Y-m-d H:00:00'),$client_aux);
+                    echo $client_aux . "\n";
+                    $this->data($this->date_init->format('Y-m-d H:00:00'), $client_aux);
                     dispatch(new SerializeMicrocontrollerDataMonthJob($this->date_init->format('Y-m-d H:00:00'), $client_aux))->onQueue('spot3');
-
                 }
             }
             if ($this->date_init->diffInDays($this->current_time) == 0) {

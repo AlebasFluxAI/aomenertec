@@ -323,6 +323,7 @@ return [
         Permissions::CLIENT_SHOW_MONITORING,
         Permissions::CLIENT_MONITORING_CONTROL,
         Permissions::CLIENT_SHOW_ALERTS,
+        Permissions::CLIENT_EDIT,
 
         Permissions::PQR_SHOW,
         Permissions::PQR_CHANGE_LEVEL,
@@ -349,6 +350,7 @@ return [
         Permissions::WORK_ORDER_SOLVE,
         Permissions::WORK_ORDER_IN_PROGRESS,
         Permissions::WORK_ORDER_STOP,
+        Permissions::WORK_ORDER_EDIT,
 
         Permissions::CLIENT_SETTINGS,
 

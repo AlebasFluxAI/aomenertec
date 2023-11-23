@@ -97,10 +97,13 @@ class ImageObserver
         }
 
         if (Storage::disk('public')->exists($image->path)) {
-            $this->optimizeImageIntervention($image);
+            if (Image::validateImageFile($image)) {
+                $this->optimizeImageIntervention($image);
+            }
             $this->storeS3($image);
         }
     }
+
 
     private function optimizeImageIntervention(Image $image)
     {
@@ -161,9 +164,9 @@ class ImageObserver
         $image->title = $name;
         $image->alt = $name;
         Storage::disk('public')->putFileAs($path, $images, $name);
-
-        $this->optimizeImageIntervention($image);
-
+        if (Image::validateImageFile($image)) {
+            $this->optimizeImageIntervention($image);
+        }
         $this->updateS3($image);
     }
 

@@ -114,6 +114,7 @@
                                  "input_type"=>"file",
                                  "input_model"=>"evidences",
                                  "icon_class"=>"fas fa-file",
+                                 "file_accepted"=>".png,.jpg,.gif,.webp,.bmp,.pdf,.docx",
                                  "placeholder"=>"Puedes seleccionar varias imagenes",
                                  "col_with"=>12,
                                  "required"=>false,

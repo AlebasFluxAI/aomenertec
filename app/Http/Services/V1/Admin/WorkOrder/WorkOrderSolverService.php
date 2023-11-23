@@ -43,9 +43,7 @@ class WorkOrderSolverService extends Singleton
     public function submitForm(Component $component)
     {
         DB::transaction(function () use ($component) {
-            $component->validate([
-                'evidences.*' => 'image|max:1024', // 1MB Max
-            ]);
+        
             foreach ($component->evidences as $evidence) {
                 $component->model->saveImageOnModelWithMorphMany($evidence, "evidences");
             }
