@@ -133,7 +133,6 @@
                                                           ],
                                                         "icon"=>"fa fa-list",
                                                         "tooltip_title"=>"Historial de mensajes",
-                                                        "conditional"=>"closedTicked"
                                                 ],
                                                 [
 

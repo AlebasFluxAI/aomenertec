@@ -15,8 +15,22 @@ class Image extends Model
     public const URL_BASE = 'images/';
 
     protected $fillable = ['name', 'title', 'alt', 'type', "description"];
-
     private $dataImage;
+
+    public static function validateImageFile($image): bool
+    {
+        $name = explode(".", $image->getAttributes()["name"]);
+        if (in_array(end($name), self::fileExtensions())) {
+            return false;
+        }
+        return true;
+
+    }
+
+    public static function fileExtensions()
+    {
+        return ["pdf", "docx"];
+    }
 
     protected static function boot()
     {
