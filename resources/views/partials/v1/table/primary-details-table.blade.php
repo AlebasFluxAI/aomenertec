@@ -54,11 +54,17 @@
                         @elseif($info["type"]=="image_multiple")
                             <td>
                                 @foreach($info["value"] as $image)
-
-                                    @include("partials.v1.image",[
-                                                "image_url"=>$image->url,
-                                                "description"=>$image->description
-                                           ])
+                                    @if(\App\Models\V1\Image::validateImageFile($image))
+                                        @include("partials.v1.image",[
+                                                    "image_url"=>$image->url,
+                                                    "description"=>$image->description
+                                               ])
+                                    @else
+                                        @include("partials.v1.document",[
+                                                   "document_url"=>$image->url,
+                                                   "description"=>$image->description
+                                              ])
+                                    @endif
                                 @endforeach
                             </td>
                         @endif

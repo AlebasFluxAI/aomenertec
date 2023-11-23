@@ -95,6 +95,7 @@
                                                 "input_model"=>"attach",
                                                 "icon_class"=>"fas fa-file",
                                                 "placeholder"=>"Puedes cargar una imagen",
+                                                "file_accepted"=>".png,.jpg,.gif,.webp,.bmp,.pdf,.docx",
                                                 "col_with"=>12,
                                                 "required"=>false,
                                            ])
