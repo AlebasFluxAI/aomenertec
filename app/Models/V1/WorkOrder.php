@@ -196,6 +196,87 @@ class WorkOrder extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function navigatorDropdownOptions()
+    {
+        return [
+            [
+                "title" => "Detalles",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "administrar.v1.ordenes_de_servicio.detalle",
+                        "binding" => "workOrder",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-search",
+                    "tooltip_title" => "Detalles",
+                    "permission" => [\App\Http\Resources\V1\Permissions::WORK_ORDER_DETAILS],
+                ],
+            ],
+            [
+                "title" => "Gestionar",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "administrar.v1.ordenes_de_servicio.administrar",
+                        "binding" => "workOrder",
+                        "value" => $this->id
+                    ],
+                    "conditional" => "adminWorkOrderConditional",
+                    "icon" => "fas fa-toolbox",
+                    "tooltip_title" => "Gestionar",
+                    "permission" => [\App\Http\Resources\V1\Permissions::WORK_ORDER_SOLVE],
+                ]
+            ],
+            [
+                "title" => "Editar",
+                "actionable" => [
+
+                    "redirect" => [
+                        "route" => "administrar.v1.ordenes_de_servicio.editar",
+                        "binding" => "workOrder",
+                        "value" => $this->id
+
+                    ],
+                    "icon" => "fas fa-pencil",
+                    "tooltip_title" => "Editar",
+                    "conditional" => "conditionalTypeReading",
+                    "permission" => [\App\Http\Resources\V1\Permissions::WORK_ORDER_EDIT],
+                ]
+            ],
+            [
+                "title" => "Detalle de lectura",
+                "actionable" => [
+
+                    "redirect" => [
+                        "route" => "v1.admin.client.hand_reading.detalle",
+                        "binding" => "microcontroller_data",
+                        "binding_value" => "microcontroller_data_id",
+                        "value" => $this->microcontroller_data_id
+
+
+                    ],
+                    "icon" => "fas fa-info-circle",
+                    "tooltip_title" => "Detalle de lectura",
+                    "conditional" => "conditionalManuallyDetail",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING_SHOW],
+                ]
+            ],
+            [
+                "title" => "Registrar lectura",
+                "actionable" => [
+
+                    "redirect" => [
+                        "route" => "v1.admin.client.hand_reading.crear",
+                    ],
+                    "icon" => "fas fa-file-signature",
+                    "tooltip_title" => "Registrar lectura",
+                    "conditional" => "conditionalManuallyCreate",
+                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING_CREATE],
+                ],
+            ]
+        ];
+
+    }
+
     public function createdBy()
     {
         return User::find($this->created_by_id);

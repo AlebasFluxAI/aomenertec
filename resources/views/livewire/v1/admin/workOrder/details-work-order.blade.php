@@ -10,14 +10,21 @@
 {{--optiones de cabecera de formulario--}}
 
 @include("partials.v1.table_nav",
-     ["mt"=>4,"nav_options"=>[
+     ["mt"=>4,
+     "nav_options"=>[
                 ["button_align"=>"right",
                 "click_action"=>"",
                 "button_icon"=>"fas fa-list",
                 "button_content"=>"Ver listado",
                 "target_route"=>"administrar.v1.ordenes_de_servicio.listado",
                 ],
-
+                [
+                    "button_align"=>"right",
+                    "button_type"=>"dropdown",
+                    "button_icon"=>"fas fa-gear",
+                    "button_content"=>"Acciones",
+                    "button_options"=>$model->navigatorDropdownOptions()
+                 ]
             ]
     ])
 

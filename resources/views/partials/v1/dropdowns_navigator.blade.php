@@ -8,7 +8,6 @@
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             @foreach($dropdown_options as $option)
-
                 @if(!array_key_exists("actionable",$option))
                     @continue
                 @endif

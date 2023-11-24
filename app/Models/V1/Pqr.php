@@ -116,6 +116,110 @@ class Pqr extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function navigatorDropdownOptions()
+    {
+        return [
+            [
+                "title" => "Detalles",
+                "actionable" => [
+
+                    "redirect" => [
+                        "route" => "administrar.v1.peticiones.detalles",
+                        "binding" => "pqr",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-search",
+                    "tooltip_title" => "Detalles",
+                    "permission" => [\App\Http\Resources\V1\Permissions::PQR_SHOW],
+                ],
+            ],
+
+            [
+                "title" => "Responder ticket",
+                "actionable" => [
+                    "permission" => [\App\Http\Resources\V1\Permissions::PQR_REPLY],
+                    "redirect" => [
+                        "route" => "administrar.v1.peticiones.respuesta",
+                        "binding" => "pqr",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fa fa-comment-dots",
+                    "tooltip_title" => "Responder ticket",
+                    "conditional" => "openTicked"
+                ],
+            ],
+            [
+                "title" => "Historial de mensajes",
+                "actionable" => [
+                    "permission" => [\App\Http\Resources\V1\Permissions::PQR_REPLY],
+                    "redirect" => [
+                        "route" => "administrar.v1.peticiones.historial-mensajes",
+                        "binding" => "pqr",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fa fa-list",
+                    "tooltip_title" => "Historial de mensajes",
+                ],
+            ],
+            [
+                "title" => "Historial de cambios de equipo",
+                "actionable" => [
+                    "permission" => [\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE_MANAGE],
+                    "redirect" => [
+                        "route" => "administrar.v1.peticiones.cambio-equipo-historico",
+                        "binding" => "pqr",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fa fa-server",
+                    "tooltip_title" => "Historial de cambios de equipo",
+                    "conditional" => "closedTicked"
+                ],
+            ],
+            [
+                "title" => "Relacionar cliente",
+                "actionable" => [
+                    "permission" => [\App\Http\Resources\V1\Permissions::PQR_LINK_CLIENT],
+                    "redirect" => [
+                        "route" => "administrar.v1.peticiones.relacionar_cliente",
+                        "binding" => "pqr",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fa fa-user-plus",
+                    "tooltip_title" => "Relacionar cliente",
+                ],
+            ],
+            [
+                "title" => "Gestionar cambio de equipo",
+                "permission" => [\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE_MANAGE],
+                "function" => "requestEquipment",
+                "icon" => "fas fa-rotate",
+                "tooltip_title" => "Gestionar cambio de equipo",
+                "actionable" => [
+                    "conditional" => "equipmentRequest",
+                    "redirect" => [
+                        "route" => "administrar.v1.peticiones.cambio-equipo",
+                        "binding" => "pqr",
+                        "value" => $this->id
+                    ],
+                ],
+            ],
+            [
+                "title" => "Resolver ticket",
+                "actionable" => [
+                    "permission" => [\App\Http\Resources\V1\Permissions::PQR_CLOSE],
+                    "redirect" => [
+                        "route" => "administrar.v1.peticiones.cierre",
+                        "binding" => "pqr",
+                        "value" => $this->id
+                    ],
+                    "icon" => "fas fa-check",
+                    "tooltip_title" => "Resolver ticket",
+                    "conditional" => "openTicked"
+                ],
+            ],
+        ];
+    }
+
     public function hasClient()
     {
         return $this->client != null;
