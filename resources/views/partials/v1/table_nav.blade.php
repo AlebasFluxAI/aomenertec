@@ -3,11 +3,13 @@
     <nav class="navbar navbar-expand-lg" style="margin-left: 80%">
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
+
                 @if(isset($option["permission"]) and !array_intersect($option["permission"],\App\Models\V1\User::getUserModel()->getPermissions()))
                     @continue
                 @endif
                 <li>
                     @if(array_key_exists("button_type",$option) and $option["button_type"]=="dropdown")
+
                         @include("partials.v1.dropdowns_navigator",[
                                         "button_content"=>$option["button_content"],
                                         "dropdown_options"=>$option["button_options"],
