@@ -104,15 +104,7 @@
                                                        "tooltip_title"=>"Detalles",
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_SHOW],
                                                  ],
-                                                 [
 
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CHANGE_LEVEL],
-                                                        "function"=>"changeLevel",
-                                                        "icon"=>"fas fa-arrow-turn-up",
-                                                        "tooltip_title"=>"Escalar ticket",
-                                                        "conditional"=>"openTicked",
-                                                        "modal_content"=>"Esta seguro que quiere cambiar el nivel del Pqrs ?"
-                                                ],
                                                 [
 
                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_REPLY],
@@ -157,14 +149,6 @@
                                                 ],
                                                 [
 
-                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE],
-                                                        "function"=>"requestEquipment",
-                                                        "icon"=>"fas fa-computer",
-                                                        "tooltip_title"=>"Solicitar cambio de equipo",
-                                                        "conditional"=>"equipmentNotRequest"
-                                                ],
-                                                [
-
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE_MANAGE],
                                                         "function"=>"requestEquipment",
                                                         "icon"=>"fas fa-rotate",
@@ -194,6 +178,14 @@
                                                         "tooltip_title"=>"Resolver ticket",
                                                         "conditional"=>"openTicked"
                                                 ],
+                                                    [
+
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_EQUIPMENT_CHANGE],
+                                                        "function"=>"requestEquipment",
+                                                        "icon"=>"fas fa-computer",
+                                                        "tooltip_title"=>"Solicitar cambio de equipo",
+                                                        "conditional"=>"equipmentNotRequest"
+                                                ],
                                                   [
 
                                                         "permission"=>[\App\Http\Resources\V1\Permissions::PQR_TO_WORK_ORDER],
@@ -207,6 +199,15 @@
                                                         "icon"=>"fas fa-file-download",
                                                         "tooltip_title"=>"Reporte de PQR",
                                                         "conditional"=>"canDownloadReport"
+                                                ],
+                                                    [
+
+                                                        "permission"=>[\App\Http\Resources\V1\Permissions::PQR_CHANGE_LEVEL],
+                                                        "function"=>"changeLevel",
+                                                        "icon"=>"fas fa-arrow-turn-up",
+                                                        "tooltip_title"=>"Escalar ticket",
+                                                        "conditional"=>"openTicked",
+                                                        "modal_content"=>"Esta seguro que quiere cambiar el nivel del Pqrs ?"
                                                 ],
                                     ]
                                 ],
