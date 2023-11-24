@@ -12,7 +12,28 @@
               "second_title"=>"",
               "first_title"=>"Reemplazo de equipo"
           ])
+        @include("partials.v1.table_nav",
+                       [
+                         "mt"=>2,
+                         "nav_options"=>[
+                                [
+                                "permission"=>[\App\Http\Resources\V1\Permissions::PQR_SHOW],
+                                "button_align"=>"right",
+                                "click_action"=>"",
+                                "button_content"=>"Ver listado",
+                                "button_icon"=>"fa-solid fa-list",
+                                "target_route"=>"administrar.v1.peticiones.listado",
+                                ],
+                                [
+                                    "button_align"=>"right",
+                                    "button_type"=>"dropdown",
+                                    "button_icon"=>"fas fa-gear",
+                                    "button_content"=>"Acciones",
+                                    "button_options"=>$model->navigatorDropdownOptions()
+                                    ]
 
+                            ]
+                        ])
         @include("partials.v1.divider_title",[
                     "title"=> "Equipos ". ($model->client?$model->client->name:"")
         ])
