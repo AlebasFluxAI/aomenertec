@@ -17,7 +17,7 @@
 
     @auth
         @include("partials.v1.table_nav",
-                [
+               [
                  "mt"=>2,
                  "nav_options"=>[
                         [
@@ -28,6 +28,13 @@
                         "button_icon"=>"fa-solid fa-list",
                         "target_route"=>"administrar.v1.peticiones.listado",
                         ],
+                        [
+                            "button_align"=>"right",
+                            "button_type"=>"dropdown",
+                            "button_icon"=>"fas fa-gear",
+                            "button_content"=>"Acciones",
+                            "button_options"=>$model->navigatorDropdownOptions()
+                            ]
 
                     ]
                 ])
