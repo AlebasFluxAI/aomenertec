@@ -17,6 +17,13 @@
                     "button_content"=>"Ver listado",
                     "target_route"=>"administrar.v1.equipos.listado",
                     ],
+                    [
+                    "button_align"=>"right",
+                    "button_type"=>"dropdown",
+                    "button_icon"=>"fas fa-gear",
+                    "button_content"=>"Acciones",
+                    "button_options"=>$equipment->navigatorDropdownOptions()
+                  ]
 
                 ]
         ])

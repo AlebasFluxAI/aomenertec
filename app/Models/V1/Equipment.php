@@ -62,6 +62,38 @@ class Equipment extends Model
         static::addGlobalScope(new OrderIdScope());
     }
 
+    public function navigatorDropdownOptions()
+    {
+        return [
+            [
+                "title" => "Detalles",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "administrar.v1.equipos.detalle",
+                        "binding" => "equipment",
+                        "value" => $this->id,
+                    ],
+                    "icon" => "fas fa-search",
+                    "tooltip_title" => "Detalles",
+                    "permission" => [\App\Http\Resources\V1\Permissions::EQUIPMENT_SHOW],
+                ]
+            ],
+            [
+                "title" => "Editar",
+                "actionable" => [
+                    "redirect" => [
+                        "route" => "administrar.v1.equipos.editar",
+                        "binding" => "equipment",
+                        "value" => $this->id,
+                    ],
+                    "icon" => "fas fa-pencil",
+                    "tooltip_title" => "Editar",
+                    "permission" => [\App\Http\Resources\V1\Permissions::EQUIPMENT_EDIT],
+                ]
+            ],
+        ];
+    }
+
     public function clients()
     {
         return $this->belongsToMany(Client::class, 'equipment_clients', 'equipment_id', 'client_id')
