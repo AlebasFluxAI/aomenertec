@@ -107,7 +107,10 @@
                                                [
                                                   "view_name"=>"livewire.v1.admin.equipment.index-equipment",
                                                   "view_values"=>[
-                                                      "data"=>$model->equipments()->get(),
+                                                      "data"=>(\App\Models\V1\Equipment::whereNetworkOperatorId($model->id)
+                                                                ->where(function ($query)  {
+                                                                    $this->applyFilter($query, $this);
+                                                                })->get()),
                                                       "permissionRemove" => [\App\Http\Resources\V1\Permissions::TECHNICIAN_REMOVE_EQUIPMENT],
                                                       "functionRemoveEquipment" => "removeEquipmentTechnician",
                                                       "conditionalRemoveEquipment" => "conditionalRemoveEquipmentTechnician",

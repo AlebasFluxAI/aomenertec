@@ -3,17 +3,19 @@
 namespace App\Http\Services\V1\Admin\Equipment;
 
 use App\Http\Services\Singleton;
+use App\Models\Traits\FilterTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\SuperAdmin;
 use App\Models\V1\User;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class EquipmentIndexService extends Singleton
 {
+    use FilterTrait;
+
     public function getEquipments()
     {
         return Equipment::with("equipmentType")->pagination();
@@ -164,14 +166,6 @@ class EquipmentIndexService extends Singleton
         return Equipment::pagination();
     }
 
-    private function applyFilter(Builder $query, $component)
-    {
-        if (!in_array($component->filterCol, $query->getModel()->getFillable())) {
-            $this->{"customFilter_" . $component->filterCol}($query, $component);
-            return;
-        }
-        $query->where($component->filterCol, 'ilike', '%' . $component->filter . '%');
-    }
 
     public function conditionalEquipmentRepaired($id)
     {
