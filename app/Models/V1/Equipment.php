@@ -150,6 +150,11 @@ class Equipment extends Model
         return $this->belongsTo(Equipment::class);
     }
 
+    public function technician()
+    {
+        return $this->belongsTo(Technician::class);
+    }
+
     public function technicians()
     {
         return $this->belongsTo(Technician::class);
