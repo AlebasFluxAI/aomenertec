@@ -154,8 +154,24 @@ class Technician extends Model
         return $this->hasMany(TechnicianEquipmentType::class);
     }
 
+    public function allEquipments()
+    {
+        return ($this->getClientEquipments()->merge($this->hasMany(Equipment::class)->get()));
+    }
+
+    private function getClientEquipments()
+    {
+        $equipment = [];
+        foreach ($this->clients as $client) {
+            $equipment[] = $client->equipments;
+        }
+        return collect($equipment)->flatten();
+    }
+
     public function equipments()
     {
         return $this->hasMany(Equipment::class);
     }
+
+
 }

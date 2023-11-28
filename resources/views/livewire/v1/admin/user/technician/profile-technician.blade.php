@@ -92,7 +92,7 @@
                                                [
                                                   "view_name"=>"livewire.v1.admin.equipment.index-equipment",
                                                   "view_values"=>[
-                                                      "data"=>$model->equipments()->get(),
+                                                      "data"=>$model->allEquipments(),
                                                       "permissionRemove" => [\App\Http\Resources\V1\Permissions::TECHNICIAN_REMOVE_EQUIPMENT],
                                                       "functionRemoveEquipment" => "removeEquipmentTechnician",
                                                       "conditionalRemoveEquipment" => "conditionalRemoveEquipmentTechnician",
