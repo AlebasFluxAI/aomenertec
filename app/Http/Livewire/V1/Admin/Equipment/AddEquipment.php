@@ -18,6 +18,7 @@ class AddEquipment extends Component
     public $equipmentTypes;
     public $picked;
     public $name;
+    public $has_multiple_connection;
 
 
     protected $rules = [

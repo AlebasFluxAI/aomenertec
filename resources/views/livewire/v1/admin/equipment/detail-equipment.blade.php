@@ -79,7 +79,10 @@
                                                                              "key"=>"Operador de red",
                                                                              "value"=>($equipment->networkOperator?$equipment->networkOperator->id:"") ." - ".($equipment->networkOperator?$equipment->networkOperator->name:"")
                                                                          ],
-
+                                                                         [
+                                                                             "key"=>"Equipo con multiple conexion?",
+                                                                             "value"=>__("boolean.".$equipment->has_multiple_connection)
+                                                                         ],
 
                                                                      ]
                                                             ]
