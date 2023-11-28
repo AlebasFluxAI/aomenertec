@@ -5,10 +5,11 @@ namespace App\Http\Services\V1\Admin\Equipment;
 use App\Http\Services\Singleton;
 use App\Models\V1\Admin;
 use App\Models\V1\Equipment;
+use App\Models\V1\EquipmentClient;
 use App\Models\V1\NetworkOperator;
 use App\Models\V1\SuperAdmin;
-use App\Models\V1\Technician;
 use App\Models\V1\User;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
 
 class EquipmentIndexService extends Singleton
@@ -144,34 +145,33 @@ class EquipmentIndexService extends Singleton
     public function getData(Component $component)
     {
         $model = User::getUserModel();
+
         if ($component->filter) {
             if ($model::class == NetworkOperator::class) {
-                return Equipment::whereNetworkOperatorId($model->id)
-                    ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
-                    ->pagination();
-            } elseif ($model::class == Admin::class) {
-                return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')
-                    ->pagination();
-            } elseif ($model::class == Technician::class) {
-                return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')
-                    ->pagination();
+                return (Equipment::whereNetworkOperatorId($model->id)->where(function ($query) use ($component) {
+                    $this->applyFilter($query, $component);
+                })->pagination());
             }
-            return Equipment::where($component->filterCol, 'ilike', '%' . $component->filter . '%')->pagination();
+            return Equipment::where(function ($query) use ($component) {
+                $this->applyFilter($query, $component);
+            })->pagination();
         }
 
         if ($model::class == NetworkOperator::class) {
             return Equipment::whereNetworkOperatorId($model->id)
                 ->pagination();
-        } elseif ($model::class == Admin::class) {
-            return Equipment::whereAdminId($model->id)
-                ->pagination();
-        } elseif ($model::class == Technician::class) {
-            return Equipment::whereTechnicianId($model->id)
-                ->pagination();
         }
         return Equipment::pagination();
     }
 
+    private function applyFilter(Builder $query, $component)
+    {
+        if (!in_array($component->filterCol, $query->getModel()->getFillable())) {
+            $this->{"customFilter_" . $component->filterCol}($query, $component);
+            return;
+        }
+        $query->where($component->filterCol, 'ilike', '%' . $component->filter . '%');
+    }
 
     public function conditionalEquipmentRepaired($id)
     {
@@ -195,6 +195,17 @@ class EquipmentIndexService extends Singleton
     {
         $equipment = Equipment::find($id);
         $equipment->deprecate();
+    }
+
+    private function customFilter_available($query, $component)
+    {
+        if ($component->filter) {
+            $query->where("status", "<>", Equipment::STATUS_DISREPAIR)->whereNotIn("id", EquipmentClient::get()->pluck("equipment_id"));
+        } else {
+            $query->where("status", "<>", Equipment::STATUS_DISREPAIR)->whereIn("id", EquipmentClient::get()->pluck("equipment_id"));
+        }
+
+
     }
 
 }
