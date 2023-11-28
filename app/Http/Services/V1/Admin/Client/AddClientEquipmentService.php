@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\V1\Admin\Client;
 
+use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\Traits\ClientServiceTrait;
 use App\Models\V1\Client;
@@ -117,23 +118,40 @@ class AddClientEquipmentService extends Singleton
     public function save(Component $component)
     {
         DB::transaction(function () use ($component) {
-            $this->linkEquipments($component, $component->client);
-            $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
+            $equipment_errors = $this->linkEquipments($component, $component->client);
+            if (!count($equipment_errors)) {
+                $component->redirectRoute("v1.admin.client.detail.client", ["client" => $component->client->id]);
+            }
+
+            foreach ($equipment_errors as $equipment) {
+                ToastEvent::launchToast($component, "show", "error", "Equipo {$equipment->id}  - {$equipment->name} ya esta asignado a otro cliente");
+            }
         });
     }
 
     private function linkEquipments(Component $component, Client $client)
     {
+        $error = [];
         foreach ($component->equipment as $item) {
             if (!$item["id"]) {
                 continue;
             }
+            $equipment = Equipment::find($item['id']);
+            if (EquipmentClient::where('equipment_id', $equipment->id)->exists() and !$equipment->has_multiple_connection) {
+                $error[] = $equipment;
+                continue;
+            }
+
+            if (EquipmentClient::where('equipment_id', $equipment->id)->where('client_id', $client->id)->exists()) {
+                continue;
+            }
             EquipmentClient::create([
                 'client_id' => $client->id,
-                'equipment_id' => $item['id'],
+                'equipment_id' => $equipment->id,
                 'current_assigned' => true,
             ]);
-            Equipment::find($item['id'])->update(['assigned' => true]);
+            $equipment->update(['assigned' => true]);
         }
+        return $error;
     }
 }
