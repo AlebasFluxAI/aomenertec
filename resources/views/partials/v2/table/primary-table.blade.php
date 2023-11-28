@@ -30,6 +30,7 @@
                                     @if($is_filtered??true)
                                         @if($table_header["col_filter"])
                                             @include("partials.v1.table.table-filter-column",[
+                                                                               "col_type"=>array_key_exists("col_type",$table_header)?$table_header["col_type"]:null,
                                                                                "col_name"=>$table_header["col_data"]
                                                                              ])
                                         @endif

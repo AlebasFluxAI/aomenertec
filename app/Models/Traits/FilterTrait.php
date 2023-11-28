@@ -6,6 +6,7 @@ trait FilterTrait
 {
     public $filter;
     public $filterCol;
+    public $filterCustom;
 
     public function cleanFilter()
     {
@@ -16,5 +17,10 @@ trait FilterTrait
     public function setFilterCol($filterCol)
     {
         $this->filterCol = $filterCol;
+    }
+
+    public function setFilterCustom($filterCustom)
+    {
+        $this->filterCustom = $filterCustom;
     }
 }
