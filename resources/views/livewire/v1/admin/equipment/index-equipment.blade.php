@@ -67,6 +67,12 @@
                                    "col_filter"=>false,
                                    "col_translate"=>"equipment"
                                ],
+                               [
+                                   "col_name" =>"Tecnico",
+                                   "col_data" =>"technician.name",
+                                   "col_filter"=>true,
+
+                               ],
                         ],
                          "table_actions"=>[
 

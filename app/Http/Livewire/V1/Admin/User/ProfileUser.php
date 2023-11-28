@@ -3,11 +3,14 @@
 namespace App\Http\Livewire\V1\Admin\User;
 
 use App\Http\Services\V1\Admin\User\ProfileUserService;
+use App\Models\Traits\FilterTrait;
 use Livewire\Component;
 use function view;
 
 class ProfileUser extends Component
 {
+    use FilterTrait;
+
     public $model;
     public $admins;
     public $network_operators;
