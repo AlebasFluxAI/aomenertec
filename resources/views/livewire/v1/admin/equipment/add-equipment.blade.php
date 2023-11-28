@@ -70,6 +70,15 @@
                                         "required"=>false,
 
                              ],
+                             [
+                                       "input_label"=>"¿ Equipo con multiple conexión ?",
+                                       "input_model"=>"has_multiple_connection",
+                                       "placeholder"=>"Descripcion del equipo",
+                                       "col_with"=>3,
+                                       "input_type"=>"checkbox",
+                                       "required"=>false,
+
+                             ],
 
                          ]
                  ])
