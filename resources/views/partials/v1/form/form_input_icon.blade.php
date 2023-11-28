@@ -28,10 +28,9 @@
                           required
                 @endif></textarea>
         @elseif($input_type=="checkbox")
-            <div class="form-check form-switch">
+            <div class="form-check form-switch ml-3">
                 <input
                     wire:model.lazy="{{$input_model}}"
-
                     class="form-check-input" type="checkbox"
                     id="flexSwitchCheckChecked">
             </div>

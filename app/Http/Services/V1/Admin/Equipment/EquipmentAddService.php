@@ -54,6 +54,7 @@ class EquipmentAddService extends Singleton
             "name" => $component->name,
             "description" => $component->equipmentDescription,
             "equipment_type_id" => $component->equipmentTypeId,
+            "has_multiple_connection" => $component->has_multiple_connection
         ];
     }
 
