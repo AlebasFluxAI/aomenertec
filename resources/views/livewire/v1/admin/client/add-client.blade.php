@@ -148,7 +148,7 @@
                                    "placeholder"=>"identificación",
                                    "col_with"=>8,
                                    "input_type"=>"text",
-                                   "required"=>true
+                                   "required"=>false
                           ])
                         </div>
 
@@ -190,7 +190,7 @@
                                     "placeholder"=>"identificación",
                                     "col_with"=>8,
                                     "input_type"=>"text",
-                                    "required"=>true
+                                    "required"=>false
                            ])
                             @include("partials.v1.form.form_list",[
                                "col_with"=>8,
@@ -212,7 +212,7 @@
                                   "placeholder"=>"Razon social para facturación",
                                   "col_with"=>8,
                                   "input_type"=>"text",
-                                  "required"=>true
+                                  "required"=>false
                             ])
 
 
@@ -224,7 +224,7 @@
                                 "placeholder"=>"Direccion de facturacion",
                                 "col_with"=>8,
                                 "input_type"=>"text",
-                                "required"=>true
+                                "required"=>false
                           ])
 
                         </div>

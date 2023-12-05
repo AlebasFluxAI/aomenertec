@@ -6,6 +6,7 @@ use App\Models\Traits\AuditableTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\BillableItem;
 use App\Models\V1\BillingInformation;
+use App\Models\V1\Client;
 use App\Models\V1\ClientAddress;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\ClientConfiguration;
@@ -36,6 +37,7 @@ use App\Observers\AddressObserver;
 use App\Observers\AuditoryStatus\AuditoryStatusObserver;
 use App\Observers\BillableItem\BillableItemObserver;
 use App\Observers\BillingInformationObserver;
+use App\Observers\Client\ClientObserver;
 use App\Observers\ClientAlert\ClientAlertObserver;
 use App\Observers\Equipment\EquipmentObserver;
 use App\Observers\HereMapObserver;
@@ -158,6 +160,8 @@ class AppServiceProvider extends ServiceProvider
         SinLevelFee::observe(FeeObserver::class);
 
         InvoicePaymentRegistration::observe(InvoicePaymentRegistrationObserver::class);
+
+        Client::observe(ClientObserver::class);
 
     }
 }
