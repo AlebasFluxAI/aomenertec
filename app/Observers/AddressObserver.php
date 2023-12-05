@@ -9,6 +9,8 @@ class AddressObserver
 {
     public function creating(Model $model)
     {
+        $model->latitude = $model->latitude ?? 0.0;
+        $model->longitude = $model->longitude ?? 0.0;
         $this->setHereMapJson($model);
     }
 
