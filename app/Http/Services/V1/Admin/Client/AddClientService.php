@@ -395,10 +395,10 @@ class AddClientService extends Singleton
 
     public function save(Component $component)
     {
-        if (!$component->client_type_id) {
-            $component->addError('client_type', 'Seleccione un tipo de cliente');
-            return;
-        }
+        // if (!$component->client_type_id) {
+        //     $component->addError('client_type', 'Seleccione un tipo de cliente');
+        //     return;
+        // }
 
         DB::transaction(function () use ($component) {
             $client = $this->createClient($component);
