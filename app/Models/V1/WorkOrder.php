@@ -242,30 +242,14 @@ class WorkOrder extends Model
                     "permission" => [\App\Http\Resources\V1\Permissions::WORK_ORDER_EDIT],
                 ]
             ],
-            [
-                "title" => "Detalle de lectura",
-                "actionable" => [
 
-                    "redirect" => [
-                        "route" => "v1.admin.client.hand_reading.detalle",
-                        "binding" => "microcontroller_data",
-                        "binding_value" => "microcontroller_data_id",
-                        "value" => $this->microcontroller_data_id
-
-
-                    ],
-                    "icon" => "fas fa-info-circle",
-                    "tooltip_title" => "Detalle de lectura",
-                    "conditional" => "conditionalManuallyDetail",
-                    "permission" => [\App\Http\Resources\V1\Permissions::CLIENT_HAND_READING_SHOW],
-                ]
-            ],
             [
                 "title" => "Registrar lectura",
                 "actionable" => [
-
                     "redirect" => [
                         "route" => "v1.admin.client.hand_reading.crear",
+                        "binding" => "workOrder",
+                        "value" => $this->id
                     ],
                     "icon" => "fas fa-file-signature",
                     "tooltip_title" => "Registrar lectura",

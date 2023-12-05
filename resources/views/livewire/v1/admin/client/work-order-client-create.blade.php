@@ -130,16 +130,19 @@
                                                  "col_with"=>5,
                                                  "required"=>false,
                                                                 ])
-                            @include("partials.v1.form.form_input_icon",[
-                                     "input_model"=>"description".$key+1,
-                                     "input_label"=>"Descripción de la imagen ".$key+1,
-                                     "icon_class"=>"fas fa-edit",
-                                     "placeholder"=>"Ingrese la descripcion de la imagen ".$key+1,
-                                     "col_with"=>5,
-                                     "input_type"=>"text",
-                                     "input_rows"=>2,
-                                     "required"=>false
-                               ])
+
+                            @if($this->{$image})
+                                @include("partials.v1.form.form_input_icon",[
+                                         "input_model"=>"description".$key+1,
+                                         "input_label"=>"Descripción de la imagen ".$key+1,
+                                         "icon_class"=>"fas fa-edit",
+                                         "placeholder"=>"Ingrese la descripcion de la imagen ".$key+1,
+                                         "col_with"=>5,
+                                         "input_type"=>"text",
+                                         "input_rows"=>2,
+                                         "required"=>true
+                                   ])
+                            @endif
 
                         </div>
                     </div>
