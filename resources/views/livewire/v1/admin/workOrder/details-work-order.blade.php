@@ -4,7 +4,7 @@
 <div class="login">
 @include("partials.v1.title",[
         "first_title"=>"Detalles de",
-        "second_title"=>"order de servicio"
+        "second_title"=>"orden de servicio"
     ])
 
 {{--optiones de cabecera de formulario--}}
