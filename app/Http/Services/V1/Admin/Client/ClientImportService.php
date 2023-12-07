@@ -6,7 +6,6 @@ namespace App\Http\Services\V1\Admin\Client;
 use App\Http\Services\Singleton;
 use App\Jobs\V1\Enertec\Import\ClientImportationJob;
 use App\Models\V1\Import;
-use App\Models\V1\NetworkOperator;
 use App\Models\V1\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +32,7 @@ class ClientImportService extends Singleton
         $fileName = "import_client_" . $import->id . ".csv";
         $component->file->storePubliclyAs('imports', $fileName, 's3');
         $url = Storage::disk('s3')->url('imports/' . $fileName);
-        $string = Storage::disk('s3')->get('imports/' . $fileName);
+        $string = utf8_encode(Storage::disk('s3')->get('imports/' . $fileName));
         $import->update([
             "name" => "Importacion_clientes_" . $import->id,
             "type" => Import::TYPE_CLIENT,
@@ -46,9 +45,7 @@ class ClientImportService extends Singleton
         $csvValues = $csv->getRecords();
         $admin = Auth::user()->getAdmin() ? Auth::user()->getAdmin()->id : null;
         $authModel = User::getUserModel();
-        if ($authModel::class == NetworkOperator::class) {
-            $networkOperator = $authModel;
-        }
+        $networkOperator = $authModel;
         dispatch(new ClientImportationJob(iterator_to_array($csvValues), $import, $admin, $networkOperator))->onConnection("sync");
         $component->redirectRoute("v1.admin.client.import-details.client", ["import" => $import->id]);
     }

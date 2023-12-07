@@ -50,6 +50,7 @@ class ClientImportationJob implements ShouldQueue
      */
     public function handle()
     {
+
         $index = 0;
         foreach ($this->csvValues as $row) {
             $index++;
