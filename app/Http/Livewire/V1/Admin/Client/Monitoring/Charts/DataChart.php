@@ -161,6 +161,7 @@ class DataChart extends Component
             }
             $this->data_chart = $data_chart;
         }
+
         if (count($data_chart) > 0) {
             if ($this->time_id == 1 or $this->time_id == 2) {
                 $this->end = $this->data_chart->first()->source_timestamp;
@@ -208,7 +209,14 @@ class DataChart extends Component
                         } elseif ($this->time_id == 3) {
                             $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
                         } else {
-                            $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
+
+                            if (is_numeric($item->day)) {
+                                $x = Carbon::create($item->year, $item->month, $item->day)->format('d F Y');
+
+                            } else {
+                                $x = Carbon::create($item->day)->format('d F Y');
+
+                            }
                         }
                         array_push($this->x_axis, $x);
                     }
