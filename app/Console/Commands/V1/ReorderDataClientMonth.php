@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Jobs\V1\Enertec\SerializeMicrocontrollerDataMonthJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
 use App\Models\V1\MonthlyMicrocontrollerData;

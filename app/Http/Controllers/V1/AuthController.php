@@ -88,11 +88,11 @@ class AuthController extends Controller
         $response = [];
 
         foreach ($clients as $client) {
-
+            $gabinete = $client->equipments()->whereEquipmentTypeId(1)->first();
             array_push($response, [
                 'uid' => $client->networkOperator->identification,
-                'did' => ($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
-                'ssid' => 'wifi_' . ($client->equipments()->whereEquipmentTypeId(1)->first())->serial,
+                'did' => $gabinete?$gabinete->serial:null,
+                'ssid' => $gabinete?'wifi_' . $gabinete->serial: 'wifi_xxx',
                 'password' => $client->identification,
                 'nombre' => ($client->alias ?? $client->name),
                 'codigo_cliente' => $client->code,
