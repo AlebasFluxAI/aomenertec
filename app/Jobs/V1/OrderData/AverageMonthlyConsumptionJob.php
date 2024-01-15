@@ -36,7 +36,7 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
     public function handle()
     {
         $billing_day = $this->day_reference->format('d');
-        $previous_month_date = $this->day_reference->copy()->subMonth();
+        $previous_month_date = $this->day_reference->copy()->subMonthNoOverflow();
         $year_aux = $previous_month_date->format('Y');
         $month_aux = $previous_month_date->format('m');
 
@@ -132,7 +132,7 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                         MonthlyMicrocontrollerData::updateOrCreate([
                             'year' => $this->day_reference->format('Y'),
                             'month' => $this->day_reference->format('m'),
-                            'day' => $date_reference_data,
+                            'day' => $date_reference_data->format('d'),
                             'client_id' => $this->client->id],
                             ['microcontroller_data_id' => $reference_data->id,
                                 'interval_real_consumption' => $interval_active_month,
@@ -154,7 +154,7 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                 if ($last_month_data == null) {
                     $last_month_data = $this->client->dailyMicrocontrollerData()
                         ->whereHas('microcontrollerData', function ($query) use ($previous_month_date) {
-                            $query->whereBetween("source_timestamp", [$previous_month_date->copy()->subMonth()->format('Y-m-01 00:00:00'), $previous_month_date->format('Y-m-01 00:00:00')]);
+                            $query->whereBetween("source_timestamp", [$previous_month_date->copy()->subMonthNoOverflow()->format('Y-m-01 00:00:00'), $previous_month_date->format('Y-m-01 00:00:00')]);
                         })
                         ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
                         ->first();
@@ -214,8 +214,8 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                         ->first();
                     if ($previous_month_data == null) {
                         $previous_month_data = $this->client->monthlyMicrocontrollerData()
-                            ->where('year', $previous_month_date->copy()->subMonths(6)->format('y'))
-                            ->where('month', $previous_month_date->copy()->subMonths(6)->format('m'))
+                            ->where('year', $previous_month_date->copy()->subMonthsNoOverflow(6)->format('y'))
+                            ->where('month', $previous_month_date->copy()->subMonthsNoOverflow(6)->format('m'))
                             ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
                             ->first();
                     }
