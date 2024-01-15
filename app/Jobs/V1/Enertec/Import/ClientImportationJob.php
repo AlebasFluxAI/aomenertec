@@ -112,9 +112,9 @@ class ClientImportationJob implements ShouldQueue
         }
 
 
-        if (!$this->validateClientData($importValues, $errors)) {
-            return null;
-        }
+        //if (!$this->validateClientData($importValues, $errors)) {
+        //    return null;
+        //}
         return Client::create($clientArray);
     }
 
@@ -160,26 +160,6 @@ class ClientImportationJob implements ShouldQueue
             "IDENTIFICACION" => "identification",
 
         ];
-    }
-
-    private function validateClientData($importValues, &$errors): bool
-    {
-        $clientArray = $this->getModelArray($this->mapHeadersClientBase(), $importValues);
-        $flag = true;
-        if (Client::whereIdentification($clientArray["identification"])->exists()) {
-            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de identificacion {$clientArray["identification"]} ya es usado por otro cliente"]);
-            $flag = false;
-        }
-        if (Client::wherePhone($clientArray["phone"])->exists()) {
-            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de telefono {$clientArray["phone"]} ya es usado por otro cliente"]);
-            $flag = false;
-        }
-        return $flag;
-    }
-
-    private function addErrorToArray(&$errors, array $message)
-    {
-        $errors = array_merge($errors, $message);
     }
 
     private function linkConnectionInformation(Client $client, $importValues, &$errors)
@@ -233,6 +213,11 @@ class ClientImportationJob implements ShouldQueue
             "MON" => ClientType::MONITORING
         ];
 
+    }
+
+    private function addErrorToArray(&$errors, array $message)
+    {
+        $errors = array_merge($errors, $message);
     }
 
     private function linkBillingInformation(Client $client, $importValues, &$errors)
@@ -419,5 +404,20 @@ class ClientImportationJob implements ShouldQueue
             "TIPO_EQUIPOS_ASOCIADOS" => "equipments_serial_type",
         ];
 
+    }
+
+    private function validateClientData($importValues, &$errors): bool
+    {
+        $clientArray = $this->getModelArray($this->mapHeadersClientBase(), $importValues);
+        $flag = true;
+        if (Client::whereIdentification($clientArray["identification"])->exists()) {
+            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de identificacion {$clientArray["identification"]} ya es usado por otro cliente"]);
+            $flag = false;
+        }
+        if (Client::wherePhone($clientArray["phone"])->exists()) {
+            $this->addErrorToArray($errors, ["Error en creacion de cliente" => "El numero de telefono {$clientArray["phone"]} ya es usado por otro cliente"]);
+            $flag = false;
+        }
+        return $flag;
     }
 }
