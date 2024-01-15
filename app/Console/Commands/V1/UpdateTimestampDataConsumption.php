@@ -41,6 +41,7 @@ class UpdateTimestampDataConsumption extends Command
     {
         $data = MicrocontrollerData::select('id', 'source_timestamp', 'raw_json')->whereNull('source_timestamp')
             ->whereNull('client_id')->get();
+        $current_time = Carbon::now();
         if ($data) {
             foreach ($data as $item) {
                 echo $item->id . "\n";
@@ -50,8 +51,13 @@ class UpdateTimestampDataConsumption extends Command
                         $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
                         $date = new Carbon();
                         $date->setTimestamp($timestamp);
-                        $item->source_timestamp = $date->format("Y-m-d H:i:s");
-                        $item->saveQuietly();
+                        if($date->diffInDays($current_time) > 100){
+                            $item->forceDelete();
+                        } else{
+                            $item->source_timestamp = $date->format("Y-m-d H:i:s");
+                            $item->saveQuietly();
+                        }
+
                     } else {
                         $item->forceDelete();
                     }

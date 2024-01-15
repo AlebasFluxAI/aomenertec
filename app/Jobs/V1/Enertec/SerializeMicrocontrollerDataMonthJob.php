@@ -37,16 +37,9 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
     public function handle()
     {
         $billing_day = $this->day_ref->format('d');
-        if ($this->day_ref->format('m') == '01') {
-            $month_aux = 12;
-            $year_aux = $this->day_ref->format('Y') - 1;
-        } else {
-            $month_aux = $this->day_ref->format('m') - 1;
-            if ($month_aux < 10) {
-                $month_aux = '0' . $month_aux;
-            }
-            $year_aux = $this->day_ref->format('Y');
-        }
+        $last_month = $this->day_ref->copy()->subMonthNoOverflow();
+        $month_aux = $last_month->format('m');
+        $year_aux = $last_month->format('Y');
         if ($billing_day == $this->day_ref->format('t')) {
             $date_aux = Carbon::create($year_aux, $month_aux, 2);
             $start_date = Carbon::create($year_aux, $month_aux, $date_aux->format('t'), 23, 59, 59);
@@ -55,6 +48,7 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
             $start_date = Carbon::create($year_aux, $month_aux, ($billing_day), 23, 59, 59);
             $end_date = Carbon::create($this->day_ref->format('Y'), $this->day_ref->format('m'), $billing_day, "23", "59", 59);
         }
+
         if ($billing_day == $this->day_ref->format('t')) {
             $data_month = $this->client->dailyMicrocontrollerData()
                 ->where('year', $this->day_ref->format('Y'))
@@ -78,6 +72,7 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                 ->whereBetween('source_timestamp', [$start_date->format('Y-m-d H:i:s'), $end_date->format('Y-m-d 23:59:59')])
                 ->orderBy('source_timestamp', 'desc')
                 ->first();
+            if ($end_data) {
             $date_end_data = new Carbon($end_data->source_timestamp);
             if ($date_end_data->isSameDay($this->day_ref)) {
 
@@ -104,7 +99,7 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                 } else {
                     $start_data = $start_data_aux->microcontrollerData;
                 }
-                if ($end_data) {
+
                     $reference_data = $end_data;
                     $json = json_decode($reference_data->raw_json, true);
                     $penalizable_inductive_month = 0;
@@ -137,9 +132,9 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                     MonthlyMicrocontrollerData::updateOrCreate([
                         'year' => $this->day_ref->format('Y'),
                         'month' => $this->day_ref->format('m'),
-                        'day' => $billing_day,
                         'client_id' => $this->client->id],
                         ['microcontroller_data_id' => $reference_data->id,
+                            'day' => $billing_day,
                             'interval_real_consumption' => $interval_active_month,
                             'interval_reactive_capacitive_consumption' => $interval_capacitive_month,
                             'interval_reactive_inductive_consumption' => $interval_inductive_month,
@@ -149,7 +144,61 @@ class SerializeMicrocontrollerDataMonthJob implements ShouldQueue
                         ]);
                 }
             } else {
-                // generar orden de trabajo de lectura para este cliente
+                $previous_month_date = $last_month->copy();
+                $last_month_data = $this->client->dailyMicrocontrollerData()
+                    ->where('year', $previous_month_date->format('Y'))
+                    ->where('month', $previous_month_date->format('m'))
+                    ->orderBy('year', 'desc')->orderBy('month', 'desc')->first();
+                if ($last_month_data == null) {
+                    $last_month_data = $this->client->dailyMicrocontrollerData()
+                        ->whereHas('microcontrollerData', function ($query) use ($previous_month_date) {
+                            $query->whereBetween("source_timestamp", [$previous_month_date->copy()->subMonthNoOverflow()->format('Y-m-01 00:00:00'), $previous_month_date->format('Y-m-01 00:00:00')]);
+                        })
+                        ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                        ->first();
+                }
+                if ($last_month_data) {
+                    $data_frame = config('data-frame.data_frame');
+                    $raw_json = json_decode($last_month_data->raw_json, true);
+                    foreach ($data_frame as $item) {
+                        if ($item['start'] >= 72) {
+                            if ($item['variable_name'] != 'Wh_calc') {
+                                if ($item['variable_name'] != 'import_wh' and $item['variable_name'] != 'export_wh' and $item['variable_name'] != 'import_VArh' and $item['variable_name'] != 'export_VArh'
+                                    and $item['variable_name'] != 'ph1_import_kwh' and $item['variable_name'] != 'ph2_import_kwh' and $item['variable_name'] != 'ph3_import_kwh' and $item['variable_name'] != 'ph1_import_kvarh'
+                                    and $item['variable_name'] != 'ph2_import_kvarh' and $item['variable_name'] != 'ph3_import_kvarh' and $item['variable_name'] != 'ph1_varCh_acumm' and $item['variable_name'] != 'ph2_varCh_acumm'
+                                    and $item['variable_name'] != 'ph3_varCh_acumm' and $item['variable_name'] != 'ph1_varLh_acumm' and $item['variable_name'] != 'ph2_varLh_acumm' and $item['variable_name'] != 'ph3_varLh_acumm'
+                                    and $item['variable_name'] != 'varLh_acumm' and $item['variable_name'] != 'varCh_acumm'
+                                ) {
+                                    if (array_key_exists($item['variable_name'], $raw_json)) {
+                                        if ($raw_json[$item['variable_name']] != null) {
+                                            $raw_json[$item['variable_name']] = 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $raw_json['data_ph1_varCh_acumm'] = 0;
+                    $raw_json['data_ph2_varCh_acumm'] = 0;
+                    $raw_json['data_ph3_varCh_acumm'] = 0;
+                    $raw_json['data_ph1_varLh_acumm'] = 0;
+                    $raw_json['data_ph2_varLh_acumm'] = 0;
+                    $raw_json['data_ph3_varLh_acumm'] = 0;
+                    MonthlyMicrocontrollerData::updateOrCreate(
+                        ['year' => $this->day_ref->format('Y'),
+                            'month' => $this->day_ref->format('m'),
+                            'day' => $billing_day,
+                            'client_id' => $this->client->id],
+                        ['microcontroller_data_id' => $last_month_data->microcontroller_data_id,
+                            'interval_real_consumption' => 0,
+                            'interval_reactive_capacitive_consumption' => 0,
+                            'interval_reactive_inductive_consumption' => 0,
+                            'penalizable_reactive_capacitive_consumption' => 0,
+                            'penalizable_reactive_inductive_consumption' => 0,
+                            'raw_json' => json_encode($raw_json),
+                        ]
+                    );
+                }
             }
         }
     }

@@ -27,7 +27,7 @@ class CreateInvoiceTable extends Migration
             $table->string("code")->nullable();
             $table->date("payment_date")->nullable();
             $table->date("expiration_date")->nullable();
-            $table->enum("payment_status", [Invoice::PAYMENT_STATUS_LATE, Invoice::PAYMENT_STATUS_PENDING, Invoice::PAYMENT_STATUS_PAID])->default(Invoice::PAYMENT_STATUS_PENDING);
+            $table->enum("payment_status", [Invoice::PAYMENT_STATUS_DECLINED, Invoice::PAYMENT_STATUS_PENDING, Invoice::PAYMENT_STATUS_APPROVED, Invoice::PAYMENT_STATUS_ERROR, Invoice::PAYMENT_STATUS_VOIDED])->default(Invoice::PAYMENT_STATUS_PENDING);
             $table->timestamps();
             $table->softDeletes();
         });
