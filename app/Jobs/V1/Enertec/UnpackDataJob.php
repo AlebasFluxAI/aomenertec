@@ -70,8 +70,12 @@ class UnpackDataJob implements ShouldQueue
                             $bin = hex2bin($split);
                             if (strlen($bin) == ($data['lenght'] / 2)) {
                                 if ($data['start'] >= 450) {
-                                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                    $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    if ($data['variable_name'] == 'volt_dc'){
+                                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                    } else{
+                                        $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                        $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    }
                                 } else {
                                     if ($data['variable_name'] == "flags") {
                                         $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
@@ -90,7 +94,12 @@ class UnpackDataJob implements ShouldQueue
                                         } else {
                                             if ($last_data) {
                                                 if ($data['start'] >= 450) {
-                                                    $json[$data['variable_name']] = $last_raw_json[$data["data_" . 'variable_name']];
+                                                    if ($data['variable_name'] != 'volt_dc') {
+                                                        $json[$data['variable_name']] = $last_raw_json[$data["data_" . 'variable_name']];
+                                                    } else{
+                                                        $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+
+                                                    }
                                                 } else {
                                                     $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                                 }
@@ -105,7 +114,7 @@ class UnpackDataJob implements ShouldQueue
                                     $json[$data['variable_name']] = null;
                                 }
 
-                                if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                if ($data['variable_name'] == "volt_dc") {
                                     break;
                                 }
                             } else {
