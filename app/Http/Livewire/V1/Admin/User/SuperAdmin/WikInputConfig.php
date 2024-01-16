@@ -13,6 +13,7 @@ class WikInputConfig extends Component
     public $parent;
     public $content;
     public $wikies;
+    public $wiki_id = null;
 
     private $wikiInputConfigService;
 
