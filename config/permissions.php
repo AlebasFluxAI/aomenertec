@@ -111,6 +111,7 @@ return [
         Permissions::ADMIN_ENABLED,
         Permissions::NETWORK_OPERATOR_SERVICE_BAG_CONFIGURATION,
         Permissions::SUPER_ADMIN_ANNUALLY_CLIENT_COST,
+        Permissions::SUPER_ADMIN_WIKI_INPUT,
 
 
         Permissions::EQUIPMENT_TYPE_CREATE,

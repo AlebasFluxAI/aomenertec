@@ -30,6 +30,8 @@ Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 
 
+    Route::get('/wiki-enertec', Livewire\V1\Admin\WikiIndexComponent::class)->name("guest.wiki");
+
     Route::prefix("clientes/invitados/pqr")->group(function () {
         Route::get('/crear', Livewire\V1\Admin\Pqr\AddPqrGuestClientComponent::class)->name("guest.add-pqr");
         Route::get('/administrar', Livewire\V1\Admin\Pqr\AdminPqrGuestClientComponent::class)->name("guest.admin-pqr");
@@ -106,6 +108,15 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                     Route::get('editar', EditUser::class)->name("administrar.v1.usuarios.editar");
 
                     Route::prefix("super_administrador")->group(function () {
+                        Route::prefix("wiki")->group(function () {
+                            Route::get('entradas/crear', Livewire\V1\Admin\User\SuperAdmin\WikInputConfig::class)
+                                ->name("configuracion.v1.wiki.entradas")
+                                ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_WIKI_INPUT));;
+                            Route::get('entradas/ver/{wiki_tree_id}', Livewire\V1\Admin\User\SuperAdmin\WikInputConfig::class)
+                                ->name("configuracion.v1.wiki.entradas.ver")
+                                ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_WIKI_INPUT));;
+                        });
+
                         Route::get('listado', Livewire\V1\Admin\User\SuperAdmin\IndexSuperAdmin::class)
                             ->name("administrar.v1.usuarios.superadmin.listado")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_SHOW));

@@ -71,6 +71,7 @@
 
                                 @include("partials.v1.form.form_list",[
                                                  "col_with"=>$form_input["col_with"],
+                                                 "input_label"=>$form_input["input_label"],
                                                  "list_model" => $form_input["list_model"],
                                                  "list_default" => $form_input["list_default"],
                                                  "list_options" => $form_input["list_options"],

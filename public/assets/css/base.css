@@ -5,6 +5,14 @@
 @tailwind components;
 @tailwind utilities;
 
+#scrollableContent {
+    overflow-y: auto;
+    border-width: 1px;
+    border-radius: 5px;
+    padding: 20px;
+
+}
+
 :root {
     --style_primary: #f5b042;
     --style_secondary: #f58442;

@@ -9,6 +9,7 @@ class Permissions
     public const SUPER_ADMIN_DELETE = "super_admin.delete";
     public const SUPER_ADMIN_SHOW = "super_admin.show";
     public const SUPER_ADMIN_ENABLED = "super_admin.enabled";
+    public const SUPER_ADMIN_WIKI_INPUT = "super_admin.wiki_input";
     public const SUPER_ADMIN_ANNUALLY_CLIENT_COST = "super_admin.annually.client.cost";
 
     public const ADMIN_CREATE = "admin.create";
