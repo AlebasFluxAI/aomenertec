@@ -46,7 +46,9 @@ class UpdateTimestampDataJob implements ShouldQueue
                     if ($this->item->clientAlert()->exists()) {
                         $this->item->clientAlert()->forceDelete();
                     }
+                    //MicrocontrollerData::find($this->item->id)->forceDelete();
                     $this->item->forceDelete();
+
                 } else{
                     $this->item->source_timestamp = $date->format("Y-m-d H:i:s");
                     $this->item->saveQuietly();
