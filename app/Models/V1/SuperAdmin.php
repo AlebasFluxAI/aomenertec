@@ -173,6 +173,20 @@ class SuperAdmin extends Model
                         ]
 
                     ],
+                    [
+                        "title" => "Configuración",
+                        "route" => "configuracion.v1.wiki.entradas",
+                        "submenu" => [
+                            [
+                                "title" => "Wiki",
+                                "route" => "configuracion.v1.wiki.entradas",
+                                "submenu" => [
+
+                                ],
+                            ],
+                        ]
+
+                    ],
 
                 ]
         ];

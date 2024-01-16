@@ -48,20 +48,20 @@
                 @endforeach
             </select>
         @else
-            <input @if($updated_input??""=="lazy")
+            <input @if(($updated_input??null)=="lazy")
                        wire:model.lazy="{{ $input_model }}"
-                   @elseif($updated_input??""=="defer")
+                   @elseif(($updated_input??null)=="defer")
                        wire:model.defer="{{ $input_model }}"
                    @else
                        wire:model="{{ $input_model }}"
                    @endif
-
+                   @if(($input_type??"text") == "number")
+                       min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
+                   @endif
                    id="{{$input_id??""}}" type="{{$input_type??"text"}}"
                    class="form-control" autocomplete="{{$autocomplete??"on"}}"
                    name="{{$input_name??""}}" onchange="{{$input_on_change??""}}()" placeholder="{{$placeholder??""}}"
-                   @if($input_type??"text" == "number")
-                       min="{{ $number_min??''}}" max="{{ $number_max??''}}" step="{{ $number_step??''}}"
-                   @endif
+
                    @if($disabled??false)disabled @endif
                    @if($required??false)
                        required
