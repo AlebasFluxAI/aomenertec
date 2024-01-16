@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Jobs\V1\Enertec\UpdateTimestampDataJob;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -41,36 +42,10 @@ class UpdateTimestampDataConsumption extends Command
     {
         $data = MicrocontrollerData::select('id', 'source_timestamp', 'raw_json')->whereNull('source_timestamp')
             ->whereNull('client_id')->get();
-        $current_time = Carbon::now();
         if ($data) {
             foreach ($data as $item) {
                 echo $item->id . "\n";
-                if (json_decode($item->raw_json, true) == null) {
-                    if (strlen($item->raw_json) > 20) {
-                        $decode = bin2hex(base64_decode($item->raw_json));
-                        $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
-                        $date = new Carbon();
-                        $date->setTimestamp($timestamp);
-                        if($date->diffInDays($current_time) > 100){
-                            if ($item->hourlyMicrocontrollerData()->exists()) {
-                                $item->hourlyMicrocontrollerData()->forceDelete();
-                            }
-                            if ($item->dailyMicrocontrollerData()->exists()) {
-                                $item->dailyMicrocontrollerData()->forceDelete();
-                            }
-                            if ($item->clientAlert()->exists()) {
-                                $item->clientAlert()->forceDelete();
-                            }
-                            $item->forceDelete();
-                        } else{
-                            $item->source_timestamp = $date->format("Y-m-d H:i:s");
-                            $item->saveQuietly();
-                        }
-
-                    } else {
-                        $item->forceDelete();
-                    }
-                }
+                dispatch(new UpdateTimestampDataJob($item))->onQueue('spot4');
             }
         }
     }
