@@ -14,6 +14,10 @@ class AddStatusToClients extends Migration
      */
     public function up()
     {
+        if (Schema::hasColumn("clients", "status")) {
+            return;
+        }
+
         Schema::table('clients', function (Blueprint $table) {
             $table->enum("status", [
                 Client::CLIENT_STATUS_DISABLED,
