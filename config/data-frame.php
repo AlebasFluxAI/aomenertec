@@ -202,6 +202,8 @@ return [
         ['flag_id' => 48, 'limit' => 'min_alert', 'variable_name' => 'min_vthd_ph_2_3', 'start' => 584, 'lenght' => 8, 'type' => 'f'],
         ['flag_id' => 49, 'limit' => 'max_alert', 'variable_name' => 'max_vthd_ph_3_1', 'start' => 592, 'lenght' => 8, 'type' => 'f'],
         ['flag_id' => 49, 'limit' => 'min_alert', 'variable_name' => 'min_vthd_ph_3_1', 'start' => 600, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 50, 'limit' => 'max_alert', 'variable_name' => 'max_volt_dc', 'start' => 608, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 50, 'limit' => 'min_alert', 'variable_name' => 'min_volt_dc', 'start' => 616, 'lenght' => 8, 'type' => 'f'],
 
     ],
 
@@ -219,6 +221,7 @@ return [
         ['id' => 11, 'flag_name' => 'coil8', 'description' => '', 'bit' => 10, 'index' => 52],
         ['id' => 12, 'flag_name' => 'coil9', 'description' => '', 'bit' => 11, 'index' => 51],
         ['id' => 13, 'flag_name' => 'coil10', 'description' => '', 'bit' => 12, 'index' => 50],
+        ['id' => 14, 'flag_name' => 'volt_dc', 'description' => '', 'bit' => 26, 'index' => 36],
         ['id' => 14, 'flag_name' => 'flagOpened', 'description' => '', 'bit' => 27, 'index' => 35],
         ['id' => 15, 'flag_name' => 'flagAdc1', 'description' => '', 'bit' => 28, 'index' => 34],
         ['id' => 16, 'flag_name' => 'flagVolt1', 'description' => '', 'variable_name' => 'ph1_volt', 'placeholder' => 'Voltaje fase 1', 'bit' => 29, 'index' => 33, 'variable_id' => 7],

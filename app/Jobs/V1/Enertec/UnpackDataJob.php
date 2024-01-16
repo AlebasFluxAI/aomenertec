@@ -132,6 +132,9 @@ class UnpackDataJob implements ShouldQueue
                                         }
                                     }
                                 }
+                                if ($data['variable_name'] == "volt_dc") {
+                                    break;
+                                }
                             }
                         } catch (Exception $e) {
                             echo 'Excepción capturada: ', $e->getMessage(), "\n";
