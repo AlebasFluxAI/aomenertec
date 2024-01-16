@@ -16,9 +16,10 @@ class WikiInputConfigService extends Singleton
 
     public function submitForm(Component $component)
     {
+
         if (!$component->wiki_id) {
             WikiTree::create([
-                "content" => $component->content,
+                "content" => $component->content ?? "Sin contenidp",
                 "title" => $component->title,
                 "parent_id" => $component->parent == "" ? null : $component->parent,
             ]);
