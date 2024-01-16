@@ -52,6 +52,15 @@ class UpdateTimestampDataConsumption extends Command
                         $date = new Carbon();
                         $date->setTimestamp($timestamp);
                         if($date->diffInDays($current_time) > 100){
+                            if ($item->hourlyMicrocontrollerData()->exists()) {
+                                $item->hourlyMicrocontrollerData()->forceDelete();
+                            }
+                            if ($item->dailyMicrocontrollerData()->exists()) {
+                                $item->dailyMicrocontrollerData()->forceDelete();
+                            }
+                            if ($item->clientAlert()->exists()) {
+                                $item->clientAlert()->forceDelete();
+                            }
                             $item->forceDelete();
                         } else{
                             $item->source_timestamp = $date->format("Y-m-d H:i:s");

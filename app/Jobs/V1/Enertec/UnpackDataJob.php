@@ -98,7 +98,6 @@ class UnpackDataJob implements ShouldQueue
                                                         $json[$data['variable_name']] = $last_raw_json[$data["data_" . 'variable_name']];
                                                     } else{
                                                         $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-
                                                     }
                                                 } else {
                                                     $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
@@ -166,12 +165,12 @@ class UnpackDataJob implements ShouldQueue
                 $this->item->forceDelete();
             }
         } else {
-            $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'];
-            $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'];
-            $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'];
-            $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'];
-            $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'];
-            $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'];
+            $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ?? 0;
+            $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ?? 0;
+            $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ?? 0;
+            $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'] ?? 0;
+            $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ?? 0;
+            $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ?? 0;
             if ($this->item->manually) {
                 $this->item->interval_real_consumption = 1;
             }
