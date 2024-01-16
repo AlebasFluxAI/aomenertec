@@ -23,6 +23,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
+        "laravelcollective/html": "^6.4",
         "league/csv": "^9.11",
         "league/flysystem-aws-s3-v3": "^1.0",
         "livewire/livewire": "^2.5",
@@ -36,6 +37,7 @@
         "pusher/pusher-php-server": "^7.2",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^5.5",
+        "tinymce/tinymce": "^6.8",
         "tymon/jwt-auth": "*",
         "zgldh/crc16-php": "^1.1"
     },

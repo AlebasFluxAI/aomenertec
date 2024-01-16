@@ -58,6 +58,7 @@
                     </div>
                     <div class="flex justify-between">
                         @include("auth.support_button")
+                        @include("auth.wiki_button")
                         <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded" type="submit">
                             Ingresar
                         </button>
