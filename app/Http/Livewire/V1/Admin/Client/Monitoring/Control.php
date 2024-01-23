@@ -4,13 +4,13 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
 use App\Models\V1\Client;
 use App\Models\V1\ClientDigitalOutput;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
+use App\Strategy\MqttSenderPattern\MqttCoilAckStrategy;
+use App\Strategy\MqttSenderPattern\MqttSenderContext;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
-use PhpMqtt\Client\MqttClient;
 
 class Control extends Component
 {
@@ -35,49 +35,18 @@ class Control extends Component
 
     public function confirmAction($index)
     {
-        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-        $topic = "mc/config/" . $equipment->serial;
-        if ($this->coils[$index]['status']) {
-            $message = "{\"coil" . $this->coils[$index]['number'] . "\":false}";
-        } else {
-            $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
-        }
+
         try {
             $mqtt = MQTT::connection('default', 'default');
-            $mqtt->publish($topic, $message);
+            $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
+            $mqttCoilAckStrategy->setIndex($index);
+            $mqttCoilAckStrategy->setTopic();
+            $mqttCoilAckStrategy->setMessage();
+            $mqttCoilAckStrategy->publish();
+            $mqttCoilAckStrategy->registerLoopEventHandler();
+            $mqttCoilAckStrategy->subscribe();
 
-            $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
-                if ($elapsedTime >= 20) {
-                    $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
-                    $mqtt->interrupt();
-                    $this->emit('changeCheck', ['index' => $index, 'flag' => false]);
-                }
-            });
-            $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($index, $mqtt, &$result) {
-                $json = json_decode($message, true);
-                if (array_key_exists('coil_ack', $json)) {
-                    $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
-                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                        ->first();
-                    if ($equipment) {
-                        $client = $equipment->clients()->first();
-                        if ($client->id == $this->client->id) {
-                            if ($json['coil_ack']) {
-                                $this->coils[$index]['status'] = !$this->coils[$index]['status'];
-                                $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
-                                $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
-                                $this->emit('changeCheck', ['index' => $coil->id, 'flag' => true]);
-                                $coil->status = $this->coils[$index]['status'];
-                                $coil->save();
-                                //$this->coils = $this->client->coils;
-                                $mqtt->interrupt();
-                            }
-                        }
-                    }
-                }
-            }, 1);
-            $mqtt->loop(true);
-            $mqtt->disconnect();
+
         } catch (MqttClientException $e) {
         }
     }

@@ -12,6 +12,7 @@ use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\ModulesAux\MQTT;
+use App\Strategy\MqttSenderPattern\MqttConfigAckStrategy;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\MqttClient;
@@ -387,66 +388,14 @@ class ClientConfigurationService extends Singleton
                     'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
                 ]);
             }
+            $mqttClient = MQTT::connection('default', 'client_aux');
+            $mqttConfigAckStrategy = new MqttConfigAckStrategy($mqttClient, $component);
+            $mqttConfigAckStrategy->setTopic();
+            $mqttConfigAckStrategy->setMessage();
+            $mqttConfigAckStrategy->registerLoopEventHandler();
+            $mqttConfigAckStrategy->publish();
+            $mqttConfigAckStrategy->subscribe();
 
-            $mqtt = MQTT::connection('default', 'client_aux');
-            $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
-                if ($elapsedTime >= 50) {
-                    $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);
-                    $mqtt->interrupt();
-                }
-            });
-            $alert_config_frame = config('data-frame.alert_config_frame');
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
-            $topic = "mc/config/" . $equipment->serial;
-            $binary_data = [];
-            $data = "";
-            foreach ($alert_config_frame as $item) {
-                if ($item['variable_name'] == 'network_operator_id') {
-                    $data = $component->client->networkOperator->identification;
-                } elseif ($item['variable_name'] == 'equipment_id') {
-                    $data = $equipment->serial;
-                } elseif ($item['variable_name'] == 'network_operator_new_id') {
-                    $data = $component->client->networkOperator->identification;
-                } elseif ($item['variable_name'] == 'equipment_new_id') {
-                    $data = $equipment->serial;
-                } else {
-                    $aux_variable = $component->client_config_alert->where('flag_id', $item['flag_id'])->first();
-                    $data = $aux_variable->{$item['limit']};
-                }
-                array_push($binary_data, pack($item['type'], $data));
-            }
-            $message = base64_encode(implode($binary_data));
-
-            $mqtt->publish($topic, $message);
-
-            $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
-                $json = json_decode($message, true);
-                if (array_key_exists('config_ack', $json)) {
-                    $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
-                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                        ->first();
-                    if ($equipment) {
-                        $client_aux = $equipment->clients()->first();
-                        if ($client_aux->id == $component->client->id) {
-                            if ($json['config_ack']) {
-
-
-                                foreach ($component->client_config_alert as $index => $item) {
-                                    if ($index == "client_notification_type") {
-                                        continue;
-                                    }
-                                    $item->save();
-                                }
-                                $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-                                $mqtt->interrupt();
-                            }
-                        }
-                    }
-                }
-
-            }, 1);
-            $mqtt->loop(true);
-            $mqtt->disconnect();
         } catch (MqttClientException $e) {
 
         }
