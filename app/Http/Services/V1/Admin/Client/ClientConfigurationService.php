@@ -390,9 +390,11 @@ class ClientConfigurationService extends Singleton
             }
             $mqttClient = MQTT::connection('default', 'client_aux');
             $mqttConfigAckStrategy = new MqttConfigAckStrategy($mqttClient, $component);
+            $mqttConfigAckStrategy->setTopic();
+            $mqttConfigAckStrategy->setMessage();
             $mqttConfigAckStrategy->registerLoopEventHandler();
-            $mqttConfigAckStrategy->publish($mqttConfigAckStrategy->setTopic(), $mqttConfigAckStrategy->makeMessage());
-            $mqttConfigAckStrategy->subscribe($component);
+            $mqttConfigAckStrategy->publish();
+            $mqttConfigAckStrategy->subscribe();
 
         } catch (MqttClientException $e) {
 

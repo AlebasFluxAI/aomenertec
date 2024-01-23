@@ -15,6 +15,7 @@ class MqttCoilAckStrategy implements MqttSenderInterface
 
     private $topic = 'mc/ack';
     private $mqtt;
+    private $message;
     private $component;
     private $index;
     private $client;
@@ -32,29 +33,29 @@ class MqttCoilAckStrategy implements MqttSenderInterface
         return $this->topic;
     }
 
-    public function makeMessage()
+    public function setMessage()
     {
         if ($this->component->coils[$this->index]['status']) {
             $message = "{\"coil" . $this->component->coils[$this->index]['number'] . "\":false}";
         } else {
             $message = "{\"coil" . $this->component->coils[$this->index]['number'] . "\":true}";
         }
-        return $message;
+        $this->message = $message;
     }
 
 
-    public function publish($topic, $message)
+    public function publish()
     {
-        $this->mqtt->publish($topic, $message);
+        $this->mqtt->publish($this->topic, $this->message);
 
     }
 
-    public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt, $params)
+    public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
         if ($elapsedTime >= 20) {
             $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
             $mqtt->interrupt();
-            $this->component->emit('changeCheck', ['index' => $params["index"], 'flag' => false]);
+            $this->component->emit('changeCheck', ['index' => $this->index, 'flag' => false]);
         }
     }
 

@@ -14,6 +14,7 @@ class MqttConfigAckStrategy implements MqttSenderInterface
 
     private $topic = 'mc/ack';
     private $mqtt;
+    private $message;
     private $component;
 
     public function __construct(MqttClient $mqtt, Component $component)
@@ -29,7 +30,7 @@ class MqttConfigAckStrategy implements MqttSenderInterface
         return $this->topic;
     }
 
-    public function makeMessage()
+    public function setMessage()
     {
         $alert_config_frame = config('data-frame.alert_config_frame');
         $equipment = $this->component->client->equipments()->whereEquipmentTypeId(1)->first();;
@@ -50,17 +51,16 @@ class MqttConfigAckStrategy implements MqttSenderInterface
             }
             array_push($binary_data, pack($item['type'], $data));
         }
-        return base64_encode(implode($binary_data));
+        $this->message = base64_encode(implode($binary_data));
     }
 
 
-    public function publish($topic, $message)
+    public function publish()
     {
-        $this->mqtt->publish($topic, $message);
-
+        $this->mqtt->publish($this->topic, $this->message);
     }
 
-    public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt, $params)
+    public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
         if ($elapsedTime >= 50) {
             $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);

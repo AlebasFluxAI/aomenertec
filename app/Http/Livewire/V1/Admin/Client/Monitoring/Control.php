@@ -40,8 +40,10 @@ class Control extends Component
             $mqtt = MQTT::connection('default', 'default');
             $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
             $mqttCoilAckStrategy->setIndex($index);
-            $mqttCoilAckStrategy->publish($mqttCoilAckStrategy->setTopic(), $mqttCoilAckStrategy->makeMessage());
-            $mqttCoilAckStrategy->registerLoopEventHandler(["index" => $index]);
+            $mqttCoilAckStrategy->setTopic();
+            $mqttCoilAckStrategy->setMessage();
+            $mqttCoilAckStrategy->publish();
+            $mqttCoilAckStrategy->registerLoopEventHandler();
             $mqttCoilAckStrategy->subscribe();
 
 

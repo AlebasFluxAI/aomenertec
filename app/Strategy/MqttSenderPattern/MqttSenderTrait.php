@@ -6,10 +6,10 @@ use PhpMqtt\Client\MqttClient;
 
 trait MqttSenderTrait
 {
-    public function registerLoopEventHandler($params = [])
+    public function registerLoopEventHandler()
     {
-        $this->mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($params) {
-            $this->registerLoopEventHandlerContext($elapsedTime, $mqtt, $params);
+        $this->mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) {
+            $this->registerLoopEventHandlerContext($elapsedTime, $mqtt);
         });
     }
 
