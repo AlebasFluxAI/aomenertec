@@ -3,7 +3,6 @@
 namespace App\Strategy\MqttSenderPattern;
 
 use App\Models\V1\EquipmentType;
-use Livewire\Component;
 use PhpMqtt\Client\MqttClient;
 
 class MqttConfigAckStrategy implements MqttSenderInterface
@@ -11,17 +10,6 @@ class MqttConfigAckStrategy implements MqttSenderInterface
     use MqttSenderTrait;
 
     public const EVENT = "config_ack";
-
-    private $topic = 'mc/ack';
-    private $mqtt;
-    private $message;
-    private $component;
-
-    public function __construct(MqttClient $mqtt, Component $component)
-    {
-        $this->mqtt = $mqtt;
-        $this->component = $component;
-    }
 
     public function setTopic()
     {
@@ -54,11 +42,6 @@ class MqttConfigAckStrategy implements MqttSenderInterface
         $this->message = base64_encode(implode($binary_data));
     }
 
-
-    public function publish()
-    {
-        $this->mqtt->publish($this->topic, $this->message);
-    }
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {

@@ -4,7 +4,6 @@ namespace App\Strategy\MqttSenderPattern;
 
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\EquipmentType;
-use Livewire\Component;
 use PhpMqtt\Client\MqttClient;
 
 class MqttCoilAckStrategy implements MqttSenderInterface
@@ -12,19 +11,8 @@ class MqttCoilAckStrategy implements MqttSenderInterface
     use MqttSenderTrait;
 
     public const EVENT = "coil_ack";
-
-    private $topic = 'mc/ack';
-    private $mqtt;
-    private $message;
-    private $component;
     private $index;
-    private $client;
 
-    public function __construct(MqttClient $mqtt, Component $component)
-    {
-        $this->mqtt = $mqtt;
-        $this->component = $component;
-    }
 
     public function setTopic()
     {
@@ -43,12 +31,6 @@ class MqttCoilAckStrategy implements MqttSenderInterface
         $this->message = $message;
     }
 
-
-    public function publish()
-    {
-        $this->mqtt->publish($this->topic, $this->message);
-
-    }
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
