@@ -54,21 +54,6 @@ class {$className} implements MqttSenderInterface
         // Implementa la lógica para registrar un controlador de bucle de evento aquí
     }
 
-    public function registerLoopEventHandler()
-    {
-        // Implementa la lógica para registrar un controlador de bucle de evento aquí
-    }
-
-    public function subscribe()
-    {
-        // Implementa la lógica para suscribirse aquí
-    }
-
-    public function publish()
-    {
-        // Implementa la lógica para publicar aquí
-    }
-
     public function setMessage()
     {
         // Implementa la lógica para establecer el mensaje aquí

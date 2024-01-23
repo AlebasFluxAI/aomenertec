@@ -18,7 +18,6 @@ class MqttCoilAckStrategy implements MqttSenderInterface
     {
         $equipment = $this->component->client->equipments()->whereEquipmentTypeId(1)->first();
         $this->topic = "mc/config/" . $equipment->serial;
-        return $this->topic;
     }
 
     public function setMessage()
