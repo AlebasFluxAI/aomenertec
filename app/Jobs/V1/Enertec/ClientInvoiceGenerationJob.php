@@ -203,7 +203,7 @@ class ClientInvoiceGenerationJob implements ShouldQueue
                 break;
             }
             $i++;
-            $date->subMonth();
+            $date->subMonthNoOverflow();
         }
 
         $chartConfig = "{

@@ -182,21 +182,21 @@ class DataChart extends Component
                     if ($this->time_id == 3 || $this->time_id == 4) {
                         $raw_json = json_decode($item->raw_json, true);
                         if (isset($raw_json[$data['variable_name']])) {
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 4));
                         } else {
                             array_push($data_aux[$index], null);
                         }
                     } elseif ($this->time_id == 2) {
                         $raw_json = json_decode($item->raw_json, true);
                         if (isset($raw_json[$data['variable_name']])) {
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 4));
                         } else {
                             array_push($data_aux[$index], null);
                         }
                     } else {
                         $raw_json = json_decode($item->raw_json, true);
                         if (isset($raw_json[$data['variable_name']])) {
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 2));
+                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 4));
                         } else {
                             array_push($data_aux[$index], null);
                         }

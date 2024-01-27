@@ -7,6 +7,7 @@ use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
+use Crc16\Crc16;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
@@ -36,48 +37,58 @@ class Control extends Component
     public function confirmAction($index)
     {
         $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
-        $topic = "mc/config/" . $equipment->serial;
+        $topic = "v1/mc/config/" . $equipment->serial;
+        $coil_id = pack('C', $this->coils[$index]['number']);
+        $event_id = pack('C', 7);
+
         if ($this->coils[$index]['status']) {
-            $message = "{\"coil" . $this->coils[$index]['number'] . "\":false}";
+            $status = pack('C',  0);
+
         } else {
-            $message = "{\"coil" . $this->coils[$index]['number'] . "\":true}";
+            $status = pack('C',  1);
         }
+        $message = $event_id.$coil_id.$status;
+        $crc = Crc16::XMODEM($message);
+        $crc_pack = pack('v', $crc);
+        $message = $message.$crc_pack;
         try {
             $mqtt = MQTT::connection('default', 'default');
             $mqtt->publish($topic, $message);
 
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
-                if ($elapsedTime >= 20) {
+                if ($elapsedTime >= 10) {
                     $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
                     $mqtt->interrupt();
                     $this->emit('changeCheck', ['index' => $index, 'flag' => false]);
                 }
             });
-            $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($index, $mqtt, &$result) {
-                $json = json_decode($message, true);
-                if (array_key_exists('coil_ack', $json)) {
-                    $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
-                    $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                        ->first();
-                    if ($equipment) {
-                        $client = $equipment->clients()->first();
-                        if ($client->id == $this->client->id) {
-                            if ($json['coil_ack']) {
-                                $this->coils[$index]['status'] = !$this->coils[$index]['status'];
-                                $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
-                                $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
-                                $this->emit('changeCheck', ['index' => $coil->id, 'flag' => true]);
-                                $coil->status = $this->coils[$index]['status'];
-                                $coil->save();
-                                //$this->coils = $this->client->coils;
-                                $mqtt->interrupt();
-                            }
+            $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) use ($index, $mqtt, &$result, $equipment) {
+                $crc_message = substr($message,-2);
+                $data_crc = substr($message, 0, -2);
+                $crc = Crc16::XMODEM($data_crc);
+                $crc_pack = pack('v', $crc);
+                if ($crc_pack == $crc_message){
+                    $event = unpack('C', $message[0])[1];
+                    if ($event == 16){
+                        $message_hex = bin2hex($message);
+                        $did = substr($message, (1), (9));
+                        $did_unpack = unpack('P', $did)[1];
+                        if($equipment->serial == $did_unpack){
+                            $this->coils[$index]['status'] = !$this->coils[$index]['status'];
+                            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
+                            $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
+                            $this->emit('changeCheck', ['index' => $coil->id, 'flag' => true]);
+                            $coil->status = $this->coils[$index]['status'];
+                            $coil->save();
+                            //$this->coils = $this->client->coils;
+                            $mqtt->interrupt();
                         }
                     }
                 }
             }, 1);
             $mqtt->loop(true);
             $mqtt->disconnect();
+
         } catch (MqttClientException $e) {
         }
     }

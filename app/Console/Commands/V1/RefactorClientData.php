@@ -57,7 +57,7 @@ class RefactorClientData extends Command
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
         }
-        $day_search = $this->current_time->copy()->subDays(2);
+        $day_search = $this->current_time->copy()->subDays(1);
         $source_date = MicrocontrollerData::where("created_at", '>=', $day_search->format('Y-m-d 00:00:00'))
             ->min('source_timestamp');
 
