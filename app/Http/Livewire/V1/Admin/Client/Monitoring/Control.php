@@ -4,10 +4,11 @@ namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
 use App\Models\V1\Client;
 use App\Models\V1\ClientDigitalOutput;
-use App\Models\V1\EquipmentType;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
 use Crc16\Crc16;
+use App\Strategy\MqttSenderPattern\MqttCoilAckStrategy;
+use App\Strategy\MqttSenderPattern\MqttSenderContext;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
@@ -51,9 +52,19 @@ class Control extends Component
         $crc = Crc16::XMODEM($message);
         $crc_pack = pack('v', $crc);
         $message = $message.$crc_pack;
+
         try {
             $mqtt = MQTT::connection('default', 'default');
             $mqtt->publish($topic, $message);
+//            $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
+//            $mqttCoilAckStrategy->setIndex($index);
+//            $mqttCoilAckStrategy->setTopic();
+//            $mqttCoilAckStrategy->setMessage();
+//            $mqttCoilAckStrategy->publish();
+//            $mqttCoilAckStrategy->registerLoopEventHandler();
+//            $mqttCoilAckStrategy->subscribe();
+
+
 
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
                 if ($elapsedTime >= 10) {
@@ -88,6 +99,7 @@ class Control extends Component
             }, 1);
             $mqtt->loop(true);
             $mqtt->disconnect();
+
 
         } catch (MqttClientException $e) {
         }

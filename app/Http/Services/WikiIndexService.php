@@ -12,6 +12,9 @@ class WikiIndexService extends Singleton
     {
         $component->wikies = WikiTree::get();
         $wiki = $component->wikies->first();
+        if (!$wiki) {
+            return;
+        }
         $component->content = $wiki->content;
         $component->title = $wiki->title;
     }
