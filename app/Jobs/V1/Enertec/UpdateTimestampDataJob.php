@@ -2,6 +2,7 @@
 
 namespace App\Jobs\V1\Enertec;
 
+use App\Models\V1\ClientAlert;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -22,10 +23,9 @@ class UpdateTimestampDataJob implements ShouldQueue
      */
     public $item;
 
-    public function __construct(MicrocontrollerData $item)
+    public function __construct($item)
     {
         $this->item = $item;
-
     }
 
     /**
@@ -43,20 +43,27 @@ class UpdateTimestampDataJob implements ShouldQueue
                 $date->setTimestamp($timestamp);
                 $current_time = Carbon::now();
                 if($date->diffInYears($current_time) > 1){
-                    if ($this->item->clientAlert()->exists()) {
-                        $this->item->clientAlert()->forceDelete();
+                    if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
+                        $alert->forceDelete();
                     }
-                    //MicrocontrollerData::find($this->item->id)->forceDelete();
-                    $this->item->forceDelete();
-
+                    if($datum = MicrocontrollerData::find($this->item->id)) {
+                        $datum->forceDelete();
+                    }
                 } else{
                     $this->item->source_timestamp = $date->format("Y-m-d H:i:s");
                     $this->item->saveQuietly();
                 }
-
             } else {
-                $this->item->forceDelete();
+                if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
+                    $alert->forceDelete();
+                }
+                MicrocontrollerData::find($this->item->id)->forceDelete();
             }
+        } else {
+            if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
+                $alert->forceDelete();
+            }
+            MicrocontrollerData::find($this->item->id)->forceDelete();
         }
     }
 }
