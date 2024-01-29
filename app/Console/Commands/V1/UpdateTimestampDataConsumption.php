@@ -40,11 +40,13 @@ class UpdateTimestampDataConsumption extends Command
      */
     public function handle()
     {
-        $data = MicrocontrollerData::select('id', 'source_timestamp', 'raw_json')->whereNull('source_timestamp')
+        $data = MicrocontrollerData::select('id', 'source_timestamp', 'raw_json', 'status')->whereNull('source_timestamp')
             ->whereNull('client_id')->get();
+        echo count($data)."\n";
+
         if ($data) {
             foreach ($data as $item) {
-                if ($item->status == MicrocontrollerData::PENDING_TIMESTAMP) {
+                if ($item->status == MicrocontrollerData::PENDING_TIMESTAMP or $item->status == null) {
                     dispatch(new UpdateTimestampDataJob($item))->onQueue('spot4');
                     $item->status = MicrocontrollerData::PROCESING_TIMESTAMP;
                     $item->saveQuietly();
