@@ -34,8 +34,17 @@ class MicrocontrollerData extends Model
         "interval_reactive_capacitive_consumption",
         "interval_reactive_inductive_consumption",
         "is_alert",
-        "manually"
+        "manually",
+        "status"
     ];
+
+    public const PENDING_TIMESTAMP = "pending_timestamp";
+    public const PROCESING_TIMESTAMP = "procesing_timestamp";
+    public const SUCCESS_TIMESTAMP = "success_timestamp";
+    public const PENDING_UNPACK = "pending_unpack";
+    public const SUCCESS_UNPACK = "success_unpack";
+    public const PENDING_REORDER = "pending_reorder";
+
 
     public function client()
     {
@@ -143,6 +152,7 @@ class MicrocontrollerData extends Model
                 $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
                 if ($last_data) {
                     if (new Carbon($last_data->source_timestamp) >= $current_time) {
+                        $this->status = MicrocontrollerData::PENDING_REORDER;
                         $this->delete();
                         // alamacenar para reubicar dato
                         return;

@@ -44,8 +44,11 @@ class UpdateTimestampDataConsumption extends Command
             ->whereNull('client_id')->get();
         if ($data) {
             foreach ($data as $item) {
-                echo $item->id . "\n";
-                dispatch(new UpdateTimestampDataJob($item))->onQueue('spot4');
+                if ($item->status == MicrocontrollerData::PENDING_TIMESTAMP) {
+                    dispatch(new UpdateTimestampDataJob($item))->onQueue('spot4');
+                    $item->status = MicrocontrollerData::PROCESING_TIMESTAMP;
+                    $item->saveQuietly();
+                }
             }
         }
     }

@@ -52,8 +52,11 @@ class UpdateDataConsumption extends Command
                      ->orderBy('source_timestamp')
                      ->cursor() as $item) {
             echo $item->id;
-            dispatch(new UnpackDataJob($item->id))->onQueue('spot4');
-
+            if($item->status == MicrocontrollerData::SUCCESS_TIMESTAMP) {
+                dispatch(new UnpackDataJob($item->id))->onQueue('spot4');
+                $item->status = MicrocontrollerData::SUCCESS_UNPACK;
+                $item->save();
+            }
         }
 
     }
