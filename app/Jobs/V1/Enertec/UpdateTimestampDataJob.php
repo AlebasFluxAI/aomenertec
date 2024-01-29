@@ -80,8 +80,6 @@ class UpdateTimestampDataJob implements ShouldQueue
                     $datum->forceDelete();
                 }
             }
-        } else{
-
         }
     }
 }
