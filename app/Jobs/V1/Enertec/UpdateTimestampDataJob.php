@@ -23,7 +23,7 @@ class UpdateTimestampDataJob implements ShouldQueue
      */
     public $item;
 
-    public function __construct($item)
+    public function __construct(MicrocontrollerData $item)
     {
         $this->item = $item;
     }
@@ -51,6 +51,8 @@ class UpdateTimestampDataJob implements ShouldQueue
                             $alert->forceDelete();
                         }
                         if ($datum = MicrocontrollerData::find($this->item->id)) {
+                            $datum->status = MicrocontrollerData::PENDING_TIMESTAMP;
+                            $datum->saveQuietly();
                             $datum->forceDelete();
                         }
                     } else {
@@ -63,6 +65,8 @@ class UpdateTimestampDataJob implements ShouldQueue
                         $alert->forceDelete();
                     }
                     if ($datum = MicrocontrollerData::find($this->item->id)) {
+                        $datum->status = MicrocontrollerData::PENDING_TIMESTAMP;
+                        $datum->saveQuietly();
                         $datum->forceDelete();
                     }
                 }
@@ -71,6 +75,8 @@ class UpdateTimestampDataJob implements ShouldQueue
                     $alert->forceDelete();
                 }
                 if ($datum = MicrocontrollerData::find($this->item->id)) {
+                    $datum->status = MicrocontrollerData::PENDING_TIMESTAMP;
+                    $datum->saveQuietly();
                     $datum->forceDelete();
                 }
             }
