@@ -25,7 +25,6 @@ class UnpackDataJob implements ShouldQueue
     public function __construct($item)
     {
         $this->item = MicrocontrollerData::find($item);
-
     }
 
     /**
@@ -35,7 +34,8 @@ class UnpackDataJob implements ShouldQueue
      */
     public function handle()
     {
-
+        $this->item->status = MicrocontrollerData::SUCCESS_TIMESTAMP;
+        $this->item->save();
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($this->item->raw_json, true);
@@ -154,7 +154,7 @@ class UnpackDataJob implements ShouldQueue
 
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {
-
+                        $this->item->status = MicrocontrollerData::SUCCESS_UNPACK;
                         $this->item->save();
                         //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
@@ -168,6 +168,7 @@ class UnpackDataJob implements ShouldQueue
                 $this->item->forceDelete();
             }
         } else {
+
             $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ?? 0;
             $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ?? 0;
             $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ?? 0;
@@ -178,6 +179,7 @@ class UnpackDataJob implements ShouldQueue
                 $this->item->interval_real_consumption = 1;
             }
             $this->item->raw_json = json_encode($raw_json);
+            $this->item->status = MicrocontrollerData::SUCCESS_UNPACK;
             $this->item->save();
             /*$equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
             $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();

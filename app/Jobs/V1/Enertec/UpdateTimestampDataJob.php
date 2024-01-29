@@ -35,35 +35,45 @@ class UpdateTimestampDataJob implements ShouldQueue
      */
     public function handle()
     {
-        if (json_decode($this->item->raw_json, true) == null) {
-            if (strlen($this->item->raw_json) > 20) {
-                $decode = bin2hex(base64_decode($this->item->raw_json));
-                $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
-                $date = new Carbon();
-                $date->setTimestamp($timestamp);
-                $current_time = Carbon::now();
-                if($date->diffInYears($current_time) > 1){
+        $this->item->status = MicrocontrollerData::PENDING_TIMESTAMP;
+        $this->item->saveQuietly();
+        $this->item = MicrocontrollerData::find($this->item->id);
+        if ($this->item->source_timestamp == null) {
+            if (json_decode($this->item->raw_json, true) == null) {
+                if (strlen($this->item->raw_json) > 20) {
+                    $decode = bin2hex(base64_decode($this->item->raw_json));
+                    $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
+                    $date = new Carbon();
+                    $date->setTimestamp($timestamp);
+                    $current_time = Carbon::now();
+                    if ($date->diffInYears($current_time) > 1) {
+                        if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
+                            $alert->forceDelete();
+                        }
+                        if ($datum = MicrocontrollerData::find($this->item->id)) {
+                            $datum->forceDelete();
+                        }
+                    } else {
+                        $this->item->source_timestamp = $date->format("Y-m-d H:i:s");
+                        $this->item->status = MicrocontrollerData::SUCCESS_TIMESTAMP;
+                        $this->item->saveQuietly();
+                    }
+                } else {
                     if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
                         $alert->forceDelete();
                     }
-                    if($datum = MicrocontrollerData::find($this->item->id)) {
+                    if ($datum = MicrocontrollerData::find($this->item->id)) {
                         $datum->forceDelete();
                     }
-                } else{
-                    $this->item->source_timestamp = $date->format("Y-m-d H:i:s");
-                    $this->item->saveQuietly();
                 }
             } else {
                 if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
                     $alert->forceDelete();
                 }
-                MicrocontrollerData::find($this->item->id)->forceDelete();
+                if ($datum = MicrocontrollerData::find($this->item->id)) {
+                    $datum->forceDelete();
+                }
             }
-        } else {
-            if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
-                $alert->forceDelete();
-            }
-            MicrocontrollerData::find($this->item->id)->forceDelete();
         }
     }
 }
