@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\V1;
 
+use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Models\V1\AuxData;
 use App\Models\V1\MicrocontrollerData;
 use Illuminate\Console\Command;
@@ -39,25 +40,20 @@ class EditDataReceived extends Command
      */
     public function handle()
     {
-        $delete = MicrocontrollerData::where('source_timestamp', '>', '2022-10-09 12:00:00')->get();
+        $delete = MicrocontrollerData::whereNull('client_id')->where('source_timestamp', '<', '2024-01-28 00:00:00')->get();
+        //dd(count($delete));
         foreach ($delete as $item) {
-            if ($item->hourlyMicrocontrollerData) {
-                $item->hourlyMicrocontrollerData->delete();
+            echo $item->id."\n";
+                    dispatch(new PushRealTimeMicrocontrollerDataJob($item->id))->onQueue('spot4');
             }
-            if ($item->dailyMicrocontrollerData) {
-                $item->dailyMicrocontrollerData->delete();
-            }
-            if ($item->clientAlert) {
-                $item->clientAlert->delete();
-            }
-            $item->delete();
-        }
-        $data = AuxData::where('created_at', '>', '2022-10-09 12:00:00')->get();
-        foreach ($data as $datum) {
-            MicrocontrollerData::create([
-                "raw_json" => $datum->data,
-            ]);
-        }
+
+
+        //$data = AuxData::where('created_at', '>', '2022-10-09 12:00:00')->get();
+        //foreach ($data as $datum) {
+         //   MicrocontrollerData::create([
+           //     "raw_json" => $datum->data,
+            //]);
+        //}
         /*$clients = Client::find([91,102,100,99,94,80,]);
         $i = 0;
         while (true){
