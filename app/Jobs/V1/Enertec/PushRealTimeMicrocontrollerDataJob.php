@@ -4,6 +4,7 @@ namespace App\Jobs\V1\Enertec;
 
 use App\Events\RealTimeMonitoringEvent;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,7 +28,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
 
     public function __construct($raw_json)
     {
-        $this->raw_json = $raw_json;
+        $this->raw_json = MicrocontrollerData::find($raw_json);
     }
 
     /**
@@ -37,10 +38,30 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        $data = $this->unpackData();
+        if ($dato= $this->raw_json->hourlyMicrocontrollerData) {
+            if (is_array($dato)) {
+                if (count($dato) > 1) {
+                    foreach ($dato as $d){
+                        $d->forceDelete();
+                    }
+                } else {
+                    $dato->forceDelete();
+                }
+            } else {
+                $dato->forceDelete();
+            }
+        }
+        if ($dato = $this->raw_json->dailyMicrocontrollerData) {
+            $dato->forceDelete();
+        }
+        if ($dato = $this->raw_json->clientAlert) {
+            $dato->forceDelete();
+        }
+        $this->raw_json->forceDelete();
+        /*$data = $this->unpackData();
         if ($data) {
             event(new RealTimeMonitoringEvent($data));
-        }
+        }*/
     }
 
     private function unpackData()

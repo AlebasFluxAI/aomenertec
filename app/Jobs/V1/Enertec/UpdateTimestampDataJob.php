@@ -46,7 +46,7 @@ class UpdateTimestampDataJob implements ShouldQueue
                     $date = new Carbon();
                     $date->setTimestamp($timestamp);
                     $current_time = Carbon::now();
-                    if ($date->diffInYears($current_time) > 1) {
+                    if ($date->diffInDays($current_time) > 360) {
                         if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
                             $alert->forceDelete();
                         }
