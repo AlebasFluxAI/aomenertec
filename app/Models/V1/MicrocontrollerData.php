@@ -314,7 +314,7 @@ class MicrocontrollerData extends Model
                 }
             }
             dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
-            $this->alertEnergyEvent();
+            // $this->alertEnergyEvent();
         }
     }
 
