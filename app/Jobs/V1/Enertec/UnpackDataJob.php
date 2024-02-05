@@ -46,7 +46,11 @@ class UnpackDataJob implements ShouldQueue
             $split = substr($decode, (16), (16));
             $bin = hex2bin($split);
             $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+            $equipment_type = EquipmentType::whereType('GABINETE')->first();
+            if($equipment_type == null){
+                $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
+            }
+            $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
                 ->first();
             if ($equipment) {
                 $client = $equipment->clients()->first();
