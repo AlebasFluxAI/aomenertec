@@ -45,8 +45,8 @@ class UpdateDataConsumption extends Command
         $j = 0;
         $i = 0;
         $queues = ['spot1', 'spot2', 'spot4', 'spot5'];
-        foreach (MicrocontrollerData::select('id', 'source_timestamp', 'raw_json')
-                     ->where('created_at', '>=', $now->subDay()->format('Y-m-d H:00:00'))
+        foreach (MicrocontrollerData::select('id', 'source_timestamp', 'raw_json', 'status')
+                     // ->where('created_at', '>=', $now->subDay()->format('Y-m-d H:00:00'))
                      ->whereNull('client_id')
                      ->whereNotNull('source_timestamp')
                      ->orderBy('source_timestamp')
