@@ -270,6 +270,16 @@ return [
 
     'data_frame_events' => [
         [
+            'event_id' => 2,
+            'frame' => [
+                ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2, 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3, 'variable_name'=> 'timestamp', 'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4, 'variable_name'=> 'serial', 'start' => 9,  'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 5, 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
             'event_id' => 11,
             'frame' => [
                 ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null,        'format' => 'number', 'lenght' => 1, 'type' => 'C'],
