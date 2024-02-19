@@ -51,7 +51,7 @@ class MqttConfigAckStrategy implements MqttSenderInterface
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
-        if ($elapsedTime >= 50) {
+        if ($elapsedTime >= 10) {
             $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);
             $mqtt->interrupt();
         }
@@ -71,21 +71,18 @@ class MqttConfigAckStrategy implements MqttSenderInterface
         if ($crc_pack == $crc_message) {
             $event_id = unpack('C', $message[0])[1];
             foreach ($data_frame_events as $event) {
-                if ($event['event_id'] == $event_id) {
+                if ($event['event_id'] == 2) {
+                    dd($event);
                     foreach ($event['frame'] as $datum) {
                         $split = substr($message, ($datum['start']), ($datum['lenght']));
                         $value = unpack($datum['type'], $split)[1];
                         $json[$datum['variable_name']] = $value;
-                        if ($event_id == 1) {
-                            echo $datum['variable_name'] . " = " . $value . "\n";
-                        }
+
                     }
-                    echo $event_id." - ". $json['serial'];
 
-
-//                   if ($event_id == 35){
-//                        dd($json);
-//                    }
+                   if ($event_id == 1){
+                        dd($json);
+                    }
                     break;
                 }
             }
