@@ -392,8 +392,8 @@ class ClientConfigurationService extends Singleton
             $mqttConfigAckStrategy = new MqttConfigAckStrategy($mqttClient, $component);
             $mqttConfigAckStrategy->setTopic();
             $mqttConfigAckStrategy->setMessage();
-            $mqttConfigAckStrategy->registerLoopEventHandler();
             $mqttConfigAckStrategy->publish();
+            $mqttConfigAckStrategy->registerLoopEventHandler();
             $mqttConfigAckStrategy->subscribe();
 
         } catch (MqttClientException $e) {

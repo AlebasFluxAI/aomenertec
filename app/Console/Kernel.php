@@ -34,14 +34,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
-        //$schedule->command(UpdateDataConsumption::class)->everyTenMinutes()->withoutOverlapping();
-        //$schedule->command(UpdateTimestampDataConsumption::class)->everyFourMinutes()->withoutOverlapping();
+        $schedule->command(UpdateDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
+        $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
 
-        //$schedule->command(AverageHourlyConsumptionCommand::class)->hourlyAt(35)->withoutOverlapping();
+        $schedule->command(AverageHourlyConsumptionCommand::class)->hourlyAt(35)->withoutOverlapping();
 
         $schedule->command(AverageDaylyConsumptionCommand::class)->dailyAt('01:05')->withoutOverlapping();
         $schedule->command(AverageMonthlyConsumptionCommand::class)->dailyAt('2:05')->withoutOverlapping();
-         //$schedule->command(RefactorClientData::class)->dailyAt('02:35')->withoutOverlapping(); // si se cambia la frecuencia revisar la hora en que se seleccionan los datos
+        //$schedule->command(RefactorClientData::class)->dailyAt('02:35')->withoutOverlapping(); // si se cambia la frecuencia revisar la hora en que se seleccionan los datos
 
         $schedule->command(SetTimestamp::class)->twiceDailyAt(10, 22, 3);
         //$schedule->command(SetTimestamp::class)->twiceDailyAt(4, 16, 3);

@@ -41,7 +41,7 @@ class EditDataReceived extends Command
     public function handle()
     {
         $delete = MicrocontrollerData::whereNull('client_id')->where('source_timestamp', '<', '2024-01-28 00:00:00')->get();
-        //dd(count($delete));
+        echo (count($delete))."\n";
         foreach ($delete as $item) {
             echo $item->id."\n";
                     dispatch(new PushRealTimeMicrocontrollerDataJob($item->id))->onQueue('spot4');
