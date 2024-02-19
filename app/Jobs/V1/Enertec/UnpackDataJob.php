@@ -161,7 +161,7 @@ class UnpackDataJob implements ShouldQueue
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {
                         $this->item->status = MicrocontrollerData::SUCCESS_UNPACK;
-                        $this->item->save();
+                        $this->item->updateQuietly();
                         //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
                     } else {
