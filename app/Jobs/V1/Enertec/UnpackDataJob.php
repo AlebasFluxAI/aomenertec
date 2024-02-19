@@ -35,7 +35,7 @@ class UnpackDataJob implements ShouldQueue
     public function handle()
     {
         $this->item->status = MicrocontrollerData::SUCCESS_TIMESTAMP;
-        $this->item->save();
+        $this->item->updateQuietly();
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($this->item->raw_json, true);
