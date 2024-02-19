@@ -24,6 +24,7 @@ class MqttConfigAckStrategy implements MqttSenderInterface
         $alert_config_frame = config('data-frame.alert_config_frame');
         $equipment = $this->component->client->equipments()->whereEquipmentTypeId(7)->first();;
         $binary_data = [];
+        $binary_data_aux = [];
         $data = "";
         foreach ($alert_config_frame as $item) {
             if ($item['variable_name'] == 'network_operator_id') {
@@ -39,6 +40,7 @@ class MqttConfigAckStrategy implements MqttSenderInterface
                 $data = $aux_variable->{$item['limit']};
             }
             array_push($binary_data, pack($item['type'], $data));
+            $binary_data_aux[$item['variable_name']] = $data;
         }
         $event_id = pack('C', 1);
         $eventLogId = pack('V', 888);
@@ -46,6 +48,7 @@ class MqttConfigAckStrategy implements MqttSenderInterface
         $crc = Crc16::XMODEM($message);
         $value = pack('v', $crc);
         $this->message = $message . $value;
+        //dd($this->message, $binary_data_aux);
     }
 
 
@@ -67,12 +70,10 @@ class MqttConfigAckStrategy implements MqttSenderInterface
         $crc = Crc16::XMODEM($data_crc);
         $crc_pack = pack('v', $crc);
         $json = null;
-        dd($data_frame_events);
         if ($crc_pack == $crc_message) {
             $event_id = unpack('C', $message[0])[1];
             foreach ($data_frame_events as $event) {
                 if ($event['event_id'] == 2) {
-                    dd($event);
                     foreach ($event['frame'] as $datum) {
                         $split = substr($message, ($datum['start']), ($datum['lenght']));
                         $value = unpack($datum['type'], $split)[1];
@@ -80,14 +81,14 @@ class MqttConfigAckStrategy implements MqttSenderInterface
 
                     }
 
-                   if ($event_id == 1){
-                        dd($json);
-                    }
+       //            if ($event_id == 2){
+     //                   dd($json);
+   //                 }
                     break;
                 }
             }
         }
-            $equipment = EquipmentType::find(1)->equipment()->whereSerial($json['serial'])
+            $equipment = EquipmentType::find(7)->equipment()->whereSerial($json['serial'])
                 ->first();
             if ($equipment) {
                 $client_aux = $equipment->clients()->first();
