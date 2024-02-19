@@ -33,7 +33,7 @@ trait MqttSenderTrait
 
     public function subscribe()
     {
-        $this->mqtt->subscribe($this->topic, function (string $topic, string $message) {
+        $this->mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) {
             $this->subscribeContext($message);
         }, 1);
         $this->mqtt->loop(true);

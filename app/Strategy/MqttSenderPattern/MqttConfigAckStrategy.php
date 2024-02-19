@@ -15,14 +15,14 @@ class MqttConfigAckStrategy implements MqttSenderInterface
     public function setTopic()
     {
         $equipment = $this->component->client->equipments()->whereEquipmentTypeId(7)->first();
-        $this->topic = "mc/config/" . $equipment->serial;
+        $this->topic = "v1/mc/config/" . $equipment->serial;
         return $this->topic;
     }
 
     public function setMessage()
     {
         $alert_config_frame = config('data-frame.alert_config_frame');
-        $equipment = $this->component->client->equipments()->whereEquipmentTypeId(1)->first();;
+        $equipment = $this->component->client->equipments()->whereEquipmentTypeId(7)->first();;
         $binary_data = [];
         $data = "";
         foreach ($alert_config_frame as $item) {
@@ -60,13 +60,14 @@ class MqttConfigAckStrategy implements MqttSenderInterface
 
     public function subscribeContext($message_received)
     {
-        $message = hex2bin($message_received);
+        $message = $message_received;
         $data_frame_events = config('data-frame.data_frame_events');
         $crc_message = substr($message, -2);
         $data_crc = substr($message, 0, -2);
         $crc = Crc16::XMODEM($data_crc);
         $crc_pack = pack('v', $crc);
         $json = null;
+        dd($data_frame_events);
         if ($crc_pack == $crc_message) {
             $event_id = unpack('C', $message[0])[1];
             foreach ($data_frame_events as $event) {

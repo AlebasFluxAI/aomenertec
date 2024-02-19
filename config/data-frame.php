@@ -266,6 +266,407 @@ return [
         ['id' => 54, 'flag_name' => 'kvarlh_hour', 'placeholder' => 'kVARLh/Hora'],
         ['id' => 55, 'flag_name' => 'kvarch_hour', 'placeholder' => 'kVARCh/Hora'],
         ['id' => 56, 'flag_name' => 'kvarlh_penalizable', 'placeholder' => 'Porcentaje horario kVARLh/kWh'],
+    ],
+
+    'data_frame_events' => [
+        [
+            'event_id' => 11,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null,        'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null,        'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5, 'parameter_name' => null,        'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'crc',          'start' => 9, 'parameter_name' => null,        'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'setDateForSerial'
+        ],
+        [
+            'event_id' => 12,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 13,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'crc',          'start' => 5, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'getDateForSerial'
+        ],
+        [
+            'event_id' => 14,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 15,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null,     'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null,     'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'salida_id',    'start' => 5, 'parameter_name' => null,     'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 4 , 'variable_name'=> 'status',       'start' => 6, 'parameter_name' => 'status', 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 5 , 'variable_name'=> 'crc',          'start' => 7, 'parameter_name' => null,     'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'setStatusCoilForSerial'
+        ],
+        [
+            'event_id' => 16,
+            'frame' => [
+                ['id' => 1 ,  'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 ,  'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 ,  'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 ,  'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 ,  'variable_name'=> 'salida_id',    'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 ,  'variable_name'=> 'status',       'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 7 ,  'variable_name'=> 'import_kwh',   'start' => 15, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 8 ,  'variable_name'=> 'import_kvarh', 'start' => 19, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 9 ,  'variable_name'=> 'export_kwh',   'start' => 23, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 10 , 'variable_name'=> 'export_kvarh', 'start' => 27, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 11 , 'variable_name'=> 'crc',          'start' => 31, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 17,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'salida_id',    'start' => 5, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 5 , 'variable_name'=> 'crc',          'start' => 6, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'getStatusCoilForSerial'
+        ],
+        [
+            'event_id' => 18,
+            'frame' => [
+                ['id' => 1 ,  'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 ,  'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 ,  'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 ,  'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 ,  'variable_name'=> 'salida_id',    'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 ,  'variable_name'=> 'status',       'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 7 ,  'variable_name'=> 'import_kwh',   'start' => 15, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 8 ,  'variable_name'=> 'import_kvarh', 'start' => 19, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 9 ,  'variable_name'=> 'export_kwh',   'start' => 23, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 10 , 'variable_name'=> 'export_kvarh', 'start' => 27, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 11 , 'variable_name'=> 'crc',          'start' => 31, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 19,
+            'frame' => [
+                ['id' => 1 ,  'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 ,  'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 ,  'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 ,  'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 ,  'variable_name'=> 'salida_id',    'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 ,  'variable_name'=> 'status',       'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 7 ,  'variable_name'=> 'import_kwh',   'start' => 15, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 8 ,  'variable_name'=> 'import_kvarh', 'start' => 19, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 9 ,  'variable_name'=> 'export_kwh',   'start' => 23, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 10 , 'variable_name'=> 'export_kvarh', 'start' => 27, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 11 , 'variable_name'=> 'crc',          'start' => 31, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 20,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'type',         'start' => 5, 'parameter_name' => 'type', 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 4 , 'variable_name'=> 'crc',          'start' => 6, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'setTypeSensorForSerial'
+        ],
+        [
+            'event_id' => 21,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'type',         'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'crc',          'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 22,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'crc',          'start' => 5, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'getTypeSensorForSerial'
+        ],
+        [
+            'event_id' => 23,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'type',         'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'crc',          'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 24,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'crc',          'start' => 5, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'getStatusSensorForSerial'
+        ],
+        [
+            'event_id' => 25,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'status',       'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'crc',          'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 26,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1, 'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'crc',          'start' => 5, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'function_name' => 'getStatusConnectForSerial'
+        ],
+        [
+            'event_id' => 27,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'status',       'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'crc',          'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 28,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'timestamp',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'crc',          'start' => 9, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'job_name' => 'SendReactiveDataMcJob'
+        ],
+        [
+            'event_id' => 29,
+            'frame' => [
+                ['id' => 1, 'variable_name'=> 'event_id',         'start' => 0,   'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2, 'variable_name'=> 'l1_import_kvarLh', 'start' => 1,   'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 3, 'variable_name'=> 'l2_import_kvarLh', 'start' => 5,   'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'f'],
+                ['id' => 4, 'variable_name'=> 'l3_import_kvarLh', 'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'f'],
+                ['id' => 5, 'variable_name'=> 'l1_import_kvarCh', 'start' => 13,  'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 6, 'variable_name'=> 'l2_import_kvarCh', 'start' => 17,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'f'],
+                ['id' => 7, 'variable_name'=> 'l3_import_kvarCh', 'start' => 21,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'f'],
+                ['id' => 8, 'variable_name'=> 'crc',              'start' => 25,  'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 32,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'timestamp',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'crc',          'start' => 9, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 33,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id', 'start' => 0, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'serial',   'start' => 1, 'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'crc',      'start' => 5, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 35,
+            'frame' => [
+                ['id' => 1 ,  'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 ,  'variable_name'=> 'timestamp',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 ,  'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 ,  'variable_name'=> 'status',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 4 ,  'variable_name'=> 'import_kwh',   'start' => 10, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 5 ,  'variable_name'=> 'import_kvarh', 'start' => 14, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 6 ,  'variable_name'=> 'export_kwh',   'start' => 18, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 7, 'variable_name'=> 'export_kvarh', 'start' => 22, 'parameter_name' => null, 'format' => 'number',   'lenght' => 4, 'type' => 'f'],
+                ['id' => 8 , 'variable_name'=> 'crc',          'start' => 26, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+    ],
+    'webhook_events' =>[
+        [
+            'event_id' => 12,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la configuración de la hora en el dispositivo', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'timestamp', 'parameter_name' => 'timestamp', 'format' => 'date']
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 14,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 2,                                                     'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la consulta de la hora en el dispositivo', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                     'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                  'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                  'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                  'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                  'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'timestamp', 'parameter_name' => 'timestamp', 'format' => 'date']
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 16,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 3,                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó el accionamiento de la bobina', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp',    'format' => 'date'],
+                    ['variable_name'=> 'status_coil',   'parameter_name' => 'status',       'format' => 'number'],
+                    ['variable_name'=> 'import_kwh',    'parameter_name' => 'import_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'export_kwh',    'parameter_name' => 'export_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'import_kvarh',  'parameter_name' => 'import_kvarh', 'format' => 'number'],
+                    ['variable_name'=> 'export_kvarh',  'parameter_name' => 'export_kvarh', 'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 18,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 4,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la consulta del estado la bobina', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                          'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                          'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                          'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                          'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp',    'format' => 'date'],
+                    ['variable_name'=> 'status_coil',   'parameter_name' => 'status',       'format' => 'number'],
+                    ['variable_name'=> 'import_kwh',    'parameter_name' => 'import_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'export_kwh',    'parameter_name' => 'export_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'import_kvarh',  'parameter_name' => 'import_kvarh', 'format' => 'number'],
+                    ['variable_name'=> 'export_kvarh',  'parameter_name' => 'export_kvarh', 'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 21,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 5,                                                    'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la configuración del sensor de apertura', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                    'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                 'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                 'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                 'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                 'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp',    'format' => 'date'],
+                    ['variable_name'=> 'status_sensor', 'parameter_name' => 'type',       'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 23,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 6,                                                                   'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la consulta de la configuración del sensor de apertura', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                                   'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                                'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                                'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                                'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                                'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'status_sensor', 'parameter_name' => 'type',      'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 25,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 7,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la consulta del estado del sensor de apertura', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'status_door',   'parameter_name' => 'status',    'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 27,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 8,                                                               'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la consulta del estado de conexión del dispositivo', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                               'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                            'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                            'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                            'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                            'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'status_connect', 'parameter_name' => 'status',    'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'event_id' => 35,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 9,                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se detecto cambio de estado en sensor de apertura', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'data',                 'value' => null,                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp',    'format' => 'date'],
+                    ['variable_name'=> 'status_door',   'parameter_name' => 'status',       'format' => 'number'],
+                    ['variable_name'=> 'import_kwh',    'parameter_name' => 'import_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'export_kwh',    'parameter_name' => 'export_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'import_kvarh',  'parameter_name' => 'import_kvarh', 'format' => 'number'],
+                    ['variable_name'=> 'export_kvarh',  'parameter_name' => 'export_kvarh', 'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+
     ]
 
 ];
