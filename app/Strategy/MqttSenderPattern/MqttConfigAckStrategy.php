@@ -3,6 +3,7 @@
 namespace App\Strategy\MqttSenderPattern;
 
 use App\Models\V1\EquipmentType;
+use Crc16\Crc16;
 use PhpMqtt\Client\MqttClient;
 
 class MqttConfigAckStrategy implements MqttSenderInterface
@@ -13,7 +14,7 @@ class MqttConfigAckStrategy implements MqttSenderInterface
 
     public function setTopic()
     {
-        $equipment = $this->component->client->equipments()->whereEquipmentTypeId(1)->first();
+        $equipment = $this->component->client->equipments()->whereEquipmentTypeId(7)->first();
         $this->topic = "mc/config/" . $equipment->serial;
         return $this->topic;
     }
@@ -39,7 +40,12 @@ class MqttConfigAckStrategy implements MqttSenderInterface
             }
             array_push($binary_data, pack($item['type'], $data));
         }
-        $this->message = base64_encode(implode($binary_data));
+        $event_id = pack('C', 1);
+        $eventLogId = pack('V', 888);
+        $message = $event_id.$eventLogId.implode($binary_data);
+        $crc = Crc16::XMODEM($message);
+        $value = pack('v', $crc);
+        $this->message = $message . $value;
     }
 
 
@@ -52,17 +58,42 @@ class MqttConfigAckStrategy implements MqttSenderInterface
     }
 
 
-    public function subscribeContext($message)
+    public function subscribeContext($message_received)
     {
-        $json = json_decode($message, true);
-        if (array_key_exists(self::EVENT, $json)) {
-            $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
-            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+        $message = hex2bin($message_received);
+        $data_frame_events = config('data-frame.data_frame_events');
+        $crc_message = substr($message, -2);
+        $data_crc = substr($message, 0, -2);
+        $crc = Crc16::XMODEM($data_crc);
+        $crc_pack = pack('v', $crc);
+        $json = null;
+        if ($crc_pack == $crc_message) {
+            $event_id = unpack('C', $message[0])[1];
+            foreach ($data_frame_events as $event) {
+                if ($event['event_id'] == $event_id) {
+                    foreach ($event['frame'] as $datum) {
+                        $split = substr($message, ($datum['start']), ($datum['lenght']));
+                        $value = unpack($datum['type'], $split)[1];
+                        $json[$datum['variable_name']] = $value;
+                        if ($event_id == 1) {
+                            echo $datum['variable_name'] . " = " . $value . "\n";
+                        }
+                    }
+                    echo $event_id." - ". $json['serial'];
+
+
+//                   if ($event_id == 35){
+//                        dd($json);
+//                    }
+                    break;
+                }
+            }
+        }
+            $equipment = EquipmentType::find(1)->equipment()->whereSerial($json['serial'])
                 ->first();
             if ($equipment) {
                 $client_aux = $equipment->clients()->first();
                 if ($client_aux->id == $this->component->client->id) {
-                    if ($json[self::EVENT]) {
                         foreach ($this->component->client_config_alert as $index => $item) {
                             if ($index == "client_notification_type") {
                                 continue;
@@ -71,9 +102,9 @@ class MqttConfigAckStrategy implements MqttSenderInterface
                         }
                         $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
                         $this->mqtt->interrupt();
-                    }
+
                 }
             }
-        }
+
     }
 }

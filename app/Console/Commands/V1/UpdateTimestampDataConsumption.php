@@ -41,7 +41,7 @@ class UpdateTimestampDataConsumption extends Command
     public function handle()
     {
         $data = MicrocontrollerData::select('id', 'source_timestamp', 'raw_json', 'status')->whereNull('source_timestamp')
-            ->whereNull('client_id')->get();
+            ->whereNull('client_id')->orderBy('id', 'asc')->get();
         echo count($data)."\n";
 
         if ($data) {
