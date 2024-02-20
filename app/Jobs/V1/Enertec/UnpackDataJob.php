@@ -51,9 +51,9 @@ class UnpackDataJob implements ShouldQueue
                 ->first();
             if($equipment == null){
                 $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
+                $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
+                    ->first();
             }
-            $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
-                ->first();
             if ($equipment) {
                 $client = $equipment->clients()->first();
                 if ($client) {
