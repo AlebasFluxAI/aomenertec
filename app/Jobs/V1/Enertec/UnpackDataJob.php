@@ -165,7 +165,7 @@ class UnpackDataJob implements ShouldQueue
                         //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
                     } else {
-                        $this->item->delete();
+                        $this->item->forceDelete();
                     }
                 } else {
                     $this->item->forceDelete();
