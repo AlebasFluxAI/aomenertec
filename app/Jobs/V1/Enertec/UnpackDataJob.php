@@ -35,7 +35,7 @@ class UnpackDataJob implements ShouldQueue
     public function handle()
     {
         $this->item->status = MicrocontrollerData::SUCCESS_TIMESTAMP;
-        $this->item->save();
+        $this->item->updateQuietly();
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($this->item->raw_json, true);
@@ -51,9 +51,9 @@ class UnpackDataJob implements ShouldQueue
                 ->first();
             if($equipment == null){
                 $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
+                $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
+                    ->first();
             }
-            $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
-                ->first();
             if ($equipment) {
                 $client = $equipment->clients()->first();
                 if ($client) {
@@ -161,11 +161,11 @@ class UnpackDataJob implements ShouldQueue
                     if ($client) {
                         //if (!$client->stopUnpackClient()->exists()) {
                         $this->item->status = MicrocontrollerData::SUCCESS_UNPACK;
-                        $this->item->save();
+                        $this->item->updateQuietly();
                         //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
                     } else {
-                        $this->item->forceDelete();
+                        $this->item->delete();
                     }
                 } else {
                     $this->item->forceDelete();

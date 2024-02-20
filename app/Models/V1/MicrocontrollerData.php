@@ -94,11 +94,13 @@ class MicrocontrollerData extends Model
         $this->source_timestamp = $current_time->format('Y-m-d H:i:s');
         $equipment_serial = str_pad($json['equipment_id'], 6, "0", STR_PAD_LEFT);
         $equipment_type = EquipmentType::whereType('GABINETE')->first();
-        if($equipment_type == null){
+        $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)->first();
+
+        if($equipment == null){
             $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
+            $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)->first();
         }
-        $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
-            ->first();
+
         if ($equipment == null) {
             $this->forceDelete();
             return;
