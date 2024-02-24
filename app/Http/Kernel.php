@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\V1\Api\EventQueueValidatorMiddleware;
+use App\Http\Middleware\V1\Api\TokenValidationMiddleware;
 use App\Http\Middleware\V1\Authenticate;
 use App\Http\Middleware\V1\CheckEnableUser;
 use App\Http\Middleware\V1\CustomPermissionMiddleware;
@@ -92,6 +94,8 @@ class Kernel extends HttpKernel
         'permission' => PermissionMiddleware::class,
         'custom_permissions' => CustomPermissionMiddleware::class,
         'enable_user' => CheckEnableUser::class,
-        "role_selection" => RoleSelectionMiddleware::class
+        "role_selection" => RoleSelectionMiddleware::class,
+        'event_queue_validation' => EventQueueValidatorMiddleware::class,
+        'token_api_validation' => TokenValidationMiddleware::class,
     ];
 }

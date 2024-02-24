@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Repositories\ConfigurationClient\ConfigClientRepository;
+use App\Http\Repositories\ConfigurationClient\Impl\ConfigClientRepositoryImpl;
 use App\Models\Traits\AuditableTrait;
 use App\Models\V1\Admin;
 use App\Models\V1\BillableItem;
@@ -75,7 +77,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(ConfigClientRepository::class, ConfigClientRepositoryImpl::class);
+
     }
 
     /**
