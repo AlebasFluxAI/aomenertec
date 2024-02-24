@@ -22,6 +22,7 @@ class Client extends Model
     use AvailableChannelTrait;
     use PaginatorTrait;
 
+    public const CLIENT_HEADER = "client_header";
 
     public const MONTHLY_RATE = "monthly";
     public const DAILY_RATE = "daily";
@@ -98,6 +99,24 @@ class Client extends Model
                 return $element["display_name"];
             }
         }
+    }
+
+    public static function getClientFromSerial($serial)
+    {
+        $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+        $equipment = $equipment_type->equipment()->whereSerial($serial)
+            ->first();
+        if ($equipment == null) {
+            //abort(500, "Error searching equipment");
+            return null;
+        }
+        $client = $equipment->clients()->first();
+        if ($client == null) {
+            //abort(500, "Error searching client");
+            return null;
+
+        }
+        return $client;
     }
 
     public static function vaupesClientStratification()

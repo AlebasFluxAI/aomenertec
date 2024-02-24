@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\V1\AuthController;
+use App\Http\Controllers\V1\ConfigurationClient\ConfigurationClientController;
 use App\Http\Controllers\V1\MqttInput\MqttInputController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post("/v1/mqtt_input", MqttInputController::class);
 Route::post("/v1/mqtt_input/real-time", \App\Http\Controllers\V1\MqttInput\MqttRealTimeInputController::class);
+
+
+Route::prefix('v1/config')->middleware(['event_queue_validation', 'token_api_validation'])->group(function () {
+    Route::get("/set-status-coil", [ConfigurationClientController::class, 'setStatusCoilForSerial']);
+    Route::get("/get-status-coil", [ConfigurationClientController::class, 'getStatusCoilForSerial']);
+    Route::get("/get-date", [ConfigurationClientController::class, 'getDateForSerial']);
+    Route::get("/set-date", [ConfigurationClientController::class, 'setDateForSerial']);
+    Route::get("/get-config-sensor", [ConfigurationClientController::class, 'getTypeSensorForSerial']);
+    Route::get("/set-config-sensor", [ConfigurationClientController::class, 'setTypeSensorForSerial']);
+    Route::get("/get-status-sensor", [ConfigurationClientController::class, 'getStatusSensorForSerial']);
+});
+
 
 Route::group([
 
