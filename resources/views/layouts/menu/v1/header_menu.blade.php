@@ -1,11 +1,10 @@
-<section class="top-info">
-    <div class="contenedor-grande ">
+<aside class="left-sidebar">
+    <div class="contenedor-grande sidebar-menu">
         <nav class="navbar navbar-expand-lg navbar-custom " style="justify-content: space-between;padding:0px">
             <div>
                 <a href="{{route("administrar.v1.perfil")}}">
                     <img class="img-fluid imagen-logo"
                          src='{{\App\Http\Resources\V1\Icon::getIcon()}}'
-
                          alt="">
                 </a>
             </div>
@@ -14,7 +13,6 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="fas fa-bars"></span>
             </button>
-
             <div class=" collapse navbar-collapse" id="navbarSupportedContent" style="visibility: inherit !important;">
                 <ul class="navbar-nav mr-auto">
 
@@ -47,5 +45,5 @@
     </div>
 
 
-</section>
+</aside>
 
