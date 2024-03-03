@@ -39,8 +39,13 @@ class SuperAdmin extends Model
                         "submenu" => [
                             [
                                 "title" => "Super administradores",
-                                "route" => "administrar.v1.usuarios.superadmin.listado",
+                                "route" => "",
                                 "submenu" => [
+                                    [
+                                        "title" => "Super administradores",
+                                        "route" => "administrar.v1.usuarios.superadmin.listado",
+                                        "submenu" => []
+                                    ],
                                     [
                                         "title" => "Usuario soporte",
                                         "route" => "administrar.v1.usuarios.soporte.listado",
