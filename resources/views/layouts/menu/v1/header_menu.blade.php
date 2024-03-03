@@ -15,7 +15,8 @@
                 <span class="fas fa-bars"></span>
             </button>
 
-            <div class=" collapse navbar-collapse" id="navbarSupportedContent" style="visibility: inherit !important;">
+            <div class=" collapse navbar-collapse" id="navbarSupportedContent"
+                 style="visibility: inherit !important;">
                 <ul class="navbar-nav mr-auto">
 
                     <li class="nav-item">
@@ -36,12 +37,12 @@
 
                     </li>
                 </ul>
-                <div class="">
-                    @auth
-                        @include("layouts.menu.v1.profile")
+            </div>
+            <div class="">
+                @auth
+                    @include("layouts.menu.v1.profile")
 
-                    @endauth
-                </div>
+                @endauth
             </div>
         </nav>
     </div>

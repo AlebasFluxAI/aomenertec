@@ -1,6 +1,6 @@
 <div class="{{ $class_container??'contenedor-grande' }}">
     <div class="primary-content table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered custom-table">
             <thead style="position: sticky;top: 0;z-index: 2">
             <tr>
                 @if(($table_checkable??false))

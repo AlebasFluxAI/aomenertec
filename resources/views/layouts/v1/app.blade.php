@@ -87,7 +87,7 @@
 
 <div>
     @auth
-        @include("layouts.menu.v1.header_menu")
+        @include("layouts.menu.v2.header_menu")
     @endauth
 
     <section class="top-info">
@@ -100,7 +100,6 @@
         </div>
         <div class="container mt-3">
             <div>
-                @yield('content')
             </div>
         </div>
     </section>
