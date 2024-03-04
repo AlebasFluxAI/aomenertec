@@ -16,9 +16,11 @@
                 </li>
                 <hr id="sidebar-hr">
                 <br>
-                @foreach(\App\Http\Resources\V1\Menu::getMenuV3()["submenu"] as $key=> $menu)
-                    @include("layouts.menu.v2.menu",["menu"=>$menu,"key"=>$key])
-                @endforeach
+                @if(\App\Http\Resources\V1\Menu::getMenuV3())
+                    @foreach(\App\Http\Resources\V1\Menu::getMenuV3()["submenu"] as $key=> $menu)
+                        @include("layouts.menu.v2.menu",["menu"=>$menu,"key"=>$key])
+                    @endforeach
+                @endif
 
             </ul>
 
