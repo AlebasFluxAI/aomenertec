@@ -58,7 +58,7 @@ class SuperAdmin extends Model
                                 "submenu" => []
                             ],
                             ["title" => "Operadores de red",
-                                "route" => "administrar.v1.usuarios.operadores.listado",
+                                "route" => "",
                                 "submenu" => [
                                     [
                                         "title" => "Operadores de red",
@@ -125,7 +125,7 @@ class SuperAdmin extends Model
                     ],
                     [
                         "title" => "PQRS",
-                        "route" => "administrar.v1.peticiones.listado",
+                        "route" => "",
                         "submenu" => [
                             [
                                 "title" => "PQRS",
@@ -139,7 +139,7 @@ class SuperAdmin extends Model
                     ],
                     [
                         "title" => "Ordenes de servicio",
-                        "route" => "administrar.v1.ordenes_de_servicio.listado",
+                        "route" => "",
                         "submenu" => [
                             [
                                 "title" => "Ordenes de servicio",
@@ -153,7 +153,7 @@ class SuperAdmin extends Model
                     ],
                     [
                         "title" => "Facturacion",
-                        "route" => "administrar.v1.facturacion.facturas.listado",
+                        "route" => "",
                         "submenu" => [
                             [
                                 "title" => "Items facturables",
