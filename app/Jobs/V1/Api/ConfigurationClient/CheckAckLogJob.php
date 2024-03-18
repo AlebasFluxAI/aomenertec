@@ -72,7 +72,7 @@ class CheckAckLogJob implements ShouldQueue
                 }
             }, 0);
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use (&$error) {
-                if ($elapsedTime >= 5) {
+                if ($elapsedTime >= 10) {
                     $error = true;
                     try {
                         $eventLog = EventLog::find($this->eventLogHeaderId);

@@ -34,7 +34,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -82,7 +87,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -126,7 +136,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -186,7 +201,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -221,7 +241,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -258,7 +283,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -291,7 +321,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -324,7 +359,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -358,7 +398,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -391,7 +436,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -428,7 +478,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -461,7 +516,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -494,7 +554,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -527,7 +592,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -560,7 +630,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);
@@ -595,7 +670,12 @@ class ConfigurationClientService
                         $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
                             ->where('serial', $value)->first();
                         if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
+                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                                ->where('serial', $value)->first();
+                            if($equipment == null) {
+                                $fail("El medidor electrico con serial " . $value . " no existe");
+                            }
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
                             $user = User::getUserModel($key);

@@ -34,8 +34,6 @@ class SetConfigJob implements ShouldQueue
     {
         $this->rawMessage = $rawMessage;
     }
-
-
     /**
      * Execute the job.
      *
@@ -72,7 +70,7 @@ class SetConfigJob implements ShouldQueue
             $apiKey =ApiKey::first();
             $response = Http::withHeaders([
                 'x-api-key' => $apiKey->api_key,
-            ])->get('http://3.12.98.178/v1/config/set-date', [
+            ])->get('https://aom.enerteclatam.com/api/v1/config/set-date', [
                 'serial' => $json['serial'],
             ]);
         }
@@ -91,22 +89,20 @@ class SetConfigJob implements ShouldQueue
             $apiKey =ApiKey::first();
             $response = Http::withHeaders([
                 'x-api-key' => $apiKey->api_key,
-            ])->post('http://3.12.98.178/v1/clients/client-add', [
+            ])->post('https://aom.enerteclatam.com/api/v1/clients/client-add', [
                 'serial' => $equipment->serial,
             ]);
             return;
         }
 
         if (array_key_exists('job_name', $event)) {
-            $jobInstance = "App\\Jobs\\V1\\ConfigurationClient\\{$event['job_name']}";
+            $jobInstance = "App\\Jobs\\V1\\Api\\ConfigurationClient\\{$event['job_name']}";
             if (class_exists($jobInstance)) {
-                if (class_exists("App\\Jobs\\V1\\ConfigurationClient\\{$event['job_name']}")) {
+                if (class_exists("App\\Jobs\\V1\\Api\\ConfigurationClient\\{$event['job_name']}")) {
                     dispatch(new $jobInstance($json))->onQueue('spot3');
                 }
             }
         }
-
-
         $eventLog = null;
         $eventLogWh = null;
         $apiKey = ApiKey::first();
