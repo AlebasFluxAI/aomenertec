@@ -2,6 +2,7 @@
 
 namespace App\Jobs\V1\Enertec;
 
+use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
@@ -46,23 +47,20 @@ class UnpackDataJob implements ShouldQueue
             $split = substr($decode, (16), (16));
             $bin = hex2bin($split);
             $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-            $equipment_type = EquipmentType::whereType('GABINETE')->first();
-            $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
-                ->first();
-            if($equipment == null){
-                $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
-                $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
-                    ->first();
-            }
-            if ($equipment) {
-                $client = $equipment->clients()->first();
-                if ($client) {
-                    if ($client->stopUnpackClient()->exists()) {
-                        return;
-                    }
-                    $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+            $client = Client::getClientFromSerial($equipment_serial);
+            if ($client) {
+                if ($client->stopUnpackClient()->exists()) {
+                    return;
                 }
+                $last_data = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->first();
+            } else {
+                if ($this->item->clientAlert()->exists()) {
+                    $this->item->clientAlert()->forceDelete();
+                }
+                $this->item->forceDelete();
+                return ;
             }
+
 
             if (strlen($this->item->raw_json) > 20) {
                 if ($last_data) {
@@ -99,15 +97,7 @@ class UnpackDataJob implements ShouldQueue
                                             $json[$data['variable_name']] = $data['default'];
                                         } else {
                                             if ($last_data) {
-                                                if ($data['start'] >= 450) {
-                                                    if ($data['variable_name'] != 'volt_dc') {
-                                                        $json[$data['variable_name']] = $last_raw_json[$data["data_" . 'variable_name']];
-                                                    } else{
-                                                        $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                                    }
-                                                } else {
-                                                    $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-                                                }
+                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
                                             } else {
                                                 $json[$data['variable_name']] = 0;
                                             }
@@ -151,7 +141,9 @@ class UnpackDataJob implements ShouldQueue
                     if ($json['import_wh'] <= 0) {
                         if ($last_data) {
                             if ($last_raw_json['import_wh'] > 0) {
-                                $this->item->updateQuietly();
+                                if ($this->item->clientAlert()->exists()) {
+                                    $this->item->clientAlert()->forceDelete();
+                                }
                                 $this->item->forceDelete();
                                 return;
                             }
@@ -165,39 +157,27 @@ class UnpackDataJob implements ShouldQueue
                         //dispatch(new JsonEdit($this->item->id, true))->onQueue($this->queue);
                         //}
                     } else {
+                        if ($this->item->clientAlert()->exists()) {
+                            $this->item->clientAlert()->forceDelete();
+                        }
                         $this->item->forceDelete();
                     }
                 } else {
+                    if ($this->item->clientAlert()->exists()) {
+                    $this->item->clientAlert()->forceDelete();
+                }
                     $this->item->forceDelete();
                 }
             } else {
+                if ($this->item->clientAlert()->exists()) {
+                    $this->item->clientAlert()->forceDelete();
+                }
                 $this->item->forceDelete();
             }
         } else {
-
-            $raw_json['ph1_varCh_acumm'] = $raw_json['data_ph1_varCh_acumm'] ?? 0;
-            $raw_json['ph2_varCh_acumm'] = $raw_json['data_ph2_varCh_acumm'] ?? 0;
-            $raw_json['ph3_varCh_acumm'] = $raw_json['data_ph3_varCh_acumm'] ?? 0;
-            $raw_json['ph1_varLh_acumm'] = $raw_json['data_ph1_varLh_acumm'] ?? 0;
-            $raw_json['ph2_varLh_acumm'] = $raw_json['data_ph2_varLh_acumm'] ?? 0;
-            $raw_json['ph3_varLh_acumm'] = $raw_json['data_ph3_varLh_acumm'] ?? 0;
-            if ($this->item->manually) {
-                $this->item->interval_real_consumption = 1;
-            }
             $this->item->raw_json = json_encode($raw_json);
             $this->item->status = MicrocontrollerData::SUCCESS_UNPACK;
             $this->item->save();
-            /*$equipment_serial = str_pad($raw_json['equipment_id'], 6, "0", STR_PAD_LEFT);
-            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)->first();
-            if ($equipment) {
-                $client = $equipment->clients()->first();
-                if ($client) {
-                    if (!$client->stopUnpackClient()->exists()) {
-                        $this->item->save();
-                        dispatch(new JsonEdit($this->item, true))->onQueue($this->queue);
-                    }
-                }
-            }*/
         }
     }
 }

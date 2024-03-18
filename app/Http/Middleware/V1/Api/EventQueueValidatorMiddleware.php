@@ -21,8 +21,8 @@ class EventQueueValidatorMiddleware
     {
 
         $event = EventLog::getEvents($request->getRequestUri());
+        $serial = $request->input("serial");
         if ($event) {
-            $serial = $request->input("serial");
             $client = Client::getClientFromSerial($serial);
             if ($client != null) {
                 if ($event != EventLog::EVENT_DATE_RANGE) {

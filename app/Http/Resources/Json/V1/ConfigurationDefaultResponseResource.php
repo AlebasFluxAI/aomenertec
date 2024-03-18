@@ -18,7 +18,7 @@ class ConfigurationDefaultResponseResource extends JsonResource
             "message" => $this->resource['message'],
             "detail" => $this->resource['detail'],
             "serial" => $this->resource['serial'],
-            "transaccion_id" => $this->resource['ack_log_id'],
+            "transaction_id" => $this->resource['transaction_id'],
             "event_id" => $this->resource['event_id'],
         ];
     }

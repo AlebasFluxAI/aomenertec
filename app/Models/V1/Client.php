@@ -107,8 +107,13 @@ class Client extends Model
         $equipment = $equipment_type->equipment()->whereSerial($serial)
             ->first();
         if ($equipment == null) {
-            //abort(500, "Error searching equipment");
-            return null;
+            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
+            $equipment = $equipment_type->equipment()->whereSerial($serial)
+                ->first();
+            if ($equipment == null) {
+                //abort(500, "Error searching equipment");
+                return null;
+            }
         }
         $client = $equipment->clients()->first();
         if ($client == null) {

@@ -24,14 +24,31 @@ Route::post("/v1/mqtt_input", MqttInputController::class);
 Route::post("/v1/mqtt_input/real-time", \App\Http\Controllers\V1\MqttInput\MqttRealTimeInputController::class);
 
 
-Route::prefix('v1/config')->middleware(['event_queue_validation', 'token_api_validation'])->group(function () {
-    Route::get("/set-status-coil", [ConfigurationClientController::class, 'setStatusCoilForSerial']);
-    Route::get("/get-status-coil", [ConfigurationClientController::class, 'getStatusCoilForSerial']);
-    Route::get("/get-date", [ConfigurationClientController::class, 'getDateForSerial']);
-    Route::get("/set-date", [ConfigurationClientController::class, 'setDateForSerial']);
-    Route::get("/get-config-sensor", [ConfigurationClientController::class, 'getTypeSensorForSerial']);
-    Route::get("/set-config-sensor", [ConfigurationClientController::class, 'setTypeSensorForSerial']);
-    Route::get("/get-status-sensor", [ConfigurationClientController::class, 'getStatusSensorForSerial']);
+Route::group(['prefix' => 'v1/config', 'namespace' => 'V1\ConfigurationClient'], function ()  {
+    Route::post("/notification-webhook", "ConfigurationClientController@notificationWebhook");
+});
+
+Route::group(['middleware' => ['token_auth', 'event_queue_validator']], function () {
+    Route::group(['prefix' => 'v1/config', 'namespace' => 'V1\ConfigurationClient'], function ()  {
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_ALERT_LIMITS, "ConfigurationClientController@setAlertLimitsForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_ALERT_TIME, "ConfigurationClientController@setAlertTimeForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_SAMPLING_TIME, "ConfigurationClientController@setSamplingTimeForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_WIFI_CREDENTIALS, "ConfigurationClientController@setWifiCredentialsForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_BROKER_CREDENTIALS, "ConfigurationClientController@setBrokerCredentialsForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_DATE, "ConfigurationClientController@setDateForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_GET_DATE, "ConfigurationClientController@getDateForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_STATUS_COIL, "ConfigurationClientController@setStatusCoilForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_GET_STATUS_COIL, "ConfigurationClientController@getStatusCoilForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_SET_CONFIG_SENSOR, "ConfigurationClientController@setTypeSensorForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_GET_CONFIG_SENSOR, "ConfigurationClientController@getTypeSensorForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_GET_STATUS_SENSOR, "ConfigurationClientController@getStatusSensorForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_GET_STATUS_CONNECTION, "ConfigurationClientController@getStatusConnectionForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_GET_CURRENT_READINGS, "ConfigurationClientController@getCurrentReadingsForSerial");
+        Route::get("/".\App\Models\V1\Api\EventLog::EVENT_ON_OFF_REAL_TIME, "ConfigurationClientController@OnOffRealTimeForSerial");
+        Route::post("/".\App\Models\V1\Api\EventLog::EVENT_OTA_UPDATE, "ConfigurationClientController@otaUpdate");
+    });
+
+
 });
 
 

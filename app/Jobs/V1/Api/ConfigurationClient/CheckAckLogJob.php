@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Jobs\V1\Api;
+namespace App\Jobs\V1\Api\ConfigurationClient;
 
 use App\Models\V1\Api\AckLog;
-use App\Models\V1\Api\ApiKey;
 use App\Models\V1\Api\EventLog;
+use App\Models\V1\Api\ApiKey;
 use App\ModulesAux\MQTT;
 use Crc16\Crc16;
+use Illuminate\Support\Facades\Http;
+use PhpMqtt\Client\Exceptions\MqttClientException;
+use PhpMqtt\Client\MqttClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
-use PhpMqtt\Client\Exceptions\MqttClientException;
-use PhpMqtt\Client\MqttClient;
-
 class CheckAckLogJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
 
     /**
      * Create a new job instance.
@@ -47,7 +47,7 @@ class CheckAckLogJob implements ShouldQueue
     {
         try {
             $mqtt = MQTT::connection("default", $this->mqttNameConnection);
-            $mqtt->subscribe('v2/mc/ack', function (string $topic, string $message) use ($mqtt) {
+            $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) use ($mqtt) {
                 $data_frame_events = config('data-frame.data_frame_events');
                 $crc_message = substr($message, -2);
                 $data_crc = substr($message, 0, -2);
@@ -124,7 +124,7 @@ class CheckAckLogJob implements ShouldQueue
             "ack_log_id" => $eventLog ? $eventLog->ack_log_id : null
         ]);
         foreach ($data_webhook_events as $event) {
-            if ($event['event_id'] == ($this->eventId + 1)) {
+            if ($event['event_id'] == ($this->eventId == 34?41:($this->eventId + 1))) {
                 foreach ($event['json'] as $datum) {
                     if ($datum['value'] != null) {
                         if ($datum['variable_name'] == 'success') {
@@ -165,8 +165,7 @@ class CheckAckLogJob implements ShouldQueue
             ];
             try {
                 $response = Http::withHeaders([
-                    'security_header_key' => $apiKey->security_header_key,
-                    'security_header_value' => $apiKey->security_header_value,
+                    $apiKey->security_header_value => $apiKey->security_header_key,
                 ])->post($webhook, $jsonResponse);
                 $jsonData = $response->json();
                 $eventLogWh->status = EventLog::STATUS_SUCCESSFUL;
@@ -175,6 +174,8 @@ class CheckAckLogJob implements ShouldQueue
                 $ackLog = $eventLogWh->ackLog;
                 $ackLog->status = AckLog::STATUS_SUCCESS;
                 $ackLog->save();
+                dump($jsonData);
+
             } catch (\Throwable $e) {
                 $statusCode = $e->getCode();
                 $errorMessage = $e->getMessage();

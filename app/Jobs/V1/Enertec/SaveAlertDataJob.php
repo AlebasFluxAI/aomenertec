@@ -2,6 +2,10 @@
 
 namespace App\Jobs\V1\Enertec;
 
+use App\Models\V1\Api\AckLog;
+use App\Models\V1\Api\ApiKey;
+use App\Models\V1\Api\EventLog;
+use App\Models\V1\Client;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
@@ -11,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 
 class SaveAlertDataJob implements ShouldQueue
 {
@@ -56,12 +61,8 @@ class SaveAlertDataJob implements ShouldQueue
             $binary_flags = sprintf("%064b", ($flag));
 
             $equipment_serial = str_pad($this->calculateValueAlert(2, $decode), 6, "0", STR_PAD_LEFT);
-            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                ->first();
-            if ($equipment == null) {
-                return;
-            }
-            $client = $equipment->clients()->first();
+            $client = Client::getClientFromSerial($equipment_serial);
+
             if ($client == null) {
                 return;
             }
@@ -119,15 +120,162 @@ class SaveAlertDataJob implements ShouldQueue
                         }
                         if ($alert) {
                             if ($type != "") {
-                                $microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
-                                ClientAlert::create([
+                                //$microcontroller_data = MicrocontrollerData::whereRawJson($this->raw_json)->first();
+                                $alertGenerated = ClientAlert::create([
                                     'client_id' => $client->id,
-                                    'microcontroller_data_id' => ($microcontroller_data) ? $microcontroller_data->id : null,
+                                    'microcontroller_data_id' => null,
                                     'client_alert_configuration_id' => $alert->id,
                                     'value' => $value,
                                     'type' => $type,
                                     'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s')
                                 ]);
+                                $json = [
+                                    "serial" => $equipment_serial,
+                                    "timestamp" => $this->source_timestamp->format('Y-m-d H:i:s'),
+                                    "variable_name" => $alertGenerated->clientAlertConfiguration->getVariableName(),
+                                    "value" => $value,
+                                    "max_value" => $alert->max_alert,
+                                    "min_value" => $alert->min_alert
+                                ];
+                                $ackLog = AckLog::create(["serial" => $equipment_serial]);
+                                $eventLog = EventLog::create([
+                                    "name" => EventLog::EVENT_ALERT_NOTIFICATION . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
+                                    "event" => EventLog::EVENT_ALERT_NOTIFICATION,
+                                    "client_id" => $client->id,
+                                    "request_endpoint" => null,
+                                    "request_json" => null,
+                                    "response_json" => json_encode($json),
+                                    "webhook" => null,
+                                    "serial" => $equipment_serial,
+                                    "request_type" => EventLog::MAIN_SERVER_MC_REQUEST,
+                                    "status" => EventLog::STATUS_SUCCESSFUL,
+                                    "ack_log_id" => $ackLog->id
+                                ]);
+                                $apiKey = ApiKey::first();
+                                $webhook = $apiKey->end_point_notification;
+                                $eventLogWh = EventLog::create([
+                                    "name" => $eventLog->event . "_" . EventLog::MAIN_SERVER_CLIENT_RESPONSE,
+                                    "event" => $eventLog->event,
+                                    "client_id" => $client->id,
+                                    "request_endpoint" => null,
+                                    "request_json" => null,
+                                    "response_json" => null,
+                                    "webhook" => $webhook,
+                                    "serial" => $equipment_serial,
+                                    "request_type" => EventLog::MAIN_SERVER_CLIENT_RESPONSE,
+                                    "status" => EventLog::STATUS_CREATED,
+                                    "ack_log_id" => $eventLog ? $eventLog->ack_log_id : null
+                                ]);
+                                $jsonMessage = [
+                                    ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 24,                                                               'parameter_name' => null,           'object' => []],
+                                    ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Alerta de variable fuera de rango', 'parameter_name' => null,           'object' => []],
+                                    ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                               'parameter_name' => null,           'object' => []],
+                                    ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                            'parameter_name' => 'serial',       'object' => []],
+                                    ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                            'parameter_name' => null,           'object' => []],
+                                    ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                            'parameter_name' => null, 'object' => []],
+                                    ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                            'parameter_name' => null,           'object' => [
+                                        ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'number'],
+                                        ['variable_name'=> 'variable_name',  'parameter_name' => 'variable_name', 'format' => 'string'],
+                                        ['variable_name'=> 'value',  'parameter_name' => 'value', 'format' => 'number'],
+                                        ['variable_name'=> 'max_value',  'parameter_name' => 'max_value', 'format' => 'number'],
+                                        ['variable_name'=> 'min_value',  'parameter_name' => 'min_value', 'format' => 'number'],
+                                    ]
+                                    ],
+                                ];
+                                foreach ($jsonMessage as $datum) {
+                                    if ($datum['value'] != null) {
+                                        $jsonResponse[$datum['variable_name']] = $datum['value'];
+                                    } elseif ($datum['parameter_name'] != null) {
+                                        $jsonResponse[$datum['variable_name']] = array_key_exists($datum['parameter_name'], $json) ? $json[$datum['parameter_name']] : null;
+                                    } else {
+                                        if ($datum['variable_name'] == 'id_transaction') {
+                                            $jsonResponse[$datum['variable_name']] = $eventLogWh ? $eventLogWh->ackLog->id : null;
+                                        } elseif ($datum['variable_name'] == 'id_event') {
+                                            $jsonResponse[$datum['variable_name']] = $eventLogWh ? $eventLogWh->id : null;
+                                        } else {
+                                            foreach ($datum['object'] as $property) {
+                                                if ($property['format'] == 'date') {
+                                                    if (array_key_exists($property['parameter_name'], $json)) {
+                                                        $date = Carbon::now();
+                                                        $date->setTimestamp($json[$property['parameter_name']]);
+
+                                                        $object[$property['variable_name']] = $date->format('Y-m-d H:i:s');
+                                                    } else {
+                                                        $object[$property['variable_name']] = null;
+                                                    }
+                                                } else {
+                                                    $object[$property['variable_name']] = array_key_exists($property['parameter_name'], $json) ? $json[$property['parameter_name']] : null;
+                                                }
+                                            }
+                                            $jsonResponse[$datum['variable_name']] = $object;
+                                        }
+                                    }
+                                }
+                                if ($jsonResponse != null) {
+                                    if ($eventLogWh) {
+                                        $eventLogWh->request_json = json_encode($jsonResponse);
+                                        $eventLogWh->save();
+                                    }
+                                    $requestDetails = [
+                                        'url' => $webhook,
+                                        'method' => 'POST',
+                                        // 'headers' => $e->request->headers()->all(),
+                                        'body' => $jsonResponse,
+                                    ];
+
+                                    try {
+
+                                        $response = Http::withHeaders([
+                                            $apiKey->security_header_value => $apiKey->security_header_key,
+                                        ])->post($webhook, $jsonResponse);
+                                        //$response = Http::post($webhook, $jsonResponse);
+
+                                        $jsonData = $response->json();
+                                        if ($eventLogWh) {
+                                            $eventLogWh->status = EventLog::STATUS_SUCCESSFUL;
+                                            $eventLogWh->response_json = json_encode($jsonData);
+                                            $eventLogWh->save();
+                                            $ackLog = $eventLogWh->ackLog;
+                                            $ackLog->status = AckLog::STATUS_SUCCESS;
+                                            $ackLog->save();
+                                        }
+
+                                        dd($jsonData);
+                                    } catch (\Throwable $e) {
+                                        $statusCode = $e->getCode();
+                                        $errorMessage = $e->getMessage();
+                                        if (property_exists($e, 'response') && $e->response) {
+                                            $responseBody = $e->response->body(); // Obtener el cuerpo de la respuesta
+                                        } else {
+                                            $responseBody = null;
+                                        }
+                                        $errorInfo = [
+                                            'status_code' => $statusCode,
+                                            'error_message' => $errorMessage,
+                                            'response_body' => $responseBody,
+                                            'request_details' => $requestDetails
+                                        ];
+                                        if ($eventLogWh) {
+                                            $eventLogWh->status = EventLog::STATUS_ERROR;
+                                            $eventLogWh->response_json = json_encode($errorInfo);
+                                            $eventLogWh->save();
+                                            $ackLog = $eventLog->ackLog;
+                                            $ackLog->status = AckLog::STATUS_EXPIRED;
+                                            $ackLog->save();
+                                        }
+                                        error_log($e->getMessage());
+                                    }
+                                } else {
+                                    if ($eventLog != null) {
+                                        $ackLog = $eventLog->ackLog;
+                                        $ackLog->status = AckLog::STATUS_SUCCESS;
+                                        $ackLog->save();
+                                    }
+                                    if ($eventLogWh != null) {
+                                        $eventLogWh->delete();
+                                    }
+                                }
+
                             }
                         }
                     }

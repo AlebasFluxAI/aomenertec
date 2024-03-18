@@ -6,7 +6,9 @@ use App\Models\V1\AuxData;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
+use App\ModulesAux\MQTT;
 use Carbon\Carbon;
+use Crc16\Crc16;
 
 class MailTestController
 {
@@ -29,9 +31,82 @@ class MailTestController
         }
     }
 
+    public function eventTest(){
+        $frame = [7 => ['coil_id', 'status']];
+        $coil_id = pack('C', 1);
+        $status = pack('C',  0);
+        $event_id = pack('C', 7);
+        $message = $event_id.$coil_id.$status;
+        $crc = Crc16::XMODEM($message);
+        $crc_pack = pack('v', $crc);
+        $message = $message.$crc_pack;
+        //////// mensaje con string
+        //$message = $event_id.$f.$coil_id.$f.$status.pack('C', strlen($string)).$string;
+
+
+        $string = "holaaaaaaaaaaaxxxx";
+        $q = pack('C', ord('Q'));
+        $l = pack('C', ord('l'));
+        $f = pack('C', ord('f'));
+        $did = '920601';
+//       $did = '888893';
+        $topic = "v1/mc/config/" . $did;
+        $mqtt = MQTT::connection('default', 'default');
+        $mqtt->publish($topic, $message);
+        $mqtt->disconnect();
+//        $crc_unpack = unpack('v', substr($message,-2))[1];
+//        $data_crc = substr($message, 0, -2);
+//        $did = substr($message, (1), (9));
+//        $bin = hex2bin($did);
+//        $did_unpack = unpack('f', $bin)[1];
+//        dd($crc_unpack, $data_crc, $message);
+        dd($message, $crc, bin2hex($message), $topic);
+
+
+           ///////////////////////////////////////////////////
+//           $crc_unpack = unpack('f', substr($message,-4))[1];
+//           $data_crc = substr($message, 0, -4);
+//           $event = unpack('C', $message[0])[1];
+//           if (Crc16::XMODEM($data_crc) == $crc_unpack){
+//               $i=1;
+//               $j=0;
+//               $json = [];
+//               $event_keys = $frame[$event];
+//               while (true){
+//                   $format = $data_crc[$i];
+//                   $i++;
+//                   if ($format == 'f'){
+//                       $size = 4;
+//                       $datum = unpack('f', substr($data_crc, $i, 4))[1];
+//                   } elseif ($format == 'l'){
+//                       $size = 8;
+//                       $datum = unpack('l', substr($data_crc, $i, 8))[1];
+//                   } elseif ($format == 'Q'){
+//                       $size = 16;
+//                       $datum = unpack('Q', substr($data_crc, $i, 16))[1];
+//                   } else{
+//                       $size = unpack('C', $format)[1];
+//                       $datum = substr($data_crc, $i, $size);
+//                   }
+//                   $i = $i + $size;
+//                   $json[$event_keys[$j]] = $datum;
+//                   $j++;
+//                   if ($i >= strlen($data_crc)){
+//                       break;
+//                   }
+//               }
+//               $json['msj_init']= $message;
+//               $json['event_id']= $event;
+//               $json['data_crc']= $data_crc;
+//               $json['data_crc']=$crc;
+//               dd($json);
+
+           //}
+    }
+
     public function whatsappNotification()
     {
-        $item = 'TmG8AAAAAAA6kA0AAAAAAAAAiEEAAJxBAAAAABAAAKB7mTlldY/lQgAAAAAAAAAALSyLPwAAAAAAAAAA8/zmQgAAAAAAAAAAUlbnQgAAAAAAAAAAAAAAAAAAAAAAAAAAq9t/PwAAAAAAAAAAAAAAAGOG7z8AAAAAAAAAAAAAAAAAAAAAAAAAAArQb0IvvQlDppvEO6rxm0GF64E/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMbXsjwAAAAAAAAAAAAAAAAAAAAA';
+        $item = 'TmG8AAAAAAB0Qb4NAAAAAAAAAAAAAAAABAAAAAAAAADPyNNlLCL1QgAAAAAAAAAAdL6JPgAAAAAAAAAARxTrQQAAAAAAAAAAzND2QQAAAAAAAAAAXE8WwQAAAAAAAAAA0Y1zPwAAAAAAAAAAAAAAAKWGj8EAAAAAAAAAAAAAAAAAAAAAAAAAAAIYcEICK4tAbxIDOwAAAAD8qdE/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYrmiPgAAAAAAAAAAAAAAAA==';
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($item, true);
@@ -42,12 +117,18 @@ class MailTestController
             $split = substr($decode, (16), (16));
             $bin = hex2bin($split);
             $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-
-            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+            $equipment_type = EquipmentType::whereType('GABINETE')->first();
+            $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)
                 ->first();
+            if($equipment == null){
+                $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
+                $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)->first();
+            }
+
             if ($equipment) {
                 $client = $equipment->clients()->first();
                 if ($client) {
+                    dd($client);
                     if ($client->stopUnpackClient()->exists()) {
                         return;
                     }
@@ -68,8 +149,12 @@ class MailTestController
                             $bin = hex2bin($split);
                             if (strlen($bin) == ($data['lenght'] / 2)) {
                                 if ($data['start'] >= 450) {
-                                    $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                    $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    if ($data['variable_name'] == 'volt_dc'){
+                                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                    } else{
+                                        $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                        $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                                    }
                                 } else {
                                     if ($data['variable_name'] == "flags") {
                                         $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
@@ -109,25 +194,28 @@ class MailTestController
                                     $json[$data['variable_name']] = null;
                                 }
 
-                                if ($data['variable_name'] == "ph3_varLh_acumm") {
+                                if ($data['variable_name'] == "volt_dc") {
                                     break;
                                 }
                             } else {
-//                                if ($data['start'] >= 72) {
-//                                    if (!$data['default']) {
-//                                        $json[$data['variable_name']] = $data['default'];
-//                                    } else {
-//                                        if ($last_data) {
-//                                            if (isset($last_raw_json[$data['variable_name']])) {
-//                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
-//                                            } else {
-//                                                $json[$data['variable_name']] = 0;
-//                                            }
-//                                        } else {
-//                                            $json[$data['variable_name']] = 0;
-//                                        }
-//                                    }
-//                                }
+                                if ($data['start'] >= 72) {
+                                    if (!$data['default']) {
+                                        $json[$data['variable_name']] = $data['default'];
+                                    } else {
+                                        if ($last_data) {
+                                            if (isset($last_raw_json[$data['variable_name']])) {
+                                                $json[$data['variable_name']] = $last_raw_json[$data['variable_name']];
+                                            } else {
+                                                $json[$data['variable_name']] = 0;
+                                            }
+                                        } else {
+                                            $json[$data['variable_name']] = 0;
+                                        }
+                                    }
+                                }
+                                if ($data['variable_name'] == "volt_dc") {
+                                    break;
+                                }
                             }
                         } catch (Exception $e) {
                             echo 'Excepción capturada: ', $e->getMessage(), "\n";
@@ -135,7 +223,7 @@ class MailTestController
                     }
                     $item = $json;
                     $json['date'] = $date_aux->format('Y-m-d H:i:s');
-                    $json['client_id'] = $client->id;
+                    //$json['client_id'] = $client->id;
                     dd($json);
 
 //                    if ($json['import_wh'] <= 0) {
@@ -169,55 +257,7 @@ class MailTestController
     //$this->alertVariableEvent();
 
 
-    /*$frame = [10=> ['ssid', 'password', 'variable']];
-    $raw_json = 'Fc1bBwAAAACguw0AAAAAAAAAiEEAAJxBAEgAAAAAAFAijI9j5WH1Qp9r90K/MPVCJZKOPgFuDD51y6E+++1rQX86JEGhp/NBREgJQvElh0FWQxtCuEL4waoLVcHAoMHBAY7YPpzXIT+eWEk/FUghPwVXgsKZW03C/PAawloTTcLGfl5CxK2JwpfYb0Jyg5VFAAAAALDCHURB6L9EBW9VQ59TVUMqbVRDAAAAAAAAAAAAAAAAv7riRHOOSURJHE1FAAAAAAAAAAAAAAAAINgBRX5Or0QKD6NE5TCVQ5WjKkNgBSJDYY+4PQAAAAC+MR49AAAAABr5kD0AAAAA';
-    $ssid = "holaaaaaaaaaaaxxxx";
-    $pass = "123456789015";
-    $float = pack('f', 110.26);
-    $event_id = pack('C', 10);
-    $q = pack('C', ord('Q'));
-    $l = pack('C', ord('l'));
-    $f = pack('C', ord('f'));
-    $message = $event_id.pack('C', strlen($ssid)).$ssid.pack('C', strlen($pass)).$pass.$f.$float;
-    $crc = Crc16::XMODEM($message);
-    $crc_pack = pack('f', $crc);
-    $message = $message.$crc_pack;
-    ///////////////////////////////////////////////////
-    $crc_unpack = unpack('f', substr($message,-4))[1];
-    $data_crc = substr($message, 0, -4);
-    $event = unpack('C', $message[0])[1];
-    if (Crc16::XMODEM($data_crc) == $crc_unpack){
-        $i=1;
-        $j=0;
-        $json = [];
-        $event_keys = $frame[$event];
-        while (true){
-            $format = $data_crc[$i];
-            $i++;
-            if ($format == 'f'){
-                $size = 4;
-                $datum = unpack('f', substr($data_crc, $i, 4))[1];
-            } elseif ($format == 'l'){
-                $size = 8;
-                $datum = unpack('l', substr($data_crc, $i, 8))[1];
-            } elseif ($format == 'Q'){
-                $size = 16;
-                $datum = unpack('Q', substr($data_crc, $i, 16))[1];
-            } else{
-                $size = unpack('C', $format)[1];
-                $datum = substr($data_crc, $i, $size);
-            }
-            $i = $i + $size;
-            $json[$event_keys[$j]] = $datum;
-            $j++;
-            if ($i >= strlen($data_crc)){
-                break;
-            }
-        }
-        $json['msj_init']= $message;
-        dd($json);
 
-    }*/
     //}
     private function alertVariableEvent()
     {

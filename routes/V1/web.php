@@ -88,7 +88,7 @@ Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 Route::get("mail/test/user_created", (MailTestController::class) . "@userCreatedNotification");
 Route::get("mail/test/whatsapp_created", (MailTestController::class) . "@whatsappNotification");
-Route::get("rorro", (MailTestController::class) . "@imageTest");
+Route::get("test_event", (MailTestController::class) . "@eventTest");
 
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], function () {
 
