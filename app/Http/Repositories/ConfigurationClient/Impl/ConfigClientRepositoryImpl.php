@@ -6,6 +6,7 @@ use App\Http\Repositories\ConfigurationClient\ConfigClientRepository;
 use App\Jobs\V1\Api\CheckAckLogJob;
 use App\Models\V1\Api\AckLog;
 use App\Models\V1\Api\EventLog;
+use App\Models\V1\Client;
 use App\ModulesAux\MQTT;
 use Carbon\Carbon;
 use Crc16\Crc16;
@@ -14,12 +15,12 @@ use PhpMqtt\Client\Exceptions\MqttClientException;
 
 class ConfigClientRepositoryImpl implements ConfigClientRepository
 {
-    public function setStatusCoilForSerial()
+    public function runService()
     {
         $data_frame_events = config('data-frame.data_frame_events');
         foreach ($data_frame_events as $event) {
-            if (array_key_exists('function_name', $event)) {
-                if ($event['function_name'] == __FUNCTION__) {
+            if(array_key_exists('uri_event', $event)) {
+                if($event['uri_event'] == Request::header(\App\Models\V1\EventLog::API_EVENT_HEADER)){
                     $serial = Request::query('serial');
                     $data = $this->packMessage($event);
                     $message = $data['message'];
@@ -34,17 +35,15 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 }
             }
         }
-
     }
 
     private function packMessage($event)
     {
         $serial = Request::query('serial');
-        $ackLog = AckLog::find($this->getAckLogId());
+        $ackLog = \App\Models\AckLog::find($this->getAckLogId());
         $request = Request::instance();
         // Crear evento server a mc
         $eventLog = EventLog::createMcEvent($ackLog, $request, EventLog::MAIN_SERVER_MC_REQUEST, null, null);
-        $data_frame_events = config('data-frame.data_frame_events');
         $message = '';
         $json_request = [];
 
@@ -61,10 +60,60 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 $crc = Crc16::XMODEM($message);
                 $value = pack($datum['type'], $crc);
                 $message = $message . $value;
+                if ($event['event_id'] == 42){
+                    $archivoBin = Request::file('file_bin');
+                    $nombreArchivo = $archivoBin->getClientOriginalName();
+                    $rutaTemporal = $archivoBin->storeAs('temp-files', $nombreArchivo);
+                    $json_request['path_file'] = $rutaTemporal;
+                }
             } elseif ($datum['variable_name'] == 'salida_id') {
                 $value = pack($datum['type'], 1);
                 $message = $message . $value;
                 $json_request[$datum['variable_name']] = 1;
+            } elseif ($datum['variable_name'] == 'time_sampling_choice') {
+                $parameter_value = Request::query($datum['parameter_name']);
+                if($parameter_value == 'hourly'){
+                    $value = pack($datum['type'], 1);
+                    $json_request[$datum['variable_name']] = 1;
+                } elseif ($parameter_value == 'hourly') {
+                    $value = pack($datum['type'], 2);
+                    $json_request[$datum['variable_name']] = 2;
+                } else {
+                    $value = pack($datum['type'], 3);
+                    $json_request[$datum['variable_name']] = 3;
+                }
+                $message = $message . $value;
+            } elseif ($datum['variable_name'] == 'frame_alerts'){
+                $alert_config_frame = config('data-frame.alert_config_frame');
+                $client = Client::getClientFromSerial($serial);
+                $equipment = $client->equipments()->whereEquipmentTypeId(2)->first();;
+                $binary_data = [];
+                $related_parameter = Request::json();
+                foreach ($alert_config_frame as $item) {
+                    if ($item['variable_name'] == 'network_operator_id') {
+                        $data = $client->networkOperator->identification;
+                    } elseif ($item['variable_name'] == 'equipment_id') {
+                        $data = $equipment->serial;
+                    } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                        $data = $client->networkOperator->identification;
+                    } elseif ($item['variable_name'] == 'equipment_new_id') {
+                        $data = $equipment->serial;
+                    } else {
+                        $data = $related_parameter->get($item['variable_name']);
+                    }
+                    array_push($binary_data, pack($item['type'], $data));
+                }
+                $frame = implode($binary_data);
+                $message = $message . $frame;
+                $json_request[$datum['variable_name']] = $related_parameter->all();
+            } elseif ($datum['variable_name'] == 'size_file'){
+                $archivoBin = Request::file('file_bin');
+                if ($archivoBin !== null) {
+                    $sizeFile = $archivoBin->getSize();
+                    $value = pack($datum['type'], $sizeFile);
+                    $json_request[$datum['variable_name']] = $sizeFile;
+                    $message = $message . $value;
+                }
             } else {
                 if ($datum['format'] == 'lenght') {
                     $nextIndex = $index + 1;
@@ -72,21 +121,27 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                     if ($nextDatum != null) {
                         $related_parameter = Request::query($nextDatum['parameter_name']);
                         $init_value = strlen($related_parameter);
+                        $value = pack($datum['type'], $init_value);
+                        $json_request[$datum['variable_name']] = $init_value;
                     }
+                } elseif ($datum['format'] == 'string') {
+                    $value = Request::query($datum['parameter_name']);
+                    $json_request[$datum['variable_name']] = $value;
                 } elseif ($datum['format'] == 'unix') {
                     // Artisan::call('ntpdate', ['server' => 'pool.ntp.org']);
                     $now = Carbon::now();
                     $init_value = $now->timestamp;
                     $json_request[$datum['variable_name']] = $init_value;
-
+                    $value = pack($datum['type'], $init_value);
                 } else {
                     $init_value = Request::query($datum['parameter_name']);
                     $json_request[$datum['variable_name']] = $init_value;
+                    $value = pack($datum['type'], $init_value);
                 }
-                $value = pack($datum['type'], $init_value);
                 $message = $message . $value;
             }
         }
+
         //// actualizar evento server a mc con json_request
         $eventLog->request_json = json_encode($json_request);
         $eventLog->save();
@@ -96,6 +151,11 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
     public function getAckLogId()
     {
         return json_decode(Request::header(AckLog::ACK_LOG_HEADER), true)["id"];
+    }
+
+    public function getEventLogId()
+    {
+        return json_decode(Request::header(EventLog::EVENT_LOG_HEADER), true)["id"];
     }
 
     public function getReturnMessage($serial, $message, $eventLogMc, $event_id)
@@ -117,18 +177,17 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
             $eventLog->ackLog->update([
                 "status" => AckLog::STATUS_EXPIRED
             ]);
-            return $this->makeMessageResponse(serial: $serial, message: "Falló el envio del mensaje", detail: "Intente nuevamente, si persiste comuniquese con soporte");
+            return $this->makeMessageResponse(serial: $serial, message: "Falló el envio del mensaje", detail: $errorInfo);
         }
     }
 
     private function sendMqttMessage($serial, $message, $eventLog, $event_id)
     {
         $topic = "v1/mc/config/" . $serial;
-        $mqtt = MQTT::connection("default", $this->getMqttConnectionName());
+        $mqtt = \App\Provider\MqttFacade::connection("default", $this->getMqttConnectionName());
         $mqtt->publish($topic, $message);
         $mqtt->disconnect();
-        dispatch(new CheckAckLogJob($this->getMqttConnectionName(), $eventLog->id, $event_id, $serial))->onQueue('spot2');
-
+        dispatch(new \App\Jobs\V1\ConfigurationClient\CheckAckLogJob($this->getMqttConnectionName(), $eventLog->id, $event_id, $serial))->onQueue('spot2');
 
     }
 
@@ -144,151 +203,8 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
             "message" => $message,
             "detail" => $detail,
             "event_id" => $this->getEventLogId(),
-            "ack_log_id" => $this->getAckLogId(),
+            "transaction_id" => $this->getAckLogId(),
         ];
-    }
-
-    public function getEventLogId()
-    {
-        return json_decode(Request::header(EventLog::EVENT_LOG_HEADER), true)["id"];
-    }
-
-    public function getStatusCoilForSerial()
-    {
-        $data_frame_events = config('data-frame.data_frame_events');
-        foreach ($data_frame_events as $event) {
-            if (array_key_exists('function_name', $event)) {
-                if ($event['function_name'] == __FUNCTION__) {
-                    $serial = Request::query('serial');
-                    $data = $this->packMessage($event);
-                    $message = $data['message'];
-                    $response = $this->getReturnMessage($serial, $message, $data['eventLog'], $event['event_id']);
-                    // se completa primer evento de la transaccion
-                    $eventLog = EventLog::find($this->getEventLogId());
-                    $eventLog->update([
-                        "status" => EventLog::STATUS_SUCCESSFUL,
-                        "response_json" => json_encode($response)
-                    ]);
-                    return $response;
-                }
-            }
-        }
-
-    }
-
-    public function setDateForSerial()
-    {
-        $data_frame_events = config('data-frame.data_frame_events');
-        foreach ($data_frame_events as $event) {
-            if (array_key_exists('function_name', $event)) {
-                if ($event['function_name'] == __FUNCTION__) {
-                    $serial = Request::query('serial');
-                    $data = $this->packMessage($event);
-                    $message = $data['message'];
-                    $response = $this->getReturnMessage($serial, $message, $data['eventLog'], $event['event_id']);
-                    // se completa primer evento de la transaccion
-                    $eventLog = EventLog::find($this->getEventLogId());
-                    $eventLog->update([
-                        "status" => EventLog::STATUS_SUCCESSFUL,
-                        "response_json" => json_encode($response)
-                    ]);
-                    return $response;
-                }
-            }
-        }
-
-    }
-
-    public function getDateForSerial()
-    {
-        $data_frame_events = config('data-frame.data_frame_events');
-        foreach ($data_frame_events as $event) {
-            if (array_key_exists('function_name', $event)) {
-                if ($event['function_name'] == __FUNCTION__) {
-                    $serial = Request::query('serial');
-                    $data = $this->packMessage($event);
-                    $message = $data['message'];
-                    $response = $this->getReturnMessage($serial, $message, $data['eventLog'], $event['event_id']);
-                    // se completa primer evento de la transaccion
-                    $eventLog = EventLog::find($this->getEventLogId());
-                    $eventLog->update([
-                        "status" => EventLog::STATUS_SUCCESSFUL,
-                        "response_json" => json_encode($response)
-                    ]);
-                    return $response;
-                }
-            }
-        }
-
-    }
-
-    public function setTypeSensorForSerial()
-    {
-        $data_frame_events = config('data-frame.data_frame_events');
-        foreach ($data_frame_events as $event) {
-            if (array_key_exists('function_name', $event)) {
-                if ($event['function_name'] == __FUNCTION__) {
-                    $serial = Request::query('serial');
-                    $data = $this->packMessage($event);
-                    $message = $data['message'];
-                    $response = $this->getReturnMessage($serial, $message, $data['eventLog'], $event['event_id']);
-                    // se completa primer evento de la transaccion
-                    $eventLog = EventLog::find($this->getEventLogId());
-                    $eventLog->update([
-                        "status" => EventLog::STATUS_SUCCESSFUL,
-                        "response_json" => json_encode($response)
-                    ]);
-                    return $response;
-                }
-            }
-        }
-
-    }
-
-    public function getTypeSensorForSerial()
-    {
-        $data_frame_events = config('data-frame.data_frame_events');
-        foreach ($data_frame_events as $event) {
-            if (array_key_exists('function_name', $event)) {
-                if ($event['function_name'] == __FUNCTION__) {
-                    $serial = Request::query('serial');
-                    $data = $this->packMessage($event);
-                    $message = $data['message'];
-                    $response = $this->getReturnMessage($serial, $message, $data['eventLog'], $event['event_id']);
-                    // se completa primer evento de la transaccion
-                    $eventLog = EventLog::find($this->getEventLogId());
-                    $eventLog->update([
-                        "status" => EventLog::STATUS_SUCCESSFUL,
-                        "response_json" => json_encode($response)
-                    ]);
-                    return $response;
-                }
-            }
-        }
-
-    }
-
-    public function getStatusSensorForSerial()
-    {
-        $data_frame_events = config('data-frame.data_frame_events');
-        foreach ($data_frame_events as $event) {
-            if (array_key_exists('function_name', $event)) {
-                if ($event['function_name'] == __FUNCTION__) {
-                    $serial = Request::query('serial');
-                    $data = $this->packMessage($event);
-                    $message = $data['message'];
-                    $response = $this->getReturnMessage($serial, $message, $data['eventLog'], $event['event_id']);
-                    // se completa primer evento de la transaccion
-                    $eventLog = EventLog::find($this->getEventLogId());
-                    $eventLog->update([
-                        "status" => EventLog::STATUS_SUCCESSFUL,
-                        "response_json" => json_encode($response)
-                    ]);
-                    return $response;
-                }
-            }
-        }
-
     }
 
     private function decodeMqttConnectionName($connectionName)

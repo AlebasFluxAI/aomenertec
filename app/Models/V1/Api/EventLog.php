@@ -2,6 +2,7 @@
 
 namespace App\Models\V1\Api;
 
+use App\Models\V1\Api\AckLog;
 use App\Models\Traits\FilterTrait;
 use App\Models\V1\Client;
 use Illuminate\Database\Eloquent\Model;
@@ -19,15 +20,37 @@ class EventLog extends Model
     const MAIN_SERVER_MC_REQUEST = "main_server_mc_request";
     const MAIN_SERVER_CLIENT_RESPONSE = "main_server_client_response";
 
-    const EVENT_DATE_RANGE = "date-range";
-    const EVENT_SET_STATUS_COIL = "set-status-coil";
-    const EVENT_GET_STATUS_COIL = "get-status-coil";
+
+    const EVENT_SET_ALERT_LIMITS = "set-alert-limits";
+    const EVENT_SET_ALERT_TIME = "set-alert-time";
+    const EVENT_SET_SAMPLING_TIME = "set-sampling-time";
+    const EVENT_SET_WIFI_CREDENTIALS = "set-wifi-credentials";
+    const EVENT_SET_BROKER_CREDENTIALS = "set-broker-credentials";
     const EVENT_SET_DATE = "set-date";
     const EVENT_GET_DATE = "get-date";
-    const EVENT_GET_CONFIG_SENSOR = "get-config-sensor";
+    const EVENT_SET_STATUS_COIL = "set-status-coil";
+    const EVENT_GET_STATUS_COIL = "get-status-coil";
     const EVENT_SET_CONFIG_SENSOR = "set-config-sensor";
+    const EVENT_GET_CONFIG_SENSOR = "get-config-sensor";
     const EVENT_GET_STATUS_SENSOR = "get-status-sensor";
+    const EVENT_GET_STATUS_CONNECTION = "get-status-connection";
+    const EVENT_GET_CURRENT_READINGS = "get-current-readings";
+    const EVENT_ON_OFF_REAL_TIME = "set-status-real-time";
+    const EVENT_CHANGE_STATE_SUPPLY_IN_APLICATION = "change-state-supply-in-application";
+    const EVENT_CHANGE_STATE_DOOR = "change-state-door";
+    const EVENT_SUPPLY_INTERRUPTION_TO_MANIPULATION = "supply-interruption-to-manipulation";
+    const EVENT_CHANGE_STATE_SUPPLY_TO_VOLTAGE = "change-state-supply-to-voltage";
+    const EVENT_METER_READING_FAILURE = "meter-reading-failure";
+    const EVENT_INITIAL_CONNECTION = "initial-connection";
+    const EVENT_LOST_CONNECTION = "lost-connection";
+    const EVENT_ALERT_NOTIFICATION = "alert-notification";
+    const EVENT_OTA_UPDATE = "ota-update";
+
+
     const EVENT_GET_EVENT_LOGS = "event_logs";
+
+    const EVENT_DATE_RANGE = "date-range";
+
 
 
     const EVENT_SET_STATUS_SENSOR = "set-status-sensor";
@@ -53,20 +76,30 @@ class EventLog extends Model
         "response_json",
         "webhook",
         "status",
-        "ack_log_id"
+        "ack_log_id",
+        "serial"
     ];
 
     public static function getEvents($uri)
     {
-        foreach ([self::EVENT_DATE_RANGE,
-                     self::EVENT_SET_STATUS_COIL,
-                     self::EVENT_GET_STATUS_COIL,
+        foreach ([
+                     self::EVENT_SET_ALERT_LIMITS,
+                     self::EVENT_SET_ALERT_TIME,
+                     self::EVENT_SET_SAMPLING_TIME,
+                     self::EVENT_SET_WIFI_CREDENTIALS,
+                     self::EVENT_SET_BROKER_CREDENTIALS,
                      self::EVENT_SET_DATE,
                      self::EVENT_GET_DATE,
-                     self::EVENT_GET_CONFIG_SENSOR,
+                     self::EVENT_SET_STATUS_COIL,
+                     self::EVENT_GET_STATUS_COIL,
                      self::EVENT_SET_CONFIG_SENSOR,
+                     self::EVENT_GET_CONFIG_SENSOR,
                      self::EVENT_GET_STATUS_SENSOR,
-                     self::EVENT_GET_STATUS_METER,
+                     self::EVENT_GET_STATUS_CONNECTION,
+                     self::EVENT_GET_CURRENT_READINGS,
+                     self::EVENT_ON_OFF_REAL_TIME,
+                     self::EVENT_OTA_UPDATE,
+                     self::EVENT_DATE_RANGE,
                      self::EVENT_SET_URL_NOTIFICATION,
                      self::EVENT_GET_URL_NOTIFICATION,
                      self::EVENT_ADD_CLIENT,
@@ -112,6 +145,7 @@ class EventLog extends Model
             "webhook" => $webhook,
             "request_type" => $requestType,
             "status" => self::STATUS_CREATED,
+            "serial" => $ackLog->serial,
             "ack_log_id" => $ackLog ? $ackLog->id : null
         ]);
     }

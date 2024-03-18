@@ -37,10 +37,10 @@ class Control extends Component
 
     public function confirmAction($index)
     {
-        $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+        $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
         $topic = "v1/mc/config/" . $equipment->serial;
         $coil_id = pack('C', $this->coils[$index]['number']);
-        $event_id = pack('C', 7);
+        $event_id = pack('C', 15);
 
         if ($this->coils[$index]['status']) {
             $status = pack('C',  0);
@@ -48,7 +48,8 @@ class Control extends Component
         } else {
             $status = pack('C',  1);
         }
-        $message = $event_id.$coil_id.$status;
+        $id_unico = pack('V', 888);
+        $message = $event_id.$id_unico.$coil_id.$status;
         $crc = Crc16::XMODEM($message);
         $crc_pack = pack('v', $crc);
         $message = $message.$crc_pack;
@@ -82,8 +83,8 @@ class Control extends Component
                     $event = unpack('C', $message[0])[1];
                     if ($event == 16){
                         $message_hex = bin2hex($message);
-                        $did = substr($message, (1), (9));
-                        $did_unpack = unpack('P', $did)[1];
+                        $did = substr($message, (9), (17));
+                        $did_unpack = unpack('V', $did)[1];
                         if($equipment->serial == $did_unpack){
                             $this->coils[$index]['status'] = !$this->coils[$index]['status'];
                             $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);

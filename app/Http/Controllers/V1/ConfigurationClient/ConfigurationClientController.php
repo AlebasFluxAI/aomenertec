@@ -16,112 +16,71 @@ class ConfigurationClientController extends Controller
     {
         $this->configurationClientService = $configurationClientService;
     }
-
-    /**
-     * Enviar mensaje para ON/OFF medidor.
-     *
-     * @OA\Get(
-     *     path="/v1/config/set-status-coil",
-     *     operationId="setStatusCoilForSerial",
-     *     tags={"Corte/Conexion suministro electrico"},
-     *     summary="Accionar suministro electrico de medidor por medio del serial",
-     *     security={
-     *         {"api_key_security_example": {}}
-     *     },
-     *     @OA\Parameter(
-     *         name="serial",
-     *         in="query",
-     *         description="Número de serie del equipo",
-     *         required=true,
-     *
-     *     ),
-     *     @OA\Parameter(
-     *         name="status",
-     *         in="query",
-     *         description="Accion a realizar 1->activar suministro, 0->desactivar suministro",
-     *         required=true,
-     *     ),
-     *        @OA\Response(
-     *          response=200,
-     *          description="Respuesta exitosa",
-     *          @OA\JsonContent(
-     *              type="array",
-     *              @OA\Items(
-     *                  @OA\Property(property="message", type="string"),
-     *                  @OA\Property(property="detail", type="string"),
-     *                  @OA\Property(property="serial", type="string"),
-     *                  @OA\Property(property="ack_log_id", type="number"),
-     *                  @OA\Property(property="event_id", type="number"),
-     *
-     *                  )
-     *          )
-     *      ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Solicitud incorrecta",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="code", type="integer"),
-     *             @OA\Property(property="message", type="string"),
-     *             @OA\Property(property="details", type="object")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Recurso no encontrado",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="code", type="integer"),
-     *             @OA\Property(property="message", type="string"),
-     *             @OA\Property(property="details", type="string")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="No autorizado",
-     *         @OA\JsonContent(
-     *             type="object",
-     *             @OA\Property(property="code", type="integer"),
-     *             @OA\Property(property="message", type="string"),
-     *             @OA\Property(property="details", type="string")
-     *         )
-     *     )
-     * )
-     */
-    public function setStatusCoilForSerial(Request $request): JsonResource
+    public function setAlertLimitsForSerial(Request $request): JsonResource
     {
-        return $this->configurationClientService->setStatusCoilForSerial($request);
+        return $this->configurationClientService->setAlertLimitsForSerial($request);
     }
-
-    public function getStatusCoilForSerial(Request $request): JsonResource
+    public function setAlertTimeForSerial(Request $request): JsonResource
     {
-        return $this->configurationClientService->getStatusCoilForSerial($request);
+        return $this->configurationClientService->setAlertTimeForSerial($request);
     }
-
-    public function getDateForSerial(Request $request): JsonResource
+    public function setSamplingTimeForSerial(Request $request): JsonResource
     {
-        return $this->configurationClientService->getDateForSerial($request);
+        return $this->configurationClientService->setSamplingTimeForSerial($request);
     }
-
+    public function setWifiCredentialsForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->setWifiCredentialsForSerial($request);
+    }
+    public function setBrokerCredentialsForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->setBrokerCredentialsForSerial($request);
+    }
     public function setDateForSerial(Request $request): JsonResource
     {
         return $this->configurationClientService->setDateForSerial($request);
     }
-
-    public function getTypeSensorForSerial(Request $request): JsonResource
+    public function getDateForSerial(Request $request): JsonResource
     {
-        return $this->configurationClientService->getTypeSensorForSerial($request);
+        return $this->configurationClientService->getDateForSerial($request);
     }
-
+    public function setStatusCoilForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->setStatusCoilForSerial($request);
+    }
+    public function getStatusCoilForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->getStatusCoilForSerial($request);
+    }
     public function setTypeSensorForSerial(Request $request): JsonResource
     {
         return $this->configurationClientService->setTypeSensorForSerial($request);
     }
-
+    public function getTypeSensorForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->getTypeSensorForSerial($request);
+    }
     public function getStatusSensorForSerial(Request $request): JsonResource
     {
         return $this->configurationClientService->getStatusSensorForSerial($request);
     }
+    public function getStatusConnectionForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->getStatusConnectionForSerial($request);
+    }
+    public function getCurrentReadingsForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->getCurrentReadingsForSerial($request);
+    }
+    public function OnOffRealTimeForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->OnOffRealTimeForSerial($request);
+    }
+    public function otaUpdate(Request $request): JsonResource
+    {
+        return $this->configurationClientService->otaUpdate($request);
+    }
+
 
     public function notificationWebhook(Request $request)
     {

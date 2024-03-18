@@ -41,21 +41,17 @@ class UpdateDataConsumption extends Command
      */
     public function handle()
     {
-        $now = new Carbon();
-        $j = 0;
-        $i = 0;
-        $queues = ['spot1', 'spot2', 'spot4', 'spot5'];
         foreach (MicrocontrollerData::select('id', 'source_timestamp', 'raw_json', 'status')
                      // ->where('created_at', '>=', $now->subDay()->format('Y-m-d H:00:00'))
                      ->whereNull('client_id')
                      ->whereNotNull('source_timestamp')
                      ->orderBy('source_timestamp')
                      ->cursor() as $item) {
-            echo $item->id;
+            // echo $item->id;
             if($item->status == MicrocontrollerData::SUCCESS_TIMESTAMP or $item->status == MicrocontrollerData::PROCESING_TIMESTAMP) {
                 dispatch(new UnpackDataJob($item->id))->onQueue('spot4');
                 $item->status = MicrocontrollerData::SUCCESS_UNPACK;
-                $item->save();
+                $item->saveQuietly();
             }
         }
 

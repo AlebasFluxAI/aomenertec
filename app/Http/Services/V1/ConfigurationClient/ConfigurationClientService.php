@@ -23,6 +23,296 @@ class ConfigurationClientService
         $this->configurationClientRepository = $configurationClientRepository;
     }
 
+    public function setAlertLimitsForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        $alert_config_frame = config('data-frame.alert_config_frame');
+        $reglas = [];
+        foreach ($alert_config_frame as $index => $item) {
+            if ($item['variable_name'] != 'network_operator_id' and $item['variable_name'] != 'equipment_id' and $item['variable_name'] != 'network_operator_new_id' and $item['variable_name'] != 'equipment_new_id') {
+                if (strpos($item['variable_name'], 'min') !== false) {
+                    $reglas[$item['variable_name']] = 'required|numeric|lte:'.$alert_config_frame[$index-1]['variable_name'];
+                } else{
+                    $reglas[$item['variable_name']] = 'required|numeric';
+                }
+            }
+        }
+        $validator = Validator::make($request->json()->all(), $reglas);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function setAlertTimeForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        $alert_config_frame = config('data-frame.alert_config_time_frame');
+        $reglas = [];
+        foreach ($alert_config_frame as $item) {
+            if ($item['variable_name'] != 'network_operator_id' and $item['variable_name'] != 'equipment_id' and $item['variable_name'] != 'network_operator_new_id' and $item['variable_name'] != 'equipment_new_id') {
+                $reglas[$item['variable_name']] = 'required';
+            }
+        }
+        $validator = Validator::make($request->json()->all(), $reglas);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function setSamplingTimeForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+            'time_sampling_choice' => [
+                'required',
+                'string',
+                'in:hourly,daily,monthly',
+            ],
+            'data_per_interval' => [
+                'required',
+                'numeric',
+                function ($attribute, $value, $fail) use ($request) {
+                    $timeSamplingChoice = $request->input('time_sampling_choice');
+
+                    if ($timeSamplingChoice === 'hourly') {
+                        $validIntervals = [1, 2, 3, 4, 6, 12, 60];
+                    } elseif ($timeSamplingChoice === 'daily') {
+                        $validIntervals = [1, 2, 4, 8];
+                    } elseif ($timeSamplingChoice === 'monthly') {
+                        $validIntervals = [1, 2];
+                    } else {
+                        $fail('Invalid time_sampling_choice value. (hourly, daily ó monthly)');
+                        return;
+                    }
+                    if (!in_array($value, $validIntervals)) {
+                        $fail('Invalid data_per_interval value for the selected time_sampling_choice. hourly->(1, 2, 3, 4, 6, 12, 60) daily->(1, 2, 4, 8) monthly->(1, 2)');
+                    }
+                },
+            ],
+            'data_per_seconds' => ['required', 'numeric', 'between:0,254']
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function setWifiCredentialsForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+            'ssid' => 'required | string',
+            'password' => 'required | string',
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function setBrokerCredentialsForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+            'host' => 'required | string',
+            'port' => 'required | string',
+            'user' => 'required | string',
+            'password' => 'required | string',
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function setDateForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function getDateForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
     public function setStatusCoilForSerial($request): JsonResource
     {
         $validator = Validator::make($request->all(), [
@@ -53,21 +343,10 @@ class ConfigurationClientService
             'status' => 'required | boolean'
         ]);
         if ($validator->fails()) {
-            $errors = $validator->messages();
-            $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
-            $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
-            $eventLog->status = EventLog::STATUS_ERROR;
-            $eventLog->response_json = json_encode($jsonError);
-            $eventLog->save();
-            $ackLog = $eventLog->ackLog;
-            $ackLog->status = AckLog::STATUS_EXPIRED;
-            $ackLog->save();
-            return $jsonError;
+            return $this->setErrorMessage($validator, $request);
         }
-        //OK
-        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->setStatusCoilForSerial());
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
     }
-
     public function getStatusCoilForSerial($request): JsonResource
     {
         $validator = Validator::make($request->all(), [
@@ -97,153 +376,10 @@ class ConfigurationClientService
             ],
         ]);
         if ($validator->fails()) {
-            $errors = $validator->messages();
-            $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
-            $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
-            $eventLog->status = EventLog::STATUS_ERROR;
-            $eventLog->response_json = json_encode($jsonError);
-            $eventLog->save();
-            $ackLog = $eventLog->ackLog;
-            $ackLog->status = AckLog::STATUS_EXPIRED;
-            $ackLog->save();
-            return $jsonError;
+            return $this->setErrorMessage($validator, $request);
         }
-        //OK
-        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->getStatusCoilForSerial());
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
     }
-
-    public function setDateForSerial($request): JsonResource
-    {
-        $validator = Validator::make($request->all(), [
-            'serial' => [
-                'required',
-                function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
-                },
-            ],
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->messages();
-            $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
-            $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
-            $eventLog->status = EventLog::STATUS_ERROR;
-            $eventLog->response_json = json_encode($jsonError);
-            $eventLog->save();
-            $ackLog = $eventLog->ackLog;
-            $ackLog->status = AckLog::STATUS_EXPIRED;
-            $ackLog->save();
-            return $jsonError;
-        }
-        //OK
-        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->setDateForSerial());
-    }
-
-    public function getDateForSerial($request): JsonResource
-    {
-        $validator = Validator::make($request->all(), [
-            'serial' => [
-                'required',
-                function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
-                },
-            ],
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->messages();
-            $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
-            $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
-            $eventLog->status = EventLog::STATUS_ERROR;
-            $eventLog->response_json = json_encode($jsonError);
-            $eventLog->save();
-            $ackLog = $eventLog->ackLog;
-            $ackLog->status = AckLog::STATUS_EXPIRED;
-            $ackLog->save();
-            return $jsonError;
-        }
-        //OK
-        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->getDateForSerial());
-    }
-
-    public function getTypeSensorForSerial($request): JsonResource
-    {
-        $validator = Validator::make($request->all(), [
-            'serial' => [
-                'required',
-                function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $fail("El medidor electrico con serial " . $value . " no existe");
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
-                },
-            ],
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->messages();
-            $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
-            $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
-            $eventLog->status = EventLog::STATUS_ERROR;
-            $eventLog->response_json = json_encode($jsonError);
-            $eventLog->save();
-            $ackLog = $eventLog->ackLog;
-            $ackLog->status = AckLog::STATUS_EXPIRED;
-            $ackLog->save();
-            return $jsonError;
-        }
-        //OK
-        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->getTypeSensorForSerial());
-    }
-
     public function setTypeSensorForSerial($request): JsonResource
     {
         $validator = Validator::make($request->all(), [
@@ -277,21 +413,43 @@ class ConfigurationClientService
             ],
         ]);
         if ($validator->fails()) {
-            $errors = $validator->messages();
-            $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
-            $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
-            $eventLog->status = EventLog::STATUS_ERROR;
-            $eventLog->response_json = json_encode($jsonError);
-            $eventLog->save();
-            $ackLog = $eventLog->ackLog;
-            $ackLog->status = AckLog::STATUS_EXPIRED;
-            $ackLog->save();
-            return $jsonError;
+            return $this->setErrorMessage($validator, $request);
         }
-        //OK
-        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->setTypeSensorForSerial());
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
     }
-
+    public function getTypeSensorForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
     public function getStatusSensorForSerial($request): JsonResource
     {
         $validator = Validator::make($request->all(), [
@@ -321,18 +479,163 @@ class ConfigurationClientService
             ],
         ]);
         if ($validator->fails()) {
-            $errors = $validator->messages();
-            $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
-            $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
-            $eventLog->status = EventLog::STATUS_ERROR;
-            $eventLog->response_json = json_encode($jsonError);
-            $eventLog->save();
-            $ackLog = $eventLog->ackLog;
-            $ackLog->status = AckLog::STATUS_EXPIRED;
-            $ackLog->save();
-            return $jsonError;
+            return $this->setErrorMessage($validator, $request);
         }
-        //OK
-        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->getStatusSensorForSerial());
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function getStatusConnectionForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function getCurrentReadingsForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function OnOffRealTimeForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+            'status' => 'required | boolean'
+
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function otaUpdate($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+                    if ($equipment_type != null) {
+                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
+                            ->where('serial', $value)->first();
+                        if ($equipment == null) {
+                            $fail("El medidor electrico con serial " . $value . " no existe");
+                        } else {
+                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
+                            $user = User::getUserModel($key);
+                            if ($equipment->network_operator_id !== $user->id) {
+                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
+                            } else {
+                                $client = $equipment->clients()->first();
+                                if ($client == null) {
+                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
+                                }
+                            }
+                        }
+                    }
+                },
+            ],
+            'version' => 'required',
+            'file_bin' => 'required|max:1950'
+
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        $archivoBin = $request->file('file_bin');
+        $nombreArchivo = $archivoBin->getClientOriginalName();
+        $archivoBin->storeAs('temp-files', $nombreArchivo);
+
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+
+
+    private function setErrorMessage($validator, $request){
+        $errors = $validator->messages();
+        $jsonError = ErrorResource::make(["code" => 400, "message" => "La solicitud enviada al servidor es incorrecta o no se puede procesar", "details" => $errors]);
+        $eventLog = EventLog::find(json_decode($request->header(EventLog::EVENT_LOG_HEADER), true)["id"]);
+        $eventLog->status = EventLog::STATUS_ERROR;
+        $eventLog->response_json = json_encode($jsonError);
+        $eventLog->save();
+        $ackLog = $eventLog->ackLog;
+        $ackLog->status = AckLog::STATUS_EXPIRED;
+        $ackLog->save();
+        return $jsonError;
     }
 }

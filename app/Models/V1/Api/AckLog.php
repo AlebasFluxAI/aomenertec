@@ -2,7 +2,7 @@
 
 namespace App\Models\V1\Api;
 
-use App\Models\V1\EventLog;
+use App\Models\V1\Api\EventLog;
 use Illuminate\Database\Eloquent\Model;
 
 class AckLog extends Model
