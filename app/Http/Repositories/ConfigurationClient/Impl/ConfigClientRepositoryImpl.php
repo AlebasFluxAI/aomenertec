@@ -3,7 +3,7 @@
 namespace App\Http\Repositories\ConfigurationClient\Impl;
 
 use App\Http\Repositories\ConfigurationClient\ConfigClientRepository;
-use App\Jobs\V1\Api\CheckAckLogJob;
+use App\Jobs\V1\Api\ConfigurationClient\CheckAckLogJob;
 use App\Models\V1\Api\AckLog;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
@@ -20,7 +20,7 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
         $data_frame_events = config('data-frame.data_frame_events');
         foreach ($data_frame_events as $event) {
             if(array_key_exists('uri_event', $event)) {
-                if($event['uri_event'] == Request::header(\App\Models\V1\EventLog::API_EVENT_HEADER)){
+                if($event['uri_event'] == Request::header(EventLog::API_EVENT_HEADER)){
                     $serial = Request::query('serial');
                     $data = $this->packMessage($event);
                     $message = $data['message'];
@@ -40,7 +40,7 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
     private function packMessage($event)
     {
         $serial = Request::query('serial');
-        $ackLog = \App\Models\AckLog::find($this->getAckLogId());
+        $ackLog = AckLog::find($this->getAckLogId());
         $request = Request::instance();
         // Crear evento server a mc
         $eventLog = EventLog::createMcEvent($ackLog, $request, EventLog::MAIN_SERVER_MC_REQUEST, null, null);
@@ -184,10 +184,10 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
     private function sendMqttMessage($serial, $message, $eventLog, $event_id)
     {
         $topic = "v1/mc/config/" . $serial;
-        $mqtt = \App\Provider\MqttFacade::connection("default", $this->getMqttConnectionName());
+        $mqtt = MQTT::connection("default", $this->getMqttConnectionName());
         $mqtt->publish($topic, $message);
         $mqtt->disconnect();
-        dispatch(new \App\Jobs\V1\ConfigurationClient\CheckAckLogJob($this->getMqttConnectionName(), $eventLog->id, $event_id, $serial))->onQueue('spot2');
+        dispatch(new CheckAckLogJob($this->getMqttConnectionName(), $eventLog->id, $event_id, $serial))->onQueue('spot2');
 
     }
 
