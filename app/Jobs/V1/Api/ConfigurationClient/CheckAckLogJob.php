@@ -121,7 +121,8 @@ class CheckAckLogJob implements ShouldQueue
             "webhook" => $webhook,
             "request_type" => EventLog::MAIN_SERVER_CLIENT_RESPONSE,
             "status" => EventLog::STATUS_CREATED,
-            "ack_log_id" => $eventLog ? $eventLog->ack_log_id : null
+            "ack_log_id" => $eventLog ? $eventLog->ack_log_id : null,
+            "serial" => $eventLog ? $eventLog->serial : null
         ]);
         foreach ($data_webhook_events as $event) {
             if ($event['event_id'] == ($this->eventId == 34?41:($this->eventId + 1))) {

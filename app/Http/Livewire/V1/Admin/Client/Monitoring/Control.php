@@ -46,26 +46,22 @@ class Control extends Component
         $requestDetails = [
             'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-coil',
             'method' => 'GET',
-            // 'headers' => $e->request->headers()->all(),
             'body' => [
                 'serial' => $equipment->serial,
                 'status' => !$this->coils[$index]['status'] ? 1: 0
             ],
             'apiKey' => $apiKey->api_key
         ];
-
-
-
         try {
             $mqtt = MQTT::connection('default', 'null');
             $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
             $mqttCoilAckStrategy->setIndex($index);
-            $mqttCoilAckStrategy->registerLoopEventHandler();
-            $mqttCoilAckStrategy->subscribe();
             $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-
-
+            $mqttCoilAckStrategy->registerLoopEventHandler();
+            $mqttCoilAckStrategy->subscribe($equipment, 3);
         } catch (MqttClientException $e) {
+            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+
         }
     }
 

@@ -37,10 +37,10 @@ trait MqttSenderTrait
         });
     }
 
-    public function subscribe($equipment)
+    public function subscribe($equipment, $notificacionTypeId)
     {
-        $this->mqtt->subscribe('aom/chanel', function (string $topic, string $message) use ($equipment) {
-            $this->subscribeContext($message, $equipment);
+        $this->mqtt->subscribe('aom/chanel', function (string $topic, string $message) use ($equipment, $notificacionTypeId) {
+            $this->subscribeContext($message, $equipment, $notificacionTypeId);
         }, 1);
         $this->mqtt->loop(true);
         $this->mqtt->disconnect();

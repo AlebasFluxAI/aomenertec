@@ -28,41 +28,26 @@ class MqttCoilAckStrategy implements MqttSenderInterface
         $this->index = $index;
     }
 
-    public function subscribeContext($message, $equipment)
+    public function subscribeContext($message, $equipment, $notificationTypeId)
     {
+        $webhookEvents = config('data-frame.webhook_events');
         $webhookResponse = json_decode($message, true);
-        if ($webhookResponse['notification_type_id'] == 3){
-            if ($webhookResponse['success'] == 1){
-                if($equipment->serial == $webhookResponse['serial']){
-                    $this->component->coils[$this->index]['status'] = $webhookResponse['data']['status_coil'];
-                    $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
-                    $coil = ClientDigitalOutput::find($this->component->coils[$this->index]['id']);
-                    $this->component->emit('changeCheck', ['index' => $coil->id, 'flag' => true]);
-                    $coil->status = $webhookResponse['data']['status_coil'];
-                    $coil->save();
-                    //$this->$this->component->coils = $this->client->coils;
-                    $this->mqtt->interrupt();
+        foreach ($webhookEvents as $event){
+            if ($event['notification_type_id'] == $notificationTypeId){
+                if ($webhookResponse['notification_type_id'] == $event['json']['notification_type_id']) {
+                    if ($webhookResponse['success'] == 1) {
+                        if ($equipment->serial == $webhookResponse['serial']) {
+                            $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
+                            $this->component->emit('changeCheck', ['index' => $this->component->coils[$this->index]['id'], 'flag' => true]);
+                            $this->mqtt->interrupt();
+                        }
+                    } else {
+                        $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
+                        $coil = ClientDigitalOutput::find($this->component->coils[$this->index]['id']);
+                        $this->component->emit('changeCheck', ['index' => $coil->id, 'flag' => false]);
+                        $this->mqtt->interrupt();
+                    }
                 }
-            } else{
-                $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
-                $coil = ClientDigitalOutput::find($this->component->coils[$this->index]['id']);
-                $this->emit('changeCheck', ['index' => $coil->id, 'flag' => false]);
-                $this->mqtt->interrupt();
-            }
-        } elseif($webhookResponse['notification_type_id'] == 20){
-            if($equipment->serial == $webhookResponse['serial']){
-                $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
-                $coil = ClientDigitalOutput::find($this->component->coils[$this->index]['id']);
-                $this->emit('changeCheck', ['index' => $coil->id, 'flag' => false]);
-                $this->mqtt->interrupt();
-            }
-        }
-        elseif($webhookResponse['notification_type_id'] == 21){
-            if($equipment->serial == $webhookResponse['serial']){
-                $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
-                $coil = ClientDigitalOutput::find($this->component->coils[$this->index]['id']);
-                $this->component->emit('changeCheck', ['index' => $coil->id, 'flag' => false]);
-                $this->mqtt->interrupt();
             }
         }
     }

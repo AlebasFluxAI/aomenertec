@@ -9,7 +9,7 @@ interface MqttSenderInterface
 {
     public function __construct(MqttClient $mqttClient, Component $component);
 
-    public function subscribeContext($message, $equipment);
+    public function subscribeContext($message, $equipment, $notificacionTypeId);
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt);
 
