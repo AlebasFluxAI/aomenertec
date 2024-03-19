@@ -6,7 +6,7 @@ namespace App\Console;
 use App\Jobs\V1\Enertec\PushRealTimeMicrocontrollerDataJob;
 use App\Jobs\V1\Enertec\SaveAlertDataJob;
 use App\Jobs\V1\Enertec\SaveMicrocontrollerDataJob;
-use App\Jobs\V1\SetConfigJob;
+use App\Jobs\V1\Api\ConfigurationClient\SetConfigJob;
 use App\ModulesAux\MQTT;
 use Illuminate\Console\Command;
 
