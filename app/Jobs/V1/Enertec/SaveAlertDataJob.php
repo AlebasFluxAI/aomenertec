@@ -227,7 +227,7 @@ class SaveAlertDataJob implements ShouldQueue
 
                                         $response = Http::withHeaders([
                                             $apiKey->security_header_value => $apiKey->security_header_key,
-                                        ])->post($webhook, $jsonResponse);
+                                        ])->withoutVerifying()->post($webhook, $jsonResponse);
                                         //$response = Http::post($webhook, $jsonResponse);
 
                                         $jsonData = $response->json();
