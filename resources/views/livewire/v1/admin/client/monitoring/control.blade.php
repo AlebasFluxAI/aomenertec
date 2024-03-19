@@ -41,11 +41,11 @@
                     </div>
                     <div class=" justify-content-end form-group  mx-2 mb-0 mt-0 ">
                         @if($coil->status)
-                            <button class="button_check btn btn-success text-white" id="{{ $index }}"><i
+                            <button class="button_check btn btn-success text-white" id="{{ $coil->id }}"><i
                                     class='fas fa-lightbulb'></i> ON
                             </button>
                         @else
-                            <button class="button_check btn btn-danger text-white" id="{{ $index }}"><i
+                            <button class="button_check btn btn-danger text-white" id="{{ $coil->id }}"><i
                                     class='far fa-lightbulb'></i> OFF
                             </button>
                         @endif
@@ -55,14 +55,14 @@
                         <input wire:model.lazy="coils.{{ $index }}.name" id="input_{{ $coil->id }}"
                                placeholder="Salida {{ $coil->number }}">
                     </div>
-                    <div class="modal fade" id="confirmModal_{{ $index }}" tabindex="-1" role="dialog"
-                         aria-labelledby="confirmModalLabel_{{ $index }}">
+                    <div class="modal fade" id="confirmModal_{{ $coil->id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="confirmModalLabel_{{ $coil->id }}">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title" id="confirmModalLabel_{{ $index }}"> Cuadro de
+                                    <h4 class="modal-title" id="confirmModalLabel_{{ $coil->id }}"> Cuadro de
                                         confirmación </h4>
-                                    <a onclick="$('#confirmModal_'+{{ $index }}).modal('hide');" type="button"
+                                    <a onclick="$('#confirmModal_'+{{ $coil->id }}).modal('hide');" type="button"
                                        class="close" data-dismiss="modal" aria-label="Close"><span
                                             aria-hidden="true">×</span></a>
                                 </div>
@@ -80,9 +80,9 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <a onclick="$('#confirmModal_'+{{ $index }}).modal('hide');" type="button"
+                                    <a onclick="$('#confirmModal_'+{{ $coil->id }}).modal('hide');" type="button"
                                        class="btn btn-default" data-despeds="modal"> Cancelar </a>
-                                    <a onclick="$('#confirmModal_'+{{ $index }}).modal('hide');confirmCheck({{ $coil->id }});"
+                                    <a onclick="$('#confirmModal_'+{{ $coil->id }}).modal('hide');confirmCheck({{ $coil->id }});"
                                        wire:click="confirmAction('{{ $index }}')" type="button" class="btn btn-primary">
                                         Confirmar </a>
                                 </div>
@@ -100,7 +100,6 @@
         var checks = document.querySelectorAll(".button_check");
         for (let check of checks) {
             $('#' + check.id).click(function (e) {
-                console.log(flag)
                 e.stopPropagation();
                 if (flag) {
                     $('#confirmModal_' + check.id).modal('show');
