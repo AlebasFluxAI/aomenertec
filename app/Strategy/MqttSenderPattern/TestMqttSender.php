@@ -9,7 +9,7 @@ class TestMqttSender implements MqttSenderInterface
     use MqttSenderTrait;
 
 
-    public function subscribeContext($message)
+    public function subscribeContext($message, $equipment, $notificationTypeId)
     {
         // Implementa la lógica para suscribirse al contexto aquí
     }
@@ -18,10 +18,7 @@ class TestMqttSender implements MqttSenderInterface
     {
         // Implementa la lógica para registrar un controlador de bucle de evento aquí
     }
-    public function fetchDataFromAPI($requestDetails)
-    {
-        // logica consultar api
-    }
+
 
 
 }

@@ -398,7 +398,7 @@ class ClientConfigurationService extends Singleton
             $apiKey = ApiKey::first();
             $requestDetails = [
                 'url' => 'https://aom.enerteclatam.com/api/v1/config/set-alert-limits',
-                'method' => 'GET',
+                'method' => 'POST',
                 'body' => array_merge(['serial' => $equipment->serial], $json),
                 'apiKey' => $apiKey->api_key
             ];

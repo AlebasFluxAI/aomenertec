@@ -20,9 +20,10 @@ trait MqttSenderTrait
     public function fetchDataFromAPI($requestDetails)
     {
         if($requestDetails['method'] == 'GET') {
-            Http::withHeaders([
+
+            dd(Http::withHeaders([
                 'x-api-key' => $requestDetails['apiKey'],
-            ])->withoutVerifying()->get($requestDetails['url'], $requestDetails['body']);
+            ])->withoutVerifying()->get($requestDetails['url'], $requestDetails['body']));
         } elseif($requestDetails['method'] == 'POST'){
             Http::withHeaders([
                 'x-api-key' => $requestDetails['apiKey'],
