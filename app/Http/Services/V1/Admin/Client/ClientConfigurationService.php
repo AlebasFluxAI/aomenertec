@@ -4,6 +4,7 @@ namespace App\Http\Services\V1\Admin\Client;
 
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
+use App\Models\V1\Api\ApiKey;
 use App\Models\V1\AvailableChannel;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlertConfiguration;
@@ -274,87 +275,70 @@ class ClientConfigurationService extends Singleton
     public function submitFormConection(Component $component)
     {
         $component->validate();
-        $flag = false;
+        $flag_broker = false;
+        $flag_wifi = false;
+        $flag_latency = false;
         $message = [];
         if ($component->client_config->isDirty('ssid')) {
             $message['ssid'] = strval($component->client_config->ssid);
-            $flag = true;
+            $flag_wifi = true;
         }
         if ($component->client_config->isDirty('wifi_password')) {
             $message['pass'] = $component->client_config->wifi_password;
-            $flag = true;
+            $flag_wifi = true;
         }
         if ($component->client_config->isDirty('mqtt_host')) {
             $message['brokerMqtt'] = $component->client_config->mqtt_host;
-            $flag = true;
+            $flag_broker = true;
         }
         if ($component->client_config->isDirty('mqtt_port')) {
             $message['portMqtt'] = $component->client_config->mqtt_port;
-            $flag = true;
+            $flag_broker = true;
         }
         if ($component->client_config->isDirty('mqtt_user')) {
             $message['userMqtt'] = $component->client_config->mqtt_user;
-            $flag = true;
+            $flag_broker = true;
         }
         if ($component->client_config->isDirty('mqtt_password')) {
             $message['passMqtt'] = $component->client_config->mqtt_password;
-            $flag = true;
+            $flag_broker = true;
         }
         if ($component->client_config->isDirty('storage_latency')
             || $component->client_config->isDirty('storage_type_latency')) {
             $message['storage_latency'] = $component->client_config->storage_latency;
             $message['storage_latency_type'] = substr($component->client_config->storage_type_latency, 0, 1);
-            $flag = true;
+            $flag_latency = true;
         }
         if ($component->client_config->isDirty('real_time_latency')) {
             $message['real_time_latency'] = $component->client_config->real_time_latency;
-            $flag = true;
+            $flag_latency = true;
         }
-        try {
-            if ($flag) {
-                $equipment = $component->client->equipments()->whereEquipmentTypeId(1)->first();
-                $message['did'] = $equipment->serial;
-                $topic = "mc/config/" . $equipment->serial;
-                $mqtt = MQTT::connection('default', 'client_aux');
-                $mqtt->publish($topic, json_encode($message));
-                $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($component) {
-                    if ($elapsedTime >= 50) {
-                        $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexión"]);
-                        $mqtt->interrupt();
-                    }
-                });
-                $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($component, $mqtt) {
-                    $json = json_decode($message, true);
-                    if (array_key_exists('config_ack', $json)) {
-                        $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
-                        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                            ->first();
-                        if ($equipment) {
-                            $client_aux = $equipment->clients()->first();
-                            if ($client_aux->id == $component->client->id) {
-                                if ($json['config_ack']) {
-                                    if ($component->client_config->save()) {
-                                        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-                                    }
-                                    foreach ($component->client->refresh()->channels as $channel) {
-                                        $channel->disable();
-                                    }
-                                    /*foreach ($component->client_notification_types as $notification_channel) {
-                                        AvailableChannel::find($component->client->refresh()->channels()->whereChannel($notification_channel)->first())->enable();
-                                    }*/
-                                    $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-                                }
-                            }
-                        }
-                    }
-                    $mqtt->interrupt();
-                }, 1);
-                $mqtt->loop(true);
-                $mqtt->disconnect();
-            }
-        } catch (MqttClientException $e) {
+            if ($flag_broker) {
+                $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+                $apiKey = ApiKey::first();
+                $requestDetails = [
+                    'url' => 'https://aom.enerteclatam.com/api/v1/config/set-broker-credentials',
+                    'method' => 'GET',
+                    'body' => [
+                        'serial' => $equipment->serial,
+                        'user' => $component->client_config->mqtt_user,
+                        'password' => $component->client_config->mqtt_password,
+                        'host' => $component->client_config->mqtt_host,
+                        'port' => $component->client_config->mqtt_port,
+                    ],
+                    'apiKey' => $apiKey->api_key
+                ];
+                try {
+                    $mqtt = MQTT::connection('default', 'null');
+                    $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
+                    $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
+                    $mqttCoilAckStrategy->registerLoopEventHandler();
+                    $mqttCoilAckStrategy->subscribe($equipment);
+                } catch (MqttClientException $e) {
+                    $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
 
-        }
+                }
+            }
     }
 
     public function submitFormPermission(Component $component)
