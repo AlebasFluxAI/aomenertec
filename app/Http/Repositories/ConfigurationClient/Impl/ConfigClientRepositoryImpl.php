@@ -22,6 +22,9 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
             if(array_key_exists('uri_event', $event)) {
                 if($event['uri_event'] == Request::header(EventLog::API_EVENT_HEADER)){
                     $serial = Request::query('serial');
+                    if($serial == null) {
+                        $serial = Request::input('serial');
+                    }
                     $data = $this->packMessage($event);
                     $message = $data['message'];
                     $response = $this->getReturnMessage($serial, $message, $data['eventLog'], $event['event_id']);
@@ -40,6 +43,9 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
     private function packMessage($event)
     {
         $serial = Request::query('serial');
+        if($serial == null) {
+            $serial = Request::input('serial');
+        }
         $ackLog = AckLog::find($this->getAckLogId());
         $request = Request::instance();
         // Crear evento server a mc
@@ -86,18 +92,17 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
             } elseif ($datum['variable_name'] == 'frame_alerts'){
                 $alert_config_frame = config('data-frame.alert_config_frame');
                 $client = Client::getClientFromSerial($serial);
-                $equipment = $client->equipments()->whereEquipmentTypeId(2)->first();;
                 $binary_data = [];
                 $related_parameter = Request::json();
                 foreach ($alert_config_frame as $item) {
                     if ($item['variable_name'] == 'network_operator_id') {
                         $data = $client->networkOperator->identification;
                     } elseif ($item['variable_name'] == 'equipment_id') {
-                        $data = $equipment->serial;
+                        $data = $serial;
                     } elseif ($item['variable_name'] == 'network_operator_new_id') {
                         $data = $client->networkOperator->identification;
                     } elseif ($item['variable_name'] == 'equipment_new_id') {
-                        $data = $equipment->serial;
+                        $data = $serial;
                     } else {
                         $data = $related_parameter->get($item['variable_name']);
                     }

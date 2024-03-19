@@ -276,7 +276,7 @@ class ClientConfigurationService extends Singleton
         try {
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
             $mqtt = MQTT::connection('default', 'null');
-            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
+            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $component);
             $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
             $mqttCoilAckStrategy->registerLoopEventHandler();
             $mqttCoilAckStrategy->subscribe($equipment, $notificationtypeId);
@@ -377,13 +377,34 @@ class ClientConfigurationService extends Singleton
                     'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
                 ]);
             }
-            $mqttClient = MQTT::connection('default', 'client_aux');
-            $mqttConfigAckStrategy = new MqttConfigAckStrategy($mqttClient, $component);
-            $mqttConfigAckStrategy->setTopic();
-            $mqttConfigAckStrategy->setMessage();
-            $mqttConfigAckStrategy->publish();
-            $mqttConfigAckStrategy->registerLoopEventHandler();
-            $mqttConfigAckStrategy->subscribe();
+            $alert_config_frame = config('data-frame.alert_config_frame');
+            $json = [];
+            $data = "";
+            foreach ($alert_config_frame as $item) {
+                if ($item['variable_name'] == 'network_operator_id') {
+                    continue;
+                } elseif ($item['variable_name'] == 'equipment_id') {
+                    continue;
+                } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                    continue;
+                } elseif ($item['variable_name'] == 'equipment_new_id') {
+                    continue;
+                } else {
+                    $aux_variable = $component->client_config_alert->where('flag_id', $item['flag_id'])->first();
+                    $json[$item['variable_name']] = $aux_variable->{$item['limit']};;
+                }
+            }
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $apiKey = ApiKey::first();
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/set-alert-limits',
+                'method' => 'GET',
+                'body' => array_merge(['serial' => $equipment->serial], $json),
+                'apiKey' => $apiKey->api_key
+            ];
+            $this->consumeService($component, $requestDetails, 10);
+
+
 
         } catch (MqttClientException $e) {
 
