@@ -95,6 +95,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user']], func
     Route::get('/seleccionar_rol', Livewire\V1\Admin\User\SelectRoleUser::class)->name("administrar.v1.seleccionar_role");
 });
 
+Route::post('/validate-screen-size', 'App\Http\Controllers\ValidateScreen@validateScreenSize');
+
+
 Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_selection"]], function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::prefix("v1")->group(function () {
