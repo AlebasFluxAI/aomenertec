@@ -13,6 +13,7 @@ use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\ModulesAux\MQTT;
+use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
 use App\Strategy\MqttSenderPattern\MqttConfigAckStrategy;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
@@ -271,6 +272,18 @@ class ClientConfigurationService extends Singleton
 
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada, Recuerde guardar cambios"]);
     }
+    private function consumeService(Component $component, $requestDetails, $notificationtypeId){
+        try {
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $mqtt = MQTT::connection('default', 'null');
+            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
+            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
+            $mqttCoilAckStrategy->registerLoopEventHandler();
+            $mqttCoilAckStrategy->subscribe($equipment, $notificationtypeId);
+        } catch (MqttClientException $e) {
+            $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+        }
+    }
 
     public function submitFormConection(Component $component)
     {
@@ -279,66 +292,58 @@ class ClientConfigurationService extends Singleton
         $flag_wifi = false;
         $flag_latency = false;
         $message = [];
-        if ($component->client_config->isDirty('ssid')) {
-            $message['ssid'] = strval($component->client_config->ssid);
-            $flag_wifi = true;
-        }
-        if ($component->client_config->isDirty('wifi_password')) {
-            $message['pass'] = $component->client_config->wifi_password;
-            $flag_wifi = true;
-        }
-        if ($component->client_config->isDirty('mqtt_host')) {
-            $message['brokerMqtt'] = $component->client_config->mqtt_host;
-            $flag_broker = true;
-        }
-        if ($component->client_config->isDirty('mqtt_port')) {
-            $message['portMqtt'] = $component->client_config->mqtt_port;
-            $flag_broker = true;
-        }
-        if ($component->client_config->isDirty('mqtt_user')) {
-            $message['userMqtt'] = $component->client_config->mqtt_user;
-            $flag_broker = true;
-        }
-        if ($component->client_config->isDirty('mqtt_password')) {
-            $message['passMqtt'] = $component->client_config->mqtt_password;
-            $flag_broker = true;
-        }
-        if ($component->client_config->isDirty('storage_latency')
-            || $component->client_config->isDirty('storage_type_latency')) {
-            $message['storage_latency'] = $component->client_config->storage_latency;
-            $message['storage_latency_type'] = substr($component->client_config->storage_type_latency, 0, 1);
-            $flag_latency = true;
-        }
-        if ($component->client_config->isDirty('real_time_latency')) {
-            $message['real_time_latency'] = $component->client_config->real_time_latency;
-            $flag_latency = true;
-        }
-            if ($flag_broker) {
-                $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-                $apiKey = ApiKey::first();
-                $requestDetails = [
-                    'url' => 'https://aom.enerteclatam.com/api/v1/config/set-broker-credentials',
-                    'method' => 'GET',
-                    'body' => [
-                        'serial' => $equipment->serial,
-                        'user' => $component->client_config->mqtt_user,
-                        'password' => $component->client_config->mqtt_password,
-                        'host' => $component->client_config->mqtt_host,
-                        'port' => $component->client_config->mqtt_port,
-                    ],
-                    'apiKey' => $apiKey->api_key
-                ];
-                try {
-                    $mqtt = MQTT::connection('default', 'null');
-                    $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
-                    $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-                    $mqttCoilAckStrategy->registerLoopEventHandler();
-                    $mqttCoilAckStrategy->subscribe($equipment);
-                } catch (MqttClientException $e) {
-                    $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+        if ($component->client_config->isDirty('ssid') || $component->client_config->isDirty('wifi_password')) {
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $apiKey = ApiKey::first();
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/set-wifi-credentials',
+                'method' => 'GET',
+                'body' => [
+                    'serial' => $equipment->serial,
+                    'ssid' => $component->client_config->ssid,
+                    'password' => $component->client_config->wifi_password
+                ],
+                'apiKey' => $apiKey->api_key
+            ];
+            $this->consumeService($component, $requestDetails, 13);
 
-                }
-            }
+        }
+        if ($component->client_config->isDirty('mqtt_host') || $component->client_config->isDirty('mqtt_port') || $component->client_config->isDirty('mqtt_user') || $component->client_config->isDirty('mqtt_password')) {
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $apiKey = ApiKey::first();
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/set-broker-credentials',
+                'method' => 'GET',
+                'body' => [
+                    'serial' => $equipment->serial,
+                    'user' => $component->client_config->mqtt_user,
+                    'password' => $component->client_config->mqtt_password,
+                    'host' => $component->client_config->mqtt_host,
+                    'port' => $component->client_config->mqtt_port,
+                ],
+                'apiKey' => $apiKey->api_key
+            ];
+            $this->consumeService($component, $requestDetails, 14);
+
+        }
+
+        if ($component->client_config->isDirty('storage_latency') || $component->client_config->isDirty('storage_type_latency') || $component->client_config->isDirty('real_time_latency')) {
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $apiKey = ApiKey::first();
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/set-sampling-time',
+                'method' => 'GET',
+                'body' => [
+                    'serial' => $equipment->serial,
+                    'time_sampling_choice' => $component->client_config->storage_type_latency,
+                    'data_per_interval' => $component->client_config->storage_latency,
+                    'data_per_seconds' => $component->client_config->real_time_latency
+                ],
+                'apiKey' => $apiKey->api_key
+            ];
+            $this->consumeService($component, $requestDetails, 12);
+        }
+
     }
 
     public function submitFormPermission(Component $component)

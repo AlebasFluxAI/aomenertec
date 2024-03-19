@@ -15,7 +15,7 @@ interface MqttSenderInterface
 
     public function registerLoopEventHandler();
 
-    public function subscribe($equipment);
+    public function subscribe($equipment, $notificacionTypeId);
 
     public function fetchDataFromAPI($requestDetails);
 

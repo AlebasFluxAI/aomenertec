@@ -10,7 +10,7 @@ use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
 use Crc16\Crc16;
-use App\Strategy\MqttSenderPattern\MqttCoilAckStrategy;
+use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
 // use App\Strategy\MqttSenderPattern\MqttSenderContext;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -54,14 +54,13 @@ class Control extends Component
         ];
         try {
             $mqtt = MQTT::connection('default', 'null');
-            $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
+            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
             $mqttCoilAckStrategy->setIndex($index);
             $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
             $mqttCoilAckStrategy->registerLoopEventHandler();
             $mqttCoilAckStrategy->subscribe($equipment, 3);
         } catch (MqttClientException $e) {
             $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
-
         }
     }
 
