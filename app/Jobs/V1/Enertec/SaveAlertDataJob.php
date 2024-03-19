@@ -56,7 +56,7 @@ class SaveAlertDataJob implements ShouldQueue
         $date = new Carbon();
         $date->setTimestamp($timestamp);
         $current_time = Carbon::now();
-        if($date->diffInYears($current_time) < 1){
+        if($date->diffInYears($current_time) <= 1){
             $flag = $this->calculateValueAlert(5, $decode);
             $binary_flags = sprintf("%064b", ($flag));
 
@@ -71,10 +71,10 @@ class SaveAlertDataJob implements ShouldQueue
             $this->source_timestamp->setTimestamp($timestamp);
             $value = 0;
             foreach ($flags_frame as $item) {
-                if ($item['id'] >= 14 and $item['id'] <= 49) {
+                if ($item['id'] >= 16 and $item['id'] <= 50) {
                     $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
                     $type = "";
-                    $split = substr($binary_flags, $item['bit'], 1);
+                    $split = substr($binary_flags, $item['index'], 1);
                     if ($split == "1") {
                         if ($item['flag_name'] == 'flagOpened') {
                             $value = 1;

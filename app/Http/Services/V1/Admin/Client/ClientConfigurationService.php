@@ -98,7 +98,7 @@ class ClientConfigurationService extends Singleton
             ]
         ];
         foreach ($component->client_config_alert as $index => $item) {
-            if ($item->flag_id < 47) {
+            if ($item->flag_id <= 50) {
                 array_push($component->inputs, [
                     "input_type" => "input_min_max",
                     "input_min_model" => "client_config_alert." . $index . ".min_alert",
