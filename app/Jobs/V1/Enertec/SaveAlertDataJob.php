@@ -244,19 +244,11 @@ class SaveAlertDataJob implements ShouldQueue
                                     } catch (\Throwable $e) {
                                         $statusCode = $e->getCode();
                                         $errorMessage = $e->getMessage();
-                                        if (property_exists($e, 'response')) {
-                                            if($e->response) {
-                                                $responseBody = $e->response->body(); // Obtener el cuerpo de la respuesta
-                                                } else{
-                                                $responseBody = null;
-                                            }
-                                        } else {
-                                            $responseBody = null;
-                                        }
+
                                         $errorInfo = [
                                             'status_code' => $statusCode,
                                             'error_message' => $errorMessage,
-                                            'response_body' => $responseBody,
+                                            'response_body' => null,
                                             'request_details' => $requestDetails
                                         ];
                                         if ($eventLogWh) {
