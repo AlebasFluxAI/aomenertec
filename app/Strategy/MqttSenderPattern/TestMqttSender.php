@@ -18,15 +18,10 @@ class TestMqttSender implements MqttSenderInterface
     {
         // Implementa la lógica para registrar un controlador de bucle de evento aquí
     }
-
-
-    public function setMessage()
+    public function fetchDataFromAPI($requestDetails)
     {
-        // Implementa la lógica para establecer el mensaje aquí
+        // logica consultar api
     }
 
-    public function setTopic()
-    {
-        // Implementa la lógica para establecer el tema aquí
-    }
+
 }

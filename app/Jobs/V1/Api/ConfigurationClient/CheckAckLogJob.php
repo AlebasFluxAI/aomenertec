@@ -169,7 +169,7 @@ class CheckAckLogJob implements ShouldQueue
                 ])->post($webhook, $jsonResponse);
                 $jsonData = $response->json();
                 $eventLogWh->status = EventLog::STATUS_SUCCESSFUL;
-                $eventLogWh->response_json = json_encode($jsonData);
+                $eventLogWh->response_json = $jsonData == null ? $jsonData :json_encode($jsonData);
                 $eventLogWh->save();
                 $ackLog = $eventLogWh->ackLog;
                 $ackLog->status = AckLog::STATUS_SUCCESS;

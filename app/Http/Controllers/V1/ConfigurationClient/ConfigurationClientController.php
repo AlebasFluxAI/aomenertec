@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1\ConfigurationClient;
 
 use App\Http\Controllers\V1\Controller;
 use App\Http\Services\V1\ConfigurationClient\ConfigurationClientService;
+use App\ModulesAux\MQTT;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -91,7 +92,9 @@ class ConfigurationClientController extends Controller
             'message' => 'Webhook procesado exitosamente',
             'request_json' => $datosJson
         ];
-
+        $mqtt = MQTT::connection('default', 'knsajknjsa');
+        $mqtt->publish('aom/chanel', json_encode($datosJson));
+        $mqtt->disconnect();
         // Retornar una instancia de Response con los datos y código de estado apropiados
         return response()->json($responseData, 200);
     }

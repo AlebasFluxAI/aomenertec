@@ -1282,7 +1282,7 @@ return [
             'json' => [
                 ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 20,                                             'parameter_name' => null,           'object' => []],
                 ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Fallo el accionamiento del suministro electrico por manipulación de gabinete', 'parameter_name' => null,           'object' => []],
-                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 0,                                             'parameter_name' => null,           'object' => []],
                 ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                          'parameter_name' => 'serial',       'object' => []],
                 ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                          'parameter_name' => null,           'object' => []],
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                          'parameter_name' => null, 'object' => []],
@@ -1302,7 +1302,7 @@ return [
             'json' => [
                 ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 21,                                             'parameter_name' => null,           'object' => []],
                 ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Fallo el accionamiento del suministro electrico por falla en el nivel de tensión', 'parameter_name' => null,           'object' => []],
-                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 0,                                             'parameter_name' => null,           'object' => []],
                 ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                          'parameter_name' => 'serial',       'object' => []],
                 ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                          'parameter_name' => null,           'object' => []],
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                          'parameter_name' => null, 'object' => []],
