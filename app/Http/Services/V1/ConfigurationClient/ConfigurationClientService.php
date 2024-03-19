@@ -366,16 +366,11 @@ class ConfigurationClientService
                                 $fail("El medidor electrico con serial " . $value . " no existe");
                             }
                         } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
+                            $client = $equipment->clients()->first();
+                            if ($client == null) {
+                                $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
                             }
+
                         }
                     }
                 },

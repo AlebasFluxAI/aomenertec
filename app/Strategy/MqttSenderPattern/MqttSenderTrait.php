@@ -2,14 +2,13 @@
 
 namespace App\Strategy\MqttSenderPattern;
 
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use PhpMqtt\Client\MqttClient;
 
 trait MqttSenderTrait
 {
     private $mqtt;
-    private $topic;
-    private $message;
     private $component;
 
     public function __construct(MqttClient $mqtt, Component $component)
@@ -18,10 +17,17 @@ trait MqttSenderTrait
         $this->component = $component;
     }
 
-    public function publish()
+    public function fetchDataFromAPI($requestDetails)
     {
-        $this->mqtt->publish($this->topic, $this->message);
-
+        if($requestDetails['method'] == 'GET') {
+            Http::withHeaders([
+                'x-api-key' => $requestDetails['apiKey'],
+            ])->withoutVerifying()->get($requestDetails['url'], $requestDetails['body']);
+        } elseif($requestDetails['method'] == 'POST'){
+            Http::withHeaders([
+                'x-api-key' => $requestDetails['apiKey'],
+            ])->withoutVerifying()->post($requestDetails['url'], $requestDetails['body']);
+        }
     }
 
     public function registerLoopEventHandler()
@@ -31,10 +37,10 @@ trait MqttSenderTrait
         });
     }
 
-    public function subscribe()
+    public function subscribe($equipment)
     {
-        $this->mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) {
-            $this->subscribeContext($message);
+        $this->mqtt->subscribe('aom/chanel', function (string $topic, string $message) use ($equipment) {
+            $this->subscribeContext($message, $equipment);
         }, 1);
         $this->mqtt->loop(true);
         $this->mqtt->disconnect();

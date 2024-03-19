@@ -2,14 +2,18 @@
 
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring;
 
+use App\Models\V1\Api\AckLog;
+use App\Models\V1\Api\ApiKey;
+use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
 use Crc16\Crc16;
 use App\Strategy\MqttSenderPattern\MqttCoilAckStrategy;
-use App\Strategy\MqttSenderPattern\MqttSenderContext;
+// use App\Strategy\MqttSenderPattern\MqttSenderContext;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\MqttClient;
@@ -37,69 +41,28 @@ class Control extends Component
 
     public function confirmAction($index)
     {
-        $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
-        $topic = "v1/mc/config/" . $equipment->serial;
-        $coil_id = pack('C', $this->coils[$index]['number']);
-        $event_id = pack('C', 15);
+        $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
+        $apiKey =ApiKey::first();
+        $requestDetails = [
+            'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-coil',
+            'method' => 'GET',
+            // 'headers' => $e->request->headers()->all(),
+            'body' => [
+                'serial' => $equipment->serial,
+                'status' => !$this->coils[$index]['status'] ? 1: 0
+            ],
+            'apiKey' => $apiKey->api_key
+        ];
 
-        if ($this->coils[$index]['status']) {
-            $status = pack('C',  0);
 
-        } else {
-            $status = pack('C',  1);
-        }
-        $id_unico = pack('V', 888);
-        $message = $event_id.$id_unico.$coil_id.$status;
-        $crc = Crc16::XMODEM($message);
-        $crc_pack = pack('v', $crc);
-        $message = $message.$crc_pack;
 
         try {
-            $mqtt = MQTT::connection('default', 'default');
-            $mqtt->publish($topic, $message);
-//            $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
-//            $mqttCoilAckStrategy->setIndex($index);
-//            $mqttCoilAckStrategy->setTopic();
-//            $mqttCoilAckStrategy->setMessage();
-//            $mqttCoilAckStrategy->publish();
-//            $mqttCoilAckStrategy->registerLoopEventHandler();
-//            $mqttCoilAckStrategy->subscribe();
-
-
-
-            $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($index) {
-                if ($elapsedTime >= 10) {
-                    $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
-                    $mqtt->interrupt();
-                    $this->emit('changeCheck', ['index' => $index, 'flag' => false]);
-                }
-            });
-            $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) use ($index, $mqtt, &$result, $equipment) {
-                $crc_message = substr($message,-2);
-                $data_crc = substr($message, 0, -2);
-                $crc = Crc16::XMODEM($data_crc);
-                $crc_pack = pack('v', $crc);
-                if ($crc_pack == $crc_message){
-                    $event = unpack('C', $message[0])[1];
-                    if ($event == 16){
-                        $message_hex = bin2hex($message);
-                        $did = substr($message, (9), (17));
-                        $did_unpack = unpack('V', $did)[1];
-                        if($equipment->serial == $did_unpack){
-                            $this->coils[$index]['status'] = !$this->coils[$index]['status'];
-                            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Accion realizada"]);
-                            $coil = ClientDigitalOutput::find($this->coils[$index]['id']);
-                            $this->emit('changeCheck', ['index' => $coil->id, 'flag' => true]);
-                            $coil->status = $this->coils[$index]['status'];
-                            $coil->save();
-                            //$this->coils = $this->client->coils;
-                            $mqtt->interrupt();
-                        }
-                    }
-                }
-            }, 1);
-            $mqtt->loop(true);
-            $mqtt->disconnect();
+            $mqtt = MQTT::connection('default', 'null');
+            $mqttCoilAckStrategy = new MqttCoilAckStrategy($mqtt, $this);
+            $mqttCoilAckStrategy->setIndex($index);
+            $mqttCoilAckStrategy->registerLoopEventHandler();
+            $mqttCoilAckStrategy->subscribe();
+            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
 
 
         } catch (MqttClientException $e) {
