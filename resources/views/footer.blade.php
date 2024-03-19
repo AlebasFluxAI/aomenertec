@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="textDerechos">
-            <span>ENERTEC © 2022, Todos los derechos reservados</span>
+            <span>ENERTEC © 2024, Todos los derechos reservados</span>
         </div>
     </div>
 </footer>
