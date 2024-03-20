@@ -45,6 +45,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     {
         $data = $this->unpackData();
         if ($data) {
+            event(new RealTimeMonitoringEvent($data));
             $client = Client::getClientFromSerial($data['equipment_id']);
             $ackLog = AckLog::create(["serial" => $data['equipment_id']]);
             $eventLog = EventLog::create([
@@ -138,8 +139,6 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                         $ackLog->status = AckLog::STATUS_SUCCESS;
                         $ackLog->save();
                     }
-
-                    dd($jsonData);
                 } catch (\Throwable $e) {
                     $statusCode = $e->getCode();
                     $errorMessage = $e->getMessage();
@@ -222,12 +221,12 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
         }
 
         if ($equipment) {
-            //$client = $equipment->clients()->first();
-
-            //$current_time = (new Carbon('now', $client->time_zone))->format('Y-m-d H:i:s');
-            //$client_id = $client->id;
-            //$json['timestamp'] = $current_time;
-            //$json['client_id'] = $client_id;
+            $client = $equipment->clients()->first();
+            $current_time = (new Carbon('now', $client->time_zone));
+            $current_time->setTimestamp($json['timestamp']);
+            $client_id = $client->id;
+            $json['timestamp'] = $current_time->format('Y-m-d H:i:s');
+            $json['client_id'] = $client_id;
             return $json;
         }
         return false;

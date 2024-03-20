@@ -79,7 +79,7 @@ class Control extends Component
     {
         if ($this->client->clientConfiguration()->first()->active_real_time) {
             if ($this->client->clientConfiguration()->first()->real_time_flag) {
-                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
                 if (RealTimeListener::whereUserId(Auth::user()->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
                     RealTimeListener::whereUserId(Auth::user()->id)

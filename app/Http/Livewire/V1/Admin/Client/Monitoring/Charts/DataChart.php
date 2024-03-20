@@ -89,7 +89,7 @@ class DataChart extends Component
     public function selectHistory()
     {
         if($this->client->clientConfiguration()->first()->active_real_time) {
-                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
                 if (RealTimeListener::whereUserId(Auth::user()->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
                     RealTimeListener::whereUserId(Auth::user()->id)
