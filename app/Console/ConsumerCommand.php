@@ -65,7 +65,7 @@ class ConsumerCommand extends Command
         }, 2);
         $mqtt->subscribe('v1/mc/real_time', function (string $topic, string $message) use ($mqtt) {
             $pack= base64_encode($message);
-            dispatch(new PushRealTimeMicrocontrollerDataJob($message))->onQueue('default');
+            dispatch(new PushRealTimeMicrocontrollerDataJob($pack))->onQueue('default');
         }, 0);
         $mqtt->loop();
     }

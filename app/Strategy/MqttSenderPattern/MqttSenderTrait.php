@@ -21,9 +21,9 @@ trait MqttSenderTrait
     {
         if($requestDetails['method'] == 'GET') {
 
-            dd(Http::withHeaders([
+            Http::withHeaders([
                 'x-api-key' => $requestDetails['apiKey'],
-            ])->withoutVerifying()->get($requestDetails['url'], $requestDetails['body']));
+            ])->withoutVerifying()->get($requestDetails['url'], $requestDetails['body']);
         } elseif($requestDetails['method'] == 'POST'){
             Http::withHeaders([
                 'x-api-key' => $requestDetails['apiKey'],
