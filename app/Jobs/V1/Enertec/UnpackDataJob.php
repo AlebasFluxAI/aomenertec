@@ -78,7 +78,6 @@ class UnpackDataJob implements ShouldQueue
                                         $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                                     } else{
                                         $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                        $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
                                     }
                                 } else {
                                     if ($data['variable_name'] == "flags") {

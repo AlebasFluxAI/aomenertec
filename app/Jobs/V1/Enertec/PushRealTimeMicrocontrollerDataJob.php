@@ -3,6 +3,10 @@
 namespace App\Jobs\V1\Enertec;
 
 use App\Events\RealTimeMonitoringEvent;
+use App\Models\V1\Api\AckLog;
+use App\Models\V1\Api\ApiKey;
+use App\Models\V1\Api\EventLog;
+use App\Models\V1\Client;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\MicrocontrollerData;
 use Carbon\Carbon;
@@ -11,6 +15,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 
 class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
 {
@@ -28,7 +33,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
 
     public function __construct($raw_json)
     {
-        $this->raw_json = MicrocontrollerData::find($raw_json);
+        $this->raw_json = $raw_json;
     }
 
     /**
@@ -38,30 +43,134 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($dato= $this->raw_json->hourlyMicrocontrollerData) {
-            if (is_array($dato)) {
-                if (count($dato) > 1) {
-                    foreach ($dato as $d){
-                        $d->forceDelete();
+        $data = $this->unpackData();
+        if ($data) {
+            $client = Client::getClientFromSerial($data['equipment_id']);
+            $ackLog = AckLog::create(["serial" => $data['equipment_id']]);
+            $eventLog = EventLog::create([
+                "name" => EventLog::EVENT_REAL_TIME_FRAME . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
+                "event" => EventLog::EVENT_REAL_TIME_FRAME,
+                "client_id" => $client->id,
+                "request_endpoint" => null,
+                "request_json" => null,
+                "response_json" => json_encode($data),
+                "webhook" => null,
+                "serial" => $data['equipment_id'],
+                "request_type" => EventLog::MAIN_SERVER_MC_REQUEST,
+                "status" => EventLog::STATUS_SUCCESSFUL,
+                "ack_log_id" => $ackLog->id
+            ]);
+            $apiKey = ApiKey::first();
+            $webhook = $apiKey->end_point_notification;
+            $eventLogWh = EventLog::create([
+                "name" => $eventLog->event . "_" . EventLog::MAIN_SERVER_CLIENT_RESPONSE,
+                "event" => $eventLog->event,
+                "client_id" => $client->id,
+                "request_endpoint" => null,
+                "request_json" => null,
+                "response_json" => null,
+                "webhook" => $webhook,
+                "serial" => $data['equipment_id'],
+                "request_type" => EventLog::MAIN_SERVER_CLIENT_RESPONSE,
+                "status" => EventLog::STATUS_CREATED,
+                "ack_log_id" => $eventLog ? $eventLog->ack_log_id : null
+            ]);
+            $data_webhook_events = config('data-frame.webhook_events');
+            foreach ($data_webhook_events as $event) {
+                if ($event['notification_type_id'] == 25) {
+                    foreach ($event['json'] as $datum) {
+                        if ($datum['value'] != null) {
+                            $jsonResponse[$datum['variable_name']] = $datum['value'];
+                        } elseif ($datum['parameter_name'] != null) {
+                            $jsonResponse[$datum['variable_name']] = array_key_exists($datum['parameter_name'], $data) ? $data[$datum['parameter_name']] : null;
+                        } else {
+                            if ($datum['variable_name'] == 'id_transaction') {
+                                $jsonResponse[$datum['variable_name']] = $eventLogWh ? $eventLogWh->ackLog->id : null;
+                            } elseif ($datum['variable_name'] == 'id_event') {
+                                $jsonResponse[$datum['variable_name']] = $eventLogWh ? $eventLogWh->id : null;
+                            } else {
+                                foreach ($datum['object'] as $property) {
+                                    if ($property['format'] == 'date') {
+                                        if (array_key_exists($property['parameter_name'], $data)) {
+                                            $date = Carbon::now();
+                                            $date->setTimestamp($data[$property['parameter_name']]);
+
+                                            $object[$property['variable_name']] = $date->format('Y-m-d H:i:s');
+                                        } else {
+                                            $object[$property['variable_name']] = null;
+                                        }
+                                    } else {
+                                        $object[$property['variable_name']] = array_key_exists($property['parameter_name'], $data) ? $data[$property['parameter_name']] : null;
+                                    }
+                                }
+                                $jsonResponse[$datum['variable_name']] = $object;
+                            }
+                        }
                     }
-                } else {
-                    $dato->forceDelete();
+                }
+            }
+
+            if ($jsonResponse != null) {
+                if ($eventLogWh) {
+                    $eventLogWh->request_json = json_encode($jsonResponse);
+                    $eventLogWh->save();
+                }
+                $requestDetails = [
+                    'url' => $webhook,
+                    'method' => 'POST',
+                    // 'headers' => $e->request->headers()->all(),
+                    'body' => $jsonResponse,
+                ];
+
+                try {
+
+                    $response = Http::withHeaders([
+                        $apiKey->security_header_value => $apiKey->security_header_key,
+                    ])->withoutVerifying()->post($webhook, $jsonResponse);
+                    //$response = Http::post($webhook, $jsonResponse);
+
+                    $jsonData = $response->json();
+                    if ($eventLogWh) {
+                        $eventLogWh->status = EventLog::STATUS_SUCCESSFUL;
+                        $eventLogWh->response_json = json_encode($jsonData);
+                        $eventLogWh->save();
+                        $ackLog = $eventLogWh->ackLog;
+                        $ackLog->status = AckLog::STATUS_SUCCESS;
+                        $ackLog->save();
+                    }
+
+                    dd($jsonData);
+                } catch (\Throwable $e) {
+                    $statusCode = $e->getCode();
+                    $errorMessage = $e->getMessage();
+
+                    $errorInfo = [
+                        'status_code' => $statusCode,
+                        'error_message' => $errorMessage,
+                        'response_body' => null,
+                        'request_details' => $requestDetails
+                    ];
+                    if ($eventLogWh) {
+                        $eventLogWh->status = EventLog::STATUS_ERROR;
+                        $eventLogWh->response_json = json_encode($errorInfo);
+                        $eventLogWh->save();
+                        $ackLog = $eventLog->ackLog;
+                        $ackLog->status = AckLog::STATUS_EXPIRED;
+                        $ackLog->save();
+                    }
+                    error_log($e->getMessage());
                 }
             } else {
-                $dato->forceDelete();
+                if ($eventLog != null) {
+                    $ackLog = $eventLog->ackLog;
+                    $ackLog->status = AckLog::STATUS_SUCCESS;
+                    $ackLog->save();
+                }
+                if ($eventLogWh != null) {
+                    $eventLogWh->delete();
+                }
             }
         }
-        if ($dato = $this->raw_json->dailyMicrocontrollerData) {
-            $dato->forceDelete();
-        }
-        if ($dato = $this->raw_json->clientAlert) {
-            $dato->forceDelete();
-        }
-        $this->raw_json->forceDelete();
-        /*$data = $this->unpackData();
-        if ($data) {
-            event(new RealTimeMonitoringEvent($data));
-        }*/
     }
 
     private function unpackData()
@@ -71,7 +180,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
         $split = substr($decode, (16), (16));
         $bin = hex2bin($split);
         $equipment_serial = str_pad(unpack('Q', $bin)[1], 6, "0", STR_PAD_LEFT);
-        $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
+        $equipment = EquipmentType::find(7)->equipment()->whereSerial($equipment_serial)
             ->first();
         foreach ($data_frame as $data) {
             try {
@@ -81,7 +190,11 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                 } else {
                     $bin = hex2bin($split);
                     if ($data['start'] >= 450) {
-                        $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                        if ($data['variable_name'] == 'volt_dc'){
+                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                        } else{
+                            $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
+                        }
                     } else {
                         if ($data['variable_name'] == "flags") {
                             $json[$data['variable_name']] = 0;
@@ -100,10 +213,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                     $json[$data['variable_name']] = null;
 
                 }
-                if ($data['variable_name'] == "ph3_varLh_acumm") {
-                    break;
-                }
-                if ($data['start'] >= 496) {
+                if ($data['variable_name'] == "volt_dc") {
                     break;
                 }
             } catch (Exception $e) {
@@ -112,12 +222,12 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
         }
 
         if ($equipment) {
-            $client = $equipment->clients()->first();
+            //$client = $equipment->clients()->first();
 
-            $current_time = (new Carbon('now', $client->time_zone))->format('Y-m-d H:i:s');
-            $client_id = $client->id;
-            $json['timestamp'] = $current_time;
-            $json['client_id'] = $client_id;
+            //$current_time = (new Carbon('now', $client->time_zone))->format('Y-m-d H:i:s');
+            //$client_id = $client->id;
+            //$json['timestamp'] = $current_time;
+            //$json['client_id'] = $client_id;
             return $json;
         }
         return false;

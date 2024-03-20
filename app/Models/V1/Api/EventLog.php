@@ -45,6 +45,7 @@ class EventLog extends Model
     const EVENT_LOST_CONNECTION = "lost-connection";
     const EVENT_ALERT_NOTIFICATION = "alert-notification";
     const EVENT_OTA_UPDATE = "ota-update";
+    const EVENT_REAL_TIME_FRAME = "real-time-frame";
 
 
     const EVENT_GET_EVENT_LOGS = "event_logs";
