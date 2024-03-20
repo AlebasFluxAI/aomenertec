@@ -42,7 +42,6 @@ class UpdateTimestampDataConsumption extends Command
     {
         $data = MicrocontrollerData::select('id', 'source_timestamp', 'raw_json', 'status')->whereNull('source_timestamp')
             ->whereNull('client_id')->orderBy('id', 'asc')->get();
-        echo count($data)."\n";
 
         if ($data) {
             foreach ($data as $item) {
