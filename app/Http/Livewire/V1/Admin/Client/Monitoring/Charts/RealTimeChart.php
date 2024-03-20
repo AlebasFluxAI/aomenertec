@@ -2,14 +2,16 @@
 
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
+use App\Models\V1\Api\ApiKey;
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
+use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use PhpMqtt\Client\Exceptions\MqttClientException;
 
-;
 
 class RealTimeChart extends Component
 {
@@ -123,7 +125,7 @@ class RealTimeChart extends Component
     public function selectRealTime()
     {
         if ($this->client->clientConfiguration()->first()->active_real_time) {
-                $equipment = $this->client->equipments()->whereEquipmentTypeId(1)->first();
+                $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
                 if (!RealTimeListener::whereUserId(Auth::user()->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
                     $new = RealTimeListener::create([
@@ -131,11 +133,26 @@ class RealTimeChart extends Component
                         "equipment_id" => $equipment->id
                     ]);
                     if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
-                        $message = "{'did':" . $equipment->serial . ",'realTimeFlag':true}";
-                        $topic = 'mc/config/' . $equipment->serial;
-                        $mqtt = MQTT::connection('default', 'null');
-                        $mqtt->publish($topic, $message);
-                        $mqtt->disconnect();
+                        $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
+                        $apiKey =ApiKey::first();
+                        $requestDetails = [
+                            'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-real-time',
+                            'method' => 'GET',
+                            'body' => [
+                                'serial' => $equipment->serial,
+                                'status' => 1
+                            ],
+                            'apiKey' => $apiKey->api_key
+                        ];
+                        try {
+                            $mqtt = MQTT::connection('default', 'null');
+                            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
+                            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
+                            $mqttCoilAckStrategy->registerLoopEventHandler();
+                            $mqttCoilAckStrategy->subscribe($equipment, 18);
+                        } catch (MqttClientException $e) {
+                            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+                        }
                     }
             }
         } else {
