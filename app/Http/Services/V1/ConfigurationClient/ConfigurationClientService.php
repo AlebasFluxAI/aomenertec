@@ -149,25 +149,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $client = $equipment->clients()->first();
-                            if ($client == null) {
-                                $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                            }
-
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
             'ssid' => 'required | string',
@@ -184,30 +166,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
             'host' => 'required | string',
@@ -226,30 +185,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
         ]);
@@ -264,30 +200,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
         ]);
@@ -302,24 +215,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $client = $equipment->clients()->first();
-                            if ($client == null) {
-                                $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
             'status' => 'required | boolean'
@@ -335,30 +231,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
         ]);
@@ -373,30 +246,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
             'type' => [
@@ -415,30 +265,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
         ]);
@@ -453,30 +280,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
         ]);
@@ -491,30 +295,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
         ]);
@@ -529,30 +310,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
         ]);
@@ -567,30 +325,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
             'status' => 'required | boolean'
@@ -607,30 +342,7 @@ class ConfigurationClientService
             'serial' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
-                    $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-                    if ($equipment_type != null) {
-                        $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                            ->where('serial', $value)->first();
-                        if ($equipment == null) {
-                            $equipment_type = EquipmentType::where('type', 'GABINETE')->first();
-                            $equipment = Equipment::where('equipment_type_id', $equipment_type->id)
-                                ->where('serial', $value)->first();
-                            if($equipment == null) {
-                                $fail("El medidor electrico con serial " . $value . " no existe");
-                            }
-                        } else {
-                            $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su organización");
-                            } else {
-                                $client = $equipment->clients()->first();
-                                if ($client == null) {
-                                    $fail("El medidor electrico con serial " . $value . " no a sido asignado a ningun cliente");
-                                }
-                            }
-                        }
-                    }
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
             'version' => 'required',
