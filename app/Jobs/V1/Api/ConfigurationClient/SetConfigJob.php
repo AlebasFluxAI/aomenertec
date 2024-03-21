@@ -75,7 +75,7 @@ class SetConfigJob implements ShouldQueue
             ]);
         }
         if ($client == null) {
-            $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+            /*$equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
             $equipment = Equipment::create([
                 'equipment_type_id' => $equipment_type->id,
                 'serial' => $serial,
@@ -91,7 +91,7 @@ class SetConfigJob implements ShouldQueue
                 'x-api-key' => $apiKey->api_key,
             ])->post('https://aom.enerteclatam.com/api/v1/clients/client-add', [
                 'serial' => $equipment->serial,
-            ]);
+            ]);*/
             return;
         }
 
@@ -220,7 +220,7 @@ class SetConfigJob implements ShouldQueue
 
                     $response = Http::withHeaders([
                         $apiKey->security_header_value => $apiKey->security_header_key,
-                    ])->post($webhook, $jsonResponse);
+                    ])->withoutVerifying()->post($webhook, $jsonResponse);
 
                     $jsonData = $response->json();
                     if ($eventLogWh) {
@@ -236,11 +236,7 @@ class SetConfigJob implements ShouldQueue
                 } catch (\Throwable $e) {
                     $statusCode = $e->getCode();
                     $errorMessage = $e->getMessage();
-                    if (property_exists($e, 'response') && $e->response) {
-                        $responseBody = $e->response->body(); // Obtener el cuerpo de la respuesta
-                    } else {
-                        $responseBody = null;
-                    }
+                    $responseBody = null;
                     $errorInfo = [
                         'status_code' => $statusCode,
                         'error_message' => $errorMessage,
