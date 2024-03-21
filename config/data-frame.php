@@ -1417,7 +1417,7 @@ return [
                 ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                            'parameter_name' => null,           'object' => []],
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                            'parameter_name' => null, 'object' => []],
                 ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                            'parameter_name' => null,           'object' => [
-                    ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'number'],
                     ['variable_name'=> 'ph1_volt', 'parameter_name' => 'ph1_volt',    'format' => 'number'],
                     ['variable_name'=> 'ph2_volt', 'parameter_name' => 'ph2_volt',    'format' => 'number'],
                     ['variable_name'=> 'ph3_volt', 'parameter_name' => 'ph3_volt',    'format' => 'number'],
