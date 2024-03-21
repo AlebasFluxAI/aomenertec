@@ -188,23 +188,17 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                     $json[$data['variable_name']] = 0;
                 } else {
                     $bin = hex2bin($split);
-                    if ($data['start'] >= 450) {
-                        if ($data['variable_name'] == 'volt_dc'){
-                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                        } else{
-                            $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                        }
+
+                    if ($data['variable_name'] == "flags") {
+                        $json[$data['variable_name']] = 0;
                     } else {
-                        if ($data['variable_name'] == "flags") {
-                            $json[$data['variable_name']] = 0;
+                        if ($data['variable_name'] == "equipment_id") {
+                            $json[$data['variable_name']] = $equipment_serial;
                         } else {
-                            if ($data['variable_name'] == "equipment_id") {
-                                $json[$data['variable_name']] = $equipment_serial;
-                            } else {
-                                $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                            }
+                            $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                         }
                     }
+
                 }
 
 
