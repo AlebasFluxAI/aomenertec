@@ -73,23 +73,16 @@ class UnpackDataJob implements ShouldQueue
                             $split = substr($decode, ($data['start']), ($data['lenght']));
                             $bin = hex2bin($split);
                             if (strlen($bin) == ($data['lenght'] / 2)) {
-                                if ($data['start'] >= 450) {
-                                    if ($data['variable_name'] == 'volt_dc'){
-                                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                                    } else{
-                                        $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                    }
+                                if ($data['variable_name'] == "flags") {
+                                    $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                 } else {
-                                    if ($data['variable_name'] == "flags") {
-                                        $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                    if ($data['variable_name'] == "equipment_id") {
+                                        $json[$data['variable_name']] = $equipment_serial;
                                     } else {
-                                        if ($data['variable_name'] == "equipment_id") {
-                                            $json[$data['variable_name']] = $equipment_serial;
-                                        } else {
-                                            $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                                        }
+                                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                                     }
                                 }
+
                                 if ($data['start'] >= 72) {
                                     if ($json[$data['variable_name']] <= $data['min'] or $json[$data['variable_name']] > $data['max']) {
                                         if (!$data['default']) {
