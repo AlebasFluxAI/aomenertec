@@ -124,10 +124,6 @@ class SendReactiveDataMcJob implements ShouldQueue
                 }
             }
         }
-        dump($json_request);
-        $mqtt = MQTT::connection("default", "null");
-        $mqtt->publish('v1/mc/test', json_encode($json_request));
-        $mqtt->disconnect();
         return $message;
     }
 
