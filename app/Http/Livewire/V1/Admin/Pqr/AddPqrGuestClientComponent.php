@@ -13,7 +13,6 @@ class AddPqrGuestClientComponent extends Component
     use PassTrait;
     use WithFileUploads;
 
-
     public $invoice_radio_button;
     public $platform_radio_button;
     public $subdomain;
@@ -79,6 +78,6 @@ class AddPqrGuestClientComponent extends Component
     {
         return view(
             'livewire.v1.admin.pqr.add-pqr-guest-client',
-        )->extends('layouts.v1.app');
+        )->extends('layouts.v1.app', ["without_header" => true]);
     }
 }

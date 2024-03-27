@@ -70,6 +70,6 @@ class AdminPqrGuestClientComponent extends Component
     {
         return view(
             'livewire.v1.admin.pqr.admin-pqr-guest-client',
-        )->extends('layouts.v1.app');
+        )->extends('layouts.v1.app', ["without_header" => true]);
     }
 }
