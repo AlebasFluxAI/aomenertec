@@ -1,5 +1,5 @@
 <div class="text-{{$button_align??"center"}} custom-nav-button">
-    <div class="dropdown">
+    <div class="dropdown dropleft">
 
         <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
