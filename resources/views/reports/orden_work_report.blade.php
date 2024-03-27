@@ -309,7 +309,7 @@
 
     <tr class="flex-row">
         <td class="flex-item" style="padding:6px; text-align: right;" colspan="12"><strong>Firma: </strong><img
-                src="{{ $client->clientTechnician()->first()->sign ? $client->clientTechnician()->first()->sign->url:"" }}"
+                src="{{ $client->clientTechnician()->first()?$client->clientTechnician()->first()->sign ? $client->clientTechnician()->first()->sign->url:"":"" }}"
                 alt="Archivo-adjunto"
                 class="logo"><br> {{ $work_order->closedBy()->name . ' ' . $work_order->closedBy()->last_name}} -
             Tecnico
