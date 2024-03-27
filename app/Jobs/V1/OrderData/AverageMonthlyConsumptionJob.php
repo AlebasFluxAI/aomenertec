@@ -235,6 +235,15 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                                         $average_accumulated_reactive_consumption_ph1 = ($last_raw_json['ph1_import_kvarh'] - $first_raw_json['ph1_import_kvarh']) / count($data);
                                         $average_accumulated_reactive_consumption_ph2 = ($last_raw_json['ph2_import_kvarh'] - $first_raw_json['ph2_import_kvarh']) / count($data);
                                         $average_accumulated_reactive_consumption_ph3 = ($last_raw_json['ph3_import_kvarh'] - $first_raw_json['ph3_import_kvarh']) / count($data);
+                                        $average_accumulated_reactive_inductive_consumption = ($last_raw_json['varLh_acumm'] - $first_raw_json['varLh_acumm']) / count($data);
+                                        $average_accumulated_reactive_inductive_consumption_ph1 = ($last_raw_json['ph1_varLh_acumm'] - $first_raw_json['ph1_varLh_acumm']) / count($data);
+                                        $average_accumulated_reactive_inductive_consumption_ph2 = ($last_raw_json['ph2_varLh_acumm'] - $first_raw_json['ph2_varLh_acumm']) / count($data);
+                                        $average_accumulated_reactive_inductive_consumption_ph3 = ($last_raw_json['ph3_varLh_acumm'] - $first_raw_json['ph3_varLh_acumm']) / count($data);
+                                        $average_accumulated_reactive_capacitive_consumption = ($last_raw_json['varCh_acumm'] - $first_raw_json['varCh_acumm']) / count($data);
+                                        $average_accumulated_reactive_capacitive_consumption_ph1 = ($last_raw_json['ph1_varCh_acumm'] - $first_raw_json['ph1_varCh_acumm']) / count($data);
+                                        $average_accumulated_reactive_capacitive_consumption_ph2 = ($last_raw_json['ph2_varCh_acumm'] - $first_raw_json['ph2_varCh_acumm']) / count($data);
+                                        $average_accumulated_reactive_capacitive_consumption_ph3 = ($last_raw_json['ph3_varCh_acumm'] - $first_raw_json['ph3_varCh_acumm']) / count($data);
+
                                     } else {
                                         $raw_json = json_decode($datum->raw_json, true);
                                         $raw_json['import_wh'] = $first_raw_json['import_wh'] + ($average_accumulated_real_consumption * $i);
@@ -253,8 +262,32 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                                         $raw_json['ph1_varh_interval'] = $average_accumulated_reactive_consumption_ph1;
                                         $raw_json['ph2_varh_interval'] = $average_accumulated_reactive_consumption_ph2;
                                         $raw_json['ph3_varh_interval'] = $average_accumulated_reactive_consumption_ph3;
+                                        $raw_json['varLh_acumm'] = $first_raw_json['varLh_acumm'] + ($average_accumulated_reactive_inductive_consumption * $i);
+                                        $raw_json['varLh_interval'] = $average_accumulated_reactive_inductive_consumption;
+                                        $raw_json['ph1_varLh_acumm'] = $first_raw_json['ph1_varLh_acumm'] + ($average_accumulated_reactive_inductive_consumption_ph1 * $i);
+                                        $raw_json['ph2_varLh_acumm'] = $first_raw_json['ph2_varLh_acumm'] + ($average_accumulated_reactive_inductive_consumption_ph2 * $i);
+                                        $raw_json['ph3_varLh_acumm'] = $first_raw_json['ph3_varLh_acumm'] + ($average_accumulated_reactive_inductive_consumption_ph3 * $i);
+                                        $raw_json['ph1_varLh_interval'] = $average_accumulated_reactive_inductive_consumption_ph1;
+                                        $raw_json['ph2_varLh_interval'] = $average_accumulated_reactive_inductive_consumption_ph2;
+                                        $raw_json['ph3_varLh_interval'] = $average_accumulated_reactive_inductive_consumption_ph3;
+                                        $raw_json['varCh_acumm'] = $first_raw_json['varCh_acumm'] + ($average_accumulated_reactive_capacitive_consumption * $i);
+                                        $raw_json['varCh_interval'] = $average_accumulated_reactive_capacitive_consumption;
+                                        $raw_json['ph1_varCh_acumm'] = $first_raw_json['ph1_varCh_acumm'] + ($average_accumulated_reactive_capacitive_consumption_ph1 * $i);
+                                        $raw_json['ph2_varCh_acumm'] = $first_raw_json['ph2_varCh_acumm'] + ($average_accumulated_reactive_capacitive_consumption_ph2 * $i);
+                                        $raw_json['ph3_varCh_acumm'] = $first_raw_json['ph3_varCh_acumm'] + ($average_accumulated_reactive_capacitive_consumption_ph3 * $i);
+                                        $raw_json['ph1_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph1;
+                                        $raw_json['ph2_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph2;
+                                        $raw_json['ph3_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph3;
+
                                         $datum->raw_json = json_encode($raw_json);
+                                        $datum->accumulated_real_consumption = $raw_json['import_wh'];
                                         $datum->interval_real_consumption = $raw_json['kwh_interval'];
+                                        $datum->accumulated_reactive_consumption = $raw_json['import_VArh'];
+                                        $datum->interval_reactive_consumption = $raw_json['varh_interval'];
+                                        $datum->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
+                                        $datum->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
+                                        $datum->interval_reactive_capacitive_consumption = $raw_json['varCh_interval'];
+                                        $datum->interval_reactive_inductive_consumption = $raw_json['varLh_interval'];
                                         $datum->save();
                                     }
                                     $i++;
@@ -267,8 +300,23 @@ class AverageMonthlyConsumptionJob implements ShouldQueue
                                 $last_raw_json['ph1_varh_interval'] = $average_accumulated_reactive_consumption_ph1;
                                 $last_raw_json['ph2_varh_interval'] = $average_accumulated_reactive_consumption_ph2;
                                 $last_raw_json['ph3_varh_interval'] = $average_accumulated_reactive_consumption_ph3;
+                                $last_raw_json['varLh_interval'] = $average_accumulated_reactive_inductive_consumption;
+                                $last_raw_json['ph1_varLh_interval'] = $average_accumulated_reactive_inductive_consumption_ph1;
+                                $last_raw_json['ph2_varLh_interval'] = $average_accumulated_reactive_inductive_consumption_ph2;
+                                $last_raw_json['ph3_varLh_interval'] = $average_accumulated_reactive_inductive_consumption_ph3;
+                                $last_raw_json['varCh_interval'] = $average_accumulated_reactive_capacitive_consumption;
+                                $last_raw_json['ph1_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph1;
+                                $last_raw_json['ph2_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph2;
+                                $last_raw_json['ph3_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph3;
                                 $month_data->raw_json = json_encode($raw_json);
+                                $month_data->accumulated_real_consumption = $raw_json['import_wh'];
                                 $month_data->interval_real_consumption = $raw_json['kwh_interval'];
+                                $month_data->accumulated_reactive_consumption = $raw_json['import_VArh'];
+                                $month_data->interval_reactive_consumption = $raw_json['varh_interval'];
+                                $month_data->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
+                                $month_data->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
+                                $month_data->interval_reactive_capacitive_consumption = $raw_json['varCh_interval'];
+                                $month_data->interval_reactive_inductive_consumption = $raw_json['varLh_interval'];
                                 $month_data->save();
                             }
                         }
