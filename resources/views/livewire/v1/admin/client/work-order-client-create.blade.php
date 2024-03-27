@@ -3,7 +3,7 @@
 @endsection
 <div class="login">
     @include("partials.v1.title",[
-            "first_title"=>"Nueve orden de",
+            "first_title"=>"Nueva orden de",
             "second_title"=>" trabajo de Cliente"
         ])
 
