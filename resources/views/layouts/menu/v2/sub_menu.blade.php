@@ -1,7 +1,7 @@
-<ul class="dropdown-menu" aria-labelledby="{{ $href }}">
+<ul class="dropdown-menu " aria-labelledby="{{ $href }}">
     @foreach($menu as $key=>$menuDeep)
         <li class="dropdown">
-            <a class="dropdown-item {{$menuDeep['route']?:"dropdown-toggle"}}"
+            <a class="dropdown-item  {{$menuDeep['route']?:"dropdown-toggle"}}"
                href="{{ $menuDeep['route'] ? route($menuDeep['route'], array_key_exists('binding', $menuDeep) ? [$menuDeep['binding'] => $menuDeep['binding_value']] : []) : '#' }}"
                id="{{ $href."-".$key }}"
                @if(!$menuDeep['route'])

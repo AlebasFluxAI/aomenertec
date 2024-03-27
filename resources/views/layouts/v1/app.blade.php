@@ -102,7 +102,7 @@
 </head>
 
 <body>
-@if(\Illuminate\Support\Facades\Request::has('isMobile'))
+@if(\Illuminate\Support\Facades\Request::has('isMobile') || isset($without_header))
     <div>
         @auth
             @include("layouts.menu.v1.header_menu")

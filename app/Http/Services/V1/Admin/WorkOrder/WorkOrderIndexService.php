@@ -151,6 +151,9 @@ class WorkOrderIndexService extends Singleton
     public function conditionalStart(Component $component, $modelId)
     {
         $workOrder = WorkOrder::find($modelId);
+        if ($workOrder->status == WorkOrder::WORK_ORDER_STATUS_CLOSED) {
+            return true;
+        }
         return $workOrder->status == WorkOrder::WORK_ORDER_STATUS_IN_PROGRESS;
     }
 
