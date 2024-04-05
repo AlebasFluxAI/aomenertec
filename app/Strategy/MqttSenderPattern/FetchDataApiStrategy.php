@@ -43,6 +43,13 @@ class FetchDataApiStrategy implements MqttSenderInterface
                                     if ($notificationTypeId == 3) {
                                         $this->component->coils[$this->index]['status'] = !$this->component->coils[$this->index]['status'];
                                         $this->component->emit('changeCheck', ['index' => $this->component->coils[$this->index]['id'], 'flag' => true]);
+                                    } elseif ($notificationTypeId == 10){
+                                        foreach ($this->component->client_config_alert as $index => $item) {
+                                            if ($index == "client_notification_type") {
+                                                continue;
+                                            }
+                                            $item->save();
+                                        }
                                     }
                                     $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
                                     $this->mqtt->interrupt();
