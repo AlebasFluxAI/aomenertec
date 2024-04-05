@@ -318,7 +318,7 @@ class MicrocontrollerData extends Model
                 }
             }
             dispatch(new UpdatedMicrocontrollerDataJob($this))->onQueue('spot');
-            // $this->alertEnergyEvent();
+            $this->alertEnergyEvent();
         }
     }
 
@@ -341,14 +341,13 @@ class MicrocontrollerData extends Model
     {
         $binary_flags = sprintf("%064b", ($this->raw_json['flags']));
         $this->source_timestamp = new Carbon($this->source_timestamp);
-        $is_wifi = substr($binary_flags, 2, 1);
-
         $client = Client::find($this->client_id);
+       /* $is_wifi = substr($binary_flags, 2, 1);
         if ($is_wifi == 1) {
             $is_wifi = true;
         } else {
             $is_wifi = false;
-        }
+        }*/
         $offset_outputs = [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
         if ($client->digitalOutputs()->exists()) {
             $client_outputs = $client->digitalOutputs()->get();
@@ -381,9 +380,9 @@ class MicrocontrollerData extends Model
 
             ]);
         }
-        $real_time_flag = $client->clientConfiguration()->first();
-        $real_time_flag->real_time_flag = $is_wifi;
-        $real_time_flag->save();
+        //$real_time_flag = $client->clientConfiguration()->first();
+        //$real_time_flag->real_time_flag = $is_wifi;
+        //$real_time_flag->save();
         $value = 0;
         $unix_time = $this->raw_json["timestamp"];
         $current_time = new Carbon();
@@ -392,9 +391,9 @@ class MicrocontrollerData extends Model
         $current_time_aux->setTimestamp($unix_time);
         $current_time->subHour();
         $current_time_aux->subMonth();
-        $energy_alerts = $client->clientAlertConfiguration()->where('flag_id', '>=', 50)
+        $energy_alerts = $client->clientAlertConfiguration()->where('flag_id', '>', 50)
             ->where('max_alert', '>', 0)->get();
-        $energy_control = $client->clientAlertConfiguration()->where('flag_id', '>=', 50)
+        $energy_control = $client->clientAlertConfiguration()->where('flag_id', '>', 50)
             ->where('active_control', true)->where('max_control', '>', 0)->get();
         $alerts = $energy_alerts->merge($energy_control);
         $energy_hour = $client->microcontrollerData()->whereBetween('source_timestamp', [$current_time->format('Y-m-d H:00:00'), $current_time->format('Y-m-d H:59:59')])
