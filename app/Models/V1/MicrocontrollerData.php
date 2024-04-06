@@ -440,11 +440,11 @@ class MicrocontrollerData extends Model
     {
         $value = 0;
         if ($energy_month) {
-            if ($flag_id == 50) {
+            if ($flag_id == 51) {
                 $value = $this->accumulated_real_consumption - $energy_month->accumulated_real_consumption;
-            } elseif ($flag_id == 51) {
-                $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
             } elseif ($flag_id == 52) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 53) {
                 $value = $this->accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
             }
         }
