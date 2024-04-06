@@ -449,15 +449,15 @@ class MicrocontrollerData extends Model
             }
         }
         if ($energy_hour) {
-            if ($flag_id == 53) {
+            if ($flag_id == 54) {
                 $value = $this->accumulated_real_consumption - $energy_hour->accumulated_real_consumption;
-            } elseif ($flag_id == 54) {
-                $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
             } elseif ($flag_id == 55) {
+                $value = $this->accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
+            } elseif ($flag_id == 56) {
                 $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
             }
         }
-        if ($flag_id == 56) {
+        if ($flag_id == 57) {
             if ($this->interval_real_consumption != 0) {
                 $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
             } else {
@@ -469,7 +469,7 @@ class MicrocontrollerData extends Model
 
     private function createAlert($value, $type, $alert)
     {
-        if ($alert->flag_id == 56) {
+        if ($alert->flag_id == 57) {
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
                 $query->whereBetween("source_timestamp", [$this->source_timestamp->copy()->subMinutes(25)->format('Y-m-d H:i:s'), $this->source_timestamp->format('Y-m-d H:i:s')]);
             })->exists()) {
@@ -482,9 +482,9 @@ class MicrocontrollerData extends Model
                     'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s')
                 ]);
             }
-        } elseif ($alert->flag_id == 50
-            || $alert->flag_id == 51
-            || $alert->flag_id == 52) {
+        } elseif ($alert->flag_id == 51
+            || $alert->flag_id == 52
+            || $alert->flag_id == 53) {
             if (!$alert->clientAlerts()->whereHas('microcontrollerData', function ($query) {
                 $query->whereBetween("source_timestamp", [$this->source_timestamp->format('Y-m-1 00:00:00'), $this->source_timestamp->format('Y-m-t 23:59:59')]);
             })->exists()) {
