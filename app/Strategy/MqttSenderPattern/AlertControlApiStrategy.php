@@ -18,25 +18,24 @@ class AlertControlApiStrategy implements MqttSenderInterface
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
-        if ($elapsedTime >= 30) {
-            echo "fallo\n";
-//            $technicians = $this->client->clientTechnician;
-//            $supervisors = $this->client->supervisors;
-//            $flag = true;
-//            foreach ($technicians as $user) {
-//                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-//            }
-//            foreach ($supervisors as $user) {
-//                if ($user->user->phone == $this->client->phone) {
-//                    $flag = false;
-//                }
-//                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-//            }
-//            if ($flag) {
-//                $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-//            }
+        if ($elapsedTime >= 20) {
+            $technicians = $this->client->clientTechnician;
+            $supervisors = $this->client->supervisors;
+            $flag = true;
+            foreach ($technicians as $user) {
+                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+            }
+            foreach ($supervisors as $user) {
+                if ($user->user->phone == $this->client->phone) {
+                    $flag = false;
+                }
+                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+            }
+            if ($flag) {
+                $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+            }
             $mqtt->interrupt();
         }
     }
@@ -59,66 +58,53 @@ class AlertControlApiStrategy implements MqttSenderInterface
                             if ($webhookResponse['success'] == 1) {
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
-                                        echo $notificationTypeId."\n";
-                                        try {
-                                            // Código donde puede ocurrir una excepción
-                                            dd($webhookResponse);
+                                        $data = json_decode($webhookResponse['data'], true);
 
-                                        } catch (\Exception $e) {
-                                            // Manejo de la excepción
-                                           dd('Ocurrió una excepción: ' . $e->getMessage());
-                                            // Puedes realizar otras acciones como enviar correos electrónicos, notificar al usuario, etc.
+                                        foreach ($this->digital_output as $output) {
+                                            $output->status = $data['status_coil'] == 1;
+                                            $output->save();
+                                            break;
                                         }
-                                        //$data = json_decode($webhookResponse['data'], true);
-                                        //echo $data['status_coil']."\n";
-                                       // dd($this->digital_output);
-
-//                                        foreach ($this->digital_output as $output) {
-//                                            $output->status = $data['status_coil'] == 1;
-//                                            $output->save();
-//                                            break;
-//                                        }
-//                                        echo $this->digital_output->id."\n";
-//                                        $technicians = $this->client->clientTechnician;
-//                                        $supervisors = $this->client->supervisors;
-//                                        foreach ($technicians as $user) {
-//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-//                                        }
-//                                        $flag = true;
-//                                        foreach ($supervisors as $user) {
-//                                            if ($user->user->phone == $this->client->phone) {
-//                                                $flag = false;
-//                                            }
-//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-//                                        }
-//                                        if ($flag) {
-//                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-//                                        }
+                                        $technicians = $this->client->clientTechnician;
+                                        $supervisors = $this->client->supervisors;
+                                        foreach ($technicians as $user) {
+                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                                        }
+                                        $flag = true;
+                                        foreach ($supervisors as $user) {
+                                            if ($user->user->phone == $this->client->phone) {
+                                                $flag = false;
+                                            }
+                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                                        }
+                                        if ($flag) {
+                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                                        }
                                         $this->mqtt->interrupt();
 
                                     }
                                 }
                             } else {
                                 if ($notificationTypeId == 3) {
-//                                    $technicians = $this->client->clientTechnician;
-//                                    $supervisors = $this->client->supervisors;
-//                                    $flag = true;
-//                                    foreach ($technicians as $user) {
-//                                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-//                                    }
-//                                    foreach ($supervisors as $user) {
-//                                        if ($user->user->phone == $this->client->phone) {
-//                                            $flag = false;
-//                                        }
-//                                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-//                                    }
-//                                    if ($flag) {
-//                                        $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-//                                    }
+                                    $technicians = $this->client->clientTechnician;
+                                    $supervisors = $this->client->supervisors;
+                                    $flag = true;
+                                    foreach ($technicians as $user) {
+                                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                                    }
+                                    foreach ($supervisors as $user) {
+                                        if ($user->user->phone == $this->client->phone) {
+                                            $flag = false;
+                                        }
+                                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                                    }
+                                    if ($flag) {
+                                        $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                                    }
                                     $this->mqtt->interrupt();
 
                                 }
