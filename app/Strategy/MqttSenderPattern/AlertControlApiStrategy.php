@@ -60,7 +60,15 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
                                         echo $notificationTypeId."\n";
-                                        dd($webhookResponse);
+                                        try {
+                                            // Código donde puede ocurrir una excepción
+                                            dd($webhookResponse);
+
+                                        } catch (\Exception $e) {
+                                            // Manejo de la excepción
+                                           dd('Ocurrió una excepción: ' . $e->getMessage());
+                                            // Puedes realizar otras acciones como enviar correos electrónicos, notificar al usuario, etc.
+                                        }
                                         //$data = json_decode($webhookResponse['data'], true);
                                         //echo $data['status_coil']."\n";
                                        // dd($this->digital_output);
