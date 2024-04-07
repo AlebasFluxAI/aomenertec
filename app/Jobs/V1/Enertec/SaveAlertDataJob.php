@@ -240,7 +240,7 @@ class SaveAlertDataJob implements ShouldQueue
                                             $ackLog->save();
                                         }
 
-                                        dd($jsonData);
+                                        //dd($jsonData);
                                     } catch (\Throwable $e) {
                                         $statusCode = $e->getCode();
                                         $errorMessage = $e->getMessage();

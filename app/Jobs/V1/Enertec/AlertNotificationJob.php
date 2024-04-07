@@ -101,8 +101,38 @@ class AlertNotificationJob implements ShouldQueue
                         $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
                         break;
                     }
-                    $mqttCoilAckStrategy->registerLoopEventHandler();
-                    $mqttCoilAckStrategy->subscribe($equipment, 3);
+                    //$mqttCoilAckStrategy->registerLoopEventHandler();
+                    //$mqttCoilAckStrategy->subscribe($equipment, 3);
+                    foreach ($this->digital_output as $output) {
+                        if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
+                            $output->status = !$output->status;
+                            $output->save();
+                        } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
+                            $output->status = true;
+                            $output->save();
+                        } else {
+                            $output->status = false;
+                            $output->save();
+                        }
+                        break;
+                    }
+                    $technicians = $this->client->clientTechnician;
+                    $supervisors = $this->client->supervisors;
+                    foreach ($technicians as $user) {
+                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                    }
+                    $flag = true;
+                    foreach ($supervisors as $user) {
+                        if ($user->user->phone == $this->client->phone) {
+                            $flag = false;
+                        }
+                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                    }
+                    if ($flag) {
+                        $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                    }
 
                 } catch (MqttClientException $e) {
 

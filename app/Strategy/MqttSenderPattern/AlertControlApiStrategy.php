@@ -18,7 +18,7 @@ class AlertControlApiStrategy implements MqttSenderInterface
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
-        if ($elapsedTime >= 20) {
+        if ($elapsedTime >= 30) {
             $technicians = $this->client->clientTechnician;
             $supervisors = $this->client->supervisors;
             $flag = true;
@@ -59,7 +59,7 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
                                         dd($webhookResponse['data']);
-                                        $data = json_decode($webhookResponse, true);
+                                        //$data = json_decode($webhookResponse, true);
 
 //                                        foreach ($this->digital_output as $output) {
 //                                            $output->status = $data['status_coil'] == 1;
