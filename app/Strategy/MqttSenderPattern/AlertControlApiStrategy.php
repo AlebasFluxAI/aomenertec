@@ -58,6 +58,7 @@ class AlertControlApiStrategy implements MqttSenderInterface
                             if ($webhookResponse['success'] == 1) {
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
+                                        dd($message);
                                         foreach ($this->digital_output as $output) {
                                             if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
                                                 $output->status = !$output->status;
@@ -111,7 +112,7 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                         $this->client->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
                                     }
                                     $this->mqtt->interrupt();
-                                    
+
                                 }
                             }
                         }
