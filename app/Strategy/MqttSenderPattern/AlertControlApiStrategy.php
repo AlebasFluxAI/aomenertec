@@ -24,17 +24,17 @@ class AlertControlApiStrategy implements MqttSenderInterface
             $flag = true;
             foreach ($technicians as $user) {
                 //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
             }
             foreach ($supervisors as $user) {
                 if ($user->user->phone == $this->client->phone) {
                     $flag = false;
                 }
                 //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
             }
             if ($flag) {
-                $this->client->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
             }
             $mqtt->interrupt();
         }
@@ -58,7 +58,6 @@ class AlertControlApiStrategy implements MqttSenderInterface
                             if ($webhookResponse['success'] == 1) {
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
-                                        dd($message);
                                         foreach ($this->digital_output as $output) {
                                             if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
                                                 $output->status = !$output->status;
@@ -70,12 +69,13 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                                 $output->status = false;
                                                 $output->save();
                                             }
+                                            break;
                                         }
                                         $technicians = $this->client->clientTechnician;
                                         $supervisors = $this->client->supervisors;
                                         foreach ($technicians as $user) {
                                             //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
                                         }
                                         $flag = true;
                                         foreach ($supervisors as $user) {
@@ -83,10 +83,10 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                                 $flag = false;
                                             }
                                             //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
                                         }
                                         if ($flag) {
-                                            $this->client->notifyNow(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
                                         }
                                         $this->mqtt->interrupt();
 
@@ -99,17 +99,17 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                     $flag = true;
                                     foreach ($technicians as $user) {
                                         //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                        $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
                                     }
                                     foreach ($supervisors as $user) {
                                         if ($user->user->phone == $this->client->phone) {
                                             $flag = false;
                                         }
                                         //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                        $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
                                     }
                                     if ($flag) {
-                                        $this->client->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
+                                        $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
                                     }
                                     $this->mqtt->interrupt();
 
