@@ -65,6 +65,7 @@ class AlertNotificationJob implements ShouldQueue
             }
         }
         if ($this->clientAlert->type == ClientAlert::CONTROL) {
+            echo "control\n";
             $client_alert_configuration = $this->clientAlert->clientAlertConfiguration;
             if ($client_alert_configuration->active_control) {
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
