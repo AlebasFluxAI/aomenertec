@@ -15,7 +15,7 @@ class ClientAlertObserver
      */
     public function created(ClientAlert $clientAlert)
     {
-        dispatch(new AlertNotificationJob($clientAlert))->onQueue('spot2');
+        dispatch(new AlertNotificationJob($clientAlert))->onQueue('default');
     }
 
     /**

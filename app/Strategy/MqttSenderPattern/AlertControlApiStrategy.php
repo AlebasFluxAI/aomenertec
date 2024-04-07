@@ -18,7 +18,7 @@ class AlertControlApiStrategy implements MqttSenderInterface
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
-        if ($elapsedTime >= 20) {
+        if ($elapsedTime >= 30) {
             $technicians = $this->client->clientTechnician;
             $supervisors = $this->client->supervisors;
             $flag = true;
@@ -58,17 +58,14 @@ class AlertControlApiStrategy implements MqttSenderInterface
                             if ($webhookResponse['success'] == 1) {
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
-                                        echo $notificationTypeId."\n";
-                                        $data = json_decode($webhookResponse['data'], true);
-                                        echo $data['status_coil']."\n";
-                                       // dd($this->digital_output);
+                                        dd($webhookResponse['data']);
+                                        //$data = json_decode($webhookResponse, true);
 
-                                        foreach ($this->digital_output as $output) {
-                                            $output->status = $data['status_coil'] == 1;
-                                            $output->save();
-                                            break;
-                                        }
-                                        echo $this->digital_output->id."\n";
+//                                        foreach ($this->digital_output as $output) {
+//                                            $output->status = $data['status_coil'] == 1;
+//                                            $output->save();
+//                                            break;
+//                                        }
 //                                        $technicians = $this->client->clientTechnician;
 //                                        $supervisors = $this->client->supervisors;
 //                                        foreach ($technicians as $user) {
@@ -87,7 +84,6 @@ class AlertControlApiStrategy implements MqttSenderInterface
 //                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
 //                                        }
                                         $this->mqtt->interrupt();
-
                                     }
                                 }
                             } else {
