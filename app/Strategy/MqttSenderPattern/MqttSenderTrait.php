@@ -5,13 +5,14 @@ namespace App\Strategy\MqttSenderPattern;
 use Illuminate\Support\Facades\Http;
 use Livewire\Component;
 use PhpMqtt\Client\MqttClient;
+use App\Jobs\V1\Enertec\AlertNotificationJob;
 
 trait MqttSenderTrait
 {
     private $mqtt;
     private $component;
 
-    public function __construct(MqttClient $mqtt, Component $component)
+    public function __construct(MqttClient $mqtt, Component|AlertNotificationJob $component)
     {
         $this->mqtt = $mqtt;
         $this->component = $component;
