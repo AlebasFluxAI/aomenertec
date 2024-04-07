@@ -58,32 +58,32 @@ class AlertControlApiStrategy implements MqttSenderInterface
                             if ($webhookResponse['success'] == 1) {
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
+                                        dd($webhookResponse);
                                         $data = json_decode($webhookResponse['data'], true);
 
-                                        foreach ($this->digital_output as $output) {
-                                            $output->status = $data['status_coil'] == 1;
-                                            $output->save();
-                                            break;
-                                        }
-                                        $technicians = $this->client->clientTechnician;
-                                        $supervisors = $this->client->supervisors;
-                                        foreach ($technicians as $user) {
-                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
-                                        $flag = true;
-                                        foreach ($supervisors as $user) {
-                                            if ($user->user->phone == $this->client->phone) {
-                                                $flag = false;
-                                            }
-                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
-                                        if ($flag) {
-                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
+//                                        foreach ($this->digital_output as $output) {
+//                                            $output->status = $data['status_coil'] == 1;
+//                                            $output->save();
+//                                            break;
+//                                        }
+//                                        $technicians = $this->client->clientTechnician;
+//                                        $supervisors = $this->client->supervisors;
+//                                        foreach ($technicians as $user) {
+//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+//                                        }
+//                                        $flag = true;
+//                                        foreach ($supervisors as $user) {
+//                                            if ($user->user->phone == $this->client->phone) {
+//                                                $flag = false;
+//                                            }
+//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+//                                        }
+//                                        if ($flag) {
+//                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+//                                        }
                                         $this->mqtt->interrupt();
-
                                     }
                                 }
                             } else {
