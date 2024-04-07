@@ -69,23 +69,23 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                             break;
                                         }
                                         echo $this->digital_output->id."\n";
-                                        $technicians = $this->client->clientTechnician;
-                                        $supervisors = $this->client->supervisors;
-                                        foreach ($technicians as $user) {
-                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
-                                        $flag = true;
-                                        foreach ($supervisors as $user) {
-                                            if ($user->user->phone == $this->client->phone) {
-                                                $flag = false;
-                                            }
-                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
-                                        if ($flag) {
-                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
+//                                        $technicians = $this->client->clientTechnician;
+//                                        $supervisors = $this->client->supervisors;
+//                                        foreach ($technicians as $user) {
+//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+//                                        }
+//                                        $flag = true;
+//                                        foreach ($supervisors as $user) {
+//                                            if ($user->user->phone == $this->client->phone) {
+//                                                $flag = false;
+//                                            }
+//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+//                                        }
+//                                        if ($flag) {
+//                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
+//                                        }
                                         $this->mqtt->interrupt();
 
                                     }
