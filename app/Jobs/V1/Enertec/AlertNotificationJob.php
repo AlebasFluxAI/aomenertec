@@ -70,6 +70,7 @@ class AlertNotificationJob implements ShouldQueue
             if ($client_alert_configuration->active_control) {
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
                 $this->digital_output = $digital_output;
+                dd($this->digital_output);
                 $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
                 $apiKey =ApiKey::first();
 
