@@ -18,7 +18,7 @@ class AlertControlApiStrategy implements MqttSenderInterface
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
-        if ($elapsedTime >= 20) {
+        if ($elapsedTime >= 30) {
             echo "fallo\n";
 //            $technicians = $this->client->clientTechnician;
 //            $supervisors = $this->client->supervisors;
