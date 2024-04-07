@@ -457,6 +457,7 @@ class MicrocontrollerData extends Model
                 $value = $this->accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
             }
         }
+
         if ($flag_id == 57) {
             if ($this->interval_real_consumption != 0) {
                 $value = ($this->interval_reactive_inductive_consumption * 100) / $this->interval_real_consumption;
