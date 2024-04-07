@@ -58,19 +58,14 @@ class AlertControlApiStrategy implements MqttSenderInterface
                             if ($webhookResponse['success'] == 1) {
                                 if ($equipment->serial == $webhookResponse['serial']) {
                                     if ($notificationTypeId == 3) {
+                                        $data = json_decode($webhookResponse['data'], true);
+
                                         foreach ($this->digital_output as $output) {
-                                            if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
-                                                $output->status = !$output->status;
-                                                $output->save();
-                                            } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
-                                                $output->status = true;
-                                                $output->save();
-                                            } else {
-                                                $output->status = false;
-                                                $output->save();
-                                            }
+                                            $output->status = $data['status_coil'] == 1;
+                                            $output->save();
                                             break;
                                         }
+                                        echo $this->digital_output->id;
                                         $technicians = $this->client->clientTechnician;
                                         $supervisors = $this->client->supervisors;
                                         foreach ($technicians as $user) {
