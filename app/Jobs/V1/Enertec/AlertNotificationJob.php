@@ -2,11 +2,13 @@
 
 namespace App\Jobs\V1\Enertec;
 
+use App\Models\V1\Api\ApiKey;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Notifications\Alert\AlertControlNotification;
 use App\Notifications\Alert\AlertNotification;
+use App\Strategy\MqttSenderPattern\AlertControlApiStrategy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -26,10 +28,13 @@ class AlertNotificationJob implements ShouldQueue
      * @return void
      */
     public $clientAlert;
+    public $client;
+    public $digital_output;
 
     public function __construct($clientAlert)
     {
         $this->clientAlert = $clientAlert->withoutRelations();
+        $this->client = $this->clientAlert->client;
     }
 
     /**
@@ -63,93 +68,40 @@ class AlertNotificationJob implements ShouldQueue
             $client_alert_configuration = $this->clientAlert->clientAlertConfiguration;
             if ($client_alert_configuration->active_control) {
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
-                $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
-                $topic = "mc/config/" . $equipment->serial;
+                $this->digital_output = $digital_output;
+                $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
+                $apiKey =ApiKey::first();
+
                 try {
-                    $mqtt = MQTT::connection();
+                    $mqtt = \App\ModulesAux\MQTT::connection('default', 'null');
+                    $mqttCoilAckStrategy = new AlertControlApiStrategy($mqtt, $this);
                     foreach ($digital_output as $output) {
                         if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
                             if ($output->status) {
-                                $message = "{\"coil" . $output->number . "\":false}";
+                                $value = false;
                             } else {
-                                $message = "{\"coil" . $output->number . "\":true}";
+                                $value = true;
                             }
                         } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
-                            $message = "{\"coil" . $output->number . "\":true}";
+                            $value = true;
                         } else {
-                            $message = "{\"coil" . $output->number . "\":false}";
+                            $value = false;
                         }
-                        $mqtt->publish($topic, $message);
-                        $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use ($client) {
-                            if ($elapsedTime >= 50) {
-                                $technicians = $client->clientTechnician;
-                                $supervisors = $client->supervisors;
-                                $flag = true;
-                                foreach ($technicians as $user) {
-                                    //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                    $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-                                }
-                                foreach ($supervisors as $user) {
-                                    if ($user->user->phone == $client->phone) {
-                                        $flag = false;
-                                    }
-                                    //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                    $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-                                }
-                                if ($flag) {
-                                    $client->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-                                }
-                                $mqtt->interrupt();
-                            }
-                        });
+                        $requestDetails = [
+                            'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-coil',
+                            'method' => 'GET',
+                            'body' => [
+                                'serial' => $equipment->serial,
+                                'status' => $value
+                            ],
+                            'apiKey' => $apiKey->api_key
+                        ];
+                        $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
+                        break;
                     }
-                    $mqtt->subscribe('mc/ack', function (string $topic, string $message) use ($client, $mqtt, $digital_output) {
-                        $json = json_decode($message, true);
-                        if (array_key_exists('coil_ack', $json)) {
-                            $equipment_serial = str_pad($json['did'], 6, "0", STR_PAD_LEFT);
-                            $equipment = EquipmentType::find(1)->equipment()->whereSerial($equipment_serial)
-                                ->first();
-                            if ($equipment) {
-                                $client_aux = $equipment->clients()->first();
-                                if ($client_aux->id == $client->id) {
-                                    if ($json['coil_ack']) {
-                                        foreach ($digital_output as $output) {
-                                            if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
-                                                $output->status = !$output->status;
-                                                $output->save();
-                                            } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
-                                                $output->status = true;
-                                                $output->save();
-                                            } else {
-                                                $output->status = false;
-                                                $output->save();
-                                            }
-                                        }
-                                        $technicians = $client->clientTechnician;
-                                        $supervisors = $client->supervisors;
-                                        foreach ($technicians as $user) {
-                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
-                                        $flag = true;
-                                        foreach ($supervisors as $user) {
-                                            if ($user->user->phone == $client->phone) {
-                                                $flag = false;
-                                            }
-                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                            $user->user->notifyNow(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
-                                        if ($flag) {
-                                            $client->notifyNow(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        $mqtt->interrupt();
-                    }, 1);
-                    $mqtt->loop(true);
-                    $mqtt->disconnect();
+                    $mqttCoilAckStrategy->registerLoopEventHandler();
+                    $mqttCoilAckStrategy->subscribe($equipment, 3);
+
                 } catch (MqttClientException $e) {
 
                 }
