@@ -87,8 +87,9 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                         if ($flag) {
                                             $this->client->notifyNow(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
                                         }
+                                        $this->mqtt->interrupt();
+
                                     }
-                                    $this->mqtt->interrupt();
                                 }
                             } else {
                                 if ($notificationTypeId == 3) {
@@ -109,8 +110,9 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                     if ($flag) {
                                         $this->client->notifyNow(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
                                     }
+                                    $this->mqtt->interrupt();
+                                    
                                 }
-                                $this->mqtt->interrupt();
                             }
                         }
                         break;

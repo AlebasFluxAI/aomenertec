@@ -287,15 +287,12 @@ class SaveAlertDataJob implements ShouldQueue
         $variable = $data_frame->where('id', $variable_id)->first();
         $split = substr($decode, ($variable['start']), ($variable['lenght']));
         $bin = hex2bin($split);
-        if ($variable['start'] >= 464) {
-            $value = (unpack($variable['type'], $bin)[1]) / 1000;
+       if ($variable['variable_name'] == "flags") {
+            $value = strval(unpack($variable['type'], $bin)[1]);
         } else {
-            if ($variable['variable_name'] == "flags") {
-                $value = strval(unpack($variable['type'], $bin)[1]);
-            } else {
-                $value = unpack($variable['type'], $bin)[1];
-            }
+            $value = unpack($variable['type'], $bin)[1];
         }
+
         return $value;
     }
 }
