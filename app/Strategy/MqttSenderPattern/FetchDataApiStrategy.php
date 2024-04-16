@@ -33,12 +33,9 @@ class FetchDataApiStrategy implements MqttSenderInterface
 
         $webhookEvents = config('data-frame.webhook_events');
         $webhookResponse = json_decode($message, true);
-
         foreach ($webhookEvents as $event){
 
             if ($event['notification_type_id'] == $notificationTypeId){
-                dd($webhookResponse, $notificationTypeId, $event);
-
                 $json = $event['json'];
                 foreach ($json as $item){
 
@@ -63,7 +60,6 @@ class FetchDataApiStrategy implements MqttSenderInterface
                                     $this->mqtt->interrupt();
                                 }
                             } else {
-                                dd($webhookResponse);
                                 $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
                                 if ($notificationTypeId == 3) {
                                     $this->component->coils[$this->index]['status'] = $this->component->coils[$this->index]['status'];

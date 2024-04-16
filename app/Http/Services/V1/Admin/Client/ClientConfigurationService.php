@@ -515,6 +515,13 @@ class ClientConfigurationService extends Singleton
                 'apiKey' => $apiKey->api_key
             ];
             $this->consumeService($component, $requestDetails, 46);
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-control-limits',
+                'method' => 'POST',
+                'body' => array_merge(['serial' => $equipment->serial], $json_status),
+                'apiKey' => $apiKey->api_key
+            ];
+            $this->consumeService($component, $requestDetails, 58);
 
 
 
