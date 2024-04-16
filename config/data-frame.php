@@ -203,7 +203,15 @@ return [
         ['flag_id' => 49,'limit' => 'min_alert', 'variable_name' => 'min_vthd_ph_3_1', 'start' => 600,   'lenght' => 8,'type' => 'f'],
         ['flag_id' => 50, 'limit' => 'max_alert', 'variable_name' => 'max_volt_dc', 'start' => 608, 'lenght' => 8, 'type' => 'f'],
         ['flag_id' => 50, 'limit' => 'min_alert', 'variable_name' => 'min_volt_dc', 'start' => 616, 'lenght' => 8, 'type' => 'f'],
-    ],
+        ['flag_id' => 51, 'limit' => 'max_alert', 'variable_name' => 'kwh_month', 'start' => 624, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 52, 'limit' => 'max_alert', 'variable_name' => 'kvarlh_month', 'start' => 632, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 53, 'limit' => 'max_alert', 'variable_name' => 'kvarch_month', 'start' => 640, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 54, 'limit' => 'max_alert', 'variable_name' => 'kwh_hour', 'start' => 648, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 55, 'limit' => 'max_alert', 'variable_name' => 'kvarlh_hour', 'start' => 656, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 56, 'limit' => 'max_alert', 'variable_name' => 'kvarch_hour', 'start' => 664, 'lenght' => 8, 'type' => 'f'],
+        ['flag_id' => 57, 'limit' => 'max_alert', 'variable_name' => 'kvarlh_penalizable', 'start' => 672, 'lenght' => 8, 'type' => 'f'],
+
+        ],
     'alert_config_time_frame' => [
         ['flag_id' => 16,'limit' => 'time_alert', 'variable_name' => 'time_vol_ph_1', 'start' => 64,   'lenght' => 8, 'type' => 'f'],
         ['flag_id' => 17,'limit' => 'time_alert', 'variable_name' => 'time_vol_ph_2', 'start' => 80,   'lenght' => 8,'type' => 'f'],

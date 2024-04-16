@@ -32,76 +32,18 @@ class MailTestController
     }
 
     public function eventTest(){
-        $frame = [7 => ['coil_id', 'status']];
-        $coil_id = pack('C', 1);
-        $status = pack('C',  0);
-        $event_id = pack('C', 7);
-        $message = $event_id.$coil_id.$status;
-        $crc = Crc16::XMODEM($message);
+        $message =hex2bin("10ac0e010098731866a1bb0d000101f9000f49fe733d486b664240842c0646fe47");
+        $crc_message = substr($message, -2);
+        $data_crc = substr($message, 0, -2);
+        $crc = Crc16::XMODEM($data_crc);
         $crc_pack = pack('v', $crc);
-        $message = $message.$crc_pack;
-        //////// mensaje con string
-        //$message = $event_id.$f.$coil_id.$f.$status.pack('C', strlen($string)).$string;
+        dd($message,$crc_pack,$crc_message,$data_crc,dechex($crc));
 
-
-        $string = "holaaaaaaaaaaaxxxx";
-        $q = pack('C', ord('Q'));
-        $l = pack('C', ord('l'));
-        $f = pack('C', ord('f'));
-        $did = '920601';
-//       $did = '888893';
-        $topic = "v1/mc/config/" . $did;
-        $mqtt = MQTT::connection('default', 'default');
-        $mqtt->publish($topic, $message);
-        $mqtt->disconnect();
-//        $crc_unpack = unpack('v', substr($message,-2))[1];
-//        $data_crc = substr($message, 0, -2);
-//        $did = substr($message, (1), (9));
-//        $bin = hex2bin($did);
-//        $did_unpack = unpack('f', $bin)[1];
-//        dd($crc_unpack, $data_crc, $message);
-        dd($message, $crc, bin2hex($message), $topic);
-
-
-           ///////////////////////////////////////////////////
-//           $crc_unpack = unpack('f', substr($message,-4))[1];
-//           $data_crc = substr($message, 0, -4);
-//           $event = unpack('C', $message[0])[1];
-//           if (Crc16::XMODEM($data_crc) == $crc_unpack){
-//               $i=1;
-//               $j=0;
-//               $json = [];
-//               $event_keys = $frame[$event];
-//               while (true){
-//                   $format = $data_crc[$i];
-//                   $i++;
-//                   if ($format == 'f'){
-//                       $size = 4;
-//                       $datum = unpack('f', substr($data_crc, $i, 4))[1];
-//                   } elseif ($format == 'l'){
-//                       $size = 8;
-//                       $datum = unpack('l', substr($data_crc, $i, 8))[1];
-//                   } elseif ($format == 'Q'){
-//                       $size = 16;
-//                       $datum = unpack('Q', substr($data_crc, $i, 16))[1];
-//                   } else{
-//                       $size = unpack('C', $format)[1];
-//                       $datum = substr($data_crc, $i, $size);
-//                   }
-//                   $i = $i + $size;
-//                   $json[$event_keys[$j]] = $datum;
-//                   $j++;
-//                   if ($i >= strlen($data_crc)){
-//                       break;
-//                   }
-//               }
-//               $json['msj_init']= $message;
-//               $json['event_id']= $event;
-//               $json['data_crc']= $data_crc;
-//               $json['data_crc']=$crc;
-//               dd($json);
-
-           //}
+        if ($crc_pack == $crc_message) {
+            $event_id = unpack('C', $message[0])[1];
+        }
+        $value = pack('f', 121);
+        dd($crc);
     }
 
     public function whatsappNotification()

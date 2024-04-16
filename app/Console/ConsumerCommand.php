@@ -34,7 +34,7 @@ class ConsumerCommand extends Command
 
     public function handle()
     {
-        $mqtt = MQTT::connection('default', 'client_consumer_princi');
+        $mqtt = MQTT::connection('default', 'client_consumer_local_sneider');
         $mqtt->subscribe('v1/mc/data', function (string $topic, string $message) use ($mqtt) {
 
             $pack= base64_encode($message);
@@ -54,8 +54,11 @@ class ConsumerCommand extends Command
             } else{
                 $hex = bin2hex($message);
             }
-            // echo $hex."\n";
+            dd($message, $hex, hex2bin($hex));
+
+            echo $hex."\n";
             dispatch(new SetConfigJob($hex))->onQueue('spot1');
+
 
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) use ($mqtt) {
