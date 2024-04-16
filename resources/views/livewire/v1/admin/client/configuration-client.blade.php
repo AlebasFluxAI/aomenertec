@@ -47,6 +47,10 @@
                                                     "title"=>"Alertas",
 
                                                 ],
+                                                [
+                                                    "title"=>"Alertas control",
+
+                                                ],
                                                  [
                                                     "title"=>"Facturacion",
                                                     "conditionable"=>false,
@@ -260,6 +264,18 @@
 
                                                             ]
                                                 ],
+                                                [
+                                                    "view_name"=>"partials.v2.form.primary_form",
+                                                    "view_values"=>  [
+                                                                        "loading_state"=>true,
+                                                                        "form_toast"=>true,
+                                                                        "session_message"=>"message",
+                                                                        "form_submit_action"=>"submitFormControl",
+                                                                        "form_title"=>"",
+                                                                        "form_inputs"=> $inputs_control
+
+                                                            ]
+                                                ],
                                                                [
                                                     "view_name"=>"partials.v2.form.primary_form",
                                                     "view_values"=>  [
@@ -378,6 +394,8 @@
                 $('.modal-backdrop').remove();
             }
         })
+            console.log(@this.control_options)
+
         })
     </script>
 </div>
