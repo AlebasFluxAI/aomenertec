@@ -916,7 +916,7 @@ return [
                 ['id' => 4, 'variable_name'=> 'serial', 'start' => 9,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
                 ['id' => 5, 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ],
-            'job_name' => 'SaveAlertControlConfigurations'
+           // 'job_name' => 'SaveAlertControlConfigurations'
         ],
     ],
     'webhook_events' =>[
@@ -1508,7 +1508,7 @@ return [
             ]
         ],
         [
-            'notification_type_id' => 10,
+            'notification_type_id' => 46,
             'event_id' => 46,
             'json' => [
                 ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 46,                                                          'parameter_name' => null,           'object' => []],
