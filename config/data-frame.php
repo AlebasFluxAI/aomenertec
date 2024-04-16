@@ -896,6 +896,28 @@ return [
                 ['id' => 6 , 'variable_name'=> 'crc',          'start' => 14, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ]
         ],
+        [
+            'event_id' => 45,
+            'frame' => [
+                ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2, 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3, 'variable_name'=> 'frame_control', 'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4, 'variable_name'=> 'crc',          'start' => 9, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+                ['id' => 5, 'variable_name'=> 'size_file',          'start' => 11, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+            ],
+            'uri_event' => \App\Models\V1\Api\EventLog::EVENT_SET_CONTROL_LIMITS
+        ],
+        [
+            'event_id' => 46,
+            'frame' => [
+                ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2, 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3, 'variable_name'=> 'timestamp', 'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4, 'variable_name'=> 'serial', 'start' => 9,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 5, 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'job_name' => 'SaveAlertControlConfigurations'
+        ],
     ],
     'webhook_events' =>[
         [
@@ -1215,7 +1237,7 @@ return [
         ],
         [
             'notification_type_id' => 17,
-            'event_id' => 33,
+            'event_id' => 32,
             'json' => [
                 ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 17,                                                               'parameter_name' => null,           'object' => []],
                 ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se presenta conexión del equipo', 'parameter_name' => null,           'object' => []],
@@ -1481,6 +1503,22 @@ return [
                     ['variable_name'=> 'ph2_varCh_acumm', 'parameter_name' => 'ph2_varCh_acumm',    'format' => 'number'],
                     ['variable_name'=> 'ph3_varCh_acumm', 'parameter_name' => 'ph3_varCh_acumm',    'format' => 'number'],
                     ['variable_name'=> 'volt_dc', 'parameter_name' => 'volt_dc',    'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'notification_type_id' => 10,
+            'event_id' => 46,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 46,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la configuración de rangos admisibles para controlar dispositivo', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date']
                 ]
                 ],
             ]

@@ -49,6 +49,9 @@
                                                   "select_options"=>$foreach_input["select_options"]??[],
                                                   "select_option_value"=>$foreach_input["select_option_value"]??"",
                                                   "select_option_view"=>$foreach_input["select_option_view"]??"",
+                                                  "select_status_input"=>$foreach_input["select_status_input"]??false,
+                                                  "input_status_model"=>$foreach_input["input_status_model"]??"",
+                                                  "select_option_title"=>$foreach_input["select_option_title"]??"",
                                              ])
                                     @elseif($foreach_input["input_type"]=="input_min_max")
                                         @include("partials.v2.form.form_input_max_min",[
@@ -73,6 +76,12 @@
                                                 "input_max_number_min"=>$foreach_input["input_max_number_min"]??"",
                                                   "input_max_number_max"=>$foreach_input["input_max_number_max"]??"",
                                                   "input_max_number_step"=>$foreach_input["input_max_number_step"]??"",
+                                                  "select_status_input"=>$foreach_input["select_status_input"]??false,
+                                                  "input_status_model"=>$foreach_input["input_status_model"]??"",
+                                                  "select_options"=>$foreach_input["select_options"]??[],
+                                                  "select_option_title"=>$foreach_input["select_option_title"]??"",
+                                                  "select_option_value"=>$foreach_input["select_option_value"]??"",
+                                                  "select_option_view"=>$foreach_input["select_option_view"]??"",
                                            ])
                                     @elseif($foreach_input["input_type"]=="dropdown-search")
 
@@ -174,6 +183,9 @@
                                             "name_select"=>$form_input["name_select"]??"",
                                             "option_value"=>$form_input["option_value"]??"",
                                             "option_view"=>$form_input["option_view"]??"",
+                                               "select_status_input"=>$form_input["select_status_input"]??false,
+                                                  "input_status_model"=>$form_input["input_status_model"]??"",
+                                                  "select_option_title"=>$form_input["select_option_title"]??"",
                                      ])
                             @elseif($form_input["input_type"]=="input_min_max")
                                 @include("partials.v2.form.form_input_max_min",[
@@ -198,6 +210,12 @@
                                         "input_max_number_min"=>$form_input["input_max_number_min"]??"",
                                           "input_max_number_max"=>$form_input["input_max_number_max"]??"",
                                           "input_max_number_step"=>$form_input["input_max_number_step"]??"",
+                                          "select_status_input"=>$form_input["select_status_input"]??false,
+                                                  "input_status_model"=>$form_input["input_status_model"]??"",
+                                                  "select_options"=>$form_input["select_options"]??[],
+                                                  "select_option_title"=>$form_input["select_option_title"]??"",
+                                                  "select_option_value"=>$form_input["select_option_value"]??"",
+                                                  "select_option_view"=>$form_input["select_option_view"]??"",
                                    ])
                             @elseif($form_input["input_type"]=="dropdown-search")
 

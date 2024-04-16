@@ -85,6 +85,9 @@ class ConfigurationClient extends Component
     public function submitFormAlert()
     {
         $this->configurationClientService->submitFormAlert($this);
+    }public function submitFormControl()
+    {
+        $this->configurationClientService->submitFormControl($this);
     }
 
     public function blinkChannel($channel)

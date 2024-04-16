@@ -61,9 +61,9 @@
             </div>
             @if($select_status_input ?? false)
                 <div class="col-md-4">
-                    <label><i class="fa-solid fa-turn-up"></i> {{$input_status_label??"Estado"}}</label>
+                    <label><i class="fa-solid fa-toggle-on"></i> {{$input_status_label??"Estado"}}</label>
                     <select wire:model.lazy="{{$input_status_model ?? null}}" class="{{$aux_class??"custom-select"}} {{$background??""}} " required>
-                        <option disabled value="0"> {{$select_default??""}} </option>
+                        <option disabled value="0"> {{$select_default??"NO ACCIÓN"}} </option>
                         @foreach($select_options??[] as $option)
                             <option @if($select_option_title??"" != "")title="{{ $option[$select_option_title] }}"
                                     @endif value="{{ $option[$select_option_value] }}">{{ $option[$select_option_view] }}</option>

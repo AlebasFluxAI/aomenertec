@@ -164,7 +164,7 @@ class ClientConfigurationService extends Singleton
                     "data_target" => "modal_" . $item['id'],
                     "click_action" => "outputRelation('" . $item->id . "')",
                     "select_status_input" => true,
-                    "input_status_model" => "client_config_alert." . $index . ".control_status",
+                    "input_status_model" => "client_config_alert." . $index . ".status_control",
                     "select_options" => $component->control_options,
                     "select_option_title" => "key",
                     "select_option_value" => "value",
@@ -186,7 +186,7 @@ class ClientConfigurationService extends Singleton
                     "data_target" => "modal_" . $item['id'],
                     "click_action" => "outputRelation('" . $item->id . "')",
                     "select_status_input" => true,
-                    "input_status_model" => "client_config_alert." . $index . ".control_status",
+                    "input_status_model" => "client_config_alert." . $index . ".status_control",
                     "select_options" => $component->control_options,
                     "select_option_title" => "key",
                     "select_option_value" => "value",
@@ -215,6 +215,7 @@ class ClientConfigurationService extends Singleton
             'client_config_alert.*.max_alert' => ['required', 'numeric'],
             'client_config_alert.*.min_control' => 'required',
             'client_config_alert.*.max_control' => 'required',
+            'client_config_alert.*.status_control' => 'required',
 
             'checks.*.output' => 'required'
         ];
@@ -484,6 +485,7 @@ class ClientConfigurationService extends Singleton
             }
             $alert_config_frame = config('data-frame.alert_config_frame');
             $json = [];
+            $json_status = [];
             $data = "";
             foreach ($alert_config_frame as $item) {
                 if ($item['variable_name'] == 'network_operator_id') {
@@ -501,6 +503,7 @@ class ClientConfigurationService extends Singleton
                     } else {
                         $json[$item['variable_name']] = $aux_variable->min_control;
                     }
+                    $json_status[str_replace(["max_", "min_"], "status_", $item['variable_name'])] = ($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::CHANGE) ? 2 :($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::ON ? 1 : 0);
                 }
             }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
