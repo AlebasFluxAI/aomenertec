@@ -46,6 +46,9 @@ class EventLog extends Model
     const EVENT_ALERT_NOTIFICATION = "alert-notification";
     const EVENT_OTA_UPDATE = "ota-update";
     const EVENT_REAL_TIME_FRAME = "real-time-frame";
+    const EVENT_SET_CONTROL_LIMITS = "set-control-limits";
+    const EVENT_SET_STATUS_CONTROL_LIMITS = "set-status-control-limits";
+
 
 
     const EVENT_GET_EVENT_LOGS = "event_logs";
@@ -99,6 +102,8 @@ class EventLog extends Model
                      self::EVENT_GET_STATUS_CONNECTION,
                      self::EVENT_GET_CURRENT_READINGS,
                      self::EVENT_ON_OFF_REAL_TIME,
+                     self::EVENT_SET_CONTROL_LIMITS,
+                     self::EVENT_SET_STATUS_CONTROL_LIMITS,
                      self::EVENT_OTA_UPDATE,
                      self::EVENT_DATE_RANGE,
                      self::EVENT_SET_URL_NOTIFICATION,

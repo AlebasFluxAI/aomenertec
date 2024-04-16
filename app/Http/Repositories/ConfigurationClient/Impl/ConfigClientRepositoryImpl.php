@@ -111,6 +111,28 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 $frame = implode($binary_data);
                 $message = $message . $frame;
                 $json_request[$datum['variable_name']] = $related_parameter->all();
+            }  elseif ($datum['variable_name'] == 'frame_control'){
+                $alert_config_frame = config('data-frame.alert_config_frame');
+                $client = Client::getClientFromSerial($serial);
+                $binary_data = [];
+                $related_parameter = Request::json();
+                foreach ($alert_config_frame as $item) {
+                    if ($item['variable_name'] == 'network_operator_id') {
+                        continue;
+                    } elseif ($item['variable_name'] == 'equipment_id') {
+                        continue;
+                    } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                        continue;
+                    } elseif ($item['variable_name'] == 'equipment_new_id') {
+                        continue;
+                    } else {
+                        $data = $related_parameter->get($item['variable_name']);
+                    }
+                    array_push($binary_data, pack($item['type'], $data));
+                }
+                $frame = implode($binary_data);
+                $message = $message . $frame;
+                $json_request[$datum['variable_name']] = $related_parameter->all();
             } elseif ($datum['variable_name'] == 'size_file'){
                 $archivoBin = Request::file('file_bin');
                 if ($archivoBin !== null) {
