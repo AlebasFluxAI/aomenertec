@@ -514,7 +514,7 @@ class ClientConfigurationService extends Singleton
                 'body' => array_merge(['serial' => $equipment->serial], $json),
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 10);
+            $this->consumeService($component, $requestDetails, 46);
 
 
 
