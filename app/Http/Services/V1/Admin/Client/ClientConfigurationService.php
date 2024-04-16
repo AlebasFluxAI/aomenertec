@@ -115,7 +115,9 @@ class ClientConfigurationService extends Singleton
                     "updated_input" => "lazy",
                     "placeholder_clickable" => false,
                     "data_target" => "modal_" . $item['id'],
-                    "click_action" => "outputRelation('" . $item->id . "')"
+                    "click_action" => "outputRelation('" . $item->id . "')",
+                    "select_status_input" => false,
+
                 ]);
             } else {
                 array_push($component->inputs, [
@@ -131,7 +133,8 @@ class ClientConfigurationService extends Singleton
                     "required" => false,
                     "placeholder_clickable" => false,
                     "data_target" => "modal_" . $item['id'],
-                    "click_action" => "outputRelation('" . $item->id . "')"
+                    "click_action" => "outputRelation('" . $item->id . "')",
+                    "select_status_input" => false,
                 ]);
             }
         }

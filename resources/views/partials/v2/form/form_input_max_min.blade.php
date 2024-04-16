@@ -59,25 +59,25 @@
                 </div>
                 @enderror
             </div>
-            @if($select_status_input)
-            <div class="col-md-4">
-                <label><i class="fa-solid fa-turn-up"></i> {{$input_status_label??"Estado"}}</label>
-                <select wire:model.lazy="{{$input_status_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} " required>
-                    <option disabled value="0"> {{$select_default??""}} </option>
-                    @foreach($select_options??[] as $option)
-                        <option @if($select_option_title??"" != "")title="{{ $option[$select_option_title] }}"
-                                @endif value="{{ $option[$select_option_value] }}">{{ $option[$select_option_view] }}</option>
+            @if($select_status_input ?? false)
+                <div class="col-md-4">
+                    <label><i class="fa-solid fa-turn-up"></i> {{$input_status_label??"Estado"}}</label>
+                    <select wire:model.lazy="{{$input_status_model ?? null}}" class="{{$aux_class??"custom-select"}} {{$background??""}} " required>
+                        <option disabled value="0"> {{$select_default??""}} </option>
+                        @foreach($select_options??[] as $option)
+                            <option @if($select_option_title??"" != "")title="{{ $option[$select_option_title] }}"
+                                    @endif value="{{ $option[$select_option_value] }}">{{ $option[$select_option_view] }}</option>
 
-                    @endforeach
-                </select>
+                        @endforeach
+                    </select>
 
-                @error($input_status_model)
-                <div class="error-container">
-                    <small class="form-text text-danger">{{$message}}</small>
+                    @error($input_status_model ?? null)
+                    <div class="error-container">
+                        <small class="form-text text-danger">{{$message}}</small>
+                    </div>
+                    @enderror
                 </div>
-                @enderror
-            </div>
-                @endif
+            @endif
         </div>
     </div>
 </div>
