@@ -113,7 +113,7 @@ class ClientConfigurationService extends Singleton
                     "col_with" => 9,
                     "required" => false,
                     "updated_input" => "lazy",
-                    "placeholder_clickable" => ($component->client_config->digital_outputs > 0) ? true : false,
+                    "placeholder_clickable" => false,
                     "data_target" => "modal_" . $item['id'],
                     "click_action" => "outputRelation('" . $item->id . "')"
                 ]);
@@ -129,9 +129,65 @@ class ClientConfigurationService extends Singleton
                     "col_with" => 8,
                     "updated_input" => "lazy",
                     "required" => false,
-                    "placeholder_clickable" => ($component->client_config->digital_outputs > 0) ? true : false,
+                    "placeholder_clickable" => false,
                     "data_target" => "modal_" . $item['id'],
                     "click_action" => "outputRelation('" . $item->id . "')"
+                ]);
+            }
+        }
+        $component->inputs_control = [
+            [
+                "input_type" => "divider",
+                "title" => "Rangos de control"
+            ]
+        ];
+        foreach ($component->client_config_alert as $index => $item) {
+            if ($item->flag_id <= 50) {
+                array_push($component->inputs_control, [
+                    "input_type" => "input_min_max",
+                    "input_min_model" => "client_config_alert." . $index . ".min_control",
+                    "input_max_model" => "client_config_alert." . $index . ".max_control",
+                    "input_min_number_min" => 0,
+                    "input_min_number_max" => "",
+                    "input_min_number_step" => 0.01,
+                    "input_max_number_min" => "",
+                    "input_max_number_max" => "",
+                    "input_max_number_step" => 0.01,
+                    "placeholder" => $component->placeholders[$index],
+                    "col_with" => 9,
+                    "required" => false,
+                    "updated_input" => "lazy",
+                    "placeholder_clickable" => false,
+                    "data_target" => "modal_" . $item['id'],
+                    "click_action" => "outputRelation('" . $item->id . "')",
+                    "select_status_input" => true,
+                    "input_status_model" => "client_config_alert." . $index . ".control_status",
+                    "select_options" => $component->control_options,
+                    "select_option_title" => "key",
+                    "select_option_value" => "value",
+                    "select_option_view" => "key",
+                ]);
+            } else {
+                array_push($component->inputs_control, [
+                    "input_type" => "number",
+                    "number_min" => 0,
+                    "number_max" => "",
+                    "number_step" => 0.01,
+                    "offset" => 2,
+                    "input_model" => "client_config_alert." . $index . ".max_control",
+                    "placeholder" => $component->placeholders[$index],
+                    "col_with" => 8,
+                    "updated_input" => "lazy",
+                    "required" => false,
+                    "placeholder_clickable" => false,
+                    "data_target" => "modal_" . $item['id'],
+                    "click_action" => "outputRelation('" . $item->id . "')",
+                    "select_status_input" => true,
+                    "input_status_model" => "client_config_alert." . $index . ".control_status",
+                    "select_options" => $component->control_options,
+                    "select_option_title" => "key",
+                    "select_option_value" => "value",
+                    "select_option_view" => "key",
                 ]);
             }
         }
@@ -363,6 +419,7 @@ class ClientConfigurationService extends Singleton
         $component->channels = $component->client->refresh()->channels;
     }
 
+
     public function submitFormAlert(Component $component)
     {
         try {
@@ -373,8 +430,6 @@ class ClientConfigurationService extends Singleton
                 $component->validate([
                     'client_config_alert.' . $index . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_alert],
                     'client_config_alert.' . $index . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_alert],
-                    'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
-                    'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
                 ]);
             }
             $alert_config_frame = config('data-frame.alert_config_frame');
@@ -412,7 +467,57 @@ class ClientConfigurationService extends Singleton
 
 
     }
+    public function submitFormControl(Component $component)
+    {
+        try {
+            foreach ($component->client_config_alert as $index => $item) {
+                if ($index == "client_notification_type") {
+                    continue;
+                }
+                $component->validate([
+                    'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
+                    'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
+                ]);
+            }
+            $alert_config_frame = config('data-frame.alert_config_frame');
+            $json = [];
+            $data = "";
+            foreach ($alert_config_frame as $item) {
+                if ($item['variable_name'] == 'network_operator_id') {
+                    continue;
+                } elseif ($item['variable_name'] == 'equipment_id') {
+                    continue;
+                } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                    continue;
+                } elseif ($item['variable_name'] == 'equipment_new_id') {
+                    continue;
+                } else {
+                    $aux_variable = $component->client_config_alert->where('flag_id', $item['flag_id'])->first();
+                    if (strpos($item['limit'], "max") !== false) {
+                        $json[$item['variable_name']] = $aux_variable->max_control;
+                    } else {
+                        $json[$item['variable_name']] = $aux_variable->min_control;
+                    }
+                }
+            }
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $apiKey = ApiKey::first();
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/set-control-limits',
+                'method' => 'POST',
+                'body' => array_merge(['serial' => $equipment->serial], $json),
+                'apiKey' => $apiKey->api_key
+            ];
+            $this->consumeService($component, $requestDetails, 10);
 
+
+
+        } catch (MqttClientException $e) {
+
+        }
+
+
+    }
     public function submitFormInvoicing(Component $component)
     {
         $component->client->clientConfiguration->update([

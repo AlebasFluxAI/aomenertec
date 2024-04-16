@@ -10,6 +10,7 @@ class ConfigurationClient extends Component
 {
     public $client;
     public $inputs;
+    public $inputs_control;
     public $checks;
     public $client_config;
     public $client_config_alert;

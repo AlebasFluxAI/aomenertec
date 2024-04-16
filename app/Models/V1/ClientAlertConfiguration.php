@@ -22,7 +22,9 @@ class ClientAlertConfiguration extends Model
         'max_alert',
         'min_control',
         'max_control',
-        'active_control'
+        'active_control',
+        'control_status'
+
     ];
 
     public function outputs()
