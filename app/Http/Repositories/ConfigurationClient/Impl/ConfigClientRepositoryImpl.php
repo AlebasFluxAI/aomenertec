@@ -91,29 +91,27 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 $message = $message . $value;
             } elseif ($datum['variable_name'] == 'frame_alerts'){
                 $alert_config_frame = config('data-frame.alert_config_frame');
-                $client = Client::getClientFromSerial($serial);
                 $binary_data = [];
                 $related_parameter = Request::json();
                 foreach ($alert_config_frame as $item) {
                     if ($item['variable_name'] == 'network_operator_id') {
-                        $data = $client->networkOperator->identification;
+                        continue;
                     } elseif ($item['variable_name'] == 'equipment_id') {
-                        $data = $serial;
+                        continue;
                     } elseif ($item['variable_name'] == 'network_operator_new_id') {
-                        $data = $client->networkOperator->identification;
+                        continue;
                     } elseif ($item['variable_name'] == 'equipment_new_id') {
-                        $data = $serial;
+                        continue;
                     } else {
                         $data = $related_parameter->get($item['variable_name']);
+                        array_push($binary_data, pack($item['type'], $data));
                     }
-                    array_push($binary_data, pack($item['type'], $data));
                 }
                 $frame = implode($binary_data);
                 $message = $message . $frame;
                 $json_request[$datum['variable_name']] = $related_parameter->all();
-            }  elseif ($datum['variable_name'] == 'frame_control'){
+            } elseif ($datum['variable_name'] == 'frame_control'){
                 $alert_config_frame = config('data-frame.alert_config_frame');
-                $client = Client::getClientFromSerial($serial);
                 $binary_data = [];
                 $related_parameter = Request::json();
                 foreach ($alert_config_frame as $item) {
@@ -127,13 +125,37 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                         continue;
                     } else {
                         $data = $related_parameter->get($item['variable_name']);
+                        array_push($binary_data, pack($item['type'], $data));
                     }
-                    array_push($binary_data, pack($item['type'], $data));
                 }
                 $frame = implode($binary_data);
                 $message = $message . $frame;
                 $json_request[$datum['variable_name']] = $related_parameter->all();
-            } elseif ($datum['variable_name'] == 'size_file'){
+            } elseif ($datum['variable_name'] == 'frame_status'){
+                $alert_config_frame = config('data-frame.alert_config_frame');
+                $binary_data = [];
+                $related_parameter = Request::json();
+                foreach ($alert_config_frame as $item) {
+                    if ($item['variable_name'] == 'network_operator_id') {
+                        continue;
+                    } elseif ($item['variable_name'] == 'equipment_id') {
+                        continue;
+                    } elseif ($item['variable_name'] == 'network_operator_new_id') {
+                        continue;
+                    } elseif ($item['variable_name'] == 'equipment_new_id') {
+                        continue;
+                    } else {
+                        if ($flag_id != $item['flag_id']) {
+                            $data = $related_parameter->get(str_replace(["max_", "min_"], "status_", $item['variable_name']));
+                            array_push($binary_data, pack($item['type'], $data));
+                            $flag_id = $item['flag_id'];
+                        }
+                    }
+                }
+                $frame = implode($binary_data);
+                $message = $message . $frame;
+                $json_request[$datum['variable_name']] = $related_parameter->all();
+            }  elseif ($datum['variable_name'] == 'size_file'){
                 $archivoBin = Request::file('file_bin');
                 if ($archivoBin !== null) {
                     $sizeFile = $archivoBin->getSize();
