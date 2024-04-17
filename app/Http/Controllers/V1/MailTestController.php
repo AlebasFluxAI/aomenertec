@@ -92,14 +92,17 @@ class MailTestController
 
                                     if ($data['variable_name'] == "flags") {
                                         $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                        $json_aux[$data['variable_name']] = [strval(unpack($data['type'], $bin)[1]), $split, $bin];
+
                                     } else {
-                                        if ($data['variable_name'] == "volt_dc") {
-                                            $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
-                                        }
+
                                         if ($data['variable_name'] == "equipment_id") {
                                             $json[$data['variable_name']] = $equipment_serial;
+                                            $json_aux[$data['variable_name']] = [$equipment_serial, $split, $bin];
+
                                         } else {
                                             $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
+                                            $json_aux[$data['variable_name']] = [unpack($data['type'], $bin)[1], $split, $bin];
                                         }
                                     }
 
@@ -161,7 +164,7 @@ class MailTestController
                     $item = $json;
                     $json['date'] = $date_aux->format('Y-m-d H:i:s');
                     //$json['client_id'] = $client->id;
-                    dd($json);
+                    dd($json_aux, $decode);
 
 //                    if ($json['import_wh'] <= 0) {
 //                        if ($last_data) {
