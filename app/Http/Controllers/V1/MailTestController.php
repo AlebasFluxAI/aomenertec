@@ -48,7 +48,7 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $item = 'TmG8AAAAAAB0Qb4NAAAAAAAAAAAAAAAABAAAAAAAAADPyNNlLCL1QgAAAAAAAAAAdL6JPgAAAAAAAAAARxTrQQAAAAAAAAAAzND2QQAAAAAAAAAAXE8WwQAAAAAAAAAA0Y1zPwAAAAAAAAAAAAAAAKWGj8EAAAAAAAAAAAAAAAAAAAAAAAAAAAIYcEICK4tAbxIDOwAAAAD8qdE/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYrmiPgAAAAAAAAAAAAAAAA==';
+        $item = 'PRukGAIAAABgrgoAAAAAAF5EtEC9kZLCAAAAAAAAAAAnyh9mWg3xQgAAAAAAAAAAVVLBPwAAAAAAAAAAmUodQwAAAAAAAAAA0FouQwAAAAAAAAAAtwiZQgAAAAAAAAAAdXpmPwAAAAAAAAAAMlllP9KN0EEAAAAAAAAAAAAAAABXUR1DAAAAAAIYcEISYxJEAAAAAI+io0NCYOU7AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK5HW0I=';
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($item, true);
@@ -70,7 +70,6 @@ class MailTestController
             if ($equipment) {
                 $client = $equipment->clients()->first();
                 if ($client) {
-                    dd($client);
                     if ($client->stopUnpackClient()->exists()) {
                         return;
                     }
@@ -82,7 +81,7 @@ class MailTestController
                 if ($last_data) {
                     $last_raw_json = json_decode($last_data->raw_json, true);
                 }
-                $source_timestamp = Carbon::create('2023-07-17 16:55:43.000');
+                $source_timestamp = Carbon::now();
                 if ($date->diffInDays($source_timestamp) <= 365) {
                     foreach ($data_frame as $data) {
                         try {
@@ -90,24 +89,20 @@ class MailTestController
 
                             $bin = hex2bin($split);
                             if (strlen($bin) == ($data['lenght'] / 2)) {
-                                if ($data['start'] >= 450) {
-                                    if ($data['variable_name'] == 'volt_dc'){
-                                        $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
-                                    } else{
-                                        $json[$data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                        $json["data_" . $data['variable_name']] = (unpack($data['type'], $bin)[1]) / 1000;
-                                    }
-                                } else {
+
                                     if ($data['variable_name'] == "flags") {
                                         $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
                                     } else {
+                                        if ($data['variable_name'] == "volt_dc") {
+                                            $json[$data['variable_name']] = strval(unpack($data['type'], $bin)[1]);
+                                        }
                                         if ($data['variable_name'] == "equipment_id") {
                                             $json[$data['variable_name']] = $equipment_serial;
                                         } else {
                                             $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                                         }
                                     }
-                                }
+
                                 if ($data['variable_name'] == 'timestamp') {
                                     $date_aux = new Carbon();
                                     $timestamp_unix = $json[$data['variable_name']];

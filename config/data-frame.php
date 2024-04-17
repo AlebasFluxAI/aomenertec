@@ -39,7 +39,7 @@ return [
         ['id' => 29, 'display_name' =>  'THDV(%)',                     'icon'=>'fas fa-percentage',                      'variable_name'=> 'volt_thd',           'chart_type' => 'line',   'real_time' => true, 'style' => 'thd'],
         ['id' => 30, 'display_name' =>  'THDV fases(%)',               'icon'=>'fas fa-percent',                         'variable_name'=> 'volts_thd',          'chart_type' => 'line',   'real_time' => true, 'style' => 'thd'],
         ['id' => 31, 'display_name' =>  'Frecuencia(Hz)',              'icon'=>'fas fa-chart-line',                      'variable_name'=> 'frecuency' ,         'chart_type' => 'line',   'real_time' => true, 'style' => 'frecuency'],
-        ['id' => 32, 'display_name' =>  'VoltajeDC(VDC)',              'icon'=>'fas fa-lightbulbs',                      'variable_name'=> 'volt_dc' ,         'chart_type' => 'line',   'real_time' => true, 'style' => 'voltage'],
+        ['id' => 33, 'display_name' =>  'VoltajeDC(VDC)',              'icon'=>'fas fa-lightbulbs',                      'variable_name'=> 'volt_dc' ,         'chart_type' => 'line',   'real_time' => true, 'style' => 'voltage'],
     ],
 
 
