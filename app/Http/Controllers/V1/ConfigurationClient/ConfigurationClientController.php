@@ -25,6 +25,10 @@ class ConfigurationClientController extends Controller
     {
         return $this->configurationClientService->setControlLimitsForSerial($request);
     }
+    public function setControlStatusForSerial(Request $request): JsonResource
+    {
+        return $this->configurationClientService->setControlStatusForSerial($request);
+    }
     public function setAlertTimeForSerial(Request $request): JsonResource
     {
         return $this->configurationClientService->setAlertTimeForSerial($request);

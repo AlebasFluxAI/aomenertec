@@ -38,7 +38,8 @@ trait MqttSenderTrait
             Http::withHeaders([
                 'x-api-key' => $requestDetails['apiKey'],
             ])->withoutVerifying()->get($requestDetails['url'], $requestDetails['body']);
-        } elseif($requestDetails['method'] == 'POST'){
+        }
+        if($requestDetails['method'] == 'POST'){
             Http::withHeaders([
                 'x-api-key' => $requestDetails['apiKey'],
             ])->withoutVerifying()->post($requestDetails['url'], $requestDetails['body']);
@@ -48,7 +49,9 @@ trait MqttSenderTrait
             Http::withHeaders([
                 'x-api-key' => $requestDetailsAux['apiKey'],
             ])->withoutVerifying()->get($requestDetailsAux['url'], $requestDetailsAux['body']);
-        } elseif($requestDetailsAux['method'] == 'POST'){
+        }
+        if($requestDetailsAux['method'] == 'POST'){
+            dd($requestDetailsAux);
             Http::withHeaders([
                 'x-api-key' => $requestDetailsAux['apiKey'],
             ])->withoutVerifying()->post($requestDetailsAux['url'], $requestDetailsAux['body']);
