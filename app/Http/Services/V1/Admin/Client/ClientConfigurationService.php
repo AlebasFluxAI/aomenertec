@@ -536,7 +536,7 @@ class ClientConfigurationService extends Singleton
                 'body' => array_merge(['serial' => $equipment->serial], $json_status),
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 46);
+            //$this->consumeService($component, $requestDetails, 46);
             try {
                 $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
                 $mqtt = MQTT::connection('default', 'null');

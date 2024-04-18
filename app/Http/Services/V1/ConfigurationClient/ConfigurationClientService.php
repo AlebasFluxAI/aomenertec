@@ -105,6 +105,35 @@ class ConfigurationClientService
         }
         return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
     }
+    public function setControlStatusForSerial($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
+                },
+            ],
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        $alert_config_frame = config('data-frame.alert_config_frame');
+        $reglas = [];
+        foreach ($alert_config_frame as $index => $item) {
+            if ($item['variable_name'] != 'network_operator_id' and $item['variable_name'] != 'equipment_id' and $item['variable_name'] != 'network_operator_new_id' and $item['variable_name'] != 'equipment_new_id') {
+                if ($flag_id != $item['flag_id']) {
+                    $reglas[str_replace(["max_", "min_"], "status_", $item['variable_name'])] = 'required|numeric';
+                    $flag_id = $item['flag_id'];
+                }
+            }
+        }
+        $validator = Validator::make($request->json()->all(), $reglas);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
     public function setAlertTimeForSerial($request): JsonResource
     {
         $validator = Validator::make($request->all(), [

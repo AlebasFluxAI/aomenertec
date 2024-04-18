@@ -37,30 +37,29 @@ class AlertControlApiStrategy implements MqttSenderInterface
 
         $webhookEvents = config('data-frame.webhook_events');
         $webhookResponse = json_decode($message, true);
-        foreach ($webhookEvents as $event){
-
-            if ($event['notification_type_id'] == 46 || $event['notification_type_id'] == 58 ){
-                $json = $event['json'];
-                foreach ($json as $item){
-
-                    if ($item['variable_name'] == 'notification_type_id') {
-
-                        if ($webhookResponse['notification_type_id'] == $item['value']) {
-
-                            if ($webhookResponse['success'] == 1) {
-                                if ($equipment->serial == $webhookResponse['serial']) {
-                                    $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
-                                    if($webhookResponse['notification_type_id'] == 58) {
+        if($webhookResponse['notification_type_id'] == 46 || $webhookResponse['notification_type_id'] == 58) {
+            foreach ($webhookEvents as $event) {
+                if ($event['notification_type_id'] == $webhookResponse['notification_type_id']) {
+                    $json = $event['json'];
+                    foreach ($json as $item) {
+                        if ($item['variable_name'] == 'notification_type_id') {
+                            if ($webhookResponse['notification_type_id'] == $item['value']) {
+                                if ($webhookResponse['success'] == 1) {
+                                    if ($equipment->serial == $webhookResponse['serial']) {
+                                        $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
                                         $this->mqtt->interrupt();
-                                    }
 
+                                        //if ($webhookResponse['notification_type_id'] == 58) {
+                                        //}
+
+                                    }
+                                } else {
+                                    $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
+                                    $this->mqtt->interrupt();
                                 }
-                            } else {
-                                $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
-                                $this->mqtt->interrupt();
                             }
+                            break;
                         }
-                        break;
                     }
                 }
             }

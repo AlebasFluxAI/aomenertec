@@ -36,6 +36,7 @@ Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']
 
             Route::post("/" . \App\Models\V1\Api\EventLog::EVENT_SET_ALERT_LIMITS, "setAlertLimitsForSerial");
             Route::post("/" . \App\Models\V1\Api\EventLog::EVENT_SET_CONTROL_LIMITS, "setControlLimitsForSerial");
+            Route::post("/" . \App\Models\V1\Api\EventLog::EVENT_SET_STATUS_CONTROL_LIMITS, "setControlStatusForSerial");
             Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_SET_ALERT_TIME, "setAlertTimeForSerial");
             Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_SET_SAMPLING_TIME, "setSamplingTimeForSerial");
             Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_SET_WIFI_CREDENTIALS, "setWifiCredentialsForSerial");
