@@ -13,6 +13,7 @@ use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\ModulesAux\MQTT;
+use App\Strategy\MqttSenderPattern\AlertControlApiStrategy;
 use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
 use App\Strategy\MqttSenderPattern\MqttConfigAckStrategy;
 use Livewire\Component;
@@ -344,6 +345,21 @@ class ClientConfigurationService extends Singleton
             $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
         }
     }
+    public function test(Component $component, $requestDetails, $notificationtypeId){
+       dd($notificationtypeId);
+
+        try {
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $mqtt = MQTT::connection('default', 'null');
+            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $component);
+            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
+            $mqttCoilAckStrategy->registerLoopEventHandler();
+            $mqttCoilAckStrategy->subscribe($equipment, $notificationtypeId);
+        } catch (MqttClientException $e) {
+            $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+        }
+    }
+
 
     public function submitFormConection(Component $component)
     {
@@ -514,15 +530,23 @@ class ClientConfigurationService extends Singleton
                 'body' => array_merge(['serial' => $equipment->serial], $json),
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 46);
-            $requestDetails = [
+            $component->requesDetails = [
                 'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-control-limits',
                 'method' => 'POST',
                 'body' => array_merge(['serial' => $equipment->serial], $json_status),
                 'apiKey' => $apiKey->api_key
             ];
-            sleep(1);
-          // $this->consumeService($component, $requestDetails, 58);
+            $this->consumeService($component, $requestDetails, 46);
+            try {
+                $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+                $mqtt = MQTT::connection('default', 'null');
+                $mqttCoilAckStrategy = new AlertControlApiStrategy($mqtt, $component);
+                $mqttCoilAckStrategy->fetchDataFromAPIControlAlerts($requestDetails, $component->requesDetails);
+                $mqttCoilAckStrategy->registerLoopEventHandler();
+                $mqttCoilAckStrategy->subscribe($equipment, 46);
+            } catch (MqttClientException $e) {
+                $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+            }
 
 
 

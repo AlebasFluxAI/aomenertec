@@ -31,6 +31,29 @@ trait MqttSenderTrait
             ])->withoutVerifying()->post($requestDetails['url'], $requestDetails['body']);
         }
     }
+    public function fetchDataFromAPIControlAlerts($requestDetails, $requestDetailsAux)
+    {
+        if($requestDetails['method'] == 'GET') {
+
+            Http::withHeaders([
+                'x-api-key' => $requestDetails['apiKey'],
+            ])->withoutVerifying()->get($requestDetails['url'], $requestDetails['body']);
+        } elseif($requestDetails['method'] == 'POST'){
+            Http::withHeaders([
+                'x-api-key' => $requestDetails['apiKey'],
+            ])->withoutVerifying()->post($requestDetails['url'], $requestDetails['body']);
+        }
+        if($requestDetailsAux['method'] == 'GET') {
+
+            Http::withHeaders([
+                'x-api-key' => $requestDetailsAux['apiKey'],
+            ])->withoutVerifying()->get($requestDetailsAux['url'], $requestDetailsAux['body']);
+        } elseif($requestDetailsAux['method'] == 'POST'){
+            Http::withHeaders([
+                'x-api-key' => $requestDetailsAux['apiKey'],
+            ])->withoutVerifying()->post($requestDetailsAux['url'], $requestDetailsAux['body']);
+        }
+    }
 
     public function registerLoopEventHandler()
     {

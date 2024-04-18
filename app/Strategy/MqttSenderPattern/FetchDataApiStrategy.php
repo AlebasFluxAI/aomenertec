@@ -4,6 +4,8 @@ namespace App\Strategy\MqttSenderPattern;
 
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\EquipmentType;
+use App\ModulesAux\MQTT;
+use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\MqttClient;
 
 class FetchDataApiStrategy implements MqttSenderInterface
@@ -58,6 +60,17 @@ class FetchDataApiStrategy implements MqttSenderInterface
                                     }
                                     $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
                                     $this->mqtt->interrupt();
+                                    if ($notificationTypeId == 46){
+                                        try {
+                                            $mqtt = MQTT::connection('default', 'null');
+                                            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this->component);
+                                            $mqttCoilAckStrategy->fetchDataFromAPI($this->component->requestDetails);
+                                            $mqttCoilAckStrategy->registerLoopEventHandler();
+                                            $mqttCoilAckStrategy->subscribe($equipment, 58);
+                                        } catch (MqttClientException $e) {
+                                            $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+                                        }
+                                    }
                                 }
                             } else {
                                 $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);

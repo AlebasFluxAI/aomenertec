@@ -5,7 +5,9 @@ namespace App\Strategy\MqttSenderPattern;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
+use App\ModulesAux\MQTT;
 use App\Notifications\Alert\AlertControlNotification;
+use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\MqttClient;
 
 class AlertControlApiStrategy implements MqttSenderInterface
@@ -18,25 +20,10 @@ class AlertControlApiStrategy implements MqttSenderInterface
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
-        if ($elapsedTime >= 30) {
-            $technicians = $this->client->clientTechnician;
-            $supervisors = $this->client->supervisors;
-            $flag = true;
-            foreach ($technicians as $user) {
-                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-            }
-            foreach ($supervisors as $user) {
-                if ($user->user->phone == $this->client->phone) {
-                    $flag = false;
-                }
-                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-            }
-            if ($flag) {
-                $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-            }
+        if ($elapsedTime >= 20) {
+            $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
             $mqtt->interrupt();
+            $this->component->emit('changeCheck', ['index' => $this->index, 'flag' => false]);
         }
     }
 
@@ -45,69 +32,32 @@ class AlertControlApiStrategy implements MqttSenderInterface
         $this->index = $index;
     }
 
-    public function subscribeContext($message, $equipment, $notificationTypeId)
+    public function subscribeContext($message, $equipment,$notificationTypeId)
     {
+
         $webhookEvents = config('data-frame.webhook_events');
         $webhookResponse = json_decode($message, true);
         foreach ($webhookEvents as $event){
-            if ($event['notification_type_id'] == $notificationTypeId){
+
+            if ($event['notification_type_id'] == 46 || $event['notification_type_id'] == 58 ){
                 $json = $event['json'];
                 foreach ($json as $item){
+
                     if ($item['variable_name'] == 'notification_type_id') {
+
                         if ($webhookResponse['notification_type_id'] == $item['value']) {
+
                             if ($webhookResponse['success'] == 1) {
                                 if ($equipment->serial == $webhookResponse['serial']) {
-                                    if ($notificationTypeId == 3) {
-                                        dd($webhookResponse['data']);
-                                        //$data = json_decode($webhookResponse, true);
-
-//                                        foreach ($this->digital_output as $output) {
-//                                            $output->status = $data['status_coil'] == 1;
-//                                            $output->save();
-//                                            break;
-//                                        }
-//                                        $technicians = $this->client->clientTechnician;
-//                                        $supervisors = $this->client->supervisors;
-//                                        foreach ($technicians as $user) {
-//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-//                                        }
-//                                        $flag = true;
-//                                        foreach ($supervisors as $user) {
-//                                            if ($user->user->phone == $this->client->phone) {
-//                                                $flag = false;
-//                                            }
-//                                            //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-//                                            $user->user->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-//                                        }
-//                                        if ($flag) {
-//                                            $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
-//                                        }
+                                    $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
+                                    if($webhookResponse['notification_type_id'] == 58) {
                                         $this->mqtt->interrupt();
                                     }
-                                }
-                            } else {
-                                if ($notificationTypeId == 3) {
-                                    $technicians = $this->client->clientTechnician;
-                                    $supervisors = $this->client->supervisors;
-                                    $flag = true;
-                                    foreach ($technicians as $user) {
-                                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-                                    }
-                                    foreach ($supervisors as $user) {
-                                        if ($user->user->phone == $this->client->phone) {
-                                            $flag = false;
-                                        }
-                                        //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
-                                        $user->user->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-                                    }
-                                    if ($flag) {
-                                        $this->client->notify(new AlertControlNotification($this->clientAlert, 'alert_control_warning'));
-                                    }
-                                    $this->mqtt->interrupt();
 
                                 }
+                            } else {
+                                $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => $webhookResponse['message']]);
+                                $this->mqtt->interrupt();
                             }
                         }
                         break;
