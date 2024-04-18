@@ -34,7 +34,7 @@ class ConsumerCommand extends Command
 
     public function handle()
     {
-        $mqtt = MQTT::connection('default', 'client_consumer_local_sneider');
+        $mqtt = MQTT::connection('default', 'client_consumer_princi');
         $mqtt->subscribe('v1/mc/data', function (string $topic, string $message) use ($mqtt) {
 
             $pack= base64_encode($message);
@@ -46,7 +46,14 @@ class ConsumerCommand extends Command
             sleep(1);
             //echo "alerta = ".$pack."\n";
             //dispatch(new SaveMicrocontrollerDataJob($pack, true))->onQueue('spot');
-            dispatch(new SaveAlertDataJob($pack))->onQueue('default');
+            dispatch(new SaveAlertDataJob($pack, false))->onQueue('default');
+        }, 0);
+        $mqtt->subscribe('v1/mc/alert_control', function (string $topic, string $message) {
+            $pack= base64_encode($message);
+            sleep(1);
+            //echo "alerta = ".$pack."\n";
+            //dispatch(new SaveMicrocontrollerDataJob($pack, true))->onQueue('spot');
+            dispatch(new SaveAlertDataJob($pack, true))->onQueue('default');
         }, 0);
         $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) {
             if (substr($message, 0, 2) == '21') {

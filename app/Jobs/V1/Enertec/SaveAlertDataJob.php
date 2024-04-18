@@ -31,11 +31,13 @@ class SaveAlertDataJob implements ShouldQueue
      */
     public $raw_json;
     public $source_timestamp;
+    public $is_control;
 
-    public function __construct($raw_json)
+    public function __construct($raw_json, $is_control)
     {
         $this->raw_json = $raw_json;
         $this->source_timestamp = new Carbon();
+        $this->is_control = $is_control;
     }
 
     /**
@@ -81,19 +83,9 @@ class SaveAlertDataJob implements ShouldQueue
                             $type = ClientAlert::ALERT;
                         } else {
                             $value = $this->calculateValueAlert($item['variable_id'], $decode);
-
                             if ($alert) {
-                                if ($alert->active_control) {
-                                    if ($alert->min_alert != 0) {
-                                        if ($value < $alert->min_alert) {
-                                            $type = ClientAlert::ALERT;
-                                        }
-                                    }
-                                    if ($alert->max_alert != 0) {
-                                        if ($value > $alert->max_alert) {
-                                            $type = ClientAlert::ALERT;
-                                        }
-                                    }
+
+                                if ($this->is_control) {
                                     if ($alert->min_control != 0) {
                                         if ($value < $alert->min_control) {
                                             $type = ClientAlert::CONTROL;
@@ -138,9 +130,10 @@ class SaveAlertDataJob implements ShouldQueue
                                     "min_value" => $alert->min_alert
                                 ];
                                 $ackLog = AckLog::create(["serial" => $equipment_serial]);
-                                $eventLog = EventLog::create([
-                                    "name" => EventLog::EVENT_ALERT_NOTIFICATION . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
-                                    "event" => EventLog::EVENT_ALERT_NOTIFICATION,
+                                $event_type = $this->is_control ? EventLog::EVENT_ALERT_CONTROL_NOTIFICATION: EventLog::EVENT_ALERT_NOTIFICATION;
+                                    $eventLog = EventLog::create([
+                                    "name" => $event_type . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
+                                    "event" => $event_type,
                                     "client_id" => $client->id,
                                     "request_endpoint" => null,
                                     "request_json" => null,

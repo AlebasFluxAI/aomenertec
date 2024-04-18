@@ -936,7 +936,7 @@ return [
                 ['id' => 4, 'variable_name'=> 'serial', 'start' => 9,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
                 ['id' => 5, 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ],
-           // 'job_name' => 'SaveAlertControlConfigurations'
+            'job_name' => 'SaveAlertControlConfigurations'
         ],
     ],
     'webhook_events' =>[

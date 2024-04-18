@@ -65,57 +65,11 @@ class AlertNotificationJob implements ShouldQueue
             }
         }
         if ($this->clientAlert->type == ClientAlert::CONTROL) {
-            echo "control\n";
             $client_alert_configuration = $this->clientAlert->clientAlertConfiguration;
             if ($client_alert_configuration->active_control) {
                 $digital_output = $client_alert_configuration->clientDigitalOutput()->get();
                 $this->digital_output = $digital_output;
 
-                $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                $apiKey =ApiKey::first();
-
-                try {
-                    $mqtt = \App\ModulesAux\MQTT::connection('default', 'null');
-                    $mqttCoilAckStrategy = new AlertControlApiStrategy($mqtt, $this);
-                    foreach ($digital_output as $output) {
-                        if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
-                            if ($output->status) {
-                                $value = false;
-                            } else {
-                                $value = true;
-                            }
-                        } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
-                            $value = true;
-                        } else {
-                            $value = false;
-                        }
-                        $requestDetails = [
-                            'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-coil',
-                            'method' => 'GET',
-                            'body' => [
-                                'serial' => $equipment->serial,
-                                'status' => $value
-                            ],
-                            'apiKey' => $apiKey->api_key
-                        ];
-                        $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-                        break;
-                    }
-                    //$mqttCoilAckStrategy->registerLoopEventHandler();
-                    //$mqttCoilAckStrategy->subscribe($equipment, 3);
-                    foreach ($this->digital_output as $output) {
-                        if ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::CHANGE) {
-                            $output->status = !$output->status;
-                            $output->save();
-                        } elseif ($output->pivot->control_status == ClientDigitalOutputAlertConfiguration::ON) {
-                            $output->status = true;
-                            $output->save();
-                        } else {
-                            $output->status = false;
-                            $output->save();
-                        }
-                        break;
-                    }
                     $technicians = $this->client->clientTechnician;
                     $supervisors = $this->client->supervisors;
                     foreach ($technicians as $user) {
@@ -134,9 +88,7 @@ class AlertNotificationJob implements ShouldQueue
                         $this->client->notify(new AlertControlNotification($this->clientAlert, 'control_alert_ok'));
                     }
 
-                } catch (MqttClientException $e) {
 
-                }
             }
         }
     }
