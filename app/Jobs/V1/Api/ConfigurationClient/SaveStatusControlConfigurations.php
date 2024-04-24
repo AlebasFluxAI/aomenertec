@@ -5,6 +5,7 @@ namespace App\Jobs\V1\Api\ConfigurationClient;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlertConfiguration;
 use App\Models\V1\Api\EventLog;
+use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\ModulesAux\MQTT;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -70,8 +71,9 @@ class SaveStatusControlConfigurations implements ShouldQueue
                 foreach ($clientAlert as $alert) {
                     $limits = $alert_config_frame->where('flag_id', $alert->flag_id)->all();
                     foreach ($limits as $limit){
-                        $alert->active_conrol = true;
-                        $alert->status_control = $json->{str_replace(["max_", "min_"], "status_", $limit['variable_name'])};
+                        $alert->active_control = true;
+                        $status = $json->{str_replace(["max_", "min_"], "status_", $limit['variable_name'])};
+                        $alert->status_control = ($status == 1) ? ClientDigitalOutputAlertConfiguration::OFF : (($status == 2) ?ClientDigitalOutputAlertConfiguration::ON:ClientDigitalOutputAlertConfiguration::CHANGE);
                     }
                     $alert->save();
                 }
