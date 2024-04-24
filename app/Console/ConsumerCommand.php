@@ -61,9 +61,6 @@ class ConsumerCommand extends Command
             } else{
                 $hex = bin2hex($message);
             }
-            dd($message, $hex, hex2bin($hex));
-
-            echo $hex."\n";
             dispatch(new SetConfigJob($hex))->onQueue('spot1');
 
 
