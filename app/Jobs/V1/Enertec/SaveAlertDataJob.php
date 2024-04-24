@@ -86,22 +86,22 @@ class SaveAlertDataJob implements ShouldQueue
             $last_month->subMonthNoOverflow();
 
             $billing_day = $client->clientConfiguration->billing_day;
-            if($billing_day >= $this->source_timestamp->format('d')  ){
-                $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$last_month->copy()->subMonth()->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59'), $last_month->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59')])
+            if($billing_day >= $this->source_timestamp->copy()->format('d')  ){
+                $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$last_month->copy()->subMonth()->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $last_month->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59')])
                     ->orderBy('source_timestamp', 'desc')->first();
                 if (!$energy_month) {
                     $energy_month = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$last_month->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59'), $this->source_timestamp->format('Y-m-d H:i:s')])
+                        ->whereBetween('source_timestamp', [$last_month->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $this->source_timestamp->format('Y-m-d H:i:s')])
                         ->orderBy('source_timestamp')
                         ->first();
                 }
             }else{
-                $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$last_month->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59'), $this->source_timestamp->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59')])
+                $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$last_month->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $this->source_timestamp->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59')])
                     ->orderBy('source_timestamp', 'desc')->first();
             }
             if (!$energy_month) {
                 $energy_month = $client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59'), $this->source_timestamp->format('Y-m-d H:i:s')])
+                    ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $this->source_timestamp->format('Y-m-d H:i:s')])
                     ->orderBy('source_timestamp')
                     ->first();
             }
