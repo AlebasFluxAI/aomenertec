@@ -20,7 +20,7 @@ class AlertControlApiStrategy implements MqttSenderInterface
 
     public function registerLoopEventHandlerContext(float $elapsedTime, MqttClient $mqtt)
     {
-        if ($elapsedTime >= 20) {
+        if ($elapsedTime >= 30) {
             $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Fallo la conexion"]);
             $mqtt->interrupt();
             $this->component->emit('changeCheck', ['index' => $this->index, 'flag' => false]);
@@ -47,10 +47,11 @@ class AlertControlApiStrategy implements MqttSenderInterface
                                 if ($webhookResponse['success'] == 1) {
                                     if ($equipment->serial == $webhookResponse['serial']) {
                                         $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
-                                        $this->mqtt->interrupt();
 
-                                        //if ($webhookResponse['notification_type_id'] == 58) {
-                                        //}
+                                        if ($webhookResponse['notification_type_id'] == 58) {
+                                            $this->mqtt->interrupt();
+
+                                        }
 
                                     }
                                 } else {

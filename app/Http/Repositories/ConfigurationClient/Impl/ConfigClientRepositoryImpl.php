@@ -135,6 +135,7 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 $alert_config_frame = config('data-frame.alert_config_frame');
                 $binary_data = [];
                 $related_parameter = Request::json();
+                $flag_id = 0;
                 foreach ($alert_config_frame as $item) {
                     if ($item['variable_name'] == 'network_operator_id') {
                         continue;
@@ -147,7 +148,7 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                     } else {
                         if ($flag_id != $item['flag_id']) {
                             $data = $related_parameter->get(str_replace(["max_", "min_"], "status_", $item['variable_name']));
-                            array_push($binary_data, pack($item['type'], $data));
+                            array_push($binary_data, pack('C', $data));
                             $flag_id = $item['flag_id'];
                         }
                     }

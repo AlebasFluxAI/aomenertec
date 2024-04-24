@@ -120,6 +120,7 @@ class ConfigurationClientService
         }
         $alert_config_frame = config('data-frame.alert_config_frame');
         $reglas = [];
+        $flag_id = 0;
         foreach ($alert_config_frame as $index => $item) {
             if ($item['variable_name'] != 'network_operator_id' and $item['variable_name'] != 'equipment_id' and $item['variable_name'] != 'network_operator_new_id' and $item['variable_name'] != 'equipment_new_id') {
                 if ($flag_id != $item['flag_id']) {
