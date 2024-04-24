@@ -13,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
 
-class SaveAlertControlConfigurations implements ShouldQueue
+class SaveStatusControlConfigurations implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -41,7 +41,7 @@ class SaveAlertControlConfigurations implements ShouldQueue
                 return;
             }
             $requestJson = json_decode($eventLog->request_json);
-            $json = $requestJson->frame_control;
+            $json = $requestJson->frame_status;
             if (array_key_exists('serial', $this->json)) {
                 $client = Client::getClientFromSerial($this->json['serial']);
                 if ($client == null) {
@@ -70,11 +70,8 @@ class SaveAlertControlConfigurations implements ShouldQueue
                 foreach ($clientAlert as $alert) {
                     $limits = $alert_config_frame->where('flag_id', $alert->flag_id)->all();
                     foreach ($limits as $limit){
-                        if (strpos($limit['limit'], "max") !== false) {
-                            $alert->max_control = $json->{$limit['variable_name']};
-                        } else {
-                            $alert->min_control = $json->{$limit['variable_name']};
-                        }
+                        $alert->active_conrol = true;
+                        $alert->status_control = $json->{str_replace(["max_", "min_"], "status_", $limit['variable_name'])};
                     }
                     $alert->save();
                 }

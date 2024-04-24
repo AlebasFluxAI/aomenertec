@@ -44,6 +44,7 @@ trait MqttSenderTrait
                 'x-api-key' => $requestDetails['apiKey'],
             ])->withoutVerifying()->post($requestDetails['url'], $requestDetails['body']);
         }
+        sleep(1);
         if($requestDetailsAux['method'] == 'GET') {
 
             Http::withHeaders([
