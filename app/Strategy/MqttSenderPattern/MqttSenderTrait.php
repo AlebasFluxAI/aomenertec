@@ -51,7 +51,6 @@ trait MqttSenderTrait
             ])->withoutVerifying()->get($requestDetailsAux['url'], $requestDetailsAux['body']);
         }
         if($requestDetailsAux['method'] == 'POST'){
-            dd($requestDetailsAux);
             Http::withHeaders([
                 'x-api-key' => $requestDetailsAux['apiKey'],
             ])->withoutVerifying()->post($requestDetailsAux['url'], $requestDetailsAux['body']);
@@ -74,3 +73,4 @@ trait MqttSenderTrait
         $this->mqtt->disconnect();
     }
 }
+

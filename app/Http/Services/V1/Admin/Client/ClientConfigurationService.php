@@ -519,7 +519,7 @@ class ClientConfigurationService extends Singleton
                     } else {
                         $json[$item['variable_name']] = $aux_variable->min_control;
                     }
-                    $json_status[str_replace(["max_", "min_"], "status_", $item['variable_name'])] = ($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::CHANGE) ? 2 :($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::ON ? 1 : 0);
+                    $json_status[str_replace(["max_", "min_"], "status_", $item['variable_name'])] = ($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::CHANGE) ? 3 :($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::ON ? 2 : 1);
                 }
             }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
