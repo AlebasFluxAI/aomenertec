@@ -70,7 +70,7 @@ class SaveStatusControlConfigurations implements ShouldQueue
                 foreach ($clientAlert as $alert) {
                     $limits = $alert_config_frame->where('flag_id', $alert->flag_id)->all();
                     foreach ($limits as $limit){
-                        $alert->active_conrol = true;
+                        $alert->active_control = true;
                         $alert->status_control = $json->{str_replace(["max_", "min_"], "status_", $limit['variable_name'])};
                     }
                     $alert->save();
