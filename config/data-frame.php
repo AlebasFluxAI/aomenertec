@@ -264,13 +264,6 @@ return [
         ['id' => 11,'flag_name'=> 'coil8', 'description' => '',            'bit' => 10, 'index' => 53],
         ['id' => 12,'flag_name'=> 'coil9', 'description' => '',            'bit' => 11, 'index' => 52],
         ['id' => 13,'flag_name'=> 'coil10', 'description' => '',           'bit' => 12, 'index' => 51],
-        ['id' => 51,'flag_name'=> 'kwh_month', 'description' => '', 'variable_name'=>'kwh_month','placeholder'=> 'kWh/Mes', 'bit' => 19, 'index' => 44, 'variable_id' => 61],
-        ['id' => 52,'flag_name'=> 'kvarlh_month', 'description' => '', 'variable_name'=>'kvarlh_month', 'placeholder'=> 'kVARLh/Mes', 'bit' => 20, 'index' => 43, 'variable_id' => 61],
-        ['id' => 53,'flag_name'=> 'kvarch_month', 'description' => '', 'variable_name'=>'kvarch_month', 'placeholder'=> 'kVARCh/Mes', 'bit' => 21, 'index' => 42, 'variable_id' => 61],
-        ['id' => 54,'flag_name'=> 'kwh_hour', 'description' => '', 'variable_name'=>'kwh_hour', 'placeholder'=> 'kWh/Hora', 'bit' => 22, 'index' => 41, 'variable_id' => 61],
-        ['id' => 55,'flag_name'=> 'kvarlh_hour', 'description' => '', 'variable_name'=>'kvarlh_hour', 'placeholder'=> 'kVARLh/Hora', 'bit' => 23, 'index' => 40, 'variable_id' => 61],
-        ['id' => 56,'flag_name'=> 'kvarch_hour', 'description' => '', 'variable_name'=>'kvarch_hour', 'placeholder'=> 'kVARCh/Hora', 'bit' => 24, 'index' => 39, 'variable_id' => 61],
-        ['id' => 57,'flag_name'=> 'kvarlh_penalizable', 'description' => '', 'variable_name'=>'kvarlh_penalizable', 'placeholder'=> 'Porcentaje horario kVARLh/kWh', 'bit' => 25, 'index' => 38, 'variable_id' => 61],
         ['id' => 14,'flag_name'=> 'flagOpened', 'description' => '',       'bit' => 27, 'index' => 36],
         ['id' => 15,'flag_name'=> 'flagAdc1', 'description' => '',         'bit' => 28, 'index' => 35],
         ['id' => 16,'flag_name'=> 'flagVolt1', 'description' => '',     'variable_name'=> 'ph1_volt',          'placeholder'=>'Voltaje fase 1', 'bit' => 29, 'index' => 34, 'variable_id' => 7],
@@ -309,7 +302,13 @@ return [
         ['id' => 48,'flag_name'=> 'flagTHDVolt23', 'description' => '', 'variable_name'=> 'ph2_ph3_volt_thd',  'placeholder'=>'Distorsion armonica total voltaje entre fase 2 y 3', 'bit' => 61, 'index' => 2,  'variable_id' => 47],
         ['id' => 49,'flag_name'=> 'flagTHDVolt31', 'description' => '', 'variable_name'=> 'ph3_ph1_volt_thd',  'placeholder'=>'Distorsion armonica total voltaje entre fase 3 y 1', 'bit' => 62, 'index' => 1,  'variable_id' => 48],
         ['id' => 50,'flag_name'=> 'flagDcVolt', 'description' => '',     'variable_name'=> 'ph1_volt',          'placeholder'=>'Voltaje bateria', 'bit' => 63, 'index' => 0, 'variable_id' => 61],
-
+        ['id' => 51,'flag_name'=> 'kwh_month', 'description' => '', 'variable_name'=>'kwh_month','placeholder'=> 'kWh/Mes', 'bit' => 19, 'index' => 44, 'variable_id' => 61],
+        ['id' => 52,'flag_name'=> 'kvarlh_month', 'description' => '', 'variable_name'=>'kvarlh_month', 'placeholder'=> 'kVARLh/Mes', 'bit' => 20, 'index' => 43, 'variable_id' => 61],
+        ['id' => 53,'flag_name'=> 'kvarch_month', 'description' => '', 'variable_name'=>'kvarch_month', 'placeholder'=> 'kVARCh/Mes', 'bit' => 21, 'index' => 42, 'variable_id' => 61],
+        ['id' => 54,'flag_name'=> 'kwh_hour', 'description' => '', 'variable_name'=>'kwh_hour', 'placeholder'=> 'kWh/Hora', 'bit' => 22, 'index' => 41, 'variable_id' => 61],
+        ['id' => 55,'flag_name'=> 'kvarlh_hour', 'description' => '', 'variable_name'=>'kvarlh_hour', 'placeholder'=> 'kVARLh/Hora', 'bit' => 23, 'index' => 40, 'variable_id' => 61],
+        ['id' => 56,'flag_name'=> 'kvarch_hour', 'description' => '', 'variable_name'=>'kvarch_hour', 'placeholder'=> 'kVARCh/Hora', 'bit' => 24, 'index' => 39, 'variable_id' => 61],
+        ['id' => 57,'flag_name'=> 'kvarlh_penalizable', 'description' => '', 'variable_name'=>'kvarlh_penalizable', 'placeholder'=> 'Porcentaje horario kVARLh/kWh', 'bit' => 25, 'index' => 38, 'variable_id' => 61],
 
     ],
 
