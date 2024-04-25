@@ -62,7 +62,7 @@ class SaveAlertDataJob implements ShouldQueue
         if($date->diffInYears($current_time) <= 1){
             $flag = $this->calculateValueAlert(5, $decode);
             $binary_flags = sprintf("%064b", ($flag));
-
+           // dd($binary_flags);
             $equipment_serial = str_pad($this->calculateValueAlert(2, $decode), 6, "0", STR_PAD_LEFT);
             $client = Client::getClientFromSerial($equipment_serial);
 
@@ -72,43 +72,18 @@ class SaveAlertDataJob implements ShouldQueue
             $timestamp = $this->calculateValueAlert(6, $decode);
 
             $this->source_timestamp->setTimestamp($timestamp);
-            $last_hour = $this->source_timestamp->copy();
+           $last_hour = $this->source_timestamp->copy();
             $last_month = $last_hour->copy();
             $last_hour->subHour();
-            $energy_hour = $client->microcontrollerData()->whereBetween('source_timestamp', [$last_hour->format('Y-m-d H:00:00'), $last_hour->format('Y-m-d H:59:59')])
-                ->orderBy('source_timestamp', 'desc')->first();
-            if (!$energy_hour) {
-                $energy_hour = $client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-d H:00:00'), $this->source_timestamp->format('Y-m-d H:59:59')])
-                    ->orderBy('source_timestamp')
-                    ->first();
-            }
-            $last_month->subMonthNoOverflow();
+            $energy_hour = $client->hourlyMicrocontrollerData()->whereBetween('source_timestamp', [$last_hour->format('Y-m-d H:00:00'), $last_hour->format('Y-m-d H:59:59')])->orderBy('source_timestamp', 'desc')->first();
+            $energy_month = $client->monthlyMicrocontrollerData()->orderBy('id', 'desc')->first();
 
-            $billing_day = $client->clientConfiguration->billing_day;
-            if($billing_day >= $this->source_timestamp->copy()->format('d')  ){
-                $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$last_month->copy()->subMonth()->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $last_month->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59')])
-                    ->orderBy('source_timestamp', 'desc')->first();
-                if (!$energy_month) {
-                    $energy_month = $client->microcontrollerData()
-                        ->whereBetween('source_timestamp', [$last_month->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $this->source_timestamp->format('Y-m-d H:i:s')])
-                        ->orderBy('source_timestamp')
-                        ->first();
-                }
-            }else{
-                $energy_month = $client->microcontrollerData()->whereBetween('source_timestamp', [$last_month->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $this->source_timestamp->format('Y-m-'. $billing_day == 31 ? 't':$billing_day. ' 23:59:59')])
-                    ->orderBy('source_timestamp', 'desc')->first();
-            }
-            if (!$energy_month) {
-                $energy_month = $client->microcontrollerData()
-                    ->whereBetween('source_timestamp', [$this->source_timestamp->format('Y-m-'. ($billing_day == 31 ? 't':$billing_day). ' 23:59:59'), $this->source_timestamp->format('Y-m-d H:i:s')])
-                    ->orderBy('source_timestamp')
-                    ->first();
-            }
+
             $value = 0;
             foreach ($flags_frame as $item) {
                 if ($item['id'] >= 16) {
                     $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
+                    echo $alert->max_alert." - ".$alert->flag_id."\n";
                     $type = "";
                     $split = substr($binary_flags, $item['index'], 1);
                     if ($split == "1") {
@@ -348,6 +323,7 @@ class SaveAlertDataJob implements ShouldQueue
             } elseif ($flag_id == 55) {
                 $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
                 $value = $accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
+                dd($energy_hour->accumulated_reactive_inductive_consumption, $accumulated_reactive_inductive_consumption);
             } elseif ($flag_id == 56) {
                 $accumulated_reactive_capacitive_consumption = $this->calculateValueAlert(58, $decode) + $this->calculateValueAlert(59, $decode) + $this->calculateValueAlert(60, $decode);
                 $value = $accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;

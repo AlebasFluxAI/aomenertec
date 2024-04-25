@@ -345,20 +345,6 @@ class ClientConfigurationService extends Singleton
             $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
         }
     }
-    public function test(Component $component, $requestDetails, $notificationtypeId){
-       dd($notificationtypeId);
-
-        try {
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-            $mqtt = MQTT::connection('default', 'null');
-            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $component);
-            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-            $mqttCoilAckStrategy->registerLoopEventHandler();
-            $mqttCoilAckStrategy->subscribe($equipment, $notificationtypeId);
-        } catch (MqttClientException $e) {
-            $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
-        }
-    }
 
 
     public function submitFormConection(Component $component)
@@ -468,6 +454,12 @@ class ClientConfigurationService extends Singleton
                     $aux_variable = $component->client_config_alert->where('flag_id', $item['flag_id'])->first();
                     $json[$item['variable_name']] = $aux_variable->{$item['limit']};;
                 }
+            }
+            foreach ($component->client_config_alert as $index => $item) {
+                if ($index == "client_notification_type") {
+                    continue;
+                }
+                $item->save();
             }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
             $apiKey = ApiKey::first();
