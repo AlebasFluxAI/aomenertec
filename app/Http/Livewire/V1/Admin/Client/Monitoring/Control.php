@@ -37,6 +37,18 @@ class Control extends Component
     {
         $this->client = $client;
         $this->coils = $this->client->digitalOutputs;
+
+        $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
+        $apiKey =ApiKey::first();
+
+        $requestDetails = [
+            'url' => 'https://aom.enerteclatam.com/api/v1/config/get-status-coil',
+            'method' => 'GET',
+            'body' => [
+                'serial' => $equipment->serial,
+            ],
+            'apiKey' => $apiKey->api_key
+        ];
     }
 
     public function confirmAction($index)

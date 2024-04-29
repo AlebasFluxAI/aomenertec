@@ -514,6 +514,12 @@ class ClientConfigurationService extends Singleton
                     $json_status[str_replace(["max_", "min_"], "status_", $item['variable_name'])] = ($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::CHANGE) ? 3 :($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::ON ? 2 : 1);
                 }
             }
+            foreach ($component->client_config_alert as $index => $item) {
+                if ($index == "client_notification_type") {
+                    continue;
+                }
+                $item->save();
+            }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
             $apiKey = ApiKey::first();
             $requestDetails = [
