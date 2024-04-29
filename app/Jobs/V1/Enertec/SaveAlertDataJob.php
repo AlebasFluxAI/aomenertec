@@ -53,37 +53,46 @@ class SaveAlertDataJob implements ShouldQueue
 
     private function alertVariableEvent()
     {
+        echo "ok\n";
         $flags_frame = config('data-frame.flags_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
         $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
         $date = new Carbon();
         $date->setTimestamp($timestamp);
         $current_time = Carbon::now();
+
         if($date->diffInYears($current_time) <= 1){
+            echo $date->format('Y-m-d H:i:s');
             $flag = $this->calculateValueAlert(5, $decode);
             $binary_flags = sprintf("%064b", ($flag));
-           // dd($binary_flags);
             $equipment_serial = str_pad($this->calculateValueAlert(2, $decode), 6, "0", STR_PAD_LEFT);
             $client = Client::getClientFromSerial($equipment_serial);
-
+            echo $binary_flags."\n";
             if ($client == null) {
                 return;
             }
             $timestamp = $this->calculateValueAlert(6, $decode);
 
             $this->source_timestamp->setTimestamp($timestamp);
-           $last_hour = $this->source_timestamp->copy();
-            $last_month = $last_hour->copy();
+            $last_hour = $this->source_timestamp->copy();
             $last_hour->subHour();
             $energy_hour = $client->hourlyMicrocontrollerData()->whereBetween('source_timestamp', [$last_hour->format('Y-m-d H:00:00'), $last_hour->format('Y-m-d H:59:59')])->orderBy('source_timestamp', 'desc')->first();
             $energy_month = $client->monthlyMicrocontrollerData()->orderBy('id', 'desc')->first();
 
 
             $value = 0;
+            $status_coil = false;
             foreach ($flags_frame as $item) {
+                if($item['id'] == 4){
+                   foreach ($client->digitalOutputs as $output){
+                       $split = substr($binary_flags, $item['index'], 1);
+                       $status_coil = $split == 1;
+                       $output->status = $status_coil;
+                       $output->save();
+                   }
+                }
                 if ($item['id'] >= 16) {
                     $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
-                    echo $alert->max_alert." - ".$alert->flag_id."\n";
                     $type = "";
                     $split = substr($binary_flags, $item['index'], 1);
                     if ($split == "1") {
@@ -97,6 +106,7 @@ class SaveAlertDataJob implements ShouldQueue
                                 } else{
                                     $value = $this->calculateValueAlertEnergy($item['id'], $energy_month, $energy_hour, $decode);
                                 }
+                                echo $value." - ".$split. " - ". $item['id']." - ".$alert->max_control."\n";
 
                                 if ($this->is_control) {
                                     if ($alert->min_control != 0) {
@@ -140,7 +150,8 @@ class SaveAlertDataJob implements ShouldQueue
                                     "variable_name" => $alertGenerated->clientAlertConfiguration->getVariableName(),
                                     "value" => $value,
                                     "max_value" => $alert->max_alert,
-                                    "min_value" => $alert->min_alert
+                                    "min_value" => $alert->min_alert,
+                                    "status_coil" => $status_coil,
                                 ];
                                 $ackLog = AckLog::create(["serial" => $equipment_serial]);
                                 $event_type = $this->is_control ? EventLog::EVENT_ALERT_CONTROL_NOTIFICATION: EventLog::EVENT_ALERT_NOTIFICATION;
@@ -185,6 +196,7 @@ class SaveAlertDataJob implements ShouldQueue
                                         ['variable_name'=> 'value',  'parameter_name' => 'value', 'format' => 'number'],
                                         ['variable_name'=> 'max_value',  'parameter_name' => 'max_value', 'format' => 'number'],
                                         ['variable_name'=> 'min_value',  'parameter_name' => 'min_value', 'format' => 'number'],
+                                        ['variable_name'=> 'status_coil',  'parameter_name' => 'status_coil', 'format' => 'number'],
                                     ]
                                     ],
                                 ];
@@ -308,31 +320,30 @@ class SaveAlertDataJob implements ShouldQueue
         $value = 0;
         if ($energy_month) {
             if ($flag_id == 51) {
-                $value = $this->calculateValueAlert(33, $decode) - $energy_month->accumulated_real_consumption;
+                $value = $this->calculateValueAlert(33, $decode) - $energy_month->microcontrollerData->accumulated_real_consumption;
             } elseif ($flag_id == 52) {
                 $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
-                $value = $accumulated_reactive_inductive_consumption - $energy_month->accumulated_reactive_inductive_consumption;
+                $value = $accumulated_reactive_inductive_consumption - $energy_month->microcontrollerData->accumulated_reactive_inductive_consumption;
             } elseif ($flag_id == 53) {
                 $accumulated_reactive_capacitive_consumption = $this->calculateValueAlert(58, $decode) + $this->calculateValueAlert(59, $decode) + $this->calculateValueAlert(60, $decode);
-                $value = $accumulated_reactive_capacitive_consumption - $energy_month->accumulated_reactive_capacitive_consumption;
+                $value = $accumulated_reactive_capacitive_consumption - $energy_month->microcontrollerData->accumulated_reactive_capacitive_consumption;
             }
         }
         if ($energy_hour) {
             if ($flag_id == 54) {
-                $value = $this->calculateValueAlert(33, $decode) - $energy_hour->accumulated_real_consumption;
+                $value = $this->calculateValueAlert(33, $decode) - $energy_hour->microcontrollerData->accumulated_real_consumption;
             } elseif ($flag_id == 55) {
                 $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
-                $value = $accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
-                dd($energy_hour->accumulated_reactive_inductive_consumption, $accumulated_reactive_inductive_consumption);
+                $value = $accumulated_reactive_inductive_consumption - $energy_hour->microcontrollerData->accumulated_reactive_inductive_consumption;
             } elseif ($flag_id == 56) {
                 $accumulated_reactive_capacitive_consumption = $this->calculateValueAlert(58, $decode) + $this->calculateValueAlert(59, $decode) + $this->calculateValueAlert(60, $decode);
-                $value = $accumulated_reactive_capacitive_consumption - $energy_hour->accumulated_reactive_capacitive_consumption;
+                $value = $accumulated_reactive_capacitive_consumption - $energy_hour->microcontrollerData->accumulated_reactive_capacitive_consumption;
             }
             if ($flag_id == 57) {
-                $interval_real_consumption = $this->calculateValueAlert(33, $decode) - $energy_hour->accumulated_real_consumption;
+                $interval_real_consumption = $this->calculateValueAlert(33, $decode) - $energy_hour->microcontrollerData->accumulated_real_consumption;
                 if ($interval_real_consumption != 0) {
                     $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
-                    $interval_reactive_inductive_consumption = $accumulated_reactive_inductive_consumption - $energy_hour->accumulated_reactive_inductive_consumption;
+                    $interval_reactive_inductive_consumption = $accumulated_reactive_inductive_consumption - $energy_hour->microcontrollerData->accumulated_reactive_inductive_consumption;
                     $value = ($interval_reactive_inductive_consumption * 100) / $interval_real_consumption;
                 } else {
                     $value = 0;
