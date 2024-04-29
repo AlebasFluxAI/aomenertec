@@ -53,7 +53,7 @@ class ConsumerCommand extends Command
             //sleep(5);
             echo "alerta control = ".$pack."\n";
             //dispatch(new SaveMicrocontrollerDataJob($pack, true))->onQueue('spot');
-            dispatch(new SaveAlertDataJob($pack, true))->onConnection('sync');
+            dispatch(new SaveAlertDataJob($pack, true))->onQueue('default');
         }, 0);
         $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) {
             if (substr($message, 0, 2) == '21') {
