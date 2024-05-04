@@ -56,7 +56,6 @@ class FetchDataApiStrategy implements MqttSenderInterface
                                         $this->component->emit('changeCheck', ['index' => $this->component->coils[$this->index]['id'], 'flag' => true]);
                                     } elseif ($notificationTypeId == 4) {
                                         $this->component->coils[0]['status'] = $json['data']['status_coil'] == 1;
-                                        dd($json['data']);
                                     } elseif ($notificationTypeId == 10){
                                         foreach ($this->component->client_config_alert as $index => $item) {
                                             if ($index == "client_notification_type") {

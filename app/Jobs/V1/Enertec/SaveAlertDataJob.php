@@ -149,8 +149,8 @@ class SaveAlertDataJob implements ShouldQueue
                                     "timestamp" => $this->source_timestamp->format('Y-m-d H:i:s'),
                                     "variable_name" => $alertGenerated->clientAlertConfiguration->getVariableName(),
                                     "value" => $value,
-                                    "max_value" => $alert->max_alert,
-                                    "min_value" => $alert->min_alert,
+                                    "max_value" => $this->is_control? $alert->max_control:$alert->max_alert,
+                                    "min_value" => $this->is_control? $alert->min_control:$alert->min_alert,
                                     "status_coil" => $status_coil,
                                 ];
                                 $ackLog = AckLog::create(["serial" => $equipment_serial]);

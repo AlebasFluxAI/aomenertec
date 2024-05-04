@@ -34,8 +34,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         ////unpack data
-        $schedule->command(UpdateDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
-        $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
+       // $schedule->command(UpdateDataConsumption::class)->everyTwoMinutes()->withoutOverlapping();
+        //$schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
 
         $schedule->command(AverageHourlyConsumptionCommand::class)->hourlyAt(35)->withoutOverlapping();
 

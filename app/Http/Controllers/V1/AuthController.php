@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Models\V1\Client;
+use App\Models\V1\WorkOrder;
 
 class AuthController extends Controller
 {
@@ -88,7 +89,8 @@ class AuthController extends Controller
         $response = [];
 
         foreach ($clients as $client) {
-            $gabinete = $client->equipments()->whereEquipmentTypeId(1)->first();
+            $gabinete = $client->equipments()->whereEquipmentTypeId(7)->first();
+            $orders = $client->workOrders()->whereStatus(WorkOrder::WORK_ORDER_STATUS_OPEN)->get();
             array_push($response, [
                 'uid' => $client->networkOperator->identification,
                 'did' => $gabinete?$gabinete->serial:null,
@@ -98,11 +100,9 @@ class AuthController extends Controller
                 'codigo_cliente' => $client->code,
                 'ubicacion' => json_decode($client->addresses()->first()->here_maps),
                 'celular' => $client->phone,
-                "fecha_lectura" => "25/12/2021",
-                "estado" => "habilitado",
-                "orden" => "lectura",
                 "pass" => $pass,
-                "equipments" => $this->clientEquipment($client)
+                "equipments" => $this->clientEquipment($client),
+                "orders"=> $orders,
             ]);
         }
         return response()->json($response);
