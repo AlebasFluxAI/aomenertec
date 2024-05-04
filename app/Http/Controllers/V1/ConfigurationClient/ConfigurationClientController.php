@@ -100,7 +100,7 @@ class ConfigurationClientController extends Controller
             'message' => 'Webhook procesado exitosamente',
             'request_json' => $datosJson
         ];
-        $mqtt = MQTT::connection('default', 'knsajknjsa');
+        $mqtt = MQTT::connection('default', 'null');
         $mqtt->publish('aom/chanel', json_encode($datosJson));
         $mqtt->disconnect();
         // Retornar una instancia de Response con los datos y código de estado apropiados

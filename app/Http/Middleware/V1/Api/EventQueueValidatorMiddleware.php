@@ -5,6 +5,7 @@ namespace App\Http\Middleware\V1\Api;
 use App\Models\V1\Api\AckLog;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -25,12 +26,21 @@ class EventQueueValidatorMiddleware
         if ($event) {
             $client = Client::getClientFromSerial($serial);
             if ($client != null) {
-                if ($event != EventLog::EVENT_DATE_RANGE) {
-                    if (EventLog::whereEvent($event)
+                if($event != EventLog::EVENT_DATE_RANGE) {
+                    $last_event = EventLog::whereEvent($event)
                         ->whereClientId($client->id)
                         ->whereStatus(EventLog::STATUS_CREATED)
-                        ->exists()) {
-                        abort(429, "Evento del mismo tipo en proceso");
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+                    if ($last_event) {
+                        $event_date = Carbon::create($last_event->created_at);
+                        $now = Carbon::now();
+                        if ($now->diffInSeconds($event_date) > 45){
+                            $last_event->status = EventLog::STATUS_ERROR;
+                            $last_event->save();
+                        }else {
+                            abort(429, "Evento del mismo tipo en proceso");
+                        }
                     }
                 }
             }
