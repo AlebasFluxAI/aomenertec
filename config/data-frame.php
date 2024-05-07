@@ -918,6 +918,122 @@ return [
            'job_name' => 'SaveAlertControlConfigurations'
         ],
         [
+            'event_id' => 47,
+            'frame' => [
+                ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2, 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3, 'variable_name'=> 'status_service_coil', 'start' => 5,  'parameter_name' => null, 'format' => 'number',   'lenght' => 1, 'type' => 'C'],
+                ['id' => 4, 'variable_name'=> 'crc',          'start' => 6, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'uri_event' => \App\Models\V1\Api\EventLog::EVENT_SET_SERVICE_COIL
+        ],
+        [
+            'event_id' => 48,
+            'frame' => [
+            ['id' => 1 ,  'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+            ['id' => 2 ,  'variable_name'=> 'id_event_log',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+            ['id' => 3 ,  'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+            ['id' => 4 ,  'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+            ['id' => 5 ,  'variable_name'=> 'status_service_coil',       'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+            ['id' => 6 ,  'variable_name'=> 'import_kwh',   'start' => 14, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 7 ,  'variable_name'=> 'import_kvarh', 'start' => 18, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 8 ,  'variable_name'=> 'export_kwh',   'start' => 22, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 9 , 'variable_name'=> 'export_kvarh', 'start' => 26, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 10 , 'variable_name'=> 'crc',          'start' => 30, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+        ],
+            //'job_name' => 'SaveStatusControlConfigurations'
+        ],
+        [
+            'event_id' => 49,
+            'frame' => [
+            ['id' => 1 ,  'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+            ['id' => 2 ,  'variable_name'=> 'timestamp',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+            ['id' => 3 ,  'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+            ['id' => 4 ,  'variable_name'=> 'status_service_coil',       'start' => 9, 'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+            ['id' => 5 ,  'variable_name'=> 'import_kwh',   'start' => 10, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 6 ,  'variable_name'=> 'import_kvarh', 'start' => 14, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 7 ,  'variable_name'=> 'export_kwh',   'start' => 18, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 8 , 'variable_name'=> 'export_kvarh', 'start' => 22, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
+            ['id' => 9 , 'variable_name'=> 'crc',          'start' => 26, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+        ],
+            //'job_name' => 'SaveStatusControlConfigurations'
+        ],
+        [
+            'event_id' => 50,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',        'start' => 0, 'parameter_name' => null,       'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log',    'start' => 1, 'parameter_name' => null,       'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'lenght_password', 'start' => 5, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 4 , 'variable_name'=> 'password',        'start' => 6, 'parameter_name' => 'password', 'format' => 'string', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 5 , 'variable_name'=> 'crc',             'start' => 7, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'uri_event' => \App\Models\V1\Api\EventLog::EVENT_SET_PASSWORD_METER_APP
+        ],
+        [
+            'event_id' => 51,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 52,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'timestamp',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'lenght_password', 'start' => 9, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 5 , 'variable_name'=> 'password',        'start' => 10, 'parameter_name' => 'password', 'format' => 'string', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'crc',             'start' => 11, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 53,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',        'start' => 0, 'parameter_name' => null,       'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log',    'start' => 1, 'parameter_name' => null,       'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp', 'start' => 5, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',        'start' => 9, 'parameter_name' => 'serial', 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'crc',             'start' => 13, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'uri_event' => \App\Models\V1\Api\EventLog::EVENT_GET_PASSWORD_METER
+        ],
+        [
+            'event_id' => 54,
+            'frame' => [
+                ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2 , 'variable_name'=> 'timestamp',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'lenght_password', 'start' => 9, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 5 , 'variable_name'=> 'password',        'start' => 10, 'parameter_name' => 'password', 'format' => 'string', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'crc',             'start' => 11, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ]
+        ],
+        [
+            'event_id' => 55,
+            'frame' => [
+                ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2, 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3, 'variable_name'=> 'billing_day', 'start' => 5,  'parameter_name' => null, 'format' => 'number',   'lenght' => 1, 'type' => 'C'],
+                ['id' => 4, 'variable_name'=> 'crc',          'start' => 6, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            'uri_event' => \App\Models\V1\Api\EventLog::EVENT_SET_BILLING_DAY
+        ],
+        [
+            'event_id' => 56,
+            'frame' => [
+                ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 2, 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3, 'variable_name'=> 'timestamp', 'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4, 'variable_name'=> 'serial', 'start' => 9,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 5, 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+            ],
+            //'job_name' => 'SaveStatusControlConfigurations'
+        ],
+        [
             'event_id' => 57,
             'frame' => [
                 ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
@@ -1544,6 +1660,114 @@ return [
             ]
         ],
         [
+            'notification_type_id' => 48,
+            'event_id' => 48,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 48,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se activo/desactivo el servicio de manipulacion del suministro electrico', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                          'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                          'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                          'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                          'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp',    'format' => 'date'],
+                    ['variable_name'=> 'status_service_coil',   'parameter_name' => 'status',       'format' => 'number'],
+                    ['variable_name'=> 'import_kwh',    'parameter_name' => 'import_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'export_kwh',    'parameter_name' => 'export_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'import_kvarh',  'parameter_name' => 'import_kvarh', 'format' => 'number'],
+                    ['variable_name'=> 'export_kvarh',  'parameter_name' => 'export_kvarh', 'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'notification_type_id' => 49,
+            'event_id' => 49,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 49,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se activo/desactivo el servicio de manipulacion del suministro electrico desde la app', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                          'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                          'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                          'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                          'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp',    'format' => 'date'],
+                    ['variable_name'=> 'status_service_coil',   'parameter_name' => 'status',       'format' => 'number'],
+                    ['variable_name'=> 'import_kwh',    'parameter_name' => 'import_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'export_kwh',    'parameter_name' => 'export_kwh',   'format' => 'number'],
+                    ['variable_name'=> 'import_kvarh',  'parameter_name' => 'import_kvarh', 'format' => 'number'],
+                    ['variable_name'=> 'export_kvarh',  'parameter_name' => 'export_kvarh', 'format' => 'number'],
+                ]
+                ],
+            ]
+        ],
+        [
+            'notification_type_id' => 51,
+            'event_id' => 51,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 51,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó el cambio de contraseña en el medidor', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date']
+                ]
+                ],
+            ]
+        ],
+        [
+            'notification_type_id' => 52,
+            'event_id' => 52,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 52,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó cambio de contraseña en el medidor desde la app', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'password', 'parameter_name' => 'password', 'format' => 'number']
+                ]
+                ],
+            ]
+        ],
+        [
+            'notification_type_id' => 54,
+            'event_id' => 54,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 54,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la consulta de la contraseña del medidor', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'password', 'parameter_name' => 'password', 'format' => 'number']
+                ]
+                ],
+            ]
+        ],
+        [
+            'notification_type_id' => 56,
+            'event_id' => 56,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 56,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se realizó la configuración de la fecha de corte del dispositivo', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                          'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                       'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date']
+                ]
+                ],
+            ]
+        ],
+        [
             'notification_type_id' => 58,
             'event_id' => 58,
             'json' => [
@@ -1559,6 +1783,7 @@ return [
                 ],
             ]
         ],
+
 
 
     ]

@@ -89,6 +89,22 @@ class ConfigurationClientController extends Controller
     {
         return $this->configurationClientService->otaUpdate($request);
     }
+    public function setBillingDay(Request $request): JsonResource
+    {
+        return $this->configurationClientService->setBillingDay($request);
+    }
+    public function setStatusServiceCoil(Request $request): JsonResource
+    {
+        return $this->configurationClientService->setStatusServiceCoil($request);
+    }
+    public function setPasswordMeter(Request $request): JsonResource
+    {
+        return $this->configurationClientService->setPasswordMeter($request);
+    }
+    public function getPasswordMeter(Request $request): JsonResource
+    {
+        return $this->configurationClientService->getPasswordMeter($request);
+    }
 
 
     public function notificationWebhook(Request $request)
