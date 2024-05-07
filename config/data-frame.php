@@ -922,7 +922,7 @@ return [
             'frame' => [
                 ['id' => 1, 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
                 ['id' => 2, 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
-                ['id' => 3, 'variable_name'=> 'status_service_coil', 'start' => 5,  'parameter_name' => null, 'format' => 'number',   'lenght' => 1, 'type' => 'C'],
+                ['id' => 3, 'variable_name'=> 'status_service_coil', 'start' => 5,  'parameter_name' => 'status_service_coil', 'format' => 'number',   'lenght' => 1, 'type' => 'C'],
                 ['id' => 4, 'variable_name'=> 'crc',          'start' => 6, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ],
             'uri_event' => \App\Models\V1\Api\EventLog::EVENT_SET_SERVICE_COIL
