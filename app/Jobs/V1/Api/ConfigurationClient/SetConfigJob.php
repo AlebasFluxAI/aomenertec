@@ -61,10 +61,11 @@ class SetConfigJob implements ShouldQueue
                             $length = $value;
                         }elseif ($datum['format'] == 'string') {
                             $value = substr($message, ($datum['start']), $length);
-                            $json_request[$datum['variable_name']] = $value;
+                            $json[$datum['variable_name']] = $value;
                         } else{
                             if ($datum['variable_name'] == 'crc'){
-                                $json[$datum['variable_name']] = $crc;
+                                $data_crc = substr($message, 0, -2);
+                                $json[$datum['variable_name']] = unpack($datum['type'], $data_crc)[1];
                             }else{
                                 $value = unpack($datum['type'], $split)[1];
                                 $json[$datum['variable_name']] = $value;
