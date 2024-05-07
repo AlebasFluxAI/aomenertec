@@ -49,6 +49,10 @@ class EventLog extends Model
     const EVENT_REAL_TIME_FRAME = "real-time-frame";
     const EVENT_SET_CONTROL_LIMITS = "set-control-limits";
     const EVENT_SET_STATUS_CONTROL_LIMITS = "set-status-control-limits";
+    const EVENT_SET_BILLING_DAY = "set-billing-day";
+    const EVENT_SET_SERVICE_COIL = "set-status-service-coil";
+    const EVENT_SET_PASSWORD_METER_APP = "set-password-meter-app";
+    const EVENT_GET_PASSWORD_METER = "get-password-meter";
 
 
 
@@ -106,6 +110,10 @@ class EventLog extends Model
                      self::EVENT_SET_CONTROL_LIMITS,
                      self::EVENT_SET_STATUS_CONTROL_LIMITS,
                      self::EVENT_OTA_UPDATE,
+                     self::EVENT_SET_BILLING_DAY,
+                     self::EVENT_SET_SERVICE_COIL,
+                     self::EVENT_SET_PASSWORD_METER_APP,
+                     self::EVENT_GET_PASSWORD_METER,
                      self::EVENT_DATE_RANGE,
                      self::EVENT_SET_URL_NOTIFICATION,
                      self::EVENT_GET_URL_NOTIFICATION,

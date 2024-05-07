@@ -17,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Request;
 
 class SetConfigJob implements ShouldQueue
 {
@@ -50,12 +51,26 @@ class SetConfigJob implements ShouldQueue
         $json = null;
         if ($crc_pack == $crc_message) {
             $event_id = unpack('C', $message[0])[1];
-            foreach ($data_frame_events as $event) {
-                if ($event['event_id'] == $event_id) {
+            foreach ($data_frame_events as $index => $event) {
+                if ($event['event_id'] ==  $event_id) {
                     foreach ($event['frame'] as $datum) {
                         $split = substr($message, ($datum['start']), ($datum['lenght']));
-                        $value = unpack($datum['type'], $split)[1];
-                        $json[$datum['variable_name']] = $value;
+                        if ($datum['format'] == 'lenght') {
+                            $value = unpack($datum['type'], $split)[1];
+                            $json[$datum['variable_name']] = $value;
+                            $length = $value;
+                        }elseif ($datum['format'] == 'string') {
+                            $value = substr($message, ($datum['start']), $length);
+                            $json_request[$datum['variable_name']] = $value;
+                        } else{
+                            if ($datum['variable_name'] == 'crc'){
+                                $json[$datum['variable_name']] = $crc;
+                            }else{
+                                $value = unpack($datum['type'], $split)[1];
+                                $json[$datum['variable_name']] = $value;
+                            }
+                           
+                        }
                     }
                         echo $event_id . " - " . $json['serial'];
                     break;

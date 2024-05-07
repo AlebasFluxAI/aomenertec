@@ -52,6 +52,11 @@ Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']
             Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_GET_CURRENT_READINGS, "getCurrentReadingsForSerial");
             Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_ON_OFF_REAL_TIME, "OnOffRealTimeForSerial");
             Route::post("/" . \App\Models\V1\Api\EventLog::EVENT_OTA_UPDATE, "otaUpdate");
+            Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_SET_BILLING_DAY, "setBillingDay");
+            Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_SET_SERVICE_COIL, "setStatusServiceCoil");
+            Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_SET_PASSWORD_METER_APP, "setPasswordMeter");
+            Route::get("/" . \App\Models\V1\Api\EventLog::EVENT_GET_PASSWORD_METER, "getPasswordMeter");
+
         });
     });
 

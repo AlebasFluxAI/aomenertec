@@ -419,6 +419,73 @@ class ConfigurationClientService
         return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
     }
 
+    public function setBillingDay($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
+                },
+            ],
+            'billing_day' => 'required | regex:/^(31|([12][0-8]?)|([1-9]))$/',
+
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function setStatusServiceCoil($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
+                },
+            ],
+            'status_service_coil' => 'required | boolean'
+
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function setPasswordMeter($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
+                },
+            ],
+            'password' => ['required', 'string', 'max:21'],
+
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
+    public function getPasswordMeter($request): JsonResource
+    {
+        $validator = Validator::make($request->all(), [
+            'serial' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $this->serialValidationLogic($attribute, $value, $fail, $request);
+                },
+            ]
+
+        ]);
+        if ($validator->fails()) {
+            return $this->setErrorMessage($validator, $request);
+        }
+        return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
+    }
 
     private function setErrorMessage($validator, $request){
         $errors = $validator->messages();
