@@ -54,6 +54,7 @@ class SetConfigJob implements ShouldQueue
             foreach ($data_frame_events as $index => $event) {
                 if ($event['event_id'] ==  $event_id) {
                     foreach ($event['frame'] as $datum) {
+
                         $split = substr($message, ($datum['start']), ($datum['lenght']));
                         if ($datum['format'] == 'lenght') {
                             $value = unpack($datum['type'], $split)[1];
@@ -85,7 +86,7 @@ class SetConfigJob implements ShouldQueue
             $apiKey =ApiKey::first();
             $response = Http::withHeaders([
                 'x-api-key' => $apiKey->api_key,
-            ])->get('https://aom.enerteclatam.com/api/v1/config/set-date', [
+            ])->withoutVerifying()->get('https://aom.enerteclatam.com/api/v1/config/set-date', [
                 'serial' => $json['serial'],
             ]);
         }

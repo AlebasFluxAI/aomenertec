@@ -53,6 +53,7 @@ class EventLog extends Model
     const EVENT_SET_SERVICE_COIL = "set-status-service-coil";
     const EVENT_SET_PASSWORD_METER_APP = "set-password-meter-app";
     const EVENT_GET_PASSWORD_METER = "get-password-meter";
+    const EVENT_CHANGE_STATE_SERVICE_COIL_IN_APLICATION = "set-status-service-coil-in-aplication";
 
 
 
@@ -114,6 +115,7 @@ class EventLog extends Model
                      self::EVENT_SET_SERVICE_COIL,
                      self::EVENT_SET_PASSWORD_METER_APP,
                      self::EVENT_GET_PASSWORD_METER,
+                     self::EVENT_CHANGE_STATE_SERVICE_COIL_IN_APLICATION,
                      self::EVENT_DATE_RANGE,
                      self::EVENT_SET_URL_NOTIFICATION,
                      self::EVENT_GET_URL_NOTIFICATION,
