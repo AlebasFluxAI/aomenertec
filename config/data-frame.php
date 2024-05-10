@@ -956,7 +956,7 @@ return [
             ['id' => 8 , 'variable_name'=> 'export_kvarh', 'start' => 22, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
             ['id' => 9 , 'variable_name'=> 'crc',          'start' => 26, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
         ],
-            //'job_name' => 'SaveStatusControlConfigurations'
+            'uri_event' => \App\Models\V1\Api\EventLog::EVENT_CHANGE_STATE_SERVICE_COIL_IN_APLICATION
         ],
         [
             'event_id' => 50,
@@ -995,9 +995,7 @@ return [
             'frame' => [
                 ['id' => 1 , 'variable_name'=> 'event_id',        'start' => 0, 'parameter_name' => null,       'format' => 'number', 'lenght' => 1, 'type' => 'C'],
                 ['id' => 2 , 'variable_name'=> 'id_event_log',    'start' => 1, 'parameter_name' => null,       'format' => 'number', 'lenght' => 4, 'type' => 'V'],
-                ['id' => 3 , 'variable_name'=> 'timestamp', 'start' => 5, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 4, 'type' => 'V'],
-                ['id' => 4 , 'variable_name'=> 'serial',        'start' => 9, 'parameter_name' => 'serial', 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
-                ['id' => 5 , 'variable_name'=> 'crc',             'start' => 13, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+                ['id' => 3 , 'variable_name'=> 'crc',             'start' => 5, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ],
             'uri_event' => \App\Models\V1\Api\EventLog::EVENT_GET_PASSWORD_METER
         ],
@@ -1005,11 +1003,12 @@ return [
             'event_id' => 54,
             'frame' => [
                 ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
-                ['id' => 2 , 'variable_name'=> 'timestamp',    'start' => 1,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
-                ['id' => 3 , 'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
-                ['id' => 4 , 'variable_name'=> 'lenght_password', 'start' => 9, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 1, 'type' => 'C'],
-                ['id' => 5 , 'variable_name'=> 'password',        'start' => 10, 'parameter_name' => 'password', 'format' => 'string', 'lenght' => 1, 'type' => 'C'],
-                ['id' => 6 , 'variable_name'=> 'crc',             'start' => 11, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log',    'start' => 1, 'parameter_name' => null,       'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
+                ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 5 , 'variable_name'=> 'lenght_password', 'start' => 13, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'password',        'start' => 14, 'parameter_name' => 'password', 'format' => 'string', 'lenght' => 4, 'type' => 'C'],
+                ['id' => 7 , 'variable_name'=> 'crc',             'start' => 18, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ]
         ],
         [
