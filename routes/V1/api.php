@@ -76,5 +76,7 @@ Route::group([
         Route::post('refresh', 'refresh');
         Route::post('job-list', 'joblist');
         Route::post('me', 'me');
+        Route::post('orders-update', 'ordersUpdate');
+
     });
 });

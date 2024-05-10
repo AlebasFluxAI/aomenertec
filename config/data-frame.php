@@ -1681,10 +1681,10 @@ return [
             ]
         ],
         [
-            'notification_type_id' => 49,
+            'notification_type_id' => 80,
             'event_id' => 49,
             'json' => [
-                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 49,                                             'parameter_name' => null,           'object' => []],
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 80,                                             'parameter_name' => null,           'object' => []],
                 ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Se activo/desactivo el servicio de manipulacion del suministro electrico desde la app', 'parameter_name' => null,           'object' => []],
                 ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                             'parameter_name' => null,           'object' => []],
                 ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                          'parameter_name' => 'serial',       'object' => []],
@@ -1692,7 +1692,7 @@ return [
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                          'parameter_name' => null, 'object' => []],
                 ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                          'parameter_name' => null,           'object' => [
                     ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp',    'format' => 'date'],
-                    ['variable_name'=> 'status_service_coil',   'parameter_name' => 'status',       'format' => 'number'],
+                    ['variable_name'=> 'status_service_coil',   'parameter_name' => 'status_service_coil',       'format' => 'number'],
                     ['variable_name'=> 'import_kwh',    'parameter_name' => 'import_kwh',   'format' => 'number'],
                     ['variable_name'=> 'export_kwh',    'parameter_name' => 'export_kwh',   'format' => 'number'],
                     ['variable_name'=> 'import_kvarh',  'parameter_name' => 'import_kvarh', 'format' => 'number'],

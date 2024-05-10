@@ -4,6 +4,8 @@ namespace App\Http\Controllers\V1;
 
 use App\Models\V1\Client;
 use App\Models\V1\WorkOrder;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthController extends Controller
 {
@@ -91,21 +93,29 @@ class AuthController extends Controller
         foreach ($clients as $client) {
             $gabinete = $client->equipments()->whereEquipmentTypeId(7)->first();
             $orders = $client->workOrders()->whereStatus(WorkOrder::WORK_ORDER_STATUS_OPEN)->get();
-            array_push($response, [
-                'uid' => $client->networkOperator->identification,
-                'did' => $gabinete?$gabinete->serial:null,
-                'ssid' => $gabinete?'wifi_' . $gabinete->serial: 'wifi_xxx',
-                'password' => $client->identification,
-                'nombre' => ($client->alias ?? $client->name),
-                'codigo_cliente' => $client->code,
-                'ubicacion' => json_decode($client->addresses()->first()->here_maps),
-                'celular' => $client->phone,
-                "pass" => $pass,
-                "equipments" => $this->clientEquipment($client),
-                "orders"=> $orders,
-            ]);
+            if(count($orders)>0) {
+                array_push($response, [
+                    'uid' => $client->networkOperator->identification,
+                    'did' => $gabinete ? $gabinete->serial : null,
+                    'ssid' => $gabinete ? 'wifi_' . $gabinete->serial : 'wifi_xxx',
+                    'password' => $client->identification,
+                    'nombre' => ($client->alias ?? $client->name),
+                    'codigo_cliente' => $client->code,
+                    'ubicacion' => json_decode($client->addresses()->first()->here_maps),
+                    'celular' => $client->phone,
+                    "pass" => $pass,
+                    "equipments" => $this->clientEquipment($client),
+                    "orders" => $orders,
+                ]);
+            }
         }
         return response()->json($response);
+    }
+
+    public function ordersUpdate(Request $request): JsonResource
+    {
+        dd($request->get());
+       //return $this->configurationClientService->setAlertLimitsForSerial($request);
     }
 
     private function clientEquipment(Client $client)
