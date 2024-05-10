@@ -428,7 +428,7 @@ class ConfigurationClientService
                     $this->serialValidationLogic($attribute, $value, $fail, $request);
                 },
             ],
-            'billing_day' => 'required | regex:/^(31|([12][0-8]?)|([1-9]))$/',
+            'billing_day' => 'required',
 
         ]);
         if ($validator->fails()) {

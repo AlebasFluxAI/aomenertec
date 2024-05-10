@@ -70,7 +70,6 @@ class SetConfigJob implements ShouldQueue
                                 $value = unpack($datum['type'], $split)[1];
                                 $json[$datum['variable_name']] = $value;
                             }
-
                         }
                     }
                         echo $event_id . " - " . $json['serial'];
