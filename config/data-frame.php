@@ -973,10 +973,12 @@ return [
             'event_id' => 51,
             'frame' => [
                 ['id' => 1 , 'variable_name'=> 'event_id',     'start' => 0,  'parameter_name' => null, 'format' => 'number', 'lenght' => 1, 'type' => 'C'],
-                ['id' => 2 , 'variable_name'=> 'id_event_log', 'start' => 1,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
+                ['id' => 2 , 'variable_name'=> 'id_event_log',    'start' => 1, 'parameter_name' => null,       'format' => 'number', 'lenght' => 4, 'type' => 'V'],
                 ['id' => 3 , 'variable_name'=> 'timestamp',    'start' => 5,  'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'V'],
                 ['id' => 4 , 'variable_name'=> 'serial',       'start' => 9,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
-                ['id' => 5 , 'variable_name'=> 'crc',          'start' => 13, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+                ['id' => 5 , 'variable_name'=> 'lenght_password', 'start' => 13, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 1, 'type' => 'C'],
+                ['id' => 6 , 'variable_name'=> 'password',        'start' => 14, 'parameter_name' => 'password', 'format' => 'string', 'lenght' => 4, 'type' => 'C'],
+                ['id' => 7 , 'variable_name'=> 'crc',             'start' => 18, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ]
         ],
         [
@@ -1712,7 +1714,8 @@ return [
                 ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                       'parameter_name' => null,           'object' => []],
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                       'parameter_name' => null, 'object' => []],
                 ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                       'parameter_name' => null,           'object' => [
-                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date']
+                    ['variable_name'=> 'response_date', 'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'password', 'parameter_name' => 'password', 'format' => 'number']
                 ]
                 ],
             ]
