@@ -988,7 +988,8 @@ return [
                 ['id' => 4 , 'variable_name'=> 'lenght_password', 'start' => 9, 'parameter_name' => null,       'format' => 'lenght', 'lenght' => 1, 'type' => 'C'],
                 ['id' => 5 , 'variable_name'=> 'password',        'start' => 10, 'parameter_name' => 'password', 'format' => 'string', 'lenght' => 1, 'type' => 'C'],
                 ['id' => 6 , 'variable_name'=> 'crc',             'start' => 11, 'parameter_name' => null,       'format' => 'number', 'lenght' => 2, 'type' => 'v'],
-            ]
+            ],
+            'uri_event' => \App\Models\V1\Api\EventLog::EVENT_CHANGE_PASSWORD_IN_APLICATION,
         ],
         [
             'event_id' => 53,
