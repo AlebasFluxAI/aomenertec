@@ -167,7 +167,7 @@ class CheckAckLogJob implements ShouldQueue
             try {
                 $response = Http::withHeaders([
                     $apiKey->security_header_value => $apiKey->security_header_key,
-                ])->post($webhook, $jsonResponse);
+                ])->withoutVerifying()->post($webhook, $jsonResponse);
                 $jsonData = $response->json();
                 $eventLogWh->status = EventLog::STATUS_SUCCESSFUL;
                 $eventLogWh->response_json = $jsonData == null ? $jsonData :json_encode($jsonData);
@@ -175,7 +175,7 @@ class CheckAckLogJob implements ShouldQueue
                 $ackLog = $eventLogWh->ackLog;
                 $ackLog->status = AckLog::STATUS_SUCCESS;
                 $ackLog->save();
-                dump($jsonData);
+                //dump($jsonData);
 
             } catch (\Throwable $e) {
                 $statusCode = $e->getCode();
