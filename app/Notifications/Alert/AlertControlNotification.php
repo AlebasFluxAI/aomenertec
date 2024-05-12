@@ -32,12 +32,7 @@ class AlertControlNotification extends Notification
         $this->template = $template;
 
         $this->client_alert_configuration = $this->clientAlert->clientAlertConfiguration;
-        $digital_output = $this->client_alert_configuration->clientDigitalOutput;
-        $name_outputs = [];
-        foreach ($digital_output as $output) {
-            array_push($name_outputs, $output->name);
-        }
-        $this->outputs = implode(", ", $name_outputs);
+        $this->outputs = $this->client->digitalOutputs()->first();
     }
 
     /**
@@ -83,8 +78,10 @@ class AlertControlNotification extends Notification
                 $this->client_alert_configuration->getVariableName(),
                 $this->clientAlert->value,
                 $date->format('d F H:i'),
-                $this->outputs,
+                $this->outputs == null? '-' : $this->outputs->name,
                 "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,
+                $this->outputs == null? '-' : ($this->outputs->status ? 'Activo': 'Inactivo'),
+
             ]);
     }
 }
