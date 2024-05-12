@@ -238,7 +238,6 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
         $mqtt->publish($topic, $message);
         $mqtt->disconnect();
         dispatch(new CheckAckLogJob($this->getMqttConnectionName(), $eventLog->id, $event_id, $serial))->onQueue('spot2');
-
     }
 
     private function getMqttConnectionName()
