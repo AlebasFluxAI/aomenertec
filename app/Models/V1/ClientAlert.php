@@ -29,7 +29,7 @@ class ClientAlert extends Model
         'value',
         'type',
         'source_timestamp',
-        'eventl_log_id'
+        'event_log_id'
     ];
 
     protected static function booted()
