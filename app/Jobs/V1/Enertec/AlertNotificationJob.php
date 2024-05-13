@@ -8,6 +8,7 @@ use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
 use App\Notifications\Alert\AlertControlNotification;
 use App\Notifications\Alert\AlertNotification;
+use App\Notifications\Alert\InformativeNotification;
 use App\Strategy\MqttSenderPattern\AlertControlApiStrategy;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -89,6 +90,22 @@ class AlertNotificationJob implements ShouldQueue
                     }
 
 
+            }
+        }
+        if ($this->clientAlert->type == ClientAlert::INFORMATIVE) {
+            foreach ($technicians as $user) {
+                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                $user->user->notify(new InformativeNotification($this->clientAlert));
+            }
+            foreach ($supervisors as $user) {
+                if ($user->user->phone == $client->phone) {
+                    $flag = false;
+                }
+                //event(new UserNotificationEvent(NotificationTypes::NOTIFICATION_CREATED, $user->user->id));
+                $user->user->notify(new InformativeNotification($this->clientAlert));
+            }
+            if ($flag) {
+                $client->notify(new InformativeNotification($this->clientAlert));
             }
         }
     }

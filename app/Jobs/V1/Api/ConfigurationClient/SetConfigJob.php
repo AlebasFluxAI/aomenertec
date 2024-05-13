@@ -201,14 +201,11 @@ class SetConfigJob implements ShouldQueue
                             } else {
                                 foreach ($datum['object'] as $property) {
                                     if ($property['format'] == 'date') {
+                                        $date = Carbon::now();
                                         if (array_key_exists($property['parameter_name'], $json)) {
-                                            $date = Carbon::now();
                                             $date->setTimestamp($json[$property['parameter_name']]);
-
-                                            $object[$property['variable_name']] = $date->format('Y-m-d H:i:s');
-                                        } else {
-                                            $object[$property['variable_name']] = null;
                                         }
+                                        $object[$property['variable_name']] = $date->format('Y-m-d H:i:s');
                                     } else {
                                         $object[$property['variable_name']] = array_key_exists($property['parameter_name'], $json) ? $json[$property['parameter_name']] : null;
                                     }

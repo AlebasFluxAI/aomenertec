@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Jobs\V1\Enertec\AlertNotificationJob;
 use App\Models\V1\AuxData;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\EquipmentType;
@@ -32,18 +33,9 @@ class MailTestController
     }
 
     public function eventTest(){
-        $message =hex2bin("10ac0e010098731866a1bb0d000101f9000f49fe733d486b664240842c0646fe47");
-        $crc_message = substr($message, -2);
-        $data_crc = substr($message, 0, -2);
-        $crc = Crc16::XMODEM($data_crc);
-        $crc_pack = pack('v', $crc);
-        dd($message,$crc_pack,$crc_message,$data_crc,dechex($crc));
-
-        if ($crc_pack == $crc_message) {
-            $event_id = unpack('C', $message[0])[1];
-        }
-        $value = pack('f', 121);
-        dd($crc);
+        $clientAlert = ClientAlert::find(25557);
+        dispatch(new AlertNotificationJob($clientAlert))->onConnection('sync');
+        dd($clientAlert);
     }
 
     public function whatsappNotification()
