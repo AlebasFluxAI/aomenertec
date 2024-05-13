@@ -121,15 +121,18 @@ class ConfigurationClientController extends Controller
         $mqtt = MQTT::connection('default', 'aom-channel-'.$datosJson['serial'].$datosJson['id_event']);
         $mqtt->publish('aom/chanel', json_encode($datosJson));
         $mqtt->disconnect();
-        $alertGenerated = ClientAlert::create([
-            'client_id' => $event->client_id,
-            'microcontroller_data_id' => null,
-            'client_alert_configuration_id' => null,
-            'value' => null,
-            'type' => ClientAlert::INFORMATIVE,
-            'source_timestamp' => $event->created_at->format('Y-m-d H:i:s'),
-            'event_log_id' => $event->id
-        ]);
+        $alert = ClientAlert::whereEventLogId($event->id)->first();
+        if ($alert == null){
+            $alertGenerated = ClientAlert::create([
+                'client_id' => $event->client_id,
+                'microcontroller_data_id' => null,
+                'client_alert_configuration_id' => null,
+                'value' => null,
+                'type' => ClientAlert::INFORMATIVE,
+                'source_timestamp' => $event->created_at->format('Y-m-d H:i:s'),
+                'event_log_id' => $event->id
+            ]);
+        }
         // Retornar una instancia de Response con los datos y código de estado apropiados
         return response()->json($responseData, 200);
     }

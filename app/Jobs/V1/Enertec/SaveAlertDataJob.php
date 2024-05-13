@@ -142,7 +142,8 @@ class SaveAlertDataJob implements ShouldQueue
                                     'client_alert_configuration_id' => $alert->id,
                                     'value' => $value,
                                     'type' => $type,
-                                    'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s')
+                                    'source_timestamp' => $this->source_timestamp->format('Y-m-d H:i:s'),
+                                    'event_log_id' => null,
                                 ]);
                                 $json = [
                                     "serial" => $equipment_serial,
@@ -183,6 +184,8 @@ class SaveAlertDataJob implements ShouldQueue
                                     "status" => EventLog::STATUS_CREATED,
                                     "ack_log_id" => $eventLog ? $eventLog->ack_log_id : null
                                 ]);
+                                $alertGenerated->event_log_id = $eventLogWh->id;
+                                $alertGenerated->save();
                                 $jsonMessage = [
                                     ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 24,                                                               'parameter_name' => null,           'object' => []],
                                     ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Alerta de variable fuera de rango', 'parameter_name' => null,           'object' => []],

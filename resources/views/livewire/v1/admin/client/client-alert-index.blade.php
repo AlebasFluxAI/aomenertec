@@ -30,9 +30,22 @@
 
                             ]
                     ])
+            @include("partials.v1.tab.v1.tab",[
 
+                                        "tab_titles"=>[
+                                                            [
+                                                                "title"=>"Alertas",
+                                                            ],
+                                                            [
+                                                                "title"=>"Eventos",
+                                                            ]
 
-        @include("partials.v2.table.primary-table",[
+                                                       ],
+
+                                        "tab_contents"=>[
+                                                            [
+                                                                "view_name"=>"partials.v2.table.primary-table",
+                                                                "view_values"=> [
                 "class_container"=>$table_class_container??null,
                "table_pageable"=>$table_pageable??true,
                "table_headers"=>[
@@ -87,8 +100,59 @@
                                ],
                            ],
                ],
-               "table_rows"=>$data
-           ])
+               "table_rows"=>$alerts
+           ]
+                                                            ],
+                                                              [
+                                                                "view_name"=>"partials.v2.table.primary-table",
+                                                                "view_values"=> [
+                "class_container"=>$table_class_container??null,
+               "table_pageable"=>$table_pageable??true,
+               "table_headers"=>[
+              [
+                   "col_name" =>"ID",
+                   "col_data" =>"id",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Tipo",
+                   "col_data" =>"type",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Tipo evento",
+                   "col_data" =>"eventLog.event",
+                   "col_filter"=>true
+               ],
+               [
+                   "col_name" =>"Mensaje",
+                   "col_data" =>"message",
+                   "col_filter"=>true
+               ],
+               [
+                    "col_name" =>"Fecha",
+                    "col_data" =>"eventLog.created_at",
+                    "col_filter"=>false
+               ],
+
+                ],
+               "table_actions"=>[
+                                           "customs"=>[
+                               [
+                                     "function"=>"deleteAlert",
+                                     "icon"=>"fas fa-trash",
+                                     "tooltip_title"=>"Eliminar",
+                               ],
+                           ],
+               ],
+               "table_rows"=>$events
+           ]
+                                                            ],
+
+                     ]
+                     ])
+
+
         @if($view_header??true)
     </div>
 @endif
