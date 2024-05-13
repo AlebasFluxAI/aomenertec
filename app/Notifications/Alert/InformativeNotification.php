@@ -46,7 +46,7 @@ class InformativeNotification extends Notification
     public function toWhatsApp($notifiable)
     {
         $template = 'informative_notification';
-        $request_json = json_decode($this->event->reques_json, true);
+        $request_json = json_decode($this->event->request_json, true);
         return (new WhatsAppMessage())
             ->to($notifiable->phone)
             ->template_name($template)
