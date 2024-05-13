@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\V1\Admin\Client;
 
 use App\Models\V1\Api\ApiKey;
+use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
@@ -77,7 +78,7 @@ class Monitoring extends Component
                         'apiKey' => $apiKey->api_key
                     ];
                     try {
-                        $mqtt = MQTT::connection('default', 'null');
+                        $mqtt = MQTT::connection('default', EventLog::EVENT_ON_OFF_REAL_TIME.'-'.$equipment->serial.'-aom-channel');
                         $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
                         $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
                         $mqttCoilAckStrategy->registerLoopEventHandler();

@@ -65,13 +65,14 @@ class Control extends Component
             'apiKey' => $apiKey->api_key
         ];
         try {
-            $mqtt = MQTT::connection('default', 'null');
+            $mqtt = MQTT::connection('default', EventLog::EVENT_SET_STATUS_COIL.'-'.$equipment->serial.'aom-channel');
             $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
             $mqttCoilAckStrategy->setIndex($index);
             $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
             $mqttCoilAckStrategy->registerLoopEventHandler();
             $mqttCoilAckStrategy->subscribe($equipment, 3);
         } catch (MqttClientException $e) {
+            $this->emit('changeCheck', ['index' => $this->component->coils[$this->index]['id'], 'flag' => false]);
             $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
         }
     }

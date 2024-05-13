@@ -22,6 +22,7 @@ class CreateClientAlertsTable extends Migration
             $table->enum('type', [
                 \App\Models\V1\ClientAlert::ALERT,
                 \App\Models\V1\ClientAlert::CONTROL,
+                \App\Models\V1\ClientAlert::INFORMATIVE,
             ])->default(\App\Models\V1\ClientAlert::ALERT);
             $table->foreign("microcontroller_data_id")
                 ->references("id")

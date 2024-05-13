@@ -5,6 +5,7 @@ namespace App\Http\Services\V1\Admin\Client;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\V1\Api\ApiKey;
+use App\Models\V1\Api\EventLog;
 use App\Models\V1\AvailableChannel;
 use App\Models\V1\Client;
 use App\Models\V1\ClientAlertConfiguration;
@@ -333,10 +334,11 @@ class ClientConfigurationService extends Singleton
 
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada, Recuerde guardar cambios"]);
     }
-    private function consumeService(Component $component, $requestDetails, $notificationtypeId){
+    private function consumeService(Component $component, $requestDetails, $notificationtypeId, $event){
         try {
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-            $mqtt = MQTT::connection('default', 'null');
+            $mqtt = MQTT::connection('default', $event.'-'.$requestDetails['body']['serial'].'-aom-channel');
+
             $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $component);
             $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
             $mqttCoilAckStrategy->registerLoopEventHandler();
@@ -367,7 +369,7 @@ class ClientConfigurationService extends Singleton
                 ],
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 13);
+            $this->consumeService($component, $requestDetails, 13, EventLog::EVENT_SET_WIFI_CREDENTIALS);
 
         }
         if ($component->client_config->isDirty('mqtt_host') || $component->client_config->isDirty('mqtt_port') || $component->client_config->isDirty('mqtt_user') || $component->client_config->isDirty('mqtt_password')) {
@@ -385,7 +387,7 @@ class ClientConfigurationService extends Singleton
                 ],
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 14);
+            $this->consumeService($component, $requestDetails, 14, EventLog::EVENT_SET_BROKER_CREDENTIALS);
 
         }
 
@@ -403,7 +405,22 @@ class ClientConfigurationService extends Singleton
                 ],
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 12);
+            $this->consumeService($component, $requestDetails, 12, EventLog::EVENT_SET_SAMPLING_TIME);
+        }
+
+        if ($component->client_config->isDirty('billing_day')) {
+            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            $apiKey = ApiKey::first();
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/set-billing-day',
+                'method' => 'GET',
+                'body' => [
+                    'serial' => $equipment->serial,
+                    'billing_day' => $component->client_config->billing_day
+                ],
+                'apiKey' => $apiKey->api_key
+            ];
+            $this->consumeService($component, $requestDetails, 56, EventLog::EVENT_SET_BILLING_DAY);
         }
 
     }
@@ -469,7 +486,7 @@ class ClientConfigurationService extends Singleton
                 'body' => array_merge(['serial' => $equipment->serial], $json),
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 10);
+            $this->consumeService($component, $requestDetails, 10, EventLog::EVENT_SET_ALERT_LIMITS);
 
 
 
@@ -537,7 +554,7 @@ class ClientConfigurationService extends Singleton
             //$this->consumeService($component, $requestDetails, 46);
             try {
                 $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-                $mqtt = MQTT::connection('default', 'null');
+                $mqtt = MQTT::connection('default', EventLog::EVENT_SET_CONTROL_LIMITS.'-'.$equipment->serial.'-aom-channel');
                 $mqttCoilAckStrategy = new AlertControlApiStrategy($mqtt, $component);
                 $mqttCoilAckStrategy->fetchDataFromAPIControlAlerts($requestDetails, $component->requesDetails);
                 $mqttCoilAckStrategy->registerLoopEventHandler();
