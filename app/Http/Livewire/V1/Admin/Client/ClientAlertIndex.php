@@ -35,12 +35,13 @@ class ClientAlertIndex extends Component
     public function render()
     {
         return view('livewire.v1.admin.client.client-alert-index', [
-            "data" => $this->getData()
+            "alerts" => $this->getData(true),
+            "events" => $this->getData(false),
         ])->extends('layouts.v1.app');
     }
 
-    public function getData()
+    public function getData($alert)
     {
-        return $this->clientAlertIndexService->getData($this);
+        return $this->clientAlertIndexService->getData($this, $alert);
     }
 }

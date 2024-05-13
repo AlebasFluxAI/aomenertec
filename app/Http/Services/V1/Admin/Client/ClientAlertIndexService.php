@@ -15,12 +15,21 @@ class ClientAlertIndexService extends Singleton
         $component->model = $client;
     }
 
-    public function getData(Component $component)
+    public function getData(Component $component, $alert)
     {
-        $clientAlerts = $component->model->clientAlerts()->pagination();
-        foreach ($clientAlerts as &$alert) {
-            $alert->name = $alert->clientAlertConfiguration->getVariableName();
+        if ($alert){
+            $clientAlerts = $component->model->clientAlerts()->where('type', '!=', ClientAlert::INFORMATIVE)->pagination();
+            foreach ($clientAlerts as &$alert) {
+                $alert->name = $alert->clientAlertConfiguration->getVariableName();
+            }
+        } else{
+            $clientAlerts = $component->model->clientAlerts()->where('type', ClientAlert::INFORMATIVE)->pagination();
+            foreach ($clientAlerts as &$alert) {
+                $request_json = json_decode($alert->eventLog->request_json, true);
+                $alert->message = $request_json['message'];
+            }
         }
+
         return $clientAlerts;
     }
 
