@@ -49,9 +49,9 @@ class AlertControlNotification extends Notification
     public function toMail($notifiable)
     {
         if ($this->template == "control_alert_ok") {
-            return (new ControlSuccessAlertMail($notifiable, $this->clientAlert, $this->outputs));
+            return (new ControlSuccessAlertMail($notifiable, $this->clientAlert, $this->outputs == null? '-': $this->outputs->name));
         }
-        return (new ControlErrorAlertMail($notifiable, $this->clientAlert, $this->outputs));
+        return (new ControlErrorAlertMail($notifiable, $this->clientAlert,$this->outputs == null? '-': $this->outputs->name));
 
 
     }
