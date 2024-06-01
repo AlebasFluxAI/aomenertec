@@ -35,11 +35,11 @@ class CreateReadTypeWorkOrderJob implements ShouldQueue
     {
         $userModel = $this->client->networkOperator->user;
         $technician = $this->client->clientTechnician()->first();
-        $technicianModel = $technician->user;
         if ($technician == null) {
             $technician = $this->client->networkOperator->technicians()->first();
         }
         if ($technician) {
+            $technicianModel = $technician->user;
             $a = $this->client->workOrders()->create([
                 "status" => WorkOrder::WORK_ORDER_STATUS_OPEN,
                 "open_at" => Carbon::now(),

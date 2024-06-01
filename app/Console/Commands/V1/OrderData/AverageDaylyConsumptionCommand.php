@@ -42,7 +42,7 @@ class AverageDaylyConsumptionCommand extends Command
     public function handle()
     {
         $clients = Client::whereHasTelemetry(true)->get();
-        $day_reference = Carbon::now()->subDay();
+        $day_reference = Carbon::create(2024,05,26)->subDay();
         foreach ($clients as $client) {
             dispatch(new AverageDailyConsumptionJob($client->id, $day_reference))->onQueue('spot3');
         }
