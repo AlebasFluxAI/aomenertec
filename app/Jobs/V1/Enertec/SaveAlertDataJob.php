@@ -320,27 +320,27 @@ class SaveAlertDataJob implements ShouldQueue
     {
         $value = 0;
         if ($energy_month) {
-            if ($flag_id == 52) {
+            if ($flag_id == 43) {
                 $value = $this->calculateValueAlert(33, $decode) - $energy_month->microcontrollerData->accumulated_real_consumption;
-            } elseif ($flag_id == 53) {
+            } elseif ($flag_id == 44) {
                 $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
                 $value = $accumulated_reactive_inductive_consumption - $energy_month->microcontrollerData->accumulated_reactive_inductive_consumption;
-            } elseif ($flag_id == 54) {
+            } elseif ($flag_id == 45) {
                 $accumulated_reactive_capacitive_consumption = $this->calculateValueAlert(58, $decode) + $this->calculateValueAlert(59, $decode) + $this->calculateValueAlert(60, $decode);
                 $value = $accumulated_reactive_capacitive_consumption - $energy_month->microcontrollerData->accumulated_reactive_capacitive_consumption;
             }
         }
         if ($energy_hour) {
-            if ($flag_id == 55) {
+            if ($flag_id == 46) {
                 $value = $this->calculateValueAlert(33, $decode) - $energy_hour->microcontrollerData->accumulated_real_consumption;
-            } elseif ($flag_id == 56) {
+            } elseif ($flag_id == 47) {
                 $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
                 $value = $accumulated_reactive_inductive_consumption - $energy_hour->microcontrollerData->accumulated_reactive_inductive_consumption;
-            } elseif ($flag_id == 57) {
+            } elseif ($flag_id == 48) {
                 $accumulated_reactive_capacitive_consumption = $this->calculateValueAlert(58, $decode) + $this->calculateValueAlert(59, $decode) + $this->calculateValueAlert(60, $decode);
                 $value = $accumulated_reactive_capacitive_consumption - $energy_hour->microcontrollerData->accumulated_reactive_capacitive_consumption;
             }
-            if ($flag_id == 58) {
+            if ($flag_id == 49) {
                 $interval_real_consumption = $this->calculateValueAlert(33, $decode) - $energy_hour->microcontrollerData->accumulated_real_consumption;
                 if ($interval_real_consumption != 0) {
                     $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
@@ -350,7 +350,7 @@ class SaveAlertDataJob implements ShouldQueue
                     $value = 0;
                 }
             }
-            if ($flag_id == 59) {
+            if ($flag_id == 50) {
                 $interval_real_consumption = $this->calculateValueAlert(33, $decode) - $energy_hour->microcontrollerData->accumulated_real_consumption;
                 if ($interval_real_consumption != 0) {
                     $accumulated_reactive_capacitiva_consumption = $this->calculateValueAlert(58, $decode) + $this->calculateValueAlert(59, $decode) + $this->calculateValueAlert(60, $decode);
