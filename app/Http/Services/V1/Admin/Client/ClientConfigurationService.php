@@ -100,12 +100,12 @@ class ClientConfigurationService extends Singleton
             ]
         ];
         foreach ($component->client_config_alert as $index => $item) {
-            if ($item->flag_id <= 51) {
+            if ($item->flag_id <= 42) {
                 array_push($component->inputs, [
                     "input_type" => "input_min_max",
                     "input_min_model" => "client_config_alert." . $index . ".min_alert",
                     "input_max_model" => "client_config_alert." . $index . ".max_alert",
-                    "input_min_number_min" => ($item->flag_id == 28 || $item->flag_id == 29 || $item->flag_id == 30 || $item->flag_id == 51)?"":0,
+                    "input_min_number_min" => ($item->flag_id == 28 || $item->flag_id == 29 || $item->flag_id == 30 || $item->flag_id == 42)?"":0,
                     "input_min_number_max" => "",
                     "input_min_number_step" => 0.01,
                     "input_max_number_min" => "",
@@ -147,12 +147,12 @@ class ClientConfigurationService extends Singleton
             ]
         ];
         foreach ($component->client_config_alert as $index => $item) {
-            if ($item->flag_id <= 51) {
+            if ($item->flag_id <= 42) {
                 array_push($component->inputs_control, [
                     "input_type" => "input_min_max",
                     "input_min_model" => "client_config_alert." . $index . ".min_control",
                     "input_max_model" => "client_config_alert." . $index . ".max_control",
-                    "input_min_number_min" => ($item->flag_id == 28 || $item->flag_id == 29 || $item->flag_id == 30 || $item->flag_id == 51)?"":0,
+                    "input_min_number_min" => ($item->flag_id == 28 || $item->flag_id == 29 || $item->flag_id == 30 || $item->flag_id == 42)?"":0,
                     "input_min_number_max" => "",
                     "input_min_number_step" => 0.01,
                     "input_max_number_min" => "",
