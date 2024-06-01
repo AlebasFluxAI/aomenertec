@@ -100,12 +100,12 @@ class ClientConfigurationService extends Singleton
             ]
         ];
         foreach ($component->client_config_alert as $index => $item) {
-            if ($item->flag_id <= 50) {
+            if ($item->flag_id <= 51) {
                 array_push($component->inputs, [
                     "input_type" => "input_min_max",
                     "input_min_model" => "client_config_alert." . $index . ".min_alert",
                     "input_max_model" => "client_config_alert." . $index . ".max_alert",
-                    "input_min_number_min" => 0,
+                    "input_min_number_min" => ($item->flag_id == 28 || $item->flag_id == 29 || $item->flag_id == 30 || $item->flag_id == 51)?"":0,
                     "input_min_number_max" => "",
                     "input_min_number_step" => 0.01,
                     "input_max_number_min" => "",
@@ -147,12 +147,12 @@ class ClientConfigurationService extends Singleton
             ]
         ];
         foreach ($component->client_config_alert as $index => $item) {
-            if ($item->flag_id <= 50) {
+            if ($item->flag_id <= 51) {
                 array_push($component->inputs_control, [
                     "input_type" => "input_min_max",
                     "input_min_model" => "client_config_alert." . $index . ".min_control",
                     "input_max_model" => "client_config_alert." . $index . ".max_control",
-                    "input_min_number_min" => 0,
+                    "input_min_number_min" => ($item->flag_id == 28 || $item->flag_id == 29 || $item->flag_id == 30 || $item->flag_id == 51)?"":0,
                     "input_min_number_max" => "",
                     "input_min_number_step" => 0.01,
                     "input_max_number_min" => "",
@@ -228,9 +228,9 @@ class ClientConfigurationService extends Singleton
         $property = explode(".", $propertyName);
         if ($property[0] == "client_config_alert") {
             $component->validate([
-                'client_config_alert.' . $property[1] . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$property[1]]->max_alert],
+                'client_config_alert.' . $property[1] . '.min_alert' => ['required', 'numeric', 'max:' . $component->client_config_alert[$property[1]]->max_alert],
                 'client_config_alert.' . $property[1] . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$property[1]]->min_alert],
-                'client_config_alert.' . $property[1] . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$property[1]]->max_control],
+                'client_config_alert.' . $property[1] . '.min_control' => ['required', 'numeric', 'max:' . $component->client_config_alert[$property[1]]->max_control],
                 'client_config_alert.' . $property[1] . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$property[1]]->min_control],
             ]);
         } else {
@@ -302,7 +302,7 @@ class ClientConfigurationService extends Singleton
         $alert = ClientAlertConfiguration::find($id);
         $flag = false;
         $component->validate([
-            'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
+            'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'max:' . $component->client_config_alert[$index]->max_control],
             'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
         ]);
         foreach ($component->checks as $check) {
@@ -451,7 +451,7 @@ class ClientConfigurationService extends Singleton
                     continue;
                 }
                 $component->validate([
-                    'client_config_alert.' . $index . '.min_alert' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_alert],
+                    'client_config_alert.' . $index . '.min_alert' => ['required', 'numeric', 'max:' . $component->client_config_alert[$index]->max_alert],
                     'client_config_alert.' . $index . '.max_alert' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_alert],
                 ]);
             }
@@ -504,7 +504,7 @@ class ClientConfigurationService extends Singleton
                     continue;
                 }
                 $component->validate([
-                    'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'min:0', 'max:' . $component->client_config_alert[$index]->max_control],
+                    'client_config_alert.' . $index . '.min_control' => ['required', 'numeric', 'max:' . $component->client_config_alert[$index]->max_control],
                     'client_config_alert.' . $index . '.max_control' => ['required', 'numeric', 'min:' . $component->client_config_alert[$index]->min_control],
                 ]);
             }

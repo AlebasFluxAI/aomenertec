@@ -41,8 +41,8 @@ class CreateReadTypeWorkOrders extends Command
      */
     public function handle()
     {
-        $now = Carbon::create(2023, 10, 29);
-        $billing_date = $now->copy()->addDays(2);
+        $now = Carbon::now();
+        $billing_date = $now->copy()->addDays(3);
         if ($billing_date->format('d') == $billing_date->format('t')) {
             $billing_day_clients = ClientConfiguration::whereBillingDay(31)->get()->pluck('client_id');
         } else {

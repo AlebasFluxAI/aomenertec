@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\V1;
 
 use App\Models\V1\Client;
+use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\WorkOrder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -112,9 +114,66 @@ class AuthController extends Controller
         return response()->json($response);
     }
 
-    public function ordersUpdate(Request $request): JsonResource
+    public function ordersUpdate(Request $request)
     {
-        dd($request->get());
+        $order = json_decode($request->get('order'), true);
+        $orderModel = WorkOrder::find($order['id']);
+        if ($orderModel) {
+
+            if($orderModel->status == WorkOrder::WORK_ORDER_STATUS_CLOSED){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'The order is already closed.'
+                ], 409); // HTTP 409 Conflict
+            }
+            if ($orderModel->type == WorkOrder::WORK_ORDER_TYPE_READING) {
+                if (array_key_exists('raw_json', $order)) {
+                    $rawJson = $order['raw_json'];
+                    $source_timestamp = Carbon::create();
+                    $source_timestamp->setTimestamp($rawJson['timestamp']);
+                    $microcontroller_data = MicrocontrollerData::create([
+                        'raw_json' => json_encode($rawJson),
+                        "source_timestamp" => $source_timestamp->format('Y-m-d H:i:s'),
+                        'manually' => true,
+                        'status' => MicrocontrollerData::SUCCESS_TIMESTAMP
+                    ]);
+                    $order['microcontroller_data_id'] = $microcontroller_data->id;
+                    unset($order['raw_json']);
+                } else{
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'raw_json not found'
+                    ], 409); // HTTP 409 Conflict
+                }
+            }
+            if (array_key_exists('images', $order)) {
+                $images = $order['images'];
+                foreach ($images as $image) {
+                    $image_file = $request->file($image['name']);
+                    $orderModel->saveImageOnModelWithMorphMany($image_file, "evidences", $image['description']);
+                    if($microcontroller_data){
+                        $microcontroller_data->saveImageOnModelWithMorphMany($image_file, "evidences", $image['description']);
+                    }
+                }
+                unset($order['images']);
+            }
+
+            unset($order['id']);
+            $orderModel->update($order);
+
+            // Devolver una respuesta JSON de éxito
+            return response()->json([
+                'success' => true,
+                'message' => 'Order updated successfully',
+                'order' => $order
+            ], 200);
+        } else {
+            // Devolver una respuesta JSON de error si no se encuentra la orden
+            return response()->json([
+                'success' => false,
+                'message' => 'Order not found'
+            ], 404);
+        }
        //return $this->configurationClientService->setAlertLimitsForSerial($request);
     }
 
