@@ -49,37 +49,48 @@ class FirmwareUpdateJob implements ShouldQueue
                     return;
                 }
                 $pathFile= $requestJson->path_file;
-                $file = fopen(storage_path('app/'.$pathFile), 'rb');
-                $i = 0;
-                $mqtt = MQTT::connection("default", "null");
-
-                while (!feof($file)) {
-                    try {
-                        if (!$mqtt->isConnected()) {
-                            $mqtt = MQTT::connection("default", "null");
-                        }
-                        $bloque = fread($file, 320);
-                        $mqtt->publish('v1/mc/ota/'.$this->json['serial'], $bloque);
-                        echo $i."\n";
-                        $i++;
-                        usleep(20000);
-
-                    } catch (\PhpMqtt\Client\Exceptions\DataTransferException $e) {
-                        echo "fail ".$i."\n";
-                        sleep(2);
-                        $mqtt = MQTT::connection("default", "null");
-                        if (!$mqtt->isConnected()) {
-                            $mqtt = MQTT::connection("default", "null");
-                        }
-                        $bloque = fread($file, 320);
-                        $mqtt->publish('v1/mc/ota/'.$this->json['serial'], $bloque);
-                        $i++;
-                        usleep(20000);
+                $filePath = storage_path('app/' . $pathFile);
+                $j=0;
+                while(true){
+                    sleep(1);
+                    $j++;
+                    if($j==5 || (file_exists($filePath))){
+                        break;
                     }
                 }
-                $mqtt->disconnect();
+                if (file_exists($filePath)) {
+                    $file = fopen($filePath, 'rb');
+                    $i = 0;
+                    if ($file) {
+                        $mqtt = MQTT::connection("default", "null");
+                        while (!feof($file)) {
+                            try {
+                                if (!$mqtt->isConnected()) {
+                                    $mqtt = MQTT::connection("default", "null");
+                                }
+                                $bloque = fread($file, 320);
+                                $mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
+                                echo $i . "\n";
+                                $i++;
+                                usleep(20000);
 
-                fclose($file);
+                            } catch (\PhpMqtt\Client\Exceptions\DataTransferException $e) {
+                                echo "fail " . $i . "\n";
+                                sleep(2);
+                                $mqtt = MQTT::connection("default", "null");
+                                if (!$mqtt->isConnected()) {
+                                    $mqtt = MQTT::connection("default", "null");
+                                }
+                                $bloque = fread($file, 320);
+                                $mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
+                                $i++;
+                                usleep(20000);
+                            }
+                        }
+                        $mqtt->disconnect();
+                        fclose($file);
+                    }
+                }
                 if (Storage::exists($pathFile)) {
                     Storage::delete($pathFile);
 //                    if (!Storage::exists($pathFile)) {

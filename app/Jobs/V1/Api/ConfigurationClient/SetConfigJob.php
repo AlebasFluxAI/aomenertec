@@ -115,6 +115,11 @@ class SetConfigJob implements ShouldQueue
             $jobInstance = "App\\Jobs\\V1\\Api\\ConfigurationClient\\{$event['job_name']}";
             if (class_exists($jobInstance)) {
                 if (class_exists("App\\Jobs\\V1\\Api\\ConfigurationClient\\{$event['job_name']}")) {
+                    if($event_id == 43){
+                        $queue = 'default';
+                    } else{
+                        $queue = 'spot3';
+                    }
                     dispatch(new $jobInstance($json))->onQueue('spot3');
                 }
             }
@@ -245,7 +250,7 @@ class SetConfigJob implements ShouldQueue
                         $ackLog->save();
                     }
 
-                    dump($jsonData);
+                  //  dump($jsonData);
                 } catch (\Throwable $e) {
                     $statusCode = $e->getCode();
                     $errorMessage = $e->getMessage();
@@ -264,7 +269,7 @@ class SetConfigJob implements ShouldQueue
                         $ackLog->status = AckLog::STATUS_EXPIRED;
                         $ackLog->save();
                     }
-                    error_log($e->getMessage());
+                  //  error_log($e->getMessage());
                 }
             } else {
                 if ($eventLog != null) {

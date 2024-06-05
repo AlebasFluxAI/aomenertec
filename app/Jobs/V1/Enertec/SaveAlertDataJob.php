@@ -98,8 +98,9 @@ class SaveAlertDataJob implements ShouldQueue
                             $value = 1;
                             $type = ClientAlert::ALERT;
                         } else {
+                            echo $item['id']."\n";
                             if ($alert) {
-                                if ($item['id'] <= 51){
+                                if ($item['id'] <= 42){
                                     $value = $this->calculateValueAlert($item['variable_id'], $decode);
                                 } else{
                                     $value = $this->calculateValueAlertEnergy($item['id'], $energy_month, $energy_hour, $decode);
