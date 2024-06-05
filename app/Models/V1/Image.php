@@ -29,7 +29,7 @@ class Image extends Model
 
     public static function fileExtensions()
     {
-        return ["pdf", "docx"];
+        return ["pdf", "docx", "bin"];
     }
 
     protected static function boot()

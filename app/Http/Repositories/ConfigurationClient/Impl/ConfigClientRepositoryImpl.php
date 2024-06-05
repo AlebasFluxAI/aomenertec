@@ -68,9 +68,7 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 $message = $message . $value;
                 if ($event['event_id'] == 42){
                     $archivoBin = Request::file('file_bin');
-                    $nombreArchivo = $archivoBin->getClientOriginalName();
-                    $rutaTemporal = $archivoBin->storeAs('temp-files', $nombreArchivo);
-                    $json_request['path_file'] = $rutaTemporal;
+                    $eventLog->saveImageOnModelWithMorphMany($archivoBin, "evidences");
                 }
             } elseif ($datum['variable_name'] == 'salida_id') {
                 $value = pack($datum['type'], 1);

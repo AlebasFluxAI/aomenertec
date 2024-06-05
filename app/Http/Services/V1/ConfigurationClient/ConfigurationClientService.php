@@ -12,6 +12,7 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ConfigurationClientService
@@ -413,8 +414,12 @@ class ConfigurationClientService
             return $this->setErrorMessage($validator, $request);
         }
         $archivoBin = $request->file('file_bin');
-        $nombreArchivo = $archivoBin->getClientOriginalName();
-        $archivoBin->storeAs('temp-files', $nombreArchivo);
+        //$nombreArchivo = $archivoBin->getClientOriginalName();
+        //$archivoBin->storeAs('temp-files', $nombreArchivo);
+        $ackLogId=json_decode($request->header(AckLog::ACK_LOG_HEADER), true)["id"];
+        $event = EventLog::find($ackLogId);
+        $event->saveImageOnModelWithMorphMany($archivoBin, "evidences");
+
 
         return ConfigurationDefaultResponseResource::make($this->configurationClientRepository->runService());
     }
