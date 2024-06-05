@@ -56,7 +56,7 @@ class FirmwareUpdateJob implements ShouldQueue
                 $filePath = $eventLog->downloadFileFromS3($eventLog->evidences[0]->path);
                 $fileSize=filesize($filePath);
                 $j=$this->j;
-                $aux= floor($fileSize/8)*$j;
+                $aux= floor($fileSize/(320*8))*$j;
                 $file = fopen($filePath, 'rb');
                 $i=$this->i;
                 if (file_exists($filePath)) {
