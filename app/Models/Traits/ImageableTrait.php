@@ -4,6 +4,8 @@ namespace App\Models\Traits;
 
 use App\Models\V1\Image;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 trait ImageableTrait
 {
@@ -96,5 +98,18 @@ trait ImageableTrait
                 $this->{$type}->update();
             }
         }
+    }
+
+    public function downloadFileFromS3($filePath)
+    {
+        $disk = Storage::disk('s3');
+        if ($disk->exists($filePath)) {
+            $tempFilePath = storage_path('app/temp-files/' . basename($filePath));
+            $fileContent = $disk->get($filePath);
+            file_put_contents($tempFilePath, $fileContent);
+            return $tempFilePath;
+        }
+
+        throw new \Exception("El archivo no existe en S3.");
     }
 }
