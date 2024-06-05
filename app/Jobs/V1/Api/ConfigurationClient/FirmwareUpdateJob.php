@@ -58,7 +58,7 @@ class FirmwareUpdateJob implements ShouldQueue
                 $j=$this->j;
                 $aux= floor($fileSize/(320*8))*$j;
                 $file = fopen($filePath, 'rb');
-                $i=$this->i;
+                $i=0;
                 if (file_exists($filePath)) {
                     $file = fopen($filePath, 'rb');
                     if ($file) {
@@ -69,7 +69,7 @@ class FirmwareUpdateJob implements ShouldQueue
                                 dispatch(new FirmwareUpdateJob($this->json,$i,$j))->onQueue('spot3');
                                 break;
                             }
-                            if ($i < $aux) {
+                            if ($i < $aux && $i >= $this->i ) {
 
                                 try {
                                     if (!$mqtt->isConnected()) {
