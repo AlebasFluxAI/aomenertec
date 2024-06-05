@@ -116,11 +116,12 @@ class SetConfigJob implements ShouldQueue
             if (class_exists($jobInstance)) {
                 if (class_exists("App\\Jobs\\V1\\Api\\ConfigurationClient\\{$event['job_name']}")) {
                     if($event_id == 43){
-                        $queue = 'default';
+                        dispatch(new $jobInstance($json))->onConnection('sync');
+
                     } else{
-                        $queue = 'spot3';
+                        dispatch(new $jobInstance($json))->onQueue('spot3');
+
                     }
-                    dispatch(new $jobInstance($json))->onQueue($queue);
                 }
             }
         }
