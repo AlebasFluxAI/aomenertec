@@ -2,15 +2,19 @@
 
 namespace App\Models\V1\Api;
 
+use App\Models\Traits\ImageableTrait;
 use App\Models\V1\Api\AckLog;
 use App\Models\Traits\FilterTrait;
 use App\Models\V1\Client;
+use App\Models\V1\Image;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Request;
 
 class EventLog extends Model
 {
     use FilterTrait;
+    use ImageableTrait;
+
 
     const EVENT_LOG_HEADER = "event_log_header";
     const EVENT_LOG_HEADER_ID = "event_log_header_id";
@@ -172,6 +176,10 @@ class EventLog extends Model
     public function ackLog()
     {
         return $this->belongsTo(AckLog::class);
+    }
+    public function evidences()
+    {
+        return $this->morphMany(Image::class, "imageable")->whereType("evidences");
     }
 
     public function updateResponse($responseJson)

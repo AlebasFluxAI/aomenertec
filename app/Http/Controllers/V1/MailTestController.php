@@ -11,6 +11,8 @@ use App\Models\V1\MicrocontrollerData;
 use App\ModulesAux\MQTT;
 use Carbon\Carbon;
 use Crc16\Crc16;
+use Illuminate\Support\Facades\Request;
+
 
 class MailTestController
 {
@@ -34,12 +36,14 @@ class MailTestController
     }
 
     public function eventTest(){
+        $archivoBin = Request::file('file_bin');
+
         $eventLog = EventLog::find(105316);
-        $requestJson = json_decode($eventLog->request_json);
-        $pathFile= $requestJson->path_file;
-        $filePath = storage_path('app/' . $pathFile);
-        $file = fopen($filePath, 'rb');
-        dd($file);
+        //$eventLog->saveImageOnModelWithMorphMany($archivoBin, "evidences");
+        sleep(2);
+        $eventLog = EventLog::find(105316);
+        dd($eventLog->evidences());
+        dd($archivoBin);
 
     }
 
