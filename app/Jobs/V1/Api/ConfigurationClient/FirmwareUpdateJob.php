@@ -20,6 +20,7 @@ class FirmwareUpdateJob implements ShouldQueue
      *
      * @return void
      */
+    public $timeout = 300;
     public $json;
     public function __construct($json)
     {
@@ -72,7 +73,7 @@ class FirmwareUpdateJob implements ShouldQueue
                                 $mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
                                 echo $i . "\n";
                                 $i++;
-                                usleep(20000);
+                                usleep(50000);
 
                             } catch (\PhpMqtt\Client\Exceptions\DataTransferException $e) {
                                 echo "fail " . $i . "\n";
