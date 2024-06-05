@@ -120,7 +120,7 @@ class SetConfigJob implements ShouldQueue
                     } else{
                         $queue = 'spot3';
                     }
-                    dispatch(new $jobInstance($json))->onQueue('spot3');
+                    dispatch(new $jobInstance($json))->onQueue($queue);
                 }
             }
         }
