@@ -61,7 +61,6 @@ class FirmwareUpdateJob implements ShouldQueue
                 $i=$this->i;
                 if (file_exists($filePath)) {
                     $file = fopen($filePath, 'rb');
-                    $i = 0;
                     if ($file) {
                         $mqtt = MQTT::connection("default", "null");
                         while (!feof($file)) {
