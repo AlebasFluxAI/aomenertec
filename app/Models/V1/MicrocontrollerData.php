@@ -118,6 +118,9 @@ class MicrocontrollerData extends Model
                 if ($this->clientAlert()->exists()) {
                     $this->clientAlert()->forceDelete();
                 }
+                if ($this->workOrder()->exists()) {
+                    $this->workOrder()->forceDelete();
+                }
                 $this->forceDelete();
                 return;
             }
@@ -335,6 +338,10 @@ class MicrocontrollerData extends Model
     public function clientAlert()
     {
         return $this->hasOne(ClientAlert::class);
+    }
+    public function workOrder()
+    {
+        return $this->hasOne(WorkOrder::class);
     }
 
     public function alertEnergyEvent()

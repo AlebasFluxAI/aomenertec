@@ -57,6 +57,9 @@ class UnpackDataJob implements ShouldQueue
                 if ($this->item->clientAlert()->exists()) {
                     $this->item->clientAlert()->forceDelete();
                 }
+                if ($this->item->workOrder()->exists()) {
+                    $this->item->workOrder()->forceDelete();
+                }
                 $this->item->forceDelete();
                 return ;
             }
@@ -136,6 +139,9 @@ class UnpackDataJob implements ShouldQueue
                                 if ($this->item->clientAlert()->exists()) {
                                     $this->item->clientAlert()->forceDelete();
                                 }
+                                if ($this->item->workOrder()->exists()) {
+                                    $this->item->workOrder()->forceDelete();
+                                }
                                 $this->item->forceDelete();
                                 return;
                             }
@@ -152,17 +158,26 @@ class UnpackDataJob implements ShouldQueue
                         if ($this->item->clientAlert()->exists()) {
                             $this->item->clientAlert()->forceDelete();
                         }
+                        if ($this->item->workOrder()->exists()) {
+                            $this->item->workOrder()->forceDelete();
+                        }
                         $this->item->forceDelete();
                     }
                 } else {
                     if ($this->item->clientAlert()->exists()) {
                     $this->item->clientAlert()->forceDelete();
                 }
+                    if ($this->item->workOrder()->exists()) {
+                        $this->item->workOrder()->forceDelete();
+                    }
                     $this->item->forceDelete();
                 }
             } else {
                 if ($this->item->clientAlert()->exists()) {
                     $this->item->clientAlert()->forceDelete();
+                }
+                if ($this->item->workOrder()->exists()) {
+                    $this->item->workOrder()->forceDelete();
                 }
                 $this->item->forceDelete();
             }
