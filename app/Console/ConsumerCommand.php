@@ -43,10 +43,10 @@ class ConsumerCommand extends Command
         }, 2);
         $mqtt->subscribe('v1/mc/alert', function (string $topic, string $message) {
             $pack= base64_encode($message);
-            //sleep(1);
+            sleep(3);
             echo "alerta = ".$pack."\n";
             //dispatch(new SaveMicrocontrollerDataJob($pack, true))->onQueue('spot');
-            dispatch(new SaveAlertDataJob($pack, false))->onQueue('default');
+            dispatch(new SaveAlertDataJob($pack, false))->onConnection('sync');
         }, 0);
         $mqtt->subscribe('v1/mc/alert_control', function (string $topic, string $message) {
             $pack= base64_encode($message);

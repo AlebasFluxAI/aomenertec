@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Jobs\V1\Enertec\AlertNotificationJob;
+use App\Models\V1\Api\EventLog;
 use App\Models\V1\AuxData;
 use App\Models\V1\ClientAlert;
 use App\Models\V1\EquipmentType;
@@ -33,9 +34,13 @@ class MailTestController
     }
 
     public function eventTest(){
-        $clientAlert = ClientAlert::find(25557);
-        dispatch(new AlertNotificationJob($clientAlert))->onConnection('sync');
-        dd($clientAlert);
+        $eventLog = EventLog::find(105316);
+        $requestJson = json_decode($eventLog->request_json);
+        $pathFile= $requestJson->path_file;
+        $filePath = storage_path('app/' . $pathFile);
+        $file = fopen($filePath, 'rb');
+        dd($file);
+
     }
 
     public function whatsappNotification()
