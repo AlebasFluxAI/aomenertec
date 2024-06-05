@@ -39,11 +39,12 @@ class MailTestController
         $archivoBin = Request::file('file_bin');
 
         $eventLog = EventLog::find(105316);
-        //$eventLog->saveImageOnModelWithMorphMany($archivoBin, "evidences");
-        sleep(2);
-        $eventLog = EventLog::find(105316);
-        dd($eventLog->evidences());
-        dd($archivoBin);
+       // dd($eventLog->evidences[0]->url);
+        $filePath = $eventLog->downloadFileFromS3($eventLog->evidences[0]->path);
+        $file = fopen($filePath, 'rb');
+
+        dd($file);
+        //dd($archivoBin);
 
     }
 

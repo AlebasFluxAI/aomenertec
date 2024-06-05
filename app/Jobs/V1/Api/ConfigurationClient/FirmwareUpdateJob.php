@@ -49,16 +49,7 @@ class FirmwareUpdateJob implements ShouldQueue
                 if ($client == null) {
                     return;
                 }
-                $pathFile= $requestJson->path_file;
-                $filePath = storage_path('app/' . $pathFile);
-                $j=0;
-                while(true){
-                    sleep(1);
-                    $j++;
-                    if($j==5 || (file_exists($filePath))){
-                        break;
-                    }
-                }
+                $filePath = $eventLog->downloadFileFromS3($eventLog->evidences[0]->path);
                 if (file_exists($filePath)) {
                     $file = fopen($filePath, 'rb');
                     $i = 0;
@@ -92,8 +83,8 @@ class FirmwareUpdateJob implements ShouldQueue
                         fclose($file);
                     }
                 }
-                if (Storage::exists($pathFile)) {
-                    Storage::delete($pathFile);
+                if (Storage::exists($filePath)) {
+                    Storage::delete($filePath);
 //                    if (!Storage::exists($pathFile)) {
 //                        // El archivo se eliminó correctamente.
 //                        return response()->json(['mensaje' => 'El archivo se eliminó con éxito.']);
