@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1;
 
 use App\Jobs\V1\Enertec\AlertNotificationJob;
+use App\Jobs\V1\Enertec\SaveAlertDataJob;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\AuxData;
 use App\Models\V1\ClientAlert;
@@ -36,83 +37,9 @@ class MailTestController
     }
 
     public function eventTest(){
-        $archivoBin = Request::file('file_bin');
 
-        $eventLog = EventLog::find(105316);
-       // dd($eventLog->evidences[0]->url);
-        $filePath = $eventLog->downloadFileFromS3($eventLog->evidences[0]->path);
-        $fileSize=filesize($filePath);
-        $aux= floor($fileSize/8);
-        $file = fopen($filePath, 'rb');
-        $j=1;
-        $i=0;
-        //$mqtt = MQTT::connection("default", "null");
-        while (!feof($file)) {
-            if ($i == ($aux)){
-                $j++;
-                $aux =$aux*$j;
-                break;
-            }
-            if ($i < $aux){
-                try {
-//                if (!$mqtt->isConnected()) {
-//                    $mqtt = MQTT::connection("default", "null");
-//                }
-                    $bloque = fread($file, 320);
-                    //$mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
-                    echo $i . "\n";
-                    $i++;
-                    usleep(50000);
-
-                } catch (\PhpMqtt\Client\Exceptions\DataTransferException $e) {
-                    echo "fail " . $i . "\n";
-                    sleep(1);
-//                $mqtt = MQTT::connection("default", "null");
-//                if (!$mqtt->isConnected()) {
-//                    $mqtt = MQTT::connection("default", "null");
-//                }
-                    $bloque = fread($file, 320);
-                    // $mqtt->publish('v1/mc/ota_aux/' . $this->json['serial'], $bloque);
-                    $i++;
-                    usleep(50000);
-                }
-            }
-        }
-
-        while (!feof($file)) {
-            if ($i == ($aux)){
-                $j++;
-                $aux =$aux*$j;
-                break;
-            }
-            if ($i < $aux){
-                try {
-//                if (!$mqtt->isConnected()) {
-//                    $mqtt = MQTT::connection("default", "null");
-//                }
-                    $bloque = fread($file, 320);
-                    //$mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
-                    echo $i . "\n";
-                    $i++;
-                    usleep(50000);
-
-                } catch (\PhpMqtt\Client\Exceptions\DataTransferException $e) {
-                    echo "fail " . $i . "\n";
-                    sleep(1);
-//                $mqtt = MQTT::connection("default", "null");
-//                if (!$mqtt->isConnected()) {
-//                    $mqtt = MQTT::connection("default", "null");
-//                }
-                    $bloque = fread($file, 320);
-                    // $mqtt->publish('v1/mc/ota_aux/' . $this->json['serial'], $bloque);
-                    $i++;
-                    usleep(50000);
-                }
-            }
-        }
-
-        dd($file);
-        //dd($archivoBin);
+        $pack = 'TmG8AAAAAAChuw0AAAAAAAAAAAAAAAAAAgBAAAAAAACfj2BmKCcCQ1C1AkNQVAJDjOqvQrQGrkKo7bFCxBsRRnJrEUad5BRG+LUyRr6OMUaFAjVGc5/QRWvCy0Vy3c1FZNdPP4ixUT+2nFI/+mRRP4FXEEL/oQtCKRAKQuOtDEKAo9tGMXuaRgDob0Jv8BVJa2ZCQBWYRkjyLBNGqNJhQ3CCYkOAwWBDzcxMQK5HQUApXD9A16OIQB+Fi0BSuIZAAAAAAAAAAAAAAAAAb0JLSNRSSUh3LENIUPaAR0Jojkcxo3tH8EkXRaY4KUVRmCBFWVQtQ6ZUZkJjEb1CAAAAAA==';
+        dispatch(new SaveAlertDataJob($pack, true))->onConnection('sync');
 
     }
 

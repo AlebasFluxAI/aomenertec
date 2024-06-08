@@ -38,7 +38,6 @@ class Kernel extends ConsoleKernel
         $schedule->command(UpdateTimestampDataConsumption::class)->everyMinute()->withoutOverlapping();
 
         $schedule->command(AverageHourlyConsumptionCommand::class)->hourlyAt(35)->withoutOverlapping();
-
         $schedule->command(AverageDaylyConsumptionCommand::class)->dailyAt('01:05')->withoutOverlapping();
         $schedule->command(AverageMonthlyConsumptionCommand::class)->dailyAt('2:05')->withoutOverlapping();
         //$schedule->command(RefactorClientData::class)->dailyAt('02:35')->withoutOverlapping(); // si se cambia la frecuencia revisar la hora en que se seleccionan los datos
