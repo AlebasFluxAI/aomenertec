@@ -34,7 +34,7 @@ class SaveAlertDataJob implements ShouldQueue
     public $source_timestamp;
     public $is_control;
 
-    public function __construct($raw_json, $is_control)
+    public function  __construct($raw_json, $is_control)
     {
         $this->raw_json = $raw_json;
         $this->source_timestamp = new Carbon();
@@ -93,6 +93,11 @@ class SaveAlertDataJob implements ShouldQueue
                     $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
                     $type = "";
                     $split = substr($binary_flags, $item['index'], 1);
+                    if ($item['id'] == 50 || $item['id'] == 49){
+
+                        dd($alert, $split, $binary_flags);
+                    }
+                    echo $item['id']."\n";
                     if ($split == "1") {
                         if ($item['flag_name'] == 'flagOpened') {
                             $value = 1;

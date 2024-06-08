@@ -56,6 +56,7 @@ class FirmwareUpdateJob implements ShouldQueue
                 $filePath = $eventLog->downloadFileFromS3($eventLog->evidences[0]->path);
                 $fileSize=filesize($filePath);
                 $j=$this->j;
+                $total_frame = $fileSize/320;
                 $aux= floor($fileSize/(320*8))*$j;
                 $file = fopen($filePath, 'rb');
                 $i=0;
@@ -67,6 +68,9 @@ class FirmwareUpdateJob implements ShouldQueue
                             if ($i == ($aux)){
                                 $j++;
                                 dispatch(new FirmwareUpdateJob($this->json,$i,$j))->onQueue('spot3');
+                                break;
+                            }
+                            if($i >= $total_frame){
                                 break;
                             }
                             if ($i < $aux && $i >= $this->i ) {
