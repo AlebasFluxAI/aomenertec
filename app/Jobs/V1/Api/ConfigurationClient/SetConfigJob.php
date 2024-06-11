@@ -249,7 +249,7 @@ class SetConfigJob implements ShouldQueue
                         $ackLog->save();
                     }
 
-                  //  dump($jsonData);
+                    dump($jsonData);
                 } catch (\Throwable $e) {
                     $statusCode = $e->getCode();
                     $errorMessage = $e->getMessage();
