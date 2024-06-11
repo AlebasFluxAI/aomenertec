@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\ConfigurationClient\ConfigurationClientController;
+use App\Http\Controllers\V1\ConfigurationClient\ClientController;
 use App\Http\Controllers\V1\MqttInput\MqttInputController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,12 @@ Route::group(['prefix' => 'v1/config'], function ()  {
         Route::post("/notification-webhook", "notificationWebhook");
     });
 });
+Route::group(['prefix' => 'v1/clients', 'namespace' => 'V1\Client'], function () {
+    Route::controller(ClientController::class)->group(function () {
+        Route::post("/client-add", "addClient");
+    });
 
+});
 Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']], function () {
     Route::group(['prefix' => 'v1/config', ], function ()  {
         Route::controller(ConfigurationClientController::class)->group(function () {
