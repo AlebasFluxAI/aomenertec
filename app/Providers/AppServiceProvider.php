@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\Repositories\Client\ClientRepository;
+use App\Http\Repositories\Client\Impl\ClientRepositoryImpl;
 use App\Http\Repositories\ConfigurationClient\ConfigClientRepository;
 use App\Http\Repositories\ConfigurationClient\Impl\ConfigClientRepositoryImpl;
 use App\Models\Traits\AuditableTrait;
@@ -78,6 +80,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(ConfigClientRepository::class, ConfigClientRepositoryImpl::class);
+        $this->app->bind(ClientRepository::class, ClientRepositoryImpl::class);
 
     }
 

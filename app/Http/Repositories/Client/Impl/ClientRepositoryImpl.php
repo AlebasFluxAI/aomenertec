@@ -66,7 +66,7 @@ class ClientRepositoryImpl implements ClientRepository
             'phone' => null,
             'identification' => $code,
             'network_topology' => Client::MONOPHASIC,
-            'network_operator_id' => 1,
+            'network_operator_id' => 7,
             'client_type_id' => 4,
             'subsistence_consumption_id' => 1,
             'voltage_level_id' => 1,

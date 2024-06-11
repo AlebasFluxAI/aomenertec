@@ -108,7 +108,6 @@ class SetConfigJob implements ShouldQueue
             ])->withoutVerifying()->post('https://aom.enerteclatam.com/api/v1/clients/client-add', [
                 'serial' => $equipment->serial,
             ]);
-            dd($response);
             return;
         }
 
