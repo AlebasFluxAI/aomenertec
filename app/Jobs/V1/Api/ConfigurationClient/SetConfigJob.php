@@ -98,7 +98,7 @@ class SetConfigJob implements ShouldQueue
                 'name' => 'MEDIDOR',
                 'description' => 'Medidor enelar',
                 'admin_id' => 1,
-                'network_operator_id' => 1,
+                'network_operator_id' => 7,
                 'has_admin' => true,
                 'has_network_operator' => true
             ]);
