@@ -105,7 +105,7 @@ class SetConfigJob implements ShouldQueue
             $apiKey =ApiKey::first();
             $response = Http::withHeaders([
                 'x-api-key' => $apiKey->api_key,
-            ])->post('https://aom.enerteclatam.com/api/v1/clients/client-add', [
+            ])->withoutVerifying()->post('https://aom.enerteclatam.com/api/v1/clients/client-add', [
                 'serial' => $equipment->serial,
             ]);
             return;
