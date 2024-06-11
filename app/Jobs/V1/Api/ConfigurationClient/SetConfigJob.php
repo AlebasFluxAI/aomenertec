@@ -91,7 +91,7 @@ class SetConfigJob implements ShouldQueue
             ]);
         }
         if ($client == null) {
-            /*$equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
+            $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
             $equipment = Equipment::create([
                 'equipment_type_id' => $equipment_type->id,
                 'serial' => $serial,
@@ -107,7 +107,7 @@ class SetConfigJob implements ShouldQueue
                 'x-api-key' => $apiKey->api_key,
             ])->post('https://aom.enerteclatam.com/api/v1/clients/client-add', [
                 'serial' => $equipment->serial,
-            ]);*/
+            ]);
             return;
         }
 

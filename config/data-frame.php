@@ -278,8 +278,8 @@ return [
         ['id' => 38,'flag_name'=> 'flagVolt12', 'description' => '',    'variable_name'=> 'ph1_ph2_volt',      'placeholder'=>'Voltaje entre fase 1 y 2', 'bit' => 51, 'index' => 12, 'variable_id' => 37],
         ['id' => 39,'flag_name'=> 'flagVolt23', 'description' => '',    'variable_name'=> 'ph2_ph3_volt',      'placeholder'=>'Voltaje entre fase 2 y 3', 'bit' => 52, 'index' => 11, 'variable_id' => 38],
         ['id' => 40,'flag_name'=> 'flagVolt31', 'description' => '',    'variable_name'=> 'ph3_ph1_volt',      'placeholder'=>'Voltaje entre fase 3 y 1', 'bit' => 53, 'index' => 10,  'variable_id' => 39],
-        ['id' => 41,'flag_name'=> 'flagvar', 'description' => '',     'variable_name'=> 'var',          'placeholder'=>'Voltio-amperios reactivo', 'bit' => 54, 'index' => 9, 'variable_id' => 31],
-        ['id' => 42,'flag_name'=> 'flagDcVolt', 'description' => '',     'variable_name'=> 'ph1_volt',          'placeholder'=>'Voltaje bateria', 'bit' => 55, 'index' => 8, 'variable_id' => 61],
+        ['id' => 41,'flag_name'=> 'flagDcVolt', 'description' => '',     'variable_name'=> 'ph1_volt',          'placeholder'=>'Voltaje bateria', 'bit' => 54, 'index' => 9, 'variable_id' => 61],
+        ['id' => 42,'flag_name'=> 'flagvar', 'description' => '',     'variable_name'=> 'var',          'placeholder'=>'Voltio-amperios reactivo', 'bit' => 55, 'index' => 8, 'variable_id' => 31],
 
         ['id' => 43,'flag_name'=> 'kwh_month', 'description' => '', 'variable_name'=>'kwh_month','placeholder'=> 'kWh/Mes', 'bit' => 19, 'index' => 44, 'variable_id' => 61],
         ['id' => 44,'flag_name'=> 'kvarlh_month', 'description' => '', 'variable_name'=>'kvarlh_month', 'placeholder'=> 'kVARLh/Mes', 'bit' => 20, 'index' => 43, 'variable_id' => 61],

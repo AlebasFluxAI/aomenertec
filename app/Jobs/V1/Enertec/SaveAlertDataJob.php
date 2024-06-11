@@ -93,10 +93,7 @@ class SaveAlertDataJob implements ShouldQueue
                     $alert = $client->clientAlertConfiguration()->where('flag_id', $item['id'])->first();
                     $type = "";
                     $split = substr($binary_flags, $item['index'], 1);
-                    if ($item['id'] == 50 || $item['id'] == 49){
 
-                        dd($alert, $split, $binary_flags);
-                    }
                     echo $item['id']."\n";
                     if ($split == "1") {
                         if ($item['flag_name'] == 'flagOpened') {
@@ -110,7 +107,7 @@ class SaveAlertDataJob implements ShouldQueue
                                 } else{
                                     $value = $this->calculateValueAlertEnergy($item['id'], $energy_month, $energy_hour, $decode);
                                 }
-                                echo $value." - ".$split. " - ". $item['id']." - ".$alert->max_control."\n";
+                                echo $value." - ".$split. " - ". $item['id']." - ".$alert->max_control. " - ".$item['variable_id']."\n";
 
                                 if ($this->is_control) {
                                     if ($alert->min_control != 0) {
@@ -317,6 +314,9 @@ class SaveAlertDataJob implements ShouldQueue
         } else {
             $value = unpack($variable['type'], $bin)[1];
         }
+       if($variable_id == 31){
+           echo $variable['id']." - ". $split ." - ".$bin."\n";
+       }
 
         return $value;
     }
