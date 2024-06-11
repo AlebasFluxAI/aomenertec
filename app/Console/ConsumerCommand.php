@@ -61,7 +61,7 @@ class ConsumerCommand extends Command
             } else{
                 $hex = bin2hex($message);
             }
-            dispatch(new SetConfigJob($hex))->onQueue('spot1');
+            dispatch(new SetConfigJob($hex))->onConnection('sync');
 
 
         }, 0);

@@ -30,7 +30,7 @@ Route::group(['prefix' => 'v1/config'], function ()  {
         Route::post("/notification-webhook", "notificationWebhook");
     });
 });
-Route::group(['prefix' => 'v1/clients', 'namespace' => 'V1\Client'], function () {
+Route::group(['prefix' => 'v1/clients'], function () {
     Route::controller(ClientController::class)->group(function () {
         Route::post("/client-add", "addClient");
     });
