@@ -38,14 +38,11 @@ class ClientService
                             $fail("El medidor electrico con serial " . $value . " no existe");
                         } else {
                             $key = ApiKey::where('api_key', $request->header('x-api-key'))->first();
-                            $user = User::getUserModel($key);
-                            if ($equipment->network_operator_id !== $user->id) {
-                                $fail("El medidor electrico con serial " . $value . " no pertenece a su porganización");
-                            } else {
-                                if ($equipment->assigned || $equipment->has_clients) {
+                            $user = User::getUserModelApi($key);
+                            if ($equipment->assigned || $equipment->has_clients) {
                                     $fail("El medidor electrico con serial " . $value . " ya esta asociado a otro cliente");
                                 }
-                            }
+
                         }
                     }
                 },

@@ -5,6 +5,7 @@ namespace App\Models\V1;
 use App\Models\Traits\AuditableTrait;
 use App\Models\Traits\PaginatorTrait;
 use App\Models\Traits\UserMenuHomeTrait;
+use App\Models\V1\Api\ApiKey;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -109,6 +110,38 @@ class User extends Authenticatable implements JWTSubject
         }
         $userRole = Request::session()->get(User::SESSION_ROLE_SELECTED) ?? User::getUserRoles()[0]["rol"];
         return $user->{$userRole};
+
+    }
+    public static function getUserModelApi(ApiKey $key)
+    {
+        $user = $key->user;
+        $userRole = User::getUserRolesApi($user)[0]["rol"];
+        return $user->{$userRole};
+
+    }
+    public static function getUserRolesApi(User $user)
+    {
+
+        $roles = [];
+
+        foreach (["superAdmin",
+                     "admin",
+                     "networkOperator",
+                     "seller",
+                     "supervisor",
+                     "support",
+                     "technician"] as $role) {
+            if ($user->{$role}) {
+                $roles[] = [
+                    "rol" => $role,
+                    "name" => __("roles." . $role),
+                    "icon" => __("roles." . $role . "_icon")
+                ];
+
+            }
+        }
+
+        return $roles;
 
     }
 

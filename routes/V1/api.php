@@ -30,13 +30,15 @@ Route::group(['prefix' => 'v1/config'], function ()  {
         Route::post("/notification-webhook", "notificationWebhook");
     });
 });
-Route::group(['prefix' => 'v1/clients'], function () {
-    Route::controller(ClientController::class)->group(function () {
-        Route::post("/client-add", "addClient");
-    });
 
-});
 Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']], function () {
+
+    Route::group(['prefix' => 'v1/clients'], function () {
+        Route::controller(ClientController::class)->group(function () {
+            Route::post("/client-add", "addClient");
+        });
+
+    });
     Route::group(['prefix' => 'v1/config', ], function ()  {
         Route::controller(ConfigurationClientController::class)->group(function () {
 

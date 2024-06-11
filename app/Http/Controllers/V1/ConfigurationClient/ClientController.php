@@ -17,7 +17,6 @@ class ClientController extends Controller
     }
     public function addClient(Request $request): JsonResource
     {
-        dd('ok');
         return $this->clientService->addClient($request);
     }
 
