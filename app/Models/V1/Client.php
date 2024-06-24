@@ -181,7 +181,7 @@ class Client extends Model
                 ],
             ],
             [
-                "title" => "Configuración de equipos",
+                "title" => "Configuración",
                 "actionable" => [
                     "redirect" => [
                         "route" => "v1.admin.client.settings",
@@ -234,7 +234,7 @@ class Client extends Model
                 ],
             ],
             [
-                "title" => "Historial de cambios de equipo",
+                "title" => "Historial de cambios",
                 "actionable" => [
                     "redirect" => [
                         "route" => "v1.admin.client.change_equipment.historical",
