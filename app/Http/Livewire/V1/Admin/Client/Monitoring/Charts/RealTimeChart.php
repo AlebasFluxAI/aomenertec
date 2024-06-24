@@ -52,7 +52,7 @@ class RealTimeChart extends Component
         $this->chart_type = $aux['chart_type'];
         $this->last_data = [];
         $this->cards_real_time = [];
-        $initial_variables = $variables->take(6);
+        $initial_variables = $variables->take(3);
         foreach ($initial_variables as $variable) {
             $aux = [];
             $var_data_frame = $this->data_frame_rt->where('variable_id', $variable['id'])->all();
@@ -164,7 +164,7 @@ class RealTimeChart extends Component
 
     public function addPoint($data)
     {
-        if (count($this->data_real_time) == 20) {
+        if (count($this->data_real_time) == 40) {
             array_shift($this->data_real_time);
         }
         array_push($this->data_real_time, $data['data']);
