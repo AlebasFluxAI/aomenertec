@@ -13,7 +13,10 @@
                                 "placeholder_second_input"=>"Capacitiva",
                                 "button_action"=>"applyFilterReactive",
                                 "button_name"=>"Filtro",
-                                "disabled"=>($time_reactive_id == 1) ? true : false
+                                "disabled"=>($time_reactive_id == 1) ? true : false,
+                                "number_min" => 0,
+                                "number_step" => 0.1
+
                         ])
 
         @include("partials.v1.form.form_list",[

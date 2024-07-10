@@ -85,6 +85,7 @@ Route::group([
         Route::post('job-list', 'joblist');
         Route::post('me', 'me');
         Route::post('orders-update', 'ordersUpdate');
+        Route::post('order-create', 'orderCreate');
 
     });
 });

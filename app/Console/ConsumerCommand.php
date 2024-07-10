@@ -62,8 +62,6 @@ class ConsumerCommand extends Command
                 $hex = bin2hex($message);
             }
             dispatch(new SetConfigJob($hex))->onQueue('spot1');
-
-
         }, 0);
         $mqtt->subscribe('mc/data', function (string $topic, string $message) use ($mqtt) {
             // echo "message= ".$message."\n";

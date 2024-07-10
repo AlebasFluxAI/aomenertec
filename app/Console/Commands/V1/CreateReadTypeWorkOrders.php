@@ -5,6 +5,7 @@ namespace App\Console\Commands\V1;
 use App\Jobs\V1\Enertec\WorkOrder\CreateReadTypeWorkOrderJob;
 use App\Models\V1\Client;
 use App\Models\V1\ClientConfiguration;
+use App\Models\V1\WorkOrder;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -54,7 +55,7 @@ class CreateReadTypeWorkOrders extends Command
             if (!($client->microcontrollerData()
                 ->where('source_timestamp', '>=', $limit_date)
                 ->exists())) {
-                dispatch(new CreateReadTypeWorkOrderJob($client->id))->onConnection('sync');
+                dispatch(new CreateReadTypeWorkOrderJob($client->id, WorkOrder::WORK_ORDER_TYPE_READING))->onConnection('sync');
             }
         }
     }

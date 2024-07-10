@@ -123,7 +123,7 @@ class ReorderDataClient extends Command
             if (!$client->stopUnpackClient()->exists()) {
                 StopUnpackDataClient::create(['client_id' => $client->id]);
             }
-            $equipment = $client->equipments()->where('equipment_type_id', 1)->first();
+            $equipment = $client->equipments()->where('equipment_type_id', 7)->first();
             $search = "\"equipment_id\":\"" . $equipment->serial . "\"";
             $search_1 = "\"equipment_id\":" . $equipment->serial;
             MicrocontrollerData::withTrashed()

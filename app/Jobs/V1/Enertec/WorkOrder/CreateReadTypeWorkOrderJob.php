@@ -20,10 +20,12 @@ class CreateReadTypeWorkOrderJob implements ShouldQueue
      * @return void
      */
     public $client;
+    public $order_type;
 
-    public function __construct($client_id)
+    public function __construct($client_id, $order_type)
     {
         $this->client = \App\Models\V1\Client::find($client_id);
+        $this->order_type = $order_type;
     }
 
     /**
@@ -44,13 +46,12 @@ class CreateReadTypeWorkOrderJob implements ShouldQueue
                 "status" => WorkOrder::WORK_ORDER_STATUS_OPEN,
                 "open_at" => Carbon::now(),
                 "open_by" => $technicianModel->id,
-                "description" => "lectura",
-                "type" => WorkOrder::WORK_ORDER_TYPE_READING,
+                "description" => "orden prueba",
+                "type" => $this->order_type,
                 "technician_id" => $technician->id,
                 "created_by_type" => $userModel::class,
                 "created_by_id" => $userModel->id
             ]);
-            echo $a->id . "\n";
         }
     }
 }
