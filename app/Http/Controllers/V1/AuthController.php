@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Jobs\V1\Enertec\WorkOrder\CreateReadTypeWorkOrderJob;
 use App\Models\V1\Client;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\WorkOrder;
@@ -113,13 +114,47 @@ class AuthController extends Controller
         }
         return response()->json($response);
     }
+    public function orderCreate(Request $request)
+    {
+        $client = Client::find($request->get('client_id'));
+        if ($client == null){
+            return response()->json([
+                'success' => false,
+                'message' => 'Client not found'
+            ], 409); // HTTP 409 Conflict
+        }
+        $order_type = $request->get('order_type');
+        $userModel = $client->networkOperator->user;
+        $technician = $client->clientTechnician()->first();
+        if ($technician == null) {
+            $technician = $client->networkOperator->technicians()->first();
+        }
+        if ($technician) {
+            $technicianModel = $technician->user;
+            $order = $client->workOrders()->create([
+                "status" => WorkOrder::WORK_ORDER_STATUS_OPEN,
+                "open_at" => Carbon::now(),
+                "open_by" => $technicianModel->id,
+                "description" => "orden prueba",
+                "type" => $order_type,
+                "technician_id" => $technician->id,
+                "created_by_type" => $userModel::class,
+                "created_by_id" => $userModel->id
+            ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Order created successfully',
+                'order' => $order
+            ], 200);
+        }
+    }
 
     public function ordersUpdate(Request $request)
     {
         $order = json_decode($request->get('order'), true);
         $orderModel = WorkOrder::find($order['id']);
+        $microcontroller_data = null;
         if ($orderModel) {
-
             if($orderModel->status == WorkOrder::WORK_ORDER_STATUS_CLOSED){
                 return response()->json([
                     'success' => false,
@@ -129,16 +164,18 @@ class AuthController extends Controller
             if ($orderModel->type == WorkOrder::WORK_ORDER_TYPE_READING) {
                 if (array_key_exists('raw_json', $order)) {
                     $rawJson = $order['raw_json'];
-                    $source_timestamp = Carbon::create();
-                    $source_timestamp->setTimestamp($rawJson['timestamp']);
-                    $microcontroller_data = MicrocontrollerData::create([
-                        'raw_json' => json_encode($rawJson),
-                        "source_timestamp" => $source_timestamp->format('Y-m-d H:i:s'),
-                        'manually' => true,
-                        'status' => MicrocontrollerData::SUCCESS_TIMESTAMP
-                    ]);
-                    $order['microcontroller_data_id'] = $microcontroller_data->id;
-                    unset($order['raw_json']);
+                    if ($rawJson != null) {
+                        $source_timestamp = Carbon::create();
+                        $source_timestamp->setTimestamp($rawJson['timestamp']);
+                        $microcontroller_data = MicrocontrollerData::create([
+                            'raw_json' => json_encode($rawJson),
+                            "source_timestamp" => null,
+                            'manually' => true,
+                            'status' => MicrocontrollerData::PENDING_TIMESTAMP
+                        ]);
+                        $order['microcontroller_data_id'] = $microcontroller_data->id;
+                        unset($order['raw_json']);
+                    }
                 } else{
                     return response()->json([
                         'success' => false,

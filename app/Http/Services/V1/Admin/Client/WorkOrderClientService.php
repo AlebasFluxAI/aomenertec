@@ -81,7 +81,6 @@ class WorkOrderClientService extends Singleton
 
     public function getTechnicians($component)
     {
-
         $component->technician_select_disabled = false;
         if (User::getUserModel()::class == SuperAdmin::class) {
             $technicians = Technician::get();
@@ -128,7 +127,6 @@ class WorkOrderClientService extends Singleton
 
     private function mapper(Component $component)
     {
-
         return [
             "description" => $component->description,
             "type" => $component->type,

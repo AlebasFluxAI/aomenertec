@@ -562,14 +562,8 @@ class ClientConfigurationService extends Singleton
             } catch (MqttClientException $e) {
                 $this->component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
             }
-
-
-
         } catch (MqttClientException $e) {
-
         }
-
-
     }
     public function submitFormInvoicing(Component $component)
     {
