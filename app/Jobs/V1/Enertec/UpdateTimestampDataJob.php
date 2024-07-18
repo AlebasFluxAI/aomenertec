@@ -4,6 +4,7 @@ namespace App\Jobs\V1\Enertec;
 
 use App\Models\V1\ClientAlert;
 use App\Models\V1\MicrocontrollerData;
+use App\Models\V1\WorkOrder;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -50,6 +51,9 @@ class UpdateTimestampDataJob implements ShouldQueue
                         if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
                             $alert->forceDelete();
                         }
+                        if ($order = WorkOrder::where('microcontroller_data_id', $this->item->id)) {
+                            $order->forceDelete();
+                        }
                         if ($datum = MicrocontrollerData::find($this->item->id)) {
                             $datum->status = MicrocontrollerData::PENDING_TIMESTAMP;
                             $datum->forceDelete();
@@ -63,6 +67,9 @@ class UpdateTimestampDataJob implements ShouldQueue
                     if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
                         $alert->forceDelete();
                     }
+                    if ($order = WorkOrder::where('microcontroller_data_id', $this->item->id)) {
+                        $order->forceDelete();
+                    }
                     if ($datum = MicrocontrollerData::find($this->item->id)) {
                         $datum->forceDelete();
                     }
@@ -70,6 +77,9 @@ class UpdateTimestampDataJob implements ShouldQueue
             } else {
                 if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
                     $alert->forceDelete();
+                }
+                if ($order = WorkOrder::where('microcontroller_data_id', $this->item->id)) {
+                    $order->forceDelete();
                 }
                 if ($datum = MicrocontrollerData::find($this->item->id)) {
                     $datum->forceDelete();

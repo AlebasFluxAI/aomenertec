@@ -86,6 +86,9 @@ Route::group([
         Route::post('me', 'me');
         Route::post('orders-update', 'ordersUpdate');
         Route::post('order-create', 'orderCreate');
+        Route::get('firmwares', 'firmwares');
+        Route::get('firmware/{id}', 'downloadFirmware');
+        Route::post('firmware-create', 'createFirmware');
 
     });
 });

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\V1;
 
 use App\Jobs\V1\Enertec\WorkOrder\CreateReadTypeWorkOrderJob;
+use App\Models\Model\V1\Firmware;
 use App\Models\V1\Client;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\WorkOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -222,4 +224,64 @@ class AuthController extends Controller
         }
         return $equipment_serial;
     }
+    public function firmwares()
+    {
+        // Obtener todos los registros de Firmware
+        $firmwares = Firmware::all();
+
+        // Devolver los registros en formato JSON
+        return response()->json($firmwares);
+    }
+
+    public function downloadFirmware($id)
+    {
+        // Encontrar el firmware por su ID
+        $firmware = Firmware::find($id);
+
+        // Verificar si el firmware existe
+        if (!$firmware) {
+            return response()->json(['error' => 'Firmware not found'], 404);
+        }
+
+        $evidence = $firmware->evidences()->first();
+        if (!$evidence) {
+            return response()->json(['error' => 'Evidence not found'], 404);
+        }
+        $filePath = $evidence->url;
+        if (!Storage::disk('s3')->exists($filePath)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        // Obtener la URL temporal del archivo en S3
+        $url = Storage::disk('s3')->temporaryUrl($filePath, now()->addMinutes(15));
+
+        // Devolver la URL temporal
+        return response()->json(['url' => $url]);
+    }
+    public function createFirmware(Request $request)
+    {
+        // Validar la solicitud
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'version' => 'required|string|max:255',
+            'description' => 'required|string',
+            'file' => 'required|file|mimes:bin'
+        ]);
+
+        // Crear un nuevo registro de Firmware
+        $firmware = new Firmware();
+        $firmware->name = $request->name;
+        $firmware->version = $request->version;
+        $firmware->description = $request->description;
+        $firmware->save();
+
+        // Subir el archivo a S3 y guardar la información en la tabla Image
+        $file = $request->file('file');
+        $firmware->saveImageOnModelWithMorphMany($file, "evidences");
+        
+
+        // Devolver una respuesta exitosa
+        return response()->json(['message' => 'Firmware created successfully', 'firmware' => $firmware], 201);
+    }
+
 }
