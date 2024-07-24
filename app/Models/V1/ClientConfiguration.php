@@ -97,7 +97,8 @@ class ClientConfiguration extends Model
         "digital_outputs",
         "active_real_time",
         "connection_type",
-        "billing_day"
+        "billing_day",
+        "automatic_control"
     ];
 
     public function client()
