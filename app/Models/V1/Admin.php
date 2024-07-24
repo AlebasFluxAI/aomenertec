@@ -438,4 +438,8 @@ class Admin extends Model
             }))->toArray()
         ));
     }
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
+    }
 }

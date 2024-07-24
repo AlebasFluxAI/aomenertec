@@ -18,7 +18,7 @@
                                          "message_variable" => $message_client,
                                          "dropdown_results" => $clients,
                                          "selected_value_function" => "assignClient",
-                                         "dropdown_result_id" => "identification",
+                                         "dropdown_result_id" => "code",
                                          "dropdown_result_value" => "name",
                                          "count_bool" => (count($clients)>0),
 
