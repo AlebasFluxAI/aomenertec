@@ -329,14 +329,16 @@
                         </tr>
                     @endif
                 @elseif($client->stratum->id < 4)
-                    @if($other_fees->discount > 0)
-                        <tr class="flex-row">
-                            <td class="flex-item" style="padding:2px; text-align: left;">Descuento</td>
-                            <td class="flex-item"
-                                style="padding:2px; text-align: center; background: #B6B7B7">{{number_format($other_fees->discount, 2, ',', '.').'%'}}</td>
-                            <td class="flex-item"
-                                style="padding:2px; text-align: right">{{'$'.number_format($value->value_discount, 2, ',', '.')}}</td>
-                        </tr>
+                    @if(isset($other_fees->discount))
+                        @if($other_fees->discount > 0)
+                            <tr class="flex-row">
+                                <td class="flex-item" style="padding:2px; text-align: left;">Descuento</td>
+                                <td class="flex-item"
+                                    style="padding:2px; text-align: center; background: #B6B7B7">{{number_format($other_fees->discount, 2, ',', '.').'%'}}</td>
+                                <td class="flex-item"
+                                    style="padding:2px; text-align: right">{{'$'.number_format($value->value_discount, 2, ',', '.')}}</td>
+                            </tr>
+                        @endif
                     @endif
                 @endif
                 <tr class="flex-row">
@@ -353,14 +355,17 @@
                     <td class="flex-item"
                         style="padding:2px; text-align: right">{{'$'.number_format($value->value_varlh, 2, ',', '.')}}</td>
                 </tr>
-                @if($client->public_lighting_tax && $other_fees->tax > 0)
-                    <tr class="flex-row">
-                        <td class="flex-item" style="padding:2px; text-align: left;">Impuesto AP</td>
-                        <td class="flex-item"
-                            style="padding:2px; text-align: center; background: #B6B7B7">{{($other_fees->tax_type == 'money_fee')?'$'.number_format($other_fees->tax, 2, ',', '.'):number_format($other_fees->tax, 2, ',', '.').'%'}}</td>
-                        <td class="flex-item"
-                            style="padding:2px; text-align: right">{{'$'.number_format($value->value_tax, 2, ',', '.')}}</td>
-                    </tr>
+                @if(isset($other_fees->tax))
+
+                    @if($client->public_lighting_tax && $other_fees->tax > 0)
+                        <tr class="flex-row">
+                            <td class="flex-item" style="padding:2px; text-align: left;">Impuesto AP</td>
+                            <td class="flex-item"
+                                style="padding:2px; text-align: center; background: #B6B7B7">{{($other_fees->tax_type == 'money_fee')?'$'.number_format($other_fees->tax, 2, ',', '.'):number_format($other_fees->tax, 2, ',', '.').'%'}}</td>
+                            <td class="flex-item"
+                                style="padding:2px; text-align: right">{{'$'.number_format($value->value_tax, 2, ',', '.')}}</td>
+                        </tr>
+                    @endif
                 @endif
                 <tr class="flex-row">
                     <td class="flex-item" style="padding: 2px; " colspan="3"></td>
