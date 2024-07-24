@@ -424,7 +424,7 @@ class ClientConfigurationService extends Singleton
             ];
             $this->consumeService($component, $requestDetails, 56, EventLog::EVENT_SET_BILLING_DAY);
         }
-        if($component->client_config->isDirty('active_real_time')){
+        if($component->client_config->isDirty('active_real_time') or $component->client_config->isDirty('automatic_control')){
             $component->client_config->save();
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
 
@@ -577,6 +577,7 @@ class ClientConfigurationService extends Singleton
         $component->client->clientConfiguration->update([
             "billing_day" => $component->invoicing_day
         ]);
+        $component->client_config->save();
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
 
 
