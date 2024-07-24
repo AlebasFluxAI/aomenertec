@@ -5,8 +5,10 @@ namespace App\Http\Services\V1\Admin\User\Technician;
 use App\Http\Resources\V1\ToastEvent;
 use App\Http\Services\Singleton;
 use App\Models\V1\Client;
+use App\Models\V1\ClientTechnician;
 use App\Models\V1\Technician;
 use App\Models\V1\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -45,11 +47,15 @@ class TechnicianAddClientService extends Singleton
     public function updatedClient(Component $component)
     {
         $component->client_picked = false;
+        $user = Auth::user()->getUserModel();
         $component->message_client = "No se encontraron clientes para este filtro";
         if ($component->client != "") {
-            $component->clients = Client::where("identification", "like", '%' . $component->client . "%")
-                ->orWhere("name", "like", '%' . $component->client . "%")
-                ->take(3)->get();
+            $component->clients = $user->clients()
+                ->where(function (Builder $query) use ($component) {
+                    return $query->where("identification", "like", '%' . $component->client . "%")
+                        ->orWhere("name", "like", '%' . $component->client . "%")
+                        ->orWhere("code", "like", '%' . $component->client . "%");
+                })->take(3)->get();
         }
     }
 
@@ -78,8 +84,11 @@ class TechnicianAddClientService extends Singleton
             }
             if ($component->model->clientTechnicians()->whereClientId($component->client_id)->exists()) {
                 $this->refreshClientSeller($component);
-
                 return;
+            }
+            $last_technician = ClientTechnician::whereClientId($component->client_id)->get();
+            foreach ($last_technician as $technician){
+                $technician->delete();
             }
             $component->model->clientTechnicians()->create(
                 [

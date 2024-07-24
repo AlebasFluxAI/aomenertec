@@ -14,6 +14,7 @@ use App\Models\V1\SuperAdmin;
 use App\Models\V1\Supervisor;
 use App\Models\V1\Support;
 use App\Models\V1\Technician;
+use App\Models\V1\User;
 use App\Models\V1\WorkOrder;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -63,7 +64,9 @@ class PqrIndexService extends Singleton
             return Pqr::whereIn("technician_id", $techniciansUserId)->pagination();
         }
         if ($model::class == Technician::class) {
-            return Pqr::where("technician_id", $model->id)->pagination();
+            $technician = User::getUserModel();
+            $clientId = $technician->clientTechnicians->pluck("client_id");
+            return Pqr::whereIn("client_id", $clientId)->pagination();
         }
         if ($model::class == Supervisor::class) {
             $clientsUserId = Client::whereIn("id", $model->clients->pluck("id"))

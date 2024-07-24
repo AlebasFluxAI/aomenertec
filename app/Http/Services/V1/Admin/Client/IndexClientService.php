@@ -124,12 +124,12 @@ class IndexClientService extends Singleton
         if (User::getUserModel()::class == Technician::class) {
             $technician = User::getUserModel();
             if ($component->filter) {
-                return (Client::whereIn('id', $technician->clients->pluck("id"))
+                return (Client::whereIn('id', $technician->clientTechnicians->pluck("client_id"))
                     ->where($component->filterCol, 'ilike', '%' . $component->filter . '%')
                 )->where($component->filterAuxColumn, $component->filterAuxValue)
                     ->pagination();
             }
-            return (Client::whereIn('id', $technician->clients->pluck("id"))
+            return (Client::whereIn('id', $technician->clientTechnicians->pluck("client_id"))
             )->where($component->filterAuxColumn, $component->filterAuxValue)
                 ->pagination();
         }
