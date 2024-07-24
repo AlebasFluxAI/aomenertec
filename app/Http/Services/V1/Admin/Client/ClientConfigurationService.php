@@ -210,6 +210,8 @@ class ClientConfigurationService extends Singleton
             'client_config.mqtt_password' => 'required',
             'client_config.real_time_latency' => 'numeric|required|min:10',
             'client_config.storage_latency' => 'required',
+            'client_config.active_real_time' => 'required',
+            'client_config.automatic_control' => 'required',
             'client_config.storage_type_latency' => 'required',
             'client_config.billing_day' => 'required',
             'client_config.digital_outputs' => 'numeric|required|min:0|max:10',
@@ -422,6 +424,11 @@ class ClientConfigurationService extends Singleton
             ];
             $this->consumeService($component, $requestDetails, 56, EventLog::EVENT_SET_BILLING_DAY);
         }
+        if($component->client_config->isDirty('active_real_time')){
+            $component->client_config->save();
+            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+
+        }
 
     }
 
@@ -570,6 +577,9 @@ class ClientConfigurationService extends Singleton
         $component->client->clientConfiguration->update([
             "billing_day" => $component->invoicing_day
         ]);
+        $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
+
+
     }
 
 }

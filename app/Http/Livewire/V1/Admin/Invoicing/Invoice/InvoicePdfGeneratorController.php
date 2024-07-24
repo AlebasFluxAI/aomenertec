@@ -19,23 +19,28 @@ class InvoicePdfGeneratorController extends Component
     private function downloadFile(Invoice $invoice)
     {
         $data = json_decode($invoice->pdf_data, true);
-        $network_operator = NetworkOperator::find($data['network_operator']['id']);
-        $pdf = Pdf::loadView('reports.client_invoice', [
-            "image_chart_url" => $data['image_chart_url'],
-            'value' => (object)$data['value'],
-            'json' => (object)$data['json'],
-            'monthly_data' => (object)$data['monthly_data'],
-            'client' => Client::find($data['client']['id']),
-            'network_operator' => $network_operator,
-            'admin' => $network_operator->admin,
-            'fees' => (object)$data['fees'],
-            'other_fees' => (object)$data['other_fees'],
-            'bar_code' => $data['bar_code'],
-            'qr_code' => $data['qr_code'],
-            'other_data' => $data['other_data'],
-        ]); //load view page
-        $pdf->setPaper('A4', 'portrait');
-        return $pdf->download('Factura-' . $invoice->code . '.pdf');
+        if ($data){
+            $network_operator = NetworkOperator::find($data['network_operator']['id']);
+            $pdf = Pdf::loadView('reports.client_invoice', [
+                "image_chart_url" => $data['image_chart_url'],
+                'value' => (object)$data['value'],
+                'json' => (object)$data['json'],
+                'monthly_data' => (object)$data['monthly_data'],
+                'client' => Client::find($data['client']['id']),
+                'network_operator' => $network_operator,
+                'admin' => $network_operator->admin,
+                'fees' => (object)$data['fees'],
+                'other_fees' => (object)$data['other_fees'],
+                'bar_code' => $data['bar_code'],
+                'qr_code' => $data['qr_code'],
+                'other_data' => $data['other_data'],
+            ]); //load view page
+            $pdf->setPaper('A4', 'portrait');
+            return $pdf->download('Factura-' . $invoice->code . '.pdf');
+        } else {
+
+        }
+
     }
 
     public function getPdfId($subdomain, Invoice $invoice)

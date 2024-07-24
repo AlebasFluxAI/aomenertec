@@ -45,14 +45,14 @@ class Client extends Model
     public const IDENTIFICATION_TYPE_NIT = 'NIT';
 
 
-    public const RESIDENCE_1_41R = "Residencia 1 (41R)";
-    public const RESIDENCE_2_42R = "Residencia 2 (42R)";
-    public const RESIDENCE_3_43R = "Residencia 3 (43R)";
-    public const OFFICIAL_1_410 = "Oficial 1 (410)";
-    public const OFFICIAL_2_420 = "Oficial 2 (420)";
-    public const COMMERCIAL_1_41C = "Comercial 1 (41C)";
-    public const COMMERCIAL_2_42C = "Comercial 2 (42C)";
-    public const COMMERCIAL_3_43C = "Comercial 3 (43C)";
+    public const RESIDENCE_1_41R = "Residencia 1";
+    public const RESIDENCE_2_42R = "Residencia 2";
+    public const RESIDENCE_3_43R = "Residencia 3";
+    public const OFFICIAL_1_410 = "Oficial 1";
+    public const OFFICIAL_2_420 = "Oficial 2";
+    public const COMMERCIAL_1_41C = "Comercial 1";
+    public const COMMERCIAL_2_42C = "Comercial 2";
+    public const COMMERCIAL_3_43C = "Comercial 3";
     public const SUSPENDED_R1_R2 = "Suspendidos R1 Y R2";
 
 

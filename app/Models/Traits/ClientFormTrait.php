@@ -95,7 +95,7 @@ trait ClientFormTrait
     public function getVaupesStratification()
     {
         $admin = User::getUserModel()->user->getAdmin();
-        return $admin->identification == "8450000210";
+        return $admin->identification == "901651742-8";
     }
 }
 

@@ -200,7 +200,6 @@
                                                                                                 "col_with"=>6,
                                                                                                 "click_action"=>"",
                                                                                                 "required"=>false,
-
                                                                                             ],
                                                                                             [
                                                                                                 "input_type"=>"number",
@@ -212,6 +211,15 @@
                                                                                                 "disabled" => !$client_config->active_real_time,
                                                                                                 "required"=>false,
 
+                                                                                            ],
+                                                                                            [
+                                                                                                "input_type"=>"checkbox",
+                                                                                                "input_model"=>"client_config.automatic_control",
+                                                                                                "placeholder"=>"Habilitar control automatico",
+                                                                                                "updated_input"=>"lazy",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>true,
                                                                                             ],
 
                                                                                 ]
@@ -289,17 +297,31 @@
                                                                                             "input_type"=>"divider",
                                                                                             "title"=>"Configuraciones de facturacion"
                                                                                         ], [
-                                                                                                "input_type"=>"number",
-                                                                                                "input_model"=>"invoicing_day",
-                                                                                                "icon_class"=>null,
-                                                                                                "placeholder"=>"Dia de facturación",
-                                                                                                "col_with"=>6,
-                                                                                                "number_min"=>1,
-                                                                                                "number_max"=>31,
-                                                                                                "click_action"=>"",
-                                                                                                "updated_input" => "defer",
-                                                                                                "required"=>true
+                                                                                             "input_model"=>"invoicing_day",
+                                                                                             "updated_input"=>"defer",
+                                                                                             "input_field"=>"",
+                                                                                             "input_type"=>"select",
+                                                                                             "icon_class"=>null,
+                                                                                             "placeholder"=>"Dia de corte mensual",
+                                                                                             "col_with"=>6,
+                                                                                             "required"=>true,
+                                                                                             "offset"=>'',
+                                                                                             "data_target"=>'',
+                                                                                             "placeholder_clickable"=>false,
+                                                                                             "input_rows"=>0,
+                                                                                             "select_options"=> \App\Models\V1\ClientConfiguration::STORAGE_LATENCY_OPTIONS[\App\Models\V1\ClientConfiguration::STORAGE_LATENCY_TYPE_MONTHLY],
+                                                                                             "select_option_value"=>"value",
+                                                                                             "select_option_view"=>"key",
                                                                                             ],
+                                                                                            [
+                                                                                                "input_type"=>"checkbox",
+                                                                                                "input_model"=>"client_config.automatic_control",
+                                                                                                "placeholder"=>"Habilitar control automatico",
+                                                                                                "updated_input"=>"lazy",
+                                                                                                "col_with"=>6,
+                                                                                                "click_action"=>"",
+                                                                                                "required"=>true,
+                                                                                            ]
 
                                                                                 ]
                                                             ]

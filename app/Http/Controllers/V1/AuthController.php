@@ -98,20 +98,23 @@ class AuthController extends Controller
         foreach ($clients as $client) {
             $gabinete = $client->equipments()->whereEquipmentTypeId(7)->first();
             $orders = $client->workOrders()->whereStatus(WorkOrder::WORK_ORDER_STATUS_OPEN)->get();
+            $equipment = $this->clientEquipment($client);
             if(count($orders)>0) {
-                array_push($response, [
-                    'uid' => $client->networkOperator->identification,
-                    'did' => $gabinete ? $gabinete->serial : null,
-                    'ssid' => $gabinete ? 'wifi_' . $gabinete->serial : 'wifi_xxx',
-                    'password' => $client->identification,
-                    'nombre' => ($client->alias ?? $client->name),
-                    'codigo_cliente' => $client->code,
-                    'ubicacion' => json_decode($client->addresses()->first()->here_maps),
-                    'celular' => $client->phone,
-                    "pass" => $pass,
-                    "equipments" => $this->clientEquipment($client),
-                    "orders" => $orders,
-                ]);
+                if($gabinete) {
+                    array_push($response, [
+                        'uid' => $client->networkOperator->identification,
+                        'did' => $gabinete ? $gabinete->serial : null,
+                        'ssid' => $gabinete ? 'wifi_' . $gabinete->serial : 'wifi_xxx',
+                        'password' => $client->identification,
+                        'nombre' => ($client->alias ?? $client->name),
+                        'codigo_cliente' => $client->code,
+                        'ubicacion' => json_decode($client->addresses()->first()->here_maps),
+                        'celular' => $client->phone,
+                        "pass" => $pass,
+                        "equipments" => $equipment,
+                        "orders" => $orders,
+                    ]);
+                }
             }
         }
         return response()->json($response);
@@ -248,15 +251,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Evidence not found'], 404);
         }
         $filePath = $evidence->url;
-        if (!Storage::disk('s3')->exists($filePath)) {
-            return response()->json(['error' => 'File not found'], 404);
-        }
-
-        // Obtener la URL temporal del archivo en S3
-        $url = Storage::disk('s3')->temporaryUrl($filePath, now()->addMinutes(15));
-
-        // Devolver la URL temporal
-        return response()->json(['url' => $url]);
+        return response()->json(['url' => $filePath], 200, [], JSON_UNESCAPED_SLASHES);
     }
     public function createFirmware(Request $request)
     {
@@ -265,7 +260,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'version' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'required|file|mimes:bin'
+            'file' => 'required|file'
         ]);
 
         // Crear un nuevo registro de Firmware
@@ -278,7 +273,7 @@ class AuthController extends Controller
         // Subir el archivo a S3 y guardar la información en la tabla Image
         $file = $request->file('file');
         $firmware->saveImageOnModelWithMorphMany($file, "evidences");
-        
+
 
         // Devolver una respuesta exitosa
         return response()->json(['message' => 'Firmware created successfully', 'firmware' => $firmware], 201);

@@ -243,7 +243,7 @@
                             @include("partials.v1.form.form_list",[
                                     "col_with"=>8,
                                     "list_model" => "stratum_id",
-                                    "input_label"=>"Estrado de cliente",
+                                    "input_label"=>"Estrato de cliente",
                                     "list_default" => "Estrato...",
                                     "list_options" => $strata,
                                     "list_option_value"=>"id",
@@ -265,7 +265,7 @@
 
 
                             @if($client_type != "")
-                                @if(strpos($client_type->type, "SIN Convencion") !== false)
+                                @if((strpos($client_type->type, "Convencion") !== false))
                                     @include("partials.v1.form.form_list",[
                                              "col_with"=>8,
                                              "input_label"=>"Nivel de tension",
@@ -308,7 +308,7 @@
 
                             @include("partials.v1.form.form_list",[
                                   "col_with"=>8,
-                                  "input_label"=>"Seleccione la topologia de red",
+                                  "input_label"=>"Seleccione la tipologia de red",
                                   "input_type"=>"text",
                                   "list_model" => "network_topology",
                                   "list_default" => "Topologia de red ...",
