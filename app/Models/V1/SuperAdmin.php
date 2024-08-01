@@ -189,6 +189,13 @@ class SuperAdmin extends Model
 
                                 ],
                             ],
+                            [
+                                "title" => "Firmwares",
+                                "route" => "administrar.v1.usuarios.superadmin.firmware.listado",
+                                "submenu" => [
+
+                                ],
+                            ],
                         ]
 
                     ],

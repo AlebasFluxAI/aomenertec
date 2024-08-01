@@ -27,6 +27,11 @@ class FirmwareIndexService extends Singleton
         $component->redirectRoute("administrar.v1.usuarios.superadmin.firmware.detalles", ["firmware" => $modelId]);
     }
 
+    public function delete(Component $component, $modelId)
+    {
+        $firmware = Firmware::find($modelId);
+        $firmware->delete();
+    }
 
     public function getData(Component $component)
     {

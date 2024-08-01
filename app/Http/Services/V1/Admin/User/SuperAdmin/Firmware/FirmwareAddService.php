@@ -17,6 +17,9 @@ class FirmwareAddService extends Singleton
             $component->validate();
             $firmware = new Firmware($component->model);
             $firmware->save();
+            foreach ($component->file as $evidence) {
+                $firmware->saveImageOnModelWithMorphMany($evidence, "evidences");
+            }
             $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "{$firmware->name} creado"]);
             $component->redirectRoute("administrar.v1.usuarios.superadmin.firmware.detalles", ["firmware" => $firmware->id]);
 

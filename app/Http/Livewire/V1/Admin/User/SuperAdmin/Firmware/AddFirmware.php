@@ -9,6 +9,7 @@ class AddFirmware extends Component
 {
     public $model;
     public $message;
+    public $file;
     protected $rules = [
         'model.name' => 'required|min:6',
         'model.version' => 'required|min:6',

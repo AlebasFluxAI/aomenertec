@@ -32,7 +32,7 @@
                                         "input_model"=>"model.name",
                                         "icon_class"=>"fas fa-user",
                                         "placeholder"=>"Nombre ",
-                                        "col_with"=>6,
+                                        "col_with"=>12,
                                         "required"=>true
                             ],
                             [
@@ -40,7 +40,7 @@
                                         "input_model"=>"model.version",
                                         "icon_class"=>"fas fa-user",
                                         "placeholder"=>"Versión",
-                                        "col_with"=>6,
+                                        "col_with"=>12,
                                         "required"=>true
                             ],
                             [
@@ -48,7 +48,7 @@
                                         "input_model"=>"model.description",
                                         "icon_class"=>"fas fa-envelope",
                                         "placeholder"=>"Descripción",
-                                        "col_with"=>6,
+                                        "col_with"=>12,
                                         "required"=>true
                             ]
                          ]

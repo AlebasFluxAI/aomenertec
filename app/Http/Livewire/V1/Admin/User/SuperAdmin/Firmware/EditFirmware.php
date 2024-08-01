@@ -9,6 +9,8 @@ use Livewire\Component;
 class EditFirmware extends Component
 {
     public $model;
+    public $file;
+
     protected $rules = [
         'model.description' => 'required|min:6',
         'model.name' => 'required|min:6',
