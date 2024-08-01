@@ -17,9 +17,9 @@ class TimelyPaymentService extends Singleton
     public function mount(Component $component, $netwotkOperator)
     {
         $component->model = $netwotkOperator;
-        $component->timely_payment_days = $component->model->timelyPayment->days_to_disconnection;
-        $component->reconnection_cost = $component->model->timelyPayment->days_to_payment;
-        $component->disconnection_days = $component->model->timelyPayment->reconnection_cost;
+        $component->timely_payment_days = $component->model->timelyPayment ? $component->model->timelyPayment->days_to_disconnection : null;
+        $component->reconnection_cost = $component->model->timelyPayment ? $component->model->timelyPayment->days_to_payment : null;
+        $component->disconnection_days = $component->model->timelyPayment ? $component->model->timelyPayment->reconnection_cost: null;
     }
 
     public function submitForm(Component $component)

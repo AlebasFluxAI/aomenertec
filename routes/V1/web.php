@@ -121,6 +121,21 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                                 ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_WIKI_INPUT));;
                         });
 
+                        Route::prefix("firmware")->group(function () {
+                            Route::get('listado', Livewire\V1\Admin\User\SuperAdmin\Firmware\IndexFirmware::class)
+                                ->name("administrar.v1.usuarios.superadmin.firmware.listado")
+                                ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_SHOW));
+                            Route::get('agregar', Livewire\V1\Admin\User\SuperAdmin\Firmware\AddFirmware::class)
+                                ->name("administrar.v1.usuarios.superadmin.firmware.agregar")
+                                ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_CREATE));
+                            Route::get('detalle/{firmware}', Livewire\V1\Admin\User\SuperAdmin\Firmware\DetailsFirmware::class)
+                                ->name("administrar.v1.usuarios.superadmin.firmware.detalles")
+                                ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_SHOW));
+                            Route::get('editar/{firmware}', Livewire\V1\Admin\User\SuperAdmin\Firmware\EditFirmware::class)
+                                ->name("administrar.v1.usuarios.superadmin.firmware.editar")
+                                ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_EDIT));
+                        });
+
                         Route::get('listado', Livewire\V1\Admin\User\SuperAdmin\IndexSuperAdmin::class)
                             ->name("administrar.v1.usuarios.superadmin.listado")
                             ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_SHOW));
