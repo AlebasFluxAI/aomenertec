@@ -14,6 +14,10 @@ class FirmwareEditService extends Singleton
         $component->fill([
             'model' => $model
         ]);
+        $file = $component->model->evidences()->first();
+        if($file){
+            $component->file = $file->url;
+        }
     }
 
 

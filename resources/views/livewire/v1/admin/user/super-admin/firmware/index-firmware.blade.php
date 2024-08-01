@@ -48,8 +48,31 @@
                    ]
                 ],
                  "table_actions"=>[
-                                    "details"=>"details",
-                                    "edit"=>"edit",
+
+                                     "customs"=>[
+                                            [
+                                               "redirect"=>[
+                                                           "route"=>"administrar.v1.usuarios.superadmin.firmware.detalles",
+                                                           "binding"=>"firmware"
+                                                     ],
+                                                   "icon"=>"fas fa-search",
+                                                   "tooltip_title"=>"Detalles",
+                                             ],
+                                            [
+                                               "redirect"=>[
+                                                           "route"=>"administrar.v1.usuarios.superadmin.firmware.editar",
+                                                           "binding"=>"firmware"
+                                                     ],
+                                                   "icon"=>"fas fa-pencil",
+                                                   "tooltip_title"=>"Editar",
+                                             ],
+                                              [
+                                                    "function"=>"delete",
+                                                    "icon"=>"fas fa-trash",
+                                                    "tooltip_title"=>"Eliminar",
+                                              ],
+
+                                           ]
                                     ],
 
                                                 /* Le dice al componente tabla las acciones que tendra la columna de acciones en la tabla [

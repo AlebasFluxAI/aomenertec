@@ -32,7 +32,7 @@
                                         "input_model"=>"model.name",
                                         "icon_class"=>"fas fa-user",
                                         "placeholder"=>"Nombre ",
-                                        "col_with"=>6,
+                                        "col_with"=>12,
                                         "required"=>true
                             ],
                             [
@@ -40,7 +40,7 @@
                                         "input_model"=>"model.version",
                                         "icon_class"=>"fas fa-user",
                                         "placeholder"=>"Versión",
-                                        "col_with"=>6,
+                                        "col_with"=>12,
                                         "required"=>true
                             ],
                             [
@@ -48,8 +48,18 @@
                                         "input_model"=>"model.description",
                                         "icon_class"=>"fas fa-envelope",
                                         "placeholder"=>"Descripción",
-                                        "col_with"=>6,
+                                        "col_with"=>12,
                                         "required"=>true
+                            ],
+                            [
+                                        "input_type"=>"file",
+                                        "input_model"=>"file",
+                                        "icon_class"=>"fas fa-file",
+                                        "placeholder"=>"Archivo .bin",
+                                        "col_with"=>12,
+                                        "required"=>true,
+                                        "multiple"=>false,
+                                        "file_accepted"=>".bin",
                             ],
 
                          ]
