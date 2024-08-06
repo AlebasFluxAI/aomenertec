@@ -92,3 +92,16 @@ Route::group([
 
     });
 });
+Route::group([
+
+    'prefix' => 'auth'
+
+], function ($router) {
+    Route::controller(AuthController::class)->group(function () {
+
+        Route::get('firmwares', 'firmwares');
+        Route::get('firmware/{id}', 'downloadFirmware');
+        Route::post('firmware-create', 'createFirmware');
+
+    });
+});

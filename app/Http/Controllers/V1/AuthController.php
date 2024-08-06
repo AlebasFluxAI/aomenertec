@@ -227,8 +227,14 @@ class AuthController extends Controller
         }
         return $equipment_serial;
     }
-    public function firmwares()
+    public function firmwares(Request $request)
     {
+        $request->validate([
+            'password' => 'required'
+        ]);
+        if($request->password != '123456789'){
+            return response()->json(['error' => 'Invalidate password'], 404);
+        }
         // Obtener todos los registros de Firmware
         $firmwares = Firmware::all();
 
@@ -236,8 +242,14 @@ class AuthController extends Controller
         return response()->json($firmwares);
     }
 
-    public function downloadFirmware($id)
+    public function downloadFirmware(Request $request, $id)
     {
+        $request->validate([
+            'password' => 'required'
+        ]);
+        if($request->password != '123456789'){
+            return response()->json(['error' => 'Invalidate password'], 404);
+        }
         // Encontrar el firmware por su ID
         $firmware = Firmware::find($id);
 
@@ -260,8 +272,13 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'version' => 'required|string|max:255',
             'description' => 'required|string',
-            'file' => 'required|file'
+            'file' => 'required|file',
+            'password' => 'required'
         ]);
+        if($request->password != '123456789'){
+            return response()->json(['error' => 'Invalidate password'], 404);
+        }
+
 
         // Crear un nuevo registro de Firmware
         $firmware = new Firmware();

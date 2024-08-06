@@ -58,7 +58,7 @@
                                         "placeholder"=>"Archivo .bin",
                                         "col_with"=>12,
                                         "required"=>true,
-                                        "multiple"=>false,
+                                        "multiple"=>true,
                                         "file_accepted"=>".bin",
                             ],
 

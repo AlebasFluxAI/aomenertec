@@ -34,6 +34,10 @@ class IndexFirmware extends Component
     {
         $this->indexFirmwareService->details($this, $id);
     }
+    public function downloadFile($id)
+    {
+        $this->indexFirmwareService->downloadFile($this, $id);
+    }
 
     public function getData()
     {
