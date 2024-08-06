@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'firmwares', 'firmware.show']]);
         $this->guard = "api";
     }
 
@@ -242,8 +242,9 @@ class AuthController extends Controller
         return response()->json($firmwares);
     }
 
-    public function downloadFirmware(Request $request, $id)
+    public function downloadFirmware($id)
     {
+        dd('ok');
         $request->validate([
             'password' => 'required'
         ]);
@@ -273,11 +274,8 @@ class AuthController extends Controller
             'version' => 'required|string|max:255',
             'description' => 'required|string',
             'file' => 'required|file',
-            'password' => 'required'
         ]);
-        if($request->password != '123456789'){
-            return response()->json(['error' => 'Invalidate password'], 404);
-        }
+
 
 
         // Crear un nuevo registro de Firmware
