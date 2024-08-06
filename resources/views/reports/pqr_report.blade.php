@@ -175,7 +175,7 @@
             colspan="3">{{$created_by->name . ' ' . $created_by->last_name}}</td>
         <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Tramitó:</strong></td>
         <td class="flex-item" style="padding:2px; width: 10%;text-align: left;"
-            colspan="3">{{$resolved_by->name . ' ' . $resolved_by->last_name}}</td>
+            colspan="3">{{$resolved_by ? $resolved_by->name . ' ' . $resolved_by->last_name : '-'}}</td>
         <td class="flex-item" style="padding:2px; text-align: right; width: 10%;"><strong>Importancia:</strong></td>
         <td class="flex-item" style="padding:2px; width: 10%;text-align: left;" colspan="3">{{$pqr->severity}}</td>
     </tr>

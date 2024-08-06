@@ -86,18 +86,28 @@ Route::group([
         Route::post('me', 'me');
         Route::post('orders-update', 'ordersUpdate');
         Route::post('order-create', 'orderCreate');
+        Route::get('firmwares', 'firmwares');
+        Route::get('firmware/{id}', 'downloadFirmware');
+        Route::post('firmware-create', 'createFirmware');
 
     });
 });
 Route::group([
 
+    'middleware' => 'api',
     'prefix' => 'auth'
 
 ], function ($router) {
     Route::controller(AuthController::class)->group(function () {
-
+        Route::post('login', 'login');
+        Route::post('logout', 'logout');
+        Route::post('refresh', 'refresh');
+        Route::post('job-list', 'joblist');
+        Route::post('me', 'me');
+        Route::post('orders-update', 'ordersUpdate');
+        Route::post('order-create', 'orderCreate');
         Route::get('firmwares', 'firmwares');
-        Route::get('firmware/{id}', 'downloadFirmware');
+        Route::get('firmware/{id}', 'downloadFirmware')->name('firmware.show');
         Route::post('firmware-create', 'createFirmware');
 
     });
