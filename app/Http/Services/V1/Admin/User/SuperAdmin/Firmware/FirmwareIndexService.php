@@ -5,6 +5,8 @@ namespace App\Http\Services\V1\Admin\User\SuperAdmin\Firmware;
 use App\Http\Services\Singleton;
 use App\Models\Model\V1\Firmware;
 use App\Models\V1\SuperAdmin;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Response;
 use Livewire\Component;
 
 class FirmwareIndexService extends Singleton
@@ -31,6 +33,45 @@ class FirmwareIndexService extends Singleton
     {
         $firmware = Firmware::find($modelId);
         $firmware->delete();
+    }
+
+    public function downloadFile(Component $component, $modelId)
+    {
+        // URL del archivo en S3
+        $firmware = Firmware::find($modelId);
+
+        $evidence = $firmware->evidences()->first();
+
+        if ($evidence){
+            $fileUrl = $evidence->url;
+            // Define un nombre para el archivo descargado
+            $fileName = basename(parse_url($fileUrl, PHP_URL_PATH));
+
+            try {
+                // Realiza la solicitud HTTP para obtener el contenido del archivo
+                $response = Http::get($fileUrl);
+
+                // Verifica si la solicitud fue exitosa
+                if ($response->successful()) {
+                    // Obtiene el contenido del archivo
+                    $fileContent = $response->body();
+                    dd(Response::make($fileContent, 200, [
+                        'Content-Type' => $response->header('Content-Type'),
+                        'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+                    ]));
+                    // Devuelve el archivo como respuesta de descarga
+                    return Response::make($fileContent, 200, [
+                        'Content-Type' => $response->header('Content-Type'),
+                        'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+                    ]);
+                } else {
+                    return response()->json(['message' => 'Failed to download file from URL'], 500);
+                }
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'Failed to download file', 'error' => $e->getMessage()], 500);
+            }
+        }
+
     }
 
     public function getData(Component $component)

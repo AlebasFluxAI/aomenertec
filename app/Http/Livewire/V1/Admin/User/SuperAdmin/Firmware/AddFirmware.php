@@ -4,9 +4,12 @@ namespace App\Http\Livewire\V1\Admin\User\SuperAdmin\Firmware;
 
 use App\Http\Services\V1\Admin\User\SuperAdmin\Firmware\FirmwareAddService;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class AddFirmware extends Component
 {
+    use WithFileUploads;
+
     public $model;
     public $message;
     public $file;
@@ -14,6 +17,7 @@ class AddFirmware extends Component
         'model.name' => 'required|min:6',
         'model.version' => 'required|min:6',
         'model.description' => 'required|min:6',
+        'file' => 'required|mimes:bin'
     ];
 
     private $FirmwareAddService;

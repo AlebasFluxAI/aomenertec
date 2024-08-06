@@ -67,6 +67,11 @@
                                                    "tooltip_title"=>"Editar",
                                              ],
                                               [
+                                                    "function"=>"downloadFile",
+                                                    "icon"=>"fas fa-download",
+                                                    "tooltip_title"=>"Descargar",
+                                              ],
+                                              [
                                                     "function"=>"delete",
                                                     "icon"=>"fas fa-trash",
                                                     "tooltip_title"=>"Eliminar",

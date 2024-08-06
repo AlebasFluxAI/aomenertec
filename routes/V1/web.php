@@ -134,6 +134,9 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
                             Route::get('editar/{firmware}', Livewire\V1\Admin\User\SuperAdmin\Firmware\EditFirmware::class)
                                 ->name("administrar.v1.usuarios.superadmin.firmware.editar")
                                 ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_EDIT));
+//                            Route::get('descargar/{firmware}', [Livewire\V1\Admin\User\SuperAdmin\Firmware\IndexFirmware::class, 'downloadFile'])
+//                                ->name("administrar.v1.usuarios.superadmin.firmware.descargar")
+//                                ->middleware(PermissionsRouteWard::permissionWard(Permissions::SUPER_ADMIN_EDIT));
                         });
 
                         Route::get('listado', Livewire\V1\Admin\User\SuperAdmin\IndexSuperAdmin::class)
