@@ -27,6 +27,7 @@ class MailTestController
 
     public function userCreatedNotification()
     {
+        dd('ok1');
         $data = AuxData::where('created_at', '>', '2023-08-01')->where('data', 'LIKE', '%UsWo9wEAAAAWA%')->get();
 
         foreach ($data as $item) {
@@ -37,6 +38,7 @@ class MailTestController
     }
 
     public function eventTest(){
+        dd('ddd');
 
         $pack = 'TmG8AAAAAAChuw0AAAAAAAAAAAAAAAAAAgBAAAAAAACfj2BmKCcCQ1C1AkNQVAJDjOqvQrQGrkKo7bFCxBsRRnJrEUad5BRG+LUyRr6OMUaFAjVGc5/QRWvCy0Vy3c1FZNdPP4ixUT+2nFI/+mRRP4FXEEL/oQtCKRAKQuOtDEKAo9tGMXuaRgDob0Jv8BVJa2ZCQBWYRkjyLBNGqNJhQ3CCYkOAwWBDzcxMQK5HQUApXD9A16OIQB+Fi0BSuIZAAAAAAAAAAAAAAAAAb0JLSNRSSUh3LENIUPaAR0Jojkcxo3tH8EkXRaY4KUVRmCBFWVQtQ6ZUZkJjEb1CAAAAAA==';
         dispatch(new SaveAlertDataJob($pack, true))->onConnection('sync');
@@ -45,7 +47,8 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $item = 'PRukGAIAAABgrgoAAAAAAF5EtEC9kZLCAAAAAAAAAAAnyh9mWg3xQgAAAAAAAAAAVVLBPwAAAAAAAAAAmUodQwAAAAAAAAAA0FouQwAAAAAAAAAAtwiZQgAAAAAAAAAAdXpmPwAAAAAAAAAAMlllP9KN0EEAAAAAAAAAAAAAAABXUR1DAAAAAAIYcEISYxJEAAAAAI+io0NCYOU7AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK5HW0I=';
+        dd('ok');
+        $item = '9fReBQAAAAB0Qb4NAAAAAAAAAAAAAAAADAAAAAAAAADb2rRmhKH0QgAAAAAAAAAAevUkPwAAAAAAAAAAZn1tQgAAAAAAAAAAuaFzQgAAAAAAAAAApt5XQQAAAAAAAAAAHqR5PwAAAAAAAAAAAAAAANvETMEAAAAAAAAAAAAAAAAAAAAAAAAAAArQb0LNzBBBpptEO7x0kzygGmdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKx4YEQTnuNEIJ6YPpYi2wNSC4IGAAAAAA==';
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($item, true);
@@ -63,7 +66,7 @@ class MailTestController
                 $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
                 $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)->first();
             }
-
+            dd($equipment);
             if ($equipment) {
                 $client = $equipment->clients()->first();
                 if ($client) {

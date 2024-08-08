@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'firmwares', 'firmware.show']]);
+        $this->middleware('auth:api', ['except' => ['login', 'firmwares', 'firmware']]);
         $this->guard = "api";
     }
 
@@ -242,9 +242,8 @@ class AuthController extends Controller
         return response()->json($firmwares);
     }
 
-    public function downloadFirmware($id)
+    public function firmware(Request $request, $id)
     {
-        dd('ok');
         $request->validate([
             'password' => 'required'
         ]);
