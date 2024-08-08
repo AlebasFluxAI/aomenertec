@@ -55,15 +55,7 @@ class FirmwareIndexService extends Singleton
                 if ($response->successful()) {
                     // Obtiene el contenido del archivo
                     $fileContent = $response->body();
-                    dd(Response::make($fileContent, 200, [
-                        'Content-Type' => $response->header('Content-Type'),
-                        'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
-                    ]));
-                    // Devuelve el archivo como respuesta de descarga
-                    return Response::make($fileContent, 200, [
-                        'Content-Type' => $response->header('Content-Type'),
-                        'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
-                    ]);
+                    redirect($fileUrl);
                 } else {
                     return response()->json(['message' => 'Failed to download file from URL'], 500);
                 }
