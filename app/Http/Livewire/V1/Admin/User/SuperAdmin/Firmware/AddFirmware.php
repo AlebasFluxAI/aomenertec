@@ -15,9 +15,9 @@ class AddFirmware extends Component
     public $file;
     protected $rules = [
         'model.name' => 'required|min:6',
-        'model.version' => 'required|min:6',
+        'model.version' => 'required',
         'model.description' => 'required|min:6',
-        'file' => 'required|mimes:bin'
+        'file' => 'required|mimetypes:application/octet-stream,application/x-dosexec|max:2048'
     ];
 
     private $FirmwareAddService;
