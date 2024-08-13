@@ -27,6 +27,10 @@ class Firmware extends Model
     {
         return $this->morphMany(Image::class, "imageable")->whereType("evidences");
     }
+    public function evidence()
+    {
+        return $this->morphMany(Image::class, "imageable")->whereType("evidences")->first();
+    }
 
 
 }

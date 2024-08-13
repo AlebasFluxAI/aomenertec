@@ -4,6 +4,7 @@ namespace App\Http\Repositories\ConfigurationClient\Impl;
 
 use App\Http\Repositories\ConfigurationClient\ConfigClientRepository;
 use App\Jobs\V1\Api\ConfigurationClient\CheckAckLogJob;
+use App\Models\Model\V1\Firmware;
 use App\Models\V1\Api\AckLog;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
@@ -52,7 +53,6 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
         $eventLog = EventLog::createMcEvent($ackLog, $request, EventLog::MAIN_SERVER_MC_REQUEST, null, null);
         $message = '';
         $json_request = [];
-
         foreach ($event['frame'] as $index => $datum) {
             if ($datum['variable_name'] == 'id_event_log') {
                 $value = pack($datum['type'], $eventLog->id);
@@ -66,10 +66,7 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 $crc = Crc16::XMODEM($message);
                 $value = pack($datum['type'], $crc);
                 $message = $message . $value;
-                if ($event['event_id'] == 42){
-                    $archivoBin = Request::file('file_bin');
-                    $eventLog->saveImageOnModelWithMorphMany($archivoBin, "evidences");
-                }
+
             } elseif ($datum['variable_name'] == 'salida_id') {
                 $value = pack($datum['type'], 1);
                 $message = $message . $value;
@@ -155,9 +152,11 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 $message = $message . $frame;
                 $json_request[$datum['variable_name']] = $related_parameter->all();
             }  elseif ($datum['variable_name'] == 'size_file'){
-                $archivoBin = Request::file('file_bin');
+                $archivoBin = Request::input('version');
                 if ($archivoBin !== null) {
-                    $sizeFile = $archivoBin->getSize();
+                    $firmware = Firmware::find($archivoBin);
+                    $filePath = $firmware->downloadFileFromS3($firmware->evidence()->path);
+                    $sizeFile=filesize($filePath);
                     $value = pack($datum['type'], $sizeFile);
                     $json_request[$datum['variable_name']] = $sizeFile;
                     $message = $message . $value;
@@ -183,6 +182,9 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                     $value = pack($datum['type'], $init_value);
                 } else {
                     $init_value = Request::query($datum['parameter_name']);
+                    if($init_value == null) {
+                        $init_value = Request::input($datum['parameter_name']);
+                    }
                     $json_request[$datum['variable_name']] = $init_value;
                     $value = pack($datum['type'], $init_value);
                 }

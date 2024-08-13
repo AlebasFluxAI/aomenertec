@@ -2,6 +2,7 @@
 
 namespace App\Jobs\V1\Api\ConfigurationClient;
 
+use App\Models\Model\V1\Firmware;
 use App\Models\V1\Client;
 use App\Models\V1\Api\EventLog;
 use App\ModulesAux\MQTT;
@@ -53,33 +54,30 @@ class FirmwareUpdateJob implements ShouldQueue
                 if ($client == null) {
                     return;
                 }
-                $filePath = $eventLog->downloadFileFromS3($eventLog->evidences[0]->path);
+                $firmware = Firmware::find($requestJson['version']);
+                $filePath = $firmware->downloadFileFromS3($firmware->evidence()->path);
                 $fileSize=filesize($filePath);
                 $j=$this->j;
                 $total_frame = $fileSize/320;
                 $aux= floor($fileSize/(320*8))*$j;
-                $file = fopen($filePath, 'rb');
                 $i=0;
+                echo $aux. " - " .$this->j. " - ".$this->i."\n";
                 if (file_exists($filePath)) {
                     $file = fopen($filePath, 'rb');
                     if ($file) {
                         $mqtt = MQTT::connection("default", "null");
                         while (!feof($file)) {
+                            $bloque = fread($file, 320);
                             if ($i == ($aux)){
                                 $j++;
                                 dispatch(new FirmwareUpdateJob($this->json,$i,$j))->onQueue('spot3');
                                 break;
                             }
-                            if($i >= $total_frame){
-                                break;
-                            }
                             if ($i < $aux && $i >= $this->i ) {
-
                                 try {
                                     if (!$mqtt->isConnected()) {
-                                        $mqtt = MQTT::connection("default", "null");
+                                       $mqtt = MQTT::connection("default", "null");
                                     }
-                                    $bloque = fread($file, 320);
                                     $mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
                                     echo $i . "\n";
                                     $i++;
@@ -92,28 +90,19 @@ class FirmwareUpdateJob implements ShouldQueue
                                     if (!$mqtt->isConnected()) {
                                         $mqtt = MQTT::connection("default", "null");
                                     }
-                                    $bloque = fread($file, 320);
                                     $mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
                                     $i++;
-                                    usleep(20000);
+                                    usleep(50000);
                                 }
+
                             } else{
                                 $i++;
                             }
+
                         }
                         $mqtt->disconnect();
                         fclose($file);
                     }
-                }
-                if (Storage::exists($filePath)) {
-                    Storage::delete($filePath);
-//                    if (!Storage::exists($pathFile)) {
-//                        // El archivo se eliminó correctamente.
-//                        return response()->json(['mensaje' => 'El archivo se eliminó con éxito.']);
-//                    } else {
-//                        // Manejar el caso en el que el archivo no se pudo eliminar.
-//                        return response()->json(['error' => 'No se pudo eliminar el archivo.'], 500);
-//                    }
                 }
             }
         }

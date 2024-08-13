@@ -63,8 +63,18 @@ class FetchDataApiStrategy implements MqttSenderInterface
                                             }
                                             $item->save();
                                         }
+                                    } elseif ($notificationTypeId == 43){
+                                        $this->component->status = $json['data']['status'] == 1;
+                                        if($this->component->status){
+                                            $this->component->initUpload();
+                                            $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
+                                        } else{
+                                            $this->component->emitTo('livewire-toast', 'warning', ['type' => 'warning', 'message' => 'El equipo recibio la solicitud pero no esta disponible para la actualización, intente nuevamente']);
+                                        }
                                     }
-                                    $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
+                                    if($notificationTypeId != 43){
+                                        $this->component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => $webhookResponse['message']]);
+                                    }
                                     $this->mqtt->interrupt();
                                     if ($notificationTypeId == 46){
                                         try {
