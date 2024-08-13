@@ -6,6 +6,7 @@ use App\Http\Services\Singleton;
 use App\Models\Model\V1\Firmware;
 use App\Models\V1\Api\ApiKey;
 use App\Models\V1\Api\EventLog;
+use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\SuperAdmin;
 use App\ModulesAux\MQTT;
@@ -24,15 +25,15 @@ class OtaUpdateService extends Singleton
             'picked' => false,
             'status' => false,
             'model' => $model,
+            'meter_id' => null,
+            'progress' => 5
         ]);
-        $file = $component->model->evidences()->first();
-        if($file){
-            $component->file = $file->url;
-        }
+
     }
-    public function updatedClient(Component $component)
+    public function updatedMeter(Component $component)
     {
         $component->meter_picked = false;
+        $component->meter_id = null;
         $component->message_meter = "No se encontraron meteres para este filtro";
         if ($component->meter != "") {
             $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
@@ -53,18 +54,26 @@ class OtaUpdateService extends Singleton
 
     public function submitForm(Component $component)
     {
-        $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-        $equipment = $equipment_type->equipment()->whereSerial($component->meter)->first();
+        if ($component->meter_id == null or $component->meter_id == ''){
+            $component->emitTo('livewire-toast', 'error', "Debe seleccionar un medidor existente");
+            return;
+        }
+        $equipment = Equipment::find($component->meter_id);
         if ($equipment == null){
             $component->emitTo('livewire-toast', 'error', "Debe seleccionar un medidor existente");
             return;
         }
-        $firmware = $component->firmware->evidence();
+        $firmware = Firmware::find($component->model->id);
         if($firmware == null){
             $component->emitTo('livewire-toast', 'error', "El firmware seleccionado no tiene archivo relacionado");
             return;
         }
-        $filePath = $firmware->downloadFileFromS3($firmware->evidence()->path);
+        $file = $firmware->evidence();
+        if($file == null){
+            $component->emitTo('livewire-toast', 'error', "El firmware seleccionado no tiene archivo relacionado");
+            return;
+        }
+        $filePath = $firmware->downloadFileFromS3($file->path);
         $fileSize=filesize($filePath);
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $filePath);
@@ -75,48 +84,33 @@ class OtaUpdateService extends Singleton
         ];
         $maxFileSize = 2048 * 1024; // 2MB en bytes
         if (in_array($mimeType, $allowedMimeTypes) && $fileSize <= $maxFileSize) {
-            // El archivo es válido y puede procesarse
-            echo "El archivo es válido.";
+            $apiKey =ApiKey::first();
+            $requestDetails = [
+                'url' => 'https://aom.enerteclatam.com/api/v1/config/ota-update',
+                'method' => 'POST',
+                'body' => [
+                    'serial' => $equipment->serial,
+                    'version' => $component->model->id
+                ],
+                'apiKey' => $apiKey->api_key
+            ];
+            try {
+                $mqtt = MQTT::connection('default', EventLog::EVENT_OTA_UPDATE.'-'.$equipment->serial.'aom-channel');
+                $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $component);
+                $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
+                $mqttCoilAckStrategy->registerLoopEventHandler();
+                $mqttCoilAckStrategy->subscribe($equipment, 43);
+            } catch (MqttClientException $e) {
+                $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+            }
+            $component->emitTo('livewire-toast', 'error', "rrrno cumple con las condiciones requeridas.");
+
         } else {
             $component->emitTo('livewire-toast', 'error', "El archivo no cumple con las condiciones requeridas.");
             return;
         }
-        $apiKey =ApiKey::first();
-        $requestDetails = [
-            'url' => 'https://aom.enerteclatam.com/api/v1/config/ota-update',
-            'method' => 'POST',
-            'body' => [
-                'serial' => $equipment->serial,
-                'version' => $component->firmware->id
-            ],
-            'apiKey' => $apiKey->api_key
-        ];
-        try {
-            $mqtt = MQTT::connection('default', EventLog::EVENT_OTA_UPDATE.'-'.$equipment->serial.'aom-channel');
-            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
-            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-            $mqttCoilAckStrategy->registerLoopEventHandler();
-            $mqttCoilAckStrategy->subscribe($equipment, 43);
-        } catch (MqttClientException $e) {
-            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
-        }
-    }
-    public function initUpload(Component $component)
-    {
-        $firmware = $component->firmware->evidence();
-        if($firmware == null){
-            $component->emitTo('livewire-toast', 'error', "El firmware seleccionado no tiene archivo relacionado");
-            return;
-        }
-        $filePath = $firmware->downloadFileFromS3($firmware->evidence()->path);
-        $fileSize=filesize($filePath);
-        $total_frame = ceil($fileSize/320);
-        for ($i = 1; $i <= $total_frame; $i++) {
 
-            $this->progress = round(($i / $total_frame) * 100);
-            usleep(60000); // 50ms
-            $this->emit('updateProgress');
-        }
 
     }
+
 }

@@ -35,6 +35,12 @@ class FirmwareIndexService extends Singleton
         $firmware->delete();
     }
 
+    public function otaUpload(Component $component, $modelId)
+    {
+        $component->redirectRoute("administrar.v1.usuarios.superadmin.firmware.cargar", ["firmware" => $modelId]);
+
+    }
+
     public function downloadFile(Component $component, $modelId)
     {
         // URL del archivo en S3

@@ -44,6 +44,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
     public function handle()
     {
         $data = $this->unpackData();
+        $jsonResponse = null;
         if ($data) {
             event(new RealTimeMonitoringEvent($data));
             $client = Client::getClientFromSerial($data['equipment_id']);

@@ -26,7 +26,12 @@ class OtaUpdate extends Component
         $this->otaUpdateService = OtaUpdateService::getInstance();
         parent::__construct($id);
     }
-
+    public function getListeners()
+    {
+        return [
+            "echo:data-ota-upload." . $this->model->id . ",.dataEventSetProgress" => 'setProgress',
+        ];
+    }
     public function mount(Firmware $firmware)
     {
         $this->otaUpdateService->mount($this, $firmware);
@@ -43,6 +48,11 @@ class OtaUpdate extends Component
     public function submitForm()
     {
         $this->otaUpdateService->submitForm($this);
+    }
+    public function setProgress($progress)
+    {
+        $this->progress = $progress;
+
     }
     public function render()
     {

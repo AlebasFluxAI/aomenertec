@@ -38,6 +38,10 @@ class IndexFirmware extends Component
     {
         $this->indexFirmwareService->downloadFile($this, $id);
     }
+    public function otaUpload($id)
+    {
+        $this->indexFirmwareService->otaUpload($this, $id);
+    }
 
     public function getData()
     {
