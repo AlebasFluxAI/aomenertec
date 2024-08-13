@@ -1528,6 +1528,24 @@ return [
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                            'parameter_name' => null, 'object' => []],
                 ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                            'parameter_name' => null,           'object' => [
                     ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'status',  'parameter_name' => 'status', 'format' => 'number'],
+
+                ]
+                ],
+            ]
+        ],
+        [
+            'notification_type_id' => 43,
+            'event_id' => 43,
+            'json' => [
+                ['id' => 1 , 'variable_name'=> 'notification_type_id', 'value' => 43,                                                               'parameter_name' => null,           'object' => []],
+                ['id' => 2 , 'variable_name'=> 'message',              'value' => 'Medidor disponible para actualización', 'parameter_name' => null,           'object' => []],
+                ['id' => 3 , 'variable_name'=> 'success',              'value' => 1,                                                               'parameter_name' => null,           'object' => []],
+                ['id' => 4 , 'variable_name'=> 'serial',               'value' => null,                                                            'parameter_name' => 'serial',       'object' => []],
+                ['id' => 5 , 'variable_name'=> 'id_transaction',       'value' => null,                                                            'parameter_name' => null,           'object' => []],
+                ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                            'parameter_name' => null, 'object' => []],
+                ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                            'parameter_name' => null,           'object' => [
+                    ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'date'],
                 ]
                 ],
             ]

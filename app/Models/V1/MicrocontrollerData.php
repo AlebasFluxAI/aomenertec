@@ -96,11 +96,17 @@ class MicrocontrollerData extends Model
         }
 
         if ($equipment == null) {
+            if ($this->workOrder()->exists()) {
+                $this->workOrder()->forceDelete();
+            }
             $this->forceDelete();
             return;
         }
         $client = $equipment->clients()->first();
         if ($client == null) {
+            if ($this->workOrder()->exists()) {
+                $this->workOrder()->forceDelete();
+            }
             $this->forceDelete();
             return;
         }

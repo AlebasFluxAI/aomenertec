@@ -50,6 +50,10 @@
                                                                          [
                                                                              "key"=>"Descripción",
                                                                              "value"=>$model->description
+                                                                         ],
+                                                                         [
+                                                                             "key"=>"path",
+                                                                             "value"=>$model->evidence()->path
                                                                          ]
 
                                                                      ]
