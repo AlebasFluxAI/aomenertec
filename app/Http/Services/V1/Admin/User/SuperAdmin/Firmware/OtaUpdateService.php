@@ -103,7 +103,6 @@ class OtaUpdateService extends Singleton
             } catch (MqttClientException $e) {
                 $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
             }
-            $component->emitTo('livewire-toast', 'error', "rrrno cumple con las condiciones requeridas.");
 
         } else {
             $component->emitTo('livewire-toast', 'error', "El archivo no cumple con las condiciones requeridas.");
@@ -112,5 +111,4 @@ class OtaUpdateService extends Singleton
 
 
     }
-
 }

@@ -51,7 +51,7 @@ class OtaUpdate extends Component
     }
     public function setProgress($progress)
     {
-        $this->progress = $progress;
+        $this->progress = $progress['progress'];
 
     }
     public function render()

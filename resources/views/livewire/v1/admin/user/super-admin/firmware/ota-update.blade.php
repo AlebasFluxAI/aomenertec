@@ -51,7 +51,7 @@
                           ]
                   ])
                 @if ($progress >= 0)
-                    <div wire:poll.500ms>
+                    <div >
                         <p>Progreso de la carga: {{ $progress }}%</p>
                         <progress value="{{ $progress }}" max="100">{{ $progress }}%</progress>
                     </div>

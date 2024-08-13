@@ -44,7 +44,6 @@ class FirmwareUpdateJob implements ShouldQueue
         if ($this->json['status'] == 0){
             return;
         }
-        return;
         if(array_key_exists('id_event_log', $this->json)) {
             $eventLog = EventLog::find($this->json['id_event_log']);
             if ($eventLog == null) {
@@ -82,9 +81,11 @@ class FirmwareUpdateJob implements ShouldQueue
                                        $mqtt = MQTT::connection("default", "null");
                                     }
                                     $mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
-                                    echo $i . "\n";
                                     $progress = round(($i / $total_frame) * 100);
-                                    if ($k == 160){
+                                    if ($k == 50){
+                                        event(new setProgressOtaUploadEvent($progress, $firmware->id));
+                                        $k=0;
+                                    }if ($progress == 100){
                                         event(new setProgressOtaUploadEvent($progress, $firmware->id));
                                         $k=0;
                                     }
