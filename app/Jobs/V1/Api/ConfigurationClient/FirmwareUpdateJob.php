@@ -2,6 +2,7 @@
 
 namespace App\Jobs\V1\Api\ConfigurationClient;
 
+use App\Events\setProgressOtaUploadEvent;
 use App\Models\Model\V1\Firmware;
 use App\Models\V1\Client;
 use App\Models\V1\Api\EventLog;
@@ -43,6 +44,7 @@ class FirmwareUpdateJob implements ShouldQueue
         if ($this->json['status'] == 0){
             return;
         }
+        return;
         if(array_key_exists('id_event_log', $this->json)) {
             $eventLog = EventLog::find($this->json['id_event_log']);
             if ($eventLog == null) {
@@ -54,13 +56,14 @@ class FirmwareUpdateJob implements ShouldQueue
                 if ($client == null) {
                     return;
                 }
-                $firmware = Firmware::find($requestJson['version']);
+                $firmware = Firmware::find($requestJson->version);
                 $filePath = $firmware->downloadFileFromS3($firmware->evidence()->path);
                 $fileSize=filesize($filePath);
                 $j=$this->j;
                 $total_frame = $fileSize/320;
                 $aux= floor($fileSize/(320*8))*$j;
                 $i=0;
+                $k=0;
                 echo $aux. " - " .$this->j. " - ".$this->i."\n";
                 if (file_exists($filePath)) {
                     $file = fopen($filePath, 'rb');
@@ -80,7 +83,13 @@ class FirmwareUpdateJob implements ShouldQueue
                                     }
                                     $mqtt->publish('v1/mc/ota/' . $this->json['serial'], $bloque);
                                     echo $i . "\n";
+                                    $progress = round(($i / $total_frame) * 100);
+                                    if ($k == 160){
+                                        event(new setProgressOtaUploadEvent($progress, $firmware->id));
+                                        $k=0;
+                                    }
                                     $i++;
+                                    $k++;
                                     usleep(50000);
 
                                 } catch (\PhpMqtt\Client\Exceptions\DataTransferException $e) {

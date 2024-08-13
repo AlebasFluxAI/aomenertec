@@ -16,7 +16,7 @@
                     "click_action"=>"",
                     "button_icon"=>"fas fa-list",
                     "button_content"=>"Ver listado",
-                    "target_route"=>"administrar.v1.usuarios.tecnicos.listado",
+                    "target_route"=>"administrar.v1.usuarios.superadmin.firmware.listado",
                     ],
 
                 ]
@@ -50,7 +50,12 @@
 
                           ]
                   ])
-
+                @if ($progress >= 0)
+                    <div wire:poll.500ms>
+                        <p>Progreso de la carga: {{ $progress }}%</p>
+                        <progress value="{{ $progress }}" max="100">{{ $progress }}%</progress>
+                    </div>
+                @endif
 
             </div>
 

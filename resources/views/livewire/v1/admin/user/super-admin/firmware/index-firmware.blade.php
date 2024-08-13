@@ -72,6 +72,11 @@
                                                     "tooltip_title"=>"Descargar",
                                               ],
                                               [
+                                                    "function"=>"otaUpload",
+                                                    "icon"=>"fas fa-download",
+                                                    "tooltip_title"=>"Cargar firmware",
+                                              ],
+                                              [
                                                     "function"=>"delete",
                                                     "icon"=>"fas fa-trash",
                                                     "tooltip_title"=>"Eliminar",
