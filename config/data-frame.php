@@ -1528,7 +1528,6 @@ return [
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                            'parameter_name' => null, 'object' => []],
                 ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                            'parameter_name' => null,           'object' => [
                     ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'date'],
-                    ['variable_name'=> 'status',  'parameter_name' => 'status', 'format' => 'number'],
 
                 ]
                 ],
@@ -1546,6 +1545,8 @@ return [
                 ['id' => 6 , 'variable_name'=> 'id_event',             'value' => null,                                                            'parameter_name' => null, 'object' => []],
                 ['id' => 7 , 'variable_name'=> 'data',                 'value' => null,                                                            'parameter_name' => null,           'object' => [
                     ['variable_name'=> 'response_date',  'parameter_name' => 'timestamp', 'format' => 'date'],
+                    ['variable_name'=> 'status',  'parameter_name' => 'status', 'format' => 'number'],
+
                 ]
                 ],
             ]
