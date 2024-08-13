@@ -54,6 +54,10 @@ class OtaUpdateService extends Singleton
 
     public function submitForm(Component $component)
     {
+        if ($component->status){
+            $component->emitTo('livewire-toast', 'error', "Se encuentra en ejecución");
+            return;
+        }
         if ($component->meter_id == null or $component->meter_id == ''){
             $component->emitTo('livewire-toast', 'error', "Debe seleccionar un medidor existente");
             return;
@@ -101,14 +105,11 @@ class OtaUpdateService extends Singleton
                 $mqttCoilAckStrategy->registerLoopEventHandler();
                 $mqttCoilAckStrategy->subscribe($equipment, 43);
             } catch (MqttClientException $e) {
-                $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+                $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
             }
 
         } else {
             $component->emitTo('livewire-toast', 'error', "El archivo no cumple con las condiciones requeridas.");
-            return;
         }
-
-
     }
 }
