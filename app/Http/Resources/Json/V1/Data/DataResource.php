@@ -16,11 +16,14 @@ class DataResource extends JsonResource
     public function toArray($request)
     {
         $date = Carbon::create($this->source_timestamp);
-        unset($this->raw_json->network_operator_id, $this->raw_json->latitude, $this->raw_json->longitude, $this->raw_json->flags, $this->raw_json->timestamp);
+
+        $raw_data = (array) json_decode($this->raw_json);
+        unset($raw_data['network_operator_id'], $raw_data['latitude'], $raw_data['longitude'], $raw_data['flags'], $raw_data['timestamp']);
+        $this->raw_json = (object) $raw_data;
         return [
-            "data" => json_decode($this->raw_json),
+            "data" => $this->raw_json,
             "date" => $date->format('Y-m-d'),
-            "hour" => $date->format('H'),
+            "hour" => $date->format('H:i:s'),
         ];
     }
 }
