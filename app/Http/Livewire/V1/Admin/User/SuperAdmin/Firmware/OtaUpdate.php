@@ -51,7 +51,12 @@ class OtaUpdate extends Component
     }
     public function setProgress($progress)
     {
-        $this->progress = $progress;
+        $this->progress = $progress['progress'];
+        if($this->progress == 100){
+            $this->status = false;
+            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Carga completada"]);
+
+        }
 
     }
     public function render()

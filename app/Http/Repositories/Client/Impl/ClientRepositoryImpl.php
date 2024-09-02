@@ -10,10 +10,12 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Api\EventLog;
+use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
 use App\Models\V1\User;
 use App\Models\V1\VoltageLevel;
+use Carbon\Carbon;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -137,5 +139,20 @@ class ClientRepositoryImpl implements ClientRepository
     public function getEventLogId()
     {
         return json_decode(Request::header(EventLog::EVENT_LOG_HEADER), true)["id"];
+    }
+
+    public function getDateRangeClientDataPaginate($request, $id): LengthAwarePaginator
+    {
+        if (is_numeric($request->query('fecha_inicio')) && is_numeric($request->query('fecha_fin'))) {
+            $start =  Carbon::createFromTimestamp($request->query('fecha_inicio'));
+            $end = Carbon::createFromTimestamp($request->query('fecha_fin'));
+        } else {
+            $start = new Carbon($request->query('fecha_inicio'));
+            $end = new Carbon($request->query('fecha_fin'));
+        }
+
+        return MicrocontrollerData::where('client_id', $id)
+            ->whereBetween("source_timestamp", [$start->format('Y-m-d H:i:s'), $end->format('Y-m-d H:i:s')])
+            ->orderBy('source_timestamp', 'desc')->paginate();
     }
 }

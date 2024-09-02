@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Events\setProgressOtaUploadEvent;
 use App\Jobs\V1\Enertec\AlertNotificationJob;
 use App\Jobs\V1\Enertec\SaveAlertDataJob;
 use App\Models\V1\Api\EventLog;
@@ -38,10 +39,8 @@ class MailTestController
     }
 
     public function eventTest(){
-        dd('ddd');
+        event(new setProgressOtaUploadEvent(30, 15));
 
-        $pack = '9fReBQAAAAAvPMwQAAAAAAAAAAAAAAAADAAAAAAAAABT27Rmdgb3QgAAAAAAAAAATuYiQQAAAAAAAAAAEHSFRAAAAAAAAAAAVE6aRAAAAAAAAAAAyy0cRAAAAAAAAAAAHOZcPwAAAAAAAAAAAAAAADCs8EEAAAAAAAAAAAAAAAAAAAAAAAAAAArQb0IdWspBAAAAAAispEAK149AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAv41pQAAAAAAAAAAAWtGDQAAAAAAAAAAAAAAAAA==';
-        dispatch(new SaveAlertDataJob($pack, true))->onConnection('sync');
 
     }
 
