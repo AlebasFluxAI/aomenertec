@@ -11,6 +11,7 @@ interface ClientRepository
    // public function getEquipmentForType($request): Collection;
 
     public function addClient($request): Collection;
+    public function getDateRangeClientDataPaginate($request, $id): LengthAwarePaginator;
 
 
 }

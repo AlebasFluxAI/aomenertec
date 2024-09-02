@@ -30,4 +30,9 @@ class ClientController extends Controller
         return $this->clientService->addEquipment($request);
     }
 
+    public function getDateRangeSerial(Request $request): JsonResource
+    {
+        return $this->clientService->getDateRangeSerial($request);
+    }
+
 }

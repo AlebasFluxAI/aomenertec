@@ -37,6 +37,10 @@ Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']
         Route::controller(ClientController::class)->group(function () {
             Route::post("/client-add", "addClient");
         });
+    Route::group(['prefix' => 'v1/data'], function () {
+        Route::controller(ClientController::class)->group(function () {
+            Route::post("/date-range", "getDateRangeSerial");
+        });
 
     });
     Route::group(['prefix' => 'v1/config', ], function ()  {

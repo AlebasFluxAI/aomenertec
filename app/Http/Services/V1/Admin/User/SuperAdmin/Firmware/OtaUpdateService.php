@@ -26,7 +26,7 @@ class OtaUpdateService extends Singleton
             'status' => false,
             'model' => $model,
             'meter_id' => null,
-            'progress' => 5
+            'progress' => 0
         ]);
 
     }
