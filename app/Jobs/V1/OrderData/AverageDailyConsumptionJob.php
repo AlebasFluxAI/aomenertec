@@ -239,14 +239,26 @@ class AverageDailyConsumptionJob implements ShouldQueue
                                     $raw_json['ph3_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph3;
 
                                     $datum->raw_json = json_encode($raw_json);
-                                    $datum->accumulated_real_consumption = $raw_json['import_wh'];
+                                    //$datum->accumulated_real_consumption = $raw_json['import_wh'];
                                     $datum->interval_real_consumption = $raw_json['kwh_interval'];
-                                    $datum->accumulated_reactive_consumption = $raw_json['import_VArh'];
+                                    //$datum->accumulated_reactive_consumption = $raw_json['import_VArh'];
                                     $datum->interval_reactive_consumption = $raw_json['varh_interval'];
-                                    $datum->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
-                                    $datum->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
+                                    //$datum->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
+                                    //$datum->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
                                     $datum->interval_reactive_capacitive_consumption = $raw_json['varCh_interval'];
                                     $datum->interval_reactive_inductive_consumption = $raw_json['varLh_interval'];
+                                    if ($datum->interval_real_consumption == 0) {
+                                        $penalizable_inductive = $datum->interval_reactive_inductive_consumption;
+                                    } else {
+                                        $percent_penalizable_inductive = ($datum->interval_reactive_inductive_consumption * 100) / $datum->interval_real_consumption;
+                                        if ($percent_penalizable_inductive >= 50) {
+                                            $penalizable_inductive = ($datum->interval_real_consumption * $percent_penalizable_inductive / 100) - ($datum->interval_real_consumption * 0.5);
+                                        } else {
+                                            $penalizable_inductive = 0;
+                                        }
+                                    }
+                                    $datum->penalizable_reactive_inductive_consumption = $penalizable_inductive;
+                                    $datum->penalizable_reactive_capacitive_consumption = $datum->interval_reactive_capacitive_consumption;
                                     $datum->save();
                                 }
                                 $i++;
@@ -268,14 +280,26 @@ class AverageDailyConsumptionJob implements ShouldQueue
                             $last_raw_json['ph2_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph2;
                             $last_raw_json['ph3_varCh_interval'] = $average_accumulated_reactive_capacitive_consumption_ph3;
                             $reference_data->raw_json = json_encode($raw_json);
-                            $reference_data->accumulated_real_consumption = $raw_json['import_wh'];
+                            //$reference_data->accumulated_real_consumption = $raw_json['import_wh'];
                             $reference_data->interval_real_consumption = $raw_json['kwh_interval'];
-                            $reference_data->accumulated_reactive_consumption = $raw_json['import_VArh'];
+                            //$reference_data->accumulated_reactive_consumption = $raw_json['import_VArh'];
                             $reference_data->interval_reactive_consumption = $raw_json['varh_interval'];
-                            $reference_data->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
-                            $reference_data->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
+                            //$reference_data->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
+                            //$reference_data->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
                             $reference_data->interval_reactive_capacitive_consumption = $raw_json['varCh_interval'];
                             $reference_data->interval_reactive_inductive_consumption = $raw_json['varLh_interval'];
+                            if ($reference_data->interval_real_consumption == 0) {
+                                $penalizable_inductive = $reference_data->interval_reactive_inductive_consumption;
+                            } else {
+                                $percent_penalizable_inductive = ($reference_data->interval_reactive_inductive_consumption * 100) / $reference_data->interval_real_consumption;
+                                if ($percent_penalizable_inductive >= 50) {
+                                    $penalizable_inductive = ($reference_data->interval_real_consumption * $percent_penalizable_inductive / 100) - ($reference_data->interval_real_consumption * 0.5);
+                                } else {
+                                    $penalizable_inductive = 0;
+                                }
+                            }
+                            $reference_data->penalizable_reactive_inductive_consumption = $penalizable_inductive;
+                            $reference_data->penalizable_reactive_capacitive_consumption = $reference_data->interval_reactive_capacitive_consumption;
                             $reference_data->save();
                         }
                     }

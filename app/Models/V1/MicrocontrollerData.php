@@ -316,12 +316,12 @@ class MicrocontrollerData extends Model
         }
         $this->saveQuietly();
         if ($flag) {
-            if ($current_time->gt($date)) {
-                if ($current_time->diffInMinutes($date) >= 35) {
+            if ($date->gt($current_time)) {
+                if ($date->diffInMinutes($current_time) >= 35) {
                     dispatch(new AverageHourlyConsumptionJob($this->client->id, $current_time))->onQueue('spot3');
                 }
-                if ($current_time->diffInDays($date) >= 1) {
-                    if ($current_time->diffInMinutes($date) >= 65) {
+                if ($date->diffInDays($current_time) >= 1) {
+                    if ($date->diffInMinutes($current_time) >= 65) {
                         dispatch(new AverageDailyConsumptionJob($this->client->id, $current_time))->onQueue('spot3');
                     }
                 }
