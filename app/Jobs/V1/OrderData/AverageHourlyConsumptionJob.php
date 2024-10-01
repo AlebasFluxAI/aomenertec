@@ -55,7 +55,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                     $penalizable_inductive = 0;
                 }
             }
-            HourlyMicrocontrollerData::updateOrCreate(
+            $reference_data = HourlyMicrocontrollerData::updateOrCreate(
                 ['year' => $year,
                     'month' => $month,
                     'day' => $day,
@@ -106,7 +106,7 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                         }
                     }
                     $source_timestamp = new Carbon($previous_hour_data->source_timestamp);
-                    HourlyMicrocontrollerData::updateOrCreate(
+                    $reference_data = HourlyMicrocontrollerData::updateOrCreate(
                         ['year' => $year,
                             'month' => $month,
                             'day' => $day,

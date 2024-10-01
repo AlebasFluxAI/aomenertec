@@ -25,12 +25,12 @@
     }
 
     function getLocation(position) {
-
+        console.log(@this.latitude, @this.longitude)
         if (@this.latitude != null && @this.longitude != null) {
             var center = {
                 lat: Number(@this.latitude),
                 lng: Number(@this.longitude)
-            };
+            }
         } else {
             var center = {
                 lat: position.coords.latitude,
@@ -54,6 +54,7 @@
             mapTypeControl: false,
             draggable: true
         });
+
 
 
         autocomplete = new google.maps.places.Autocomplete(
@@ -194,6 +195,7 @@
     </ul>
 </div>
 <script
-    src="https://maps.googleapis.com/maps/api/js?key={{config("google.apiKey")}}&callback=myMap&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key={{config("google.apiKey")}}&callback=myMap&libraries=places"
+        defer></script>
 
 
