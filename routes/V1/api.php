@@ -32,11 +32,19 @@ Route::group(['prefix' => 'v1/config'], function ()  {
     });
 });
 
+
 Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']], function () {
 
     Route::group(['prefix' => 'v1/clients'], function () {
         Route::controller(ClientController::class)->group(function () {
             Route::post("/client-add", "addClient");
+        });
+    });
+    Route::group(['prefix' => 'v1/event_logs'], function () {
+        Route::controller(EventLogController::class)->group(function () {
+            Route::get("", "getEventLogs");
+            Route::get("/{eventLog}", "getEventLogById");
+            Route::get("/ack_logs/{ackLog}", "getEventLogByAckLog");
         });
     });
     Route::group(['prefix' => 'v1/data'], function () {
@@ -45,14 +53,7 @@ Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']
         });
     });
 
-    Route::group(['prefix' => 'v1/event_logs'], function () {
-        Route::controller(EventLogController::class)->group(function () {
-            Route::get("", "EventLogController@getEventLogs");
-            Route::get("/{eventLog}", "EventLogController@getEventLogById");
-            Route::get("/ack_logs/{ackLog}", "EventLogController@getEventLogByAckLog");
-        });
 
-    });
 
     Route::group(['prefix' => 'v1/config', ], function ()  {
         Route::controller(ConfigurationClientController::class)->group(function () {

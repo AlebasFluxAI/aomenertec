@@ -210,7 +210,6 @@ class EventLogController
 
     public function getEventLogByAckLog(AckLog $ackLog)
     {
-        dd('ok');
         return $this->eventLogService->getEventLogByAckLog($ackLog);
     }
 }
