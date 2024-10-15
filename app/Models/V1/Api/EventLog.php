@@ -3,6 +3,7 @@
 namespace App\Models\V1\Api;
 
 use App\Models\Traits\ImageableTrait;
+use App\Models\Traits\PaginatorTrait;
 use App\Models\V1\Api\AckLog;
 use App\Models\Traits\FilterTrait;
 use App\Models\V1\Client;
@@ -14,6 +15,7 @@ class EventLog extends Model
 {
     use FilterTrait;
     use ImageableTrait;
+    use PaginatorTrait;
 
 
     const EVENT_LOG_HEADER = "event_log_header";
@@ -26,7 +28,7 @@ class EventLog extends Model
 
 
     const EVENT_SET_ALERT_LIMITS = "set-alert-limits";
-    const SET_REACTIVE_DATA = "set-reactve-data";
+    const SET_REACTIVE_DATA = "set-reactive-data";
     const EVENT_SET_ALERT_TIME = "set-alert-time";
     const EVENT_SET_SAMPLING_TIME = "set-sampling-time";
     const EVENT_SET_WIFI_CREDENTIALS = "set-wifi-credentials";
