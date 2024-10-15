@@ -314,9 +314,8 @@ class SaveAlertDataJob implements ShouldQueue
         } else {
             $value = unpack($variable['type'], $bin)[1];
         }
-       if($variable_id == 31){
-           echo $variable['id']." - ". $split ." - ".$bin."\n";
-       }
+       echo $variable['id']." - ". $split ." - ".$bin."\n";
+
 
         return $value;
     }
@@ -352,6 +351,9 @@ class SaveAlertDataJob implements ShouldQueue
                     $accumulated_reactive_inductive_consumption = $this->calculateValueAlert(55, $decode) + $this->calculateValueAlert(56, $decode) + $this->calculateValueAlert(57, $decode);
                     $interval_reactive_inductive_consumption = $accumulated_reactive_inductive_consumption - $energy_hour->microcontrollerData->accumulated_reactive_inductive_consumption;
                     $value = ($interval_reactive_inductive_consumption * 100) / $interval_real_consumption;
+                    if ($value > 200){
+                        $value = 0;
+                    }
                 } else {
                     $value = 0;
                 }
