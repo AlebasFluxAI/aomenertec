@@ -3,6 +3,7 @@
 use App\Http\Controllers\V1\AuthController;
 use App\Http\Controllers\V1\ConfigurationClient\ConfigurationClientController;
 use App\Http\Controllers\V1\ConfigurationClient\ClientController;
+use App\Http\Controllers\V1\EventLog\EventLogController;
 use App\Http\Controllers\V1\MqttInput\MqttInputController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,7 +46,7 @@ Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']
     });
 
     Route::group(['prefix' => 'v1/event_logs'], function () {
-        Route::controller(ClientController::class)->group(function () {
+        Route::controller(EventLogController::class)->group(function () {
             Route::get("", "EventLogController@getEventLogs");
             Route::get("/{eventLog}", "EventLogController@getEventLogById");
             Route::get("/ack_logs/{ackLog}", "EventLogController@getEventLogByAckLog");
