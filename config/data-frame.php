@@ -100,12 +100,12 @@ return [
         ['id' => 52, 'variable_name'=> 'ph1_import_kvarh',   'description' => '',    'display_name' => 'L1 ENERGIA kVARh TOTAL',    'variable_id'=> 7,  'key' => 'L1',        'start' => 432, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 1, 'max' => 1000000, 'default' => true, 'bolean_accum' => false],
         ['id' => 53, 'variable_name'=> 'ph2_import_kvarh',   'description' => '',    'display_name' => 'L2 ENERGIA kVARh TOTAL',    'variable_id'=> 7,  'key' => 'L2',        'start' => 440, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 1, 'max' => 1000000, 'default' => true, 'bolean_accum' => false],
         ['id' => 54, 'variable_name'=> 'ph3_import_kvarh',   'description' => '',    'display_name' => 'L3 ENERGIA kVARh TOTAL',    'variable_id'=> 7,  'key' => 'L3',        'start' => 448, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 1, 'max' => 1000000, 'default' => true, 'bolean_accum' => false],
-        ['id' => 55, 'variable_name'=> 'ph1_varLh_acumm', 'description' => '',     'display_name' => 'L1 ENERGIA kVARLh TOTAL',    'variable_id'=> 15, 'key' => 'L1',        'start' => 456, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 10000, 'default' => 0, 'bolean_accum' => false],
-        ['id' => 56, 'variable_name'=> 'ph2_varLh_acumm', 'description' => '',     'display_name' => 'L2 ENERGIA kVARLh TOTAL',    'variable_id'=> 15, 'key' => 'L2',        'start' => 464, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 10000, 'default' => 0, 'bolean_accum' => false],
-        ['id' => 57, 'variable_name'=> 'ph3_varLh_acumm', 'description' => '',     'display_name' => 'L3 ENERGIA kVARLh TOTAL',    'variable_id'=> 15, 'key' => 'L3',        'start' => 472, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 10000, 'default' => 0, 'bolean_accum' => false],
-        ['id' => 58, 'variable_name'=> 'ph1_varCh_acumm', 'description' => '',     'display_name' => 'L1 ENERGIA kVARCh TOTAL',    'variable_id'=> 11,  'key' => 'L1',       'start' => 480, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 10000, 'default' => 0, 'bolean_accum' => false],
-        ['id' => 59, 'variable_name'=> 'ph2_varCh_acumm', 'description' => '',     'display_name' => 'L2 ENERGIA kVARCh TOTAL',    'variable_id'=> 11,  'key' => 'L2',       'start' => 488, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 10000, 'default' => 0, 'bolean_accum' => false],
-        ['id' => 60, 'variable_name'=> 'ph3_varCh_acumm', 'description' => '',     'display_name' => 'L3 ENERGIA kVARCh TOTAL',    'variable_id'=> 11,  'key' => 'L3',       'start' => 496, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 10000, 'default' => 0, 'bolean_accum' => false],
+        ['id' => 55, 'variable_name'=> 'ph1_varLh_acumm', 'description' => '',     'display_name' => 'L1 ENERGIA kVARLh TOTAL',    'variable_id'=> 15, 'key' => 'L1',        'start' => 456, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 1000000, 'default' => 0, 'bolean_accum' => false],
+        ['id' => 56, 'variable_name'=> 'ph2_varLh_acumm', 'description' => '',     'display_name' => 'L2 ENERGIA kVARLh TOTAL',    'variable_id'=> 15, 'key' => 'L2',        'start' => 464, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 1000000, 'default' => 0, 'bolean_accum' => false],
+        ['id' => 57, 'variable_name'=> 'ph3_varLh_acumm', 'description' => '',     'display_name' => 'L3 ENERGIA kVARLh TOTAL',    'variable_id'=> 15, 'key' => 'L3',        'start' => 472, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 1000000, 'default' => 0, 'bolean_accum' => false],
+        ['id' => 58, 'variable_name'=> 'ph1_varCh_acumm', 'description' => '',     'display_name' => 'L1 ENERGIA kVARCh TOTAL',    'variable_id'=> 11,  'key' => 'L1',       'start' => 480, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 1000000, 'default' => 0, 'bolean_accum' => false],
+        ['id' => 59, 'variable_name'=> 'ph2_varCh_acumm', 'description' => '',     'display_name' => 'L2 ENERGIA kVARCh TOTAL',    'variable_id'=> 11,  'key' => 'L2',       'start' => 488, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 1000000, 'default' => 0, 'bolean_accum' => false],
+        ['id' => 60, 'variable_name'=> 'ph3_varCh_acumm', 'description' => '',     'display_name' => 'L3 ENERGIA kVARCh TOTAL',    'variable_id'=> 11,  'key' => 'L3',       'start' => 496, 'lenght' => 8,  'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 1000000, 'default' => 0, 'bolean_accum' => false],
         ['id' => 61, 'variable_name' => 'volt_dc', 'description' => '', 'display_name' => 'VOLTAJE BATERIA', 'variable_id' => 33, 'key' => 'VDC', 'start' => 504, 'lenght' => 8, 'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 10000, 'default' => 0, 'bolean_accum' => false],
 
         ['id' => 62, 'variable_name' => 'Wh_calc', 'description' => '', 'display_name' => '', 'variable_id' => '', 'key' => '', 'start' => 504, 'lenght' => 8, 'type' => 'f', 'factor' => 1, 'min' => 0, 'max' => 1000000, 'default' => 0, 'bolean_accum' => false],
@@ -605,7 +605,8 @@ return [
                 ['id' => 3 , 'variable_name'=> 'serial',       'start' => 5,  'parameter_name' => null, 'format' => 'number', 'lenght' => 4, 'type' => 'V'],
                 ['id' => 4 , 'variable_name'=> 'crc',          'start' => 9, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ],
-            'job_name' => 'SendReactiveDataMcJob'
+            'job_name' => 'SendReactiveDataMcJob',
+            'uri_event' => \App\Models\V1\Api\EventLog::SET_REACTIVE_DATA
         ],
         [
             'event_id' => 29,

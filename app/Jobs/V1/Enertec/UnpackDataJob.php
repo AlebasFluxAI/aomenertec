@@ -85,6 +85,7 @@ class UnpackDataJob implements ShouldQueue
                                         $json[$data['variable_name']] = unpack($data['type'], $bin)[1];
                                     }
                                 }
+                                // corregir reactivos inductivos y capacitivos
 
                                 if ($data['start'] >= 72) {
                                     if ($json[$data['variable_name']] <= $data['min'] or $json[$data['variable_name']] > $data['max']) {

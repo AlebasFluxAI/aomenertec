@@ -46,7 +46,7 @@ class MailTestController
 
     public function whatsappNotification()
     {
-        $item = '9fReBQAAAAC1IjMBAAAAAAAAAAAAAAAADAAAAAAAAAAPHrZmpLb1QgAAAAAAAAAAAFE5QQAAAAAAAAAAvhagRAAAAAAAAAAAhOiwRAAAAAAAAAAAogcXxAAAAAAAAAAAJkdnPwAAAAAAAAAAAAAAACxNp0MAAAAAAAAAAAAAAAAAAAAAAAAAAArQb0LZztZBCtejO99PDT5CYG1BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAyWb5PQAAAAAAAAAAEq1HQQAAAAAAAAAAAAAAAA==';
+        $item = '9fReBQAAAAChuw0AAAAAAAAAAAAAAAAACAAAAAAAAAC/fg5noNL/QigdAEMwSgBDjP6wQvx7yUKIF71CB3gpRi+1QUaj9jVGQ0swRkNWSEbCDj1GXlFCRUlyTEWlOU1FzhZ2P2SHdz/QZHY/VLZ2P1RyfEFAwW5BSGJ6QWABeEG2QAhHPw4XRgAScEIE/CZJa2ZCQLUmXUi3yxlG8BZeQ5BdXkP4Jl1DAABQQD0KR0CamUlAXI/iQDMzu0AzM9NAAAAAAAAAAAAAAAAA795hSB5QYEj/wFlIAcOPR7D2nUe5k4xH2ZwcRmB2JUZkQBxGSH68Q7wN8kJbEW9DAAAAAA==';
         $data_frame = config('data-frame.data_frame');
         $date = Carbon::now();
         $raw_json = json_decode($item, true);
@@ -64,7 +64,6 @@ class MailTestController
                 $equipment_type = EquipmentType::whereType('MEDIDOR ELECTRICO')->first();
                 $equipment = $equipment_type->equipment()->whereSerial($equipment_serial)->first();
             }
-            dd($equipment);
             if ($equipment) {
                 $client = $equipment->clients()->first();
                 if ($client) {

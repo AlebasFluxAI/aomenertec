@@ -26,6 +26,7 @@ class EventLog extends Model
 
 
     const EVENT_SET_ALERT_LIMITS = "set-alert-limits";
+    const SET_REACTIVE_DATA = "set-reactve-data";
     const EVENT_SET_ALERT_TIME = "set-alert-time";
     const EVENT_SET_SAMPLING_TIME = "set-sampling-time";
     const EVENT_SET_WIFI_CREDENTIALS = "set-wifi-credentials";
@@ -126,7 +127,8 @@ class EventLog extends Model
                      self::EVENT_SET_URL_NOTIFICATION,
                      self::EVENT_GET_URL_NOTIFICATION,
                      self::EVENT_ADD_CLIENT,
-                     self::EVENT_GET_EVENT_LOGS
+                     self::EVENT_GET_EVENT_LOGS,
+                     self::SET_REACTIVE_DATA
                  ] as $event) {
             if (strpos($uri, $event)) {
                 return $event;

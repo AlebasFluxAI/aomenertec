@@ -43,6 +43,16 @@ Route::group(['middleware' => ['token_api_validation', 'event_queue_validation']
             Route::get("/date-range", "getDateRangeSerial");
         });
     });
+
+    Route::group(['prefix' => 'v1/event_logs'], function () {
+        Route::controller(ClientController::class)->group(function () {
+            Route::get("", "EventLogController@getEventLogs");
+            Route::get("/{eventLog}", "EventLogController@getEventLogById");
+            Route::get("/ack_logs/{ackLog}", "EventLogController@getEventLogByAckLog");
+        });
+
+    });
+
     Route::group(['prefix' => 'v1/config', ], function ()  {
         Route::controller(ConfigurationClientController::class)->group(function () {
 
