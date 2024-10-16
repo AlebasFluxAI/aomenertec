@@ -160,6 +160,29 @@ class AuthController extends Controller
         $orderModel = WorkOrder::find($order['id']);
         $microcontroller_data = null;
         if ($orderModel) {
+            // Validación de las imágenes antes de cualquier otra acción
+            if (array_key_exists('images', $order)) {
+                $images = $order['images'];
+                foreach ($images as $image) {
+                    $image_file = $request->file($image['name']);
+
+                    // Verificar si el archivo fue cargado correctamente
+                    if (!$image_file) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'One or more images are missing in the request.'
+                        ], 400); // HTTP 400 Bad Request
+                    }
+
+                    // Validación del tamaño de la imagen
+                    if ($image_file->getSize() > 6 * 1024 * 1024) { // 6MB en bytes
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'The image ' . $image['name'] . ' exceeds the maximum size of 6MB.'
+                        ], 413); // HTTP 413 Payload Too Large
+                    }
+                }
+            }
             if($orderModel->status == WorkOrder::WORK_ORDER_STATUS_CLOSED){
                 return response()->json([
                     'success' => false,
