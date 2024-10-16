@@ -76,7 +76,7 @@ class UpdateTimestampDataJob implements ShouldQueue
                 }
             } else {
                 $raw_json = json_decode($this->item->raw_json, true);
-                if (property_exists($raw_json, 'timestamp')) {
+                if (array_key_exists('timestamp',$raw_json )) {
                     $timestamp = $raw_json['timestamp'];
                     $date = new Carbon();
                     $date->setTimestamp($timestamp);
