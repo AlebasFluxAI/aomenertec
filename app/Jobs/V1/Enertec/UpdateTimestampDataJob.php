@@ -75,14 +75,39 @@ class UpdateTimestampDataJob implements ShouldQueue
                     }
                 }
             } else {
-                if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
-                    $alert->forceDelete();
-                }
-                if ($order = WorkOrder::where('microcontroller_data_id', $this->item->id)) {
-                    $order->forceDelete();
-                }
-                if ($datum = MicrocontrollerData::find($this->item->id)) {
-                    $datum->forceDelete();
+                $raw_json = json_decode($this->item->raw_json, true);
+                if (property_exists($raw_json, 'timestamp')) {
+                    $timestamp = $raw_json['timestamp'];
+                    $date = new Carbon();
+                    $date->setTimestamp($timestamp);
+                    $current_time = Carbon::now();
+                    if ($date->diffInDays($current_time) > 360) {
+                        if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
+                            $alert->forceDelete();
+                        }
+                        if ($order = WorkOrder::where('microcontroller_data_id', $this->item->id)) {
+                            $order->forceDelete();
+                        }
+                        if ($datum = MicrocontrollerData::find($this->item->id)) {
+                            $datum->status = MicrocontrollerData::PENDING_TIMESTAMP;
+                            $datum->forceDelete();
+                        }
+                    } else {
+                        $this->item->source_timestamp = $date->format("Y-m-d H:i:s");
+                        $this->item->status = MicrocontrollerData::SUCCESS_TIMESTAMP;
+                        $this->item->saveQuietly();
+                    }
+                } else {
+                    if ($alert = ClientAlert::where('microcontroller_data_id', $this->item->id)) {
+                        $alert->forceDelete();
+                    }
+                    if ($order = WorkOrder::where('microcontroller_data_id', $this->item->id)) {
+                        $order->forceDelete();
+                    }
+                    if ($datum = MicrocontrollerData::find($this->item->id)) {
+                        $datum->status = MicrocontrollerData::PENDING_TIMESTAMP;
+                        $datum->forceDelete();
+                    }
                 }
             }
         }
