@@ -26,6 +26,10 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/politicas-enertec', function () {
+    return view('politicas-enertec.index');
+});
 Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 

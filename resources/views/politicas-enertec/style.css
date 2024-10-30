@@ -1,0 +1,33 @@
+.content {
+  /* margin: 50px; */
+  max-width: 1460px;
+  margin: 0 auto 48px;
+  padding: 0 20px;
+  font-family: 'Roboto', sans-serif;
+  /* color: #2F5496; */
+}
+
+.logo-app {
+  display: flex;
+  max-width: 300px;
+  min-width: 150px;
+  margin: 0 auto;
+}
+
+.logo-corpo {
+  max-width: 400px;
+  min-width: 100px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.rule-description {
+  text-align: justify;
+}
+
+.rule-description strong {
+  text-decoration: underline;
+}
