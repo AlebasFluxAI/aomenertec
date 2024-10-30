@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+      <link rel="stylesheet" href="{{ asset('images/style.css') }}">
     <title>Politicas de ENERTEC AOM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +14,7 @@
   </head>
   <body>
     <div class="content">
-      <img class="logo-app" src="images/logo.png" alt="" />
+      <img class="logo-app" src="{{ asset('images/logo.png') }}" alt="" />
 
       <h1 class="title">POLÍTICA DE PRIVACIDAD DE DATOS</h1>
 
