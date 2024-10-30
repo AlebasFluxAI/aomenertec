@@ -10,6 +10,7 @@ use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\EquipmentType;
 use App\Models\V1\Api\EventLog;
+use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
 use App\Models\V1\Stratum;
 use App\Models\V1\SubsistenceConsumption;
@@ -151,7 +152,7 @@ class ClientRepositoryImpl implements ClientRepository
             $end = new Carbon($request->query('fecha_fin'));
         }
 
-        return MicrocontrollerData::where('client_id', $id)
+        return HourlyMicrocontrollerData::where('client_id', $id)
             ->whereBetween("source_timestamp", [$start->format('Y-m-d H:i:s'), $end->format('Y-m-d H:i:s')])
             ->orderBy('source_timestamp', 'desc')->paginate();
     }
