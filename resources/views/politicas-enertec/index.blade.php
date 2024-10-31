@@ -13,7 +13,7 @@
     />
   </head>
   <body>
-    <div class="content">
+    <div class="content1">
       <img class="logo-app" src="{{ asset('images/logo.png') }}" alt="" />
 
       <h1 class="title">POLÍTICA DE PRIVACIDAD DE DATOS</h1>
