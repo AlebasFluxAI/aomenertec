@@ -1,6 +1,6 @@
 <div class=" mt-{{ $mt??0 }} mb-{{ $mb??0 }} flex justify-center">
     <br>
-    <nav class="navbar navbar-expand-lg" style="margin-left: 80%">
+    <nav class="navbar navbar-expand-lg" style="margin-left: 70%">
         <ul class="navbar-nav">
             @foreach($nav_options as $option)
 
