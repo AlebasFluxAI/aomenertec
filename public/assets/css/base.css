@@ -590,7 +590,6 @@ primary
     min-height: 350px;
     height: auto;
     align-items: center;
-    justify-items: center;
     align-content: center;
     justify-content: center;
     border-top: 3px solid var(--style_primary);

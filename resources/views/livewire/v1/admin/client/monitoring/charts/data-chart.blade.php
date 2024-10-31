@@ -179,6 +179,7 @@
                     id: 'line_chart',
                     type: @js($chart_type),
                     height: '450px',
+                    width: '100%',
                     animations: {
                         enabled: true,
                         easing: 'easeinout',
