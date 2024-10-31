@@ -151,21 +151,37 @@ class AverageHourlyConsumptionJob implements ShouldQueue
                                 if ($i == 0) {
                                     $first_raw_json = json_decode($datum->raw_json, true);
                                     $average_accumulated_real_consumption = ($last_raw_json['import_wh'] - $first_raw_json['import_wh']) / count($data);
+                                    if ($average_accumulated_real_consumption<0){$average_accumulated_real_consumption = 0;}
                                     $average_accumulated_real_consumption_ph1 = ($last_raw_json['ph1_import_kwh'] - $first_raw_json['ph1_import_kwh']) / count($data);
+                                    if ($average_accumulated_real_consumption_ph1<0){$average_accumulated_real_consumption_ph1 = 0;}
                                     $average_accumulated_real_consumption_ph2 = ($last_raw_json['ph2_import_kwh'] - $first_raw_json['ph2_import_kwh']) / count($data);
+                                    if ($average_accumulated_real_consumption_ph2<0){$average_accumulated_real_consumption_ph2 = 0;}
                                     $average_accumulated_real_consumption_ph3 = ($last_raw_json['ph3_import_kwh'] - $first_raw_json['ph3_import_kwh']) / count($data);
+                                    if ($average_accumulated_real_consumption_ph3<0){$average_accumulated_real_consumption_ph3 = 0;}
                                     $average_accumulated_reactive_consumption = ($last_raw_json['import_VArh'] - $first_raw_json['import_VArh']) / count($data);
+                                    if ($average_accumulated_reactive_consumption<0){$average_accumulated_reactive_consumption = 0;}
                                     $average_accumulated_reactive_consumption_ph1 = ($last_raw_json['ph1_import_kvarh'] - $first_raw_json['ph1_import_kvarh']) / count($data);
+                                    if ($average_accumulated_reactive_consumption_ph1<0){$average_accumulated_reactive_consumption_ph1 = 0;}
                                     $average_accumulated_reactive_consumption_ph2 = ($last_raw_json['ph2_import_kvarh'] - $first_raw_json['ph2_import_kvarh']) / count($data);
+                                    if ($average_accumulated_reactive_consumption_ph2<0){$average_accumulated_reactive_consumption_ph2 = 0;}
                                     $average_accumulated_reactive_consumption_ph3 = ($last_raw_json['ph3_import_kvarh'] - $first_raw_json['ph3_import_kvarh']) / count($data);
+                                    if ($average_accumulated_reactive_consumption_ph3<0){$average_accumulated_reactive_consumption_ph3 = 0;}
                                     $average_accumulated_reactive_inductive_consumption = ($last_raw_json['varLh_acumm'] - $first_raw_json['varLh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_inductive_consumption<0){$average_accumulated_reactive_inductive_consumption = 0;}
                                     $average_accumulated_reactive_inductive_consumption_ph1 = ($last_raw_json['ph1_varLh_acumm'] - $first_raw_json['ph1_varLh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_inductive_consumption_ph1<0){$average_accumulated_reactive_inductive_consumption_ph1 = 0;}
                                     $average_accumulated_reactive_inductive_consumption_ph2 = ($last_raw_json['ph2_varLh_acumm'] - $first_raw_json['ph2_varLh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_inductive_consumption_ph2<0){$average_accumulated_reactive_inductive_consumption_ph2 = 0;}
                                     $average_accumulated_reactive_inductive_consumption_ph3 = ($last_raw_json['ph3_varLh_acumm'] - $first_raw_json['ph3_varLh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_inductive_consumption_ph3<0){$average_accumulated_reactive_inductive_consumption_ph3 = 0;}
                                     $average_accumulated_reactive_capacitive_consumption = ($last_raw_json['varCh_acumm'] - $first_raw_json['varCh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_capacitive_consumption<0){$average_accumulated_reactive_capacitive_consumption = 0;}
                                     $average_accumulated_reactive_capacitive_consumption_ph1 = ($last_raw_json['ph1_varCh_acumm'] - $first_raw_json['ph1_varCh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_capacitive_consumption_ph1<0){$average_accumulated_reactive_capacitive_consumption_ph1 = 0;}
                                     $average_accumulated_reactive_capacitive_consumption_ph2 = ($last_raw_json['ph2_varCh_acumm'] - $first_raw_json['ph2_varCh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_capacitive_consumption_ph2<0){$average_accumulated_reactive_capacitive_consumption_ph2 = 0;}
                                     $average_accumulated_reactive_capacitive_consumption_ph3 = ($last_raw_json['ph3_varCh_acumm'] - $first_raw_json['ph3_varCh_acumm']) / count($data);
+                                    if ($average_accumulated_reactive_capacitive_consumption_ph3<0){$average_accumulated_reactive_capacitive_consumption_ph3 = 0;}
                                 } else {
                                     $raw_json = json_decode($datum->raw_json, true);
                                     $raw_json['import_wh'] = $first_raw_json['import_wh'] + ($average_accumulated_real_consumption * $i);
