@@ -9,6 +9,7 @@ use Closure;
 
 class ValidateSerialRule implements Rule
 {
+    protected $errorMessage;
     /**
      * Determina si la validación pasa.
      */
@@ -26,11 +27,19 @@ class ValidateSerialRule implements Rule
                     ->where('serial', $value)->first();
 
                 if (!$equipment) {
+                    $this->errorMessage = "El serial proporcionado no existe.";
                     return false;
                 }
-            } elseif (!$equipment->clients()->exists()) {
+            }
+
+            // Validar si el equipo está asignado a un cliente.
+            if ($equipment->clients()->first() == null) {
+                $this->errorMessage = "El serial proporcionado no está asignado a ningún cliente.";
                 return false;
             }
+        } else {
+            $this->errorMessage = "No se encontró un tipo de equipo válido.";
+            return false;
         }
 
         return true;
@@ -41,6 +50,6 @@ class ValidateSerialRule implements Rule
      */
     public function message(): string
     {
-        return "El serial proporcionado no es válido o no está asignado a ningún cliente.";
+        return $this->errorMessage ?? "El serial proporcionado no es válido.";
     }
 }

@@ -115,6 +115,14 @@ class Equipment extends Model
     {
         if ($this->status == self::STATUS_DISREPAIR) {
             return false;
+
+
+
+
+
+
+
+
         }
 
         return !$this->has_client;
