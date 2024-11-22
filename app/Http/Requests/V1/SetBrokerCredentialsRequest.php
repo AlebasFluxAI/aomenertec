@@ -14,7 +14,7 @@ class SetBrokerCredentialsRequest extends FormRequest
      */
     protected function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**

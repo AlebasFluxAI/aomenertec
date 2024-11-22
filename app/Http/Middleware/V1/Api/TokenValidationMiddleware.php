@@ -23,7 +23,6 @@ class TokenValidationMiddleware
         if (!$apiKey or !$apiKey->isValid()) {
             abort(401, "Error al validar api key de cliente");
         }
-
         return $next($request);
     }
 }

@@ -14,7 +14,7 @@ class SetWifiCredentialsRequest extends FormRequest
      */
     protected function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
