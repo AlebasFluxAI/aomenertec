@@ -139,7 +139,8 @@ class DetailClientService extends Singleton
     {
         Equipment::find($equipmentId)->delete();
         $component->emitTo('livewire-toast', 'show', "Equipo {$equipmentId} eliminado exitosamente");
-        $component->reset();
+        //$component->reset();
+        $component->client = Client::find($component->client->id);
     }
 
     public function conditionalRemoveEquipmentAdmin(Component $component, $id)
