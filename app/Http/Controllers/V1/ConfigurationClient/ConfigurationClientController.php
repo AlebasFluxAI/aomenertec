@@ -4,10 +4,26 @@ namespace App\Http\Controllers\V1\ConfigurationClient;
 
 
 use App\Http\Controllers\V1\Controller;
+use App\Http\Requests\V1\OnOffRealTimeRequest;
+use App\Http\Requests\V1\OtaUpdateRequest;
+use App\Http\Requests\V1\SetAlertLimitsRequest;
+use App\Http\Requests\V1\SetAlertTimeRequest;
+use App\Http\Requests\V1\SetBillingDayRequest;
+use App\Http\Requests\V1\SetBrokerCredentialsRequest;
+use App\Http\Requests\V1\SetControlLimitsRequest;
+use App\Http\Requests\V1\SetControlStatusRequest;
+use App\Http\Requests\V1\SetPasswordMeterRequest;
+use App\Http\Requests\V1\SetSamplingTimeRequest;
+use App\Http\Requests\V1\SetStatusCoilRequest;
+use App\Http\Requests\V1\SetStatusServiceCoilRequest;
+use App\Http\Requests\V1\SetTypeSensorRequest;
+use App\Http\Requests\V1\SetWifiCredentialsRequest;
+use App\Http\Requests\V1\ValidateSerialRequest;
 use App\Http\Services\V1\ConfigurationClient\ConfigurationClientService;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\ClientAlert;
 use App\ModulesAux\MQTT;
+use App\Rules\ValidateSerialRule;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,91 +35,99 @@ class ConfigurationClientController extends Controller
     {
         $this->configurationClientService = $configurationClientService;
     }
-    public function setAlertLimitsForSerial(Request $request): JsonResource
+
+    public function setAlertLimitsForSerial(SetAlertLimitsRequest $request): JsonResource
     {
         return $this->configurationClientService->setAlertLimitsForSerial($request);
     }
-    public function setControlLimitsForSerial(Request $request): JsonResource
+
+    public function setControlLimitsForSerial(SetControlLimitsRequest $request): JsonResource
     {
         return $this->configurationClientService->setControlLimitsForSerial($request);
     }
-    public function setControlStatusForSerial(Request $request): JsonResource
+
+    public function setControlStatusForSerial(SetControlStatusRequest $request): JsonResource
     {
         return $this->configurationClientService->setControlStatusForSerial($request);
     }
-    public function setAlertTimeForSerial(Request $request): JsonResource
+
+    public function setAlertTimeForSerial(SetAlertTimeRequest $request): JsonResource
     {
         return $this->configurationClientService->setAlertTimeForSerial($request);
     }
-    public function setSamplingTimeForSerial(Request $request): JsonResource
+
+    public function setSamplingTimeForSerial(SetSamplingTimeRequest $request): JsonResource
     {
         return $this->configurationClientService->setSamplingTimeForSerial($request);
     }
-    public function setWifiCredentialsForSerial(Request $request): JsonResource
+
+    public function setWifiCredentialsForSerial(SetWifiCredentialsRequest $request): JsonResource
     {
         return $this->configurationClientService->setWifiCredentialsForSerial($request);
     }
-    public function setBrokerCredentialsForSerial(Request $request): JsonResource
+
+    public function setBrokerCredentialsForSerial(SetBrokerCredentialsRequest $request): JsonResource
     {
         return $this->configurationClientService->setBrokerCredentialsForSerial($request);
     }
-    public function setDateForSerial(Request $request): JsonResource
+
+    public function setDateForSerial(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->setDateForSerial($request);
     }
-    public function getDateForSerial(Request $request): JsonResource
+    public function getDateForSerial(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->getDateForSerial($request);
     }
-    public function setStatusCoilForSerial(Request $request): JsonResource
+    public function setStatusCoilForSerial(SetStatusCoilRequest $request): JsonResource
     {
         return $this->configurationClientService->setStatusCoilForSerial($request);
     }
-    public function getStatusCoilForSerial(Request $request): JsonResource
+    public function getStatusCoilForSerial(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->getStatusCoilForSerial($request);
     }
-    public function setTypeSensorForSerial(Request $request): JsonResource
+    public function setTypeSensorForSerial(SetTypeSensorRequest $request): JsonResource
     {
         return $this->configurationClientService->setTypeSensorForSerial($request);
     }
-    public function getTypeSensorForSerial(Request $request): JsonResource
+    public function getTypeSensorForSerial(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->getTypeSensorForSerial($request);
     }
-    public function getStatusSensorForSerial(Request $request): JsonResource
+    public function getStatusSensorForSerial(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->getStatusSensorForSerial($request);
     }
-    public function getStatusConnectionForSerial(Request $request): JsonResource
+    public function getStatusConnectionForSerial(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->getStatusConnectionForSerial($request);
     }
-    public function getCurrentReadingsForSerial(Request $request): JsonResource
+    public function getCurrentReadingsForSerial(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->getCurrentReadingsForSerial($request);
     }
-    public function OnOffRealTimeForSerial(Request $request): JsonResource
+    public function OnOffRealTimeForSerial(OnOffRealTimeRequest $request): JsonResource
     {
         return $this->configurationClientService->OnOffRealTimeForSerial($request);
     }
-    public function otaUpdate(Request $request): JsonResource
+    public function otaUpdate(OtaUpdateRequest $request): JsonResource
     {
         return $this->configurationClientService->otaUpdate($request);
     }
-    public function setBillingDay(Request $request): JsonResource
+    public function setBillingDay(SetBillingDayRequest $request): JsonResource
     {
         return $this->configurationClientService->setBillingDay($request);
     }
-    public function setStatusServiceCoil(Request $request): JsonResource
+    public function setStatusServiceCoil(SetStatusServiceCoilRequest $request): JsonResource
     {
         return $this->configurationClientService->setStatusServiceCoil($request);
     }
-    public function setPasswordMeter(Request $request): JsonResource
+    public function setPasswordMeter(SetPasswordMeterRequest $request): JsonResource
     {
         return $this->configurationClientService->setPasswordMeter($request);
     }
-    public function getPasswordMeter(Request $request): JsonResource
+    public function getPasswordMeter(ValidateSerialRequest $request): JsonResource
     {
         return $this->configurationClientService->getPasswordMeter($request);
     }
