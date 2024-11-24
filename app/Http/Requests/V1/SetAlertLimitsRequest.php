@@ -12,7 +12,7 @@ class SetAlertLimitsRequest extends FormRequest
      *
      * @return bool
      */
-    protected function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,7 +22,7 @@ class SetAlertLimitsRequest extends FormRequest
      *
      * @return array
      */
-    protected function rules(): array
+    public function rules(): array
     {
         $rules = [
             'serial' => ['required', new ValidateSerialRule()],

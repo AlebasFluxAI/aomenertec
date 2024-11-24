@@ -12,7 +12,7 @@ class SetStatusCoilRequest extends FormRequest
      *
      * @return bool
      */
-    protected function authorize(): bool
+    public function authorize(): bool
     {
         return true;
     }
@@ -22,7 +22,7 @@ class SetStatusCoilRequest extends FormRequest
      *
      * @return array
      */
-    protected function rules(): array
+    public function rules(): array
     {
         return [
             'serial' => ['required', new ValidateSerialRule()],
