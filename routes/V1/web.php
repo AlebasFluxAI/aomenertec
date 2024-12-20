@@ -30,6 +30,10 @@ use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 Route::get('/politicas-enertec', function () {
     return view('politicas-enertec.index');
 });
+
+Route::get('/balance-example', function () {
+    return view('partials.balance-example');
+});
 Route::domain("{subdomain}.enerteclatam.com")->group(function () {
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 
