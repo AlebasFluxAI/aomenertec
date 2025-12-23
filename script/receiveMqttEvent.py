@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 import paho.mqtt.client
 import requests
+import os
+from dotenv import load_dotenv
 
+# Cargar variables de entorno
+load_dotenv('/var/www/html/.env')
 
 topic_regular = "mc/data"
 topic_realtime= "mc/real_time"
@@ -18,18 +22,20 @@ def on_message(client, userdata, message):
         pass
 
 def mqttRegularMessageHandler(message):
-   requests.post("http://localhost/api/v1/mqtt_input", {"message": message.payload})
+   api_url = os.getenv('LARAVEL_API_URL', 'http://localhost')
+   requests.post(f"{api_url}/api/v1/mqtt_input", {"message": message.payload})
 
 def mqttRealTimeMessageHandler(message):
-    requests.post("http://localhost/api/v1/mqtt_input/real-time", data={"message": message.payload})
+    api_url = os.getenv('LARAVEL_API_URL', 'http://localhost')
+    requests.post(f"{api_url}/api/v1/mqtt_input/real-time", data={"message": message.payload})
 
 
 
 def main():
-    host = 'localhost'
-    port = 1883
-    username = "enertec"
-    password = "enertec2020**"
+    host = os.getenv('MQTT_HOST', 'mosquitto')
+    port = int(os.getenv('MQTT_PORT', '1883'))
+    username = os.getenv('MQTT_AUTH_USERNAME', 'enertec')
+    password = os.getenv('MQTT_AUTH_PASSWORD', 'enertec2020**')
     client = paho.mqtt.client.Client("main_receiver", clean_session=False)
     client.subscribe([(topic_regular,0),(topic_realtime,0)])
     client.on_message = on_message

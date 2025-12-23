@@ -1,77 +1,231 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Proyecto Enertec - Sistema de Gestión de Energía
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
-Updated
+Sistema de gestión y monitoreo de energía desarrollado con Laravel 8.75, que integra comunicación MQTT para dispositivos IoT, WebSockets en tiempo real y gestión avanzada de usuarios.
 
-## About Laravelss
+## 🚀 Inicio Rápido
 
-Laravels is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and
-creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in
-many web projects, such as:
+Este proyecto está completamente dockerizado. Para comenzar:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache)
-  storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+```bash
+# Configuración inicial (primera vez)
+make setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+# Iniciar servicios
+make up
 
-## LearninXg Laravel
+# Ver estado
+make status
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all
-modern web application frameworks, making it a breeze to get started with the framework.
+**📖 Para instrucciones detalladas de Docker, consulta [README-DOCKER.md](README-DOCKER.md)**
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video
-tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging
-into our comprehensive video library.
+## 🏗️ Stack Tecnológico
 
-## Laravel Sponsors
+- **Framework**: Laravel 8.75
+- **Frontend**: Livewire 2.5 + Jetstream + TailwindCSS
+- **Base de Datos**: PostgreSQL 14
+- **Cache/Broadcasting**: Redis
+- **WebSockets**: Laravel Echo Server
+- **IoT**: Mosquitto MQTT Broker
+- **Contenedores**: Docker + Laravel Sail
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in
-becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## 📦 Servicios Incluidos
 
-### Premium Partners
+| Servicio | Versión | Puerto | Descripción |
+|----------|---------|--------|-------------|
+| **PHP** | 8.1 | 80 | Aplicación Laravel con Livewire |
+| **PostgreSQL** | 14 | 5432 | Base de datos principal |
+| **Redis** | Alpine | 6379 | Cache y Broadcasting |
+| **Mosquitto** | 2.0 | 1883 | MQTT Broker para IoT |
+| **Echo Server** | Latest | 8443 | WebSockets (HTTPS) |
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-- **[Romega Software](https://romegasoftware.com)**
+## 🎯 Características Principales
 
-## Contributing
+### Sistema de Usuarios
+- Autenticación con Laravel Jetstream
+- Roles y permisos
+- Gestión de equipos (Teams)
+- Perfiles de usuario personalizables
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in
-the [Laravel documentation](https://laravel.com/docs/contributions).
+### Comunicación IoT
+- Integración MQTT para dispositivos
+- Scripts Python para procesamiento de eventos
+- Monitoreo en tiempo real
+- Procesamiento de datos de sensores
 
-## Code of Conduct
+### Sistema V1
+- Gestión de clientes y equipos
+- Monitoreo de consumo energético
+- Dashboard con métricas en tiempo real
+- Reportes y analíticas
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by
-the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📋 Comandos Disponibles (Makefile)
 
-## Security Vulnerabilities
+### Comandos de Docker
+```bash
+make build         # Build rápido (versión simple)
+make build-full    # Build completo con MQTT y Echo Server
+make up            # Iniciar servicios
+make down          # Detener servicios
+make restart       # Reiniciar servicios
+make logs          # Ver logs de todos los servicios
+make ps            # Ver estado de contenedores
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell
-via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Configuración y Base de Datos
+```bash
+make setup         # Configuración inicial completa
+make install       # Instalar dependencias (Composer + NPM)
+make migrate       # Ejecutar migraciones
+make migrate-fresh # Resetear base de datos
+make migrate-seed  # Resetear con seeders
+make seed          # Ejecutar seeders
+```
 
-## License
+### Desarrollo
+```bash
+make dev           # Compilar assets en desarrollo
+make watch         # Compilar y observar cambios
+make prod          # Compilar assets para producción
+make cache-clear   # Limpiar cachés
+make optimize      # Optimizar aplicación
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Utilidades
+```bash
+make shell         # Shell del contenedor
+make tinker        # Laravel Tinker
+make test          # Ejecutar tests
+make status        # Ver estado completo
+make urls          # Mostrar URLs de acceso
+make help          # Ver todos los comandos disponibles
+```
+
+## 🌐 URLs de Acceso
+
+- **Aplicación Web**: http://localhost
+- **Laravel Echo Server**: https://localhost:8443
+- **PostgreSQL**: localhost:5432
+- **Redis**: localhost:6379
+- **MQTT Broker**: localhost:1883
+
+## 📁 Estructura del Proyecto
+
+```
+aomenertec/
+├── app/
+│   ├── Actions/           # Jetstream actions
+│   ├── Http/
+│   │   ├── Controllers/   # Controladores
+│   │   └── Livewire/      # Componentes Livewire
+│   ├── Models/            # Modelos Eloquent
+│   └── V1/                # Sistema V1 (namespace principal)
+│       ├── Config/
+│       ├── Models/
+│       ├── Repositories/
+│       └── Services/
+├── database/
+│   ├── migrations/        # Migraciones
+│   └── seeders/          # Seeders
+├── docker/               # Configuración Docker
+│   ├── Dockerfile        # Dockerfile simple
+│   ├── Dockerfile.optimized # Dockerfile completo
+│   ├── init-scripts/     # Scripts de inicialización
+│   ├── mosquitto/        # Config MQTT
+│   ├── ssl/              # Certificados SSL
+│   └── supervisor/       # Configuración Supervisor
+├── resources/
+│   ├── views/            # Vistas Blade
+│   └── js/               # JavaScript/Vue
+├── routes/
+│   ├── web.php           # Rutas web
+│   └── api.php           # Rutas API
+├── script/               # Scripts Python MQTT
+│   ├── receiveMqttEvent.py
+│   ├── receiveMqttRealTimeEvent.py
+│   └── requirements.txt
+├── Makefile              # Comandos simplificados
+├── docker-compose.yml    # Orquestación de servicios
+└── laravel-echo-server.json # Config Echo Server
+```
+
+## 🔧 Configuración Adicional
+
+### MQTT Broker
+Para configurar la contraseña de Mosquitto:
+
+```bash
+make mqtt-password
+# Usuario: enertec
+# Contraseña: enertec2020**
+```
+
+### Supervisor
+Ver estado de procesos en background:
+
+```bash
+make supervisor-status
+make supervisor-restart
+```
+
+### Hot Reload
+Los cambios en código PHP/Blade se reflejan automáticamente. Para assets:
+
+```bash
+make watch
+```
+
+## 🧪 Testing
+
+```bash
+make test              # Ejecutar todos los tests
+make test-coverage     # Tests con cobertura
+```
+
+## 🐛 Solución de Problemas
+
+### Reiniciar completamente
+```bash
+make clean-all  # ⚠️ Elimina volúmenes (base de datos)
+make setup      # Configurar de nuevo
+```
+
+### Ver logs específicos
+```bash
+make logs-app      # Laravel
+make logs-db       # PostgreSQL
+make logs-mqtt     # Mosquitto
+```
+
+### Limpiar cachés
+```bash
+make cache-clear
+make clean
+```
+
+## 📚 Documentación Adicional
+
+- **[README-DOCKER.md](README-DOCKER.md)** - Guía completa de Docker
+- **[CLAUDE.md](CLAUDE.md)** - Documentación técnica del proyecto
+- **Makefile** - Ejecuta `make help` para ver todos los comandos
+
+## 🔒 Seguridad
+
+- Nunca commitear archivos `.env` o `credentials.json`
+- Cambiar las contraseñas por defecto en producción
+- Los certificados SSL en `docker/ssl` son auto-firmados (solo desarrollo)
+
+## 🤝 Contribución
+
+Este proyecto usa:
+- **PSR-4** para autoloading
+- **Laravel best practices**
+- **Conventional commits** para mensajes de commit
+
+## 📄 Licencia
+
+Desarrollado por **IMERGI**
+
+---
+
+**Nota**: Este proyecto utiliza Laravel Sail para desarrollo. Todos los comandos están disponibles a través del Makefile para facilitar su uso.

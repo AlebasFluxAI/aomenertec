@@ -1,0 +1,67 @@
+# Dockerfile Optimizado para build completo con MQTT y Echo Server
+# Usa la imagen oficial de Sail + optimizaciones de caché
+
+FROM laravelsail/php81-composer:latest
+
+LABEL maintainer="IMERGI"
+
+USER root
+WORKDIR /var/www/html
+
+# OPTIMIZACIÓN 1: Instalar Node.js y dependencias del sistema en UNA SOLA capa con caché
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y --no-install-recommends \
+    nodejs \
+    python3 \
+    python3-pip \
+    supervisor \
+    libpq-dev \
+    netcat-openbsd \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# OPTIMIZACIÓN 1.5: Instalar y habilitar extensiones PHP para PostgreSQL
+RUN docker-php-ext-install pdo_pgsql pgsql && \
+    docker-php-ext-enable pdo_pgsql pgsql
+
+# OPTIMIZACIÓN 1.6: Configurar e instalar extensión GD para manejo de imágenes
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install gd && \
+    docker-php-ext-enable gd
+
+# Crear usuario y grupo sail
+RUN groupadd --force -g 1000 sail && \
+    useradd -ms /bin/bash --no-user-group -g 1000 -u 1337 sail
+
+# OPTIMIZACIÓN 2: Instalar Laravel Echo Server con caché de npm
+RUN --mount=type=cache,target=/root/.npm,sharing=locked \
+    npm install -g laravel-echo-server
+
+# OPTIMIZACIÓN 3: Instalar dependencias Python con caché de pip
+COPY script/requirements.txt /tmp/requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip,sharing=locked \
+    pip3 install --no-cache-dir -r /tmp/requirements.txt && \
+    rm /tmp/requirements.txt
+
+# Copiar scripts Python MQTT
+COPY script/receiveMqttEvent.py /usr/local/bin/receiveMqttEvent.py
+COPY script/receiveMqttRealTimeEvent.py /usr/local/bin/receiveMqttRealTimeEvent.py
+RUN chmod +x /usr/local/bin/*.py
+
+# Copiar configuración de Supervisor
+COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN mkdir -p /var/log/supervisor
+
+# Copiar script de inicio
+COPY docker/init-scripts/init-db.sh /usr/local/bin/start-container
+RUN chmod +x /usr/local/bin/start-container
+
+# Exponer puertos
+EXPOSE 8000 8443
+
+# Usar el script de inicio que arranca Supervisor
+ENTRYPOINT ["start-container"]

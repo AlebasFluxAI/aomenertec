@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan sail:install:*)",
+      "Bash(composer install:*)",
+      "Bash(openssl req:*)",
+      "Bash(chmod:*)",
+      "Bash(make build:*)",
+      "Bash(make:*)",
+      "Bash(./vendor/bin/sail logs:*)",
+      "Bash(curl:*)",
+      "Bash(./vendor/bin/sail exec:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
