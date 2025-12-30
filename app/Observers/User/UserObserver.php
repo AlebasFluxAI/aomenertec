@@ -48,6 +48,9 @@ class UserObserver
                 $user->assignRole(Admin::getRole());
         }
 
-        $user->notifyNow(new UserCreatedNotification(Route::input("subdomain") ?? "aom"));
+        // Solo enviar notificación si hay una ruta disponible (no desde CLI)
+        if (Route::current()) {
+            $user->notifyNow(new UserCreatedNotification(Route::input("subdomain") ?? "aom"));
+        }
     }
 }
