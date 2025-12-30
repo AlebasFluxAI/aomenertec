@@ -18,9 +18,9 @@ else
     echo "✅ APP_KEY ya está configurado"
 fi
 
-# Ejecutar migraciones
-echo "📦 Ejecutando migraciones de base de datos..."
-php artisan migrate --force
+# Ejecutar migraciones (comentado para configuración inicial manual)
+# echo "📦 Ejecutando migraciones de base de datos..."
+# php artisan migrate --force
 
 # Ejecutar seeders (comentado por defecto)
 # echo "🌱 Ejecutando seeders..."
