@@ -13,12 +13,15 @@ class CreateSeedersTable extends Migration
      */
     public function up()
     {
-        Schema::create('seeders', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        // Verificar si la tabla ya existe antes de crearla
+        if (!Schema::hasTable('seeders')) {
+            Schema::create('seeders', function (Blueprint $table) {
+                $table->id();
+                $table->string('name')->unique();
+                $table->timestamps();
+                $table->softDeletes();
+            });
+        }
     }
 
     /**
