@@ -38,13 +38,29 @@ class DatabaseSeeder extends Seeder
 
     public function call($class, $silent = false, $parameters = [])
     {
-        if (SeederModel::where('name', $class)->exists()) {
-            return $this;
+        // Verificar si el seeder ya fue ejecutado (solo si la tabla existe)
+        try {
+            if (\Schema::hasTable('seeders') && SeederModel::where('name', $class)->exists()) {
+                return $this;
+            }
+        } catch (\Exception $e) {
+            // Si hay error verificando, continuar sin registrar
         }
 
         $return = parent::call($class, $silent = false);
 
-        SeederModel::create(['name' => $class]);
+        // Registrar el seeder ejecutado (solo si la tabla existe y sin timestamps automáticos)
+        try {
+            if (\Schema::hasTable('seeders')) {
+                \DB::table('seeders')->insert([
+                    'name' => is_array($class) ? $class[0] : $class,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Silenciar errores al registrar seeders
+        }
 
         return $return;
     }
