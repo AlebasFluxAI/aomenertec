@@ -66,8 +66,8 @@ setup: ## Configuración inicial completa del proyecto
 		echo "📋 Copiando .env.example a .env..."; \
 		cp .env.example .env; \
 	fi
-	@echo "🔨 Construyendo imágenes Docker..."
-	@$(SAIL) build
+	@echo "🔨 Construyendo imágenes Docker (versión completa con Node.js)..."
+	@$(SAIL) build --no-cache
 	@echo "🚀 Iniciando servicios..."
 	@$(SAIL) up -d
 	@echo "⏳ Esperando que los servicios estén listos..."

@@ -15,11 +15,10 @@ use PhpMqtt\Client\Exceptions\MqttClientException;
 
 class DataChart extends Component
 {
-    public $client;
+    public $client_id;
     public $variables;
     public $variables_selected;
     public $data_frame;
-    public $data_chart;
     public $variable_chart_id;
     public $chart_type;
     public $time_id;
@@ -32,10 +31,19 @@ class DataChart extends Component
     public $select_data;
     protected $listeners = ['changeDateRange', 'selectHistory', 'setPointPhasor'];
 
+    // No serializar data_chart entre requests - solo calcular cuando se necesita
+    protected $data_chart;
+
+    // Propiedad computada para evitar serialización del modelo completo
+    public function getClientProperty()
+    {
+        return Client::find($this->client_id);
+    }
+
     public function mount(Client $client, $variables, $data_frame, $data_chart, $time)
     {
         $this->select_data = false;
-        $this->client = $client;
+        $this->client_id = $client->id;
         $this->variables = $variables;
         $this->data_frame = $data_frame;
         $this->variable_chart_id = 1;
@@ -46,7 +54,7 @@ class DataChart extends Component
         $this->time_id = $time;
         $this->series = [];
         $this->x_axis = [];
-        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
+        $this->data_chart = $this->getClientProperty()->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
         if (count($this->data_chart) > 0) {
             if ($time == 1 or $time == 2) {
                 $this->end = $this->data_chart->first()->source_timestamp;

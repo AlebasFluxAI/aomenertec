@@ -8,17 +8,22 @@ LABEL maintainer="IMERGI"
 USER root
 WORKDIR /var/www/html
 
-# OPTIMIZACIÓN 1: Instalar todo en UNA SOLA capa para aprovechar caché de Docker
-# Solo instalamos lo que NO viene en la imagen de Sail
+# OPTIMIZACIÓN 1: Instalar Node.js y dependencias del sistema en UNA SOLA capa con caché
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && apt-get install -y --no-install-recommends \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y --no-install-recommends \
+    nodejs \
     python3-pip \
     supervisor \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# OPTIMIZACIÓN 2: Usar caché de npm para laravel-echo-server
+# Crear usuario y grupo sail (requerido por Laravel Sail)
+RUN groupadd --force -g 1000 sail && \
+    useradd -ms /bin/bash --no-user-group -g 1000 -u 1337 sail
+
+# OPTIMIZACIÓN 2: Instalar Laravel Echo Server con caché de npm
 RUN --mount=type=cache,target=/root/.npm \
     npm install -g laravel-echo-server
 

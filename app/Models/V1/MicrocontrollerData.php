@@ -380,16 +380,17 @@ class MicrocontrollerData extends Model
                 "client_id" => $client->id,
                 "ssid" => "",
                 "wifi_password" => "",
-                "mqtt_host" => "3.12.98.178",
-                "mqtt_port" => "1883",
-                "mqtt_user" => "enertec",
-                "mqtt_password" => "enertec2020**",
-                "real_time_latency" => 30,
+                "mqtt_host" => env('DEFAULT_MQTT_HOST', '3.12.98.178'),
+                "mqtt_port" => env('DEFAULT_MQTT_PORT', '1883'),
+                "mqtt_user" => env('DEFAULT_MQTT_USER', 'enertec'),
+                "mqtt_password" => env('DEFAULT_MQTT_PASSWORD', 'enertec2020**'),
+                "real_time_latency" => env('DEFAULT_REAL_TIME_LATENCY', 30),
                 "active_real_time" => false,
-                "storage_latency" => 1,
+                "storage_latency" => env('DEFAULT_STORAGE_LATENCY', 1),
                 "storage_type_latency" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY,
                 "frame_type" => ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES,
                 "digital_outputs" => 0,
+                "billing_day" => env('DEFAULT_BILLING_DAY', 1),
 
             ]);
         }

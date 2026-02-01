@@ -1,0 +1,128 @@
+📊 Arquitectura del Sistema Enertec
+
+  1. Acceso al Panel de Administración
+
+  Credenciales de acceso:
+  - URL: http://localhost
+  - Email: sadminprueba@enerteclatam.com
+  - Contraseña: 111111111 (el número de identificación del usuario)
+
+  Nota importante: El sistema tiene un UserObserver que sobrescribe la contraseña al crear usuarios y la establece como el
+  hash del número de identificación. Por defecto, la contraseña siempre es el número de identificación del usuario.
+
+  2. Sistema MQTT - Arquitectura de Comunicación
+
+  El broker MQTT Mosquitto está funcionando correctamente en el puerto 1883. Puedes verificarlo de varias formas:
+
+  Verificación del Estado MQTT:
+
+  # Ver estado del contenedor Mosquitto
+  ./vendor/bin/sail ps
+
+  # Ver logs en tiempo real del broker MQTT
+  ./vendor/bin/sail logs mosquitto -f
+
+  # Ver últimas conexiones
+  ./vendor/bin/sail logs mosquitto --tail 20
+
+  Los logs muestran que el cliente Python main_receiver se está conectando constantemente al broker, lo cual es correcto y
+  esperado.
+
+  Flujo de Datos MQTT:
+
+  Dispositivos IoT (Medidores)
+      ↓
+  Mosquitto MQTT Broker (puerto 1883)
+      ↓
+  Scripts Python (receiveMqttEvent.py y receiveMqttRealTimeEvent.py)
+      ↓
+  Laravel API Endpoints (/api/v1/mqtt_input y /api/v1/mqtt_input/real-time)
+      ↓
+  Procesamiento en Laravel + Broadcasting via Laravel Echo Server
+      ↓
+  Interfaz Web (Tiempo Real via WebSockets)
+
+  3. Servicios en Ejecución
+
+  El contenedor de Laravel ejecuta automáticamente mediante Supervisor:
+
+  1. Laravel Echo Server (Puerto 8443) - WebSockets para actualizaciones en tiempo real
+  2. receiveMqttEvent.py - Escucha topic mc/data (datos regulares de medidores)
+  3. receiveMqttRealTimeEvent.py - Escucha topic mc/real_time (datos en tiempo real)
+
+  Verificar que los scripts Python estén corriendo:
+
+  # Ver todos los procesos supervisados
+  docker exec aomenertec-laravel.test-1 ps aux | grep python
+
+  # Ver logs de los scripts MQTT
+  ./vendor/bin/sail logs laravel.test | grep -i mqtt
+
+  4. Cómo Monitorear MQTT desde el Admin
+
+  Desde el panel de administración puedes:
+
+  - Usuarios → Gestionar usuarios del sistema
+  - Clientes → Ver clientes con medidores activos
+  - Equipos → Ver equipos/medidores conectados
+  - Configuración → Ajustes del sistema
+
+  Para ver datos en tiempo real de MQTT, necesitarías navegar a la sección de clientes y seleccionar un cliente específico
+  que tenga medidores asociados. Allí podrías ver:
+  - Consumo en tiempo real (si hay medidores publicando en MQTT)
+  - Historial de consumo
+  - Alertas configuradas
+  - Control remoto de dispositivos
+
+  5. Endpoints API para MQTT
+
+  El sistema expone estos endpoints para recibir datos MQTT:
+
+  - POST /api/v1/mqtt_input - Recibe datos regulares del topic mc/data
+  - POST /api/v1/mqtt_input/real-time - Recibe datos en tiempo real del topic mc/real_time
+
+  Los scripts Python hacen POST a estos endpoints cuando reciben mensajes MQTT.
+
+  6. Problema del WebSocket Error
+
+  Notas que en la consola del navegador aparece:
+  WebSocket connection to 'ws://localhost:8443/socket.io/' failed
+
+  Esto indica que Laravel Echo Server no está corriendo completamente. Los scripts Python para MQTT sí están funcionando
+  (puedes ver las conexiones en los logs de Mosquitto), pero el servidor de WebSockets para el navegador necesita ser
+  iniciado.
+
+  Para verificar y solucionar:
+
+  # Verificar si Laravel Echo Server está corriendo
+  docker exec aomenertec-laravel.test-1 ps aux | grep "laravel-echo"
+
+  # Ver logs del Echo Server
+  docker exec aomenertec-laravel.test-1 cat /var/log/supervisor/laravel-echo-server.out.log
+
+  Resumen Visual:
+
+  ┌─────────────────────────────────────────────────────────┐
+  │  DOCKER COMPOSE STACK                                    │
+  ├─────────────────────────────────────────────────────────┤
+  │                                                           │
+  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
+  │  │ Laravel App  │  │  PostgreSQL  │  │    Redis     │  │
+  │  │  (Port 80)   │  │  (Port 5432) │  │  (Port 6379) │  │
+  │  │              │  │              │  │              │  │
+  │  │ - PHP 8.1    │  │ - Database   │  │ - Cache      │  │
+  │  │ - Supervisor │  └──────────────┘  │ - Sessions   │  │
+  │  │ - Python 3   │                    │ - Queue      │  │
+  │  │ - Node.js    │  ┌──────────────┐  └──────────────┘  │
+  │  └──────────────┘  │  Mosquitto   │                     │
+  │                    │ MQTT Broker  │                     │
+  │  Python Scripts:   │  (Port 1883) │                     │
+  │  • receiveMqtt     │              │                     │
+  │    Event.py        │ - IoT Comm   │                     │
+  │  • receiveMqtt     └──────────────┘                     │
+  │    RealTime.py                                           │
+  │                                                          │
+  └──────────────────────────────────────────────────────────┘
+
+  El MQTT está funcionando correctamente - puedes ver las conexiones activas en los logs. Solo necesitas crear clientes y
+  medidores en el sistema para ver datos fluyendo en tiempo real.

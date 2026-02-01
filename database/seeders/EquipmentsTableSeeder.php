@@ -78,6 +78,9 @@ class EquipmentsTableSeeder extends Seeder
             ['equipment_type_id' => 11, 'name' => 'test', 'serial' => '999995', 'description' => 'PRECINTO MEDIDOR ELECTRICO'],
             ['equipment_type_id' => 11, 'name' => 'test', 'serial' => '999994', 'description' => 'PRECINTO MEDIDOR ELECTRICO'],
 
+            // Medidor real de Jerson Pruebas - Serial 20128617
+            ['equipment_type_id' => 7, 'name' => 'Medidor Jerson', 'serial' => '20128617', 'description' => 'MEDIDOR ELECTRICO REAL', 'assigned' => true],
+
         ];
 
         foreach ($equipment as $item) {

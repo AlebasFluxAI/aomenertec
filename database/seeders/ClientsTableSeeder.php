@@ -15,6 +15,7 @@ class ClientsTableSeeder extends Seeder
      */
     public function run()
     {
+        // Cliente de prueba original
         $client = Client::create([
             'code' => 1234567890,
             'identification' => 123456789,
@@ -46,6 +47,27 @@ class ClientsTableSeeder extends Seeder
         EquipmentClient::create([
             'client_id' => $client->id,
             'equipment_id' => 43,
+            'current_assigned' => true,
+        ]);
+
+        // Cliente Jerson Pruebas - Tu medidor real
+        $jersonClient = Client::create([
+            'code' => 20128617,
+            'identification' => 90109173,
+            'name' => 'Jerson',
+            'last_name' => 'Pruebas',
+            'email' => 'jerson@enerteclatam.com',
+            'phone' => '3001234567',
+            'network_operator_id' => 1,
+            'status' => Client::CLIENT_STATUS_ENABLED,
+            'has_telemetry' => true,
+            'indicative' => '+57',
+        ]);
+
+        // Asignar el medidor eléctrico con serial 20128617
+        EquipmentClient::create([
+            'client_id' => $jersonClient->id,
+            'equipment_id' => 61, // MEDIDOR ELECTRICO serial 20128617
             'current_assigned' => true,
         ]);
     }

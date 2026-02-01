@@ -16,3 +16,4 @@ yarn-error.log
 /.vscode
 laravel-echo-server.lock
 laravel-echo-server.json
+laravel-echo-server.local.json
