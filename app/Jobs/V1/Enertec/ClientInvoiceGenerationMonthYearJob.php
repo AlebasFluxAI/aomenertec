@@ -210,7 +210,7 @@ class ClientInvoiceGenerationMonthYearJob implements ShouldQueue
         $generadorDeCodigoDeBarras = new DNS1D();
         $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG('123456789', 'C39');
         $generate_qr_code = new DNS2D();
-        $qr_code = $generate_qr_code->getBarcodePNG('aom.enerteclatam.com', 'QRCODE');
+        $qr_code = $generate_qr_code->getBarcodePNG(config('app.url'), 'QRCODE');
         $value_aux = [
             'value_active' => $value->value_active,
             'value_contribution' => $value->value_contribution,

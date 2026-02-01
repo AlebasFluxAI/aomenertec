@@ -50,6 +50,9 @@
 
 .logo {
     padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .sidebar-menu ul {
@@ -73,12 +76,24 @@
 }
 
 :root {
-    --style_primary: #f5b042;
-    --style_secondary: #f58442;
-    --style_header_color: #f5e342;
-    --style_orange: #f5b042;
-    --style_orange_light: #f58442;
-    --style_header_button: #f5b042;
+    /* FluxAI Brand Colors - Opción C */
+    --style_primary: #0C62DC;           /* Azul medio (primary) */
+    --style_secondary: #0044A4;         /* Azul oscuro (secondary) */
+    --style_header_color: #00C781;      /* Verde turquesa (accent) */
+    --style_orange: #0C62DC;            /* Legacy: ahora primary */
+    --style_orange_light: #00C781;      /* Legacy: ahora accent */
+    --style_header_button: #0C62DC;     /* Botones header: primary */
+    
+    /* FluxAI Extended Colors */
+    --flux-primary: #0C62DC;
+    --flux-primary-dark: #0A4FB8;
+    --flux-primary-light: #4A90E2;
+    --flux-secondary: #0044A4;
+    --flux-accent: #00C781;
+    --flux-accent-dark: #00A56B;
+    --flux-bg-light: #F5F7FA;
+    --flux-bg-medium: #E4E9F0;
+    --flux-text-primary: #1A202C;
 }
 
 .select-rol-container {
@@ -165,7 +180,7 @@
 #message-box-right {
     padding: 1rem;
     margin: 1rem;
-    border-color: #00aabb;
+    border-color: var(--style_header_color);
     background: #f2f2f2;
     border-width: 2px;
     border-radius: 5px;
@@ -291,9 +306,9 @@
 /*------- HEADER ----*/
 .navbar-custom {
     background-color: white;
-    border-bottom-color: var(--style_primary);
-    border-bottom-width: .2rem;
-
+    /* Material Design elevation (reemplaza border) */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar-custom-coenergia {
@@ -459,7 +474,7 @@ primary
 
 .primary-content button {
     background-color: transparent;
-    border: none #009599 1px;
+    border: none var(--style_primary) 1px;
     padding: 4px 10px;
     margin: 3px;
     color: #c3c3c3;
@@ -470,7 +485,7 @@ primary
 
 .primary-content button :hover {
     background-color: transparent !important;
-    border: none #009599 1px;
+    border: none var(--style_primary) 1px;
     color: white;
     transition: 0.4s;
     border-radius: 13px;
@@ -602,10 +617,10 @@ primary
 
 .login .contenedor-tabla {
     width: 100%;
-    border-top: 2px solid #009599;
-    border-bottom: 2px solid #009599;
-    border-left: 2px solid #F5B307;
-    border-right: 2px solid #F5B307;
+    border-top: 2px solid var(--style_primary);
+    border-bottom: 2px solid var(--style_primary);
+    border-left: 2px solid var(--style_header_color);
+    border-right: 2px solid var(--style_header_color);
 
     background: #fff;
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.12);
@@ -618,10 +633,10 @@ primary
 dialog {
     text-align: center;
     border-radius: 25px;
-    border-top: 2px solid #009599;
-    border-bottom: 2px solid #009599;
-    border-left: 2px solid #F5B307;
-    border-right: 2px solid #F5B307;
+    border-top: 2px solid var(--style_primary);
+    border-bottom: 2px solid var(--style_primary);
+    border-left: 2px solid var(--style_header_color);
+    border-right: 2px solid var(--style_header_color);
 }
 
 .contenedor-grande .loading {
@@ -741,9 +756,12 @@ dialog {
 }
 
 .slide-login {
-    height: 110px;
+    height: 120px;  /* Aumentado de 110px a 120px para más espacio */
     background-color: white;
-    border-bottom: 3px solid #364d69;
+    border-bottom: 3px solid var(--style_primary);  /* FluxAI primary color */
+    padding-top: 15px;  /* Espacio arriba para el logo */
+    display: flex;
+    align-items: center;  /* Centrado vertical del logo */
     -webkit-box-shadow: 0px 0px 12px 0px rgba(168, 168, 168, 1);
     -moz-box-shadow: 0px 0px 12px 0px rgba(168, 168, 168, 1);
     box-shadow: 0px 0px 12px 0px rgba(168, 168, 168, 1);
@@ -780,14 +798,21 @@ dialog {
 }
 
 .imagen-logo-login {
-    margin: 20px 0;
+    height: 70px;  /* Tamaño fijo para el logo del login */
+    width: auto;
+    max-width: 250px;
+    object-fit: contain;
+    margin: 0 auto;  /* Centrado horizontal */
+    display: block;
 }
 
 .imagen-logo {
-    height: auto;
-    width: 150px;
+    height: 60px;  /* Aumentado de 50px a 60px */
+    width: auto;   /* Auto para mantener aspect ratio del logo horizontal */
+    max-width: 220px;  /* Aumentado de 200px a 220px */
     object-fit: contain;
-    margin: 5px;
+    margin: 10px auto;  /* Auto para centrado horizontal */
+    display: block;  /* Necesario para que margin auto funcione */
 }
 
 .imagen-logo:hover {
@@ -798,12 +823,12 @@ dialog {
 
 a.btn.btn-lg.badge.badge-light.rounded-full {
 
-    border-color: #009599;
-    color: #009299;
+    border-color: var(--style_primary);
+    color: var(--style_primary);
 }
 
 a.btn.btn-lg.badge.badge-light.rounded-full:hover {
-    background-color: #009299;
+    background-color: var(--style_primary);
 }
 
 a.btn.btn-lg.badge.badge-light.rounded-full:hover i {
@@ -898,20 +923,20 @@ li {
 }
 
 .btn-outline-primary {
-    color: #009599;
-    border-color: #009599;
+    color: var(--style_primary);
+    border-color: var(--style_primary);
 }
 
 .btn-check:checked + .btn-outline-primary {
     color: #fff;
-    background-color: #009599;
-    border-color: #009599;
+    background-color: var(--style_primary);
+    border-color: var(--style_primary);
 }
 
 .btn-outline-primary:hover {
     color: #fff;
-    background-color: #009599;
-    border-color: #009599;
+    background-color: var(--style_primary);
+    border-color: var(--style_primary);
 }
 
 /*--------------------------------------------------------------
@@ -955,7 +980,7 @@ li {
     position: absolute;
     top: -20px;
     left: 12px;
-    background: linear-gradient(60deg, #009599, #0bd9e0);
+    background: linear-gradient(60deg, var(--style_primary), var(--flux-accent-light));
     color: white;
     width: 90px;
     height: 90px;
@@ -985,7 +1010,8 @@ li {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 85px;
+    height: 95px;  /* Aumentado de 85px a 95px */
+    padding-top: 12px;  /* Espacio para las barras superiores */
 }
 
 #header .logo {
@@ -1003,7 +1029,7 @@ li {
 }
 
 #header .logo img {
-    max-height: 40px;
+    max-height: 60px;  /* Aumentado de 40px a 60px para logo más visible */
 }
 
 #header:before {
@@ -1014,7 +1040,7 @@ li {
     left: 0;
     width: 50%;
     height: 8px;
-    background-color: #009299;
+    background-color: var(--style_primary);  /* FluxAI primary */
 }
 
 #header:after {
@@ -1025,7 +1051,7 @@ li {
     right: 0;
     width: 50%;
     height: 8px;
-    background-color: #F5B307;
+    background-color: var(--style_header_color);  /* FluxAI accent */
 }
 
 #header .separator {
@@ -1107,7 +1133,7 @@ li {
 }
 
 .navbar-light .navbar-nav .nav-link:hover {
-    color: #009299;
+    color: var(--style_primary);
 }
 
 /*.dropdown-toggle::after {
@@ -1120,7 +1146,7 @@ li {
 .navbar li:hover > a {
     display: flex;
     flex-direction: column;
-    color: #009299;
+    color: var(--style_primary);
 }
 
 .navbar .dropdown ul {
@@ -1182,7 +1208,7 @@ li {
 
 .dropdown-toggle.links {
     margin: 20px;
-    border: 2px solid #f9b000;
+    border: 2px solid var(--style_header_color);
     padding: 5px 14px;
     border-radius: 10px;
 }
@@ -1376,7 +1402,7 @@ section {
     display: block;
     width: 40px;
     height: 3px;
-    background: #009599;
+    background: var(--style_primary);
     bottom: 0;
     left: calc(50% - 20px);
 }
@@ -1409,7 +1435,7 @@ th i svg {
 
 .btn-card-mon a {
     font-size: 12px;
-    background-color: #009599;
+    background-color: var(--style_primary);
 }
 
 .btn-card-mon a:hover {
@@ -1442,14 +1468,14 @@ th i svg {
 }
 
 .button-opciones {
-    border: 2px solid #f9b000;
+    border: 2px solid var(--style_header_color);
     padding: 7px;
     margin: 5px;
     border-radius: 7px;
 }
 
 .button-opciones:hover {
-    background-color: #f9b000;
+    background-color: var(--style_header_color);
     color: white;
     transition: 0.2s;
 }
@@ -2214,7 +2240,7 @@ footer .copyright {
 /*Row Hover*/
 table.dataTable.hover tbody tr:hover,
 table.dataTable.display tbody tr:hover {
-    background-color: #f9b000;
+    background-color: var(--style_header_color);
     /*bg-indigo-100*/
 
 }
@@ -2230,7 +2256,7 @@ table.dataTable.display tbody tr:hover {
 }
 
 table.dataTable tr:nth-child(even) {
-    background-color: #009599;
+    background-color: var(--style_primary);
 }
 
 table.dataTable input {
@@ -2267,7 +2293,7 @@ table.dataTable td div {
     /*font-bold*/
     border-radius: .25rem;
     /*rounded*/
-    background: #009599 !important;
+    background: var(--style_primary) !important;
     /*bg-indigo-500*/
     border: 1px solid transparent;
     /*border border-transparent*/
@@ -2285,7 +2311,7 @@ table.dataTable.no-footer {
 /*Change colour of responsive icon*/
 table.dataTable.dtr-inline.collapsed > tbody > tr > td:first-child:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
-    background-color: #f9b000 !important;
+    background-color: var(--style_header_color) !important;
     /*bg-indigo-500*/
 }
 
@@ -2376,48 +2402,49 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th:first-child:before {
     justify-content: center;
 }
 
+/* FluxAI Monitoring Variable Colors */
 .voltage {
-    color: #145A32;
+    color: var(--flux-primary); /* Azul medio para voltaje */
 }
 
 .current {
-    color: #154360;
+    color: var(--flux-accent); /* Verde para corriente */
 }
 
 .power {
-    color: #4A235A;
+    color: var(--flux-secondary); /* Azul oscuro para potencia */
 }
 
 .active_energy {
-    color: #7D6608;
+    color: var(--flux-accent-dark); /* Verde oscuro para energía activa */
 }
 
 .reactive_energy {
-    color: #641E16;
+    color: var(--flux-primary-dark); /* Azul oscuro para energía reactiva */
 }
 
 .power_factor {
-    color: #0B5345;
+    color: var(--flux-accent); /* Verde para factor de potencia */
 }
 
 .phase_angle {
-    color: #1B2631;
+    color: var(--flux-text-primary); /* Texto principal para ángulo de fase */
 }
 
 .thd {
-    color: #6E2C00;
+    color: var(--flux-secondary); /* Azul oscuro para THD */
 }
 
 .frecuency {
-    color: #B7950B;
+    color: var(--flux-primary-light); /* Azul claro para frecuencia */
 }
 
 .reactive_capacitive {
-    color: #000000;
+    color: var(--flux-secondary); /* Azul oscuro para reactiva capacitiva */
 }
 
 .reactive_inductive {
-    color: #424949;
+    color: var(--flux-text-secondary); /* Texto secundario para reactiva inductiva */
 }
 
 .checkbox-menu li label {
@@ -2496,7 +2523,7 @@ justify-content-end .textClientes p {
 }
 
 /* .containerFooter a:hover{
-    color:#f9b000;;
+    color:var(--style_header_color);;
     text-decoration: none;
 } */
 .logos {
@@ -2699,4 +2726,125 @@ justify-content-end .textClientes p {
     }
 }
 
+
+
+/* ============================================
+   FLUXAI MONITORING VIEWS - Material Design
+   ============================================ */
+
+/* Cards para vistas de monitoreo */
+.box {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.box.shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.box.shadow:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10);
+    transform: translateY(-2px);
+}
+
+/* Botones FluxAI */
+.btn-flux-primary {
+    background-color: var(--flux-primary);
+    border-color: var(--flux-primary);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-flux-primary:hover {
+    background-color: var(--flux-primary-dark);
+    border-color: var(--flux-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(12, 98, 220, 0.3);
+}
+
+.btn-flux-accent {
+    background-color: var(--flux-accent);
+    border-color: var(--flux-accent);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-flux-accent:hover {
+    background-color: var(--flux-accent-dark);
+    border-color: var(--flux-accent-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 199, 129, 0.3);
+}
+
+/* Tablas con paleta FluxAI */
+.table-flux-primary {
+    background-color: rgba(12, 98, 220, 0.1) !important;
+    color: var(--flux-primary) !important;
+}
+
+.table-flux-accent {
+    background-color: rgba(0, 199, 129, 0.1) !important;
+    color: var(--flux-accent) !important;
+}
+
+.table-flux-secondary {
+    background-color: rgba(0, 68, 164, 0.1) !important;
+    color: var(--flux-secondary) !important;
+}
+
+/* Badges/Pills FluxAI */
+.badge-flux-primary {
+    background-color: var(--flux-primary);
+    color: white;
+}
+
+.badge-flux-accent {
+    background-color: var(--flux-accent);
+    color: white;
+}
+
+/* Modal headers con FluxAI */
+.modal-header {
+    background-color: var(--flux-bg-light);
+    border-bottom: 2px solid var(--flux-primary);
+}
+
+.modal-title {
+    color: var(--flux-primary);
+    font-weight: 600;
+}
+
+/* Inputs con focus FluxAI */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--flux-primary);
+    box-shadow: 0 0 0 0.2rem rgba(12, 98, 220, 0.25);
+}
+
+/* Chart containers */
+#chart_line,
+#phasor,
+#chart_reactive,
+#chart_heat_map {
+    min-height: 350px;
+    padding: 1rem;
+}
+
+/* Loading states */
+[wire\:loading] {
+    color: var(--flux-primary);
+    font-weight: 500;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* Separadores con contraste (sin bordes) */
+.flux-separator {
+    background: linear-gradient(to right, var(--flux-bg-light), var(--flux-bg-medium), var(--flux-bg-light));
+    height: 2px;
+    margin: 1.5rem 0;
+    border: none;
+}
 

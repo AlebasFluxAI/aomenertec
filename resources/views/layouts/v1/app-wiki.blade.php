@@ -94,7 +94,7 @@
         </div>
         <div>
             <div class="p-4" style="background-color: #1c1c1c;color: white">
-                Wiki Enertec
+                Wiki FluxAI
             </div>
             <div style="background-color: #e8e8e8">
                 @yield('content')

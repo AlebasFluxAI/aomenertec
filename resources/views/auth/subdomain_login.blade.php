@@ -71,7 +71,7 @@
         @endif
 
         <div class="col-12 mb-2">
-            <h3 class="login-title text-lg pb-4 text-center font-weight-bold" style="color: #1c9599;">Conectate</h3>
+            <h3 class="login-title text-lg pb-4 text-center font-weight-bold text-flux-primary">Conectate</h3>
         </div>
         <div class="col-md-12 mb-3">
             <p class="login-subtitle leading-tight text-slate-500 text-base"> Usa el correo electronico y contraseña que

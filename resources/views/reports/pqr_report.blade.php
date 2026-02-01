@@ -100,29 +100,38 @@
             vertical-align: top;
         }
 
+        /* FluxAI Brand Colors */
+        :root {
+            --flux-primary: #0C62DC;
+            --flux-secondary: #0044A4;
+            --flux-accent: #00C781;
+            --flux-warning: #F59E0B;
+            --flux-light-bg: #F3F3F3;
+        }
+
     </style>
 </head>
 <body>
 <table class="header-container">
     <tr class="flex-row">
         <td class="flex-item" rowspan="3"><img src={{$admin->icon->url}} alt="Logo" class="logo"></td>
-        <td class="flex-item" rowspan="3"><br>{{$network_operator->name. ' '. $network_operator->last_name}}<br>www.enerteclatam.com
+        <td class="flex-item" rowspan="3"><br>{{$network_operator->name. ' '. $network_operator->last_name}}<br>www.fluxai.co
         </td>
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Reporte
+        <td class="flex-item" style="background: var(--flux-warning); border-bottom-left-radius: 15px;"><strong>Reporte
                 PQR {{$pqr->code}}</strong></td>
         <td class="flex-item"
             style="background: #fff; border-top-right-radius: 15px; text-align: right;">{{$pqr->code}}</td>
     </tr>
 
     <tr class="flex-row">
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Tipo de PQR</strong>
+        <td class="flex-item" style="background: var(--flux-warning); border-bottom-left-radius: 15px;"><strong>Tipo de PQR</strong>
         </td>
         <td class="flex-item"
             style="background: #fff; border-top-right-radius: 15px; text-align: right;">{{$pqr->type}}</td>
     </tr>
 
     <tr class="flex-row">
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Fecha de
+        <td class="flex-item" style="background: var(--flux-warning); border-bottom-left-radius: 15px;"><strong>Fecha de
                 registro<strong></strong></td>
         <td class="flex-item"
             style="background: #fff; border-top-right-radius: 15px; text-align: right; ">{{$pqr->created_at}}</td>
@@ -133,7 +142,7 @@
     <table class="large-container" style="margin-top: 150px;">
         <tr class="flex-row">
             <td class="flex-item"
-                style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                 colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
         </tr>
         <tr class="flex-row">
@@ -166,7 +175,7 @@
 <table class="large-container" style="margin-top: 20px; margin-right: 5px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>INFORMACIÓN DEL PROCEDIMIENTO PQR</strong></td>
     </tr>
     <tr class="flex-row">
@@ -215,7 +224,7 @@
 <table class="large-container" style="margin-top: 20px; margin-right: 5px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>ARCHIVOS ADJUNTOS</strong></td>
     </tr>
     <tr class="flex-row">
@@ -252,7 +261,7 @@
 <table class="large-container" style="margin-top: 20px; margin-right: 20px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>DIAGNÓSTICO Y SOLUCIÓN</strong></td>
     </tr>
     <tr class="flex-row">

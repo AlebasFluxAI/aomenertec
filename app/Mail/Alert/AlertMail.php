@@ -38,7 +38,7 @@ class AlertMail extends Mailable
             "variable_name" => $this->clientAlert->clientAlertConfiguration->getVariableName(),
             "variable_value" => $this->clientAlert->value,
             "variable_time" => $this->clientAlert->source_timestamp->format('d F H:i'),
-            "detail_link" => "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id
+            "detail_link" => url('/v1/administrar/clientes/alertas/' . $this->clientAlert->client_id)
         ])->subject("¡¡ Nueva alerta generada !! - ")
             ->to($this->user->email);
     }

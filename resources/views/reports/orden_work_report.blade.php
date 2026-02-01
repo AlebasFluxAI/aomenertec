@@ -101,15 +101,24 @@
             vertical-align: top;
         }
 
+        /* FluxAI Brand Colors */
+        :root {
+            --flux-primary: #0C62DC;
+            --flux-secondary: #0044A4;
+            --flux-accent: #00C781;
+            --flux-warning: #F59E0B;
+            --flux-light-bg: #F3F3F3;
+        }
+
     </style>
 </head>
 <body>
 <table class="header-container">
     <tr class="flex-row">
         <td class="flex-item" rowspan="3"><img src={{$admin->icon->url}} alt="Logo" class="logo"></td>
-        <td class="flex-item" rowspan="3"><br>{{$network_operator->name. ' '. $network_operator->last_name}}<br>www.enerteclatam.com
+        <td class="flex-item" rowspan="3"><br>{{$network_operator->name. ' '. $network_operator->last_name}}<br>www.fluxai.co
         </td>
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Órden de
+        <td class="flex-item" style="background: var(--flux-warning); border-bottom-left-radius: 15px;"><strong>Órden de
                 Trabajo </strong></td>
         <td class="flex-item"
             style="background: #fff; border-top-right-radius: 15px; text-align: right;">{{ $work_order->id }}</td>
@@ -117,13 +126,13 @@
 
 
     <tr class="flex-row">
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>PQR
+        <td class="flex-item" style="background: var(--flux-warning); border-bottom-left-radius: 15px;"><strong>PQR
                 Asociado</strong></td>
         <td class="flex-item"
             style="background: #fff; border-top-right-radius: 15px; text-align: right; ">{{ $work_order->pqr ? $work_order->pqr->code : "N/A"}}</td>
     </tr>
     <tr class="flex-row">
-        <td class="flex-item" style="background: #ffdf7e; border-bottom-left-radius: 15px;"><strong>Fecha de
+        <td class="flex-item" style="background: var(--flux-warning); border-bottom-left-radius: 15px;"><strong>Fecha de
                 registro</strong></td>
         <td class="flex-item"
             style="background: #fff; border-top-right-radius: 15px; text-align: right; ">{{ $work_order->created_at }}</td>
@@ -134,7 +143,7 @@
 <table class="large-container" style="margin-top: 150px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
             colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
     </tr>
     <tr class="flex-row">
@@ -166,7 +175,7 @@
 <table class="large-container" style="margin-top: 20px; margin-right: 5px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>INFORMACIÓN DE LA ÓRDEN DE SERVICIO</strong></td>
     </tr>
     <tr class="flex-row">
@@ -229,7 +238,7 @@
 
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>TIEMPO ESTIMADO DE DURACIÓN</strong></td>
     </tr>
     <tr class="flex-row">
@@ -245,7 +254,7 @@
             <strong>MINUTOS: </strong>{{ $work_order->minutes }}</td>
     </tr>
     {{--    <tr class="flex-row">--}}
-    {{--        <td class="flex-item" style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>TIEMPO REAL DE DURACIÓN</strong></td>--}}
+    {{--        <td class="flex-item" style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;" colspan="12"><strong>TIEMPO REAL DE DURACIÓN</strong></td>--}}
     {{--    </tr>--}}
     {{--    <tr class="flex-row">--}}
     {{--        <td class="flex-item" style="padding: 6px;" colspan="12"></td>--}}
@@ -266,7 +275,7 @@
 <table class="large-container" style="margin-top: 20px; margin-right: 20px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>DIAGNÓSTICO Y SOLUCIÓN</strong></td>
     </tr>
     <tr class="flex-row">
@@ -276,7 +285,7 @@
     </tr>
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>RECOMENDACIONES FINALES</strong></td>
     </tr>
     <tr class="flex-row">
@@ -289,7 +298,7 @@
 <table class="large-container" style="margin-top: 20px; margin-right: 5px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px; border-top-right-radius: 10px; text-align: center;"
             colspan="12"><strong>EVIDENCIAS</strong></td>
     </tr>
     <tr class="flex-row">

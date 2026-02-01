@@ -109,6 +109,27 @@
             vertical-align: top;
         }
 
+        /* FluxAI Brand Colors */
+        :root {
+            --flux-primary: #0C62DC;
+            --flux-secondary: #0044A4;
+            --flux-accent: #00C781;
+            --flux-warning: #F59E0B;
+            --flux-light-bg: #F3F3F3;
+        }
+
+        .bg-flux-primary {
+            background: var(--flux-primary);
+        }
+
+        .bg-flux-accent {
+            background: var(--flux-accent);
+        }
+
+        .bg-flux-warning {
+            background: var(--flux-warning);
+        }
+
     </style>
 </head>
 <body>
@@ -118,24 +139,24 @@
                 src={{$admin->icon->url}} alt="Logo" class="logo"></td>
         <td class="flex-item" rowspan="3"
             style="padding-top: 4px; padding-bottom: 4px">{{$network_operator->name. ' '. $network_operator->last_name}}
-            <br>{{$network_operator->identification_type.': '.$network_operator->identification}}<br>www.enerteclatam.com
+            <br>{{$network_operator->identification_type.': '.$network_operator->identification}}<br>www.fluxai.co
         </td>
         <td class="flex-item"
-            style="background: #ffdf7e; border-bottom-left-radius: 15px; padding-top: 4px; padding-bottom: 4px"><strong>No.
+            style="background: var(--flux-warning); border-bottom-left-radius: 15px; padding-top: 4px; padding-bottom: 4px"><strong>No.
                 de factura:</strong></td>
         <td class="flex-item"
             style="background: #fff; border-top-right-radius: 15px; text-align: right; padding-top: 4px; padding-bottom: 4px">{{ $other_data['numero_factura'] }}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding-top: 4px; padding-bottom: 4px; background: #ffdf7e; border-bottom-left-radius: 15px;">
+            style="padding-top: 4px; padding-bottom: 4px; background: var(--flux-warning); border-bottom-left-radius: 15px;">
             <strong>Total a pagar:</strong></td>
         <td class="flex-item"
             style="padding-top: 4px; padding-bottom: 4px; background: #fff; border-top-right-radius: 15px; text-align: right;">{{'$'.number_format($value->total, 2, ',', '.')}}</td>
     </tr>
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding-top: 4px; padding-bottom: 4px; background: #ffdf7e; border-bottom-left-radius: 15px;">
+            style="padding-top: 4px; padding-bottom: 4px; background: var(--flux-warning); border-bottom-left-radius: 15px;">
             <strong>Pago oportuno:</strong></td>
         <td class="flex-item"
             style="padding-top: 4px; padding-bottom: 4px; background: #fff; border-top-right-radius: 15px; text-align: right; ">{{ $other_data['pago_oportuno'] }}</td>
@@ -145,7 +166,7 @@
 <table class="large-container" style="margin-top: 110px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
             colspan="6"><strong>INFORMACIÓN CLIENTE</strong></td>
     </tr>
     <tr class="flex-row">
@@ -190,7 +211,7 @@
             <table class="middle-container" style="margin-top: 5px; margin-right: 5px; ">
                 <tr class="flex-row">
                     <td class="flex-item"
-                        style="padding: 10px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                        style="padding: 10px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                         colspan="2"><strong>INFORMACIÓN DE PAGO</strong></td>
                 </tr>
                 <tr class="flex-row" style="background: #B6B7B7;">
@@ -227,12 +248,12 @@
             <table class="middle-container" style="margin-top: 5px; margin-right: 5px;">
                 <tr class="flex-row">
                     <td class="flex-item"
-                        style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                        style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                         colspan="3"><strong>HISTORIAL DE CONSUMOS</strong></td>
                 </tr>
                 <tr class="flex-row">
                     <td class="flex-item"
-                        style="border-radius: 10px; padding:2px; text-align: center;background: #ffdf7e; font-size: 8px">
+                        style="border-radius: 10px; padding:2px; text-align: center;background: var(--flux-warning); font-size: 8px">
                         <strong>Consumo facturado <br> mes actual</strong></td>
                     <td class="flex-item"
                         style="border-radius: 10px;padding:2px; text-align: center; background: #F3F3F3; font-size: 8px">
@@ -258,7 +279,7 @@
             <table class="middle-container" style="margin-top: 13px; margin-right: 5px; font-size: 10px ">
                 <tr class="flex-row">
                     <td class="flex-item"
-                        style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                        style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                         colspan="3"><strong>DESGLOSE REACTIVA</strong></td>
                 </tr>
                 <tr class="flex-row">
@@ -302,7 +323,7 @@
             <table class="middle-container" style="margin-top: 5px; margin-left: 5px; ">
                 <tr class="flex-row">
                     <td class="flex-item"
-                        style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                        style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                         colspan="3"><strong>DETALLE DE LA FACTURA</strong></td>
                 </tr>
                 <tr class="flex-row">
@@ -404,7 +425,7 @@
                         style="padding:2px; text-align: right">{{'$'.number_format($value->subtotal_others, 2, ',', '.')}}</td>
                 </tr>
 
-                <tr class="flex-row" style="background: #009599;">
+                <tr class="flex-row" style="background: var(--flux-primary);">
                     <td class="flex-item"
                         style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;"
                         colspan="2"><strong>Total a pagar</strong></td>
@@ -416,7 +437,7 @@
             <table class="middle-container" style="margin-top: 5px; margin-left: 5px; ">
                 <tr class="flex-row">
                     <td class="flex-item"
-                        style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                        style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                         colspan="2"><strong>CALCULO DE TARIFA DE ENERGÍA</strong></td>
                 </tr>
                 <tr class="flex-row" style="background: #B6B7B7;">
@@ -450,7 +471,7 @@
                     <td class="flex-item"
                         style="padding:3px; text-align: right">{{'$'.number_format($fees->restriction, 2, ',', '.')}}</td>
                 </tr>
-                <tr class="flex-row" style="background: #009599;">
+                <tr class="flex-row" style="background: var(--flux-primary);">
                     <td class="flex-item"
                         style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;"><strong>Total
                             Costo Unitario (CU)</strong></td>
@@ -458,7 +479,7 @@
                         style="padding: 6px;  border-bottom-right-radius: 10px; margin: 0;  text-align: right;">
                         <strong>{{'$'.number_format($fees->unit_cost, 2, ',', '.')}}</strong></td>
                 </tr>
-                <tr class="flex-row" style="background: #009599;">
+                <tr class="flex-row" style="background: var(--flux-primary);">
                     <td class="flex-item"
                         style="padding: 6px; border-bottom-left-radius: 10px; margin: 0;  text-align: left;"><strong>Tarifa
                             opcional</strong></td>
@@ -475,7 +496,7 @@
 <table class="large-container" style="margin-top: 10px;">
     <tr class="flex-row">
         <td class="flex-item"
-            style="padding: 6px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+            style="padding: 6px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
             colspan="6"><strong>DATOS TÉCNICOS</strong></td>
     </tr>
     <tr class="flex-row">
@@ -513,7 +534,7 @@
         <table class="middle-container" style="margin-top: 5px; margin-left: 5px; ">
             <tr class="flex-row">
                 <td class="flex-item"
-                    style="padding: 10px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                    style="padding: 10px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                     colspan="2"><strong>Para pagos en banco</strong></td>
             </tr>
             <tr class="flex-row">
@@ -525,7 +546,7 @@
             <table class="middle-container" style="margin-top: 5px; margin-left: 5px; ">
                 <tr class="flex-row">
                     <td class="flex-item"
-                        style="padding: 10px; margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
+                        style="padding: 10px; margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;"
                         colspan="2"><strong>Para pagos en linea</strong></td>
                 </tr>
                 <tr class="flex-row">
@@ -539,7 +560,7 @@
 
 </table>
 {{--<table class="footer-container" style="margin-top: 5px">--}}
-{{--    <td class="flex-item" style="margin: 0; background: #009599; border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="2"><img class="qr_code" src="data:image/png;base64,{{ $qr_code }}" alt="Código QR"></td>--}}
+{{--    <td class="flex-item" style="margin: 0; background: var(--flux-primary); border-top-left-radius: 10px;border-top-right-radius: 10px; text-align: center;" colspan="2"><img class="qr_code" src="data:image/png;base64,{{ $qr_code }}" alt="Código QR"></td>--}}
 
 {{--</table>--}}
 </body>

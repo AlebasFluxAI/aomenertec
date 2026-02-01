@@ -10,7 +10,7 @@
                     @endif
                 @endisset
                 <tr>
-                    <th class="font-[2000] uppercase" style="color:#009299;">{{$info["key"]}}</th>
+                    <th class="font-[2000] uppercase text-gray-800">{{$info["key"]}}</th>
                     @isset($info["type"])
                         @if($info["type"]=="text")
                             @isset($info["money"])

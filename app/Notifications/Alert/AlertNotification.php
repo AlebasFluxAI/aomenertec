@@ -49,7 +49,7 @@ class AlertNotification extends Notification
             ->template_name($template)
             ->params([($this->client->alias ?? $this->client->name), $this->clientAlert->clientAlertConfiguration->getVariableName(),
                 $this->clientAlert->value, $this->clientAlert->created_at->format('d F H:i'),
-                "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,
+                url('/v1/administrar/clientes/alertas/' . $this->clientAlert->client_id),
             ]);
     }
 }

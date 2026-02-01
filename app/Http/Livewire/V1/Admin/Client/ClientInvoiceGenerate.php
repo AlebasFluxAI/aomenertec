@@ -75,7 +75,7 @@ class ClientInvoiceGenerate extends Component
             $generadorDeCodigoDeBarras = new DNS1D();
             $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG($bar_code, 'C39');
             $generate_qr_code = new DNS2D();
-            $qr_code = $generate_qr_code->getBarcodePNG('https://aom.enerteclatam.com/', 'QRCODE');
+            $qr_code = $generate_qr_code->getBarcodePNG(config('app.url'), 'QRCODE');
 
 
             $pdf = PDF::loadView('reports.client_invoice', [

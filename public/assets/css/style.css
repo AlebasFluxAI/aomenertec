@@ -7,11 +7,11 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-    --style_primary: #009599;
-    --style_secondary: #f2c968;
-    --style_header_color: #292929;
-    --style_orange: #f9b000;
-    --style_orange_light: #f2c968;
-    --style_header_button: #ffffff;
-
+    /* FluxAI Brand Colors - Opción C */
+    --style_primary: #0C62DC;           /* Azul medio (primary) */
+    --style_secondary: #0044A4;         /* Azul oscuro (secondary) */
+    --style_header_color: #00C781;      /* Verde turquesa (accent) */
+    --style_orange: #0C62DC;            /* Legacy: ahora primary */
+    --style_orange_light: #00C781;      /* Legacy: ahora accent */
+    --style_header_button: #0C62DC;     /* Botones header: primary */
 }

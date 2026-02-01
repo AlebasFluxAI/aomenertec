@@ -52,7 +52,7 @@ class InformativeNotification extends Notification
             ->template_name($template)
             ->params([($this->client->alias ?? $this->client->name), $this->event->serial, $this->event->event,
                 $this->event->created_at->format('d F H:i'), $request_json['message'],
-                "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,
+                url('/v1/administrar/clientes/alertas/' . $this->clientAlert->client_id),
             ]);
     }
 }

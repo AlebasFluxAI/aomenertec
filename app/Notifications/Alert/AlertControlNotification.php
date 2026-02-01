@@ -79,7 +79,7 @@ class AlertControlNotification extends Notification
                 $this->clientAlert->value,
                 $date->format('d F H:i'),
                 $this->outputs == null? '-' : $this->outputs->name,
-                "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id,
+                url('/v1/administrar/clientes/alertas/' . $this->clientAlert->client_id),
                 $this->outputs == null? '-' : ($this->outputs->status ? 'Activo': 'Inactivo'),
 
             ]);

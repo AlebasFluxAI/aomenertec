@@ -225,7 +225,7 @@
                                             <td align="center"
                                                 style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                                 <div
-                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:25px;line-height:1;text-align:center;color:#052b4a;">
+                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:25px;line-height:1;text-align:center;color:#0044A4;">
                                                     <strong>Hola {{$client_name}}
                                                         <br>
                                                         <br>
@@ -254,7 +254,7 @@
                                             <td align="center"
                                                 style="font-size:0px;padding:30px 30px;word-break:break-word;">
                                                 <div
-                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#063b66;">
+                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#0C62DC;">
                                                     <p>Se ha generado una nueva alerta de control</p>
                                                     <p style="font-weight: bold">Una variable fuera de rango con acción
                                                         de control.</p>
@@ -335,12 +335,12 @@
     </div>
     <!--[if mso | IE]></td></tr></table>
     <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
-           bgcolor="#e67219">
+           bgcolor="#F59E0B">
         <tr>
             <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
-    <div style="background:#e67219;background-color:#e67219;margin:0px auto;max-width:600px;">
+    <div style="background:#F59E0B;background-color:#F59E0B;margin:0px auto;max-width:600px;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
-               style="background:#e67219;background-color:#e67219;width:100%;">
+               style="background:#F59E0B;background-color:#F59E0B;width:100%;">
             <tbody>
             <tr>
                 <td style="direction:ltr;font-size:0px;padding:2px;text-align:center;">
@@ -382,7 +382,7 @@
                                                 style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                                 <div
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:12px;line-height:1;text-align:left;color:#ffffff;">
-                                                    Enertec ®
+                                                    FluxAI ®
                                                 </div>
                                             </td>
                                         </tr>

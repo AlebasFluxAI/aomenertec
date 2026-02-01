@@ -224,7 +224,7 @@
                                             <td align="center"
                                                 style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                                 <div
-                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:25px;line-height:1;text-align:center;color:#052b4a;">
+                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:25px;line-height:1;text-align:center;color:#0044A4;">
                                                     <strong>Hola {{$data->name}} {{$data->last_name}}
                                                         <br>
                                                         <br>
@@ -253,16 +253,16 @@
                                             <td align="center"
                                                 style="font-size:0px;padding:30px 30px;word-break:break-word;">
                                                 <div
-                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#063b66;">
+                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#0C62DC;">
                                                     @if($data->getUserType() == "super_administrator")
                                                         <strong>Has sido registrado como "{{$data->getUserRole()}}" en
                                                             la
-                                                            plataforma de ENERTEC AO&M </strong>
+                                                            plataforma de FluxAI AO&M </strong>
                                                     @else
                                                         <strong>Has sido registrado como "{{$data->getUserType()}}" en
                                                             la
                                                             plataforma
-                                                            de {{is_object($data->getAdmin())?$data->getAdmin()->name:"Enertec"}} </strong>
+                                                            de {{is_object($data->getAdmin())?$data->getAdmin()->name:"FluxAI"}} </strong>
                                                     @endif
                                                 </div>
                                             </td>
@@ -271,7 +271,7 @@
                                             <td align="center"
                                                 style="font-size:0px;padding:10px 1px;word-break:break-word;">
                                                 <div
-                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#063b66;">
+                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#0C62DC;">
                                                     Siga las siguientes instrucciones para ingresar a la plataforma:
                                                 </div>
                                             </td>
@@ -280,12 +280,12 @@
                                             <td align="center"
                                                 style="font-size:0px;padding:10px 40px;word-break:break-word;">
                                                 <div
-                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#063b66;">
+                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:18px;line-height:1;text-align:center;color:#0C62DC;">
                                                     <ul>
                                                         <li> Ingrese al siguiente
                                                             enlace: <a
-                                                                href="https://{{$subdomain}}.enerteclatam.com/login">
-                                                                https://{{$subdomain}}.enerteclatam.com/login</a>.
+                                                                href="https://{{$subdomain}}.fluxai.co/login">
+                                                                https://{{$subdomain}}.fluxai.co/login</a>.
                                                         </li>
 
                                                         <li> Inicie sesion con su correo electronico
@@ -346,11 +346,11 @@
                                             <td align="center"
                                                 style="font-size:0px;padding:10px 2px;word-break:break-word;">
                                                 <div
-                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;text-align:center;color:#063b66;">
+                                                    style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:15px;line-height:1;text-align:center;color:#0C62DC;">
                                                     Para cambiar tu contraseña por defecto ingresa al siguiente enlace:
                                                     <br><br><a
-                                                        href="https://{{$subdomain}}.enerteclatam.com/forgot-password">
-                                                        https://{{$subdomain}}.enerteclatam.com/forgot-password</a>
+                                                        href="https://{{$subdomain}}.fluxai.co/forgot-password">
+                                                        https://{{$subdomain}}.fluxai.co/forgot-password</a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -369,12 +369,12 @@
     </div>
     <!--[if mso | IE]></td></tr></table>
     <table align="center" border="0" cellpadding="0" cellspacing="0" class="" style="width:600px;" width="600"
-           bgcolor="#e67219">
+           bgcolor="#F59E0B">
         <tr>
             <td style="line-height:0px;font-size:0px;mso-line-height-rule:exactly;"><![endif]-->
-    <div style="background:#e67219;background-color:#e67219;margin:0px auto;max-width:600px;">
+    <div style="background:#F59E0B;background-color:#F59E0B;margin:0px auto;max-width:600px;">
         <table align="center" border="0" cellpadding="0" cellspacing="0" role="presentation"
-               style="background:#e67219;background-color:#e67219;width:100%;">
+               style="background:#F59E0B;background-color:#F59E0B;width:100%;">
             <tbody>
             <tr>
                 <td style="direction:ltr;font-size:0px;padding:2px;text-align:center;">
@@ -416,7 +416,7 @@
                                                 style="font-size:0px;padding:10px 25px;word-break:break-word;">
                                                 <div
                                                     style="font-family:Lato, Helvetica, Arial, sans-serif;font-size:12px;line-height:1;text-align:left;color:#ffffff;">
-                                                    Enertec ®
+                                                    FluxAI ®
                                                 </div>
                                             </td>
                                         </tr>

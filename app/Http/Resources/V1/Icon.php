@@ -13,7 +13,7 @@ class Icon extends Singleton
         try {
             return self::getUserIcon();
         } catch (Throwable $exception) {
-            return "https://enertedevops.s3.us-east-2.amazonaws.com/images/enertec-logotipo-new.png";
+            return asset('images/flux-ai-logo-horizontal.png');
         }
     }
 
@@ -22,7 +22,7 @@ class Icon extends Singleton
         if ($admin = Auth::user()->getAdmin()) {
             return $admin->icon->url;
         }
-        return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
+        return asset('images/flux-ai-logo-horizontal.png');
     }
 
     public static function getUserIconUser($user)
@@ -32,7 +32,7 @@ class Icon extends Singleton
                 return $admin->icon->url;
             }
         } catch (Throwable $e) {
-            return "https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png";
+            return asset('images/flux-ai-logo-horizontal.png');
         }
     }
 }

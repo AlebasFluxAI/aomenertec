@@ -44,9 +44,9 @@ class ControlErrorAlertMail extends Mailable
             "variable_value" => $this->clientAlert->value,
             "variable_time" => (new Carbon($this->clientAlert->created_at))->format('d F H:i'),
             "variable_outputs" => $this->outputs,
-            "detail_link" => "https://aom.enerteclatam.com/v1/administrar/clientes/alertas/" . $this->clientAlert->client_id
+            "detail_link" => url('/v1/administrar/clientes/alertas/' . $this->clientAlert->client_id)
         ])->subject("¡¡ Nueva alerta de control generada !!")
-            ->from('soporte@enerteclatam.com', 'Enertec')
+            ->from('soporte@fluxai.co', 'FluxAI')
             ->to($this->user->email);
     }
 }

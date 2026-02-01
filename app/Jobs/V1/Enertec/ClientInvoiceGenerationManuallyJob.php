@@ -230,7 +230,7 @@ class ClientInvoiceGenerationManuallyJob implements ShouldQueue
             $generadorDeCodigoDeBarras = new DNS1D();
             $imagenDeCodigoDeBarras = $generadorDeCodigoDeBarras->getBarcodePNG($bar_code, 'C39');
             $generate_qr_code = new DNS2D();
-            $qr_code = $generate_qr_code->getBarcodePNG('https://aom.enerteclatam.com/clientes/invitados/facturas/cliente/factura/' . $invoice->id, 'QRCODE');
+            $qr_code = $generate_qr_code->getBarcodePNG(url('/clientes/invitados/facturas/cliente/factura/' . $invoice->id), 'QRCODE');
 
             $value_aux = [
                 'value_active' => $value->value_active,

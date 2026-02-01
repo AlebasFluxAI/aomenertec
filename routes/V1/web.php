@@ -34,7 +34,7 @@ Route::get('/politicas-enertec', function () {
 Route::get('/balance-example', function () {
     return view('partials.balance-example');
 });
-Route::domain("{subdomain}.enerteclatam.com")->group(function () {
+Route::domain(env('APP_SUBDOMAIN_PATTERN', '{subdomain}.localhost'))->group(function () {
     Route::get('/', '\App\Http\Controllers\V1\IndexController@index');
 
 

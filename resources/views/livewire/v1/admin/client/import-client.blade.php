@@ -35,7 +35,7 @@
                            "table_info"=>[
                                                     [
                                                     "key"=>"NOMBRE",
-                                                    "value"=>"NOMBRE DEL CLIENTE --- Enertec (Requerido)"
+                                                    "value"=>"NOMBRE DEL CLIENTE --- FluxAI (Requerido)"
                                                     ],
                                                     [
                                                     "key"=>"APELLIDO",
@@ -43,7 +43,7 @@
                                                     ],
                                                      [
                                                     "key"=>"ALIAS",
-                                                    "value"=>"NOMBRE ALTERNATIVO DE CLIENTE --- Enertec (Requerido)"
+                                                    "value"=>"NOMBRE ALTERNATIVO DE CLIENTE --- FluxAI (Requerido)"
                                                     ],
                                                     [
                                                     "key"=>"CODIGO",
@@ -59,7 +59,7 @@
                                                     ],
                                                     [
                                                     "key"=>"EMAIL",
-                                                    "value"=>"CORREO ELECTRONICO DEL CLIENTE--- enerter@enerteclatam.com (Requerido)"
+                                                    "value"=>"CORREO ELECTRONICO DEL CLIENTE--- ejemplo@fluxai.co (Requerido)"
                                                     ],
                                                     [
                                                     "key"=>"TIPO_PERSONA",
@@ -112,7 +112,7 @@
                                                     ],
                                                     [
                                                     "key"=>"RAZON_SOCIAL",
-                                                    "value"=>"RAZON SOCIAL DE FACTURACION DE CLIENTE  --- Enertec Latam (Opcional)"
+                                                    "value"=>"RAZON SOCIAL DE FACTURACION DE CLIENTE  --- FluxAI Latam (Opcional)"
                                                     ],
                                                     [
                                                     "key"=>"DIRECCION",

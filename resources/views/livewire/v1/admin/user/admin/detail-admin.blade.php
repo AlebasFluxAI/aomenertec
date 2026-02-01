@@ -92,7 +92,7 @@
                                                                            [
                                                                              "key"=>"Logo",
                                                                              "type"=>"image",
-                                                                             "value"=>$admin->icon?$admin->icon->url:"https://enertedevops.s3.us-east-2.amazonaws.com/images/logotipo-enerteclatam.png"
+                                                                             "value"=>$admin->icon?$admin->icon->url:"{{asset("images/flux-ai-logo-icon.png")}}"
                                                                          ],
                                                                      ]
                                                             ],

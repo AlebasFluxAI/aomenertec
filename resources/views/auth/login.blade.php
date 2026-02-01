@@ -20,7 +20,7 @@
             @endif
 
             <div class="col-12 mb-2">
-                <h3 class="login-title text-lg pb-4 text-center" style="color: #1c9599;"> Conectate</h3>
+                <h3 class="login-title text-lg pb-4 text-center primary-text"> Conectate</h3>
             </div>
             <div class="col-md-12 mb-3">
                 <p class="login-subtitle leading-tight text-slate-500 text-base"> Usa el correo electronico y contraseña
@@ -70,7 +70,7 @@
     <div class="container">
         <div class="row mb-5 pb-5">
             <div class="col-12">
-                <h1 class="text-center pt-4 text-bold" style="color: #1c9599;">Servicios</h1>
+                <h1 class="text-center pt-4 text-bold primary-text">Servicios</h1>
             </div>
             <div class="col-12" style="display: flex; flex-wrap: wrap;">
                 @foreach([

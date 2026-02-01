@@ -23,15 +23,15 @@
     <table style="width: 100%">
         <tr>
             <td>
-                <img alt="logo" height="auto"
-                     src="https://enertedevops.s3.us-east-2.amazonaws.com/images/enertec-logotipo-new.png"
+                <img alt="FluxAI Logo" height="auto"
+                     src="{{asset('images/flux-ai-logo-horizontal.png')}}"
                      style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:20%;font-size:13px;"
                      width="150px">
                 <br>
             </td>
         </tr>
         <tr>
-            <td> ENERTEC COLOMBIA</td>
+            <td> FLUXAI COLOMBIA</td>
 
         </tr>
         <tr>
