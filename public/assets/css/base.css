@@ -96,6 +96,62 @@
     --flux-text-primary: #1A202C;
 }
 
+/* FluxAI Utility Classes for Login Modernization */
+
+/* Background Colors */
+.bg-flux-primary {
+    background-color: var(--flux-primary) !important;
+}
+
+.bg-flux-secondary {
+    background-color: var(--flux-secondary) !important;
+}
+
+.bg-flux-accent {
+    background-color: var(--flux-accent) !important;
+}
+
+/* Text Colors */
+.text-flux-primary {
+    color: var(--flux-primary) !important;
+}
+
+.text-flux-secondary {
+    color: var(--flux-secondary) !important;
+}
+
+.text-flux-accent {
+    color: var(--flux-accent) !important;
+}
+
+/* Hover States */
+.hover\:bg-flux-secondary:hover {
+    background-color: var(--flux-secondary) !important;
+}
+
+.hover\:text-flux-secondary:hover {
+    color: var(--flux-secondary) !important;
+}
+
+/* Focus Ring */
+.focus\:ring-flux-primary:focus {
+    --tw-ring-color: var(--flux-primary) !important;
+    box-shadow: 0 0 0 3px rgba(12, 98, 220, 0.5) !important;
+}
+
+/* Modern Login Container */
+.login-container-modern {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    padding: 2rem;
+}
+
+.login-gradient-bg {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+    min-height: 100vh;
+}
+
 .select-rol-container {
     background-color: #f2f2f2;
     border-radius: 15px;

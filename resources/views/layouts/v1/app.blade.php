@@ -142,6 +142,7 @@
                     </div>
                     <div class="container mt-3">
                         <div>
+                            @yield('content')
                         </div>
                     </div>
                 </section>
@@ -151,7 +152,9 @@
             <div>
                 @endif
 
-                @include("footer")
+                @unless(request()->is('/', 'login'))
+                    @include("footer")
+                @endunless
 
             </div>
 

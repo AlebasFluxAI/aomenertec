@@ -1,122 +1,120 @@
 @extends('layouts.v1.app')
 
 @section('header')
-    <section class="top-info" style="background-color: #f2f2f2; height: 100%;">
-        <div class="flex-column">
-            <nav class="navbar navbar-expand-lg d-flex justify-content-center"
-                 style="{{\App\Http\Resources\V1\Subdomain::getHeaderColor()}}">
-                <a class="navbar-brand" href="/">
-                    <img class="img-fluid imagen-logo"
-                         src="{{\App\Http\Resources\V1\Subdomain::getHeaderIcon()}}"
-                         alt=""></a>
-                <button class="navbar-toggler" id="button-menu" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="fas fa-bars"></span>
-                </button>
-
-                <!-- <div class=" collapse navbar-collapse" id="navbarSupportedContent"
-                     style="width: 0px;">
-                    <ul class="navbar-nav mr-auto">
-
-                        <li class="nav-item">
-
-                            @isset(\App\Http\Resources\V1\Menu::getMenuV3()["submenu"])
-
-                    <ul class="navbar-nav" style="justify-content: left">
-
-@foreach(\App\Http\Resources\V1\Menu::getMenuV3()["submenu"] as $menu)
-                        @include("layouts.menu.v1.menu",["menu"=>$menu])
-                    @endforeach
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                          class="hidden">
-                                        @csrf
-                    </form>
-                </ul>
-
-
-
-
-
-
-
-
-
-
-
-                @endisset
-
-                </li>
-            </ul>
-            <div class="mt-4 mb-4">
-@auth
-                    @include("layouts.menu.v1.profile")
-
-                @endauth
-                </div>
-            </div> -->
-            </nav>
+    {{-- Header minimalista sin navegación --}}
+    <section class="top-info bg-gray-50">
+        <div class="flex justify-center py-6">
+            <a href="/" class="inline-block">
+                <img class="h-16 w-auto imagen-logo" 
+                     src="{{\App\Http\Resources\V1\Subdomain::getHeaderIcon()}}" 
+                     alt="FluxAI Logo">
+            </a>
         </div>
     </section>
 @endsection
+
 @section('content')
-    <div class="col-md-4"
-         style="margin:auto;padding: 20px;border-radius: 15px;
-         background-color: #f2f2f2; -webkit-box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%);
-         box-shadow: 5px 5px 14px 5px rgb(0 0 0 / 23%);">
-        @if (session('status'))
-            <div>
-                {{ session('status') }}
+    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            {{-- Title Section --}}
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900 tracking-tight">
+                    Conectate
+                </h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    Ingresa tus credenciales para acceder al sistema
+                </p>
             </div>
-        @endif
 
-        <div class="col-12 mb-2">
-            <h3 class="login-title text-lg pb-4 text-center font-weight-bold text-flux-primary">Conectate</h3>
-        </div>
-        <div class="col-md-12 mb-3">
-            <p class="login-subtitle leading-tight text-slate-500 text-base"> Usa el correo electronico y contraseña que
-                te proporcionaron al
-                crear tu cuenta, si olvidaste tu
-                contraseña puedes reestablecerla usando tu correo.</p>
-        </div>
-        <div class="col-md-12">
-            <form action="{{ route('login') }}" method="post" role="form">
-                @csrf
-                <div class="form-group">
-                    <label class="block text-sm text-slate-400" for="email">Correo electrónico</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror"
-                           name="email" value="{{ old('email') }}" autocomplete="email" autofocus required>
-                    @error('email')
-                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label class="block text-sm text-slate-400" for="password">Contraseña </label>
-                    <a class="login-forgot-pass" style="font-size: 12px; margin-left: 10px;" href="
-                                    {{route('password.reset.form')}}
-                            ">
-                        ¿La olvidaste?</a>
-                    <input type="password"
-                           class="form-control @error('password') is-invalid @enderror"
-                           name="password" autocomplete="current-password" required>
-                    @error('password')
-                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                    @enderror
-                </div>
-                <div class="flex justify-between">
-                    @include("auth.support_button")
-                    <button class="login-button drop-shadow-xl hover:drop-shadow-none rounded"
-                            style="color: white; padding: 6px 12px; margin: 3px; background-color: var(--style_primary); transition: 0.4s; font-size: 0.9rem;"
-                            type="submit">Ingresar
-                    </button>
-                </div>
+            {{-- Login Card --}}
+            <div class="bg-white rounded-2xl shadow-xl p-8 space-y-6">
+                {{-- Status Messages --}}
+                @if (session('status'))
+                    <div class="rounded-md bg-green-50 p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-green-800">{{ session('status') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
-            </form>
+                {{-- Form --}}
+                <form action="{{ route('login') }}" method="post" class="space-y-6" role="form">
+                    @csrf
+
+                    {{-- Email Field --}}
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">
+                            Correo electrónico
+                        </label>
+                        <div class="mt-1">
+                            <input id="email" 
+                                   name="email" 
+                                   type="email" 
+                                   value="{{ old('email') }}"
+                                   autocomplete="email" 
+                                   required 
+                                   autofocus
+                                   class="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-flux-primary focus:border-transparent transition duration-150 ease-in-out sm:text-sm @error('email') border-red-500 @enderror"
+                                   placeholder="tu@email.com">
+                        </div>
+                        @error('email')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Password Field --}}
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">
+                            Contraseña
+                        </label>
+                        <div class="mt-1">
+                            <input id="password" 
+                                   name="password" 
+                                   type="password" 
+                                   autocomplete="current-password" 
+                                   required
+                                   class="appearance-none block w-full px-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-flux-primary focus:border-transparent transition duration-150 ease-in-out sm:text-sm @error('password') border-red-500 @enderror"
+                                   placeholder="••••••••">
+                        </div>
+                        @error('password')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Forgot Password Link --}}
+                    <div class="flex items-center justify-end">
+                        <a href="{{ route('password.reset.form') }}" 
+                           class="text-sm font-medium text-flux-primary hover:text-flux-secondary transition-colors">
+                            ¿Olvidaste tu contraseña?
+                        </a>
+                    </div>
+
+                    {{-- Submit Button --}}
+                    <div>
+                        <button type="submit" 
+                                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-flux-primary hover:bg-flux-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-flux-primary transition-all duration-200 transform hover:scale-[1.02]">
+                            <span class="mr-2">Ingresar</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {{-- Footer --}}
+            <div class="text-center">
+                <p class="text-xs text-gray-500">
+                    FluxAI &copy; {{ date('Y') }} - Todos los derechos reservados
+                </p>
+            </div>
         </div>
     </div>
-
 @endsection
