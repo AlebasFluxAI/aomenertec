@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+    nginx:
+        build:
+            context: ./docker/nginx
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./docker/ssl:/etc/nginx/ssl:ro
+        depends_on:
+            - laravel.test
+        networks:
+            - sail
+        restart: unless-stopped
+
+    laravel.test:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        image: fluxai/app:latest
+        environment:
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: 'off'
+        volumes:
+            - '.:/var/www/html'
+        depends_on:
+            pgsql:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            mosquitto:
+                condition: service_started
+        networks:
+            - sail
+        restart: unless-stopped
+
+    pgsql:
+        image: 'postgres:14'
+        environment:
+            PGPASSWORD: '${DB_PASSWORD}'
+            POSTGRES_DB: '${DB_DATABASE}'
+            POSTGRES_USER: '${DB_USERNAME}'
+            POSTGRES_PASSWORD: '${DB_PASSWORD}'
+        volumes:
+            - 'sail-pgsql:/var/lib/postgresql/data'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
+            interval: 10s
+            retries: 5
+            timeout: 5s
+        restart: unless-stopped
+
+    redis:
+        image: 'redis:alpine'
+        command: redis-server --appendonly yes
+        volumes:
+            - 'sail-redis:/data'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "redis-cli", "ping"]
+            interval: 10s
+            retries: 5
+            timeout: 5s
+        restart: unless-stopped
+
+    mosquitto:
+        image: 'eclipse-mosquitto:2.0'
+        ports:
+            - '1883:1883'
+        volumes:
+            - './docker/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf'
+            - './docker/mosquitto/passwd:/mosquitto/config/passwd'
+            - 'sail-mosquitto-data:/mosquitto/data'
+        networks:
+            - sail
+        restart: unless-stopped
+
+networks:
+    sail:
+        driver: bridge
+
+volumes:
+    sail-pgsql:
+        driver: local
+    sail-redis:
+        driver: local
+    sail-mosquitto-data:
+        driver: local
