@@ -34,9 +34,9 @@ if [ ! -f ".env.production" ]; then
 fi
 
 # Check if SSL certificates exist
-if [ ! -f "docker/ssl/origin.pem" ] || [ ! -f "docker/ssl/origin.key" ]; then
+if [ ! -f "docker/ssl/fluxai.pem" ] || [ ! -f "docker/ssl/fluxai.key" ]; then
     echo -e "${RED}Error: SSL certificates not found.${NC}"
-    echo -e "${YELLOW}Place origin.pem and origin.key in docker/ssl/${NC}"
+    echo -e "${YELLOW}Place fluxai.pem and fluxai.key in docker/ssl/${NC}"
     exit 1
 fi
 
