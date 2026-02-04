@@ -22,6 +22,7 @@ Puerto adicional abierto:
 - Servidor Ubuntu 22.04 con Docker y Docker Compose V2 instalados
 - Dominio configurado en Cloudflare (ej: `app.fluxai.solutions`)
 - Acceso SSH al servidor
+- `make` instalado (`sudo apt install make`)
 
 ---
 
@@ -85,7 +86,13 @@ sudo ufw enable
 sudo ufw status
 ```
 
-### 2.3 Clonar Repositorio
+### 2.3 Instalar Make (si no está instalado)
+
+```bash
+sudo apt install make -y
+```
+
+### 2.4 Clonar Repositorio
 
 ```bash
 cd ~
@@ -93,7 +100,7 @@ git clone https://github.com/tu-org/tu-repo.git fluxai
 cd ~/fluxai
 ```
 
-### 2.4 Copiar Certificados SSL
+### 2.5 Copiar Certificados SSL
 
 Copiar los archivos de Cloudflare al servidor:
 
@@ -103,7 +110,7 @@ scp fluxai.pem fluxai@IP_SERVIDOR:~/fluxai/docker/ssl/
 scp fluxai.key fluxai@IP_SERVIDOR:~/fluxai/docker/ssl/
 ```
 
-### 2.5 Configurar Variables de Entorno
+### 2.6 Configurar Variables de Entorno
 
 ```bash
 cp .env.production.example .env.production
@@ -130,37 +137,37 @@ ln -s .env.production .env
 
 ## Fase 3: Deployment
 
-### 3.1 Ejecutar Script de Deployment
+### 3.1 Ejecutar Deployment con Make
 
 ```bash
-chmod +x scripts/deploy-production.sh
-./scripts/deploy-production.sh
+make prod-deploy
 ```
 
-El script ejecuta automáticamente:
-1. Build de imágenes Docker
-2. Inicio de servicios
-3. Composer install
-4. Generación de APP_KEY
-5. Migraciones
-6. NPM install y build
-7. Optimización de Laravel (config:cache, route:cache)
-8. Configuración de permisos
+Este comando ejecuta automáticamente:
+1. ✅ Validación de archivos necesarios
+2. ✅ Build de imágenes Docker
+3. ✅ Inicio de servicios
+4. ✅ Composer install (producción)
+5. ✅ Generación de APP_KEY
+6. ✅ Migraciones
+7. ✅ NPM install y build
+8. ✅ Optimización de Laravel
+9. ✅ Configuración de permisos
 
 ### 3.2 Configurar Contraseña MQTT
 
 Este paso es **manual** y solo se hace una vez:
 
 ```bash
-# Configurar contraseña (usar la misma del .env.production)
-docker compose -f docker-compose.production.yml exec mosquitto mosquitto_passwd -c /mosquitto/config/passwd enertec
+make prod-mqtt-password
+```
 
-# Arreglar permisos del archivo
-docker compose -f docker-compose.production.yml exec mosquitto chmod 0700 /mosquitto/config/passwd
-docker compose -f docker-compose.production.yml exec mosquitto chown root:root /mosquitto/config/passwd
+Ingresá la **misma contraseña** que está en `MQTT_AUTH_PASSWORD` de `.env.production`.
 
-# Reiniciar servicios
-docker compose -f docker-compose.production.yml restart
+### 3.3 Reiniciar Servicios
+
+```bash
+make prod-restart
 ```
 
 ---
@@ -170,7 +177,7 @@ docker compose -f docker-compose.production.yml restart
 ### 4.1 Verificar Contenedores
 
 ```bash
-docker compose -f docker-compose.production.yml ps
+make prod-ps
 ```
 
 Todos deben estar `Up`:
@@ -183,19 +190,23 @@ Todos deben estar `Up`:
 ### 4.2 Verificar Procesos Internos
 
 ```bash
-docker compose -f docker-compose.production.yml logs laravel.test --tail=30
+make prod-status
 ```
 
-Buscar que todos los procesos estén `RUNNING`:
-- laravel-server
-- laravel-echo-server
-- mqtt-receiver
-- mqtt-realtime-receiver
-- kafka-consumer
-- queue-worker
-- scheduler
+### 4.3 Ver Logs
 
-### 4.3 Verificar en Navegador
+```bash
+# Todos los servicios
+make prod-logs
+
+# Solo Laravel
+make prod-logs-app
+
+# Solo Nginx
+make prod-logs-nginx
+```
+
+### 4.4 Verificar en Navegador
 
 1. Abrir `https://tu-dominio.com`
 2. Debería cargar la página de login
@@ -203,56 +214,60 @@ Buscar que todos los procesos estén `RUNNING`:
 
 ---
 
-## Comandos Útiles
+## Comandos de Producción (Makefile)
 
-### Alias recomendado
+### Operaciones básicas
 
-Agregar a `~/.bashrc`:
+| Comando | Descripción |
+|---------|-------------|
+| `make prod-deploy` | Deployment completo (primera vez) |
+| `make prod-up` | Iniciar servicios |
+| `make prod-down` | Detener servicios |
+| `make prod-restart` | Reiniciar servicios |
+| `make prod-ps` | Ver estado de contenedores |
+| `make prod-status` | Ver estado completo |
 
-```bash
-alias dc='docker compose -f ~/fluxai/docker-compose.production.yml'
-```
+### Logs
 
-### Operaciones comunes
+| Comando | Descripción |
+|---------|-------------|
+| `make prod-logs` | Ver todos los logs |
+| `make prod-logs-app` | Ver logs de Laravel |
+| `make prod-logs-nginx` | Ver logs de Nginx |
 
-```bash
-# Ver logs en tiempo real
-dc logs -f
+### Mantenimiento
 
-# Ver logs de un servicio específico
-dc logs -f laravel.test
-dc logs -f nginx
+| Comando | Descripción |
+|---------|-------------|
+| `make prod-update` | Actualizar código (después de git pull) |
+| `make prod-migrate` | Ejecutar migraciones |
+| `make prod-cache-clear` | Limpiar cachés |
+| `make prod-shell` | Shell dentro del contenedor |
 
-# Reiniciar todo
-dc restart
+### Configuración
 
-# Reiniciar solo Laravel
-dc restart laravel.test
+| Comando | Descripción |
+|---------|-------------|
+| `make prod-mqtt-password` | Configurar contraseña MQTT |
 
-# Ejecutar comandos artisan
-dc exec laravel.test php artisan migrate
-dc exec laravel.test php artisan cache:clear
-dc exec laravel.test php artisan config:clear
+---
 
-# Ver procesos dentro del contenedor
-dc exec laravel.test ps aux | grep -E "php|node|python"
+## Actualizar Código en Producción
 
-# Shell dentro del contenedor
-dc exec laravel.test bash
-```
-
-### Actualizar código
+Después de hacer `git pull`:
 
 ```bash
 cd ~/fluxai
 git pull origin master
-dc exec laravel.test composer install --no-dev --optimize-autoloader
-dc exec laravel.test npm run prod
-dc exec laravel.test php artisan migrate --force
-dc exec laravel.test php artisan config:cache
-dc exec laravel.test php artisan route:cache
-dc restart laravel.test
+make prod-update
 ```
+
+El comando `make prod-update` ejecuta:
+- Composer install
+- NPM build
+- Migraciones
+- Cache de configuración
+- Reinicio de Laravel
 
 ---
 
@@ -279,9 +294,9 @@ apt-get install -y netcat-openbsd
 La contraseña en `.env.production` no coincide con la del volumen de PostgreSQL. Solución:
 
 ```bash
-dc down
+make prod-down
 docker volume rm fluxai_sail-pgsql
-./scripts/deploy-production.sh
+make prod-deploy
 ```
 
 ### Error: "ext-gd is missing"
@@ -311,18 +326,10 @@ El Echo Server se configura via `laravel-echo-server.production.json`, no via va
 Nginx no puede conectar con Laravel. Verificar:
 
 ```bash
-dc logs laravel.test --tail=50
+make prod-logs-app
 ```
 
 Buscar errores en el inicio de supervisor o PHP.
-
-### Supervisor socket not found
-
-Es normal si no está configurado el socket. Los procesos igual corren. Verificar con:
-
-```bash
-dc exec laravel.test ps aux | grep -E "php|node|python"
-```
 
 ---
 
@@ -350,10 +357,10 @@ dc exec laravel.test ps aux | grep -E "php|node|python"
 - [ ] Repositorio clonado
 - [ ] Certificados SSL en `docker/ssl/`
 - [ ] `.env.production` configurado
-- [ ] Deployment script ejecutado sin errores
-- [ ] Contraseña MQTT configurada
-- [ ] Todos los contenedores `Up`
-- [ ] Todos los procesos supervisor `RUNNING`
+- [ ] `make prod-deploy` ejecutado sin errores
+- [ ] `make prod-mqtt-password` configurado
+- [ ] `make prod-restart` ejecutado
+- [ ] Todos los contenedores `Up` (`make prod-ps`)
 - [ ] Web accesible via HTTPS
 - [ ] Login funciona
 - [ ] WebSocket conecta

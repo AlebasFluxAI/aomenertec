@@ -1,11 +1,17 @@
-# Makefile para Proyecto Enertec
-# Desarrollo con Docker usando Laravel Sail
+# Makefile para Proyecto FluxAI (Enertec)
+# Desarrollo LOCAL con Laravel Sail + Producción con Docker Compose
 
-.PHONY: help build up down restart logs shell install setup migrate fresh test clean
+.PHONY: help build up down restart logs shell install setup migrate fresh test clean \
+        prod-deploy prod-up prod-down prod-restart prod-logs prod-ps prod-shell \
+        prod-migrate prod-mqtt-password prod-update
 
-# Variables
+# Variables - Desarrollo (Sail)
 SAIL = ./vendor/bin/sail
 DOCKER_COMPOSE = docker-compose
+
+# Variables - Producción
+PROD_COMPOSE = docker compose -f docker-compose.production.yml
+PROD_EXEC = $(PROD_COMPOSE) exec -T laravel.test
 
 help: ## Mostrar esta ayuda
 	@echo "Comandos disponibles:"
@@ -227,3 +233,133 @@ urls: ## Mostrar URLs de acceso
 	@echo "  • PostgreSQL:        localhost:5432"
 	@echo "  • Redis:             localhost:6379"
 	@echo "  • MQTT Broker:       localhost:1883"
+
+# ============================================
+# 🚀 PRODUCCIÓN - Docker Compose
+# ============================================
+# Estos comandos usan docker-compose.production.yml
+# Para usar en el servidor Ubuntu de producción
+# ============================================
+
+prod-deploy: ## [PROD] Deployment completo a producción
+	@echo "🚀 Iniciando deployment a producción..."
+	@if [ ! -f docker-compose.production.yml ]; then \
+		echo "❌ Error: docker-compose.production.yml no encontrado"; \
+		exit 1; \
+	fi
+	@if [ ! -f .env.production ] && [ ! -f .env ]; then \
+		echo "❌ Error: .env.production no encontrado"; \
+		echo "   Copia .env.production.example a .env.production y configúralo"; \
+		exit 1; \
+	fi
+	@if [ ! -f docker/ssl/fluxai.pem ] || [ ! -f docker/ssl/fluxai.key ]; then \
+		echo "❌ Error: Certificados SSL no encontrados en docker/ssl/"; \
+		echo "   Coloca fluxai.pem y fluxai.key de Cloudflare Origin Certificate"; \
+		exit 1; \
+	fi
+	@if [ ! -f .env ] && [ -f .env.production ]; then \
+		echo "📋 Creando symlink .env -> .env.production..."; \
+		ln -s .env.production .env; \
+	fi
+	@echo "🔨 Construyendo imágenes Docker..."
+	@$(PROD_COMPOSE) build --no-cache
+	@echo "🚀 Iniciando servicios..."
+	@$(PROD_COMPOSE) up -d
+	@echo "⏳ Esperando que la base de datos esté lista..."
+	@sleep 15
+	@echo "📦 Instalando dependencias de Composer..."
+	@$(PROD_EXEC) composer install --no-dev --optimize-autoloader
+	@echo "🔑 Generando APP_KEY..."
+	@$(PROD_EXEC) php artisan key:generate --force
+	@echo "📦 Ejecutando migraciones..."
+	@$(PROD_EXEC) php artisan migrate --force
+	@echo "📦 Instalando dependencias NPM..."
+	@$(PROD_EXEC) npm install
+	@echo "🎨 Compilando assets para producción..."
+	@$(PROD_EXEC) npm run prod
+	@echo "⚡ Optimizando Laravel..."
+	@$(PROD_EXEC) php artisan config:cache
+	@$(PROD_EXEC) php artisan route:cache
+	@echo "🔐 Configurando permisos..."
+	@$(PROD_EXEC) chmod -R 775 storage bootstrap/cache
+	@echo "✅ Verificando servicios..."
+	@$(PROD_COMPOSE) ps
+	@echo ""
+	@echo "=========================================="
+	@echo "   ✅ Deployment completado!"
+	@echo "=========================================="
+	@echo ""
+	@echo "⚠️  Pasos pendientes (solo primera vez):"
+	@echo "   1. Configurar contraseña MQTT: make prod-mqtt-password"
+	@echo "   2. Reiniciar servicios: make prod-restart"
+	@echo ""
+
+prod-up: ## [PROD] Iniciar servicios de producción
+	@echo "🚀 Iniciando servicios de producción..."
+	$(PROD_COMPOSE) up -d
+	@echo "✅ Servicios iniciados"
+
+prod-down: ## [PROD] Detener servicios de producción
+	@echo "🛑 Deteniendo servicios de producción..."
+	$(PROD_COMPOSE) down
+
+prod-restart: ## [PROD] Reiniciar servicios de producción
+	@echo "🔄 Reiniciando servicios de producción..."
+	$(PROD_COMPOSE) restart
+
+prod-logs: ## [PROD] Ver logs de producción (todos los servicios)
+	$(PROD_COMPOSE) logs -f
+
+prod-logs-app: ## [PROD] Ver logs del contenedor Laravel
+	$(PROD_COMPOSE) logs -f laravel.test
+
+prod-logs-nginx: ## [PROD] Ver logs de Nginx
+	$(PROD_COMPOSE) logs -f nginx
+
+prod-ps: ## [PROD] Ver estado de contenedores de producción
+	$(PROD_COMPOSE) ps
+
+prod-shell: ## [PROD] Abrir shell en el contenedor Laravel
+	$(PROD_COMPOSE) exec laravel.test bash
+
+prod-migrate: ## [PROD] Ejecutar migraciones en producción
+	@echo "📦 Ejecutando migraciones en producción..."
+	$(PROD_EXEC) php artisan migrate --force
+
+prod-mqtt-password: ## [PROD] Configurar contraseña MQTT en producción
+	@echo "🔐 Configurando contraseña MQTT..."
+	@echo "   Ingresa la misma contraseña que está en MQTT_AUTH_PASSWORD de .env.production"
+	$(PROD_COMPOSE) exec mosquitto mosquitto_passwd -c /mosquitto/config/passwd enertec
+	@echo "🔧 Ajustando permisos del archivo..."
+	$(PROD_COMPOSE) exec mosquitto chmod 0700 /mosquitto/config/passwd
+	$(PROD_COMPOSE) exec mosquitto chown root:root /mosquitto/config/passwd
+	@echo "✅ Contraseña configurada. Reiniciando servicios..."
+	$(PROD_COMPOSE) restart
+
+prod-update: ## [PROD] Actualizar código en producción (después de git pull)
+	@echo "🔄 Actualizando producción..."
+	@$(PROD_EXEC) composer install --no-dev --optimize-autoloader
+	@$(PROD_EXEC) npm run prod
+	@$(PROD_EXEC) php artisan migrate --force
+	@$(PROD_EXEC) php artisan config:cache
+	@$(PROD_EXEC) php artisan route:cache
+	@echo "🔄 Reiniciando Laravel..."
+	@$(PROD_COMPOSE) restart laravel.test
+	@echo "✅ Actualización completada"
+
+prod-cache-clear: ## [PROD] Limpiar cachés en producción
+	@echo "🧹 Limpiando cachés de producción..."
+	$(PROD_EXEC) php artisan cache:clear
+	$(PROD_EXEC) php artisan config:clear
+	$(PROD_EXEC) php artisan route:clear
+	$(PROD_EXEC) php artisan view:clear
+	@echo "✅ Cachés limpiadas"
+
+prod-status: ## [PROD] Ver estado completo de producción
+	@echo "📊 Estado de producción:"
+	@echo ""
+	@echo "🐳 Contenedores:"
+	@$(PROD_COMPOSE) ps
+	@echo ""
+	@echo "📋 Procesos Supervisor:"
+	@$(PROD_COMPOSE) exec laravel.test ps aux | grep -E "php|node|python" || true

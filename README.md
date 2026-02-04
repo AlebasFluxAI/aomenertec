@@ -1,4 +1,4 @@
-# Proyecto Enertec - Sistema de Gestión de Energía
+# Proyecto FluxAI - Sistema de Gestión de Energía
 
 Sistema de gestión y monitoreo de energía desarrollado con Laravel 8.75, que integra comunicación MQTT para dispositivos IoT, WebSockets en tiempo real y gestión avanzada de usuarios.
 
@@ -17,7 +17,9 @@ make up
 make status
 ```
 
-**📖 Para instrucciones detalladas de Docker, consulta [README-DOCKER.md](README-DOCKER.md)**
+**📖 Documentación:**
+- [README-DOCKER.md](README-DOCKER.md) - Guía completa de Docker para desarrollo
+- [DEPLOYMENT-PRODUCTION.md](DEPLOYMENT-PRODUCTION.md) - Guía de deployment a producción
 
 ## 🏗️ Stack Tecnológico
 
@@ -100,6 +102,19 @@ make status        # Ver estado completo
 make urls          # Mostrar URLs de acceso
 make help          # Ver todos los comandos disponibles
 ```
+
+### Producción (Servidor Ubuntu)
+```bash
+make prod-deploy       # Deployment completo
+make prod-up           # Iniciar servicios
+make prod-down         # Detener servicios
+make prod-restart      # Reiniciar servicios
+make prod-logs         # Ver logs
+make prod-update       # Actualizar código
+make prod-mqtt-password # Configurar MQTT
+```
+
+> 📖 Ver [DEPLOYMENT-PRODUCTION.md](DEPLOYMENT-PRODUCTION.md) para la guía completa de deployment.
 
 ## 🌐 URLs de Acceso
 
@@ -205,7 +220,8 @@ make clean
 
 ## 📚 Documentación Adicional
 
-- **[README-DOCKER.md](README-DOCKER.md)** - Guía completa de Docker
+- **[README-DOCKER.md](README-DOCKER.md)** - Guía completa de Docker para desarrollo
+- **[DEPLOYMENT-PRODUCTION.md](DEPLOYMENT-PRODUCTION.md)** - Guía de deployment a producción
 - **[CLAUDE.md](CLAUDE.md)** - Documentación técnica del proyecto
 - **Makefile** - Ejecuta `make help` para ver todos los comandos
 
