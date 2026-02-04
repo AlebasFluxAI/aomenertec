@@ -55,28 +55,31 @@ docker compose -f docker-compose.production.yml up -d
 echo -e "${GREEN}Step 3: Waiting for database to be ready...${NC}"
 sleep 10
 
-echo -e "${GREEN}Step 4: Running migrations...${NC}"
-docker compose -f docker-compose.production.yml exec -T laravel.test php artisan migrate --force
+echo -e "${GREEN}Step 4: Installing Composer dependencies...${NC}"
+docker compose -f docker-compose.production.yml exec -T laravel.test composer install --no-dev --optimize-autoloader
 
 echo -e "${GREEN}Step 5: Generating application key (if not set)...${NC}"
 docker compose -f docker-compose.production.yml exec -T laravel.test php artisan key:generate --force
 
-echo -e "${GREEN}Step 6: Installing NPM dependencies...${NC}"
+echo -e "${GREEN}Step 6: Running migrations...${NC}"
+docker compose -f docker-compose.production.yml exec -T laravel.test php artisan migrate --force
+
+echo -e "${GREEN}Step 7: Installing NPM dependencies...${NC}"
 docker compose -f docker-compose.production.yml exec -T laravel.test npm install
 
-echo -e "${GREEN}Step 7: Building frontend assets...${NC}"
+echo -e "${GREEN}Step 8: Building frontend assets...${NC}"
 docker compose -f docker-compose.production.yml exec -T laravel.test npm run prod
 
-echo -e "${GREEN}Step 8: Optimizing Laravel for production...${NC}"
+echo -e "${GREEN}Step 9: Optimizing Laravel for production...${NC}"
 docker compose -f docker-compose.production.yml exec -T laravel.test php artisan config:cache
 docker compose -f docker-compose.production.yml exec -T laravel.test php artisan route:cache
 docker compose -f docker-compose.production.yml exec -T laravel.test php artisan view:cache
 
-echo -e "${GREEN}Step 9: Setting file permissions...${NC}"
+echo -e "${GREEN}Step 10: Setting file permissions...${NC}"
 docker compose -f docker-compose.production.yml exec -T laravel.test chmod -R 775 storage bootstrap/cache
 docker compose -f docker-compose.production.yml exec -T laravel.test chown -R www-data:www-data storage bootstrap/cache
 
-echo -e "${GREEN}Step 10: Verifying services...${NC}"
+echo -e "${GREEN}Step 11: Verifying services...${NC}"
 docker compose -f docker-compose.production.yml ps
 
 echo ""
