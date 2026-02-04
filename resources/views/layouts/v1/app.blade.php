@@ -122,41 +122,35 @@
                 </div>
             </div>
         </section>
-
-
     </div>
+@else
     <div>
-        @else
-            <div>
-                @auth
-                    @include("layouts.menu.v2.header_menu")
-                @endauth
+        @auth
+            @include("layouts.menu.v2.header_menu")
+        @endauth
 
-                <section class="top-info">
-                    @yield('header')
-                </section>
-                <section class="top-info">
-                    @livewire('livewire-toast')
-                    <div class="loader-page">
-                        <h2 style="margin-top: 150px;"></h2>
-                    </div>
-                    <div class="container mt-3">
-                        <div>
-                            @yield('content')
-                        </div>
-                    </div>
-                </section>
-
-
+        <section class="top-info">
+            @yield('header')
+        </section>
+        <section class="top-info">
+            @livewire('livewire-toast')
+            <div class="loader-page">
+                <h2 style="margin-top: 150px;"></h2>
             </div>
-            <div>
-                @endif
-
-                @unless(request()->is('/', 'login'))
-                    @include("footer")
-                @endunless
-
+            <div class="container mt-3">
+                <div>
+                    @yield('content')
+                </div>
             </div>
+        </section>
+    </div>
+@endif
+
+<div>
+    @unless(request()->is('/', 'login'))
+        @include("footer")
+    @endunless
+</div>
 
             <!-- Vendor JS Files -->
             <script>
