@@ -127,22 +127,23 @@
     <div>
         @auth
             @include("layouts.menu.v2.header_menu")
-        @endauth
-
-        <section class="top-info">
-            @yield('header')
-        </section>
-        <section class="top-info">
-            @livewire('livewire-toast')
-            <div class="loader-page">
-                <h2 style="margin-top: 150px;"></h2>
-            </div>
-            <div class="container mt-3">
-                <div>
-                    @yield('content')
+        @else
+            {{-- Para páginas sin autenticación (login, reset password, etc.) --}}
+            <section class="top-info">
+                @yield('header')
+            </section>
+            <section class="top-info">
+                @livewire('livewire-toast')
+                <div class="loader-page">
+                    <h2 style="margin-top: 150px;"></h2>
                 </div>
-            </div>
-        </section>
+                <div class="container mt-3">
+                    <div>
+                        @yield('content')
+                    </div>
+                </div>
+            </section>
+        @endauth
     </div>
 @endif
 
