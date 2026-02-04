@@ -20,6 +20,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensiones PHP requeridas
