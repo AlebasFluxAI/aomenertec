@@ -423,10 +423,25 @@ Muestra:
 ### Producción
 
 - ⚠️ CAMBIAR todas las contraseñas
-- ⚠️ Usar certificados SSL válidos
+- ⚠️ Usar certificados SSL válidos (Cloudflare Origin Certificate)
 - ⚠️ NO exponer puertos directamente
-- ⚠️ Usar reverse proxy (nginx)
+- ⚠️ Usar reverse proxy (nginx incluido en docker-compose.production.yml)
 - ⚠️ Habilitar firewall
+- ⚠️ Configurar MQTT con `make prod-mqtt-password` después del deploy
+
+**Comandos de producción:**
+```bash
+# Primera vez (desde cero)
+make prod-deploy-fresh     # Deploy + migrate:fresh --seed
+make prod-mqtt-password    # Configurar MQTT (REQUERIDO)
+
+# Actualización
+make prod-update           # Después de git pull
+
+# Mantenimiento
+make prod-restart          # Reiniciar servicios
+make prod-logs             # Ver logs
+```
 
 ## 📚 Recursos Adicionales
 

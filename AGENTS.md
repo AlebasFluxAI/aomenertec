@@ -28,12 +28,26 @@ make test                     # Run all tests
 
 ### Production (Ubuntu Server)
 ```bash
-make prod-deploy              # Full deployment (first time)
-make prod-update              # Update code (after git pull)
+# First time deployment (fresh install with seeders)
+make prod-deploy-fresh        # Full deployment + migrate:fresh --seed
+make prod-mqtt-password       # Configure MQTT (interactive, REQUIRED)
+
+# Normal deployment (existing database)
+make prod-deploy              # Full deployment with migrations only
+make prod-mqtt-password       # Configure MQTT (interactive, REQUIRED)
+
+# After git pull
+make prod-update              # Update code, assets, migrations
+
+# Maintenance
 make prod-restart             # Restart services
 make prod-logs                # View logs
 make prod-ps                  # Container status
+make prod-seed                # Run seeders only
+make prod-create-db           # Create database if not exists
 ```
+
+> ⚠️ **IMPORTANT**: After `prod-deploy` or `prod-deploy-fresh`, you MUST run `make prod-mqtt-password` to configure MQTT authentication. Enter the same password as `MQTT_AUTH_PASSWORD` in `.env.production`.
 
 > 📖 See [DEPLOYMENT-PRODUCTION.md](DEPLOYMENT-PRODUCTION.md) for full production guide.
 

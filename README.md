@@ -105,14 +105,28 @@ make help          # Ver todos los comandos disponibles
 
 ### Producción (Servidor Ubuntu)
 ```bash
-make prod-deploy       # Deployment completo
-make prod-up           # Iniciar servicios
-make prod-down         # Detener servicios
-make prod-restart      # Reiniciar servicios
-make prod-logs         # Ver logs
-make prod-update       # Actualizar código
-make prod-mqtt-password # Configurar MQTT
+# Primera instalación (desde cero con seeders)
+make prod-deploy-fresh     # Deployment completo + migrate:fresh --seed
+make prod-mqtt-password    # Configurar MQTT (interactivo, REQUERIDO)
+
+# Deployment normal (base de datos existente)
+make prod-deploy           # Deployment con migraciones
+make prod-mqtt-password    # Configurar MQTT (interactivo, REQUERIDO)
+
+# Actualización después de git pull
+make prod-update           # Actualizar código, assets, migraciones
+
+# Mantenimiento
+make prod-up               # Iniciar servicios
+make prod-down             # Detener servicios
+make prod-restart          # Reiniciar servicios
+make prod-logs             # Ver logs
+make prod-ps               # Estado de contenedores
+make prod-seed             # Ejecutar seeders
+make prod-create-db        # Crear base de datos si no existe
 ```
+
+> ⚠️ **IMPORTANTE**: Después de `prod-deploy` o `prod-deploy-fresh`, DEBES ejecutar `make prod-mqtt-password` para configurar la autenticación MQTT. Ingresa la misma contraseña que `MQTT_AUTH_PASSWORD` en `.env.production`.
 
 > 📖 Ver [DEPLOYMENT-PRODUCTION.md](DEPLOYMENT-PRODUCTION.md) para la guía completa de deployment.
 

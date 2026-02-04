@@ -2,8 +2,8 @@
 # Desarrollo LOCAL con Laravel Sail + Producción con Docker Compose
 
 .PHONY: help build up down restart logs shell install setup migrate fresh test clean \
-        prod-deploy prod-up prod-down prod-restart prod-logs prod-ps prod-shell \
-        prod-migrate prod-mqtt-password prod-update
+        prod-deploy prod-deploy-fresh prod-up prod-down prod-restart prod-logs prod-ps prod-shell \
+        prod-migrate prod-seed prod-mqtt-password prod-update prod-create-db
 
 # Variables - Desarrollo (Sail)
 SAIL = ./vendor/bin/sail
@@ -241,7 +241,7 @@ urls: ## Mostrar URLs de acceso
 # Para usar en el servidor Ubuntu de producción
 # ============================================
 
-prod-deploy: ## [PROD] Deployment completo a producción
+prod-deploy: ## [PROD] Deployment completo a producción (sin seeders)
 	@echo "🚀 Iniciando deployment a producción..."
 	@if [ ! -f docker-compose.production.yml ]; then \
 		echo "❌ Error: docker-compose.production.yml no encontrado"; \
@@ -267,6 +267,7 @@ prod-deploy: ## [PROD] Deployment completo a producción
 	@$(PROD_COMPOSE) up -d
 	@echo "⏳ Esperando que la base de datos esté lista..."
 	@sleep 15
+	@$(MAKE) prod-create-db
 	@echo "📦 Instalando dependencias de Composer..."
 	@$(PROD_EXEC) composer install --no-dev --optimize-autoloader
 	@echo "🔑 Generando APP_KEY..."
@@ -282,17 +283,73 @@ prod-deploy: ## [PROD] Deployment completo a producción
 	@$(PROD_EXEC) php artisan route:cache
 	@echo "🔐 Configurando permisos..."
 	@$(PROD_EXEC) chmod -R 775 storage bootstrap/cache
-	@echo "✅ Verificando servicios..."
-	@$(PROD_COMPOSE) ps
 	@echo ""
 	@echo "=========================================="
 	@echo "   ✅ Deployment completado!"
 	@echo "=========================================="
 	@echo ""
-	@echo "⚠️  Pasos pendientes (solo primera vez):"
-	@echo "   1. Configurar contraseña MQTT: make prod-mqtt-password"
-	@echo "   2. Reiniciar servicios: make prod-restart"
+	@echo "⚠️  IMPORTANTE - Ejecutar manualmente:"
+	@echo "   1. Configurar MQTT: make prod-mqtt-password"
+	@echo "   2. (Opcional) Cargar datos: make prod-seed"
 	@echo ""
+
+prod-deploy-fresh: ## [PROD] Deployment completo desde cero (con migraciones fresh + seeders)
+	@echo "🚀 Iniciando deployment FRESH a producción..."
+	@if [ ! -f docker-compose.production.yml ]; then \
+		echo "❌ Error: docker-compose.production.yml no encontrado"; \
+		exit 1; \
+	fi
+	@if [ ! -f .env.production ] && [ ! -f .env ]; then \
+		echo "❌ Error: .env.production no encontrado"; \
+		echo "   Copia .env.production.example a .env.production y configúralo"; \
+		exit 1; \
+	fi
+	@if [ ! -f docker/ssl/fluxai.pem ] || [ ! -f docker/ssl/fluxai.key ]; then \
+		echo "❌ Error: Certificados SSL no encontrados en docker/ssl/"; \
+		echo "   Coloca fluxai.pem y fluxai.key de Cloudflare Origin Certificate"; \
+		exit 1; \
+	fi
+	@if [ ! -f .env ] && [ -f .env.production ]; then \
+		echo "📋 Creando symlink .env -> .env.production..."; \
+		ln -s .env.production .env; \
+	fi
+	@echo "🔨 Construyendo imágenes Docker..."
+	@$(PROD_COMPOSE) build --no-cache
+	@echo "🚀 Iniciando servicios..."
+	@$(PROD_COMPOSE) up -d
+	@echo "⏳ Esperando que la base de datos esté lista..."
+	@sleep 15
+	@$(MAKE) prod-create-db
+	@echo "📦 Instalando dependencias de Composer..."
+	@$(PROD_EXEC) composer install --no-dev --optimize-autoloader
+	@echo "🔑 Generando APP_KEY..."
+	@$(PROD_EXEC) php artisan key:generate --force
+	@echo "📦 Ejecutando migraciones fresh + seeders..."
+	@$(PROD_EXEC) php artisan migrate:fresh --seed --force
+	@echo "📦 Instalando dependencias NPM..."
+	@$(PROD_EXEC) npm install
+	@echo "🎨 Compilando assets para producción..."
+	@$(PROD_EXEC) npm run prod
+	@echo "⚡ Optimizando Laravel..."
+	@$(PROD_EXEC) php artisan config:cache
+	@$(PROD_EXEC) php artisan route:cache
+	@echo "🔐 Configurando permisos..."
+	@$(PROD_EXEC) chmod -R 775 storage bootstrap/cache
+	@echo ""
+	@echo "=========================================="
+	@echo "   ✅ Deployment FRESH completado!"
+	@echo "=========================================="
+	@echo ""
+	@echo "⚠️  IMPORTANTE - Ejecutar manualmente:"
+	@echo "   Configurar MQTT: make prod-mqtt-password"
+	@echo ""
+
+prod-create-db: ## [PROD] Crear base de datos si no existe
+	@echo "🗄️  Verificando/creando base de datos..."
+	@DB_NAME=$$(grep DB_DATABASE .env.production 2>/dev/null | cut -d '=' -f2 || echo "enertec"); \
+	$(PROD_COMPOSE) exec -T pgsql psql -U sail -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '$$DB_NAME'" | grep -q 1 || \
+	$(PROD_COMPOSE) exec -T pgsql psql -U sail -d postgres -c "CREATE DATABASE $$DB_NAME;" && \
+	echo "✅ Base de datos '$$DB_NAME' lista"
 
 prod-up: ## [PROD] Iniciar servicios de producción
 	@echo "🚀 Iniciando servicios de producción..."
@@ -326,15 +383,25 @@ prod-migrate: ## [PROD] Ejecutar migraciones en producción
 	@echo "📦 Ejecutando migraciones en producción..."
 	$(PROD_EXEC) php artisan migrate --force
 
-prod-mqtt-password: ## [PROD] Configurar contraseña MQTT en producción
+prod-seed: ## [PROD] Ejecutar seeders en producción
+	@echo "🌱 Ejecutando seeders en producción..."
+	$(PROD_EXEC) php artisan db:seed --force
+	@echo "✅ Seeders ejecutados"
+
+prod-mqtt-password: ## [PROD] Configurar contraseña MQTT en producción (interactivo)
 	@echo "🔐 Configurando contraseña MQTT..."
-	@echo "   Ingresa la misma contraseña que está en MQTT_AUTH_PASSWORD de .env.production"
+	@echo "   Usuario: enertec"
+	@echo "   Usa la misma contraseña que MQTT_AUTH_PASSWORD en .env.production"
+	@echo ""
 	$(PROD_COMPOSE) exec mosquitto mosquitto_passwd -c /mosquitto/config/passwd enertec
+	@echo ""
 	@echo "🔧 Ajustando permisos del archivo..."
-	$(PROD_COMPOSE) exec mosquitto chmod 0700 /mosquitto/config/passwd
-	$(PROD_COMPOSE) exec mosquitto chown root:root /mosquitto/config/passwd
-	@echo "✅ Contraseña configurada. Reiniciando servicios..."
-	$(PROD_COMPOSE) restart
+	@$(PROD_COMPOSE) exec -T mosquitto chmod 0700 /mosquitto/config/passwd
+	@$(PROD_COMPOSE) exec -T mosquitto chown root:root /mosquitto/config/passwd
+	@echo "🔄 Reiniciando servicios..."
+	@$(PROD_COMPOSE) restart
+	@sleep 10
+	@echo "✅ Contraseña MQTT configurada y servicios reiniciados"
 
 prod-update: ## [PROD] Actualizar código en producción (después de git pull)
 	@echo "🔄 Actualizando producción..."
