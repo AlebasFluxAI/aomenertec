@@ -22,9 +22,9 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     libfreetype6-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Instalar extensión GD de PHP (requerida por phpspreadsheet y simple-qrcode)
+# Instalar extensiones PHP requeridas
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) gd pdo_pgsql pgsql
 
 # Crear usuario y grupo sail (requerido por Laravel Sail)
 RUN groupadd --force -g 1000 sail && \
