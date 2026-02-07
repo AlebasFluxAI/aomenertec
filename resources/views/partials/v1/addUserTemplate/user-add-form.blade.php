@@ -1,6 +1,19 @@
 <div class="contenedor-grande">
     <div class="row content p-5">
         <div class="row ">
+            {{-- Mostrar todos los errores de validación --}}
+            @if ($errors->any())
+                <div class="col-12 mb-4">
+                    <div class="alert alert-danger">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Por favor corrija los siguientes errores:</strong>
+                        <ul class="mb-0 mt-2">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
             @if($form_title??null)
                 @include("partials.v1.divider_title",[
                                "title"=>$form_title??""
