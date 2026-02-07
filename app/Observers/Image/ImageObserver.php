@@ -100,8 +100,19 @@ class ImageObserver
             if (Image::validateImageFile($image)) {
                 $this->optimizeImageIntervention($image);
             }
-            $this->storeS3($image);
+            // Only upload to S3 if bucket is configured
+            if ($this->isS3Configured()) {
+                $this->storeS3($image);
+            }
         }
+    }
+
+    /**
+     * Check if S3 is properly configured
+     */
+    private function isS3Configured(): bool
+    {
+        return !empty(config('filesystems.disks.s3.bucket'));
     }
 
 
@@ -152,7 +163,10 @@ class ImageObserver
         //New sizes
         $imageData = explode('/', $image->path);
 
-        Storage::disk('s3')->deleteDirectory(Image::URL_BASE . $imageData[1]);
+        // Only delete from S3 if configured
+        if ($this->isS3Configured()) {
+            Storage::disk('s3')->deleteDirectory(Image::URL_BASE . $imageData[1]);
+        }
 
         $image->name = $name;
         $image->file_name = $name;
@@ -167,7 +181,10 @@ class ImageObserver
         if (Image::validateImageFile($image)) {
             $this->optimizeImageIntervention($image);
         }
-        $this->updateS3($image);
+        // Only update S3 if configured
+        if ($this->isS3Configured()) {
+            $this->updateS3($image);
+        }
     }
 
     private function updateS3(Image $image)

@@ -92,7 +92,7 @@
                                                                            [
                                                                              "key"=>"Logo",
                                                                              "type"=>"image",
-                                                                             "value"=>$admin->icon?$admin->icon->url:"{{asset("images/flux-ai-logo-icon.png")}}"
+                                                                             "value"=>$admin->icon ? $admin->icon->url : asset('images/flux-ai-logo-icon.png')
                                                                          ],
                                                                      ]
                                                             ],

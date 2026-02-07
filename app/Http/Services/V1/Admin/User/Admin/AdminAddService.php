@@ -30,6 +30,7 @@ class AdminAddService extends Singleton
             "model.billing_name" => "",
             "model.last_name" => "",
             "model.name" => "",
+            "model.css_file" => "blue_green_black_header",
             "indicatives" => IndicativeHelper::getIndicativesKeyValue(),
             "model.indicative" => IndicativeHelper::COLOMBIA
         ]);
@@ -40,7 +41,11 @@ class AdminAddService extends Singleton
     {
         DB::transaction(function () use ($component) {
             $component->validate([
-                'icon' => 'image|max:10240', // 1MB Max
+                'icon' => 'required|image|max:10240', // 10MB Max
+            ], [
+                'icon.required' => 'El logo del administrador es obligatorio.',
+                'icon.image' => 'El archivo debe ser una imagen válida (jpg, png, gif, webp).',
+                'icon.max' => 'La imagen no debe superar los 10MB.',
             ]);
             $component->model['latitude'] = $component->latitude;
             $component->model['longitude'] = $component->longitude;
