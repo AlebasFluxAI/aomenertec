@@ -298,6 +298,7 @@ return (array_merge(
 
 - **NEVER** commit without explicit user request
 - **NEVER** run destructive commands without confirmation
+- **NEVER** modify database data directly (Tinker, raw SQL, etc.). **ALL database changes MUST go through migrations or seeders** so they are reproducible and deployable to production
 - **ALWAYS** use `./vendor/bin/sail` prefix in Docker environment
 - **ALWAYS** clear cache after config changes: `make cache-clear`
 - **CHECK** if MQTT/Echo Server processes are running via Supervisor: `make supervisor-status`

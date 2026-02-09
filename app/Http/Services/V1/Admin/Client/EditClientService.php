@@ -174,7 +174,7 @@ class EditClientService extends Singleton
 
     private function mapper(Component $component)
     {
-        return [
+        $data = [
             'name' => $component->name,
             'email' => $component->email,
             'last_name' => $component->last_name,
@@ -191,8 +191,13 @@ class EditClientService extends Singleton
             'subsistence_consumption_id' => $component->subsistence_consumption_id ?? 1,
             'voltage_level_id' => $component->voltage_level_id,
             'stratum_id' => $component->stratum_id,
-            "vaupes_stratification_type" => $component->stratification_name,
         ];
+
+        if ($component->stratification_name) {
+            $data["vaupes_stratification_type"] = $component->stratification_name;
+        }
+
+        return $data;
     }
 
     private function linkTechnician(Component $component, Client $client)

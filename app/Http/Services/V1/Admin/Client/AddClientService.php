@@ -420,7 +420,7 @@ class AddClientService extends Singleton
             }
         }
 
-        return Client::create([
+        $clientData = [
             'name' => $component->name,
             'last_name' => $component->last_name,
             'email' => $component->email,
@@ -443,8 +443,13 @@ class AddClientService extends Singleton
             'person_type' => $component->client_person_type,
             "has_telemetry" => $component->has_telemetry,
             "admin_id" => Auth::user()->getAdmin() ? Auth::user()->getAdmin()->id : null,
-            "vaupes_stratification_type" => $component->stratification_name,
-        ]);
+        ];
+
+        if ($component->stratification_name) {
+            $clientData["vaupes_stratification_type"] = $component->stratification_name;
+        }
+
+        return Client::create($clientData);
     }
 
     public function clientCode($input = '0123456789', $strength = 10)
