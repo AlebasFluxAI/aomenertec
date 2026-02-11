@@ -13,7 +13,7 @@ Laravel 8.75 + Livewire 2.5 + Jetstream energy management system with MQTT IoT d
 ### Development (Local)
 ```bash
 # First time setup
-make setup                    # Full automated setup
+make setup                    # Full automated setup (creates shared network automatically)
 
 # Daily workflow
 make up                       # Start services
@@ -25,6 +25,8 @@ make migrate                  # Run migrations
 make cache-clear              # Clear all caches
 make test                     # Run all tests
 ```
+
+> **Shared Docker Network**: All services join the `enertec-shared` external Docker network, allowing `aomenertec-api` containers to reach PostgreSQL, Redis, and Mosquitto by container name. `make setup` / `make prod-deploy` create the network automatically. To create it manually: `make network`.
 
 ### Production (Ubuntu Server)
 ```bash
@@ -293,6 +295,7 @@ return (array_merge(
 6. **Authentication**: JWT for API, Jetstream for web
 7. **Permissions**: Spatie Laravel Permission package
 8. **Constants**: Define status constants on models (e.g., `WorkOrder::WORK_ORDER_STATUS_OPEN`)
+9. **API URL config**: Use `config('aom.api_url')`, `config('aom.api_config_path')`, `config('aom.api_clients_path')` from `config/aom.php` — NEVER use `env()` directly for API URLs in service code
 
 ## 🚨 Important Notes
 
@@ -304,6 +307,7 @@ return (array_merge(
 - **CHECK** if MQTT/Echo Server processes are running via Supervisor: `make supervisor-status`
 - **DEFAULT PASSWORD**: User identification number (see UserObserver)
 - **TEST CREDENTIALS**: sadminprueba@fluxai.local / 111111111
+- **API Key (inter-service)**: `dev-api-key-enertec-2026` (header: `x-api-key`) — created by `ApiKeySeeder`
 
 ## 📊 Critical Business Logic
 
@@ -333,6 +337,9 @@ make tinker                                                 # Laravel Tinker REP
 make migrate-fresh                                          # Reset DB (⚠️ destroys data)
 make migrate-seed                                           # Reset DB + seeders
 make db-shell                                               # PostgreSQL CLI
+
+# Docker networking
+make network                                                # Create enertec-shared network
 
 # Assets
 make watch                                                  # Hot reload CSS/JS

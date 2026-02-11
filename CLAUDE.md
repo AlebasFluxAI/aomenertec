@@ -12,6 +12,13 @@ Este es un proyecto Laravel 8.75 con Livewire 2.5 y Jetstream, que funciona como
 
 Este proyecto utiliza Laravel Sail para proporcionar un entorno de desarrollo Docker completo y consistente.
 
+### Red Docker Compartida
+
+Los contenedores del proyecto se conectan a una red Docker externa `enertec-shared` que permite la comunicación directa con los contenedores de `aomenertec-api`. La API puede alcanzar PostgreSQL, Redis y Mosquitto por nombre de contenedor a través de esta red.
+
+- `make network` crea la red `enertec-shared` (idempotente, no falla si ya existe)
+- `make setup`, `make prod-deploy` y `make prod-deploy-fresh` ejecutan `make network` automáticamente como dependencia
+
 ### Servicios Incluidos
 
 El proyecto incluye los siguientes servicios Docker:
@@ -383,6 +390,14 @@ El proyecto también tiene configuración legacy para Bitbucket Pipelines con AW
 - La configuración de deployment está en `appspec.yml`
 
 ## Configuraciones Especiales
+
+### Comunicación con API IoT (aomenertec-api)
+La URL base y paths de la API están centralizados en `/config/aom.php`:
+- `config('aom.api_url')` — URL base de la API (env: `AOM_API_URL`, default: `http://localhost:8000`)
+- `config('aom.api_config_path')` — Path de configuración (env: `AOM_API_CONFIG_PATH`, default: `/api/v1/config`)
+- `config('aom.api_clients_path')` — Path de clientes (env: `AOM_API_CLIENTS_PATH`, default: `/api/v1/clients`)
+
+**IMPORTANTE**: Usar siempre `config('aom.*')` en el código, NUNCA `env()` directamente. Esto permite que `php artisan config:cache` funcione correctamente en producción.
 
 ### Data Frames
 El sistema tiene múltiples archivos de configuración para diferentes tipos de medidores:
