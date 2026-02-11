@@ -22,7 +22,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Prueba",
                 'identification' => '111111111',
                 'phone' => '30111111111',
-                'email' => 'sadminprueba@enerteclatam.com',
+                'email' => 'sadminprueba@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_SUPER_ADMIN
@@ -32,7 +32,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '666666662',
                 'phone' => '30666666662',
-                'email' => 'adminprueba@enerteclatam.com',
+                'email' => 'adminprueba@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_ADMIN
@@ -42,7 +42,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '11219345723',
                 'phone' => '31033436163',
-                'email' => 's.fuentes@enerteclatam.com',
+                'email' => 's.fuentes@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_ADMIN
@@ -52,7 +52,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '999999994',
                 'phone' => '3999999994',
-                'email' => 'patrocinadorprueba@enerteclatam.com',
+                'email' => 'patrocinadorprueba@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_NETWORK_OPERATOR
@@ -63,7 +63,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '888888885',
                 'phone' => '3888888885',
-                'email' => 'patrocinadorpruebaSFVI@enerteclatam.com',
+                'email' => 'patrocinadorpruebaSFVI@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_NETWORK_OPERATOR
@@ -74,7 +74,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '777777776',
                 'phone' => '3777777776',
-                'email' => 'patrocinadorpruebaRED@enerteclatam.com',
+                'email' => 'patrocinadorpruebaRED@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_NETWORK_OPERATOR
@@ -85,7 +85,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '999999117',
                 'phone' => '3999999117',
-                'email' => 'vendedorprueba@enerteclatam.com',
+                'email' => 'vendedorprueba@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_SELLER
@@ -96,7 +96,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '888888118',
                 'phone' => '3888888118',
-                'email' => 'vendedorpruebaSFVI@enerteclatam.com',
+                'email' => 'vendedorpruebaSFVI@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_SELLER
@@ -107,7 +107,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '777777119',
                 'phone' => '3777777119',
-                'email' => 'vendedorpruebaRED@enerteclatam.com',
+                'email' => 'vendedorpruebaRED@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_SELLER
@@ -118,7 +118,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '2299999910',
                 'phone' => '32299999910',
-                'email' => 'tecnicoprueba@enerteclatam.com',
+                'email' => 'tecnicoprueba@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_TECHNICIAN
@@ -129,7 +129,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '2288888811',
                 'phone' => '32288888811',
-                'email' => 'tecnicopruebaSFVI@enerteclatam.com',
+                'email' => 'tecnicopruebaSFVI@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_TECHNICIAN
@@ -140,7 +140,7 @@ class UsersTableSeeder extends Seeder
                 "last_name" => "Apellido",
                 'identification' => '2277777712',
                 'phone' => '32277777712',
-                'email' => 'tecnicopruebaRED@enerteclatam.com',
+                'email' => 'tecnicopruebaRED@fluxai.local',
                 'password' => bcrypt('12345678'),
                 'remember_token' => Str::random(60),
                 'type' => User::TYPE_TECHNICIAN

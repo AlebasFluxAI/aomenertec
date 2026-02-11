@@ -3,27 +3,32 @@
 namespace Database\Seeders;
 
 use App\Models\V1\Api\ApiKey;
+use App\Models\V1\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class ApiKeySeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Seed a development API key for inter-service communication testing.
+     *
+     * This key is used in the x-api-key header to authenticate requests
+     * between aomenertec and aomenertec-api.
      *
      * @return void
      */
     public function run()
     {
-        $superAdmin = \App\Models\V1\User::where('email', 'sadminprueba@enerteclatam.com')->first();
-        
-        ApiKey::create([
-            'api_key' => 'enertec-local-' . Str::random(32),
-            'status' => 'enabled',
-            'security_header_key' => 'X-API-Key',
-            'security_header_value' => Str::random(32),
-            'expiration' => now()->addYears(10), // Expira en 10 años
-            'user_id' => $superAdmin ? $superAdmin->id : 1,
-        ]);
+        $superAdmin = User::where('email', 'sadminprueba@fluxai.local')->first();
+
+        ApiKey::updateOrCreate(
+            ['api_key' => 'dev-api-key-enertec-2026'],
+            [
+                'user_id' => $superAdmin ? $superAdmin->id : 1,
+                'status' => ApiKey::STATUS_ENABLED,
+                'expiration' => '2030-12-31 23:59:59',
+                'security_header_key' => 'X-API-Key',
+                'security_header_value' => 'dev-api-key-enertec-2026',
+            ]
+        );
     }
 }

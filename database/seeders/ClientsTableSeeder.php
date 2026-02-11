@@ -56,7 +56,7 @@ class ClientsTableSeeder extends Seeder
             'identification' => 90109173,
             'name' => 'Jerson',
             'last_name' => 'Pruebas',
-            'email' => 'jerson@enerteclatam.com',
+            'email' => 'jerson@fluxai.local',
             'phone' => '3001234567',
             'network_operator_id' => 1,
             'status' => Client::CLIENT_STATUS_ENABLED,

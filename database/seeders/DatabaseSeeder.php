@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             VoltageLevelsTableSeeder::class,//
             RoleHasPermissionsTableSeeder::class,
             ClientsTableSeeder::class,
+            ApiKeySeeder::class,
         ]);
     }
 
