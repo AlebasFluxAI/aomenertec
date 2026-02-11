@@ -2,6 +2,7 @@
 # Desarrollo LOCAL con Laravel Sail + Producción con Docker Compose
 
 .PHONY: help build up down restart logs shell install setup migrate fresh test clean \
+        network \
         prod-deploy prod-deploy-fresh prod-up prod-down prod-restart prod-logs prod-ps prod-shell \
         prod-migrate prod-seed prod-mqtt-password prod-update prod-create-db
 
@@ -63,10 +64,18 @@ ps: ## Ver estado de los contenedores
 	$(SAIL) ps
 
 # ============================================
+# Red Docker Compartida
+# ============================================
+
+network: ## Crear red compartida con la API (enertec-shared)
+	@echo "==> Creando red Docker compartida 'enertec-shared'..."
+	@docker network create enertec-shared 2>/dev/null || echo "    La red ya existe"
+
+# ============================================
 # Configuración Inicial
 # ============================================
 
-setup: ## Configuración inicial completa del proyecto
+setup: network ## Configuración inicial completa del proyecto
 	@echo "⚙️  Configuración inicial del proyecto..."
 	@if [ ! -f .env ]; then \
 		echo "📋 Copiando .env.example a .env..."; \
@@ -81,6 +90,8 @@ setup: ## Configuración inicial completa del proyecto
 	@$(MAKE) install
 	@echo "🔑 Generando APP_KEY..."
 	@$(SAIL) artisan key:generate
+	@echo "🔑 Generando JWT_SECRET..."
+	@$(SAIL) artisan jwt:secret --force
 	@echo "📦 Ejecutando migraciones..."
 	@$(SAIL) artisan migrate
 	@echo "🎨 Compilando assets..."
@@ -241,7 +252,7 @@ urls: ## Mostrar URLs de acceso
 # Para usar en el servidor Ubuntu de producción
 # ============================================
 
-prod-deploy: ## [PROD] Deployment completo a producción (sin seeders)
+prod-deploy: network ## [PROD] Deployment completo a producción (sin seeders)
 	@echo "🚀 Iniciando deployment a producción..."
 	@if [ ! -f docker-compose.production.yml ]; then \
 		echo "❌ Error: docker-compose.production.yml no encontrado"; \
@@ -272,6 +283,8 @@ prod-deploy: ## [PROD] Deployment completo a producción (sin seeders)
 	@$(PROD_EXEC) composer install --no-dev --optimize-autoloader
 	@echo "🔑 Generando APP_KEY..."
 	@$(PROD_EXEC) php artisan key:generate --force
+	@echo "🔑 Generando JWT_SECRET..."
+	@$(PROD_EXEC) php artisan jwt:secret --force
 	@echo "📦 Ejecutando migraciones..."
 	@$(PROD_EXEC) php artisan migrate --force
 	@echo "📦 Instalando dependencias NPM..."
@@ -293,7 +306,7 @@ prod-deploy: ## [PROD] Deployment completo a producción (sin seeders)
 	@echo "   2. (Opcional) Cargar datos: make prod-seed"
 	@echo ""
 
-prod-deploy-fresh: ## [PROD] Deployment completo desde cero (con migraciones fresh + seeders)
+prod-deploy-fresh: network ## [PROD] Deployment completo desde cero (con migraciones fresh + seeders)
 	@echo "🚀 Iniciando deployment FRESH a producción..."
 	@if [ ! -f docker-compose.production.yml ]; then \
 		echo "❌ Error: docker-compose.production.yml no encontrado"; \
@@ -324,6 +337,8 @@ prod-deploy-fresh: ## [PROD] Deployment completo desde cero (con migraciones fre
 	@$(PROD_EXEC) composer install --no-dev --optimize-autoloader
 	@echo "🔑 Generando APP_KEY..."
 	@$(PROD_EXEC) php artisan key:generate --force
+	@echo "🔑 Generando JWT_SECRET..."
+	@$(PROD_EXEC) php artisan jwt:secret --force
 	@echo "📦 Ejecutando migraciones fresh + seeders..."
 	@$(PROD_EXEC) php artisan migrate:fresh --seed --force
 	@echo "📦 Instalando dependencias NPM..."
