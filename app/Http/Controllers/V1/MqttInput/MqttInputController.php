@@ -10,6 +10,10 @@ class MqttInputController extends Controller
 {
     public function __invoke(Request $request)
     {
+        if (!$request->has('message') || empty($request->message)) {
+            return response()->json(['error' => 'El campo message es requerido'], 422);
+        }
+
         SaveMicrocontrollerDataJob::dispatch($request->message);
     }
 }

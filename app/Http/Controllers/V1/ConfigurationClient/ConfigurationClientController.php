@@ -136,7 +136,17 @@ class ConfigurationClientController extends Controller
     public function notificationWebhook(Request $request)
     {
         $datosJson = $request->json()->all();
+
+        if (empty($datosJson['id_event']) || empty($datosJson['serial'])) {
+            return response()->json(['error' => 'Faltan campos requeridos: id_event, serial'], 422);
+        }
+
         $event = EventLog::find($datosJson['id_event']);
+
+        if (!$event) {
+            return response()->json(['error' => 'EventLog no encontrado'], 404);
+        }
+
         $responseData = [
             'status' => 'success',
             'message' => 'Webhook procesado exitosamente',
