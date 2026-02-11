@@ -89,7 +89,13 @@ class AuthController extends Controller
     public function joblist()
     {
         $user = auth("api")->user();
-        $clients = $user->technician->clients;
+        $technician = $user->technician;
+
+        if (!$technician) {
+            return response()->json(['error' => 'Este endpoint es solo para técnicos'], 403);
+        }
+
+        $clients = $technician->clients;
 
         $pass = "jghsdjfg626FFDS5266s";
         $pass1 = "jkdhjk54858DDS55";
@@ -255,7 +261,7 @@ class AuthController extends Controller
         $request->validate([
             'password' => 'required'
         ]);
-        if($request->password != '123456789'){
+        if($request->password != config('aom.firmware_password')){
             return response()->json(['error' => 'Invalidate password'], 404);
         }
         // Obtener todos los registros de Firmware
@@ -270,7 +276,7 @@ class AuthController extends Controller
         $request->validate([
             'password' => 'required'
         ]);
-        if($request->password != '123456789'){
+        if($request->password != config('aom.firmware_password')){
             return response()->json(['error' => 'Invalidate password'], 404);
         }
         // Encontrar el firmware por su ID
