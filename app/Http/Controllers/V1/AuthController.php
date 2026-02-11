@@ -292,6 +292,12 @@ class AuthController extends Controller
             return response()->json(['error' => 'Evidence not found'], 404);
         }
         $filePath = $evidence->url;
+
+        // Construir URL absoluta si la ruta es relativa (storage local sin S3)
+        if ($filePath && !str_starts_with($filePath, 'http')) {
+            $filePath = url($filePath);
+        }
+
         return response()->json(['url' => $filePath], 200, [], JSON_UNESCAPED_SLASHES);
     }
     public function createFirmware(Request $request)

@@ -94,6 +94,8 @@ setup: network ## Configuración inicial completa del proyecto
 	@$(SAIL) artisan jwt:secret --force
 	@echo "📦 Ejecutando migraciones..."
 	@$(SAIL) artisan migrate
+	@echo "🔗 Creando symlink storage..."
+	@$(SAIL) artisan storage:link 2>/dev/null || echo "    Symlink ya existe"
 	@echo "🎨 Compilando assets..."
 	@$(SAIL) npm run dev
 	@echo "🔐 Configurando contraseña MQTT..."
@@ -287,6 +289,8 @@ prod-deploy: network ## [PROD] Deployment completo a producción (sin seeders)
 	@$(PROD_EXEC) php artisan jwt:secret --force
 	@echo "📦 Ejecutando migraciones..."
 	@$(PROD_EXEC) php artisan migrate --force
+	@echo "🔗 Creando symlink storage..."
+	@$(PROD_EXEC) php artisan storage:link 2>/dev/null || echo "    Symlink ya existe"
 	@echo "📦 Instalando dependencias NPM..."
 	@$(PROD_EXEC) npm install
 	@echo "🎨 Compilando assets para producción..."
@@ -341,6 +345,8 @@ prod-deploy-fresh: network ## [PROD] Deployment completo desde cero (con migraci
 	@$(PROD_EXEC) php artisan jwt:secret --force
 	@echo "📦 Ejecutando migraciones fresh + seeders..."
 	@$(PROD_EXEC) php artisan migrate:fresh --seed --force
+	@echo "🔗 Creando symlink storage..."
+	@$(PROD_EXEC) php artisan storage:link 2>/dev/null || echo "    Symlink ya existe"
 	@echo "📦 Instalando dependencias NPM..."
 	@$(PROD_EXEC) npm install
 	@echo "🎨 Compilando assets para producción..."
