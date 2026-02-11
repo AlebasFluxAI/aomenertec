@@ -617,6 +617,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified', 'enable_user', "role_
 });
 
 
+// TODO [INC-006]: Esta ruta siempre retorna true. Actualmente no representa un riesgo
+// porque todos los canales usan Channel (público), no PrivateChannel.
+// Cuando se migren canales sensibles (data-monitoring.{client_id}, notifications)
+// a PrivateChannel, esta ruta DEBE implementar autorizacion real:
+//   return Broadcast::auth(request());
 Route::post('/broadcasting/auth', function () {
     return true;
 });
