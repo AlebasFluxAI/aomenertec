@@ -22,6 +22,7 @@ services:
             - '.:/var/www/html'
         networks:
             - sail
+            - enertec-shared
         depends_on:
             - pgsql
             - redis
@@ -41,6 +42,7 @@ services:
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
         networks:
             - sail
+            - enertec-shared
         healthcheck:
             test:
                 - CMD
@@ -61,6 +63,7 @@ services:
             - 'sail-redis:/data'
         networks:
             - sail
+            - enertec-shared
         healthcheck:
             test:
                 - CMD
@@ -80,6 +83,7 @@ services:
             - 'sail-mosquitto-log:/mosquitto/log'
         networks:
             - sail
+            - enertec-shared
         healthcheck:
             test:
                 - CMD
@@ -97,6 +101,8 @@ services:
 networks:
     sail:
         driver: bridge
+    enertec-shared:
+        external: true
 volumes:
     sail-pgsql:
         driver: local

@@ -12,6 +12,7 @@ services:
             - laravel.test
         networks:
             - sail
+            - enertec-shared
         restart: unless-stopped
 
     laravel.test:
@@ -33,6 +34,7 @@ services:
                 condition: service_started
         networks:
             - sail
+            - enertec-shared
         restart: unless-stopped
 
     pgsql:
@@ -46,6 +48,7 @@ services:
             - 'sail-pgsql:/var/lib/postgresql/data'
         networks:
             - sail
+            - enertec-shared
         healthcheck:
             test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
             interval: 10s
@@ -60,6 +63,7 @@ services:
             - 'sail-redis:/data'
         networks:
             - sail
+            - enertec-shared
         healthcheck:
             test: ["CMD", "redis-cli", "ping"]
             interval: 10s
@@ -77,11 +81,14 @@ services:
             - 'sail-mosquitto-data:/mosquitto/data'
         networks:
             - sail
+            - enertec-shared
         restart: unless-stopped
 
 networks:
     sail:
         driver: bridge
+    enertec-shared:
+        external: true
 
 volumes:
     sail-pgsql:
