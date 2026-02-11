@@ -52,17 +52,17 @@ class ClientConfigurationService extends Singleton
                 "client_id" => $client->id,
                 "ssid" => "",
                 "wifi_password" => "",
-                "mqtt_host" => env('DEFAULT_MQTT_HOST', '3.12.98.178'),
-                "mqtt_port" => env('DEFAULT_MQTT_PORT', '1883'),
-                "mqtt_user" => env('DEFAULT_MQTT_USER', 'enertec'),
-                "mqtt_password" => env('DEFAULT_MQTT_PASSWORD', 'enertec2020**'),
-                "real_time_latency" => env('DEFAULT_REAL_TIME_LATENCY', 30),
+                "mqtt_host" => config('aom.client_defaults.mqtt_host'),
+                "mqtt_port" => config('aom.client_defaults.mqtt_port'),
+                "mqtt_user" => config('aom.client_defaults.mqtt_user'),
+                "mqtt_password" => config('aom.client_defaults.mqtt_password'),
+                "real_time_latency" => config('aom.client_defaults.real_time_latency'),
                 "active_real_time" => false,
-                "storage_latency" => env('DEFAULT_STORAGE_LATENCY', 1),
+                "storage_latency" => config('aom.client_defaults.storage_latency'),
                 "storage_type_latency" => ClientConfiguration::STORAGE_LATENCY_TYPE_HOURLY,
                 "frame_type" => ClientConfiguration::FRAME_TYPE_ACTIVE_REACTIVE_ENERGY_VARIABLES,
                 "digital_outputs" => 0,
-                "billing_day" => env('DEFAULT_BILLING_DAY', 1),
+                "billing_day" => config('aom.client_defaults.billing_day'),
 
             ]);
         }
@@ -359,9 +359,9 @@ class ClientConfigurationService extends Singleton
         $flag_wifi = false;
         $flag_latency = false;
         $message = [];
-        $aomApiUrl = env('AOM_API_URL', 'https://aom.enerteclatam.com');
-        $aomConfigPath = env('AOM_API_CONFIG_PATH', '/api/v1/config');
-        
+        $aomApiUrl = config('aom.api_url');
+        $aomConfigPath = config('aom.api_config_path');
+
         if ($component->client_config->isDirty('ssid') || $component->client_config->isDirty('wifi_password')) {
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
             $apiKey = ApiKey::first();
@@ -491,8 +491,8 @@ class ClientConfigurationService extends Singleton
             }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
             $apiKey = ApiKey::first();
-            $aomApiUrl = env('AOM_API_URL', 'https://aom.enerteclatam.com');
-            $aomConfigPath = env('AOM_API_CONFIG_PATH', '/api/v1/config');
+            $aomApiUrl = config('aom.api_url');
+            $aomConfigPath = config('aom.api_config_path');
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-alert-limits',
                 'method' => 'POST',
@@ -552,8 +552,8 @@ class ClientConfigurationService extends Singleton
             }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
             $apiKey = ApiKey::first();
-            $aomApiUrl = env('AOM_API_URL', 'https://aom.enerteclatam.com');
-            $aomConfigPath = env('AOM_API_CONFIG_PATH', '/api/v1/config');
+            $aomApiUrl = config('aom.api_url');
+            $aomConfigPath = config('aom.api_config_path');
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-control-limits',
                 'method' => 'POST',

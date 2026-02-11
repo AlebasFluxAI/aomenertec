@@ -69,7 +69,7 @@ class Monitoring extends Component
                     $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
                     $apiKey =ApiKey::first();
                     $requestDetails = [
-                        'url' => 'https://aom.enerteclatam.com/api/v1/config/set-status-real-time',
+                        'url' => config('aom.api_url') . config('aom.api_config_path') . '/set-status-real-time',
                         'method' => 'GET',
                         'body' => [
                             'serial' => $equipment->serial,

@@ -60,7 +60,7 @@ Verificá que `.env` de producción tenga:
 
 ```bash
 # URLs para API externa (configuración remota de medidores)
-AOM_API_URL=https://aom.enerteclatam.com
+AOM_API_URL=https://api.fluxai.solutions
 AOM_API_CONFIG_PATH=/api/v1/config
 AOM_API_CLIENTS_PATH=/api/v1/clients
 

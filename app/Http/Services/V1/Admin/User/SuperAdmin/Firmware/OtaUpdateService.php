@@ -90,7 +90,7 @@ class OtaUpdateService extends Singleton
         if (in_array($mimeType, $allowedMimeTypes) && $fileSize <= $maxFileSize) {
             $apiKey =ApiKey::first();
             $requestDetails = [
-                'url' => 'https://aom.enerteclatam.com/api/v1/config/ota-update',
+                'url' => config('aom.api_url') . config('aom.api_config_path') . '/ota-update',
                 'method' => 'POST',
                 'body' => [
                     'serial' => $equipment->serial,

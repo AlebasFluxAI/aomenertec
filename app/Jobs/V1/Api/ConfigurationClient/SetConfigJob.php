@@ -86,7 +86,7 @@ class SetConfigJob implements ShouldQueue
             $apiKey =ApiKey::first();
             $response = Http::withHeaders([
                 'x-api-key' => $apiKey->api_key,
-            ])->withoutVerifying()->get('https://aom.enerteclatam.com/api/v1/config/set-date', [
+            ])->withoutVerifying()->get(config('aom.api_url') . config('aom.api_config_path') . '/set-date', [
                 'serial' => $json['serial'],
             ]);
         }
@@ -105,7 +105,7 @@ class SetConfigJob implements ShouldQueue
             $apiKey =ApiKey::first();
             $response = Http::withHeaders([
                 'x-api-key' => $apiKey->api_key,
-            ])->withoutVerifying()->post('https://aom.enerteclatam.com/api/v1/clients/client-add', [
+            ])->withoutVerifying()->post(config('aom.api_url') . config('aom.api_clients_path') . '/client-add', [
                 'serial' => $equipment->serial,
             ]);
             return;
