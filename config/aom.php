@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'api_url' => env('AOM_API_URL', 'http://localhost:8000'),
+    'api_url' => env('AOM_API_URL', 'http://localhost'),
     'api_config_path' => env('AOM_API_CONFIG_PATH', '/api/v1/config'),
     'api_clients_path' => env('AOM_API_CLIENTS_PATH', '/api/v1/clients'),
 

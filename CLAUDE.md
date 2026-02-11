@@ -391,13 +391,16 @@ El proyecto también tiene configuración legacy para Bitbucket Pipelines con AW
 
 ## Configuraciones Especiales
 
-### Comunicación con API IoT (aomenertec-api)
-La URL base y paths de la API están centralizados en `/config/aom.php`:
-- `config('aom.api_url')` — URL base de la API (env: `AOM_API_URL`, default: `http://localhost:8000`)
+### Configuración de API URL (self-calling)
+La web app se llama a sí misma para los endpoints de configuración IoT (`/api/v1/config/*`, `/api/v1/clients/*`). La URL base y paths están centralizados en `/config/aom.php`:
+- `config('aom.api_url')` — URL base de la propia web app (env: `AOM_API_URL`, default: `http://localhost`)
+  - **Local**: `http://localhost` (la web app en Docker, puerto 80)
+  - **Producción**: `https://app.fluxai.solutions`
 - `config('aom.api_config_path')` — Path de configuración (env: `AOM_API_CONFIG_PATH`, default: `/api/v1/config`)
 - `config('aom.api_clients_path')` — Path de clientes (env: `AOM_API_CLIENTS_PATH`, default: `/api/v1/clients`)
 
 **IMPORTANTE**: Usar siempre `config('aom.*')` en el código, NUNCA `env()` directamente. Esto permite que `php artisan config:cache` funcione correctamente en producción.
+**NOTA**: `AOM_API_URL` apunta a la propia web app (mismo dominio), NO a un servidor API externo.
 
 ### Data Frames
 El sistema tiene múltiples archivos de configuración para diferentes tipos de medidores:

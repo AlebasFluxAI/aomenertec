@@ -59,8 +59,8 @@ En producción, necesitás actualizar estos paths en `laravel-echo-server.json`:
 Verificá que `.env` de producción tenga:
 
 ```bash
-# URLs para API externa (configuración remota de medidores)
-AOM_API_URL=https://api.fluxai.solutions
+# URL base de la propia web app (se llama a sí misma para config IoT)
+AOM_API_URL=https://app.fluxai.solutions
 AOM_API_CONFIG_PATH=/api/v1/config
 AOM_API_CLIENTS_PATH=/api/v1/clients
 
