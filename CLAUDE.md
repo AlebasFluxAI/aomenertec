@@ -26,7 +26,7 @@ El proyecto incluye los siguientes servicios Docker:
 1. **Laravel App** (PHP 8.1)
    - Puerto: 80 (HTTP)
    - Puerto: 8443 (HTTPS - Laravel Echo Server)
-   - Incluye: PHP-FPM, Supervisor, Python 3, Node.js, Laravel Echo Server
+   - Incluye: PHP-FPM, Supervisor, Node.js, Laravel Echo Server
 
 2. **PostgreSQL 14**
    - Puerto: 5432
@@ -149,15 +149,18 @@ Una vez iniciados los servicios:
 El contenedor de Laravel ejecuta automáticamente (vía Supervisor):
 
 1. **Laravel Echo Server** - WebSockets para broadcasting en tiempo real
-2. **receiveMqttEvent.py** - Script Python que escucha eventos MQTT en topic `mc/data`
-3. **receiveMqttRealTimeEvent.py** - Script Python que escucha eventos MQTT en topic `mc/real_time`
+2. **mqtt-consumer** - PHP-MQTT consumer (`php artisan mqtt:consume`) que se suscribe a los topics MQTT (`v1/mc/data`, `mc/data`, `v1/mc/alert`, `v1/mc/alert_control`, `v1/mc/ack`, `v1/mc/real_time`) y despacha jobs de procesamiento
+3. **queue-worker** - Procesa jobs de la cola (Redis/sync)
+4. **scheduler** - Ejecuta tareas programadas de Laravel
+
+> **Nota**: Los scripts Python legacy (`receiveMqttEvent.py`, `receiveMqttRealTimeEvent.py`) fueron reemplazados por el consumer PHP-MQTT que se conecta directamente al broker y despacha jobs sin intermediarios HTTP.
 
 Para ver los logs de estos procesos:
 
 ```bash
 ./vendor/bin/sail exec laravel.test supervisorctl status
 ./vendor/bin/sail exec laravel.test tail -f /var/log/supervisor/laravel-echo-server.out.log
-./vendor/bin/sail exec laravel.test tail -f /var/log/supervisor/mqtt-receiver.out.log
+./vendor/bin/sail exec laravel.test tail -f /var/log/supervisor/mqtt-consumer.out.log
 ```
 
 ### Ejecutar Comandos en Contenedores

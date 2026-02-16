@@ -90,14 +90,13 @@ DEFAULT_MQTT_PASSWORD=tu-password-seguro-aqui
 
 ```bash
 ✅ laravel-echo-server       # WebSocket server
-✅ kafka-consumer            # Recibe datos MQTT
+✅ mqtt-consumer             # PHP-MQTT consumer (php artisan mqtt:consume)
 ✅ queue-worker              # Procesa jobs (colas: spot,spot1,spot4,default)
 ✅ scheduler                 # Comandos programados (cada 1-2 min)
-✅ mqtt-receiver             # Legacy MQTT receiver (Python)
-✅ mqtt-realtime-receiver    # Legacy realtime receiver (Python)
-✅ mqtt-realtime-forwarder   # Forwarder v1/mc/data → v1/mc/real_time
 ✅ laravel-server            # Servidor PHP
 ```
+
+> **Nota**: Los procesos legacy (`kafka-consumer`, `mqtt-receiver`, `mqtt-realtime-receiver`, `mqtt-realtime-forwarder`) fueron consolidados en un único `mqtt-consumer` que usa PHP-MQTT directamente.
 
 ---
 
@@ -183,7 +182,7 @@ window.Echo.socketId()
 
 ### Datos en tiempo real no aparecen:
 
-1. Verificar que `kafka-consumer` está corriendo
+1. Verificar que `mqtt-consumer` está corriendo
 2. Verificar que `queue-worker` procesa jobs
 3. Verificar que medidor envía a `v1/mc/real_time`
 4. Verificar logs de broadcasting en Laravel

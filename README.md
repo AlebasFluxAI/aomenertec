@@ -50,10 +50,10 @@ make status
 - Perfiles de usuario personalizables
 
 ### Comunicación IoT
-- Integración MQTT para dispositivos
-- Scripts Python para procesamiento de eventos
-- Monitoreo en tiempo real
-- Procesamiento de datos de sensores
+- Integración MQTT para dispositivos IoT (medidores eléctricos)
+- PHP-MQTT consumer directo (`php artisan mqtt:consume`) — sin intermediarios
+- Monitoreo en tiempo real vía WebSockets
+- Procesamiento y agregación de datos de sensores (minuto/hora/día/mes)
 
 ### Sistema V1
 - Gestión de clientes y equipos
@@ -169,10 +169,7 @@ aomenertec/
 ├── routes/
 │   ├── web.php           # Rutas web
 │   └── api.php           # Rutas API
-├── script/               # Scripts Python MQTT
-│   ├── receiveMqttEvent.py
-│   ├── receiveMqttRealTimeEvent.py
-│   └── requirements.txt
+├── script/               # Scripts legacy (deshabilitados, ver ConsumerCommand.php)
 ├── Makefile              # Comandos simplificados
 ├── docker-compose.yml    # Orquestación de servicios
 └── laravel-echo-server.json # Config Echo Server

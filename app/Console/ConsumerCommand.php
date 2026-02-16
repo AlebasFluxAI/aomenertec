@@ -17,14 +17,14 @@ class ConsumerCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'kafka:consume';
+    protected $signature = 'mqtt:consume';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Kafka consumer';
+    protected $description = 'MQTT consumer - subscribes to IoT device topics and dispatches processing jobs';
 
     /**
      * Execute the console command.

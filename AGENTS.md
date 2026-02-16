@@ -291,7 +291,7 @@ return (array_merge(
 2. **Service Layer Pattern**: Controllers delegate to Services (e.g., `AlertTypeAddService`)
 3. **Singleton Services**: Use `::getInstance()` for service classes
 4. **Broadcasting**: Use Laravel Echo + Redis for real-time updates
-5. **MQTT Processing**: Python scripts POST to Laravel endpoints
+5. **MQTT Processing**: PHP-MQTT `ConsumerCommand` (`php artisan mqtt:consume`) subscribes directly to Mosquitto topics and dispatches jobs. Legacy Python scripts have been removed.
 6. **Authentication**: JWT for API, Jetstream for web
 7. **Permissions**: Spatie Laravel Permission package
 8. **Constants**: Define status constants on models (e.g., `WorkOrder::WORK_ORDER_STATUS_OPEN`)
@@ -321,6 +321,7 @@ return (array_merge(
 
 ```bash
 # Artisan commands
+./vendor/bin/sail artisan mqtt:consume                      # Start MQTT consumer (subscribes to IoT topics)
 ./vendor/bin/sail artisan schedule:run                      # Run scheduled tasks manually
 ./vendor/bin/sail artisan update:data-consumption           # Process consumption data
 ./vendor/bin/sail artisan average:hourly-consumption        # Calculate hourly averages
@@ -353,7 +354,7 @@ make prod                                                   # Production build
 3. **Verify middleware** requirements in routes
 4. **Clear caches** after config/route changes
 5. **Test MQTT flow** if touching MqttInput controllers
-6. **Verify Supervisor** processes if changing Python scripts
+6. **Verify Supervisor** processes if changing MQTT consumer or queue workers
 7. **Check permissions** in `/config/permissions.php`
 
 ## 📝 When Writing Tests

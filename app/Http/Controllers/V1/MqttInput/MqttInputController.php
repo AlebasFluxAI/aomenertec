@@ -14,6 +14,8 @@ class MqttInputController extends Controller
             return response()->json(['error' => 'El campo message es requerido'], 422);
         }
 
-        SaveMicrocontrollerDataJob::dispatch($request->message);
+        SaveMicrocontrollerDataJob::dispatch($request->message, false);
+
+        return response()->json(['success' => true, 'message' => 'Datos MQTT recibidos'], 200);
     }
 }

@@ -25,7 +25,7 @@
   # Ver últimas conexiones
   ./vendor/bin/sail logs mosquitto --tail 20
 
-  Los logs muestran que el cliente Python main_receiver se está conectando constantemente al broker, lo cual es correcto y
+  Los logs muestran que el cliente PHP-MQTT `client_consumer_princi` se está conectando al broker, lo cual es correcto y
   esperado.
 
   Flujo de Datos MQTT:
@@ -34,9 +34,9 @@
       ↓
   Mosquitto MQTT Broker (puerto 1883)
       ↓
-  Scripts Python (receiveMqttEvent.py y receiveMqttRealTimeEvent.py)
-      ↓
-  Laravel API Endpoints (/api/v1/mqtt_input y /api/v1/mqtt_input/real-time)
+  PHP-MQTT ConsumerCommand (php artisan mqtt:consume)
+      ↓  dispatch() directo a Laravel Jobs
+  SaveMicrocontrollerDataJob / SaveAlertDataJob / PushRealTimeMicrocontrollerDataJob
       ↓
   Procesamiento en Laravel + Broadcasting via Laravel Echo Server
       ↓
@@ -47,16 +47,23 @@
   El contenedor de Laravel ejecuta automáticamente mediante Supervisor:
 
   1. Laravel Echo Server (Puerto 8443) - WebSockets para actualizaciones en tiempo real
-  2. receiveMqttEvent.py - Escucha topic mc/data (datos regulares de medidores)
-  3. receiveMqttRealTimeEvent.py - Escucha topic mc/real_time (datos en tiempo real)
+  2. mqtt-consumer (php artisan mqtt:consume) - Se suscribe a topics MQTT:
+     - v1/mc/data (datos regulares, QoS 2) → SaveMicrocontrollerDataJob
+     - mc/data (datos regulares legacy, QoS 2) → SaveMicrocontrollerDataJob
+     - v1/mc/alert (alertas, QoS 0) → SaveAlertDataJob
+     - v1/mc/alert_control (alertas de control, QoS 0) → SaveAlertDataJob
+     - v1/mc/ack (acknowledgments, QoS 0) → SetConfigJob
+     - v1/mc/real_time (datos tiempo real, QoS 0) → PushRealTimeMicrocontrollerDataJob
+  3. queue-worker - Procesa jobs de la cola Redis
+  4. scheduler - Tareas programadas de Laravel
 
-  Verificar que los scripts Python estén corriendo:
+  Verificar que el consumer MQTT esté corriendo:
 
-  # Ver todos los procesos supervisados
-  docker exec aomenertec-laravel.test-1 ps aux | grep python
+  # Ver estado de Supervisor
+  make supervisor-status
 
-  # Ver logs de los scripts MQTT
-  ./vendor/bin/sail logs laravel.test | grep -i mqtt
+  # Ver logs del consumer MQTT
+  docker exec aomenertec-laravel.test-1 tail -f /var/log/supervisor/mqtt-consumer.out.log
 
   4. Cómo Monitorear MQTT desde el Admin
 
@@ -74,21 +81,25 @@
   - Alertas configuradas
   - Control remoto de dispositivos
 
-  5. Endpoints API para MQTT
+  5. Procesamiento MQTT
 
-  El sistema expone estos endpoints para recibir datos MQTT:
+  El consumer PHP-MQTT (ConsumerCommand) se conecta directamente al broker Mosquitto
+  y despacha jobs de Laravel sin intermediarios HTTP. Los endpoints HTTP legacy
+  (/api/v1/mqtt_input y /api/v1/mqtt_input/real-time) siguen existiendo como fallback
+  pero ya no son utilizados por el flujo principal.
 
-  - POST /api/v1/mqtt_input - Recibe datos regulares del topic mc/data
-  - POST /api/v1/mqtt_input/real-time - Recibe datos en tiempo real del topic mc/real_time
-
-  Los scripts Python hacen POST a estos endpoints cuando reciben mensajes MQTT.
+  Jobs principales:
+  - SaveMicrocontrollerDataJob - Procesa frames binarios de datos de medidores
+  - SaveAlertDataJob - Procesa alertas de dispositivos
+  - PushRealTimeMicrocontrollerDataJob - Reenvía datos en tiempo real via WebSocket
+  - SetConfigJob - Procesa acknowledgments de configuración
 
   6. Problema del WebSocket Error
 
   Notas que en la consola del navegador aparece:
   WebSocket connection to 'ws://localhost:8443/socket.io/' failed
 
-  Esto indica que Laravel Echo Server no está corriendo completamente. Los scripts Python para MQTT sí están funcionando
+  Esto indica que Laravel Echo Server no está corriendo completamente. El consumer MQTT sí está funcionando
   (puedes ver las conexiones en los logs de Mosquitto), pero el servidor de WebSockets para el navegador necesita ser
   iniciado.
 
@@ -112,17 +123,23 @@
   │  │              │  │              │  │              │  │
   │  │ - PHP 8.1    │  │ - Database   │  │ - Cache      │  │
   │  │ - Supervisor │  └──────────────┘  │ - Sessions   │  │
-  │  │ - Python 3   │                    │ - Queue      │  │
-  │  │ - Node.js    │  ┌──────────────┐  └──────────────┘  │
-  │  └──────────────┘  │  Mosquitto   │                     │
-  │                    │ MQTT Broker  │                     │
-  │  Python Scripts:   │  (Port 1883) │                     │
-  │  • receiveMqtt     │              │                     │
-  │    Event.py        │ - IoT Comm   │                     │
-  │  • receiveMqtt     └──────────────┘                     │
-  │    RealTime.py                                           │
+  │  │ - Node.js    │                    │ - Queue      │  │
+  │  │              │  ┌──────────────┐  └──────────────┘  │
+  │  └──────┬───────┘  │  Mosquitto   │                     │
+  │         │          │ MQTT Broker  │                     │
+  │  Supervisor:       │  (Port 1883) │                     │
+  │  • mqtt-consumer   │              │                     │
+  │    (PHP-MQTT)  ◄───│ - IoT Comm   │                     │
+  │  • queue-worker    └──────────────┘                     │
+  │  • echo-server                                           │
+  │  • scheduler                                             │
   │                                                          │
   └──────────────────────────────────────────────────────────┘
 
   El MQTT está funcionando correctamente - puedes ver las conexiones activas en los logs. Solo necesitas crear clientes y
   medidores en el sistema para ver datos fluyendo en tiempo real.
+
+  Nota: Los scripts Python legacy (receiveMqttEvent.py, receiveMqttRealTimeEvent.py) fueron reemplazados
+  por el consumer PHP-MQTT (ConsumerCommand) que se conecta directamente al broker y despacha jobs de
+  Laravel sin intermediarios HTTP. Los scripts permanecen en el directorio script/ como referencia pero
+  ya no se ejecutan en Supervisor ni están incluidos en la imagen Docker.
