@@ -125,8 +125,21 @@ class RealTimeChart extends Component
 
     public function selectRealTime()
     {
-        if ($this->client->clientConfiguration()->first()->active_real_time) {
+        $clientConfig = $this->client->clientConfiguration()->first();
+
+        if (!$clientConfig) {
+            $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data' => 'El cliente no tiene configuración. Contacte al administrador.']);
+            return;
+        }
+
+        if ($clientConfig->active_real_time) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
+
+                if (!$equipment) {
+                    $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data' => 'No se encontró el microcontrolador asociado al cliente.']);
+                    return;
+                }
+
                 if (!RealTimeListener::whereUserId(Auth::user()->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
                     $new = RealTimeListener::create([
@@ -134,8 +147,7 @@ class RealTimeChart extends Component
                         "equipment_id" => $equipment->id
                     ]);
                     if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
-                        $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                        $apiKey =ApiKey::first();
+                        $apiKey = ApiKey::first();
                         $requestDetails = [
                             'url' => config('aom.api_url') . config('aom.api_config_path') . '/set-status-real-time',
                             'method' => 'GET',
