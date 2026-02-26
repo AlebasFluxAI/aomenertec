@@ -20,16 +20,15 @@
     "devMode": true,
     "host": "0.0.0.0",
     "port": "8443",
-    "protocol": "https",
+    "protocol": "http",
     "socketio": {
         "cors": {
             "origin": ["http://localhost", "http://localhost:80", "http://laravel.test"],
             "credentials": false
         }
     },
-    "secureOptions": 67108864,
-    "sslCertPath": "/var/www/html/docker/ssl/enertec.pem",
-    "sslKeyPath": "/var/www/html/docker/ssl/enertec.key",
+    "sslCertPath": "",
+    "sslKeyPath": "",
     "sslPassphrase": "",
     "subscribers": {
         "http": true,
@@ -42,10 +41,3 @@
         "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
     }
 }
-
-
-
-
-
-
-
