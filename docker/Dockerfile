@@ -14,7 +14,7 @@ WORKDIR /var/www/html
 # Instalar Node.js y dependencias del sistema en UNA SOLA capa con caché
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y --no-install-recommends \
     nodejs \
     supervisor \
