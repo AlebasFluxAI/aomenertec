@@ -3,15 +3,13 @@
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Api\ApiKey;
-use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
-use App\ModulesAux\MQTT;
-use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use PhpMqtt\Client\Exceptions\MqttClientException;
 
 class HeatMapChart extends Component
 {
@@ -75,9 +73,11 @@ class HeatMapChart extends Component
 
     public function selectHeatMap()
     {
-        if($this->client->clientConfiguration()->first()->active_real_time) {
+        $clientConfig = $this->client->clientConfiguration()->first();
+
+        if ($clientConfig && $clientConfig->active_real_time) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                if (RealTimeListener::whereUserId(Auth::user()->id)
+                if ($equipment && RealTimeListener::whereUserId(Auth::user()->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
                     RealTimeListener::whereUserId(Auth::user()->id)
                         ->whereEquipmentId(
@@ -86,23 +86,25 @@ class HeatMapChart extends Component
                     if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
                         $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
                         $apiKey =ApiKey::first();
-                        $requestDetails = [
-                            'url' => config('aom.api_url') . config('aom.api_config_path') . '/set-status-real-time',
-                            'method' => 'GET',
-                            'body' => [
-                                'serial' => $equipment->serial,
-                                'status' => 0
-                            ],
-                            'apiKey' => $apiKey->api_key
-                        ];
-                        try {
-                            $mqtt = MQTT::connection('default', EventLog::EVENT_ON_OFF_REAL_TIME.'-'.$equipment->serial.'-aom-channel');
-                            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
-                            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-                            $mqttCoilAckStrategy->registerLoopEventHandler();
-                            $mqttCoilAckStrategy->subscribe($equipment, 18);
-                        } catch (MqttClientException $e) {
-                            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+
+                        if ($apiKey && $equipment) {
+                            try {
+                                // Llamada interna (localhost) para desactivar real-time.
+                                // Fire-and-forget: no necesita esperar ACK del dispositivo.
+                                $internalUrl = 'http://localhost' . config('aom.api_config_path') . '/set-status-real-time';
+
+                                Http::withHeaders([
+                                    'x-api-key' => $apiKey->api_key,
+                                ])->timeout(10)->get($internalUrl, [
+                                    'serial' => $equipment->serial,
+                                    'status' => 0
+                                ]);
+
+                                Log::info('HeatMapChart: deactivation command sent for serial ' . $equipment->serial);
+                            } catch (\Throwable $e) {
+                                Log::error('HeatMapChart: error deactivating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
+                                $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+                            }
                         }
                     }
                 }

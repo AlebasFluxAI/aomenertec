@@ -3,15 +3,13 @@
 namespace App\Http\Livewire\V1\Admin\Client\Monitoring\Charts;
 
 use App\Models\V1\Api\ApiKey;
-use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
-use App\ModulesAux\MQTT;
-use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use PhpMqtt\Client\Exceptions\MqttClientException;
 
 class DataChart extends Component
 {
@@ -157,23 +155,21 @@ class DataChart extends Component
                     $apiKey = ApiKey::first();
 
                     if ($apiKey) {
-                        $requestDetails = [
-                            'url' => config('aom.api_url') . config('aom.api_config_path') . '/set-status-real-time',
-                            'method' => 'GET',
-                            'body' => [
+                        try {
+                            // Llamada interna (localhost) para desactivar real-time.
+                            // Fire-and-forget: no necesita esperar ACK del dispositivo.
+                            $internalUrl = 'http://localhost' . config('aom.api_config_path') . '/set-status-real-time';
+
+                            Http::withHeaders([
+                                'x-api-key' => $apiKey->api_key,
+                            ])->timeout(10)->get($internalUrl, [
                                 'serial' => $equipment->serial,
                                 'status' => 0
-                            ],
-                            'apiKey' => $apiKey->api_key
-                        ];
-                        try {
-                            $mqtt = MQTT::connection('default', EventLog::EVENT_ON_OFF_REAL_TIME.'-'.$equipment->serial.'-aom-channel');
+                            ]);
 
-                            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
-                            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-                            $mqttCoilAckStrategy->registerLoopEventHandler();
-                            $mqttCoilAckStrategy->subscribe($equipment, 18);
-                        } catch (MqttClientException $e) {
+                            Log::info('DataChart: deactivation command sent for serial ' . $equipment->serial);
+                        } catch (\Throwable $e) {
+                            Log::error('DataChart: error deactivating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
                             $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
                         }
                     }

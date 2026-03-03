@@ -9,14 +9,12 @@ use App\Models\V1\Client;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\RealTimeListener;
 use App\ModulesAux\MQTT;
-use Crc16\Crc16;
 use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
-// use App\Strategy\MqttSenderPattern\MqttSenderContext;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use PhpMqtt\Client\Exceptions\MqttClientException;
-use PhpMqtt\Client\MqttClient;
 
 class Control extends Component
 {
@@ -90,34 +88,35 @@ class Control extends Component
 
     public function selectControl()
     {
-        if ($this->client->clientConfiguration()->first()->active_real_time) {
-            if ($this->client->clientConfiguration()->first()->real_time_flag) {
-                $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                if (RealTimeListener::whereUserId(Auth::user()->id)
-                    ->whereEquipmentId($equipment->id)->exists()) {
-                    RealTimeListener::whereUserId(Auth::user()->id)
-                        ->whereEquipmentId(
-                            $equipment->id
-                        )->forceDelete();
-                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
-                        $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                        $apiKey =ApiKey::first();
-                        $requestDetails = [
-                            'url' => config('aom.api_url') . config('aom.api_config_path') . '/set-status-real-time',
-                            'method' => 'GET',
-                            'body' => [
+        $clientConfig = $this->client->clientConfiguration()->first();
+
+        if ($clientConfig && $clientConfig->active_real_time && $clientConfig->real_time_flag) {
+            $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
+
+            if ($equipment && RealTimeListener::whereUserId(Auth::user()->id)
+                ->whereEquipmentId($equipment->id)->exists()) {
+                RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->forceDelete();
+
+                if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                    $apiKey = ApiKey::first();
+
+                    if ($apiKey) {
+                        try {
+                            // Llamada interna (localhost) para desactivar real-time.
+                            // Fire-and-forget: no necesita esperar ACK del dispositivo.
+                            $internalUrl = 'http://localhost' . config('aom.api_config_path') . '/set-status-real-time';
+
+                            Http::withHeaders([
+                                'x-api-key' => $apiKey->api_key,
+                            ])->timeout(10)->get($internalUrl, [
                                 'serial' => $equipment->serial,
                                 'status' => 0
-                            ],
-                            'apiKey' => $apiKey->api_key
-                        ];
-                        try {
-                            $mqtt = MQTT::connection('default', 'null');
-                            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
-                            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-                            $mqttCoilAckStrategy->registerLoopEventHandler();
-                            $mqttCoilAckStrategy->subscribe($equipment, 18);
-                        } catch (MqttClientException $e) {
+                            ]);
+
+                            Log::info('Control: deactivation command sent for serial ' . $equipment->serial);
+                        } catch (\Throwable $e) {
+                            Log::error('Control: error deactivating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
                             $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
                         }
                     }
