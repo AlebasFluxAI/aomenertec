@@ -6,6 +6,7 @@ use App\Console\Commands\V1\AdminClientEnabledAnnuallyCronjob;
 use App\Console\Commands\V1\ClientInvoiceGeneration;
 use App\Console\Commands\V1\ClientReport;
 use App\Console\Commands\V1\DeleteStopUnpackData;
+use App\Console\Commands\V1\MqttConsumerHealthCheck;
 use App\Console\Commands\V1\OrderData\AverageDaylyConsumptionCommand;
 use App\Console\Commands\V1\OrderData\AverageHourlyConsumptionCommand;
 use App\Console\Commands\V1\OrderData\AverageMonthlyConsumptionCommand;
@@ -62,6 +63,20 @@ class Kernel extends ConsoleKernel
 
         $schedule->command(AdminClientEnabledAnnuallyCronjob::class)
             ->monthlyOn(1);
+
+        // MQTT Consumer health check — verifica que el consumer esté vivo cada 5 minutos.
+        // Si el heartbeat no se actualizó en los últimos 90 segundos, reinicia el consumer
+        // via Supervisor automáticamente. Esto previene pérdida silenciosa de suscripciones MQTT.
+        $schedule->command(MqttConsumerHealthCheck::class)
+            ->everyFiveMinutes()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path('logs/mqtt-health.log'));
+
+        // Reinicio preventivo del consumer cada 6 horas para evitar
+        // degradación de conexiones TCP de larga duración con el broker.
+        $schedule->exec('supervisorctl restart mqtt-consumer')
+            ->cron('0 */6 * * *')
+            ->appendOutputTo(storage_path('logs/mqtt-health.log'));
     }
 
     /**

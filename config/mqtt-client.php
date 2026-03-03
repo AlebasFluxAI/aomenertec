@@ -92,6 +92,14 @@ return [
                     'retain' => env('MQTT_LAST_WILL_RETAIN', false),
                 ],
 
+                // Auto-reconnect: if the broker connection drops, the client will
+                // automatically try to reconnect. Essential for long-lived consumers.
+                'auto_reconnect' => [
+                    'enabled' => env('MQTT_AUTO_RECONNECT', true),
+                    'max_reconnect_attempts' => env('MQTT_MAX_RECONNECT_ATTEMPTS', 10),
+                    'delay_between_reconnect_attempts' => env('MQTT_RECONNECT_DELAY', 5),
+                ],
+
                 // The timeouts (in seconds) used for the connection. Some of these settings
                 // are only relevant when using the event loop of the MQTT client.
                 'connect_timeout' => env('MQTT_CONNECT_TIMEOUT', 60),

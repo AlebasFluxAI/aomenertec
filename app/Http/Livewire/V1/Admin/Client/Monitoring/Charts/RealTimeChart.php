@@ -193,7 +193,14 @@ class RealTimeChart extends Component
                             $mqttCoilAckStrategy->registerLoopEventHandler();
                             $mqttCoilAckStrategy->subscribe($equipment, 18);
                         } catch (MqttClientException $e) {
-                            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+                            // La activación HTTP ya se envió al dispositivo (fetchDataFromAPI).
+                            // Si falla la suscripción MQTT a aom/chanel es solo la confirmación
+                            // del ACK — los datos real-time llegan igual via el consumer principal.
+                            \Illuminate\Support\Facades\Log::warning('RealTimeChart: MQTT ACK subscription failed for serial ' . $equipment->serial . ': ' . $e->getMessage());
+                            $this->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Activación enviada. Los datos llegarán en unos segundos."]);
+                        } catch (\Throwable $e) {
+                            \Illuminate\Support\Facades\Log::error('RealTimeChart: unexpected error activating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
+                            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Error al activar tiempo real. Intente nuevamente."]);
                         }
                     }
             }
