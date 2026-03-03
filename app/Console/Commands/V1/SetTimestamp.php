@@ -44,6 +44,12 @@ class SetTimestamp extends Command
         $clients = Client::whereHasTelemetry(true)->get();
         foreach ($clients as $client) {
             $equipment = $client->equipments()->whereEquipmentTypeId(1)->first();
+
+            if (!$equipment) {
+                $this->warn("Cliente ID {$client->id} no tiene equipo tipo 1, omitiendo.");
+                continue;
+            }
+
             $topic = "mc/config/" . $equipment->serial;
             $date = (new Carbon('now', $client->time_zone));
             $date_unix = (Carbon::parse($date->format('Y-m-d H:i:s'), TimeZoneHelper::COLOMBIA))->timestamp;

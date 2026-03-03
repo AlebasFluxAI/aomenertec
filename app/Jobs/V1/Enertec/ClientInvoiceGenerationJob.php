@@ -16,6 +16,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
@@ -55,12 +56,30 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $networkOperator = $client->networkOperator;
         $fechaActual = Carbon::now();
         $clientType = $client->client_type_id;
+
+        if (!$networkOperator) {
+            Log::warning("ClientInvoiceGenerationJob: Cliente ID {$client->id} no tiene operador de red, omitiendo facturación.");
+            return;
+        }
+
+        if (!$stratum) {
+            Log::warning("ClientInvoiceGenerationJob: Cliente ID {$client->id} no tiene estrato configurado, omitiendo facturación.");
+            return;
+        }
+
         $invoice = $client->invoices()->create([
             "type" => Invoice::TYPE_CONSUMPTION,
             "network_operator_id" => $networkOperator->id
         ]);
 
-        if (ClientType::find($clientType)->type == ClientType::SIN_CONVENTIONAL) {
+        $clientTypeModel = ClientType::find($clientType);
+        if (!$clientTypeModel) {
+            Log::warning("ClientInvoiceGenerationJob: Cliente ID {$client->id} tiene client_type_id={$clientType} inválido, omitiendo facturación.");
+            $invoice->forceDelete();
+            return;
+        }
+
+        if ($clientTypeModel->type == ClientType::SIN_CONVENTIONAL) {
             $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->where('month', str_pad($fechaActual->copy()->subDay()->format('m'), 2, "0", STR_PAD_LEFT))->where('year', $fechaActual->copy()->subDay()->format('Y'))->first();
             if (!($otherFee)) {
                 $otherFee = $networkOperator->sinOtherFees()->whereStrataId($stratum->id)->first();
@@ -84,11 +103,18 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $year = $billing_date->format('Y');
         $month = $billing_date->format('m');
 
-        $total_consumption = $invoice->client->monthlyMicrocontrollerData()
+        $monthlyData = $invoice->client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
             ->where("year", $year)
-            ->first()
-            ->interval_real_consumption;
+            ->first();
+
+        if (!$monthlyData) {
+            Log::warning("ClientInvoiceGenerationJob: Cliente ID {$client->id} no tiene datos mensuales para {$year}-{$month}, omitiendo facturación.");
+            $invoice->forceDelete();
+            return;
+        }
+
+        $total_consumption = $monthlyData->interval_real_consumption;
         $consumptionFee = $invoice->client->consumptionFee($year, $month);
         $totalConsumptionBase = $consumptionFee * $total_consumption;
         $totalConsumption = $totalConsumptionBase;
@@ -98,19 +124,39 @@ class ClientInvoiceGenerationJob implements ShouldQueue
             "total" => $totalConsumption,
             "tax_total" => 0.0,
             "discount" => 0.0,
-            "billable_item_id" => BillableItem::whereSlug(BillableItem::TOTAL_CONSUMPTION)->first()->id,
+            "billable_item_id" => optional(BillableItem::whereSlug(BillableItem::TOTAL_CONSUMPTION)->first())->id,
             "quantity" => $total_consumption,
         ]);
         $consumption = $invoice->client->consumption($year, $month);
 
         $fees = $client->feesDate($month, $year);
         $other_fees = $client->otherFeesDate($month, $year);
+
+        if (!$fees || !$other_fees) {
+            Log::warning("ClientInvoiceGenerationJob: Cliente ID {$client->id} no tiene tarifas (fees/other_fees) para {$year}-{$month}, omitiendo facturación.");
+            $invoice->forceDelete();
+            return;
+        }
+
         $monthly_data = $client->monthlyMicrocontrollerData()
             ->where("month", str_pad($month, 2, "0", STR_PAD_LEFT))
             ->where("year", $year)->first();
-        $json = json_decode($monthly_data->raw_json);
+
+        if (!$monthly_data) {
+            Log::warning("ClientInvoiceGenerationJob: Cliente ID {$client->id} no tiene monthly_data (re-query) para {$year}-{$month}, omitiendo facturación.");
+            $invoice->forceDelete();
+            return;
+        }
+
+        $json = json_decode($monthly_data->raw_json ?? '{}');
 
         $sc = SubsistenceConsumption::find($client->subsistence_consumption_id);
+        if (!$sc) {
+            Log::warning("ClientInvoiceGenerationJob: Cliente ID {$client->id} no tiene SubsistenceConsumption (subsistence_consumption_id={$client->subsistence_consumption_id}), omitiendo facturación.");
+            $invoice->forceDelete();
+            return;
+        }
+
         $value_kwh = (($fees->optional_fee == 0) ? $fees->unit_cost : $fees->optional_fee);
         $value_discount_kwh = $value_kwh * $other_fees->discount / 100;
         $value_discount = ($monthly_data->interval_real_consumption > $sc->value) ? ($sc->value * $value_discount_kwh * (-1)) : ($monthly_data->interval_real_consumption * $value_discount_kwh * (-1));
@@ -121,11 +167,13 @@ class ClientInvoiceGenerationJob implements ShouldQueue
         $value_active = $monthly_data->interval_real_consumption * $value_kwh;
         $value = collect([]);
         $value->value_active = $value_active;
-        $value->value_contribution = ($client->stratum->id > 4) ? (($client->contribution && $other_fees->contribution > 0) ? $value_active * $other_fees->contribution / 100 : 0) : 0;
-        $value->value_discount = ($client->stratum->id < 4) ? (($other_fees->discount > 0) ? $value_discount : 0) : 0;
+        $value->value_contribution = ($stratum->id > 4) ? (($client->contribution && $other_fees->contribution > 0) ? $value_active * $other_fees->contribution / 100 : 0) : 0;
+        $value->value_discount = ($stratum->id < 4) ? (($other_fees->discount > 0) ? $value_discount : 0) : 0;
         $value->value_tax = $value_tax;
-        $value->value_varch = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND') ? ($this->fees->distribution * $monthly_data->interval_reactive_capacitive_consumption) : 0;
-        $value->value_varlh = ($this->client->stratum->acronym == 'COM' or $this->client->stratum->acronym == 'IND') ? ($this->fees->distribution * $monthly_data->penalizable_reactive_inductivo_consumption) : 0;
+        $stratumAcronym = $stratum->acronym ?? '';
+        $feesDistribution = $fees->distribution ?? 0;
+        $value->value_varch = ($stratumAcronym == 'COM' || $stratumAcronym == 'IND') ? ($feesDistribution * ($monthly_data->interval_reactive_capacitive_consumption ?? 0)) : 0;
+        $value->value_varlh = ($stratumAcronym == 'COM' || $stratumAcronym == 'IND') ? ($feesDistribution * ($monthly_data->penalizable_reactive_inductivo_consumption ?? 0)) : 0;
         $value->subtotal_energy = $value->value_active + $value->value_contribution + $value->value_discount + $value->value_tax + $value->value_varch + $value->value_varlh;
         $value->subtotal_others = 0;
         $value->total = $value->subtotal_energy + $value->subtotal_others;
@@ -147,13 +195,18 @@ class ClientInvoiceGenerationJob implements ShouldQueue
                      BillableItem::TOTAL_INVOICE => $value->total,
                  ]
                  as $key => $item) {
+            $billableItem = BillableItem::whereSlug($key)->first();
+            if (!$billableItem) {
+                Log::warning("ClientInvoiceGenerationJob: BillableItem con slug '{$key}' no encontrado, omitiendo item para cliente ID {$client->id}.");
+                continue;
+            }
             $invoice->items()->create([
                 "unit_total" => $item ?? 0.0,
                 "subtotal" => $item ?? 0.0,
                 "total" => $item ?? 0.0,
                 "tax_total" => 0.0,
                 "discount" => 0.0,
-                "billable_item_id" => BillableItem::whereSlug($key)->first()->id,
+                "billable_item_id" => $billableItem->id,
                 "quantity" => 1,
             ]);
 
@@ -178,11 +231,13 @@ class ClientInvoiceGenerationJob implements ShouldQueue
                 array_push($value_chart['x_axis'], Carbon::create($data->year, $data->month, $data->day)->format('d M y'));
                 if ($i == 1) {
                     $last_month = $data->interval_real_consumption;
-                    $date_last_month = Carbon::create($data->microcontrollerData->source_timestamp);
+                    $mcData = $data->microcontrollerData;
+                    $date_last_month = $mcData ? Carbon::create($mcData->source_timestamp) : Carbon::now();
                 }
                 if ($i == 0) {
                     $month = $data->interval_real_consumption;
-                    $date_month = Carbon::create($data->microcontrollerData->source_timestamp);
+                    $mcData = $data->microcontrollerData;
+                    $date_month = $mcData ? Carbon::create($mcData->source_timestamp) : Carbon::now();
                 }
                 $promedio = $data->interval_real_consumption + $promedio;
 
@@ -217,13 +272,22 @@ class ClientInvoiceGenerationJob implements ShouldQueue
               }
             }";
         $chartUrl = 'https://quickchart.io/chart?w=500&h=300&c=' . urlencode($chartConfig);
-        $client = Client::find($client->id);
+        $client = Client::find($client->id) ?? $this->client;
         $promedio = $promedio / 6;
         $others_data['pago_oportuno'] = $fechaActual->copy()->addDays(15)->format('Y-m-d');
         $others_data['suspension'] = $fechaActual->copy()->addDays(20)->format('Y-m-d');
         $others_data['serial_meter'] = $client->getSerialMeter();
         $others_data['promedio'] = $promedio;
-        $others_data['last_month'] = $last_month;
+        $others_data['last_month'] = $last_month ?? 0;
+
+        // Protect against $date_month being null (no data found for i==0)
+        if (!isset($date_month) || $date_month === null) {
+            $date_month = Carbon::now();
+        }
+        if (!isset($date_last_month)) {
+            $date_last_month = null;
+        }
+
         $others_data['periodo_facturado'] = $date_last_month == null ? $date_month->format('Y-m-d') . ' - ' . $date_month->format('Y-m-01') : $date_month->format('Y-m-d') . ' - ' . $date_last_month->format('Y-m-d');
         $others_data['dias_facturados'] = $date_last_month == null ? $date_month->format('d') : $date_month->diffInDays($date_last_month);
         $others_data['numero_factura'] = $date_month->format('y') . $date_month->format('m') . $client->code;

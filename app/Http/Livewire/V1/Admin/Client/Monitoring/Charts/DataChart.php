@@ -40,6 +40,27 @@ class DataChart extends Component
         return Client::find($this->client_id);
     }
 
+    /**
+     * Extrae source_timestamp de forma segura desde un modelo de datos agregados.
+     * Los modelos hourly/daily/monthly tienen una relación belongsTo ->microcontrollerData
+     * que puede retornar null si el FK está roto o el registro fue eliminado.
+     */
+    private function getSourceTimestamp($dataModel)
+    {
+        if (!$dataModel) {
+            return null;
+        }
+
+        // time_id 1 y 2 tienen source_timestamp directo
+        if ($this->time_id == 1 || $this->time_id == 2) {
+            return $dataModel->source_timestamp;
+        }
+
+        // time_id 3 y 4 (daily/monthly) necesitan la relación microcontrollerData
+        $mcData = $dataModel->microcontrollerData;
+        return $mcData ? $mcData->source_timestamp : null;
+    }
+
     public function mount(Client $client, $variables, $data_frame, $data_chart, $time)
     {
         $this->select_data = false;
@@ -49,21 +70,31 @@ class DataChart extends Component
         $this->variable_chart_id = 1;
         $this->variables_selected = $this->data_frame->where('variable_id', $this->variable_chart_id)->all();
         $aux = $variables->where('id', $this->variable_chart_id)->first();
-        $this->chart_title = $aux['display_name'];
-        $this->chart_type = $aux['chart_type'];
+        if ($aux) {
+            $this->chart_title = $aux['display_name'];
+            $this->chart_type = $aux['chart_type'];
+        } else {
+            $this->chart_title = '';
+            $this->chart_type = 'line';
+        }
         $this->time_id = $time;
         $this->series = [];
         $this->x_axis = [];
-        $this->data_chart = $this->getClientProperty()->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
+        $this->data_chart = $client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
         if (count($this->data_chart) > 0) {
-            if ($time == 1 or $time == 2) {
-                $this->end = $this->data_chart->first()->source_timestamp;
-                $this->start = $this->data_chart->last()->source_timestamp;
-            } else {
-                $this->start = $this->data_chart->first()->microcontrollerData->source_timestamp;
-                $this->end = $this->data_chart->last()->microcontrollerData->source_timestamp;
+            $firstTs = $this->getSourceTimestamp($this->data_chart->first());
+            $lastTs = $this->getSourceTimestamp($this->data_chart->last());
+
+            if ($firstTs && $lastTs) {
+                if ($time == 1 or $time == 2) {
+                    $this->end = $firstTs;
+                    $this->start = $lastTs;
+                } else {
+                    $this->start = $firstTs;
+                    $this->end = $lastTs;
+                }
+                $this->date_range = $this->start . " - " . $this->end;
             }
-            $this->date_range = $this->start . " - " . $this->end;
         } else {
             $this->data_chart = [];
         }
@@ -73,41 +104,59 @@ class DataChart extends Component
 
     public function restartDateRange()
     {
-        if ($this->time_id == 1) {
-            $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
-        } elseif ($this->time_id == 2) {
-            $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
-        } elseif ($this->time_id == 3) {
-            $this->data_chart = $this->client->dailyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(31)->get();
-        } else {
-            $this->data_chart = $this->client->monthlyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(12)->get();
+        $client = $this->client;
+        if (!$client) {
+            return;
         }
-        if (count($this->data_chart)>0) {
-            if ($this->time_id == 1) {
-                $this->end = $this->data_chart->first()->source_timestamp;
-                $this->start = $this->data_chart->last()->source_timestamp;
-            } else {
-                $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-                $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+
+        if ($this->time_id == 1) {
+            $this->data_chart = $client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
+        } elseif ($this->time_id == 2) {
+            $this->data_chart = $client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
+        } elseif ($this->time_id == 3) {
+            $this->data_chart = $client->dailyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(31)->get();
+        } else {
+            $this->data_chart = $client->monthlyMicrocontrollerData()->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')->limit(12)->get();
+        }
+        if (count($this->data_chart) > 0) {
+            $firstTs = $this->getSourceTimestamp($this->data_chart->first());
+            $lastTs = $this->getSourceTimestamp($this->data_chart->last());
+
+            if ($firstTs && $lastTs) {
+                if ($this->time_id == 1 || $this->time_id == 2) {
+                    $this->end = $firstTs;
+                    $this->start = $lastTs;
+                } else {
+                    $this->end = $firstTs;
+                    $this->start = $lastTs;
+                }
+                $this->date_range = $this->start . " - " . $this->end;
             }
-            $this->date_range = $this->start . " - " . $this->end;
         }
         $this->chartRender(true);
     }
 
     public function selectHistory()
     {
-        if($this->client->clientConfiguration()->first()->active_real_time) {
-                $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                if (RealTimeListener::whereUserId(Auth::user()->id)
-                    ->whereEquipmentId($equipment->id)->exists()) {
-                    RealTimeListener::whereUserId(Auth::user()->id)
-                        ->whereEquipmentId(
-                            $equipment->id
-                        )->forceDelete();
-                    if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
-                        $equipment= $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                        $apiKey =ApiKey::first();
+        $client = $this->client;
+        if (!$client) {
+            return;
+        }
+
+        $clientConfig = $client->clientConfiguration()->first();
+
+        if ($clientConfig && $clientConfig->active_real_time) {
+            $equipment = $client->equipments()->whereEquipmentTypeId(7)->first();
+
+            if ($equipment && RealTimeListener::whereUserId(Auth::user()->id)
+                ->whereEquipmentId($equipment->id)->exists()) {
+                RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->forceDelete();
+
+                if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {
+                    $apiKey = ApiKey::first();
+
+                    if ($apiKey) {
                         $requestDetails = [
                             'url' => config('aom.api_url') . config('aom.api_config_path') . '/set-status-real-time',
                             'method' => 'GET',
@@ -129,6 +178,7 @@ class DataChart extends Component
                         }
                     }
                 }
+            }
         }
         $this->restartDateRange();
     }
@@ -149,6 +199,9 @@ class DataChart extends Component
     public function updatedVariableChartId()
     {
         $variable = $this->variables->where('id', $this->variable_chart_id)->first();
+        if (!$variable) {
+            return;
+        }
         $this->chart_type = $variable['chart_type'];
         $this->chart_title = $variable['display_name'];
         $this->variables_selected = $this->data_frame->where('variable_id', $this->variable_chart_id);
@@ -159,28 +212,35 @@ class DataChart extends Component
 
     private function chartRender($flag)
     {
+        $client = $this->client;
+
         if ($flag) {
             $data_chart = $this->data_chart;
         } else {
+            if (!$client) {
+                $this->emit('changeAxis', ['series' => [], 'x_axis' => [], 'title' => $this->chart_title]);
+                return;
+            }
+
             if ($this->time_id == 1) {
-                $data_chart = $this->client->microcontrollerData()
+                $data_chart = $client->microcontrollerData()
                     ->whereBetween("source_timestamp", [$this->start, $this->end])
                     ->orderBy('source_timestamp', 'desc')
                     ->limit(250)->get();
             } elseif ($this->time_id == 2) {
-                $data_chart = $this->client->hourlyMicrocontrollerData()
+                $data_chart = $client->hourlyMicrocontrollerData()
                     ->whereBetween("source_timestamp", [$this->start, $this->end])
                     ->orderBy('source_timestamp', 'desc')
                     ->limit(250)->get();
             } elseif ($this->time_id == 3) {
-                $data_chart = $this->client->dailyMicrocontrollerData()
+                $data_chart = $client->dailyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })
                     ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
                     ->limit(250)->get();
             } else {
-                $data_chart = $this->client->monthlyMicrocontrollerData()
+                $data_chart = $client->monthlyMicrocontrollerData()
                     ->whereHas('microcontrollerData', function ($query) {
                         $query->whereBetween("source_timestamp", [$this->start, $this->end]);
                     })
@@ -190,15 +250,21 @@ class DataChart extends Component
             $this->data_chart = $data_chart;
         }
 
-        if (count($data_chart) > 0) {
-            if ($this->time_id == 1 or $this->time_id == 2) {
-                $this->end = $this->data_chart->first()->source_timestamp;
-                $this->start = $this->data_chart->last()->source_timestamp;
-            } else {
-                $this->end = $this->data_chart->first()->microcontrollerData->source_timestamp;
-                $this->start = $this->data_chart->last()->microcontrollerData->source_timestamp;
+        if ($data_chart && count($data_chart) > 0) {
+            $firstTs = $this->getSourceTimestamp($this->data_chart->first());
+            $lastTs = $this->getSourceTimestamp($this->data_chart->last());
+
+            if ($firstTs && $lastTs) {
+                if ($this->time_id == 1 or $this->time_id == 2) {
+                    $this->end = $firstTs;
+                    $this->start = $lastTs;
+                } else {
+                    $this->end = $firstTs;
+                    $this->start = $lastTs;
+                }
+                $this->date_range = $this->start . " - " . $this->end;
             }
-            $this->date_range = $this->start . " - " . $this->end;
+
             $array_aux = $data_chart->reverse();
             $this->series = [];
             $data_aux = [];
@@ -207,27 +273,11 @@ class DataChart extends Component
             foreach ($this->variables_selected as $data) {
                 $data_aux[$index] = [];
                 foreach ($array_aux as $item) {
-                    if ($this->time_id == 3 || $this->time_id == 4) {
-                        $raw_json = json_decode($item->raw_json, true);
-                        if (isset($raw_json[$data['variable_name']])) {
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 4));
-                        } else {
-                            array_push($data_aux[$index], null);
-                        }
-                    } elseif ($this->time_id == 2) {
-                        $raw_json = json_decode($item->raw_json, true);
-                        if (isset($raw_json[$data['variable_name']])) {
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 4));
-                        } else {
-                            array_push($data_aux[$index], null);
-                        }
+                    $raw_json = json_decode($item->raw_json, true);
+                    if ($raw_json && isset($raw_json[$data['variable_name']])) {
+                        array_push($data_aux[$index], round($raw_json[$data['variable_name']], 4));
                     } else {
-                        $raw_json = json_decode($item->raw_json, true);
-                        if (isset($raw_json[$data['variable_name']])) {
-                            array_push($data_aux[$index], round($raw_json[$data['variable_name']], 4));
-                        } else {
-                            array_push($data_aux[$index], null);
-                        }
+                        array_push($data_aux[$index], null);
                     }
                     if ($index == 0) {
                         if ($this->time_id == 1) {
@@ -258,9 +308,61 @@ class DataChart extends Component
         }
     }
 
+    /**
+     * Re-carga data_chart desde la DB ya que es protected y no se serializa entre requests Livewire.
+     */
+    private function loadDataChart()
+    {
+        if ($this->data_chart) {
+            return $this->data_chart;
+        }
+
+        $client = $this->client;
+        if (!$client) {
+            return collect();
+        }
+
+        if (!$this->start || !$this->end) {
+            return collect();
+        }
+
+        if ($this->time_id == 1) {
+            return $client->microcontrollerData()
+                ->whereBetween("source_timestamp", [$this->start, $this->end])
+                ->orderBy('source_timestamp', 'desc')
+                ->limit(250)->get();
+        } elseif ($this->time_id == 2) {
+            return $client->hourlyMicrocontrollerData()
+                ->whereBetween("source_timestamp", [$this->start, $this->end])
+                ->orderBy('source_timestamp', 'desc')
+                ->limit(250)->get();
+        } elseif ($this->time_id == 3) {
+            return $client->dailyMicrocontrollerData()
+                ->whereHas('microcontrollerData', function ($query) {
+                    $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                })
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(250)->get();
+        } else {
+            return $client->monthlyMicrocontrollerData()
+                ->whereHas('microcontrollerData', function ($query) {
+                    $query->whereBetween("source_timestamp", [$this->start, $this->end]);
+                })
+                ->orderBy('year', 'desc')->orderBy('month', 'desc')->orderBy('day', 'desc')
+                ->limit(250)->get();
+        }
+    }
+
     public function setPointPhasor($point)
     {
-        $data = $this->data_chart->reverse();
+        $data_chart = $this->loadDataChart();
+
+        if (!$data_chart || count($data_chart) === 0) {
+            return;
+        }
+
+        $data = $data_chart->reverse();
+        $json = null;
         $i = 0;
         foreach ($data as $datum) {
             if ($i == $point) {
@@ -269,6 +371,11 @@ class DataChart extends Component
             }
             $i++;
         }
+
+        if (!$json || !isset($json['total_phase_angle'])) {
+            return;
+        }
+
         if ($json['total_phase_angle'] < 0) {
             $sum_angle_2 = -120;
             $sum_angle_3 = -240;
