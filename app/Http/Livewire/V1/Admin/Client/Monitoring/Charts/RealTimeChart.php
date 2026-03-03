@@ -6,12 +6,9 @@ use App\Models\V1\Api\ApiKey;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\Client;
 use App\Models\V1\RealTimeListener;
-use App\ModulesAux\MQTT;
-use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use PhpMqtt\Client\Exceptions\MqttClientException;
 
 
 class RealTimeChart extends Component
@@ -186,20 +183,21 @@ class RealTimeChart extends Component
                             'apiKey' => $apiKey->api_key
                         ];
                         try {
-                            $mqtt = MQTT::connection('default', EventLog::EVENT_ON_OFF_REAL_TIME.'-'.$equipment->serial.'-aom-channel');
+                            // Solo enviamos el comando HTTP al dispositivo (non-blocking).
+                            // NO hacemos suscripción MQTT bloqueante (subscribe/loop) porque:
+                            // 1. Bloquea la request HTTP ~20s, causando 504 en Cloudflare
+                            // 2. Los datos real-time llegan por el canal principal del consumer
+                            //    MQTT → PushRealTimeMicrocontrollerDataJob → RealTimeMonitoringEvent
+                            //    → Echo WebSocket → addPoint() en este mismo componente
+                            // 3. El ACK de confirmación no es necesario para real-time
+                            \Illuminate\Support\Facades\Http::withHeaders([
+                                'x-api-key' => $requestDetails['apiKey'],
+                            ])->withoutVerifying()->timeout(10)->get($requestDetails['url'], $requestDetails['body']);
 
-                            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $this);
-                            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-                            $mqttCoilAckStrategy->registerLoopEventHandler();
-                            $mqttCoilAckStrategy->subscribe($equipment, 18);
-                        } catch (MqttClientException $e) {
-                            // La activación HTTP ya se envió al dispositivo (fetchDataFromAPI).
-                            // Si falla la suscripción MQTT a aom/chanel es solo la confirmación
-                            // del ACK — los datos real-time llegan igual via el consumer principal.
-                            \Illuminate\Support\Facades\Log::warning('RealTimeChart: MQTT ACK subscription failed for serial ' . $equipment->serial . ': ' . $e->getMessage());
-                            $this->emitTo('livewire-toast', 'show', ['type' => 'warning', 'message' => "Activación enviada. Los datos llegarán en unos segundos."]);
+                            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Activación enviada. Los datos llegarán en unos segundos."]);
+                            \Illuminate\Support\Facades\Log::info('RealTimeChart: activation command sent for serial ' . $equipment->serial);
                         } catch (\Throwable $e) {
-                            \Illuminate\Support\Facades\Log::error('RealTimeChart: unexpected error activating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
+                            \Illuminate\Support\Facades\Log::error('RealTimeChart: error activating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
                             $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Error al activar tiempo real. Intente nuevamente."]);
                         }
                     }
