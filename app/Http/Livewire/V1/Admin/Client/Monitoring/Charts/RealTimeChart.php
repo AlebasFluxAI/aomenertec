@@ -183,16 +183,15 @@ class RealTimeChart extends Component
                             'apiKey' => $apiKey->api_key
                         ];
                         try {
-                            // Solo enviamos el comando HTTP al dispositivo (non-blocking).
-                            // NO hacemos suscripción MQTT bloqueante (subscribe/loop) porque:
-                            // 1. Bloquea la request HTTP ~20s, causando 504 en Cloudflare
-                            // 2. Los datos real-time llegan por el canal principal del consumer
-                            //    MQTT → PushRealTimeMicrocontrollerDataJob → RealTimeMonitoringEvent
-                            //    → Echo WebSocket → addPoint() en este mismo componente
-                            // 3. El ACK de confirmación no es necesario para real-time
+                            // Llamada interna (localhost) para evitar pasar por Cloudflare,
+                            // que corta requests largas con 504 Gateway Timeout.
+                            // El endpoint construye el frame binario y lo publica via MQTT
+                            // al topic v1/mc/config/{serial} para activar el streaming.
+                            $internalUrl = 'http://localhost' . config('aom.api_config_path') . '/set-status-real-time';
+
                             \Illuminate\Support\Facades\Http::withHeaders([
                                 'x-api-key' => $requestDetails['apiKey'],
-                            ])->withoutVerifying()->timeout(10)->get($requestDetails['url'], $requestDetails['body']);
+                            ])->timeout(10)->get($internalUrl, $requestDetails['body']);
 
                             $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Activación enviada. Los datos llegarán en unos segundos."]);
                             \Illuminate\Support\Facades\Log::info('RealTimeChart: activation command sent for serial ' . $equipment->serial);
