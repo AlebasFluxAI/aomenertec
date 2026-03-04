@@ -13,13 +13,9 @@ use App\Models\V1\ClientConfiguration;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
-use App\ModulesAux\MQTT;
-use App\Strategy\MqttSenderPattern\AlertControlApiStrategy;
-use App\Strategy\MqttSenderPattern\FetchDataApiStrategy;
-use App\Strategy\MqttSenderPattern\MqttConfigAckStrategy;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use PhpMqtt\Client\Exceptions\MqttClientException;
-use PhpMqtt\Client\MqttClient;
 
 class ClientConfigurationService extends Singleton
 {
@@ -337,17 +333,53 @@ class ClientConfigurationService extends Singleton
 
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada, Recuerde guardar cambios"]);
     }
-    private function consumeService(Component $component, $requestDetails, $notificationtypeId, $event){
+    /**
+     * Send config to device via internal API (non-blocking).
+     * The API handles binary packing, MQTT publish to device, and async ACK via CheckAckLogJob.
+     */
+    private function sendConfigToDevice(Component $component, $requestDetails, $event): bool
+    {
         try {
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-            $mqtt = MQTT::connection('default', $event.'-'.$requestDetails['body']['serial'].'-aom-channel');
+            $httpMethod = strtoupper($requestDetails['method']);
+            $httpClient = Http::withHeaders([
+                'x-api-key' => $requestDetails['apiKey'],
+            ])->withoutVerifying()->timeout(10);
 
-            $mqttCoilAckStrategy = new FetchDataApiStrategy($mqtt, $component);
-            $mqttCoilAckStrategy->fetchDataFromAPI($requestDetails);
-            $mqttCoilAckStrategy->registerLoopEventHandler();
-            $mqttCoilAckStrategy->subscribe($equipment, $notificationtypeId);
-        } catch (MqttClientException $e) {
-            $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+            if ($httpMethod === 'POST') {
+                $response = $httpClient->post($requestDetails['url'], $requestDetails['body']);
+            } else {
+                $response = $httpClient->get($requestDetails['url'], $requestDetails['body']);
+            }
+
+            if ($response->successful()) {
+                Log::info("Config sent successfully: {$event} for serial {$requestDetails['body']['serial']}");
+                return true;
+            }
+
+            $status = $response->status();
+            if ($status === 429) {
+                Log::warning("Config rate-limited (429): {$event} for serial {$requestDetails['body']['serial']}");
+                $component->emitTo('livewire-toast', 'show', [
+                    'type' => 'warning',
+                    'message' => "Comando en proceso, espere unos segundos e intente nuevamente"
+                ]);
+            } else {
+                Log::error("Config API error ({$status}): {$event} for serial {$requestDetails['body']['serial']}", [
+                    'response' => $response->body()
+                ]);
+                $component->emitTo('livewire-toast', 'show', [
+                    'type' => 'error',
+                    'message' => "Error al enviar configuración ({$status})"
+                ]);
+            }
+            return false;
+        } catch (\Exception $e) {
+            Log::error("Config send exception: {$event} for serial {$requestDetails['body']['serial']}: {$e->getMessage()}");
+            $component->emitTo('livewire-toast', 'show', [
+                'type' => 'error',
+                'message' => "Error de conexión, intente nuevamente"
+            ]);
+            return false;
         }
     }
 
@@ -355,16 +387,25 @@ class ClientConfigurationService extends Singleton
     public function submitFormConection(Component $component)
     {
         $component->validate();
-        $flag_broker = false;
-        $flag_wifi = false;
-        $flag_latency = false;
-        $message = [];
         $aomApiUrl = config('aom.api_url');
         $aomConfigPath = config('aom.api_config_path');
+        $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+
+        if (!$equipment) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró equipo asociado al cliente"]);
+            return;
+        }
+
+        $apiKey = ApiKey::first();
+        if (!$apiKey) {
+            $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró API key configurada"]);
+            return;
+        }
+
+        $configsSent = 0;
+        $configsFailed = 0;
 
         if ($component->client_config->isDirty('ssid') || $component->client_config->isDirty('wifi_password')) {
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-            $apiKey = ApiKey::first();
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-wifi-credentials',
                 'method' => 'GET',
@@ -375,12 +416,11 @@ class ClientConfigurationService extends Singleton
                 ],
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 13, EventLog::EVENT_SET_WIFI_CREDENTIALS);
-
+            $this->sendConfigToDevice($component, $requestDetails, EventLog::EVENT_SET_WIFI_CREDENTIALS)
+                ? $configsSent++ : $configsFailed++;
         }
+
         if ($component->client_config->isDirty('mqtt_host') || $component->client_config->isDirty('mqtt_port') || $component->client_config->isDirty('mqtt_user') || $component->client_config->isDirty('mqtt_password')) {
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-            $apiKey = ApiKey::first();
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-broker-credentials',
                 'method' => 'GET',
@@ -393,13 +433,11 @@ class ClientConfigurationService extends Singleton
                 ],
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 14, EventLog::EVENT_SET_BROKER_CREDENTIALS);
-
+            $this->sendConfigToDevice($component, $requestDetails, EventLog::EVENT_SET_BROKER_CREDENTIALS)
+                ? $configsSent++ : $configsFailed++;
         }
 
         if ($component->client_config->isDirty('storage_latency') || $component->client_config->isDirty('storage_type_latency') || $component->client_config->isDirty('real_time_latency')) {
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-            $apiKey = ApiKey::first();
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-sampling-time',
                 'method' => 'GET',
@@ -411,12 +449,11 @@ class ClientConfigurationService extends Singleton
                 ],
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 12, EventLog::EVENT_SET_SAMPLING_TIME);
+            $this->sendConfigToDevice($component, $requestDetails, EventLog::EVENT_SET_SAMPLING_TIME)
+                ? $configsSent++ : $configsFailed++;
         }
 
         if ($component->client_config->isDirty('billing_day')) {
-            $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-            $apiKey = ApiKey::first();
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-billing-day',
                 'method' => 'GET',
@@ -426,14 +463,39 @@ class ClientConfigurationService extends Singleton
                 ],
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 56, EventLog::EVENT_SET_BILLING_DAY);
+            $this->sendConfigToDevice($component, $requestDetails, EventLog::EVENT_SET_BILLING_DAY)
+                ? $configsSent++ : $configsFailed++;
         }
-        if($component->client_config->isDirty('active_real_time') or $component->client_config->isDirty('automatic_control')){
+
+        if ($component->client_config->isDirty('active_real_time') || $component->client_config->isDirty('automatic_control')) {
             $component->client_config->save();
-            $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Datos actualizados"]);
-
+            $configsSent++;
         }
 
+        // Show summary toast
+        if ($configsSent > 0 && $configsFailed === 0) {
+            $component->client_config->save();
+            $component->emitTo('livewire-toast', 'show', [
+                'type' => 'success',
+                'message' => "Configuración enviada al equipo, esperando confirmación del dispositivo"
+            ]);
+        } elseif ($configsSent > 0 && $configsFailed > 0) {
+            $component->client_config->save();
+            $component->emitTo('livewire-toast', 'show', [
+                'type' => 'warning',
+                'message' => "Algunas configuraciones fueron enviadas, otras fallaron. Revise e intente nuevamente"
+            ]);
+        } elseif ($configsSent === 0 && $configsFailed > 0) {
+            $component->emitTo('livewire-toast', 'show', [
+                'type' => 'error',
+                'message' => "Error al enviar la configuración, intente nuevamente"
+            ]);
+        } else {
+            $component->emitTo('livewire-toast', 'show', [
+                'type' => 'info',
+                'message' => "No se detectaron cambios en la configuración"
+            ]);
+        }
     }
 
     public function submitFormPermission(Component $component)
@@ -468,7 +530,6 @@ class ClientConfigurationService extends Singleton
             }
             $alert_config_frame = config('data-frame.alert_config_frame');
             $json = [];
-            $data = "";
             foreach ($alert_config_frame as $item) {
                 if ($item['variable_name'] == 'network_operator_id') {
                     continue;
@@ -480,7 +541,7 @@ class ClientConfigurationService extends Singleton
                     continue;
                 } else {
                     $aux_variable = $component->client_config_alert->where('flag_id', $item['flag_id'])->first();
-                    $json[$item['variable_name']] = $aux_variable->{$item['limit']};;
+                    $json[$item['variable_name']] = $aux_variable->{$item['limit']};
                 }
             }
             foreach ($component->client_config_alert as $index => $item) {
@@ -490,7 +551,15 @@ class ClientConfigurationService extends Singleton
                 $item->save();
             }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            if (!$equipment) {
+                $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró equipo asociado al cliente"]);
+                return;
+            }
             $apiKey = ApiKey::first();
+            if (!$apiKey) {
+                $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró API key configurada"]);
+                return;
+            }
             $aomApiUrl = config('aom.api_url');
             $aomConfigPath = config('aom.api_config_path');
             $requestDetails = [
@@ -499,15 +568,17 @@ class ClientConfigurationService extends Singleton
                 'body' => array_merge(['serial' => $equipment->serial], $json),
                 'apiKey' => $apiKey->api_key
             ];
-            $this->consumeService($component, $requestDetails, 10, EventLog::EVENT_SET_ALERT_LIMITS);
 
-
-
-        } catch (MqttClientException $e) {
-
+            if ($this->sendConfigToDevice($component, $requestDetails, EventLog::EVENT_SET_ALERT_LIMITS)) {
+                $component->emitTo('livewire-toast', 'show', [
+                    'type' => 'success',
+                    'message' => "Alertas enviadas al equipo, esperando confirmación del dispositivo"
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error("submitFormAlert exception: {$e->getMessage()}");
+            $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Error al enviar alertas"]);
         }
-
-
     }
     public function submitFormControl(Component $component)
     {
@@ -524,7 +595,6 @@ class ClientConfigurationService extends Singleton
             $alert_config_frame = config('data-frame.alert_config_frame');
             $json = [];
             $json_status = [];
-            $data = "";
             foreach ($alert_config_frame as $item) {
                 if ($item['variable_name'] == 'network_operator_id') {
                     continue;
@@ -541,7 +611,7 @@ class ClientConfigurationService extends Singleton
                     } else {
                         $json[$item['variable_name']] = $aux_variable->min_control;
                     }
-                    $json_status[str_replace(["max_", "min_"], "status_", $item['variable_name'])] = ($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::CHANGE) ? 3 :($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::ON ? 2 : 1);
+                    $json_status[str_replace(["max_", "min_"], "status_", $item['variable_name'])] = ($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::CHANGE) ? 3 : ($aux_variable->status_control == ClientDigitalOutputAlertConfiguration::ON ? 2 : 1);
                 }
             }
             foreach ($component->client_config_alert as $index => $item) {
@@ -551,33 +621,50 @@ class ClientConfigurationService extends Singleton
                 $item->save();
             }
             $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
+            if (!$equipment) {
+                $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró equipo asociado al cliente"]);
+                return;
+            }
             $apiKey = ApiKey::first();
+            if (!$apiKey) {
+                $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró API key configurada"]);
+                return;
+            }
             $aomApiUrl = config('aom.api_url');
             $aomConfigPath = config('aom.api_config_path');
+
+            // Send control limits (first call)
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-control-limits',
                 'method' => 'POST',
                 'body' => array_merge(['serial' => $equipment->serial], $json),
                 'apiKey' => $apiKey->api_key
             ];
-            $component->requesDetails = [
+            $controlLimitsSent = $this->sendConfigToDevice($component, $requestDetails, EventLog::EVENT_SET_CONTROL_LIMITS);
+
+            // Send control status (second call)
+            $requestDetailsStatus = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-status-control-limits',
                 'method' => 'POST',
                 'body' => array_merge(['serial' => $equipment->serial], $json_status),
                 'apiKey' => $apiKey->api_key
             ];
-            //$this->consumeService($component, $requestDetails, 46);
-            try {
-                $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
-                $mqtt = MQTT::connection('default', EventLog::EVENT_SET_CONTROL_LIMITS.'-'.$equipment->serial.'-aom-channel');
-                $mqttCoilAckStrategy = new AlertControlApiStrategy($mqtt, $component);
-                $mqttCoilAckStrategy->fetchDataFromAPIControlAlerts($requestDetails, $component->requesDetails);
-                $mqttCoilAckStrategy->registerLoopEventHandler();
-                $mqttCoilAckStrategy->subscribe($equipment, 46);
-            } catch (MqttClientException $e) {
-                $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
+            $controlStatusSent = $this->sendConfigToDevice($component, $requestDetailsStatus, EventLog::EVENT_SET_CONTROL_LIMITS . '_status');
+
+            if ($controlLimitsSent && $controlStatusSent) {
+                $component->emitTo('livewire-toast', 'show', [
+                    'type' => 'success',
+                    'message' => "Configuración de control enviada al equipo, esperando confirmación"
+                ]);
+            } elseif ($controlLimitsSent || $controlStatusSent) {
+                $component->emitTo('livewire-toast', 'show', [
+                    'type' => 'warning',
+                    'message' => "Configuración parcialmente enviada, intente nuevamente"
+                ]);
             }
-        } catch (MqttClientException $e) {
+        } catch (\Exception $e) {
+            Log::error("submitFormControl exception: {$e->getMessage()}");
+            $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Error al enviar configuración de control"]);
         }
     }
     public function submitFormInvoicing(Component $component)
