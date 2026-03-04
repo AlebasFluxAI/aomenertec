@@ -13,7 +13,7 @@ use App\Models\V1\ClientConfiguration;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -334,38 +334,58 @@ class ClientConfigurationService extends Singleton
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada, Recuerde guardar cambios"]);
     }
     /**
-     * Send config to device via internal API (non-blocking).
-     * The API handles binary packing, MQTT publish to device, and async ACK via CheckAckLogJob.
+     * Send config to device via internal sub-request (no HTTP socket).
+     * Uses app()->handle() to process the request in-process, bypassing the
+     * single-threaded php artisan serve limitation that causes self-call deadlocks.
      */
     private function sendConfigToDevice(Component $component, $requestDetails, $event): bool
     {
         try {
             $httpMethod = strtoupper($requestDetails['method']);
-            $httpClient = Http::withHeaders([
-                'x-api-key' => $requestDetails['apiKey'],
-            ])->withoutVerifying()->timeout(10);
+            $apiKey = $requestDetails['apiKey'];
+            $body = $requestDetails['body'];
 
-            if ($httpMethod === 'POST') {
-                $response = $httpClient->post($requestDetails['url'], $requestDetails['body']);
+            // Build the internal URL path (strip host, keep path + query)
+            $urlParts = parse_url($requestDetails['url']);
+            $path = $urlParts['path'] ?? '/';
+
+            if ($httpMethod === 'GET') {
+                // For GET, params go as query string
+                $queryString = http_build_query($body);
+                $uri = $path . '?' . $queryString;
+                $internalRequest = HttpRequest::create($uri, 'GET');
             } else {
-                $response = $httpClient->get($requestDetails['url'], $requestDetails['body']);
+                // For POST, params go as JSON body
+                $internalRequest = HttpRequest::create($path, 'POST', [], [], [], [
+                    'CONTENT_TYPE' => 'application/json',
+                ], json_encode($body));
+                $internalRequest->headers->set('Content-Type', 'application/json');
             }
 
-            if ($response->successful()) {
-                Log::info("Config sent successfully: {$event} for serial {$requestDetails['body']['serial']}");
+            // Set required headers
+            $internalRequest->headers->set('x-api-key', $apiKey);
+
+            // Process the request through the application kernel (same process, no network)
+            $response = app()->handle($internalRequest);
+            $status = $response->getStatusCode();
+
+            // Restore the original request so Livewire continues working
+            app()->instance('request', request());
+
+            if ($status >= 200 && $status < 300) {
+                Log::info("Config sent successfully: {$event} for serial {$body['serial']}");
                 return true;
             }
 
-            $status = $response->status();
             if ($status === 429) {
-                Log::warning("Config rate-limited (429): {$event} for serial {$requestDetails['body']['serial']}");
+                Log::warning("Config rate-limited (429): {$event} for serial {$body['serial']}");
                 $component->emitTo('livewire-toast', 'show', [
                     'type' => 'warning',
                     'message' => "Comando en proceso, espere unos segundos e intente nuevamente"
                 ]);
             } else {
-                Log::error("Config API error ({$status}): {$event} for serial {$requestDetails['body']['serial']}", [
-                    'response' => $response->body()
+                Log::error("Config API error ({$status}): {$event} for serial {$body['serial']}", [
+                    'response' => $response->getContent()
                 ]);
                 $component->emitTo('livewire-toast', 'show', [
                     'type' => 'error',
