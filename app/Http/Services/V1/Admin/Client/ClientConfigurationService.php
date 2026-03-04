@@ -387,7 +387,7 @@ class ClientConfigurationService extends Singleton
     public function submitFormConection(Component $component)
     {
         $component->validate();
-        $aomApiUrl = config('aom.api_url');
+        $aomApiUrl = config('aom.api_internal_url');
         $aomConfigPath = config('aom.api_config_path');
         $equipment = $component->client->equipments()->whereEquipmentTypeId(7)->first();
 
@@ -560,7 +560,7 @@ class ClientConfigurationService extends Singleton
                 $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró API key configurada"]);
                 return;
             }
-            $aomApiUrl = config('aom.api_url');
+            $aomApiUrl = config('aom.api_internal_url');
             $aomConfigPath = config('aom.api_config_path');
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-alert-limits',
@@ -630,7 +630,7 @@ class ClientConfigurationService extends Singleton
                 $component->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "No se encontró API key configurada"]);
                 return;
             }
-            $aomApiUrl = config('aom.api_url');
+            $aomApiUrl = config('aom.api_internal_url');
             $aomConfigPath = config('aom.api_config_path');
 
             // Send control limits (first call)

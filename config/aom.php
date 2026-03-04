@@ -2,6 +2,8 @@
 
 return [
     'api_url' => env('AOM_API_URL', 'http://localhost'),
+    // Internal URL for self-referencing API calls (always localhost to avoid Cloudflare proxy)
+    'api_internal_url' => env('AOM_API_INTERNAL_URL', 'http://localhost'),
     'api_config_path' => env('AOM_API_CONFIG_PATH', '/api/v1/config'),
     'api_clients_path' => env('AOM_API_CLIENTS_PATH', '/api/v1/clients'),
 
