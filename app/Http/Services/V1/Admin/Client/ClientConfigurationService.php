@@ -397,6 +397,11 @@ class ClientConfigurationService extends Singleton
 
     public function submitFormConection(Component $component)
     {
+        Log::error("submitFormConection: ENTERED. originalConfig=" . json_encode($component->originalConfig ?? [])
+            . " current_real_time_latency=" . ($component->client_config->real_time_latency ?? 'null')
+            . " current_storage_latency=" . ($component->client_config->storage_latency ?? 'null')
+        );
+
         $component->validate();
         $aomApiUrl = config('aom.api_internal_url');
         $aomConfigPath = config('aom.api_config_path');
