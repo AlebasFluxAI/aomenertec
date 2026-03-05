@@ -13,7 +13,6 @@ use App\Models\V1\ClientConfiguration;
 use App\Models\V1\ClientDigitalOutput;
 use App\Models\V1\ClientDigitalOutputAlertConfiguration;
 use App\Models\V1\EquipmentType;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -334,100 +333,24 @@ class ClientConfigurationService extends Singleton
         $component->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Asignacion realizada, Recuerde guardar cambios"]);
     }
     /**
-     * Send config to device by directly calling the API controller layer.
-     * Bypasses HTTP entirely — no socket, no sub-request, no kernel.
-     * Creates the required middleware artifacts (AckLog, EventLog) manually,
-     * then calls the repository directly to pack binary + MQTT publish.
+     * Dispatch config send to background job to avoid session corruption.
+     * The Request facade swap needed by ConfigClientRepositoryImpl destroys
+     * Livewire's session when run inline — moving it to a job isolates it.
      */
     private function sendConfigToDevice(Component $component, $requestDetails, $event): bool
     {
         try {
-            $httpMethod = strtoupper($requestDetails['method']);
-            $body = $requestDetails['body'];
-            $serial = $body['serial'] ?? null;
+            \App\Jobs\V1\Api\ConfigurationClient\SendConfigToDeviceJob::dispatch(
+                $requestDetails,
+                $event
+            )->onQueue('spot2');
 
-            // Build the internal URL path
-            $urlParts = parse_url($requestDetails['url']);
-            $path = $urlParts['path'] ?? '/';
-
-            // Create a synthetic request that the existing code can read via Request facade
-            if ($httpMethod === 'GET') {
-                $queryString = http_build_query($body);
-                $uri = $path . '?' . $queryString;
-                $internalRequest = HttpRequest::create($uri, 'GET');
-            } else {
-                $internalRequest = HttpRequest::create($path, 'POST', $body, [], [], [
-                    'CONTENT_TYPE' => 'application/json',
-                ], json_encode($body));
-                $internalRequest->headers->set('Content-Type', 'application/json');
-            }
-            $internalRequest->headers->set('x-api-key', $requestDetails['apiKey']);
-
-            // Save the original request and swap in our synthetic one
-            $originalRequest = app('request');
-
-            try {
-                // Swap the request so Request facade and Request::query/input work
-                app()->instance('request', $internalRequest);
-
-                // Replicate what EventQueueValidatorMiddleware does:
-                // 1. Resolve event from URI, 2. Create AckLog + EventLog, 3. Set headers
-                $eventType = \App\Models\V1\Api\EventLog::getEvents($path);
-                $client = \App\Models\V1\Client::getClientFromSerial($serial);
-
-                if ($eventType && $eventType !== EventLog::EVENT_DATE_RANGE && $client) {
-                    // Rate limit check (same as middleware: 45s window)
-                    $lastEvent = EventLog::whereEvent($eventType)
-                        ->whereClientId($client->id)
-                        ->whereStatus(EventLog::STATUS_CREATED)
-                        ->orderBy('created_at', 'desc')
-                        ->first();
-                    if ($lastEvent) {
-                        $eventDate = \Carbon\Carbon::create($lastEvent->created_at);
-                        if (now()->diffInSeconds($eventDate) <= 45) {
-                            Log::warning("Config rate-limited: {$event} for serial {$serial}");
-                            $component->emitTo('livewire-toast', 'show', [
-                                'type' => 'warning',
-                                'message' => "Comando en proceso, espere unos segundos e intente nuevamente"
-                            ]);
-                            return false;
-                        }
-                        $lastEvent->status = EventLog::STATUS_ERROR;
-                        $lastEvent->save();
-                    }
-                }
-
-                // Create AckLog and EventLog (same as EventQueueValidatorMiddleware)
-                $ackLog = \App\Models\V1\Api\AckLog::create(["serial" => $serial]);
-                $internalRequest->headers->set(EventLog::API_EVENT_HEADER, $eventType);
-                $internalRequest->headers->set(\App\Models\V1\Client::CLIENT_HEADER, $client ? $client->id : null);
-                $eventLog = EventLog::createEvent($ackLog, json_encode($body), EventLog::CLIENT_MAIN_SERVER_REQUEST, json_encode($body), null);
-                $internalRequest->headers->set(EventLog::EVENT_LOG_HEADER, $eventLog);
-                $internalRequest->headers->set(EventLog::EVENT_LOG_HEADER_ID, $eventLog->id);
-                $internalRequest->headers->set(\App\Models\V1\Api\AckLog::ACK_LOG_HEADER, $ackLog);
-                $internalRequest->headers->set("serial", $serial);
-
-                // Re-bind the modified request
-                app()->instance('request', $internalRequest);
-
-                // Call the repository directly (this does binary packing + MQTT publish)
-                $repository = app(\App\Http\Repositories\ConfigurationClient\ConfigClientRepository::class);
-                $result = $repository->runService();
-
-                Log::info("Config sent successfully: {$event} for serial {$serial}", [
-                    'result' => $result
-                ]);
-                return true;
-
-            } finally {
-                // ALWAYS restore the original request so Livewire/session keeps working
-                app()->instance('request', $originalRequest);
-            }
+            return true;
         } catch (\Exception $e) {
-            Log::error("Config send exception: {$event} for serial {$requestDetails['body']['serial']}: {$e->getMessage()}");
+            Log::error("Config dispatch exception: {$event}: {$e->getMessage()}");
             $component->emitTo('livewire-toast', 'show', [
                 'type' => 'error',
-                'message' => "Error de conexión, intente nuevamente"
+                'message' => "Error al enviar la configuración, intente nuevamente"
             ]);
             return false;
         }
