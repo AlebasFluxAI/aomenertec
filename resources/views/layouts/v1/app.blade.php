@@ -172,7 +172,7 @@
             <script src="https://cdn.jsdelivr.net/npm/flatpickr@latest/dist/flatpickr.min.js"></script>
 
 
-            <script src="{{ asset('js/app.js') }}"></script>
+            <script src="{{ mix('js/app.js') }}"></script>
             @include("partials.v1.whatsapp-button")
             <!-- Template Main JS File -->
 
