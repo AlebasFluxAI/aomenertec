@@ -32,6 +32,7 @@ class ConfigurationClient extends Component
     public $client_report_variables;
     public $invoicing_day;
     public $requesDetails;
+    public $originalConfig = [];
 
     private $configurationClientService;
 

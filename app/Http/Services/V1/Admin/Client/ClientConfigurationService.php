@@ -62,11 +62,30 @@ class ClientConfigurationService extends Singleton
             ]);
         }
 
+        // Store original config values for change detection.
+        // Livewire's wire:model.lazy updates the Eloquent model BEFORE submit,
+        // so isDirty() always returns false. We compare against these snapshots instead.
+        $config = $client->clientConfiguration;
+        $component->originalConfig = [
+            'ssid' => $config->ssid,
+            'wifi_password' => $config->wifi_password,
+            'mqtt_host' => $config->mqtt_host,
+            'mqtt_port' => $config->mqtt_port,
+            'mqtt_user' => $config->mqtt_user,
+            'mqtt_password' => $config->mqtt_password,
+            'storage_latency' => $config->storage_latency,
+            'storage_type_latency' => $config->storage_type_latency,
+            'real_time_latency' => $config->real_time_latency,
+            'billing_day' => $config->billing_day,
+            'active_real_time' => $config->active_real_time,
+            'automatic_control' => $config->automatic_control,
+        ];
+
         $component->fill([
             "invoicing_day" => $component->client->clientConfiguration->billing_day,
             "client" => $client,
-            "client_config" => $client->clientConfiguration,
-            'active_real_time' => $client->clientConfiguration->active_real_time,
+            "client_config" => $config,
+            'active_real_time' => $config->active_real_time,
             "client_config_alert" => $client->clientAlertConfiguration,
             "digital_outputs" => $client->digitalOutputs,
             "frame_types" => [
@@ -357,6 +376,25 @@ class ClientConfigurationService extends Singleton
     }
 
 
+    /**
+     * Check if a config field changed vs the original snapshot taken at mount().
+     * Livewire's wire:model.lazy updates Eloquent attributes BEFORE submit,
+     * making isDirty() always false. This compares against the mount() snapshot.
+     */
+    private function configChanged(Component $component, string ...$fields): bool
+    {
+        $original = $component->originalConfig ?? [];
+        foreach ($fields as $field) {
+            $currentValue = $component->client_config->{$field};
+            $originalValue = $original[$field] ?? null;
+            // Cast both to string for reliable comparison (DB may return int vs string)
+            if ((string) $currentValue !== (string) $originalValue) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function submitFormConection(Component $component)
     {
         $component->validate();
@@ -378,7 +416,7 @@ class ClientConfigurationService extends Singleton
         $configsSent = 0;
         $configsFailed = 0;
 
-        if ($component->client_config->isDirty('ssid') || $component->client_config->isDirty('wifi_password')) {
+        if ($this->configChanged($component, 'ssid', 'wifi_password')) {
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-wifi-credentials',
                 'method' => 'GET',
@@ -393,7 +431,7 @@ class ClientConfigurationService extends Singleton
                 ? $configsSent++ : $configsFailed++;
         }
 
-        if ($component->client_config->isDirty('mqtt_host') || $component->client_config->isDirty('mqtt_port') || $component->client_config->isDirty('mqtt_user') || $component->client_config->isDirty('mqtt_password')) {
+        if ($this->configChanged($component, 'mqtt_host', 'mqtt_port', 'mqtt_user', 'mqtt_password')) {
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-broker-credentials',
                 'method' => 'GET',
@@ -410,7 +448,7 @@ class ClientConfigurationService extends Singleton
                 ? $configsSent++ : $configsFailed++;
         }
 
-        if ($component->client_config->isDirty('storage_latency') || $component->client_config->isDirty('storage_type_latency') || $component->client_config->isDirty('real_time_latency')) {
+        if ($this->configChanged($component, 'storage_latency', 'storage_type_latency', 'real_time_latency')) {
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-sampling-time',
                 'method' => 'GET',
@@ -426,7 +464,7 @@ class ClientConfigurationService extends Singleton
                 ? $configsSent++ : $configsFailed++;
         }
 
-        if ($component->client_config->isDirty('billing_day')) {
+        if ($this->configChanged($component, 'billing_day')) {
             $requestDetails = [
                 'url' => $aomApiUrl . $aomConfigPath . '/set-billing-day',
                 'method' => 'GET',
@@ -440,20 +478,23 @@ class ClientConfigurationService extends Singleton
                 ? $configsSent++ : $configsFailed++;
         }
 
-        if ($component->client_config->isDirty('active_real_time') || $component->client_config->isDirty('automatic_control')) {
+        if ($this->configChanged($component, 'active_real_time', 'automatic_control')) {
             $component->client_config->save();
             $configsSent++;
         }
 
-        // Show summary toast
+        // Show summary toast and update original snapshot
         if ($configsSent > 0 && $configsFailed === 0) {
             $component->client_config->save();
+            // Update original snapshot so next save without changes shows "no changes"
+            $this->refreshOriginalConfig($component);
             $component->emitTo('livewire-toast', 'show', [
                 'type' => 'success',
                 'message' => "Configuración enviada al equipo, esperando confirmación del dispositivo"
             ]);
         } elseif ($configsSent > 0 && $configsFailed > 0) {
             $component->client_config->save();
+            $this->refreshOriginalConfig($component);
             $component->emitTo('livewire-toast', 'show', [
                 'type' => 'warning',
                 'message' => "Algunas configuraciones fueron enviadas, otras fallaron. Revise e intente nuevamente"
@@ -469,6 +510,28 @@ class ClientConfigurationService extends Singleton
                 'message' => "No se detectaron cambios en la configuración"
             ]);
         }
+    }
+
+    /**
+     * Refresh the original config snapshot after a successful save.
+     */
+    private function refreshOriginalConfig(Component $component): void
+    {
+        $config = $component->client_config;
+        $component->originalConfig = [
+            'ssid' => $config->ssid,
+            'wifi_password' => $config->wifi_password,
+            'mqtt_host' => $config->mqtt_host,
+            'mqtt_port' => $config->mqtt_port,
+            'mqtt_user' => $config->mqtt_user,
+            'mqtt_password' => $config->mqtt_password,
+            'storage_latency' => $config->storage_latency,
+            'storage_type_latency' => $config->storage_type_latency,
+            'real_time_latency' => $config->real_time_latency,
+            'billing_day' => $config->billing_day,
+            'active_real_time' => $config->active_real_time,
+            'automatic_control' => $config->automatic_control,
+        ];
     }
 
     public function submitFormPermission(Component $component)
