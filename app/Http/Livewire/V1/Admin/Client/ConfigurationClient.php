@@ -42,6 +42,29 @@ class ConfigurationClient extends Component
         parent::__construct($id);
     }
 
+    public function getListeners()
+    {
+        $clientId = $this->client->id ?? null;
+        if ($clientId) {
+            return [
+                "echo:config-ack.{$clientId},.configAckResponse" => 'handleConfigAck',
+            ];
+        }
+        return [];
+    }
+
+    public function handleConfigAck($payload)
+    {
+        $data = $payload['data'] ?? $payload;
+        $status = $data['status'] ?? 'error';
+        $message = $data['message'] ?? 'Respuesta del equipo recibida';
+
+        $this->emitTo('livewire-toast', 'show', [
+            'type' => $status === 'success' ? 'success' : 'error',
+            'message' => $message,
+        ]);
+    }
+
     public function mount(Client $client)
     {
         $this->configurationClientService->mount($this, $client);

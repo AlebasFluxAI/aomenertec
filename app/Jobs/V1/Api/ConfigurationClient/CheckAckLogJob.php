@@ -2,12 +2,14 @@
 
 namespace App\Jobs\V1\Api\ConfigurationClient;
 
+use App\Events\ConfigAckEvent;
 use App\Models\V1\Api\AckLog;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\Api\ApiKey;
 use App\ModulesAux\MQTT;
 use Crc16\Crc16;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use PhpMqtt\Client\Exceptions\MqttClientException;
 use PhpMqtt\Client\MqttClient;
 use Illuminate\Bus\Queueable;
@@ -45,9 +47,11 @@ class CheckAckLogJob implements ShouldQueue
      */
     public function handle()
     {
+        $ackReceived = false;
+
         try {
             $mqtt = MQTT::connection("default", $this->mqttNameConnection);
-            $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) use ($mqtt) {
+            $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) use ($mqtt, &$ackReceived) {
                 $data_frame_events = config('data-frame.data_frame_events');
                 $crc_message = substr($message, -2);
                 $data_crc = substr($message, 0, -2);
@@ -62,6 +66,7 @@ class CheckAckLogJob implements ShouldQueue
                                     $split = substr($message, ($datum['start']), ($datum['lenght']));
                                     $value = unpack($datum['type'], $split)[1];
                                     if ($value == $this->eventLogHeaderId) {
+                                        $ackReceived = true;
                                         $mqtt->interrupt();
                                     }
                                 }
@@ -71,27 +76,27 @@ class CheckAckLogJob implements ShouldQueue
                     }
                 }
             }, 0);
-            $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use (&$error) {
+            $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use (&$ackReceived) {
                 if ($elapsedTime >= 10) {
-                    $error = true;
                     try {
                         $eventLog = EventLog::find($this->eventLogHeaderId);
-                        if ($eventLog->status == EventLog::STATUS_SUCCESSFUL) {
-                            $error = false;
+                        if ($eventLog && $eventLog->status == EventLog::STATUS_SUCCESSFUL) {
+                            // Already marked successful by another path
+                            $ackReceived = true;
                             $mqtt->interrupt();
+                            return;
                         }
-                        if ($error) {
-                            $eventLog->update([
-                                "status" => EventLog::STATUS_ERROR
-                            ]);
-                            $eventLog->ackLog->update([
-                                "status" => AckLog::STATUS_EXPIRED
-                            ]);
-                            $this->sendErrorWebhook();
+                        // Timeout — mark as error
+                        if ($eventLog) {
+                            $eventLog->update(["status" => EventLog::STATUS_ERROR]);
+                            if ($eventLog->ackLog) {
+                                $eventLog->ackLog->update(["status" => AckLog::STATUS_EXPIRED]);
+                            }
                         }
-
+                        $this->sendErrorWebhook();
                         $mqtt->interrupt();
                     } catch (\Throwable $e) {
+                        Log::error("CheckAckLogJob timeout handler error: {$e->getMessage()}");
                         $mqtt->interrupt();
                     }
                 }
@@ -100,7 +105,68 @@ class CheckAckLogJob implements ShouldQueue
             $mqtt->unregisterLoopEventHandler();
             $mqtt->disconnect();
         } catch (MqttClientException $e) {
+            Log::error("CheckAckLogJob MQTT error for eventLog {$this->eventLogHeaderId}: {$e->getMessage()}");
+        }
 
+        // Broadcast ACK result to the frontend via Echo
+        $this->broadcastAckResult($ackReceived);
+    }
+
+    /**
+     * Broadcast the ACK result to the frontend via Laravel Echo.
+     */
+    private function broadcastAckResult(bool $success): void
+    {
+        try {
+            $eventLog = EventLog::find($this->eventLogHeaderId);
+            if (!$eventLog) {
+                Log::warning("CheckAckLogJob: EventLog {$this->eventLogHeaderId} not found for broadcast");
+                return;
+            }
+
+            // Mark as successful if ACK was received and not already marked
+            if ($success && $eventLog->status !== EventLog::STATUS_SUCCESSFUL) {
+                $eventLog->update(["status" => EventLog::STATUS_SUCCESSFUL]);
+                if ($eventLog->ackLog) {
+                    $eventLog->ackLog->update(["status" => AckLog::STATUS_SUCCESS]);
+                }
+            }
+
+            $clientId = $eventLog->client_id;
+            if (!$clientId) {
+                Log::warning("CheckAckLogJob: No client_id on EventLog {$this->eventLogHeaderId}");
+                return;
+            }
+
+            // Human-readable event name for the toast
+            $eventNames = [
+                'set-alert-limits' => 'Límites de alerta',
+                'set-sampling-time' => 'Tiempo de muestreo',
+                'set-wifi-credentials' => 'Credenciales WiFi',
+                'set-broker-credentials' => 'Credenciales MQTT',
+                'set-billing-day' => 'Día de facturación',
+                'set-control-limits' => 'Límites de control',
+                'set-status-control-limits' => 'Estado de control',
+                'set-status-coil' => 'Estado de bobina',
+                'set-status-real-time' => 'Tiempo real',
+                'ota-update' => 'Actualización OTA',
+            ];
+            $eventName = $eventNames[$eventLog->event] ?? $eventLog->event;
+
+            event(new ConfigAckEvent([
+                'client_id' => (int) $clientId,
+                'serial' => $this->serial,
+                'event' => $eventLog->event,
+                'event_log_id' => $eventLog->id,
+                'status' => $success ? 'success' : 'error',
+                'message' => $success
+                    ? "✓ {$eventName}: El equipo {$this->serial} confirmó la configuración"
+                    : "✗ {$eventName}: El equipo {$this->serial} no respondió (timeout)",
+            ]));
+
+            Log::info("CheckAckLogJob: Broadcast ACK " . ($success ? 'success' : 'error') . " for eventLog {$this->eventLogHeaderId}, client {$clientId}");
+        } catch (\Throwable $e) {
+            Log::error("CheckAckLogJob: Failed to broadcast ACK result: {$e->getMessage()}");
         }
     }
 
