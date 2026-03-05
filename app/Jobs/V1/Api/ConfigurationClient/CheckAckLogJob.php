@@ -66,7 +66,7 @@ class CheckAckLogJob implements ShouldQueue
                                     $split = substr($message, ($datum['start']), ($datum['lenght']));
                                     $value = unpack($datum['type'], $split)[1];
                                     if ($value == $this->eventLogHeaderId) {
-                                        Log::info("CheckAckLogJob: ACK received for eventLog {$this->eventLogHeaderId}");
+                                        Log::error("CheckAckLogJob: ACK received for eventLog {$this->eventLogHeaderId}");
                                         $ackReceived = true;
                                         $mqtt->interrupt();
                                     }
@@ -80,7 +80,7 @@ class CheckAckLogJob implements ShouldQueue
             $mqtt->registerLoopEventHandler(function (MqttClient $mqtt, float $elapsedTime) use (&$ackReceived) {
                 if ($elapsedTime >= 10) {
                     try {
-                        Log::info("CheckAckLogJob: Timeout (10s) for eventLog {$this->eventLogHeaderId}, serial {$this->serial}");
+                        Log::error("CheckAckLogJob: Timeout (10s) for eventLog {$this->eventLogHeaderId}, serial {$this->serial}");
                         $eventLog = EventLog::find($this->eventLogHeaderId);
                         if ($eventLog && $eventLog->status == EventLog::STATUS_SUCCESSFUL) {
                             // Already marked successful by another path
@@ -122,7 +122,7 @@ class CheckAckLogJob implements ShouldQueue
         try {
             $eventLog = EventLog::find($this->eventLogHeaderId);
             if (!$eventLog) {
-                Log::warning("CheckAckLogJob: EventLog {$this->eventLogHeaderId} not found for broadcast");
+                Log::error("CheckAckLogJob: EventLog {$this->eventLogHeaderId} not found for broadcast");
                 return;
             }
 
@@ -136,7 +136,7 @@ class CheckAckLogJob implements ShouldQueue
 
             $clientId = $eventLog->client_id;
             if (!$clientId) {
-                Log::warning("CheckAckLogJob: No client_id on EventLog {$this->eventLogHeaderId}");
+                Log::error("CheckAckLogJob: No client_id on EventLog {$this->eventLogHeaderId}");
                 return;
             }
 
@@ -166,7 +166,7 @@ class CheckAckLogJob implements ShouldQueue
                     : "✗ {$eventName}: El equipo {$this->serial} no respondió (timeout)",
             ]));
 
-            Log::info("CheckAckLogJob: Broadcast ACK " . ($success ? 'success' : 'error') . " for eventLog {$this->eventLogHeaderId}, client {$clientId}");
+            Log::error("CheckAckLogJob: Broadcast ACK " . ($success ? 'success' : 'error') . " for eventLog {$this->eventLogHeaderId}, client {$clientId}");
         } catch (\Throwable $e) {
             Log::error("CheckAckLogJob: Failed to broadcast ACK result: {$e->getMessage()}");
         }
@@ -179,12 +179,12 @@ class CheckAckLogJob implements ShouldQueue
         $jsonResponse = null;
         $apiKey = ApiKey::first();
         if (!$apiKey) {
-            Log::warning("CheckAckLogJob: No API key found, skipping error webhook for eventLog {$this->eventLogHeaderId}");
+            Log::error("CheckAckLogJob: No API key found, skipping error webhook for eventLog {$this->eventLogHeaderId}");
             return;
         }
         $webhook = $apiKey->end_point_notification;
         if (empty($webhook)) {
-            Log::info("CheckAckLogJob: No webhook endpoint configured, skipping error webhook for eventLog {$this->eventLogHeaderId}");
+            Log::error("CheckAckLogJob: No webhook endpoint configured, skipping error webhook for eventLog {$this->eventLogHeaderId}");
             return;
         }
         $eventLogWh = EventLog::create([
