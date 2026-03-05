@@ -70,23 +70,13 @@ class Monitoring extends Component
                     $apiKey =ApiKey::first();
 
                     if ($apiKey && $equipment) {
-                        try {
-                            // Llamada interna (localhost) para desactivar real-time.
-                            // Fire-and-forget: no necesita esperar ACK del dispositivo.
-                            $internalUrl = 'http://localhost' . config('aom.api_config_path') . '/set-status-real-time';
-
-                            Http::withHeaders([
-                                'x-api-key' => $apiKey->api_key,
-                            ])->timeout(10)->get($internalUrl, [
-                                'serial' => $equipment->serial,
-                                'status' => 0
-                            ]);
-
-                            Log::info('Monitoring: deactivation command sent for serial ' . $equipment->serial);
-                        } catch (\Throwable $e) {
-                            Log::error('Monitoring: error deactivating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
-                            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Intente nuevamente"]);
-                        }
+                        // Dispatch background job to avoid Http::localhost deadlock
+                        // on single-threaded php artisan serve.
+                        \App\Jobs\V1\Api\ConfigurationClient\SendRealTimeStatusJob::dispatch(
+                            $equipment->serial,
+                            0,
+                            $apiKey->api_key
+                        )->onQueue('spot2');
                     }
                 }
             }

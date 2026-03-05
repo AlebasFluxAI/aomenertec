@@ -173,32 +173,15 @@ class RealTimeChart extends Component
                             return;
                         }
 
-                        $requestDetails = [
-                            'url' => config('aom.api_url') . config('aom.api_config_path') . '/set-status-real-time',
-                            'method' => 'GET',
-                            'body' => [
-                                'serial' => $equipment->serial,
-                                'status' => 1
-                            ],
-                            'apiKey' => $apiKey->api_key
-                        ];
-                        try {
-                            // Llamada interna (localhost) para evitar pasar por Cloudflare,
-                            // que corta requests largas con 504 Gateway Timeout.
-                            // El endpoint construye el frame binario y lo publica via MQTT
-                            // al topic v1/mc/config/{serial} para activar el streaming.
-                            $internalUrl = 'http://localhost' . config('aom.api_config_path') . '/set-status-real-time';
+                        // Dispatch background job to avoid Http::localhost deadlock
+                        // on single-threaded php artisan serve.
+                        \App\Jobs\V1\Api\ConfigurationClient\SendRealTimeStatusJob::dispatch(
+                            $equipment->serial,
+                            1,
+                            $apiKey->api_key
+                        )->onQueue('spot2');
 
-                            \Illuminate\Support\Facades\Http::withHeaders([
-                                'x-api-key' => $requestDetails['apiKey'],
-                            ])->timeout(10)->get($internalUrl, $requestDetails['body']);
-
-                            $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Activación enviada. Los datos llegarán en unos segundos."]);
-                            \Illuminate\Support\Facades\Log::info('RealTimeChart: activation command sent for serial ' . $equipment->serial);
-                        } catch (\Throwable $e) {
-                            \Illuminate\Support\Facades\Log::error('RealTimeChart: error activating real-time for serial ' . $equipment->serial . ': ' . $e->getMessage());
-                            $this->emitTo('livewire-toast', 'show', ['type' => 'error', 'message' => "Error al activar tiempo real. Intente nuevamente."]);
-                        }
+                        $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Activación enviada. Los datos llegarán en unos segundos."]);
                     }
             }
         } else {
