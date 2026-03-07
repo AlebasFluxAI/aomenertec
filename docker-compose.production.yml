@@ -37,6 +37,14 @@ services:
             - sail
             - enertec-shared
         restart: unless-stopped
+        labels:
+            - autoheal=true
+        healthcheck:
+            test: ["CMD", "curl", "-sf", "http://localhost:8443/socket.io/?EIO=3&transport=polling"]
+            interval: 30s
+            timeout: 5s
+            retries: 3
+            start_period: 60s
 
     pgsql:
         image: 'postgres:14'
@@ -84,6 +92,18 @@ services:
             - sail
             - enertec-shared
         restart: unless-stopped
+
+    autoheal:
+        image: willfarrell/autoheal:latest
+        restart: unless-stopped
+        environment:
+            AUTOHEAL_CONTAINER_LABEL: autoheal
+            AUTOHEAL_INTERVAL: 10
+            AUTOHEAL_START_PERIOD: 0
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - sail
 
 networks:
     sail:
