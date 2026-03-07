@@ -159,13 +159,29 @@ class RealTimeChart extends Component
                     return;
                 }
 
-                if (!RealTimeListener::whereUserId(Auth::user()->id)
-                    ->whereEquipmentId($equipment->id)->exists()) {
+                // Limpiar listeners zombie (más de 30 minutos sin actividad)
+                // Esto evita que sesiones abandonadas bloqueen la activación del streaming.
+                RealTimeListener::whereEquipmentId($equipment->id)
+                    ->where('updated_at', '<', now()->subMinutes(30))
+                    ->delete();
+
+                $alreadyListening = RealTimeListener::whereUserId(Auth::user()->id)
+                    ->whereEquipmentId($equipment->id)->exists();
+
+                if (!$alreadyListening) {
                     $new = RealTimeListener::create([
                         "user_id" => Auth::user()->id,
                         "equipment_id" => $equipment->id
                     ]);
-                    if (!RealTimeListener::whereEquipmentId($equipment->id)->where('id', '!=', $new->id)->exists()) {
+
+                    // Solo hay listeners activos si después de crear el nuestro existen otros
+                    // (que no son zombie — ya se limpiaron arriba).
+                    $othersExist = RealTimeListener::whereEquipmentId($equipment->id)
+                        ->where('id', '!=', $new->id)
+                        ->exists();
+
+                    if (!$othersExist) {
+                        // Somos el primer listener activo: activar streaming en el dispositivo
                         $apiKey = ApiKey::first();
 
                         if (!$apiKey) {
@@ -183,7 +199,7 @@ class RealTimeChart extends Component
 
                         $this->emitTo('livewire-toast', 'show', ['type' => 'success', 'message' => "Activación enviada. Los datos llegarán en unos segundos."]);
                     }
-            }
+                }
         } else {
             $this->emit('addPointRealTime', ['series' => [], 'title' => "", 'no_data' => 'El dispositivo no cuenta con conexión wifi...']);
         }
