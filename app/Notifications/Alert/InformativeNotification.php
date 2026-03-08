@@ -51,7 +51,7 @@ class InformativeNotification extends Notification
             ->to($notifiable->phone)
             ->template_name($template)
             ->params([($this->client->alias ?? $this->client->name), $this->event->serial, $this->event->event,
-                $this->event->created_at->format('d F H:i'), $request_json['message'],
+                $this->event->created_at->locale('es')->isoFormat('DD MMMM HH:mm'), $request_json['message'],
                 url('/v1/administrar/clientes/alertas/' . $this->clientAlert->client_id),
             ]);
     }

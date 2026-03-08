@@ -77,7 +77,7 @@ class AlertControlNotification extends Notification
             ->params([($this->client->alias ?? $this->client->name),
                 $this->client_alert_configuration->getVariableName(),
                 $this->clientAlert->value,
-                $date->format('d F H:i'),
+                $date->locale('es')->isoFormat('DD MMMM HH:mm'),
                 $this->outputs == null? '-' : $this->outputs->name,
                 url('/v1/administrar/clientes/alertas/' . $this->clientAlert->client_id),
                 $this->outputs == null? '-' : ($this->outputs->status ? 'Activo': 'Inactivo'),
