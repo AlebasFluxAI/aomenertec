@@ -64,8 +64,7 @@ class ConsumerCommand extends Command
 
         $mqtt->subscribe('v1/mc/alert', function (string $topic, string $message) {
             $pack = base64_encode($message);
-            sleep(3);
-            dispatch(new SaveAlertDataJob($pack, false))->onConnection('sync');
+            dispatch(new SaveAlertDataJob($pack, false))->onQueue('default');
         }, 0);
 
         $mqtt->subscribe('v1/mc/alert_control', function (string $topic, string $message) {

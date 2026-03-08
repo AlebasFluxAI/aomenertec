@@ -3,7 +3,9 @@
 namespace App\Channels;
 
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class WhatsAppChannel
@@ -23,19 +25,22 @@ class WhatsAppChannel
 
     public function send($notifiable, Notification $notification)
     {
-        $toWhatsapp = $notification->toWhatsapp($notifiable);
-        if (!$this->checkTemplateExists($toWhatsapp->template_name)) {
+        // Guard FIRST — before any HTTP calls
+        if (!config('whatsapp.api_key')) {
+            Log::warning('WhatsApp notification skipped: WHATSAPP_API_KEY not configured');
             return;
         }
 
-        if (!config('whatsapp.api_key')) {
+        $toWhatsapp = $notification->toWhatsapp($notifiable);
+
+        if (!$this->checkTemplateExists($toWhatsapp->template_name)) {
+            Log::warning('WhatsApp notification skipped: template not approved', ['template' => $toWhatsapp->template_name]);
             return;
         }
-        $cellphone = $toWhatsapp->to;
 
         try {
             $body = [
-                'to' => (int)$notifiable->indicative . $notifiable->phone,
+                'to' => (int)($notifiable->indicative . $notifiable->phone),
                 'channelId' => config('whatsapp.channel_id'),
                 'type' => 'hsm',
                 'content' => [
@@ -51,25 +56,42 @@ class WhatsAppChannel
                 ],
             ];
 
-
             $response = $this->httpClient->post(
                 'https://conversations.messagebird.com/v1/conversations/start',
                 $body
             );
+
+            Log::info('WhatsApp notification sent', [
+                'to' => $notifiable->phone,
+                'template' => $toWhatsapp->template_name,
+                'status' => $response->status(),
+            ]);
         } catch (Throwable $e) {
+            Log::error('WhatsApp send failed', [
+                'error' => $e->getMessage(),
+                'to' => $notifiable->phone ?? 'unknown',
+                'template' => $toWhatsapp->template_name ?? 'unknown',
+            ]);
         }
     }
 
     public function checkTemplateExists($template)
     {
-        try {
-            $response = $this->httpClient->get(
-                'https://integrations.messagebird.com/v1/public/whatsapp/templates'
-            );
-        } catch (Throwable $e) {
-            return false;
-        }
-        return in_array($template, collect($response->object())->where('status', 'APPROVED')->pluck('name')->toArray());
+        $templates = Cache::remember('whatsapp_approved_templates', 300, function () {
+            try {
+                $response = $this->httpClient->get(
+                    'https://integrations.messagebird.com/v1/public/whatsapp/templates'
+                );
+                return collect($response->object())
+                    ->where('status', 'APPROVED')
+                    ->pluck('name')
+                    ->toArray();
+            } catch (Throwable $e) {
+                Log::warning('WhatsApp template check failed', ['error' => $e->getMessage()]);
+                return [];
+            }
+        });
+        return in_array($template, $templates);
     }
 
     public function getParams($params_in)
@@ -89,7 +111,6 @@ class WhatsAppChannel
             return;
         }
         $cellphone = $toWhatsapp->to;
-
 
         try {
             $response = $this->httpClient->post(
@@ -134,6 +155,11 @@ class WhatsAppChannel
                 ]
             );
         } catch (Throwable $e) {
+            Log::error('WhatsApp send failed', [
+                'error' => $e->getMessage(),
+                'to' => isset($toWhatsapp) ? ($toWhatsapp->to ?? 'unknown') : 'unknown',
+                'template' => isset($toWhatsapp) ? ($toWhatsapp->template_name ?? 'unknown') : 'unknown',
+            ]);
         }
     }
 }
