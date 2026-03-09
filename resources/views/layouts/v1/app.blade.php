@@ -148,9 +148,11 @@
 @endif
 
 <div>
-    @unless(request()->is('/', 'login'))
-        @include("footer")
-    @endunless
+    @guest
+        @unless(request()->is('/', 'login'))
+            @include("footer")
+        @endunless
+    @endguest
 </div>
 
             <!-- Vendor JS Files -->
