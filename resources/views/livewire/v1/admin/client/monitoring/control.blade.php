@@ -35,7 +35,7 @@
                     <div wire:loading wire:target="confirmAction('{{ $index }}')"
                          class="justify-content-end  mx-2 form-group mb-0 mt-0 ">
 
-                        <span class="">Conectando...</span>
+                        <span class="">Enviando...</span>
                         <div class="spinner-grow" role="status">
                         </div>
                     </div>
