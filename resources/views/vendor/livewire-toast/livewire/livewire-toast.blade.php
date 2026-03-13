@@ -1,11 +1,23 @@
 <div style="z-index: 100" class="fixed {{$positionCss}} @if($hideOnClick) cursor-pointer @endif"
-     x-data="{show: false, timeout: null, duration: null}"
+     x-data="{
+        show: false,
+        timeout: null,
+        getDuration() {
+            var type = '{{ $type }}';
+            if (type === 'error' || type === 'warning') return 0;
+            return 8000;
+        },
+        showToast() {
+            var d = this.getDuration();
+            clearTimeout(this.timeout);
+            this.show = true;
+            if (d > 0) { this.timeout = setTimeout(() => { this.show = false }, d); }
+        }
+     }"
      @if($message)
-         x-init="() => { duration = @this.duration; clearTimeout(timeout); show = true;
-                if( duration > 0 ) {timeout = setTimeout(() => { show = false }, duration); }}"
+         x-init="() => { showToast(); }"
      @endif
-     @new-toast.window="duration = @this.duration; clearTimeout(timeout); show = true;
-                if( duration > 0 ) { timeout = setTimeout(() => { show = false }, duration); }"
+     @new-toast.window="showToast()"
      @click="if(@this.hideOnClick) { show = false; }"
      x-show="show"
 
@@ -31,6 +43,9 @@
             <div class="text-{{$textColorCss}} max-w-xs ">
                 {{$message}}
             </div>
+            @if($type === 'error' || $type === 'warning')
+                <div class="text-{{$textColorCss}} ml-2 font-bold cursor-pointer" @click="show = false" title="Cerrar">&times;</div>
+            @endif
         </div>
     @endif
 </div>
