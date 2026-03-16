@@ -34,7 +34,7 @@
     </a>
 
     {{-- Cerrar sesión --}}
-    <form method="POST" action="{{ route('logout') }}" class="flex-1 min-w-[56px]">
+    <form method="POST" action="{{ route('logout') }}" class="flex-1 min-w-[56px] hidden sm:flex">
         @csrf
         <button type="submit"
                 class="w-full h-full border border-ui-border text-ui-muted rounded-xl flex items-center justify-center py-2 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors"

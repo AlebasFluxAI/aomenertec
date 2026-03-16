@@ -5,6 +5,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Alpine.js: oculta elementos con x-cloak hasta que Alpine los inicializa */
+[x-cloak] { display: none !important; }
+
 /* FluxAI Custom CSS Variables */
 :root {
     /* Brand Colors */

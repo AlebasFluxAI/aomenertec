@@ -17,6 +17,11 @@ class Icon extends Singleton
         }
     }
 
+    public static function getIconSidebar()
+    {
+        return asset('images/flux-ai-logo-sidebar.png');
+    }
+
     private static function getUserIcon()
     {
         if ($admin = Auth::user()->getAdmin()) {
