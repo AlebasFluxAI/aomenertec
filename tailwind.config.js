@@ -56,5 +56,12 @@ module.exports = {
             },
         },
     },
+    safelist: [
+        'lg:pl-16',
+        'lg:pl-[272px]',
+        'lg:ml-12',
+        'lg:ml-[260px]',
+        'lg:hidden',
+    ],
     plugins: [],
 };

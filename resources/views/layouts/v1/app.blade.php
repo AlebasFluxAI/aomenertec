@@ -81,33 +81,15 @@
     <script type="text/javascript" src="{{asset('js/library/acwf-canvas.js')}}"></script>
     <!-- ACWF canvas plotting library -->
 
-    <script>
-        // Function to validate screen size and send the information to the backend
-        function validateScreenSizeAndSendToBackend() {
-            // Get the width of the screen
-            var screenWidth = window.innerWidth;
-
-            // Determine if the screen is considered a mobile device
-            var isMobile = screenWidth < 768; // Adjust the threshold according to your requ
-            console.log('{!! \Illuminate\Support\Facades\Request::url() !!}')
-            @if(!\Illuminate\Support\Facades\Request::has('isMobile'))
-            if (isMobile)
-                window.location = '{!! \Illuminate\Support\Facades\Request::url() !!}?isMobile=true';
-            @endif
-        }
-
-        // Call the function when the document is ready
-        validateScreenSizeAndSendToBackend();
-    </script>
 </head>
 
 <body>
-@if(\Illuminate\Support\Facades\Request::has('isMobile') || isset($without_header))
-    <div>
-        @auth
-            @include("layouts.menu.v1.header_menu")
-        @endauth
-
+<div>
+    @auth
+        @livewire('livewire-toast')
+        @include("layouts.menu.v2.header_menu")
+    @else
+        {{-- Para páginas sin autenticación (login, reset password, etc.) --}}
         <section class="top-info">
             @yield('header')
         </section>
@@ -122,31 +104,8 @@
                 </div>
             </div>
         </section>
-    </div>
-@else
-    <div>
-        @auth
-            @livewire('livewire-toast')
-            @include("layouts.menu.v2.header_menu")
-        @else
-            {{-- Para páginas sin autenticación (login, reset password, etc.) --}}
-            <section class="top-info">
-                @yield('header')
-            </section>
-            <section class="top-info">
-                @livewire('livewire-toast')
-                <div class="loader-page">
-                    <h2 style="margin-top: 150px;"></h2>
-                </div>
-                <div class="container mt-3">
-                    <div>
-                        @yield('content')
-                    </div>
-                </div>
-            </section>
-        @endauth
-    </div>
-@endif
+    @endauth
+</div>
 
 <div>
     @guest
