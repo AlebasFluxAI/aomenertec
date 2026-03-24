@@ -63,7 +63,7 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                 "ack_log_id" => $ackLog->id
             ]);
             $apiKey = ApiKey::first();
-            $webhook = $apiKey->end_point_notification;
+            $webhook = $apiKey ? $apiKey->end_point_notification : null;
             $eventLogWh = EventLog::create([
                 "name" => $eventLog->event . "_" . EventLog::MAIN_SERVER_CLIENT_RESPONSE,
                 "event" => $eventLog->event,
@@ -124,41 +124,43 @@ class PushRealTimeMicrocontrollerDataJob implements ShouldQueue
                     'body' => $jsonResponse,
                 ];
 
-                try {
+                if (!empty($webhook) && $apiKey) {
+                    try {
 
-                    $response = Http::withHeaders([
-                        $apiKey->security_header_value => $apiKey->security_header_key,
-                    ])->withoutVerifying()->post($webhook, $jsonResponse);
-                    //$response = Http::post($webhook, $jsonResponse);
+                        $response = Http::withHeaders([
+                            $apiKey->security_header_value => $apiKey->security_header_key,
+                        ])->withoutVerifying()->post($webhook, $jsonResponse);
+                        //$response = Http::post($webhook, $jsonResponse);
 
-                    $jsonData = $response->json();
-                    if ($eventLogWh) {
-                        $eventLogWh->status = EventLog::STATUS_SUCCESSFUL;
-                        $eventLogWh->response_json = json_encode($jsonData);
-                        $eventLogWh->save();
-                        $ackLog = $eventLogWh->ackLog;
-                        $ackLog->status = AckLog::STATUS_SUCCESS;
-                        $ackLog->save();
+                        $jsonData = $response->json();
+                        if ($eventLogWh) {
+                            $eventLogWh->status = EventLog::STATUS_SUCCESSFUL;
+                            $eventLogWh->response_json = json_encode($jsonData);
+                            $eventLogWh->save();
+                            $ackLog = $eventLogWh->ackLog;
+                            $ackLog->status = AckLog::STATUS_SUCCESS;
+                            $ackLog->save();
+                        }
+                    } catch (\Throwable $e) {
+                        $statusCode = $e->getCode();
+                        $errorMessage = $e->getMessage();
+
+                        $errorInfo = [
+                            'status_code' => $statusCode,
+                            'error_message' => $errorMessage,
+                            'response_body' => null,
+                            'request_details' => $requestDetails
+                        ];
+                        if ($eventLogWh) {
+                            $eventLogWh->status = EventLog::STATUS_ERROR;
+                            $eventLogWh->response_json = json_encode($errorInfo);
+                            $eventLogWh->save();
+                            $ackLog = $eventLog->ackLog;
+                            $ackLog->status = AckLog::STATUS_EXPIRED;
+                            $ackLog->save();
+                        }
+                        error_log($e->getMessage());
                     }
-                } catch (\Throwable $e) {
-                    $statusCode = $e->getCode();
-                    $errorMessage = $e->getMessage();
-
-                    $errorInfo = [
-                        'status_code' => $statusCode,
-                        'error_message' => $errorMessage,
-                        'response_body' => null,
-                        'request_details' => $requestDetails
-                    ];
-                    if ($eventLogWh) {
-                        $eventLogWh->status = EventLog::STATUS_ERROR;
-                        $eventLogWh->response_json = json_encode($errorInfo);
-                        $eventLogWh->save();
-                        $ackLog = $eventLog->ackLog;
-                        $ackLog->status = AckLog::STATUS_EXPIRED;
-                        $ackLog->save();
-                    }
-                    error_log($e->getMessage());
                 }
             } else {
                 if ($eventLog != null) {

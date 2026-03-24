@@ -242,7 +242,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                                     //$datum->accumulated_real_consumption = $raw_json['import_wh'];
                                     $datum->interval_real_consumption = $raw_json['kwh_interval'];
                                     //$datum->accumulated_reactive_consumption = $raw_json['import_VArh'];
-                                    $datum->interval_reactive_consumption = $raw_json['varh_interval'];
+                                    //$datum->interval_reactive_consumption = $raw_json['varh_interval'];
                                     //$datum->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
                                     //$datum->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
                                     $datum->interval_reactive_capacitive_consumption = $raw_json['varCh_interval'];
@@ -283,7 +283,7 @@ class AverageDailyConsumptionJob implements ShouldQueue
                             //$reference_data->accumulated_real_consumption = $raw_json['import_wh'];
                             $reference_data->interval_real_consumption = $raw_json['kwh_interval'];
                             //$reference_data->accumulated_reactive_consumption = $raw_json['import_VArh'];
-                            $reference_data->interval_reactive_consumption = $raw_json['varh_interval'];
+                            //$reference_data->interval_reactive_consumption = $raw_json['varh_interval'];
                             //$reference_data->accumulated_reactive_capacitive_consumption = $raw_json['varCh_acumm'];
                             //$reference_data->accumulated_reactive_inductive_consumption = $raw_json['varLh_acumm'];
                             $reference_data->interval_reactive_capacitive_consumption = $raw_json['varCh_interval'];
