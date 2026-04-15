@@ -8,6 +8,7 @@ use App\Models\V1\Api\ApiKey;
 use App\Models\V1\Client;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\Api\EventLog;
 use Carbon\Carbon;
 use Crc16\Crc16;
@@ -30,6 +31,7 @@ class SetConfigJob implements ShouldQueue
      */
     public $rawMessage;
 
+    public $tries = 3;
 
     public function __construct($rawMessage)
     {
@@ -92,22 +94,42 @@ class SetConfigJob implements ShouldQueue
         }
         if ($client == null) {
             $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
-            $equipment = Equipment::create([
-                'equipment_type_id' => $equipment_type->id,
-                'serial' => $serial,
-                'name' => 'MEDIDOR',
-                'description' => 'Medidor enelar',
-                'admin_id' => 1,
-                'network_operator_id' => 7,
-                'has_admin' => true,
-                'has_network_operator' => true
-            ]);
-            $apiKey =ApiKey::first();
-            $response = Http::withHeaders([
-                'x-api-key' => $apiKey->api_key,
-            ])->withoutVerifying()->post(config('aom.api_url') . config('aom.api_clients_path') . '/client-add', [
-                'serial' => $equipment->serial,
-            ]);
+            $network_operator = NetworkOperator::first();
+            $admin = $network_operator ? $network_operator->admin : null;
+
+            if (!$equipment_type || !$network_operator || !$admin) {
+                logger()->warning('SetConfigJob: No se pudo auto-provisionar equipo — faltan datos base', [
+                    'serial' => $serial,
+                    'equipment_type' => $equipment_type ? $equipment_type->id : null,
+                    'network_operator' => $network_operator ? $network_operator->id : null,
+                    'admin' => $admin ? $admin->id : null,
+                ]);
+                return;
+            }
+
+            $equipment = Equipment::firstOrCreate(
+                ['serial' => $serial],
+                [
+                    'equipment_type_id' => $equipment_type->id,
+                    'name' => 'MEDIDOR',
+                    'description' => 'Auto-provisionado',
+                    'admin_id' => $admin->id,
+                    'network_operator_id' => $network_operator->id,
+                    'has_admin' => true,
+                    'has_network_operator' => true
+                ]
+            );
+
+            if ($equipment->wasRecentlyCreated) {
+                $apiKey = ApiKey::first();
+                if ($apiKey) {
+                    Http::withHeaders([
+                        'x-api-key' => $apiKey->api_key,
+                    ])->withoutVerifying()->post(config('aom.api_url') . config('aom.api_clients_path') . '/client-add', [
+                        'serial' => $equipment->serial,
+                    ]);
+                }
+            }
             return;
         }
 

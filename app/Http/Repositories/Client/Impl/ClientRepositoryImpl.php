@@ -9,6 +9,7 @@ use App\Models\V1\Client;
 use App\Models\V1\Equipment;
 use App\Models\V1\EquipmentClient;
 use App\Models\V1\EquipmentType;
+use App\Models\V1\NetworkOperator;
 use App\Models\V1\Api\EventLog;
 use App\Models\V1\HourlyMicrocontrollerData;
 use App\Models\V1\MicrocontrollerData;
@@ -60,6 +61,18 @@ class ClientRepositoryImpl implements ClientRepository
                 break;
             }
         }
+
+        $network_operator = NetworkOperator::first();
+        $admin = $network_operator ? $network_operator->admin : null;
+
+        if (!$network_operator || !$admin) {
+            logger()->warning('ClientRepositoryImpl: No se pudo crear cliente — faltan datos base', [
+                'network_operator' => $network_operator ? $network_operator->id : null,
+                'admin' => $admin ? $admin->id : null,
+            ]);
+            return null;
+        }
+
         return Client::create([
             'name' => "Cliente ". $code,
             'last_name' => "enelar",
@@ -69,7 +82,7 @@ class ClientRepositoryImpl implements ClientRepository
             'phone' => null,
             'identification' => $code,
             'network_topology' => Client::MONOPHASIC,
-            'network_operator_id' => 7,
+            'network_operator_id' => $network_operator->id,
             'client_type_id' => 4,
             'subsistence_consumption_id' => 1,
             'voltage_level_id' => 1,
@@ -77,7 +90,7 @@ class ClientRepositoryImpl implements ClientRepository
             'identification_type' => Client::IDENTIFICATION_TYPE_CC,
             'person_type' => Client::PERSON_TYPE_NATURAL,
             "has_telemetry" => true,
-            "admin_id" => 1,
+            "admin_id" => $admin->id,
         ]);
     }
 

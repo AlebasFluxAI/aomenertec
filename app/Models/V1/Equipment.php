@@ -155,7 +155,7 @@ class Equipment extends Model
 
     public function networkOperator()
     {
-        return $this->belongsTo(Equipment::class);
+        return $this->belongsTo(NetworkOperator::class);
     }
 
     public function technician()
