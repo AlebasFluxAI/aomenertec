@@ -133,7 +133,7 @@ Obtiene un token JWT para autenticación posterior.
 ```bash
 curl -X POST http://localhost/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email": "sadminprueba@fluxai.local", "password": "111111111"}'
+  -d '{"email": "support@fluxai.solutions", "password": "Flux@i2026!Secure"}'
 ```
 
 **Respuesta exitosa (200)**:
@@ -227,7 +227,7 @@ curl -X POST http://localhost/api/auth/me \
 {
   "id": 1,
   "name": "Admin",
-  "email": "sadminprueba@fluxai.local",
+  "email": "support@fluxai.solutions",
   "email_verified_at": "2024-01-01T00:00:00.000000Z",
   "created_at": "2024-01-01T00:00:00.000000Z",
   "updated_at": "2024-01-01T00:00:00.000000Z"

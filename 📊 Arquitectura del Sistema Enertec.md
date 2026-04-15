@@ -4,8 +4,8 @@
 
   Credenciales de acceso:
   - URL: http://localhost
-  - Email: sadminprueba@enerteclatam.com
-  - Contraseña: 111111111 (el número de identificación del usuario)
+   - Email: support@fluxai.solutions
+   - Contraseña: Flux@i2026!Secure
 
   Nota importante: El sistema tiene un UserObserver que sobrescribe la contraseña al crear usuarios y la establece como el
   hash del número de identificación. Por defecto, la contraseña siempre es el número de identificación del usuario.

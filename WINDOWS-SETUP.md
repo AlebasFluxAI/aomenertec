@@ -144,8 +144,8 @@ http://localhost
 ### Credenciales de Acceso
 
 **Super Administrador:**
-- Email: `sadminprueba@enerteclatam.com`
-- Contraseña: `111111111` *(el número de identificación del usuario)*
+- Email: `support@fluxai.solutions`
+- Contraseña: `Flux@i2026!Secure`
 
 **Otros Usuarios de Prueba:**
 | Tipo | Email | Contraseña |

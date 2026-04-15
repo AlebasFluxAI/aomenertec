@@ -307,7 +307,7 @@ return (array_merge(
 - **ALWAYS** clear cache after config changes: `make cache-clear`
 - **CHECK** if MQTT/Echo Server processes are running via Supervisor: `make supervisor-status`
 - **DEFAULT PASSWORD**: User identification number (see UserObserver)
-- **TEST CREDENTIALS**: sadminprueba@fluxai.local / 111111111
+- **PROD CREDENTIALS (Super Admin)**: support@fluxai.solutions / Flux@i2026!Secure
 - **API Key (inter-service)**: `dev-api-key-enertec-2026` (header: `x-api-key`) — created by `ApiKeySeeder`
 
 ## 📊 Critical Business Logic
