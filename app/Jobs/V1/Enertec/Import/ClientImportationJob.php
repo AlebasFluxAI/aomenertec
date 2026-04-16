@@ -96,14 +96,16 @@ class ClientImportationJob implements ShouldQueue
 
     private function createClient($importValues, $admin, &$errors)
     {
-        while (true) {
-            $code = $this->clientCode();
-            if (!(Client::whereCode($code)->exists())) {
-                break;
-            }
-        }
         $clientArray = $this->getModelArray($this->mapHeadersClientBase(), $importValues);
-        if (!array_key_exists("code", $clientArray)) {
+        $existingClient = Client::withoutGlobalScopes()->withTrashed()->whereIdentification($clientArray["identification"])->first();
+
+        if (!$existingClient) {
+            while (true) {
+                $code = $this->clientCode();
+                if (!(Client::withoutGlobalScopes()->whereCode($code)->exists())) {
+                    break;
+                }
+            }
             $clientArray = array_merge($clientArray, ["code" => $code]);
         }
         $clientArray = array_merge($clientArray, ["admin_id" => $admin]);
@@ -117,6 +119,14 @@ class ClientImportationJob implements ShouldQueue
         //if (!$this->validateClientData($importValues, $errors)) {
         //    return null;
         //}
+        if ($existingClient) {
+            if ($existingClient->trashed()) {
+                $existingClient->restore();
+            }
+            $existingClient->update($clientArray);
+            return $existingClient->fresh();
+        }
+
         return Client::create($clientArray);
     }
 
@@ -245,7 +255,13 @@ class ClientImportationJob implements ShouldQueue
             $billingInformationArray = $this->getModelArray($this->mapHeadersBillingInformation(), $importValues);
             $billingInformationArray = array_merge($billingInformationArray, ["default" => true]);
             $billingInformationArray = array_merge($billingInformationArray, ["type" => $this->mapValuesBillingInformation()[$billingInformationArray["type"]]]);
-            $client->billingInformation()->create($billingInformationArray);
+            $client->billingInformation()->updateOrCreate(
+                [
+                    "client_id" => $client->id,
+                    "default" => true,
+                ],
+                $billingInformationArray
+            );
         } catch (\Throwable $error) {
             $this->addErrorToArray($errors, ["Error en creacion de informacion de facturacion" => $error->getMessage()]);
         }
@@ -280,20 +296,29 @@ class ClientImportationJob implements ShouldQueue
             return;
         }
         $technician = Technician::find($technicianInformation["technician_id"]);
+        if (!$technician) {
+            $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Tecnico con identificador {$technicianInformation["technician_id"]} no existe"]);
+            return;
+        }
         $networkOperatorId = $technicianInformation["network_operator_id"];
         if (!$networkOperator = NetworkOperator::find($networkOperatorId)) {
             $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Operador de red con identificador $networkOperatorId no existe"]);
+            return;
         }
 
         if ($networkOperator->admin_id != $this->admin) {
             $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Operador de red con identificador $networkOperatorId no pertenece al administrador {$this->admin}"]);
+            return;
         }
         if ($technician->network_operator_id != $networkOperatorId) {
             $this->addErrorToArray($errors, ["Error al asociar tecnico" => "Tecnico no pertecene a operador de red"]);
             return;
         }
         $client->update(["network_operator_id" => $networkOperator->id]);
-        $client->technician()->create($technicianInformation);
+        $client->technician()->firstOrCreate([
+            "client_id" => $client->id,
+            "technician_id" => $technicianInformation["technician_id"],
+        ]);
     }
 
     private function mapHeadersTechnicianInformation()
@@ -317,7 +342,10 @@ class ClientImportationJob implements ShouldQueue
             return;
         }
         try {
-            $supervisor = Supervisor::create(
+            $supervisor = Supervisor::withTrashed()->updateOrCreate(
+                [
+                    "identification" => $client->identification,
+                ],
                 [
                     "name" => $client->name,
                     "last_name" => $client->last_name ?? "",
@@ -325,27 +353,30 @@ class ClientImportationJob implements ShouldQueue
                     "phone" => $client->phone,
                     "network_operator_id" => $client->network_operator_id,
                     "identification" => $client->identification,
-
                 ]
             );
+            if ($supervisor->trashed()) {
+                $supervisor->restore();
+            }
 
-            $user = User::create([
+            $user = User::updateOrCreate([
+                "identification" => $client->identification,
+            ], [
                 "name" => $client->name,
                 "last_name" => $client->last_name ?? "",
                 "email" => $client->email,
                 "phone" => $client->phone,
-                "network_operator_id" => $client->network_operator_id,
                 "identification" => $client->identification,
                 "type" => User::TYPE_SUPERVISOR
-
             ]);
             $supervisor->update([
                 "user_id" => $user->id
             ]);
 
-            ClientSupervisor::create([
+            ClientSupervisor::firstOrCreate([
                 "client_id" => $client->id,
                 "supervisor_id" => $supervisor->id,
+            ], [
                 "active" => true
             ]);
         } catch (\Throwable $error) {
@@ -367,7 +398,11 @@ class ClientImportationJob implements ShouldQueue
     {
         try {
             $billingInformationArray = $this->getModelArray($this->mapHeadersAddressInformation(), $importValues);
-            $client->addresses()->create($billingInformationArray);
+            if ($client->address) {
+                $client->address()->update($billingInformationArray);
+            } else {
+                $client->addresses()->create($billingInformationArray);
+            }
         } catch (\Throwable $error) {
             $this->addErrorToArray($errors, ["Error en creacion de informacion de direccion" => $error->getMessage()]);
 
@@ -400,13 +435,18 @@ class ClientImportationJob implements ShouldQueue
                 $this->addErrorToArray($errors, ["Error al asociar equipos" => "Equipo $serial no existe"]);
                 return;
             }
+            if (EquipmentClient::where('equipment_id', $equipment->id)->where('client_id', $client->id)->exists()) {
+                continue;
+            }
             if ($equipment->assigned) {
                 $this->addErrorToArray($errors, ["Error al asociar equipos" => "Equipo $serial asignado"]);
+                continue;
             }
             try {
-                EquipmentClient::create([
+                EquipmentClient::firstOrCreate([
                     'client_id' => $client->id,
                     'equipment_id' => $equipment->id,
+                ], [
                     'current_assigned' => true,
                 ]);
                 $equipment->update(['assigned' => true]);
