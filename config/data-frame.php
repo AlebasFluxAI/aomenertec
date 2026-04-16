@@ -130,10 +130,10 @@ return [
     ],
 
     'alert_config_frame' => [
-        ['variable_name' => 'network_operator_id', 'start' => 0,   'lenght' => 16,'type' => 'Q'],
-        ['variable_name' => 'equipment_id', 'start' => 16,   'lenght' => 16,'type' => 'Q'],
-        ['variable_name' => 'network_operator_new_id', 'start' => 32,   'lenght' => 16, 'type' => 'Q'],
-        ['variable_name' => 'equipment_new_id','start' => 48,   'lenght' => 16, 'type' => 'Q'],
+        ['variable_name' => 'network_operator_id', 'start' => 0,   'lenght' => 16,'type' => 'P'],
+        ['variable_name' => 'equipment_id', 'start' => 16,   'lenght' => 16,'type' => 'P'],
+        ['variable_name' => 'network_operator_new_id', 'start' => 32,   'lenght' => 16, 'type' => 'P'],
+        ['variable_name' => 'equipment_new_id','start' => 48,   'lenght' => 16, 'type' => 'P'],
         ['flag_id' => 16,'limit' => 'max_alert', 'variable_name' => 'max_vol_ph_1', 'start' => 64,   'lenght' => 8, 'type' => 'f'],
         ['flag_id' => 16,'limit' => 'min_alert', 'variable_name' => 'min_vol_ph_1', 'start' => 72,   'lenght' => 8,'type' => 'f'],
         ['flag_id' => 17,'limit' => 'max_alert', 'variable_name' => 'max_vol_ph_2', 'start' => 80,   'lenght' => 8,'type' => 'f'],
@@ -774,7 +774,7 @@ return [
                 ['id' => 8 ,  'variable_name'=> 'import_kvarh', 'start' => 19, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
                 ['id' => 9 ,  'variable_name'=> 'export_kwh',   'start' => 23, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
                 ['id' => 10 , 'variable_name'=> 'export_kvarh', 'start' => 27, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
-                ['id' => 11 , 'variable_name'=> 'crc',          'start' => 29, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+                ['id' => 11 , 'variable_name'=> 'crc',          'start' => 31, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ]
         ],
         [
@@ -795,7 +795,7 @@ return [
                 ['id' => 13 ,  'variable_name'=> 'ph1_volt',   'start' => 39, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
                 ['id' => 14 , 'variable_name'=> 'ph2_volt', 'start' => 43, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
                 ['id' => 15 , 'variable_name'=> 'ph3_volt', 'start' => 47, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
-                ['id' => 16 , 'variable_name'=> 'crc',          'start' => 49, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+                ['id' => 16 , 'variable_name'=> 'crc',          'start' => 51, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ]
         ],
         [
@@ -815,7 +815,7 @@ return [
                 ['id' => 12 ,  'variable_name'=> 'ph1_volt',   'start' => 35, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
                 ['id' => 13 , 'variable_name'=> 'ph2_volt', 'start' => 39, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
                 ['id' => 14 , 'variable_name'=> 'ph3_volt', 'start' => 43, 'parameter_name' => null, 'format' => 'unix',   'lenght' => 4, 'type' => 'f'],
-                ['id' => 15 , 'variable_name'=> 'crc',          'start' => 45, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
+                ['id' => 15 , 'variable_name'=> 'crc',          'start' => 47, 'parameter_name' => null, 'format' => 'number', 'lenght' => 2, 'type' => 'v'],
             ],
             'uri_event' => \App\Models\V1\Api\EventLog::EVENT_CHANGE_STATE_SUPPLY_TO_VOLTAGE
         ],

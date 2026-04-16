@@ -18,6 +18,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 class SetConfigJob implements ShouldQueue
@@ -53,9 +54,12 @@ class SetConfigJob implements ShouldQueue
         $json = null;
         if ($crc_pack == $crc_message) {
             $event_id = unpack('C', $message[0])[1];
-            foreach ($data_frame_events as $index => $event) {
-                if ($event['event_id'] ==  $event_id) {
-                    foreach ($event['frame'] as $datum) {
+            $matchedEvent = null;
+            foreach ($data_frame_events as $index => $eventDef) {
+                if ($eventDef['event_id'] ==  $event_id) {
+                    $matchedEvent = $eventDef;
+                    $length = 0;
+                    foreach ($eventDef['frame'] as $datum) {
 
                         $split = substr($message, ($datum['start']), ($datum['lenght']));
                         if ($datum['format'] == 'lenght') {
@@ -67,30 +71,44 @@ class SetConfigJob implements ShouldQueue
                             $json[$datum['variable_name']] = $value;
                         } else{
                             if ($datum['variable_name'] == 'crc'){
-                                $data_crc = substr($message, 0, -2);
-                                $json[$datum['variable_name']] = unpack($datum['type'], $data_crc)[1];
+                                // Extraer CRC correctamente: últimos 2 bytes del mensaje
+                                $json[$datum['variable_name']] = unpack($datum['type'], $crc_message)[1];
                             }else{
                                 $value = unpack($datum['type'], $split)[1];
                                 $json[$datum['variable_name']] = $value;
                             }
                         }
                     }
-                        echo $event_id . " - " . $json['serial'];
+                    Log::debug("[ACK] event_id={$event_id} serial=" . ($json['serial'] ?? 'N/A'));
                     break;
                 }
             }
         } else {
+            Log::warning("[ACK] CRC mismatch - raw hex: " . substr($this->rawMessage, 0, 20) . "...");
             return;
         }
-        $serial = $json['serial'];
+
+        if ($json === null || $matchedEvent === null) {
+            Log::warning("[ACK] No matching frame for event_id or empty json");
+            return;
+        }
+
+        $serial = $json['serial'] ?? null;
+        if ($serial === null) {
+            Log::warning("[ACK] Event {$event_id} has no serial field in frame");
+            return;
+        }
+
         $client = Client::getClientFromSerial($serial);
         if ($event_id == 32){
-            $apiKey =ApiKey::first();
-            $response = Http::withHeaders([
-                'x-api-key' => $apiKey->api_key,
-            ])->withoutVerifying()->get(config('aom.api_url') . config('aom.api_config_path') . '/set-date', [
-                'serial' => $json['serial'],
-            ]);
+            $apiKey = ApiKey::first();
+            if ($apiKey) {
+                $response = Http::withHeaders([
+                    'x-api-key' => $apiKey->api_key,
+                ])->withoutVerifying()->get(config('aom.api_url') . config('aom.api_config_path') . '/set-date', [
+                    'serial' => $json['serial'],
+                ]);
+            }
         }
         if ($client == null) {
             $equipment_type = EquipmentType::where('type', 'MEDIDOR ELECTRICO')->first();
@@ -133,15 +151,13 @@ class SetConfigJob implements ShouldQueue
             return;
         }
 
-        if (array_key_exists('job_name', $event)) {
-            $jobInstance = "App\\Jobs\\V1\\Api\\ConfigurationClient\\{$event['job_name']}";
+        if (array_key_exists('job_name', $matchedEvent)) {
+            $jobInstance = "App\\Jobs\\V1\\Api\\ConfigurationClient\\{$matchedEvent['job_name']}";
             if (class_exists($jobInstance)) {
-                if (class_exists("App\\Jobs\\V1\\Api\\ConfigurationClient\\{$event['job_name']}")) {
-                    if($event_id == 43){
-                        dispatch(new $jobInstance($json,0,1))->onQueue('spot3');
-                    } else{
-                        dispatch(new $jobInstance($json))->onQueue('spot3');
-                    }
+                if($event_id == 43){
+                    dispatch(new $jobInstance($json,0,1))->onQueue('spot3');
+                } else{
+                    dispatch(new $jobInstance($json))->onQueue('spot3');
                 }
             }
         }
@@ -156,23 +172,24 @@ class SetConfigJob implements ShouldQueue
             if (array_key_exists('id_event_log', $json)) {
                 if ($json['event_id'] == 44){
                     $eventLog_last = EventLog::find($json['id_event_log']);
-                    echo $eventLog_last->event;
-                    $eventLog = EventLog::create([
-                        "name" => $eventLog_last->event . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
-                        "event" => $eventLog_last->event,
-                        "client_id" => $client->id,
-                        "request_endpoint" => null,
-                        "request_json" => null,
-                        "response_json" => json_encode($json),
-                        "webhook" => null,
-                        "serial" => $serial,
-                        "request_type" => EventLog::MAIN_SERVER_MC_REQUEST,
-                        "status" => EventLog::STATUS_SUCCESSFUL,
-                        "ack_log_id" => $eventLog_last->ackLog->id
-                    ]);
+                    if ($eventLog_last) {
+                        $eventLog = EventLog::create([
+                            "name" => $eventLog_last->event . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
+                            "event" => $eventLog_last->event,
+                            "client_id" => $client->id,
+                            "request_endpoint" => null,
+                            "request_json" => null,
+                            "response_json" => json_encode($json),
+                            "webhook" => null,
+                            "serial" => $serial,
+                            "request_type" => EventLog::MAIN_SERVER_MC_REQUEST,
+                            "status" => EventLog::STATUS_SUCCESSFUL,
+                            "ack_log_id" => $eventLog_last->ackLog ? $eventLog_last->ackLog->id : null
+                        ]);
+                    }
                 } else{
                     $eventLog = EventLog::find($json['id_event_log']);
-                    if ($client->id == $eventLog->client_id) {
+                    if ($eventLog && $client->id == $eventLog->client_id) {
                         $eventLog->update([
                             "status" => EventLog::STATUS_SUCCESSFUL,
                             "response_json" => json_encode($json)
@@ -180,12 +197,12 @@ class SetConfigJob implements ShouldQueue
                     }
                 }
             } else{
-                if (array_key_exists('uri_event', $event)) {
+                if (array_key_exists('uri_event', $matchedEvent)) {
 
                     $ackLog = AckLog::create(["serial" => $serial]);
                     $eventLog = EventLog::create([
-                        "name" => $event['uri_event'] . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
-                        "event" => $event['uri_event'],
+                        "name" => $matchedEvent['uri_event'] . "_" . EventLog::MAIN_SERVER_MC_REQUEST,
+                        "event" => $matchedEvent['uri_event'],
                         "client_id" => $client->id,
                         "request_endpoint" => null,
                         "request_json" => null,
@@ -199,8 +216,12 @@ class SetConfigJob implements ShouldQueue
                 }
             }
 
-            foreach ($data_webhook_events as $event) {
-                if ($event['event_id'] == $event_id) {
+            foreach ($data_webhook_events as $webhookEvent) {
+                if ($webhookEvent['event_id'] == $event_id) {
+                    if ($eventLog === null) {
+                        Log::warning("[ACK] No eventLog for webhook event_id={$event_id}");
+                        break;
+                    }
                     $eventLogWh = EventLog::create([
                         "name" => $eventLog->event . "_" . EventLog::MAIN_SERVER_CLIENT_RESPONSE,
                         "event" => $eventLog->event,
@@ -212,19 +233,21 @@ class SetConfigJob implements ShouldQueue
                         "serial" => $serial,
                         "request_type" => EventLog::MAIN_SERVER_CLIENT_RESPONSE,
                         "status" => EventLog::STATUS_CREATED,
-                        "ack_log_id" => $eventLog ? $eventLog->ack_log_id : null
+                        "ack_log_id" => $eventLog->ack_log_id ?? null
                     ]);
-                    foreach ($event['json'] as $datum) {
+                    $object = [];
+                    foreach ($webhookEvent['json'] as $datum) {
                         if ($datum['value'] != null) {
                             $jsonResponse[$datum['variable_name']] = $datum['value'];
                         } elseif ($datum['parameter_name'] != null) {
                             $jsonResponse[$datum['variable_name']] = array_key_exists($datum['parameter_name'], $json) ? $json[$datum['parameter_name']] : null;
                         } else {
                             if ($datum['variable_name'] == 'id_transaction') {
-                                $jsonResponse[$datum['variable_name']] = $eventLogWh ? $eventLogWh->ackLog->id : null;
+                                $jsonResponse[$datum['variable_name']] = $eventLogWh && $eventLogWh->ackLog ? $eventLogWh->ackLog->id : null;
                             } elseif ($datum['variable_name'] == 'id_event') {
                                 $jsonResponse[$datum['variable_name']] = $eventLogWh ? $eventLogWh->id : null;
                             } else {
+                                $object = [];
                                 foreach ($datum['object'] as $property) {
                                     if ($property['format'] == 'date') {
                                         $date = Carbon::now();
@@ -243,7 +266,7 @@ class SetConfigJob implements ShouldQueue
                     break;
                 }
             }
-            if ($jsonResponse != null) {
+            if ($jsonResponse != null && $webhook != null) {
                 if ($eventLogWh) {
                     $eventLogWh->request_json = json_encode($jsonResponse);
                     $eventLogWh->save();
@@ -251,7 +274,6 @@ class SetConfigJob implements ShouldQueue
                 $requestDetails = [
                     'url' => $webhook,
                     'method' => 'POST',
-                    // 'headers' => $e->request->headers()->all(),
                     'body' => $jsonResponse,
                 ];
 
@@ -259,7 +281,7 @@ class SetConfigJob implements ShouldQueue
                     try {
 
                         $response = Http::withHeaders([
-                            $apiKey->security_header_value => $apiKey->security_header_key,
+                            $apiKey->security_header_key => $apiKey->security_header_value,
                         ])->withoutVerifying()->post($webhook, $jsonResponse);
 
                         $jsonData = $response->json();
@@ -268,34 +290,35 @@ class SetConfigJob implements ShouldQueue
                             $eventLogWh->response_json = json_encode($jsonData);
                             $eventLogWh->save();
                             $ackLog = $eventLogWh->ackLog;
-                            $ackLog->status = AckLog::STATUS_SUCCESS;
-                            $ackLog->save();
+                            if ($ackLog) {
+                                $ackLog->status = AckLog::STATUS_SUCCESS;
+                                $ackLog->save();
+                            }
                         }
-
-                        dump($jsonData);
                     } catch (\Throwable $e) {
                         $statusCode = $e->getCode();
                         $errorMessage = $e->getMessage();
-                        $responseBody = null;
                         $errorInfo = [
                             'status_code' => $statusCode,
                             'error_message' => $errorMessage,
-                            'response_body' => $responseBody,
+                            'response_body' => null,
                             'request_details' => $requestDetails
                         ];
                         if ($eventLogWh) {
                             $eventLogWh->status = EventLog::STATUS_ERROR;
                             $eventLogWh->response_json = json_encode($errorInfo);
                             $eventLogWh->save();
-                            $ackLog = $eventLog->ackLog;
-                            $ackLog->status = AckLog::STATUS_EXPIRED;
-                            $ackLog->save();
+                            $ackLog = $eventLogWh->ackLog;
+                            if ($ackLog) {
+                                $ackLog->status = AckLog::STATUS_EXPIRED;
+                                $ackLog->save();
+                            }
                         }
-                      //  error_log($e->getMessage());
+                        Log::error("[ACK] Webhook failed for event_id={$event_id}: " . $e->getMessage());
                     }
                 }
             } else {
-                if ($eventLog != null) {
+                if ($eventLog != null && $eventLog->ackLog) {
                     $ackLog = $eventLog->ackLog;
                     $ackLog->status = AckLog::STATUS_SUCCESS;
                     $ackLog->save();
