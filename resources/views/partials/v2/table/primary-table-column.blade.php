@@ -8,7 +8,7 @@
     </div>
 @elseif(($col_type?:"")== \App\Http\Resources\V1\ColTypeEnum::COL_TYPE_ARRAY)
     <div class="text-center">
-        @foreach(json_decode($col_data) as $key=>$array_value)
+        @foreach(json_decode($col_data ?? '{}') ?? [] as $key=>$array_value)
             <li>
                 <b>{{$key}}</b>
                 <p>{{$array_value}}</p>
