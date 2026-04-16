@@ -134,13 +134,16 @@ class ClientImportationJob implements ShouldQueue
     {
         $clientName = trim($clientArray["name"] ?? "");
         $clientAlias = trim($clientArray["alias"] ?? "");
+        $clientLastName = trim($clientArray["last_name"] ?? "");
         $businessName = trim($importValues["RAZON_SOCIAL"] ?? "");
 
-        if (($clientArray["person_type"] ?? null) === "juridical" && $clientName === "") {
+        if ($clientName === "") {
             if ($clientAlias !== "") {
                 $clientArray["name"] = $clientAlias;
             } elseif ($businessName !== "") {
                 $clientArray["name"] = $businessName;
+            } elseif ($clientLastName !== "") {
+                $clientArray["name"] = $clientLastName;
             }
         }
 
@@ -165,7 +168,7 @@ class ClientImportationJob implements ShouldQueue
             if (!array_key_exists($key, $importValues)) {
                 continue;
             }
-            $fieldValue = $importValues[$key];
+            $fieldValue = is_string($importValues[$key]) ? trim($importValues[$key]) : $importValues[$key];
             if ($value == "person_type") {
                 $fieldValue = $fieldValue == "JURIDICA" ? "juridical" : strtolower($fieldValue);
             }
@@ -423,8 +426,17 @@ class ClientImportationJob implements ShouldQueue
     private function linkEquipments(Client $client, $importValues, &$errors)
     {
         $equipmentInformation = $this->getModelArray($this->mapHeadersCreateEquipment(), $importValues);
-        $equipmentTypeId = explode("/", $equipmentInformation["equipments_serial_type"]);
-        $equipmentSerials = explode("/", $equipmentInformation["equipments_serial"]);
+        if (empty($equipmentInformation["equipments_serial"]) || empty($equipmentInformation["equipments_serial_type"])) {
+            return;
+        }
+
+        $equipmentTypeId = array_values(array_filter(array_map('trim', explode("/", $equipmentInformation["equipments_serial_type"])), fn ($value) => $value !== ''));
+        $equipmentSerials = array_values(array_filter(array_map('trim', explode("/", $equipmentInformation["equipments_serial"])), fn ($value) => $value !== ''));
+
+        if (count($equipmentTypeId) === 0 || count($equipmentSerials) === 0) {
+            return;
+        }
+
         if (count($equipmentTypeId) != count($equipmentSerials)) {
             $this->addErrorToArray($errors, ["Error al asociar equipos" => "La cantidad de tipos de equipo no coincide con el serial de los equipos"]);
             return;
