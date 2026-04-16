@@ -43,15 +43,15 @@
                                                                          "table_info"=>[
                                                                           [
                                                                               "key"=>"Id",
-                                                                              "value"=>$model->id
+                                                                              "value"=>$importId
                                                                           ],
                                                                           [
                                                                               "key"=>"Nombre",
-                                                                              "value"=>$model->name
+                                                                              "value"=>$importName
                                                                           ],
                                                                           [
                                                                               "key"=>"Tipo",
-                                                                              "value"=>__("import.".$model->type)
+                                                                              "value"=>__("import.".$importType)
                                                                           ],
 
                                                                           ]

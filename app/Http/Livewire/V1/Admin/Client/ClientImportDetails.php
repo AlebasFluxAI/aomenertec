@@ -13,7 +13,9 @@ class ClientImportDetails extends Component
     use WithPagination;
     use FilterTrait;
 
-    public $model;
+    public $importId;
+    public $importName;
+    public $importType;
     private $clientImportDetailsService;
 
     public function __construct($id = null)

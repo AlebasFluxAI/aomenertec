@@ -14,7 +14,9 @@ class ClientImportDetailsService extends Singleton
 
     public function mount(Component $component, Import $import)
     {
-        $component->model = $import;
+        $component->importId = $import->id;
+        $component->importName = $import->name;
+        $component->importType = $import->type;
     }
 
     public function completedStatus($importItemId)
@@ -29,6 +31,8 @@ class ClientImportDetailsService extends Singleton
 
     public function getData(Component $component)
     {
-        return $component->model->items()->with('importable')->paginate();
+        return ImportItem::where('import_id', $component->importId)
+            ->with('importable')
+            ->paginate();
     }
 }
