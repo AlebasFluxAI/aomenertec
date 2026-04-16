@@ -111,11 +111,30 @@ class ClientImportationJob implements ShouldQueue
             $clientArray = array_merge($clientArray, ["network_operator_id" => $this->networkOperator->id]);
         }
 
+        $clientArray = $this->normalizeClientBaseData($clientArray, $importValues);
+
 
         //if (!$this->validateClientData($importValues, $errors)) {
         //    return null;
         //}
         return Client::create($clientArray);
+    }
+
+    private function normalizeClientBaseData(array $clientArray, array $importValues)
+    {
+        $clientName = trim($clientArray["name"] ?? "");
+        $clientAlias = trim($clientArray["alias"] ?? "");
+        $businessName = trim($importValues["RAZON_SOCIAL"] ?? "");
+
+        if (($clientArray["person_type"] ?? null) === "juridical" && $clientName === "") {
+            if ($clientAlias !== "") {
+                $clientArray["name"] = $clientAlias;
+            } elseif ($businessName !== "") {
+                $clientArray["name"] = $businessName;
+            }
+        }
+
+        return $clientArray;
     }
 
     public function clientCode($input = '0123456789', $strength = 10)
