@@ -97,7 +97,7 @@
                                                                                         "customs"=>[
                                                                                                     [
 
-                                                                                                           "conditional"=>"completedStatus",
+                                                                                                           "conditionalModel"=>"completedStatusModel",
                                                                                                            "redirect"=>[
                                                                                                                    "route"=>"v1.admin.client.detail.client",
                                                                                                                    "binding"=>"client",
@@ -117,4 +117,3 @@
           ])
 
 </div>
-

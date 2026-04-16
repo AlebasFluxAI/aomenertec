@@ -22,8 +22,13 @@ class ClientImportDetailsService extends Singleton
         return ImportItem::find($importItemId)->status != Import::STATUS_COMPLETED;
     }
 
+    public function completedStatusModel(ImportItem $importItem)
+    {
+        return $importItem->status != Import::STATUS_COMPLETED;
+    }
+
     public function getData(Component $component)
     {
-        return $component->model->items()->paginate();
+        return $component->model->items()->with('importable')->paginate();
     }
 }

@@ -32,6 +32,11 @@ class ClientImportDetails extends Component
         return $this->clientImportDetailsService->completedStatus($importItemId);
     }
 
+    public function completedStatusModel($importItem)
+    {
+        return $this->clientImportDetailsService->completedStatusModel($importItem);
+    }
+
     public function render()
     {
         return view('livewire.v1.admin.client.import-client-details', [
