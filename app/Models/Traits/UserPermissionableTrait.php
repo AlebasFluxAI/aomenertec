@@ -44,19 +44,24 @@ trait UserPermissionableTrait
 
     public function tabPermissionExist($permissionName)
     {
-        $tabPermission = TabPermission::wherePermission($permissionName)->first()->id;
-        return $this->tabPermissions()->whereTabPermissionId($tabPermission)->exists();
+        $tabPermission = TabPermission::wherePermission($permissionName)->first();
+        if (!$tabPermission) {
+            return false;
+        }
+        return $this->tabPermissions()->whereTabPermissionId($tabPermission->id)->exists();
     }
 
     public function tabPermissionConditionableExist($permissionName, $model)
     {
-
-        $tabPermission = TabPermission::wherePermission($permissionName)->first()->id;
+        $tabPermission = TabPermission::wherePermission($permissionName)->first();
+        if (!$tabPermission) {
+            return false;
+        }
 
         return $this->tabPermissions()
             ->whereConditionableId($model->id)
             ->whereConditionableType($model::class)
-            ->whereTabPermissionId($tabPermission)->exists();
+            ->whereTabPermissionId($tabPermission->id)->exists();
     }
 
 }

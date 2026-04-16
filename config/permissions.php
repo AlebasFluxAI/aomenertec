@@ -149,7 +149,8 @@ return [
         Permissions::SELLER_SHOW,
         Permissions::SELLER_LINK_CLIENT,
 
-        //Permissions::CLIENT_EDIT,
+        Permissions::CLIENT_CREATE,
+        Permissions::CLIENT_EDIT,
         Permissions::CLIENT_DELETE,
         Permissions::CLIENT_SHOW,
         Permissions::CLIENT_SHOW_MONITORING,
