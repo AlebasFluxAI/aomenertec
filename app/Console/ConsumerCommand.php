@@ -73,7 +73,9 @@ class ConsumerCommand extends Command
         }, 0);
 
         $mqtt->subscribe('v1/mc/ack', function (string $topic, string $message) {
-            if (substr($message, 0, 2) == '21') {
+            // Last Will llega como hex string desde el broker; ACKs normales como binario.
+            // Detectar hex: si todos los chars son hex válidos y longitud es par, es hex string.
+            if (strlen($message) > 0 && strlen($message) % 2 === 0 && ctype_xdigit($message)) {
                 $hex = $message;
             } else {
                 $hex = bin2hex($message);
