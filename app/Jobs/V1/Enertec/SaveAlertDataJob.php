@@ -55,7 +55,7 @@ class SaveAlertDataJob implements ShouldQueue
     {
         $flags_frame = config('data-frame.flags_frame');
         $decode = bin2hex(base64_decode($this->raw_json));
-        $timestamp = (unpack('l', hex2bin(substr($decode, 64, 8)))[1]);
+        $timestamp = (unpack('V', hex2bin(substr($decode, 64, 8)))[1]);
         $date = new Carbon();
         $date->setTimestamp($timestamp);
         $current_time = Carbon::now();

@@ -76,7 +76,7 @@ class ConfigClientRepositoryImpl implements ConfigClientRepository
                 if($parameter_value == 'hourly'){
                     $value = pack($datum['type'], 1);
                     $json_request[$datum['variable_name']] = 1;
-                } elseif ($parameter_value == 'hourly') {
+                } elseif ($parameter_value == 'daily') {
                     $value = pack($datum['type'], 2);
                     $json_request[$datum['variable_name']] = 2;
                 } else {
