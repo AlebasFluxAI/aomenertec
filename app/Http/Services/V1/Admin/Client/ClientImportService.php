@@ -30,14 +30,17 @@ class ClientImportService extends Singleton
             "auditable_type" => User::class,
         ]);
         $fileName = "import_client_" . $import->id . ".csv";
-        $component->file->storePubliclyAs('imports', $fileName, 's3');
-        $url = Storage::disk('s3')->url('imports/' . $fileName);
-        $string = utf8_encode(Storage::disk('s3')->get('imports/' . $fileName));
+        $storedPath = $component->file->storeAs('imports/temp', $fileName, 'local');
+        try {
+            $string = utf8_encode(Storage::disk('local')->get($storedPath));
+        } finally {
+            Storage::disk('local')->delete($storedPath);
+        }
         $import->update([
             "name" => "Importacion_clientes_" . $import->id,
             "type" => Import::TYPE_CLIENT,
             "status" => Import::STATUS_PROCESSING,
-            "url" => $url,
+            "url" => null,
             "file_name" => $component->file->getClientOriginalName()
         ]);
         $csv = Reader::createFromString($string, 'r');
