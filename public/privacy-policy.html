@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Política de Privacidad | FluxAI</title>
+    <meta
+      name="description"
+      content="Política de Privacidad de FluxAI para publicación en Google Play Store."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --flux-primary: #0044a4;
+        --flux-secondary: #0c62dc;
+        --flux-success: #00c781;
+        --flux-error: #ef4444;
+        --flux-warning: #f97316;
+
+        --bg: #f2f7ff;
+        --surface: #ffffff;
+        --surface-soft: #f8fbff;
+        --text: #12243f;
+        --text-muted: #506382;
+        --line: #dce7f7;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 0% 0%, #d8e9ff 0%, transparent 35%),
+          radial-gradient(circle at 100% 0%, #e5f0ff 0%, transparent 40%),
+          var(--bg);
+        line-height: 1.58;
+      }
+
+      .container {
+        width: min(1140px, 94vw);
+        margin: 0 auto;
+      }
+
+      .hero {
+        margin: 1rem auto 1.2rem;
+        border-radius: 24px;
+        overflow: hidden;
+        background: linear-gradient(
+          140deg,
+          var(--flux-primary) 0%,
+          var(--flux-secondary) 62%,
+          #3f89ff 100%
+        );
+        color: #fff;
+        position: relative;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        box-shadow:
+          0 30px 60px rgba(0, 68, 164, 0.22),
+          inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      }
+
+      .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(
+            120deg,
+            rgba(255, 255, 255, 0.11),
+            rgba(255, 255, 255, 0) 45%
+          ),
+          repeating-linear-gradient(
+            -45deg,
+            rgba(255, 255, 255, 0.08) 0,
+            rgba(255, 255, 255, 0.08) 4px,
+            transparent 4px,
+            transparent 18px
+          );
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        padding: 2.2rem 2rem 2rem;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 999px;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Sora", sans-serif;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 0.8rem;
+        font-size: clamp(1.8rem, 3vw, 2.7rem);
+        max-width: 16ch;
+        line-height: 1.15;
+      }
+
+      .hero p {
+        margin: 0.9rem 0 0;
+        max-width: 75ch;
+        color: rgba(255, 255, 255, 0.93);
+      }
+
+      .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 1rem;
+      }
+
+      .hero-meta .item {
+        padding: 0.4rem 0.7rem;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        font-size: 0.82rem;
+      }
+
+      .top-actions {
+        margin-top: 1.1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+      }
+
+      .btn {
+        appearance: none;
+        border: 0;
+        border-radius: 12px;
+        padding: 0.65rem 0.95rem;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+      }
+
+      .btn-light {
+        background: #ffffff;
+        color: var(--flux-primary);
+      }
+
+      .btn-outline {
+        background: transparent;
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+      }
+
+      .quick-grid {
+        margin-top: 1rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+
+      .quick-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 0.95rem 1rem;
+        box-shadow: 0 10px 22px rgba(11, 43, 88, 0.07);
+      }
+
+      .quick-card .label {
+        font-size: 0.74rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .quick-card .value {
+        font-size: 0.98rem;
+        font-weight: 700;
+        margin-top: 0.3rem;
+      }
+
+      .layout {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 1rem;
+        margin: 1rem 0 2rem;
+        padding-bottom: 8rem;
+      }
+
+      .toc {
+        position: sticky;
+        top: 14px;
+        align-self: start;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 0.95rem;
+      }
+
+      .toc h3 {
+        font-size: 0.96rem;
+        margin-bottom: 0.65rem;
+      }
+
+      .toc-body {
+        display: grid;
+        grid-template-columns: 4px minmax(0, 1fr);
+        gap: 0.62rem;
+        align-items: stretch;
+      }
+
+      .toc-progress {
+        position: relative;
+        border-radius: 999px;
+        background: #e2ecfb;
+        border: 1px solid #d2e2fb;
+        overflow: hidden;
+      }
+
+      .toc-progress-fill {
+        position: absolute;
+        inset: 0 auto auto 0;
+        width: 100%;
+        height: 0%;
+        border-radius: inherit;
+        background: linear-gradient(
+          180deg,
+          var(--flux-secondary) 0%,
+          var(--flux-primary) 100%
+        );
+        box-shadow: 0 0 0 1px rgba(12, 98, 220, 0.22);
+        transition: height 180ms ease;
+      }
+
+      .toc nav {
+        display: grid;
+        gap: 0.32rem;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: #1f3c66;
+        font-size: 0.87rem;
+        padding: 0.33rem 0.45rem;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        transition:
+          background-color 160ms ease,
+          color 160ms ease,
+          border-color 160ms ease,
+          transform 160ms ease;
+      }
+
+      .toc a:hover {
+        background: #eaf2ff;
+        color: var(--flux-primary);
+      }
+
+      .toc a.active {
+        color: var(--flux-primary);
+        background: #e4efff;
+        border-color: #bfd8ff;
+        font-weight: 700;
+        transform: translateX(2px);
+      }
+
+      .article {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      section.policy-section {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 1rem 1.05rem;
+        box-shadow: 0 12px 24px rgba(12, 46, 95, 0.06);
+        scroll-margin-top: 16px;
+      }
+
+      .policy-section h2 {
+        font-size: 1.12rem;
+        color: #0f3368;
+        margin-bottom: 0.68rem;
+      }
+
+      .policy-section h3 {
+        font-size: 0.96rem;
+        margin: 0.9rem 0 0.45rem;
+      }
+
+      .policy-section p,
+      .policy-section li {
+        color: #223c61;
+        font-size: 0.95rem;
+      }
+
+      .policy-section ul,
+      .policy-section ol {
+        margin: 0.55rem 0 0.25rem;
+        padding-left: 1.15rem;
+      }
+
+      .callout {
+        border-left: 5px solid var(--flux-warning);
+        background: #fff7f1;
+        border-radius: 12px;
+        padding: 0.78rem 0.85rem;
+        color: #7a3f14;
+        margin-top: 0.4rem;
+      }
+
+      .callout strong {
+        color: #4b250d;
+      }
+
+      .mini-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        margin-top: 0.55rem;
+      }
+
+      .badge {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 0.3rem 0.55rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+      }
+
+      .badge.primary {
+        color: var(--flux-primary);
+        background: #e7f0ff;
+        border-color: #cae1ff;
+      }
+
+      .badge.success {
+        color: #06764e;
+        background: #e3fff4;
+        border-color: #b7f7df;
+      }
+
+      .badge.warning {
+        color: #8c470f;
+        background: #fff2e8;
+        border-color: #ffd8bf;
+      }
+
+      .badge.error {
+        color: #a32727;
+        background: #ffeded;
+        border-color: #ffd0d0;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+        margin-top: 0.55rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 730px;
+      }
+
+      th,
+      td {
+        border: 1px solid var(--line);
+        text-align: left;
+        padding: 0.66rem 0.62rem;
+        font-size: 0.9rem;
+        vertical-align: top;
+      }
+
+      th {
+        background: #edf4ff;
+        color: #103768;
+        font-family: "Sora", sans-serif;
+        font-size: 0.82rem;
+        letter-spacing: 0.01em;
+      }
+
+      .footer-note {
+        margin: 1.25rem 0 2rem;
+        font-size: 0.83rem;
+        color: #486085;
+      }
+
+      .complete-box {
+        border: 1px dashed #efb07d;
+        background: #fff8f3;
+        border-radius: 12px;
+        padding: 0.75rem;
+        margin-top: 0.5rem;
+      }
+
+      .complete-box code {
+        background: #fff;
+        border: 1px solid #f3d2b5;
+        border-radius: 8px;
+        padding: 0.15rem 0.35rem;
+        font-size: 0.8rem;
+      }
+
+      @media (max-width: 940px) {
+        .quick-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .toc {
+          position: static;
+          order: -1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <header class="hero">
+        <div class="hero-content">
+          <span class="chip">🔒 Documento público — Google Play Store</span>
+          <h1>Política de Privacidad de FluxAI</h1>
+          <p>
+            Esta política describe cómo FluxAI recopila, usa, comparte y protege
+            la información relacionada con la operación de medidores eléctricos,
+            órdenes de trabajo y funciones técnicas de campo.
+          </p>
+
+          <div class="hero-meta">
+            <span class="item"><strong>App:</strong> FluxAI</span>
+            <span class="item"><strong>Plataforma:</strong> Android</span>
+            <span class="item"
+              ><strong>Última actualización:</strong>
+              <span id="lastUpdate">17/04/2026</span></span
+            >
+          </div>
+
+          <div class="top-actions">
+            <button class="btn btn-light" onclick="window.print()">
+              Imprimir / Guardar PDF
+            </button>
+            <a
+              class="btn btn-outline"
+              href="#contacto"
+              style="text-decoration: none"
+              >Ir a contacto</a
+            >
+          </div>
+        </div>
+      </header>
+
+      <section class="quick-grid" aria-label="Resumen ejecutivo">
+        <article class="quick-card">
+          <p class="label">Tipo de datos principales</p>
+          <p class="value">
+            Cuenta, Bluetooth, telemetría, órdenes y ubicación
+          </p>
+        </article>
+        <article class="quick-card">
+          <p class="label">Uso principal</p>
+          <p class="value">Operación técnica y gestión de medidores en campo</p>
+        </article>
+        <article class="quick-card">
+          <p class="label">Publicidad de terceros</p>
+          <p class="value">No se integra SDK de anuncios en el estado actual</p>
+        </article>
+      </section>
+
+      <div class="layout">
+        <aside class="toc" aria-label="Tabla de contenidos">
+          <h3>Contenido</h3>
+          <div class="toc-body">
+            <div class="toc-progress" aria-hidden="true">
+              <span class="toc-progress-fill" id="tocProgressFill"></span>
+            </div>
+            <nav>
+              <a href="#responsable">1. Responsable</a>
+              <a href="#alcance">2. Alcance</a>
+              <a href="#datos">3. Datos que tratamos</a>
+              <a href="#finalidades">4. Finalidades</a>
+              <a href="#permisos">5. Permisos Android</a>
+              <a href="#compartimos">6. Compartición de datos</a>
+              <a href="#retencion">7. Retención y almacenamiento</a>
+              <a href="#seguridad">8. Seguridad</a>
+              <a href="#derechos">9. Derechos del usuario</a>
+              <a href="#menores">10. Menores de edad</a>
+              <a href="#cambios">11. Cambios</a>
+              <a href="#contacto">12. Contacto</a>
+            </nav>
+          </div>
+        </aside>
+
+        <article class="article">
+          <section class="policy-section" id="responsable">
+            <h2>1. Responsable del tratamiento</h2>
+            <p>
+              El responsable del tratamiento de datos personales de FluxAI es:
+            </p>
+            <div class="complete-box">
+              <p style="margin-top: 0">
+                <strong>Datos del responsable:</strong>
+              </p>
+              <ul>
+                <li>
+                  Razón social:
+                  <code
+                    >CONSULTORIA E INGENIERIA EN EFICIENCIA ENERGETICA SAS</code
+                  >
+                </li>
+                <li>NIT/ID fiscal: <code>901992450-5</code></li>
+                <li>
+                  Domicilio:
+                  <code>CR 36 24 A 44 OF 2 BRR SAN BENITO</code>
+                </li>
+                <li>
+                  Email de privacidad:
+                  <code>inge@alebas.co</code>
+                </li>
+                <li>País/Jurisdicción: <code>Colombia</code></li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="policy-section" id="alcance">
+            <h2>2. Alcance de esta política</h2>
+            <p>
+              Esta política aplica al uso de la aplicación móvil FluxAI en
+              Android, publicada a través de Google Play Store, y cubre la
+              información tratada durante:
+            </p>
+            <ul>
+              <li>Autenticación en plataforma (modo online).</li>
+              <li>
+                Conexión y operación técnica por Bluetooth (modo de campo).
+              </li>
+              <li>
+                Gestión de órdenes de trabajo, configuración de medidores y
+                actualizaciones OTA.
+              </li>
+            </ul>
+            <div class="mini-badges">
+              <span class="badge primary">App ID: com.fluxai</span>
+              <span class="badge success">Operación técnica</span>
+              <span class="badge warning">Uso profesional</span>
+            </div>
+          </section>
+
+          <section class="policy-section" id="datos">
+            <h2>3. Datos que tratamos</h2>
+
+            <h3>3.1 Datos de cuenta y autenticación</h3>
+            <ul>
+              <li>Email y contraseña (en flujo de inicio de sesión).</li>
+              <li>
+                Tokens de autenticación (acceso/refresh) y perfil de usuario.
+              </li>
+              <li>
+                Datos de perfil: nombre, apellido, identificación, teléfono, rol
+                y metadatos de cuenta.
+              </li>
+            </ul>
+
+            <h3>3.2 Datos técnicos del equipo y conectividad</h3>
+            <ul>
+              <li>Dirección MAC Bluetooth del medidor y estado de conexión.</li>
+              <li>
+                Comandos técnicos enviados y respuestas del equipo
+                (consola/operación).
+              </li>
+              <li>
+                Eventos operativos: recarga, cambios de estado, configuración y
+                OTA.
+              </li>
+            </ul>
+
+            <h3>3.3 Datos operativos y telemetría del medidor</h3>
+            <ul>
+              <li>
+                Consumo, carga, voltajes, alertas y otras variables del
+                dispositivo.
+              </li>
+              <li>
+                Estado de relé y tipo de sistema (prepago, postpago,
+                telemetría).
+              </li>
+            </ul>
+
+            <h3>3.4 Datos de órdenes de trabajo y ubicación</h3>
+            <ul>
+              <li>
+                Datos de cliente y orden: nombre, código, estado de órdenes,
+                equipos asociados.
+              </li>
+              <li>
+                Datos de ubicación vinculados a órdenes: dirección, latitud y
+                longitud.
+              </li>
+              <li>
+                Evidencias de orden (cuando aplique): nombre/metadata de archivo
+                y descripción.
+              </li>
+            </ul>
+
+            <h3>3.5 Datos de firmware y notificaciones</h3>
+            <ul>
+              <li>
+                Catálogo de firmwares, versiones y archivos descargados
+                localmente.
+              </li>
+              <li>
+                Notificaciones de eventos técnicos (incluyendo estado de
+                lectura/revisión).
+              </li>
+            </ul>
+          </section>
+
+          <section class="policy-section" id="finalidades">
+            <h2>4. Finalidades del tratamiento</h2>
+            <ol>
+              <li>Autenticar usuarios y administrar sesiones de acceso.</li>
+              <li>
+                Permitir conexión Bluetooth y operación técnica de medidores en
+                campo.
+              </li>
+              <li>
+                Visualizar telemetría y estado operativo del equipo en tiempo
+                real.
+              </li>
+              <li>Gestionar órdenes de trabajo y su contexto geográfico.</li>
+              <li>Ejecutar y controlar actualizaciones OTA de firmware.</li>
+              <li>
+                Generar alertas y notificaciones operativas para continuidad del
+                servicio.
+              </li>
+              <li>
+                Atender soporte técnico, auditoría operativa y seguridad del
+                sistema.
+              </li>
+            </ol>
+
+            <h3>Base jurídica (adaptar a tu jurisdicción)</h3>
+            <p>
+              El tratamiento puede fundarse, según corresponda, en: ejecución
+              contractual, cumplimiento de obligaciones legales, interés
+              legítimo para operación y seguridad, y consentimiento cuando sea
+              exigible.
+            </p>
+          </section>
+
+          <section class="policy-section" id="permisos">
+            <h2>5. Permisos Android y para qué se usan</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Permiso</th>
+                    <th>Finalidad operativa</th>
+                    <th>Obligatorio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Bluetooth (scan/connect/admin)</td>
+                    <td>
+                      Descubrir, conectar y comunicarse con medidores por
+                      Bluetooth.
+                    </td>
+                    <td>Sí, para funciones de campo.</td>
+                  </tr>
+                  <tr>
+                    <td>Ubicación aproximada/precisa</td>
+                    <td>
+                      Soporte técnico de Bluetooth y vistas de mapa/ruta de
+                      órdenes.
+                    </td>
+                    <td>Según función usada.</td>
+                  </tr>
+                  <tr>
+                    <td>Notificaciones</td>
+                    <td>
+                      Mostrar alertas de operación, estado de equipos y eventos
+                      de servicio.
+                    </td>
+                    <td>Recomendado.</td>
+                  </tr>
+                  <tr>
+                    <td>Almacenamiento</td>
+                    <td>
+                      Gestión de archivos firmware y datos locales de operación.
+                    </td>
+                    <td>Según versión Android / función.</td>
+                  </tr>
+                  <tr>
+                    <td>Foreground service / wake lock</td>
+                    <td>
+                      Mantener monitoreo técnico activo cuando la app pasa a
+                      segundo plano.
+                    </td>
+                    <td>Solo para esa capacidad.</td>
+                  </tr>
+                  <tr>
+                    <td>Cámara (cuando aplique)</td>
+                    <td>
+                      Escaneo de códigos QR para capturar identificadores de
+                      medidor.
+                    </td>
+                    <td>Opcional.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="policy-section" id="compartimos">
+            <h2>6. ¿Compartimos datos?</h2>
+            <p>
+              FluxAI no comercializa datos personales. Podemos compartir
+              información únicamente en escenarios necesarios para operar el
+              servicio:
+            </p>
+            <ul>
+              <li>
+                <strong>Infraestructura y backend del servicio:</strong> para
+                autenticación, lista de trabajo, catálogo OTA y operación de la
+                plataforma.
+              </li>
+              <li>
+                <strong>Servicios de mapas:</strong> para renderización de mapas
+                y rutas cuando se usa la vista de mapa.
+              </li>
+              <li>
+                <strong>Cumplimiento legal:</strong> cuando exista obligación
+                legal o requerimiento válido de autoridad.
+              </li>
+            </ul>
+            <div class="mini-badges">
+              <span class="badge success">No venta de datos</span>
+              <span class="badge primary">Uso limitado a operación</span>
+            </div>
+          </section>
+
+          <section class="policy-section" id="retencion">
+            <h2>7. Almacenamiento local y retención</h2>
+            <h3>7.1 En el dispositivo</h3>
+            <ul>
+              <li>
+                Tokens y perfil de sesión (mientras exista sesión activa).
+              </li>
+              <li>
+                Historial técnico local (MAC recientes, notificaciones, settings
+                de consola).
+              </li>
+              <li>Archivos de firmware descargados para operación OTA.</li>
+            </ul>
+
+            <h3>7.2 En plataforma</h3>
+            <p>
+              Los datos administrados por backend (usuarios, órdenes, telemetría
+              y catálogos) se retienen conforme a políticas operativas y
+              obligaciones regulatorias de la organización responsable.
+            </p>
+            <div class="callout">
+              <strong>Acción recomendada:</strong> publicar en este punto plazos
+              concretos de retención por tipo de dato (ej.: sesión, órdenes,
+              evidencias, logs técnicos).
+            </div>
+          </section>
+
+          <section class="policy-section" id="seguridad">
+            <h2>8. Medidas de seguridad</h2>
+            <ul>
+              <li>
+                Controles de autenticación y sesión para acceso a plataforma.
+              </li>
+              <li>
+                Separación de funciones por rol operativo
+                (cliente/técnico/administración).
+              </li>
+              <li>Persistencia local acotada a necesidades de operación.</li>
+              <li>
+                Uso de protocolos y controles técnicos de acuerdo con la
+                arquitectura del servicio.
+              </li>
+            </ul>
+            <p>
+              Aun con medidas razonables, ningún sistema es 100% invulnerable.
+              Por eso se aplican prácticas continuas de revisión y mejora.
+            </p>
+          </section>
+
+          <section class="policy-section" id="derechos">
+            <h2>9. Derechos de los titulares</h2>
+            <p>
+              El titular puede solicitar acceso, rectificación, actualización,
+              supresión o limitación del tratamiento de sus datos, así como
+              revocar consentimiento cuando corresponda legalmente.
+            </p>
+            <p>
+              Para ejercer estos derechos, contactar por los canales indicados
+              en la sección 12.
+            </p>
+            <div class="complete-box">
+              <p style="margin: 0">
+                Definir SLA de respuesta (ejemplo):
+                <code>[15_dias_habiles]</code>
+              </p>
+            </div>
+          </section>
+
+          <section class="policy-section" id="menores">
+            <h2>10. Tratamiento de datos de menores de edad</h2>
+            <p>
+              FluxAI está orientada a uso profesional/técnico y no está diseñada
+              para ser utilizada por menores de edad. Si detectás tratamiento no
+              intencional de datos de menores, podés contactarnos para su
+              revisión y gestión.
+            </p>
+          </section>
+
+          <section class="policy-section" id="cambios">
+            <h2>11. Cambios a esta política</h2>
+            <p>
+              Podemos actualizar esta política cuando cambien funcionalidades,
+              requerimientos legales o medidas de seguridad. Publicaremos la
+              versión vigente en esta misma URL, con fecha de actualización.
+            </p>
+          </section>
+
+          <section class="policy-section" id="contacto">
+            <h2>12. Contacto de privacidad</h2>
+            <p>
+              Para consultas, quejas o solicitudes sobre privacidad y
+              tratamiento de datos, escribir a:
+            </p>
+            <div class="complete-box">
+              <ul>
+                <li>
+                  Email de privacidad:
+                  <a href="mailto:inge@alebas.co"
+                    ><code>inge@alebas.co</code></a
+                  >
+                </li>
+                <li>
+                  Email de soporte:
+                  <a href="mailto:support@fluxai.solutions"
+                    ><code>support@fluxai.solutions</code></a
+                  >
+                </li>
+                <li>
+                  Dirección:
+                  <code>CR 36 24 A 44 OF 2 BRR SAN BENITO</code>
+                </li>
+                <li>País: <code>Colombia</code></li>
+              </ul>
+            </div>
+
+            <p style="margin-bottom: 0">
+              Si publicás en Google Play Store, asegurate de que este contacto
+              coincida con el del perfil del desarrollador.
+            </p>
+          </section>
+        </article>
+      </div>
+
+      <p class="footer-note">
+        FluxAI © <span id="year"></span>. Todos los derechos reservados.
+      </p>
+    </main>
+
+    <script>
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, "0");
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const year = now.getFullYear();
+      document.getElementById("lastUpdate").textContent =
+        `${day}/${month}/${year}`;
+      document.getElementById("year").textContent = year;
+
+      const tocLinks = Array.from(document.querySelectorAll(".toc nav a"));
+      const tocProgressFill = document.getElementById("tocProgressFill");
+      const sections = tocLinks
+        .map((link) => {
+          const target = link.getAttribute("href");
+          return target ? document.querySelector(target) : null;
+        })
+        .filter(Boolean);
+
+      const setActiveLink = (sectionId) => {
+        tocLinks.forEach((link) => {
+          const isActive = link.getAttribute("href") === `#${sectionId}`;
+          link.classList.toggle("active", isActive);
+
+          if (isActive) {
+            link.setAttribute("aria-current", "true");
+          } else {
+            link.removeAttribute("aria-current");
+          }
+        });
+      };
+
+      if (sections.length > 0) {
+        const visibleSections = new Map();
+        let currentSectionId = sections[0].id;
+        const firstSection = sections[0];
+        const lastSection = sections[sections.length - 1];
+
+        const updateTocProgress = () => {
+          if (!tocProgressFill || !firstSection || !lastSection) return;
+
+          const scrollY = window.scrollY;
+          const start = firstSection.offsetTop - window.innerHeight * 0.28;
+          const end =
+            lastSection.offsetTop +
+            lastSection.offsetHeight -
+            window.innerHeight * 0.45;
+
+          const span = Math.max(end - start, 1);
+          const ratio = Math.min(Math.max((scrollY - start) / span, 0), 1);
+          tocProgressFill.style.height = `${(ratio * 100).toFixed(2)}%`;
+        };
+
+        const isNearBottom = () => {
+          const scrollBottom = window.scrollY + window.innerHeight;
+          const docHeight = document.documentElement.scrollHeight;
+          return docHeight - scrollBottom <= 0;
+        };
+
+        const forceLastSectionWhenAtBottom = () => {
+          if (!lastSection?.id) return;
+          if (!isNearBottom()) return;
+
+          if (currentSectionId !== lastSection.id) {
+            currentSectionId = lastSection.id;
+            setActiveLink(currentSectionId);
+          }
+
+          updateTocProgress();
+        };
+
+        setActiveLink(currentSectionId);
+        updateTocProgress();
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const id = entry.target.id;
+
+              if (entry.isIntersecting) {
+                visibleSections.set(id, entry.intersectionRatio);
+              } else {
+                visibleSections.delete(id);
+              }
+            });
+
+            if (visibleSections.size === 0) return;
+
+            const nextSectionId = Array.from(visibleSections.entries()).sort(
+              (a, b) => b[1] - a[1],
+            )[0][0];
+
+            if (nextSectionId !== currentSectionId) {
+              currentSectionId = nextSectionId;
+              setActiveLink(currentSectionId);
+            }
+          },
+          {
+            root: null,
+            rootMargin: "-32% 0px -52% 0px",
+            threshold: [0, 0.1, 0.2, 0.35, 0.5, 0.75, 1],
+          },
+        );
+
+        sections.forEach((section) => observer.observe(section));
+
+        const onViewportChange = () => {
+          forceLastSectionWhenAtBottom();
+          updateTocProgress();
+        };
+
+        window.addEventListener("scroll", onViewportChange, {
+          passive: true,
+        });
+        window.addEventListener("resize", onViewportChange);
+        onViewportChange();
+
+        tocLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            const href = link.getAttribute("href");
+            if (!href) return;
+
+            const id = href.replace("#", "");
+            if (id) {
+              currentSectionId = id;
+              setActiveLink(currentSectionId);
+              requestAnimationFrame(updateTocProgress);
+              setTimeout(updateTocProgress, 180);
+            }
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
