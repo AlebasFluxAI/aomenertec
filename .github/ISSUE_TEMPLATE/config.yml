@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📖 Documentación técnica
+    url: https://github.com/AlebasFluxAI/aomenertec/blob/main/AGENTS.md
+    about: Consultá AGENTS.md y CLAUDE.md antes de abrir un issue
+  - name: 🚀 Guía de deployment en producción
+    url: https://github.com/AlebasFluxAI/aomenertec/blob/main/DEPLOYMENT-PRODUCTION.md
+    about: Para dudas sobre despliegue a producción
+  - name: 🐳 Guía de Docker / desarrollo local
+    url: https://github.com/AlebasFluxAI/aomenertec/blob/main/README-DOCKER.md
+    about: Para dudas sobre el entorno de desarrollo con Docker/Sail

@@ -1,0 +1,118 @@
+name: ✨ Solicitud de Feature
+description: Proponer una nueva funcionalidad o mejora al sistema
+title: "[FEATURE]: "
+labels: ["type: feature", "status: needs-triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por proponer una mejora! Cuanto más claro sea el "por qué", más fácil va a ser evaluarla y priorizarla.
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: Problema que resuelve
+      description: ¿Qué problema o necesidad estás tratando de resolver? El "por qué" es más importante que el "qué".
+      placeholder: Ej. Los operadores de red no pueden ver el consumo agregado de sus clientes en tiempo real, y tienen que exportar datos manualmente cada día...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solucion
+    attributes:
+      label: Solución propuesta
+      description: Describí qué te gustaría que pase. Sé lo más específico posible.
+      placeholder: Ej. Agregar un dashboard en el rol NetworkOperator que muestre consumo en vivo vía Echo Server...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: dominio
+    attributes:
+      label: Dominio afectado
+      description: ¿Qué dominio del sistema involucra esta feature? (ver AGENTS.md)
+      multiple: true
+      options:
+        - Admin
+        - Client
+        - NetworkOperator
+        - Technician
+        - MqttInput (IoT / MQTT)
+        - EventLog
+        - ConfigurationClient
+        - Auth (JWT / Jetstream)
+        - Billing / Invoicing
+        - Broadcasting (Echo Server)
+        - Scheduled Jobs / Cron
+        - Infraestructura (Docker / Supervisor)
+        - Nuevo dominio
+    validations:
+      required: true
+
+  - type: dropdown
+    id: tipo-usuario
+    attributes:
+      label: Tipo de usuario beneficiado
+      description: ¿Quién se beneficia con esta feature?
+      multiple: true
+      options:
+        - Super Admin
+        - Admin
+        - Cliente final
+        - Operador de Red
+        - Técnico
+        - Sistema (jobs / cron / MQTT)
+        - Desarrolladores / Mantenimiento
+
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas consideradas
+      description: ¿Qué otras soluciones pensaste? ¿Por qué descartaste esas?
+      placeholder: Ej. Considerar generar reportes PDF diarios por email, pero se pierde el dato en tiempo real...
+
+  - type: textarea
+    id: impacto
+    attributes:
+      label: Impacto técnico esperado
+      description: ¿Requiere migraciones? ¿Nuevos endpoints API? ¿Cambios en MQTT? ¿Permisos nuevos?
+      placeholder: |
+        - Migración: nueva tabla `network_operator_dashboards`
+        - API: endpoint GET /v1/network-operator/dashboard
+        - Permisos: nuevo permiso `network_operator.view_live_dashboard`
+        - MQTT: no afecta
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups / Referencias
+      description: Si tenés diseños, capturas de sistemas similares, o referencias visuales, pegalas acá.
+
+  - type: dropdown
+    id: prioridad-sugerida
+    attributes:
+      label: Prioridad sugerida
+      description: ¿Qué tan urgente/importante es? (el equipo puede re-priorizar)
+      options:
+        - Crítica (bloquea operación)
+        - Alta (muy necesaria)
+        - Media (mejora importante)
+        - Baja (nice to have)
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto adicional
+      description: Cualquier otra info relevante (requisito de cliente, regulación, etc.)
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist previo
+      options:
+        - label: Busqué en issues existentes y no encontré una propuesta similar
+          required: true
+        - label: Revisé la documentación (AGENTS.md, CLAUDE.md) y no existe esta funcionalidad
+          required: true
