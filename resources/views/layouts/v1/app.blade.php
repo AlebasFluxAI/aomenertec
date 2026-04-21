@@ -49,38 +49,42 @@
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
         rel="stylesheet">
 
-    <!-- FluxAI Tech Fonts (Rajdhani + Exo 2) -->
+    <!-- FluxAI Typography: Inter (UI) + JetBrains Mono (code) — sobrias y 100% legibles -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@400;500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --flux-tech-font: 'Rajdhani', 'Exo 2', 'Poppins', 'Inter', sans-serif;
-            --flux-body-font: 'Poppins', 'Inter', 'Open Sans', sans-serif;
+            --flux-tech-font: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Poppins', sans-serif;
+            --flux-body-font: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Poppins', sans-serif;
+            --flux-mono-font: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace;
             --flux-primary: #0044A4;
+            --flux-primary-dark: #003380;
             --flux-secondary: #0C62DC;
             --flux-accent: #00C781;
             --flux-graphite: #2D3748;
+            --flux-muted: #7A869A;
             --flux-border: #E4E9F0;
         }
-        .flux-tech-font,
+        .flux-tech-font {
+            font-family: var(--flux-tech-font) !important;
+            letter-spacing: 0.01em;
+        }
         .flux-tech-title {
             font-family: var(--flux-tech-font) !important;
+            font-weight: 600;
             letter-spacing: 0.02em;
         }
-        .flux-tech-title {
-            font-weight: 600;
-            text-transform: uppercase;
-        }
 
-        /* Aplicar tipografia tecnica FluxAI a toda la pagina */
+        /* Tipografia sobria FluxAI aplicada a toda la pagina */
         html, body {
-            font-family: 'Exo 2', 'Rajdhani', 'Poppins', 'Inter', 'Open Sans', sans-serif;
-            font-feature-settings: "ss01", "cv11";
+            font-family: var(--flux-body-font);
+            font-feature-settings: "cv11", "ss01", "ss03";
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
-        /* Titulos, navegacion y botones refuerzan la estetica tecnica */
+        /* Titulos, navegacion, botones, tablas — misma familia, solo cambia peso */
         h1, h2, h3, h4, h5, h6,
         .navbar, .nav-link, .nav-item,
         .btn, button,
@@ -88,11 +92,12 @@
         .modal-title,
         .table thead th {
             font-family: var(--flux-tech-font);
-            letter-spacing: 0.02em;
+            letter-spacing: 0.01em;
         }
         h1, h2, h3, .modal-title, .card-title { font-weight: 600; }
-        /* Mantener mono para codigo/datos */
-        code, pre, kbd, samp { font-family: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace; }
+        h4, h5, h6 { font-weight: 600; }
+        /* Monospace para codigo/datos numericos */
+        code, pre, kbd, samp { font-family: var(--flux-mono-font); }
     </style>
 
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>

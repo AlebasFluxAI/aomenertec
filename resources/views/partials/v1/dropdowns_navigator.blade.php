@@ -7,17 +7,17 @@
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        padding: 9px 20px 9px 16px;
+        padding: 9px 18px 9px 14px;
         border: 1px solid rgba(12, 98, 220, 0.35);
         border-radius: 12px;
         background: linear-gradient(135deg, #0044A4 0%, #0C62DC 55%, #1E88E5 100%);
         color: #fff !important;
-        font-family: var(--flux-tech-font, 'Rajdhani', 'Exo 2', sans-serif);
+        font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);
         font-weight: 600;
         font-size: 14px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        line-height: 1;
+        letter-spacing: 0.01em;
+        text-transform: none;
+        line-height: 1.2;
         cursor: pointer;
         box-shadow: 0 6px 18px -10px rgba(0, 68, 164, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.08);
         transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
@@ -59,7 +59,7 @@
         border: 1px solid var(--flux-border, #E4E9F0);
         border-radius: 14px;
         box-shadow: 0 18px 40px -16px rgba(9, 30, 66, 0.25), 0 2px 6px -2px rgba(9, 30, 66, 0.08);
-        font-family: var(--flux-tech-font, 'Rajdhani', 'Exo 2', sans-serif);
+        font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);
     }
     .flux-actions-menu::before {
         content: "";
@@ -71,10 +71,10 @@
     }
     .flux-actions-menu__header {
         padding: 2px 8px 8px 8px;
-        font-size: 11px;
+        font-size: 11.5px;
         font-weight: 600;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        text-transform: none;
         color: #7A869A;
         display: flex;
         align-items: center;
@@ -90,10 +90,10 @@
         margin: 2px 0;
         border-radius: 10px;
         color: var(--flux-graphite, #2D3748);
-        font-family: var(--flux-tech-font, 'Rajdhani', 'Exo 2', sans-serif);
+        font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);
         font-weight: 500;
-        font-size: 14.5px;
-        letter-spacing: 0.03em;
+        font-size: 14px;
+        letter-spacing: 0.005em;
         text-decoration: none;
         background: transparent;
         border: 1px solid transparent;
@@ -162,7 +162,7 @@
         background: transparent;
         border: 1px solid transparent;
         color: var(--flux-graphite, #2D3748);
-        font-family: var(--flux-tech-font, 'Rajdhani', 'Exo 2', sans-serif);
+        font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);
         font-weight: 500;
         border-radius: 10px;
     }

@@ -6,10 +6,10 @@
 </div>
 <style>
     .flux-section-title .flux-tech-title {
-        font-family: var(--flux-tech-font, 'Rajdhani', 'Exo 2', sans-serif);
-        font-weight: 700;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
+        font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);
+        font-weight: 600;
+        letter-spacing: 0.005em;
+        text-transform: none;
     }
     .flux-section-title .flux-tech-title .primary-text {
         background: linear-gradient(90deg, #0044A4 0%, #0C62DC 60%, #00C781 100%);
