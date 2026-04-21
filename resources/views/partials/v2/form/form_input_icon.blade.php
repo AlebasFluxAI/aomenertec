@@ -1,10 +1,10 @@
 <div class="form-group mb-2 col-md-{{$col_with??12}} offset-{{$offset??'0'}} form-v2-input p-2">
 
-    <div @if($select_status_input??false)class="col-md-6"@else class="col-md-8"@endif style=" border-left-color: teal;border-left-width: 2px">
+    <div @if($select_status_input??false)class="col-md-6"@else class="col-md-8"@endif style="border-left-color: var(--flux-primary); border-left-width: 2px; border-left-style: solid;">
         @if(!$placeholder_clickable??false)
-            <li>{{$placeholder}}</li>
+            <li class="flux-input-label">{{$placeholder}}</li>
         @else
-            <li><a>
+            <li class="flux-input-label"><a>
                     <button wire:click="{{ $click_action }}" type="button" data-toggle="modal"
                             data-target="#{{ $data_target }}" class="stretched-link">{{ $placeholder??"" }}</button>
                 </a></li>
@@ -28,19 +28,44 @@
                           wire:model="{{ $input_model }}"
                       @endif
                       rows="{{$input_rows}}" type="{{$input_type??"text"}}"
-                      class="form-control" autocomplete="on" placeholder="{{$placeholder??""}}"
+                      class="form-control flux-input" autocomplete="on" placeholder="{{$placeholder??""}}"
                       required="{{$required??false}}"></textarea>
         @elseif($input_type=="checkbox")
-            <div class="form-check form-switch">
-                <input
-                    wire:model.lazy="{{$input_model}}"
-
-                    class="form-check-input" type="checkbox"
-                    id="flexSwitchCheckChecked">
+            @php
+                // Resolves "client_config.active_real_time" → $client_config->active_real_time
+                $switchValue = false;
+                try {
+                    $parts = explode('.', $input_model);
+                    $resolved = $$parts[0];
+                    for ($i = 1; $i < count($parts); $i++) {
+                        $resolved = is_array($resolved)
+                            ? ($resolved[$parts[$i]] ?? false)
+                            : ($resolved->{$parts[$i]} ?? false);
+                    }
+                    $switchValue = (bool) $resolved;
+                } catch (\Throwable $e) {
+                    $switchValue = false;
+                }
+                $switchId = 'flux_switch_' . preg_replace('/[^a-zA-Z0-9]/', '_', $input_model);
+            @endphp
+            <div class="d-flex align-items-center gap-2 flux-toggle-wrap">
+                <div class="form-check form-switch mb-0">
+                    <input
+                        wire:model.lazy="{{ $input_model }}"
+                        class="form-check-input flux-toggle"
+                        type="checkbox"
+                        role="switch"
+                        id="{{ $switchId }}"
+                        @if($disabled ?? false) disabled @endif>
+                </div>
+                <span class="flux-badge {{ $switchValue ? 'flux-badge-on' : 'flux-badge-off' }}">
+                    <i class="fas {{ $switchValue ? 'fa-circle-check' : 'fa-circle-xmark' }} me-1"></i>
+                    {{ $switchValue ? 'Activo' : 'Inactivo' }}
+                </span>
             </div>
 
         @elseif($input_type=="select")
-            <select wire:model="{{$input_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} "
+            <select wire:model="{{$input_model}}" class="{{$aux_class??"custom-select"}} {{$background??""}} flux-input"
                     required="{{$required??false}}" @if($disabled??false)disabled @endif>
                 <option disabled value="0"> {{$select_default??"Seleccione..."}} </option>
                 @foreach($select_options??[] as $option)
@@ -73,7 +98,7 @@
                        wire:model="{{ $input_model }}"
                    @endif
 
-                   type="{{$input_type??"text"}}" class="form-control" autocomplete="on"
+                   type="{{$input_type??"text"}}" class="form-control flux-input" autocomplete="on"
 
                    required="{{$required??false}}"
 
