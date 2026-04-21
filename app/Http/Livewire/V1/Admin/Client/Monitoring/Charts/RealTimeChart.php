@@ -26,6 +26,7 @@ class RealTimeChart extends Component
     public $select_data;
     public $chart_title;
     public $chart_type;
+    public $windowSize = 60; // puntos visibles (× 2 s = minutos de datos)
     protected $rules = [
 
         'cards_real_time.*.color' => 'required',
@@ -126,7 +127,7 @@ class RealTimeChart extends Component
                 if (!isset($item['timestamp']) || !isset($item[$variable['variable_name']])) {
                     continue;
                 }
-                $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
+                $x = Carbon::create($item['timestamp'])->format('H:i:s');
                 if ($variable['start'] <= 430) {
                     array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
                 }
@@ -205,6 +206,14 @@ class RealTimeChart extends Component
         }
     }
 
+    public function updatedWindowSize()
+    {
+        // Recortar buffer al nuevo tamaño seleccionado
+        while (count($this->data_real_time) > $this->windowSize) {
+            array_shift($this->data_real_time);
+        }
+    }
+
     public function addPoint($data)
     {
         // Validar que el broadcast data tenga la estructura esperada
@@ -214,7 +223,7 @@ class RealTimeChart extends Component
 
         $pointData = $data['data'];
 
-        if (count($this->data_real_time) == 40) {
+        while (count($this->data_real_time) >= $this->windowSize) {
             array_shift($this->data_real_time);
         }
         array_push($this->data_real_time, $pointData);
@@ -228,7 +237,7 @@ class RealTimeChart extends Component
                 if (!isset($item['timestamp']) || !isset($item[$variable['variable_name']])) {
                     continue;
                 }
-                $x = Carbon::create($item['timestamp'])->format('d F H:i:s');
+                $x = Carbon::create($item['timestamp'])->format('H:i:s');
                 array_push($data_aux[$index], ["x" => $x, "y" => round($item[$variable['variable_name']], 2)]);
             }
             $this->series_real_time[$index] = ["name" => $variable['display_name'], "data" => $data_aux[$index]];

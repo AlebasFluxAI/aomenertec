@@ -27,6 +27,23 @@
                     ])
         <div class="col-12 mt-0">
             <div class="box shadow mt-4">
+                {{-- Selector de ventana de tiempo --}}
+                <div class="d-flex justify-content-between align-items-center px-3 pt-3 pb-1 border-bottom">
+                    <span class="text-muted" style="font-size:0.82rem;">
+                        <i class="fas fa-chart-line me-1" style="color:var(--flux-primary)"></i>
+                        Ventana de datos en tiempo real
+                    </span>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Ventana de tiempo">
+                        @foreach([30 => '1 min', 60 => '2 min', 150 => '5 min', 300 => '10 min'] as $pts => $label)
+                            <button type="button"
+                                    wire:click="$set('windowSize', {{ $pts }})"
+                                    class="btn {{ $windowSize == $pts ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                    style="{{ $windowSize == $pts ? 'background-color:var(--flux-primary);border-color:var(--flux-primary-dark);' : '' }}">
+                                {{ $label }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
                 <div wire:ignore id="chart_real_time">
 
                 </div>
@@ -115,57 +132,70 @@
                 });
             })
             var options_real_time = {
-
                 series: [],
-                xaxis: {
-                    type: 'text'
-                },
                 chart: {
                     id: 'real_time_chart',
                     type: 'line',
-                    height: '450px',
+                    height: 520,
                     animations: {
                         enabled: true,
                         easing: 'linear',
-
                         dynamicAnimation: {
                             enabled: true,
-                            speed: 3000
+                            speed: 600   // ms – más veloz para feel real-time
                         }
                     },
                     toolbar: {
-                        show: false
+                        show: true,
+                        tools: {
+                            download: true,
+                            selection: false,
+                            zoom: true,
+                            zoomin: true,
+                            zoomout: true,
+                            pan: true,
+                            reset: true
+                        }
                     },
-                    zoom: {
-                        enabled: false
+                    zoom: { enabled: true }
+                },
+                xaxis: {
+                    type: 'category',
+                    tickAmount: 10,       // máximo 10 etiquetas → sin solapamiento
+                    labels: {
+                        rotate: -45,
+                        style: { fontSize: '11px', fontFamily: 'Inter, sans-serif' },
+                        hideOverlappingLabels: true
                     }
-
+                },
+                yaxis: {
+                    labels: {
+                        style: { fontSize: '12px', fontFamily: 'Inter, sans-serif' },
+                        formatter: (val) => val !== null ? val.toFixed(2) : ''
+                    }
                 },
                 colors: [function ({value, seriesIndex, w}) {
                     if ((w.config.series).length > 1) {
-                        if (seriesIndex == 0) {
-                            return '#FFF000';
-                        } else if (seriesIndex == 1) {
-                            return '#000FFF';
-                        } else {
-                            return '#FF0000'
-                        }
-                    } else {
-                        return '#2D45BD';
+                        if (seriesIndex === 0) return '#FFC000';   // L1 – amarillo vivo
+                        if (seriesIndex === 1) return '#0044A4';   // L2 – azul FluxAI
+                        return '#E53935';                          // L3 – rojo
                     }
-
+                    return '#0044A4';
                 }],
-                dataLabels: {
-                    enabled: false
-                },
-                noData: {
-                    text: 'Loading...'
-                },
                 stroke: {
-                    curve: 'smooth'
+                    curve: 'smooth',
+                    width: 2
                 },
-                legend: {
-                    show: false
+                grid: {
+                    borderColor: '#E4E9F0',
+                    strokeDashArray: 3
+                },
+                dataLabels: { enabled: false },
+                noData: { text: 'Esperando datos…', style: { fontSize: '14px' } },
+                legend: { show: false },
+                tooltip: {
+                    x: { show: true },
+                    style: { fontSize: '12px' }
                 }
             }
 
@@ -224,15 +254,13 @@
                 ]
             };
         @this.on('addPointRealTime', (e) => {
+            // Actualizar título / noData sin redibujar todo
             chart_real_time.updateOptions({
-                series: e.series,
-                title: {
-                    text: e.title,
-                },
-                noData: {
-                    text: e.no_data
-                },
-            }, true)
+                title:  { text: e.title },
+                noData: { text: e.no_data }
+            }, false, false);
+            // Actualizar solo la serie con animación suave
+            chart_real_time.updateSeries(e.series, true);
             phasor = new ACWF.PhasorDiagram("phasor_rt")
             // wfSet = ACWF.WaveformSet.create(sampleData);
             //phasor.plotWaveformSet(wfSet, 0);
