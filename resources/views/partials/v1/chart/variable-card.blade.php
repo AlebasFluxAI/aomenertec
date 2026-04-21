@@ -1,42 +1,48 @@
-<div wire:key="cards-{{ $id }}" class="col-md-{{$col_with??4}} mb-2 grid-margin stretch-card">
-    <div class="card1 shadow  {{$color??"voltage"}} ">
-        <div class="card-body">
-            <div class="d-flex flex-md-column flex-xl-row flex-wrap  align-items-center justify-content-between">
-                <div class="d-flex align-items-center icon-rounded-inverse icon-rounded-lg">
-                    <i class=" {{$icon_class}} fa-2x">
-                    </i>
-                </div>
-                <div>
+{{-- FluxAI metric card
+     Rediseñada con paleta corporativa (#0044A4 / #00C781 / #0C62DC).
+     Mantiene la API de props: icon_class, color, list_variable_options,
+     list_model_variable, data, id, real_time_flag. --}}
+<div wire:key="cards-{{ $id }}" class="col-md-{{$col_with??4}} mb-3 grid-margin stretch-card">
+    <div class="flux-metric-card flux-metric-card--{{$color??'voltage'}} {{($real_time_flag??false) ? 'flux-metric-card--rt' : ''}}">
+        <div class="flux-metric-card__accent"></div>
 
-                    @include("partials.v1.form.form_list",[
-                                                 "col_with"=>6,
-                                                 "mb"=>0,
-                                                 "background"=>$color??"voltage",
-                                                 "disabled" => false,
-                                                 "aux_class"=>"no-border-card",
-                                                 "list_model" => $list_model_variable,
-                                                 "list_default" => "Variable...",
-                                                 "list_options" => $list_variable_options,
-                                                 "list_option_value"=>"id",
-                                                 "list_option_view"=>"display_name",
-                                                 "list_option_title"=>""
-                                        ])
+        <div class="flux-metric-card__body">
+            <div class="flux-metric-card__icon">
+                <i class="{{$icon_class}}"></i>
+            </div>
+
+            <div class="flux-metric-card__content">
+                @include("partials.v1.form.form_list",[
+                                             "col_with"=>12,
+                                             "mb"=>0,
+                                             "background"=>$color??"voltage",
+                                             "disabled" => false,
+                                             "aux_class"=>"flux-metric-card__select no-border-card",
+                                             "list_model" => $list_model_variable,
+                                             "list_default" => "Variable...",
+                                             "list_options" => $list_variable_options,
+                                             "list_option_value"=>"id",
+                                             "list_option_view"=>"display_name",
+                                             "list_option_title"=>""
+                                    ])
+
+                <div class="flux-metric-card__values">
                     @foreach($data as $index=>$option)
-                        <div
-                            class="d-flex flex-md-column flex-xl-row align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end
-                                    @if($real_time_flag??false)animated-element @endif">
-                            <h3 wire:loading.remove wire:target="{{$list_model_variable}}"
-                                class="mb-0 mb-md-1 mb-lg-0 mr-1">{{ $option['value'] }}</h3>
-                            <small wire:loading.remove wire:target="{{$list_model_variable}}"
-                                   class="mb-0">{{ $option['key'] }}</small>
+                        <div class="flux-metric-card__value @if($real_time_flag??false) animated-element flux-metric-card__value--rt @endif">
+                            <span class="flux-metric-card__number"
+                                  wire:loading.remove
+                                  wire:target="{{$list_model_variable}}">{{ $option['value'] }}</span>
+                            <span class="flux-metric-card__unit"
+                                  wire:loading.remove
+                                  wire:target="{{$list_model_variable}}">{{ $option['key'] }}</span>
                         </div>
                     @endforeach
-                    <div
-                        class="d-flex flex-md-column flex-xl-row  align-items-baseline align-items-md-center align-items-xl-baseline justify-content-end">
-                        <small wire:loading wire:target="{{$list_model_variable}}" class="mb-0">Actualizando...</small>
+                    <div class="flux-metric-card__loading"
+                         wire:loading
+                         wire:target="{{$list_model_variable}}">
+                        <i class="fas fa-circle-notch fa-spin"></i>
+                        <span>Actualizando...</span>
                     </div>
-
-
                 </div>
             </div>
         </div>

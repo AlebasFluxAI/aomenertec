@@ -26,7 +26,8 @@ class Monitoring extends Component
     public $clientAlerts;
     public $data_chart_result;
     public $model;
-    protected $listeners = ['tabChange'];
+    public $liveMode = false;
+    protected $listeners = ['tabChange', 'toggleLiveMode'];
 
     public function mount(Client $client)
     {
@@ -50,6 +51,28 @@ class Monitoring extends Component
         if (count($this->data_chart) == 0) {
             $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
             $this->time = 1;
+        }
+    }
+
+    /**
+     * Alterna el modo tiempo real en el dashboard unificado.
+     *
+     * ON  → delega a RealTimeChart::selectRealTime() que maneja el contrato
+     *       con el firmware (RealTimeListener + SendRealTimeStatusJob).
+     * OFF → reutiliza tabChange() que ya limpia el listener y envía el
+     *       comando de desactivación al dispositivo IoT.
+     *
+     * No modificamos topics MQTT, payloads ni API endpoints — solo
+     * orquestamos desde la UI los mismos mecanismos que ya existen.
+     */
+    public function toggleLiveMode()
+    {
+        $this->liveMode = ! $this->liveMode;
+
+        if ($this->liveMode) {
+            $this->emit('selectRealTime');
+        } else {
+            $this->tabChange();
         }
     }
 
