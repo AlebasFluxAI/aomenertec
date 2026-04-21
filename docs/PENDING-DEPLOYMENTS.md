@@ -14,19 +14,23 @@
 |---|------------|-------------------------------------------------------------|--------------------------------------------------------------------------------------------------|----------------|
 | 1 | `6380f340` | [#7](https://github.com/AlebasFluxAI/aomenertec/pull/7)     | feat(ui): BaseLine rediseñado + tipografía Inter sobria + navegación FluxAI                      | *sin asignar*  |
 | 2 | `8d3db85d` | [#6](https://github.com/AlebasFluxAI/aomenertec/pull/6)     | feat(monitoreo): dashboard unificado FluxAI con toggle tiempo real                               | *sin asignar*  |
+| 3 | `7746e39b` | [#10](https://github.com/AlebasFluxAI/aomenertec/pull/10)   | feat(ui): home dashboard FluxAI por rol + login alineado con app movil + breadcrumbs             | *sin asignar*  |
 
 ---
 
 ## 🎯 Alcance de los cambios pendientes
 
-Solo archivos `resources/views/**/*.blade.php` y CSS inline. **No hay**:
+Vistas Blade + CSS inline + metodos PHP en el service del home (solo lectura de
+BD con `count()` y `limit(5)`). **No hay**:
 - ❌ Migraciones de base de datos
 - ❌ Cambios de dependencias Composer/NPM
-- ❌ Cambios en lógica PHP/Livewire/jobs
+- ❌ Cambios en rutas, permisos, middleware o relaciones Eloquent
 - ❌ Variables de entorno nuevas
-- ❌ Cambios en Supervisor/queue workers
+- ❌ Cambios en Supervisor/queue workers/jobs
 
-Esto permite deploy rápido sin downtime ni `composer install` ni `npm run prod`.
+El PR #10 modifica `ProfileUserService.php` (nuevo metodo `buildDashboard`)
+pero solo agrega logica de lectura no-intrusiva. Esto permite deploy rápido
+sin downtime ni `composer install` ni `npm run prod`.
 
 ---
 
@@ -59,6 +63,7 @@ make prod-update        # composer install, npm run prod, migrate, view:cache, r
 
 ## ✅ Verificación post-deploy
 
+### Rediseño original (#6, #7) — monitoreo cliente
 1. Abrir `https://app.fluxai.solutions/v1/admin/client/monitoring/{client_id}`
 2. Verificar el checklist:
    - [ ] Pestañas visibles: **Dashboard / BaseLine / Reportes y tarifas** (3 pestañas, no 6)
@@ -67,7 +72,26 @@ make prod-update        # composer install, npm run prod, migrate, view:cache, r
    - [ ] BaseLine muestra 3 cards reactivas (Referencia / Comparación / Ahorro-Sobreconsumo)
    - [ ] Sidebar con franja gradiente verde→azul en la parte superior
    - [ ] Hover en iconos del header (perfil, rol, logout) muestra elevación sutil
-3. Si algo se ve con fuente genérica (serif):
+
+### Home dashboard + login (#10)
+1. Abrir `https://app.fluxai.solutions/login` (sesión cerrada)
+   - [ ] Fondo con gradiente azul→verde muy suave
+   - [ ] Logo + tagline `Gestión profesional de la energía`
+   - [ ] Card blanca con labels UPPERCASE, inputs con ícono izquierdo (envelope/lock)
+   - [ ] Toggle ojo funciona para mostrar/ocultar contraseña
+   - [ ] Botón `Iniciar sesión` azul sólido con hover elevado
+2. Login como `super_admin` → `https://app.fluxai.solutions/v1/inicio`
+   - [ ] Hero con `Bienvenido, {nombre}` + chip rol + fecha
+   - [ ] 6 KPI cards (clientes / equipos / admins / PQRs / facturas / órdenes)
+   - [ ] 6 accesos rápidos clicables (navegan a sus listados)
+   - [ ] 3 paneles de actividad (últimos clientes, PQRs, facturas)
+   - [ ] Tabs heredados accesibles bajo `Detalles del perfil`
+3. Probar con otros roles: admin, network_operator, technician, supervisor, seller, support
+   - [ ] Cada rol ve KPIs scoped a sus datos (no globales)
+   - [ ] Sin errores 500 ni warnings en logs
+4. Navegar a un listado (ej. `/v1/administrar/clientes/activos`)
+   - [ ] Breadcrumbs aparecen en el header bajo el logo
+5. Si algo se ve con fuente genérica (serif):
    ```bash
    ./vendor/bin/sail artisan view:clear
    ./vendor/bin/sail artisan view:cache
