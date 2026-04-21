@@ -96,3 +96,129 @@
 .flux-card:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10);
 }
+
+/* ============================================================
+   CONFIG FORM v2 – Estilos corporativos FluxAI
+   ============================================================ */
+
+/* Fila de formulario de configuración */
+.form-v2-input {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--flux-bg-medium);
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    transition: background 0.15s ease;
+}
+.form-v2-input:hover {
+    background: rgba(0, 68, 164, 0.03);
+}
+.form-v2-input:last-child {
+    border-bottom: none;
+}
+
+/* Label de campo */
+.flux-input-label {
+    list-style: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--flux-text-secondary);
+    margin: 0;
+    padding-left: 0.5rem;
+}
+
+/* Input de texto/número/select */
+.flux-input {
+    border: 1px solid var(--flux-bg-medium);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.flux-input:focus {
+    border-color: var(--flux-primary) !important;
+    box-shadow: 0 0 0 3px rgba(0, 68, 164, 0.12) !important;
+    outline: none;
+}
+.flux-input:disabled {
+    background: var(--flux-bg-medium);
+    color: var(--flux-text-light);
+    cursor: not-allowed;
+}
+
+/* Toggle switch – tamaño y color */
+.flux-toggle-wrap {
+    min-height: 2rem;
+}
+.flux-toggle.form-check-input {
+    width: 2.8em;
+    height: 1.5em;
+    cursor: pointer;
+    background-color: var(--flux-bg-medium);
+    border-color: #adb5bd;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.flux-toggle.form-check-input:checked {
+    background-color: var(--flux-accent) !important;
+    border-color: var(--flux-accent-dark) !important;
+}
+.flux-toggle.form-check-input:focus {
+    box-shadow: 0 0 0 3px rgba(0, 199, 129, 0.25);
+}
+.flux-toggle.form-check-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Badge de estado ON / OFF */
+.flux-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+.flux-badge-on {
+    background: rgba(0, 199, 129, 0.15);
+    color: var(--flux-accent-dark);
+    border: 1px solid var(--flux-accent);
+}
+.flux-badge-off {
+    background: rgba(160, 174, 192, 0.15);
+    color: var(--flux-text-secondary);
+    border: 1px solid var(--flux-bg-medium);
+}
+
+/* Encabezados de sección de configuración */
+.detail-table h5 {
+    color: var(--flux-primary);
+    font-weight: 700;
+    font-size: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--flux-primary);
+    margin-bottom: 1rem;
+}
+
+/* Botón guardar principal */
+.btn-flux-primary,
+form .btn-primary {
+    background-color: var(--flux-primary) !important;
+    border-color: var(--flux-primary-dark) !important;
+    color: #fff !important;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-flux-primary:hover,
+form .btn-primary:hover {
+    background-color: var(--flux-primary-dark) !important;
+    box-shadow: 0 4px 12px rgba(0, 68, 164, 0.35);
+}
+
+/* Mensaje de error de validación */
+.error-container small {
+    font-size: 0.78rem;
+    font-weight: 500;
+}
