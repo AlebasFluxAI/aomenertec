@@ -49,6 +49,31 @@
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Jost:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
         rel="stylesheet">
 
+    <!-- FluxAI Tech Fonts (Rajdhani + Exo 2) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --flux-tech-font: 'Rajdhani', 'Exo 2', 'Poppins', 'Inter', sans-serif;
+            --flux-body-font: 'Poppins', 'Inter', 'Open Sans', sans-serif;
+            --flux-primary: #0044A4;
+            --flux-secondary: #0C62DC;
+            --flux-accent: #00C781;
+            --flux-graphite: #2D3748;
+            --flux-border: #E4E9F0;
+        }
+        .flux-tech-font,
+        .flux-tech-title {
+            font-family: var(--flux-tech-font) !important;
+            letter-spacing: 0.02em;
+        }
+        .flux-tech-title {
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+    </style>
+
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
 
