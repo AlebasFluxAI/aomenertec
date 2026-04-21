@@ -15,4 +15,15 @@
     @livewire('v1.admin.client.monitoring.data-report', ['client'=>$client, 'variables' => $variables, 'data_frame'=>$data_frame])
 @elseif($type == "control_data")
     @livewire('v1.admin.client.monitoring.control', ['client'=>$client])
+@elseif($type == "dashboard_unified")
+    @include("partials.v1.chart.unified_dashboard", [
+        "client" => $client,
+        "variables" => $variables,
+        "reactive_variables" => $reactive_variables,
+        "real_time_variables" => $real_time_variables,
+        "data_frame" => $data_frame,
+        "data_chart" => $data_chart,
+        "time" => $time,
+        "liveMode" => $liveMode,
+    ])
 @endif

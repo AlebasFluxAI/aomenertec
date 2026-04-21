@@ -78,47 +78,47 @@
                                     <thead>
                                     <tr>
                                         <th scope="col">UNIDAD</th>
-                                        <th class="table-flux-accent" scope="col">L1</th>
-                                        <th class="table-flux-primary" scope="col">L2</th>
-                                        <th class="table-flux-secondary" scope="col">L3</th>
+                                        <th class="flux-phase-l1" scope="col">L1</th>
+                                        <th class="flux-phase-l2" scope="col">L2</th>
+                                        <th class="flux-phase-l3" scope="col">L3</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
                                         <th class="text-bold" scope="row">VOLTAJE (V)</th>
-                                        <td class="table-flux-accent">{{ ($select_data['data'][0])['magnitude'] }}</td>
-                                        <td class="table-flux-primary">{{ ($select_data['data'][1])['magnitude'] }}</td>
-                                        <td class="table-flux-secondary">{{ ($select_data['data'][2])['magnitude'] }}</td>
+                                        <td class="flux-phase-l1">{{ ($select_data['data'][0])['magnitude'] }}</td>
+                                        <td class="flux-phase-l2">{{ ($select_data['data'][1])['magnitude'] }}</td>
+                                        <td class="flux-phase-l3">{{ ($select_data['data'][2])['magnitude'] }}</td>
                                     </tr>
                                     <tr>
                                         <th class="text-bold" scope="row">ANGULO (°)</th>
-                                        <td class="table-flux-accent">{{ ($select_data['data'][0])['degrees'] }}</td>
-                                        <td class="table-flux-primary">{{ ($select_data['data'][1])['degrees'] }}</td>
-                                        <td class="table-flux-secondary">{{ ($select_data['data'][2])['degrees'] }}</td>
+                                        <td class="flux-phase-l1">{{ ($select_data['data'][0])['degrees'] }}</td>
+                                        <td class="flux-phase-l2">{{ ($select_data['data'][1])['degrees'] }}</td>
+                                        <td class="flux-phase-l3">{{ ($select_data['data'][2])['degrees'] }}</td>
                                     </tr>
                                     <tr>
                                         <th class="text-bold" scope="row">CORRIENTE (A)</th>
-                                        <td class="table-flux-accent">{{ ($select_data['data'][3])['magnitude'] }}</td>
-                                        <td class="table-flux-primary">{{ ($select_data['data'][4])['magnitude'] }}</td>
-                                        <td class="table-flux-secondary">{{ ($select_data['data'][5])['magnitude'] }}</td>
+                                        <td class="flux-phase-l1">{{ ($select_data['data'][3])['magnitude'] }}</td>
+                                        <td class="flux-phase-l2">{{ ($select_data['data'][4])['magnitude'] }}</td>
+                                        <td class="flux-phase-l3">{{ ($select_data['data'][5])['magnitude'] }}</td>
                                     </tr>
                                     <tr>
                                         <th class="text-bold" scope="row">ANGULO (°)</th>
-                                        <td class="table-flux-accent">{{ ($select_data['data'][3])['degrees'] }} </td>
-                                        <td class="table-flux-primary">{{ ($select_data['data'][4])['degrees'] }}</td>
-                                        <td class="table-flux-secondary">{{ ($select_data['data'][5])['degrees'] }}</td>
+                                        <td class="flux-phase-l1">{{ ($select_data['data'][3])['degrees'] }} </td>
+                                        <td class="flux-phase-l2">{{ ($select_data['data'][4])['degrees'] }}</td>
+                                        <td class="flux-phase-l3">{{ ($select_data['data'][5])['degrees'] }}</td>
                                     </tr>
                                     <tr>
                                         <th class="text-bold" scope="row">V1 - I1 (°)</th>
-                                        <td class="table-flux-accent">{{ ($select_data['data'][3])['relationship_degrees'] }} </td>
-                                        <td class="table-flux-primary">{{ ($select_data['data'][4])['relationship_degrees'] }}</td>
-                                        <td class="table-flux-secondary">{{ ($select_data['data'][5])['relationship_degrees'] }}</td>
+                                        <td class="flux-phase-l1">{{ ($select_data['data'][3])['relationship_degrees'] }} </td>
+                                        <td class="flux-phase-l2">{{ ($select_data['data'][4])['relationship_degrees'] }}</td>
+                                        <td class="flux-phase-l3">{{ ($select_data['data'][5])['relationship_degrees'] }}</td>
                                     </tr>
                                     <tr>
                                         <th class="text-bold" scope="row">TIPO SISTEMA</th>
-                                        <td class="table-flux-accent">{{ ($select_data['data'][0])['system_type'] }}</td>
-                                        <td class="table-flux-primary">{{ ($select_data['data'][1])['system_type'] }}</td>
-                                        <td class="table-flux-secondary">{{ ($select_data['data'][2])['system_type']}}</td>
+                                        <td class="flux-phase-l1">{{ ($select_data['data'][0])['system_type'] }}</td>
+                                        <td class="flux-phase-l2">{{ ($select_data['data'][1])['system_type'] }}</td>
+                                        <td class="flux-phase-l3">{{ ($select_data['data'][2])['system_type']}}</td>
                                     </tr>
                                     <tr>
                                         <th class="table-active text-bold" scope="row" colspan="4">DESEQUILIBRIO</th>
@@ -218,14 +218,14 @@
                 colors: [function ({value, seriesIndex, w}) {
                     if ((w.config.series).length > 1) {
                         if (seriesIndex == 0) {
-                            return '#FFF000';
+                            return '#F59E0B';   // L1 – naranja FluxAI
                         } else if (seriesIndex == 1) {
-                            return '#000FFF';
+                            return '#0044A4';   // L2 – azul FluxAI
                         } else {
-                            return '#FF0000'
+                            return '#E53935';   // L3 – rojo
                         }
                     } else {
-                        return '#2D45BD';
+                        return '#0044A4';       // serie única – azul FluxAI
                     }
 
                 }],

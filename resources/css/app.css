@@ -222,3 +222,413 @@ form .btn-primary:hover {
     font-size: 0.78rem;
     font-weight: 500;
 }
+
+/* ============================================================
+   UNIFIED DASHBOARD — FluxAI
+   NOTA: estos estilos están duplicados inline en
+   resources/views/partials/v1/chart/unified_dashboard.blade.php
+   porque este archivo no está conectado al pipeline de Laravel Mix
+   (webpack.mix.js solo compila resources/sass/app.scss). Se mantienen
+   aquí por consistencia de referencia — la versión inline es la que
+   efectivamente se renderiza en producción.
+   ============================================================ */
+
+.flux-dashboard {
+    padding-top: 1rem;
+}
+
+.flux-dashboard-controlbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border: 1px solid var(--flux-bg-medium);
+    border-radius: 10px;
+    margin-bottom: 1.25rem;
+    color: var(--flux-text-primary);
+}
+
+.flux-dashboard-controlbar__left,
+.flux-dashboard-controlbar__right {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.flux-dashboard-title {
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--flux-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: 0.01em;
+}
+
+.flux-dashboard-title i {
+    font-size: 1.05rem;
+    color: var(--flux-accent);
+}
+
+.flux-dashboard-section {
+    margin-bottom: 1.5rem;
+}
+
+.flux-dashboard-subheader {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--flux-primary);
+    margin: 0.25rem 0 0.6rem 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.flux-dashboard-subheader i {
+    color: var(--flux-accent);
+}
+
+/* ---- Toggle Tiempo Real ---- */
+.flux-rt-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: var(--flux-bg-light);
+    border: 1px solid var(--flux-bg-medium);
+    color: var(--flux-text-secondary);
+    padding: 0.35rem 0.85rem 0.35rem 0.5rem;
+    border-radius: 999px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.flux-rt-toggle:hover {
+    background: #fff;
+    border-color: var(--flux-primary);
+}
+
+.flux-rt-toggle--on {
+    background: var(--flux-accent);
+    border-color: var(--flux-accent);
+    color: #fff;
+}
+
+.flux-rt-toggle--on:hover {
+    background: var(--flux-accent-dark);
+    border-color: var(--flux-accent-dark);
+}
+
+.flux-rt-toggle__track {
+    position: relative;
+    width: 2em;
+    height: 1.05em;
+    background: var(--flux-bg-medium);
+    border-radius: 999px;
+    transition: background 0.2s ease;
+}
+
+.flux-rt-toggle--on .flux-rt-toggle__track {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.flux-rt-toggle__thumb {
+    position: absolute;
+    top: 0.12em;
+    left: 0.12em;
+    width: 0.8em;
+    height: 0.8em;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.flux-rt-toggle--on .flux-rt-toggle__thumb {
+    transform: translateX(0.95em);
+}
+
+/* ---- Badge LIVE / Histórico ---- */
+.flux-rt-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.25s ease;
+}
+
+.flux-rt-badge--idle {
+    background: var(--flux-bg-light);
+    color: var(--flux-text-secondary);
+}
+
+.flux-rt-badge--live {
+    background: rgba(0, 199, 129, 0.12);
+    color: var(--flux-accent-dark);
+}
+
+.flux-rt-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+}
+
+.flux-rt-badge--live .flux-rt-dot {
+    background: var(--flux-accent);
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(0, 199, 129, 0.8);
+    animation: flux-rt-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes flux-rt-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0, 199, 129, 0.7); }
+    70%  { box-shadow: 0 0 0 8px rgba(0, 199, 129, 0);  }
+    100% { box-shadow: 0 0 0 0 rgba(0, 199, 129, 0);    }
+}
+
+/* ---- Transiciones LIVE → Histórico ---- */
+.flux-rt-dimmable {
+    transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
+}
+
+.flux-rt-dim {
+    opacity: 0.35;
+    filter: grayscale(0.7);
+    pointer-events: none;
+    transform: scale(0.995);
+}
+
+.flux-rt-reveal {
+    transition: opacity 0.35s ease;
+}
+
+/* ============================================================
+   FLUX METRIC CARDS — Cards superiores del dashboard
+   ============================================================ */
+
+.flux-metric-card {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--flux-bg-medium);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.flux-metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(0, 68, 164, 0.10), 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+/* Barra lateral de color corporativo por tipo de métrica */
+.flux-metric-card__accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--flux-primary);
+}
+
+.flux-metric-card--voltage .flux-metric-card__accent,
+.flux-metric-card--primary .flux-metric-card__accent {
+    background: var(--flux-primary);
+}
+
+.flux-metric-card--current .flux-metric-card__accent,
+.flux-metric-card--secondary .flux-metric-card__accent {
+    background: var(--flux-secondary);
+}
+
+.flux-metric-card--power .flux-metric-card__accent,
+.flux-metric-card--accent .flux-metric-card__accent {
+    background: var(--flux-accent);
+}
+
+.flux-metric-card__body {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.15rem 1rem 1.35rem;
+}
+
+.flux-metric-card__icon {
+    flex: 0 0 auto;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--flux-bg-light) 0%, var(--flux-bg-medium) 100%);
+    color: var(--flux-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    transition: color 0.2s ease, background 0.2s ease;
+}
+
+.flux-metric-card--voltage .flux-metric-card__icon,
+.flux-metric-card--primary .flux-metric-card__icon {
+    color: var(--flux-primary);
+}
+
+.flux-metric-card--current .flux-metric-card__icon,
+.flux-metric-card--secondary .flux-metric-card__icon {
+    color: var(--flux-secondary);
+}
+
+.flux-metric-card--power .flux-metric-card__icon,
+.flux-metric-card--accent .flux-metric-card__icon {
+    color: var(--flux-accent-dark);
+    background: linear-gradient(135deg, rgba(0, 199, 129, 0.10) 0%, rgba(0, 199, 129, 0.22) 100%);
+}
+
+.flux-metric-card__content {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+}
+
+.flux-metric-card__select {
+    width: 100%;
+    margin-bottom: 0.2rem;
+}
+
+.flux-metric-card__values {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+    width: 100%;
+}
+
+.flux-metric-card__value {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    line-height: 1.1;
+    transition: transform 0.25s ease;
+}
+
+.flux-metric-card__number {
+    font-family: 'Poppins', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.45rem;
+    color: var(--flux-text-primary);
+    letter-spacing: -0.01em;
+}
+
+.flux-metric-card__unit {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 0.72rem;
+    color: var(--flux-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.flux-metric-card__loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--flux-text-light);
+}
+
+/* Realce visual en cards de tiempo real */
+.flux-metric-card--rt {
+    border-color: rgba(0, 199, 129, 0.35);
+    box-shadow: 0 0 0 1px rgba(0, 199, 129, 0.15), 0 4px 12px rgba(0, 199, 129, 0.10);
+}
+
+.flux-metric-card__value--rt .flux-metric-card__number {
+    color: var(--flux-accent-dark);
+}
+
+/* Responsive: reducir jerarquía tipográfica en móvil */
+@media (max-width: 768px) {
+    .flux-dashboard-controlbar {
+        padding: 0.7rem 0.9rem;
+    }
+    .flux-metric-card__icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.15rem;
+    }
+    .flux-metric-card__number {
+        font-size: 1.2rem;
+    }
+}
+
+/* ============================================================
+   PHASE COLORS — L1 / L2 / L3
+   L1 = naranja FluxAI (#F59E0B) destaca más que amarillo puro
+   L2 = azul FluxAI primary (#0044A4)
+   L3 = rojo (#E53935)
+   Se aplican como clases a celdas <th>/<td> en tablas de fasores.
+   ============================================================ */
+
+.flux-phase-l1,
+.flux-phase-l2,
+.flux-phase-l3 {
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    transition: background 0.2s ease;
+}
+
+/* L1 – naranja */
+.flux-phase-l1 {
+    background: rgba(245, 158, 11, 0.12) !important;
+    color: #B45309;
+    border-bottom-color: #F59E0B;
+}
+th.flux-phase-l1 {
+    background: #F59E0B !important;
+    color: #fff;
+    border-bottom-color: #B45309;
+}
+
+/* L2 – azul FluxAI */
+.flux-phase-l2 {
+    background: rgba(0, 68, 164, 0.10) !important;
+    color: var(--flux-primary-dark);
+    border-bottom-color: var(--flux-primary);
+}
+th.flux-phase-l2 {
+    background: var(--flux-primary) !important;
+    color: #fff;
+    border-bottom-color: var(--flux-primary-dark);
+}
+
+/* L3 – rojo */
+.flux-phase-l3 {
+    background: rgba(229, 57, 53, 0.10) !important;
+    color: #B71C1C;
+    border-bottom-color: #E53935;
+}
+th.flux-phase-l3 {
+    background: #E53935 !important;
+    color: #fff;
+    border-bottom-color: #B71C1C;
+}
+
