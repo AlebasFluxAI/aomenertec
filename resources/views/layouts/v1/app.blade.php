@@ -72,6 +72,27 @@
             font-weight: 600;
             text-transform: uppercase;
         }
+
+        /* Aplicar tipografia tecnica FluxAI a toda la pagina */
+        html, body {
+            font-family: 'Exo 2', 'Rajdhani', 'Poppins', 'Inter', 'Open Sans', sans-serif;
+            font-feature-settings: "ss01", "cv11";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Titulos, navegacion y botones refuerzan la estetica tecnica */
+        h1, h2, h3, h4, h5, h6,
+        .navbar, .nav-link, .nav-item,
+        .btn, button,
+        .card-title, .section-title,
+        .modal-title,
+        .table thead th {
+            font-family: var(--flux-tech-font);
+            letter-spacing: 0.02em;
+        }
+        h1, h2, h3, .modal-title, .card-title { font-weight: 600; }
+        /* Mantener mono para codigo/datos */
+        code, pre, kbd, samp { font-family: 'JetBrains Mono', 'Fira Code', Menlo, Consolas, monospace; }
     </style>
 
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>
