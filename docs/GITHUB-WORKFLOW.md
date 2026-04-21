@@ -257,3 +257,73 @@ gh pr checkout 123
 4. **Tests pasan antes de pedir review.** No hagas perder tiempo al reviewer.
 5. **Un PR, un propósito.** No mezcles refactor + feature + bugfix en el mismo PR.
 6. **Si bloqueás el trabajo de otro**, poné label `status: blocked` y comentá por qué.
+
+---
+
+## 11. 🚀 Despliegues pendientes a producción
+
+> Commits ya mergeados en `master` que **aún no están desplegados** en el servidor
+> de producción (`app.fluxai.solutions`). El desarrollador principal con acceso
+> SSH al host debe ejecutar el deploy.
+
+### Pendiente — 2026-04-21
+
+| # | Commit | PR | Descripción |
+|---|---|---|---|
+| 1 | `6380f340` | [#7](https://github.com/AlebasFluxAI/aomenertec/pull/7) | **feat(ui):** BaseLine rediseñado + tipografía Inter sobria + navegación FluxAI |
+| 2 | `8d3db85d` | [#6](https://github.com/AlebasFluxAI/aomenertec/pull/6) | **feat(monitoreo):** dashboard unificado FluxAI con toggle tiempo real |
+
+### Alcance del cambio
+
+Solo archivos `resources/views/**/*.blade.php` y CSS inline. **No hay**:
+- ❌ Migraciones de base de datos
+- ❌ Cambios de dependencias Composer/NPM
+- ❌ Cambios en lógica PHP/Livewire/jobs
+- ❌ Variables de entorno nuevas
+- ❌ Cambios en Supervisor/queue workers
+
+### Instrucciones para el desarrollador principal
+
+#### Opción A — Deploy mínimo (recomendado, ~30 s, sin downtime)
+
+Son solo vistas + CSS, no hace falta reconstruir assets ni reiniciar contenedores:
+
+```bash
+cd /ruta/al/repo
+git fetch origin master
+git pull origin master
+./vendor/bin/sail artisan view:clear
+./vendor/bin/sail artisan view:cache
+```
+
+#### Opción B — Deploy completo (si prefiere el flujo estándar)
+
+```bash
+cd /ruta/al/repo
+git pull origin master
+make prod-update        # composer install, npm run prod, migrate, view:cache, restart
+```
+
+#### Verificación post-deploy
+
+1. Abrir `https://app.fluxai.solutions/v1/admin/client/monitoring/{client_id}`
+2. Verificar:
+   - [ ] Pestañas visibles: **Dashboard / BaseLine / Reportes y tarifas** (3 pestañas, no 6)
+   - [ ] Fuente legible en toda la página (Inter)
+   - [ ] Botón **Acciones** abre dropdown con iconos por cada opción
+   - [ ] BaseLine muestra 3 cards (Referencia / Comparación / Ahorro-Sobreconsumo)
+   - [ ] Sidebar con franja gradiente verde→azul en la parte superior
+3. Si algo se ve con fuente genérica (serif) → `php artisan view:clear && php artisan view:cache`
+
+#### Rollback
+
+Como son solo vistas, un rollback es seguro:
+
+```bash
+git reset --hard 6a02370   # último commit pre-rediseño
+./vendor/bin/sail artisan view:clear
+```
+
+> **Cuando se complete el deploy**, marcar los commits como desplegados moviendo
+> esta tabla a una sección `## Desplegados` o eliminando la fila. Mantener este
+> documento como fuente de verdad de qué está en prod vs qué está en `master`.
