@@ -1,14 +1,22 @@
-<div class="login">
+<div>
     @section("header")
         {{--extended app.blade--}}
     @endsection
 
-    @include("partials.v1.title",[
-            "first_title"=>"Perfil",
-            "second_title"=>"usuario soporte"
-        ])
+    {{-- FluxAI Home — dashboard operacional (ver partials.v1.home.flux-shell) --}}
+    @include("partials.v1.home.flux-shell", [
+        "welcome_title"     => $dashboard["welcome_title"]     ?? ("Hola, " . ($model->name ?? '')),
+        "welcome_subtitle"  => $dashboard["welcome_subtitle"]  ?? "Panel FluxAI",
+        "welcome_role_chip" => $dashboard["welcome_role_chip"] ?? "Soporte",
+        "kpis"              => $dashboard["kpis"]              ?? [],
+        "quick_actions"     => $dashboard["quick_actions"]     ?? [],
+        "activity_panels"   => $dashboard["activity_panels"]   ?? [],
+    ])
 
-
+    <section class="flux-section flux-legacy-tabs">
+        <div class="flux-section__head">
+            <h2 class="flux-section__title">Detalles del perfil</h2>
+        </div>
 
     {{----------------------------------Formulario--------------------------}}
     @include("partials.v1.tab.v1.tab",[
@@ -91,5 +99,5 @@
                                 ],
                            "logout_button"=>true
         ])
-
+    </section>
 </div>

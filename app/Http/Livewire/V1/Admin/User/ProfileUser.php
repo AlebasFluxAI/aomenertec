@@ -16,6 +16,14 @@ class ProfileUser extends Component
     public $network_operators;
     public $equipment;
     public $supervisors;
+    public $dashboard = [
+        "welcome_title"     => "",
+        "welcome_subtitle"  => "",
+        "welcome_role_chip" => "",
+        "kpis"              => [],
+        "quick_actions"     => [],
+        "activity_panels"   => [],
+    ];
     private $profileUserService;
 
     public function __construct()
