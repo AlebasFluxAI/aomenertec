@@ -223,7 +223,7 @@ class ClientConfigurationService extends Singleton
             'client_config.mqtt_port' => 'required',
             'client_config.mqtt_user' => 'required',
             'client_config.mqtt_password' => 'required',
-            'client_config.real_time_latency' => 'numeric|required|min:10',
+            'client_config.real_time_latency' => 'numeric|required|min:2',
             'client_config.storage_latency' => 'required',
             'client_config.active_real_time' => 'required',
             'client_config.automatic_control' => 'required',
