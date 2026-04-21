@@ -318,6 +318,78 @@
                      alt="FluxAI"
                      class="max-h-10 w-auto object-contain">
             </a>
+
+            {{-- Breadcrumbs dinamicos basados en el nombre de la ruta actual.
+                 Segmentos: administrar.v1.<modulo>.<accion>[.subaccion]  --}}
+            @php
+                $routeName = request()->route() ? request()->route()->getName() : null;
+                $trail = [];
+                if ($routeName) {
+                    $labels = [
+                        "administrar"       => null,
+                        "v1"                => null,
+                        "inicio"            => "Inicio",
+                        "perfil"            => "Inicio",
+                        "usuarios"          => "Usuarios",
+                        "superadmin"        => "Super administradores",
+                        "admin"             => "Administradores",
+                        "operadores"        => "Operadores de red",
+                        "tecnico"           => "Técnicos",
+                        "vendedor"          => "Vendedores",
+                        "supervisor"        => "Supervisores",
+                        "soporte"           => "Soporte",
+                        "clientes"          => "Clientes",
+                        "activos"           => "Activos",
+                        "desactivados"      => "Desactivados",
+                        "equipos"           => "Equipos",
+                        "tipos"             => "Tipos",
+                        "alertas"           => "Alertas",
+                        "pqr"               => "PQR",
+                        "pqrs"              => "PQRs",
+                        "ordenes_servicio"  => "Órdenes de servicio",
+                        "facturacion"       => "Facturación",
+                        "facturas"          => "Facturas",
+                        "items"             => "Items",
+                        "impuestos"         => "Impuestos",
+                        "configuracion"     => "Configuración",
+                        "wiki"              => "Wiki",
+                        "firmware"          => "Firmwares",
+                        "notificaciones"    => "Notificaciones",
+                        "listado"           => "Listado",
+                        "agregar"           => "Agregar",
+                        "editar"            => "Editar",
+                        "detalle"           => "Detalle",
+                        "detalles"          => "Detalle",
+                        "monitoring"        => "Monitoreo",
+                        "monitoreo"         => "Monitoreo",
+                    ];
+                    foreach (explode('.', $routeName) as $seg) {
+                        if (array_key_exists($seg, $labels)) {
+                            if ($labels[$seg] !== null) { $trail[] = $labels[$seg]; }
+                        } else {
+                            $trail[] = ucfirst(str_replace(['_', '-'], ' ', $seg));
+                        }
+                    }
+                    $trail = array_values(array_unique($trail));
+                }
+            @endphp
+
+            @if(count($trail) > 0)
+                <nav aria-label="breadcrumb"
+                     class="hidden lg:flex items-center gap-1 text-sm"
+                     style="font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);">
+                    <a href="{{ route('administrar.v1.perfil') }}"
+                       style="color: #7A869A; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                        <i class="fas fa-home" style="font-size: 0.78rem;"></i>
+                    </a>
+                    @foreach($trail as $i => $crumb)
+                        <span style="color: #CBD5E1; margin: 0 0.3rem;">/</span>
+                        <span style="color: {{ $i === count($trail) - 1 ? '#0044A4' : '#7A869A' }};
+                                     font-weight: {{ $i === count($trail) - 1 ? '600' : '500' }};
+                                     letter-spacing: 0.01em;">{{ $crumb }}</span>
+                    @endforeach
+                </nav>
+            @endif
         </div>
 
         {{-- Derecha: notificaciones + cambiar rol + perfil --}}
