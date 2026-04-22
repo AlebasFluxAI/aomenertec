@@ -95,13 +95,10 @@ class BaseLineChart extends Component
         }
 
         $user = Auth::user();
-        if (!$user) {
-            return;
-        }
 
         $clientConfig = $this->client->clientConfiguration()->first();
 
-        if ($clientConfig && $clientConfig->active_real_time) {
+        if ($user && $clientConfig && $clientConfig->active_real_time) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
                 if ($equipment && RealTimeListener::whereUserId($user->id)
                     ->whereEquipmentId($equipment->id)->exists()) {

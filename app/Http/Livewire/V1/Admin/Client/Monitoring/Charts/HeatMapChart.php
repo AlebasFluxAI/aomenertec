@@ -45,6 +45,7 @@ class HeatMapChart extends Component
         $this->heatmap_title = "Activa (kWh)";
         $this->data_chart_heat_map = $data_chart_heat_map;
         $this->series_heat_map = [];
+        $this->chartRender();
     }
 
     public function dateRangeHeatMap($start, $end)
@@ -79,13 +80,10 @@ class HeatMapChart extends Component
         }
 
         $user = Auth::user();
-        if (!$user) {
-            return;
-        }
 
         $clientConfig = $this->client->clientConfiguration()->first();
 
-        if ($clientConfig && $clientConfig->active_real_time) {
+        if ($user && $clientConfig && $clientConfig->active_real_time) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
                 if ($equipment && RealTimeListener::whereUserId($user->id)
                     ->whereEquipmentId($equipment->id)->exists()) {

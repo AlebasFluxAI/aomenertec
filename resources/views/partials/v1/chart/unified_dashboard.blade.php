@@ -314,7 +314,7 @@
                 'client'=>$client,
                 'variables' => $variables,
                 'data_frame'=>$data_frame
-            ], key('cards-hist'))
+            ], key('cards-hist-' . $historicalRenderVersion))
         </div>
 
         {{-- Gráfica histórica principal. --}}
@@ -325,7 +325,7 @@
                 'data_frame'=>$data_frame,
                 'data_chart'=>$data_chart,
                 'time'=>$time
-            ], key('data-chart'))
+            ], key('data-chart-' . $historicalRenderVersion))
         </div>
 
         {{-- Reactivos + HeatMap a brillo normal cuando NO es live. --}}
@@ -339,7 +339,7 @@
                 'reactive_variables' => $reactive_variables,
                 'data_chart_reactive'=>$data_chart,
                 'time'=>$time
-            ], key('reactive-chart-hist'))
+            ], key('reactive-chart-hist-' . $historicalRenderVersion))
         </div>
 
         <div class="flux-dashboard-section">
@@ -351,7 +351,7 @@
                 'client'=>$client,
                 'reactive_variables' => $reactive_variables,
                 'data_chart_heat_map'=>$data_chart
-            ], key('heatmap-chart-hist'))
+            ], key('heatmap-chart-hist-' . $historicalRenderVersion))
         </div>
     @endif
 

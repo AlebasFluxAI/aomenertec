@@ -162,6 +162,17 @@
             chart_reactive.render();
             _el._apexChart = chart_reactive;
 
+            ApexCharts.exec('reactive_chart', "updateOptions", {
+                series: @js($series_reactive),
+                xaxis: {
+                    categories: @js($x_axis_reactive)
+                }
+            });
+
+            if (typeof window.fluxScheduleChartResize === 'function') {
+                window.fluxScheduleChartResize();
+            }
+
             $wire.on('changeAxisReactive', (e) => {
 
                 ApexCharts.exec('reactive_chart', "updateOptions", {
@@ -189,6 +200,4 @@
         };
     </script>
 </div>
-
-
 

@@ -44,6 +44,18 @@ class ReactiveChart extends Component
         $this->x_axis_reactive = [];
         $this->capacitive_filter = 0;
         $this->inductive_filter = 0;
+
+        if (count($this->data_chart_reactive) > 0) {
+            if ($this->time_reactive_id == 1) {
+                $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
+                $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
+            } else {
+                $this->end_reactive = $this->data_chart_reactive->first()->source_timestamp;
+                $this->start_reactive = $this->data_chart_reactive->last()->source_timestamp;
+            }
+            $this->date_range_reactive = $this->start_reactive . " - " . $this->end_reactive;
+            $this->chartRender(true);
+        }
     }
 
     public function selectReactive()
@@ -55,13 +67,10 @@ class ReactiveChart extends Component
         }
 
         $user = Auth::user();
-        if (!$user) {
-            return;
-        }
 
         $clientConfig = $this->client->clientConfiguration()->first();
 
-        if ($clientConfig && $clientConfig->active_real_time) {
+        if ($user && $clientConfig && $clientConfig->active_real_time) {
             $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
             if ($equipment && RealTimeListener::whereUserId($user->id)
                 ->whereEquipmentId($equipment->id)->exists()) {

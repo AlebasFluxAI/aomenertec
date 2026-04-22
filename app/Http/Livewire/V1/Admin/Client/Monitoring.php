@@ -27,6 +27,7 @@ class Monitoring extends Component
     public $data_chart_result;
     public $model;
     public $liveMode = false;
+    public $historicalRenderVersion = 0;
     protected $listeners = ['tabChange', 'toggleLiveMode'];
 
     public function mount(Client $client)
@@ -40,18 +41,7 @@ class Monitoring extends Component
         $this->variables = collect(config('data-frame.variables'));
         $this->reactive_variables = $this->data_frame->whereIn('variable_id', [2, 14, 10])->toArray();
         $this->real_time_variables = $this->variables->where('real_time', true);
-        $this->time = 2;
-        $first_day = Carbon::now();
-        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()
-            ->where('year', $first_day->format('Y'))
-            ->where('month', $first_day->format('m'))
-            ->where('day', 01)
-            ->get();
-        $this->data_chart = $this->client->hourlyMicrocontrollerData()->orderBy('source_timestamp', 'desc')->limit(24)->get();
-        if (count($this->data_chart) == 0) {
-            $this->data_chart = $this->client->microcontrollerData()->orderBy('source_timestamp', 'desc')->limit(60)->get();
-            $this->time = 1;
-        }
+        $this->refreshHistoricalData();
     }
 
     /**
@@ -79,6 +69,37 @@ class Monitoring extends Component
             $this->activateRealTime();
         } else {
             $this->tabChange();
+            $this->refreshHistoricalData();
+            $this->historicalRenderVersion++;
+            $this->dispatchBrowserEvent('monitoring-historical-remount');
+        }
+    }
+
+    private function refreshHistoricalData(): void
+    {
+        if (!$this->client) {
+            return;
+        }
+
+        $this->time = 2;
+        $firstDay = Carbon::now();
+        $this->data_chart_result = $this->client->hourlyMicrocontrollerData()
+            ->where('year', $firstDay->format('Y'))
+            ->where('month', $firstDay->format('m'))
+            ->where('day', 1)
+            ->get();
+
+        $this->data_chart = $this->client->hourlyMicrocontrollerData()
+            ->orderBy('source_timestamp', 'desc')
+            ->limit(24)
+            ->get();
+
+        if (count($this->data_chart) == 0) {
+            $this->data_chart = $this->client->microcontrollerData()
+                ->orderBy('source_timestamp', 'desc')
+                ->limit(60)
+                ->get();
+            $this->time = 1;
         }
     }
 

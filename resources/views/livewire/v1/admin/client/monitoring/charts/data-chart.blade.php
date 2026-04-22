@@ -280,6 +280,10 @@
         })
             ;
 
+            if (typeof window.fluxScheduleChartResize === 'function') {
+                window.fluxScheduleChartResize();
+            }
+
 
             $wire.on('changeAxis', (e) => {
 
@@ -315,7 +319,6 @@
 
 
 </div>
-
 
 
 
