@@ -415,8 +415,6 @@
             @yield("content")
         </div>
 
-        @include("footer")
-
     </div>
 
 </div>
