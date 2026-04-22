@@ -73,13 +73,23 @@ class HeatMapChart extends Component
 
     public function selectHeatMap()
     {
+        // Defensive guards for Livewire hydrate races.
+        if (!$this->client) {
+            return;
+        }
+
+        $user = Auth::user();
+        if (!$user) {
+            return;
+        }
+
         $clientConfig = $this->client->clientConfiguration()->first();
 
         if ($clientConfig && $clientConfig->active_real_time) {
                 $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
-                if ($equipment && RealTimeListener::whereUserId(Auth::user()->id)
+                if ($equipment && RealTimeListener::whereUserId($user->id)
                     ->whereEquipmentId($equipment->id)->exists()) {
-                    RealTimeListener::whereUserId(Auth::user()->id)
+                    RealTimeListener::whereUserId($user->id)
                         ->whereEquipmentId(
                             $equipment->id
                         )->forceDelete();
