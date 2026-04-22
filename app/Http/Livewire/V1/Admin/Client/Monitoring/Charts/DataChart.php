@@ -141,14 +141,19 @@ class DataChart extends Component
             return;
         }
 
+        $user = Auth::user();
+        if (!$user) {
+            return;
+        }
+
         $clientConfig = $client->clientConfiguration()->first();
 
         if ($clientConfig && $clientConfig->active_real_time) {
             $equipment = $client->equipments()->whereEquipmentTypeId(7)->first();
 
-            if ($equipment && RealTimeListener::whereUserId(Auth::user()->id)
+            if ($equipment && RealTimeListener::whereUserId($user->id)
                 ->whereEquipmentId($equipment->id)->exists()) {
-                RealTimeListener::whereUserId(Auth::user()->id)
+                RealTimeListener::whereUserId($user->id)
                     ->whereEquipmentId($equipment->id)->forceDelete();
 
                 if (!RealTimeListener::whereEquipmentId($equipment->id)->exists()) {

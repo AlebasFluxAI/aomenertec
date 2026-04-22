@@ -95,6 +95,11 @@ class Monitoring extends Component
             return;
         }
 
+        $user = Auth::user();
+        if (!$user) {
+            return;
+        }
+
         $clientConfig = $this->client->clientConfiguration()->first();
         if (!$clientConfig || !$clientConfig->active_real_time) {
             return;
@@ -111,7 +116,7 @@ class Monitoring extends Component
             ->where('updated_at', '<', now()->subMinutes(30))
             ->delete();
 
-        $alreadyListening = RealTimeListener::whereUserId(Auth::user()->id)
+        $alreadyListening = RealTimeListener::whereUserId($user->id)
             ->whereEquipmentId($equipment->id)
             ->exists();
 
@@ -120,7 +125,7 @@ class Monitoring extends Component
         }
 
         $new = RealTimeListener::create([
-            'user_id' => Auth::user()->id,
+            'user_id' => $user->id,
             'equipment_id' => $equipment->id,
         ]);
 
@@ -148,13 +153,26 @@ class Monitoring extends Component
 
     public function tabChange()
     {
+        // Defensive guards: Livewire 2 hydrate can deliver null props when
+        // the component re-syncs after a toggle race. Without these early
+        // returns, `$this->client->...` or `Auth::user()->id` crash the
+        // request with 500 and the historical dashboard never re-renders.
+        if (!$this->client) {
+            return;
+        }
+
+        $user = Auth::user();
+        if (!$user) {
+            return;
+        }
+
         $clientConfig = $this->client->clientConfiguration()->first();
 
         if ($clientConfig && $clientConfig->active_real_time) {
             $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
-            if ($equipment && RealTimeListener::whereUserId(Auth::user()->id)
+            if ($equipment && RealTimeListener::whereUserId($user->id)
                 ->whereEquipmentId($equipment->id)->exists()) {
-                RealTimeListener::whereUserId(Auth::user()->id)
+                RealTimeListener::whereUserId($user->id)
                     ->whereEquipmentId(
                         $equipment->id
                     )->forceDelete();
