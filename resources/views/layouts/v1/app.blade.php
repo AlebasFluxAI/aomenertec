@@ -139,6 +139,7 @@
     @auth
         @livewire('livewire-toast')
         @include("layouts.menu.v2.header_menu")
+        @include("footer")
     @else
         {{-- Para páginas sin autenticación (login, reset password, etc.) --}}
         <section class="top-info">
