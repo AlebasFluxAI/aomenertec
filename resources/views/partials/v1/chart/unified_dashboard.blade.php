@@ -251,7 +251,21 @@
     }
 </style>
 
-<div class="flux-dashboard" x-data="{ live: @entangle('liveMode') }">
+{{-- ============================================================
+     Render SSR puro — Livewire reemplaza el DOM en cada toggle.
+     - NO usamos x-data + @entangle + x-show para evitar bugs de Alpine
+       dentro de componentes Livewire 2 con múltiples root children
+       (Alpine.disableEffectScheduling crasheaba en producción).
+     - El estado $liveMode vive solo en el backend; cada click en el
+       toggle hace wire:click => toggleLiveMode() => re-render SSR.
+     - El DOM solo incluye los @livewire hijos que efectivamente se
+       muestran; cuando live=true, los componentes de histórico NO
+       se montan (y viceversa). Esto elimina duplicados y multi-root.
+     - Responsive: todas las media queries del bloque <style> quedan
+       intactas — solo cambia la semántica de visibilidad, no la
+       presentación de cada subsección.
+     ============================================================ --}}
+<div class="flux-dashboard">
 
     {{-- ------------ Barra de control del dashboard ------------ --}}
     <div class="flux-dashboard-controlbar">
@@ -264,41 +278,75 @@
 
         <div class="flux-dashboard-controlbar__right">
             @if($canSeeRealTime)
-                <span class="flux-rt-badge" :class="live ? 'flux-rt-badge--live' : 'flux-rt-badge--idle'">
+                <span class="flux-rt-badge {{ $liveMode ? 'flux-rt-badge--live' : 'flux-rt-badge--idle' }}">
                     <span class="flux-rt-dot"></span>
-                    <span x-text="live ? 'LIVE' : 'Histórico'"></span>
+                    <span>{{ $liveMode ? 'LIVE' : 'Histórico' }}</span>
                 </span>
 
                 <button type="button"
                         wire:click="toggleLiveMode"
-                        class="flux-rt-toggle"
-                        :class="live ? 'flux-rt-toggle--on' : 'flux-rt-toggle--off'">
+                        class="flux-rt-toggle {{ $liveMode ? 'flux-rt-toggle--on' : 'flux-rt-toggle--off' }}">
                     <span class="flux-rt-toggle__track">
                         <span class="flux-rt-toggle__thumb"></span>
                     </span>
-                    <span class="flux-rt-toggle__label" x-text="live ? 'Tiempo real activo' : 'Activar tiempo real'"></span>
+                    <span class="flux-rt-toggle__label">{{ $liveMode ? 'Tiempo real activo' : 'Activar tiempo real' }}</span>
                 </button>
             @endif
         </div>
     </div>
 
-    {{-- ------------ Cards superiores (métricas) ------------ --}}
-    {{-- En LIVE se usa real-time-chart (mismas cards con valores en vivo)
-         En histórico se usa cards-data (últimos valores persistidos) --}}
-    <div class="flux-dashboard-section flux-rt-reveal"
-         x-show="!live"
-         x-transition.opacity.duration.250ms>
-        @livewire('v1.admin.client.monitoring.charts.cards-data', [
-            'client'=>$client,
-            'variables' => $variables,
-            'data_frame'=>$data_frame
-        ], key('cards-hist'))
-    </div>
+    @if($liveMode && $canSeeRealTime)
+        {{-- ============ MODO TIEMPO REAL ============ --}}
+        {{-- real-time-chart trae sus propias cards con valores en vivo,
+             la gráfica con streaming y el diagrama de fasores. --}}
+        <div class="flux-dashboard-section">
+            @livewire('v1.admin.client.monitoring.charts.real-time-chart', [
+                'client'=>$client,
+                'variables' => $real_time_variables,
+                'data_frame'=>$data_frame
+            ], key('rt-chart'))
+        </div>
 
-    {{-- ------------ Bloque principal: histórico o tiempo real ------------ --}}
-    <div class="flux-dashboard-section">
-        {{-- Histórico (visible cuando live=false) --}}
-        <div x-show="!live" x-transition.opacity.duration.300ms>
+        {{-- Reactivos + HeatMap se muestran atenuados en LIVE (contexto
+             visual: el foco está en el streaming, pero el operador
+             sigue viendo la calidad de energía y el heatmap). --}}
+        <div class="flux-dashboard-section flux-rt-dimmable flux-rt-dim">
+            <div class="flux-dashboard-subheader">
+                <i class="fas fa-bolt"></i>
+                <span>Reactivos</span>
+            </div>
+            @livewire('v1.admin.client.monitoring.charts.reactive-chart', [
+                'client'=>$client,
+                'reactive_variables' => $reactive_variables,
+                'data_chart_reactive'=>$data_chart,
+                'time'=>$time
+            ], key('reactive-chart-live'))
+        </div>
+
+        <div class="flux-dashboard-section flux-rt-dimmable flux-rt-dim">
+            <div class="flux-dashboard-subheader">
+                <i class="fas fa-table-cells"></i>
+                <span>HeatMap</span>
+            </div>
+            @livewire('v1.admin.client.monitoring.charts.heat-map-chart', [
+                'client'=>$client,
+                'reactive_variables' => $reactive_variables,
+                'data_chart_heat_map'=>$data_chart
+            ], key('heatmap-chart-live'))
+        </div>
+    @else
+        {{-- ============ MODO HISTÓRICO (default) ============ --}}
+        {{-- Cards superiores con últimos valores persistidos. --}}
+        <div class="flux-dashboard-section">
+            @livewire('v1.admin.client.monitoring.charts.cards-data', [
+                'client'=>$client,
+                'variables' => $variables,
+                'data_frame'=>$data_frame
+            ], key('cards-hist'))
+        </div>
+
+        {{-- Gráfica histórica principal. --}}
+        <div class="flux-dashboard-section">
             @livewire('v1.admin.client.monitoring.charts.data-chart', [
                 'client'=>$client,
                 'variables' => $variables,
@@ -308,44 +356,31 @@
             ], key('data-chart'))
         </div>
 
-        {{-- Tiempo real (visible cuando live=true) — incluye cards RT + gráfica + fasores --}}
-        @if($canSeeRealTime)
-            <div x-show="live" x-transition.opacity.duration.300ms x-cloak>
-                @livewire('v1.admin.client.monitoring.charts.real-time-chart', [
-                    'client'=>$client,
-                    'variables' => $real_time_variables,
-                    'data_frame'=>$data_frame
-                ], key('rt-chart'))
+        {{-- Reactivos + HeatMap a brillo normal cuando NO es live. --}}
+        <div class="flux-dashboard-section">
+            <div class="flux-dashboard-subheader">
+                <i class="fas fa-bolt"></i>
+                <span>Reactivos</span>
             </div>
-        @endif
-    </div>
-
-    {{-- ------------ Reactivos + HeatMap (se atenúan en LIVE) ------------ --}}
-    <div class="flux-dashboard-section flux-rt-dimmable"
-         :class="live ? 'flux-rt-dim' : ''">
-        <div class="flux-dashboard-subheader">
-            <i class="fas fa-bolt"></i>
-            <span>Reactivos</span>
+            @livewire('v1.admin.client.monitoring.charts.reactive-chart', [
+                'client'=>$client,
+                'reactive_variables' => $reactive_variables,
+                'data_chart_reactive'=>$data_chart,
+                'time'=>$time
+            ], key('reactive-chart-hist'))
         </div>
-        @livewire('v1.admin.client.monitoring.charts.reactive-chart', [
-            'client'=>$client,
-            'reactive_variables' => $reactive_variables,
-            'data_chart_reactive'=>$data_chart,
-            'time'=>$time
-        ], key('reactive-chart'))
-    </div>
 
-    <div class="flux-dashboard-section flux-rt-dimmable"
-         :class="live ? 'flux-rt-dim' : ''">
-        <div class="flux-dashboard-subheader">
-            <i class="fas fa-table-cells"></i>
-            <span>HeatMap</span>
+        <div class="flux-dashboard-section">
+            <div class="flux-dashboard-subheader">
+                <i class="fas fa-table-cells"></i>
+                <span>HeatMap</span>
+            </div>
+            @livewire('v1.admin.client.monitoring.charts.heat-map-chart', [
+                'client'=>$client,
+                'reactive_variables' => $reactive_variables,
+                'data_chart_heat_map'=>$data_chart
+            ], key('heatmap-chart-hist'))
         </div>
-        @livewire('v1.admin.client.monitoring.charts.heat-map-chart', [
-            'client'=>$client,
-            'reactive_variables' => $reactive_variables,
-            'data_chart_heat_map'=>$data_chart
-        ], key('heatmap-chart'))
-    </div>
+    @endif
 
 </div>

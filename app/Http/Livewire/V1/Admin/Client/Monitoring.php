@@ -57,23 +57,93 @@ class Monitoring extends Component
     /**
      * Alterna el modo tiempo real en el dashboard unificado.
      *
-     * ON  → delega a RealTimeChart::selectRealTime() que maneja el contrato
-     *       con el firmware (RealTimeListener + SendRealTimeStatusJob).
-     * OFF → reutiliza tabChange() que ya limpia el listener y envía el
-     *       comando de desactivación al dispositivo IoT.
+     * ON  → crea el RealTimeListener y dispatcha el job MQTT que activa
+     *       el streaming en el firmware IpstaticV2.
+     * OFF → delega en tabChange() que limpia el listener y envía el
+     *       comando de desactivación al equipo.
      *
-     * No modificamos topics MQTT, payloads ni API endpoints — solo
-     * orquestamos desde la UI los mismos mecanismos que ya existen.
+     * IMPORTANTE: Hacemos el trabajo AQUÍ (no vía emit a RealTimeChart)
+     * porque con render SSR puro el componente hijo real-time-chart
+     * se monta por primera vez en la misma request donde se activa
+     * live mode — el emit se perdería porque aún no hay listener.
+     * Replicamos la lógica de RealTimeChart::selectRealTime() para
+     * preservar el contrato con el firmware sin depender del hijo.
+     *
+     * No modificamos topics MQTT, payloads ni API endpoints.
      */
     public function toggleLiveMode()
     {
         $this->liveMode = ! $this->liveMode;
 
         if ($this->liveMode) {
-            $this->emit('selectRealTime');
+            $this->activateRealTime();
         } else {
             $this->tabChange();
         }
+    }
+
+    /**
+     * Activa el streaming de tiempo real para el cliente actual.
+     * Espejo de RealTimeChart::selectRealTime() simplificado para el
+     * toggle unificado. Es idempotente: si ya hay listener del usuario,
+     * no duplica nada. Si es el primer listener vivo del equipo, envía
+     * el comando de activación al firmware.
+     */
+    private function activateRealTime(): void
+    {
+        if (!$this->client) {
+            return;
+        }
+
+        $clientConfig = $this->client->clientConfiguration()->first();
+        if (!$clientConfig || !$clientConfig->active_real_time) {
+            return;
+        }
+
+        $equipment = $this->client->equipments()->whereEquipmentTypeId(7)->first();
+        if (!$equipment) {
+            return;
+        }
+
+        // Limpieza de listeners zombie (>30 min sin actividad): evita
+        // que sesiones abandonadas bloqueen la activación del streaming.
+        RealTimeListener::whereEquipmentId($equipment->id)
+            ->where('updated_at', '<', now()->subMinutes(30))
+            ->delete();
+
+        $alreadyListening = RealTimeListener::whereUserId(Auth::user()->id)
+            ->whereEquipmentId($equipment->id)
+            ->exists();
+
+        if ($alreadyListening) {
+            return;
+        }
+
+        $new = RealTimeListener::create([
+            'user_id' => Auth::user()->id,
+            'equipment_id' => $equipment->id,
+        ]);
+
+        // Solo disparamos el comando al firmware si somos el primer
+        // listener activo; si hay otros, ya hay streaming en curso.
+        $othersExist = RealTimeListener::whereEquipmentId($equipment->id)
+            ->where('id', '!=', $new->id)
+            ->exists();
+
+        if ($othersExist) {
+            return;
+        }
+
+        $apiKey = ApiKey::first();
+        if (!$apiKey) {
+            return;
+        }
+
+        \App\Jobs\V1\Api\ConfigurationClient\SendRealTimeStatusJob::dispatch(
+            $equipment->serial,
+            1,
+            $apiKey->api_key
+        )->onQueue('spot2');
     }
 
     public function tabChange()
