@@ -47,79 +47,87 @@
                 <div wire:ignore id="chart_real_time">
 
                 </div>
-                @if($select_data)
-                    <div class="row mt-0">
-                        <div class="col-md-4 col-sm-12 mt-0">
-                            <div class="p-4" id="phasor_rt"></div>
-                        </div>
-                        <div class="p-4 col-md-8 col-sm-12 mt-0 align-items-center">
-                            <table class="table table-sm text-center">
-                                <thead>
-                                <tr>
-                                    <th scope="col">UNIDAD</th>
-                                    <th class="flux-phase-l1" scope="col">L1</th>
-                                    <th class="flux-phase-l2" scope="col">L2</th>
-                                    <th class="flux-phase-l3" scope="col">L3</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th class="text-bold" scope="row">VOLTAJE (V)</th>
-                                    <td class="flux-phase-l1">{{ ($select_data['data'][0])['magnitude'] }}</td>
-                                    <td class="flux-phase-l2">{{ ($select_data['data'][1])['magnitude'] }}</td>
-                                    <td class="flux-phase-l3">{{ ($select_data['data'][2])['magnitude'] }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-bold" scope="row">ANGULO (°)</th>
-                                    <td class="flux-phase-l1">{{ ($select_data['data'][0])['degrees'] }}</td>
-                                    <td class="flux-phase-l2">{{ ($select_data['data'][1])['degrees'] }}</td>
-                                    <td class="flux-phase-l3">{{ ($select_data['data'][2])['degrees'] }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-bold" scope="row">CORRIENTE (A)</th>
-                                    <td class="flux-phase-l1">{{ ($select_data['data'][3])['magnitude'] }}</td>
-                                    <td class="flux-phase-l2">{{ ($select_data['data'][4])['magnitude'] }}</td>
-                                    <td class="flux-phase-l3">{{ ($select_data['data'][5])['magnitude'] }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-bold" scope="row">ANGULO (°)</th>
-                                    <td class="flux-phase-l1">{{ ($select_data['data'][3])['degrees'] }} </td>
-                                    <td class="flux-phase-l2">{{ ($select_data['data'][4])['degrees'] }}</td>
-                                    <td class="flux-phase-l3">{{ ($select_data['data'][5])['degrees'] }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-bold" scope="row">V1 - I1 (°)</th>
-                                    <td class="flux-phase-l1">{{ ($select_data['data'][3])['relationship_degrees'] }} </td>
-                                    <td class="flux-phase-l2">{{ ($select_data['data'][4])['relationship_degrees'] }}</td>
-                                    <td class="flux-phase-l3">{{ ($select_data['data'][5])['relationship_degrees'] }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-bold" scope="row">TIPO SISTEMA</th>
-                                    <td class="flux-phase-l1">{{ ($select_data['data'][0])['system_type'] }}</td>
-                                    <td class="flux-phase-l2">{{ ($select_data['data'][1])['system_type'] }}</td>
-                                    <td class="flux-phase-l3">{{ ($select_data['data'][2])['system_type']}}</td>
-                                </tr>
-                                <tr>
-                                    <th class="table-active text-bold" scope="row" colspan="4">DESEQUILIBRIO</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-bold" scope="row" colspan="2">VOLTAJE (V2/V1)</th>
-                                    <td>%</td>
-                                    <td>{{ $select_data['percent_volt'] }}</td>
-                                </tr>
-                                <tr>
-                                    <th class="text-bold" scope="row" colspan="2">CORRIENTE (I2/I1)</th>
-                                    <td>%</td>
-                                    <td>{{ $select_data['percent_curr'] }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                @endif
             </div>
         </div>
     </div>
+    @if($select_data)
+        <div class="box shadow mt-4">
+            <div class="d-flex align-items-center px-3 pt-3 pb-1 border-bottom">
+                <span class="text-muted" style="font-size:0.82rem;">
+                    <i class="fas fa-project-diagram me-1" style="color:var(--flux-primary)"></i>
+                    Diagrama de fasores
+                </span>
+            </div>
+            <div class="row mt-0">
+                <div class="col-md-4 col-sm-12 mt-0">
+                    <div class="p-4" id="phasor_rt"></div>
+                </div>
+                <div class="p-4 col-md-8 col-sm-12 mt-0 align-items-center">
+                    <table class="table table-sm text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">UNIDAD</th>
+                            <th class="flux-phase-l1" scope="col">L1</th>
+                            <th class="flux-phase-l2" scope="col">L2</th>
+                            <th class="flux-phase-l3" scope="col">L3</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th class="text-bold" scope="row">VOLTAJE (V)</th>
+                            <td class="flux-phase-l1">{{ ($select_data['data'][0])['magnitude'] }}</td>
+                            <td class="flux-phase-l2">{{ ($select_data['data'][1])['magnitude'] }}</td>
+                            <td class="flux-phase-l3">{{ ($select_data['data'][2])['magnitude'] }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-bold" scope="row">ANGULO (°)</th>
+                            <td class="flux-phase-l1">{{ ($select_data['data'][0])['degrees'] }}</td>
+                            <td class="flux-phase-l2">{{ ($select_data['data'][1])['degrees'] }}</td>
+                            <td class="flux-phase-l3">{{ ($select_data['data'][2])['degrees'] }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-bold" scope="row">CORRIENTE (A)</th>
+                            <td class="flux-phase-l1">{{ ($select_data['data'][3])['magnitude'] }}</td>
+                            <td class="flux-phase-l2">{{ ($select_data['data'][4])['magnitude'] }}</td>
+                            <td class="flux-phase-l3">{{ ($select_data['data'][5])['magnitude'] }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-bold" scope="row">ANGULO (°)</th>
+                            <td class="flux-phase-l1">{{ ($select_data['data'][3])['degrees'] }} </td>
+                            <td class="flux-phase-l2">{{ ($select_data['data'][4])['degrees'] }}</td>
+                            <td class="flux-phase-l3">{{ ($select_data['data'][5])['degrees'] }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-bold" scope="row">V1 - I1 (°)</th>
+                            <td class="flux-phase-l1">{{ ($select_data['data'][3])['relationship_degrees'] }} </td>
+                            <td class="flux-phase-l2">{{ ($select_data['data'][4])['relationship_degrees'] }}</td>
+                            <td class="flux-phase-l3">{{ ($select_data['data'][5])['relationship_degrees'] }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-bold" scope="row">TIPO SISTEMA</th>
+                            <td class="flux-phase-l1">{{ ($select_data['data'][0])['system_type'] }}</td>
+                            <td class="flux-phase-l2">{{ ($select_data['data'][1])['system_type'] }}</td>
+                            <td class="flux-phase-l3">{{ ($select_data['data'][2])['system_type']}}</td>
+                        </tr>
+                        <tr>
+                            <th class="table-active text-bold" scope="row" colspan="4">DESEQUILIBRIO</th>
+                        </tr>
+                        <tr>
+                            <th class="text-bold" scope="row" colspan="2">VOLTAJE (V2/V1)</th>
+                            <td>%</td>
+                            <td>{{ $select_data['percent_volt'] }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-bold" scope="row" colspan="2">CORRIENTE (I2/I1)</th>
+                            <td>%</td>
+                            <td>{{ $select_data['percent_curr'] }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    @endif
     <script>
         document.addEventListener('livewire:load', function () {
             const elements = document.querySelectorAll('.animated-element');
