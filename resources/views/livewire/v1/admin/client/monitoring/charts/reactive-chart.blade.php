@@ -74,7 +74,9 @@
                 <div wire:loading>
                     Actualizando Grafica...
                 </div>
-                <div id="chart_reactive">
+                <div id="chart_reactive"
+                     x-data
+                     x-init="$nextTick(() => window.initReactiveChart($wire))">
 
                 </div>
 
@@ -82,19 +84,19 @@
         </div>
     </div>
     <script>
+        window.initReactiveChart = window.initReactiveChart || function ($wire) {
+            // Guard against double-init if the component remounts or x-init fires twice.
+            var _el = document.querySelector('#chart_reactive');
+            if (!_el || _el.__chartInitialized) return;
+            _el.__chartInitialized = true;
 
-
-        document.addEventListener('livewire:load', function () {
-            $(function () {
-                $('input[name="datetime_reactive"]').daterangepicker({
-                    applyButtonClasses: 'text-primary',
-                    timePicker: true,
-                    timePicker24Hour: true,
-                    locale: {
-                        format: 'YYYY-MM-DD HH:mm'
-                    }
-                });
-
+            $('input[name="datetime_reactive"]').daterangepicker({
+                applyButtonClasses: 'text-primary',
+                timePicker: true,
+                timePicker24Hour: true,
+                locale: {
+                    format: 'YYYY-MM-DD HH:mm'
+                }
             });
 
             var options_reactive = {
@@ -149,31 +151,31 @@
 
             chart_reactive.render();
 
-        @this.on('changeAxisReactive', (e) => {
+            $wire.on('changeAxisReactive', (e) => {
 
-            ApexCharts.exec('reactive_chart', "updateOptions", {
-                series: e.series_reactive,
-                xaxis: {
-                    categories: e.x_axis_reactive
-                }
-            });
-        })
+                ApexCharts.exec('reactive_chart', "updateOptions", {
+                    series: e.series_reactive,
+                    xaxis: {
+                        categories: e.x_axis_reactive
+                    }
+                });
+            })
 
-        @this.on('loading8', (e) => {
-            ApexCharts.exec('reactive_chart', "updateOptions", {
-                series: [],
-                xaxis: {
-                    categories: []
-                },
-                noData: {
-                    text: 'Datos no encontrados'
-                }
-            });
-        })
+            $wire.on('loading8', (e) => {
+                ApexCharts.exec('reactive_chart', "updateOptions", {
+                    series: [],
+                    xaxis: {
+                        categories: []
+                    },
+                    noData: {
+                        text: 'Datos no encontrados'
+                    }
+                });
+            })
             $('input[name="datetime_reactive"]').on('apply.daterangepicker', function (ev, picker) {
-            @this.emit('dateRangeReactive', picker.startDate.format('YYYY-MM-DD HH:mm:00'), picker.endDate.format('YYYY-MM-DD HH:mm:00'))
+                $wire.emit('dateRangeReactive', picker.startDate.format('YYYY-MM-DD HH:mm:00'), picker.endDate.format('YYYY-MM-DD HH:mm:00'))
             });
-        })
+        };
     </script>
 </div>
 

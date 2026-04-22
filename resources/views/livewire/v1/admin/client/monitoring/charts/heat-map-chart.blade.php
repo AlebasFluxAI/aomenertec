@@ -38,7 +38,9 @@
                 <div wire:loading>
                     Actualizando Grafica...
                 </div>
-                <div id="chart_heat_map">
+                <div id="chart_heat_map"
+                     x-data
+                     x-init="$nextTick(() => window.initHeatMapChart($wire))">
 
                 </div>
 
@@ -46,22 +48,22 @@
         </div>
     </div>
     <script>
+        window.initHeatMapChart = window.initHeatMapChart || function ($wire) {
+            // Guard against double-init if the component remounts or x-init fires twice.
+            var _el = document.querySelector('#chart_heat_map');
+            if (!_el || _el.__chartInitialized) return;
+            _el.__chartInitialized = true;
 
+            $('input[name="datetime_heat_map"]').daterangepicker({
+                applyButtonClasses: 'text-primary',
+                timePicker: false,
+                maxSpan: {
+                    days: 15,
+                },
 
-        document.addEventListener('livewire:load', function () {
-            $(function () {
-                $('input[name="datetime_heat_map"]').daterangepicker({
-                    applyButtonClasses: 'text-primary',
-                    timePicker: false,
-                    maxSpan: {
-                        days: 15,
-                    },
-
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    }
-                });
-
+                locale: {
+                    format: 'YYYY-MM-DD'
+                }
             });
 
             var options_heat_map = {
@@ -117,66 +119,66 @@
 
             chart_heat_map.render();
 
-        @this.on('changeAxisHeatMap', (e) => {
-            ApexCharts.exec('heat_map_chart', "updateOptions", {
-                series: e.series_heat_map,
-                xaxis: {
-                    categories: ["00h", "01h", "02h", "03h", "04h", "05h", "06h", "07h", "08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h", "22h", "23h"],
-                },
-                title: {
-                    text: e.title,
+            $wire.on('changeAxisHeatMap', (e) => {
+                ApexCharts.exec('heat_map_chart', "updateOptions", {
+                    series: e.series_heat_map,
+                    xaxis: {
+                        categories: ["00h", "01h", "02h", "03h", "04h", "05h", "06h", "07h", "08h", "09h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h", "18h", "19h", "20h", "21h", "22h", "23h"],
+                    },
+                    title: {
+                        text: e.title,
 
-                },
-                plotOptions: {
-                    heatmap: {
-                        colorScale: {
-                            ranges: [
-                                {
-                                    from: 0,
-                                    to: (e.max_value) * 0.25,
-                                    color: '#00A100',
-                                    name: 'Bajo(>0)',
-                                },
-                                {
-                                    from: ((e.max_value) * 0.25),
-                                    to: (e.max_value) * 0.5,
-                                    color: '#ffcf63',
-                                    name: 'Medio(>' + ((e.max_value) * 0.25) + ')',
-                                },
-                                {
-                                    from: ((e.max_value) * 0.5),
-                                    to: (e.max_value) * 0.75,
-                                    color: '#ff9100',
-                                    name: 'Alto(>' + ((e.max_value) * 0.5) + ')',
-                                },
-                                {
-                                    from: ((e.max_value) * 0.75),
-                                    to: e.max_value,
-                                    color: '#ff0000',
-                                    name: 'Extremo(>' + ((e.max_value) * 0.75) + ')',
-                                }
-                            ]
+                    },
+                    plotOptions: {
+                        heatmap: {
+                            colorScale: {
+                                ranges: [
+                                    {
+                                        from: 0,
+                                        to: (e.max_value) * 0.25,
+                                        color: '#00A100',
+                                        name: 'Bajo(>0)',
+                                    },
+                                    {
+                                        from: ((e.max_value) * 0.25),
+                                        to: (e.max_value) * 0.5,
+                                        color: '#ffcf63',
+                                        name: 'Medio(>' + ((e.max_value) * 0.25) + ')',
+                                    },
+                                    {
+                                        from: ((e.max_value) * 0.5),
+                                        to: (e.max_value) * 0.75,
+                                        color: '#ff9100',
+                                        name: 'Alto(>' + ((e.max_value) * 0.5) + ')',
+                                    },
+                                    {
+                                        from: ((e.max_value) * 0.75),
+                                        to: e.max_value,
+                                        color: '#ff0000',
+                                        name: 'Extremo(>' + ((e.max_value) * 0.75) + ')',
+                                    }
+                                ]
+                            }
                         }
                     }
-                }
-            });
-        })
+                });
+            })
 
-        @this.on('loading8', (e) => {
-            ApexCharts.exec('heat_map_chart', "updateOptions", {
-                series: [],
-                xaxis: {
-                    categories: []
-                },
-                noData: {
-                    text: 'Datos no encontrados'
-                }
-            });
-        })
+            $wire.on('loading8', (e) => {
+                ApexCharts.exec('heat_map_chart', "updateOptions", {
+                    series: [],
+                    xaxis: {
+                        categories: []
+                    },
+                    noData: {
+                        text: 'Datos no encontrados'
+                    }
+                });
+            })
             $('input[name="datetime_heat_map"]').on('apply.daterangepicker', function (ev, picker) {
-            @this.emit('dateRangeHeatMap', picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
+                $wire.emit('dateRangeHeatMap', picker.startDate.format('YYYY-MM-DD'), picker.endDate.format('YYYY-MM-DD'))
             });
-        })
+        };
     </script>
 </div>
 

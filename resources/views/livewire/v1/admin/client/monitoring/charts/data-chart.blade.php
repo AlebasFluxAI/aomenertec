@@ -49,7 +49,10 @@
             <div wire:loading>
                 Actualizando Grafica...
             </div>
-            <div wire:ignore id="chart_line">
+            <div wire:ignore
+                 id="chart_line"
+                 x-data
+                 x-init="$nextTick(() => window.initDataChart($wire))">
 
             </div>
 
@@ -148,8 +151,12 @@
 
 
     <script>
+        window.initDataChart = window.initDataChart || function ($wire) {
+            // Guard against double-init if the component remounts or x-init fires twice.
+            var _el = document.querySelector('#chart_line');
+            if (!_el || _el.__chartInitialized) return;
+            _el.__chartInitialized = true;
 
-        $(function () {
             $('input[name="datetimes"]').daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
@@ -159,12 +166,7 @@
                 }
             });
 
-        });
-
-
-        document.addEventListener('livewire:load', function () {
-
-            @this.on('chartPhasor', (e) => {
+            $wire.on('chartPhasor', (e) => {
                 var phasor = new ACWF.PhasorDiagram("phasor");
                 var wfSet = ACWF.WaveformSet.create(e.data);
                 phasor.plotWaveformSet(wfSet, 0);
@@ -198,7 +200,7 @@
                             // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
 
                             if (config.dataPointIndex > 0) {
-                            @this.emitSelf('setPointPhasor', config.dataPointIndex)
+                                $wire.emitSelf('setPointPhasor', config.dataPointIndex)
                             }
 
 
@@ -267,36 +269,36 @@
             ;
 
 
-        @this.on('changeAxis', (e) => {
+            $wire.on('changeAxis', (e) => {
 
-            ApexCharts.exec('line_chart', "updateOptions", {
-                series: e.series,
-                xaxis: {
-                    categories: e.x_axis
-                },
-                title: {
-                    text: e.title,
-                },
-                dataLabels: {
-                    enabled: (e.type == 'column') ? true : false
-                },
-            });
-        })
-        @this.on('loading', (e) => {
-            ApexCharts.exec('line_chart', "updateOptions", {
-                series: [],
-                xaxis: {
-                    categories: []
-                },
-                noData: {
-                    text: 'Datos no encontrados'
-                }
-            });
-        })
+                ApexCharts.exec('line_chart', "updateOptions", {
+                    series: e.series,
+                    xaxis: {
+                        categories: e.x_axis
+                    },
+                    title: {
+                        text: e.title,
+                    },
+                    dataLabels: {
+                        enabled: (e.type == 'column') ? true : false
+                    },
+                });
+            })
+            $wire.on('loading', (e) => {
+                ApexCharts.exec('line_chart', "updateOptions", {
+                    series: [],
+                    xaxis: {
+                        categories: []
+                    },
+                    noData: {
+                        text: 'Datos no encontrados'
+                    }
+                });
+            })
             $('input[name="datetimes"]').on('apply.daterangepicker', function (ev, picker) {
-            @this.emit('changeDateRange', picker.startDate.format('YYYY-MM-DD HH:mm:00'), picker.endDate.format('YYYY-MM-DD HH:mm:00'))
+                $wire.emit('changeDateRange', picker.startDate.format('YYYY-MM-DD HH:mm:00'), picker.endDate.format('YYYY-MM-DD HH:mm:00'))
             });
-        })
+        };
     </script>
 
 
