@@ -6,77 +6,81 @@
                   Cuando colapsado: oculta la fila top (logo+X) y el texto de los ítems
      Toggle con Alpine.js
 ========================================================== --}}
-<style>
-    /* =========================================================
-       FluxAI Navigation Layer
-       Aplica el mismo lenguaje visual del menu "Acciones":
-       - Tipografia Inter sobria y legible
-       - Acento gradiente verde-azul como linea superior
-       - Hover/active suaves con elevacion
-       Solo CSS: no modifica estructura ni comportamiento.
-    ========================================================= --}}
-    aside nav { font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif); }
-    aside nav button,
-    aside nav a {
-        font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);
-        letter-spacing: 0.005em;
-    }
-    aside nav span {
-        font-weight: 500;
-        font-size: 14px;
-    }
-    aside nav button i,
-    aside nav a i { transition: transform 0.2s ease; }
-    aside nav button:hover i:not(.fa-chevron-down),
-    aside nav a:hover i:not(.fa-chevron-down) { transform: scale(1.08); }
-
-    /* Header — alinear tipografia con el resto de la plataforma */
-    header { font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif); }
-
-    /* Profile icons (notificaciones/rol/perfil/logout) — estilo coherente con Acciones */
-    header a[title="Cambiar rol"],
-    header a[title="Mi Perfil"],
-    header form button[title="Cerrar sesión"] {
-        transition: box-shadow .2s ease, border-color .2s ease, color .2s ease, background-color .2s ease, transform .1s ease;
-    }
-    header a[title="Cambiar rol"]:hover,
-    header a[title="Mi Perfil"]:hover {
-        border-color: rgba(12, 98, 220, 0.35) !important;
-        color: var(--flux-primary, #0044A4) !important;
-        background: linear-gradient(90deg, rgba(12, 98, 220, 0.06) 0%, rgba(0, 199, 129, 0.05) 100%) !important;
-        box-shadow: 0 4px 12px -6px rgba(12, 98, 220, 0.35);
-        transform: translateY(-1px);
-    }
-    header form button[title="Cerrar sesión"]:hover {
-        box-shadow: 0 4px 12px -6px rgba(229, 57, 53, 0.35);
-        transform: translateY(-1px);
-    }
-
-    /* Accent strip on top of the sidebar (gradiente energético) */
-    aside > div:first-child {
-        position: relative;
-    }
-    aside > div:first-child::before {
-        content: "";
-        position: absolute;
-        left: 0; right: 0; top: 0;
-        height: 2px;
-        background: linear-gradient(90deg, #00C781 0%, #0C62DC 55%, #0044A4 100%);
-        z-index: 1;
-    }
-</style>
 <div class="flex flex-col h-screen overflow-hidden"
      x-data="{
-         sidebarOpen: false,
-         sidebarCollapsed: false,
+          sidebarOpen: false,
+          sidebarCollapsed: false,
          toggleSidebar() {
              if (window.innerWidth >= 1024) {
                  this.sidebarCollapsed = !this.sidebarCollapsed;
              } else {
                  this.sidebarOpen = !this.sidebarOpen;
              }
-         }
+          }
      }">
+
+    {{-- Style embebido dentro del root del layout para evitar que un <style>
+         top-level quede como sibling de componentes Livewire globales (toast)
+         y dispare el warning 'Multiple root elements detected'. --}}
+    <style>
+        /* =========================================================
+           FluxAI Navigation Layer
+           Aplica el mismo lenguaje visual del menu "Acciones":
+           - Tipografia Inter sobria y legible
+           - Acento gradiente verde-azul como linea superior
+           - Hover/active suaves con elevacion
+           Solo CSS: no modifica estructura ni comportamiento.
+        ========================================================= --}}
+        aside nav { font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif); }
+        aside nav button,
+        aside nav a {
+            font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif);
+            letter-spacing: 0.005em;
+        }
+        aside nav span {
+            font-weight: 500;
+            font-size: 14px;
+        }
+        aside nav button i,
+        aside nav a i { transition: transform 0.2s ease; }
+        aside nav button:hover i:not(.fa-chevron-down),
+        aside nav a:hover i:not(.fa-chevron-down) { transform: scale(1.08); }
+
+        /* Header — alinear tipografia con el resto de la plataforma */
+        header { font-family: var(--flux-tech-font, 'Inter', system-ui, sans-serif); }
+
+        /* Profile icons (notificaciones/rol/perfil/logout) — estilo coherente con Acciones */
+        header a[title="Cambiar rol"],
+        header a[title="Mi Perfil"],
+        header form button[title="Cerrar sesión"] {
+            transition: box-shadow .2s ease, border-color .2s ease, color .2s ease, background-color .2s ease, transform .1s ease;
+        }
+        header a[title="Cambiar rol"]:hover,
+        header a[title="Mi Perfil"]:hover {
+            border-color: rgba(12, 98, 220, 0.35) !important;
+            color: var(--flux-primary, #0044A4) !important;
+            background: linear-gradient(90deg, rgba(12, 98, 220, 0.06) 0%, rgba(0, 199, 129, 0.05) 100%) !important;
+            box-shadow: 0 4px 12px -6px rgba(12, 98, 220, 0.35);
+            transform: translateY(-1px);
+        }
+        header form button[title="Cerrar sesión"]:hover {
+            box-shadow: 0 4px 12px -6px rgba(229, 57, 53, 0.35);
+            transform: translateY(-1px);
+        }
+
+        /* Accent strip on top of the sidebar (gradiente energético) */
+        aside > div:first-child {
+            position: relative;
+        }
+        aside > div:first-child::before {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; top: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00C781 0%, #0C62DC 55%, #0044A4 100%);
+            z-index: 1;
+        }
+    </style>
 
     {{-- =========================================================
          BACKDROP (overlay oscuro — solo móvil)
