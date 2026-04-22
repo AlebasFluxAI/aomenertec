@@ -8,11 +8,30 @@
        mecanismos ya existentes.
      ============================================================ --}}
 @php
+    // Resolución del permiso "tiempo real" por rol:
+    // - Admin / NetworkOperator / Supervisor / Technician usan UserPermissionableTrait
+    //   y permisos granulares por cliente (tabPermissionConditionableExist).
+    // - SuperAdmin / Seller / Support NO usan ese trait → no tienen permisos
+    //   granulares y ven el toggle por defecto (mismo comportamiento histórico
+    //   del patrón tab.blade.php, que filtra por clase antes de invocar el método).
     $userModel = \App\Models\V1\User::getUserModel();
-    $canSeeRealTime = $userModel && $userModel->tabPermissionConditionableExist(
-        \App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
-        $client
-    );
+    $rolesConPermisoGranular = [
+        \App\Models\V1\Admin::class,
+        \App\Models\V1\NetworkOperator::class,
+        \App\Models\V1\Supervisor::class,
+        \App\Models\V1\Technician::class,
+    ];
+
+    if (! $userModel) {
+        $canSeeRealTime = false;
+    } elseif (! in_array($userModel::class, $rolesConPermisoGranular, true)) {
+        $canSeeRealTime = true;
+    } else {
+        $canSeeRealTime = $userModel->tabPermissionConditionableExist(
+            \App\Models\V1\TabPermission::CLIENT_MONITORING_REAL_TIME,
+            $client
+        );
+    }
 @endphp
 
 {{-- Estilos inline: el build de Laravel Mix solo compila resources/sass/app.scss,
