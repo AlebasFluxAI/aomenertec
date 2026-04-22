@@ -4,140 +4,6 @@
      La lógica del componente PHP no cambia; solo el layout visual.
      ============================================================ --}}
 
-<style>
-    .flux-baseline { padding-top: 1rem; }
-
-    /* Reutiliza flux-dashboard-controlbar + subheader del dashboard unificado.
-       Si el navegador no cargó esos estilos (navegación directa), aquí hay
-       respaldo mínimo. */
-    .flux-baseline .flux-dashboard-controlbar {
-        display: flex; justify-content: space-between; align-items: center;
-        flex-wrap: wrap; gap: 0.75rem;
-        padding: 0.75rem 1rem;
-        background: #fff; border: 1px solid #E4E9F0;
-        border-radius: 10px; margin-bottom: 1.25rem;
-    }
-    .flux-baseline .flux-dashboard-title {
-        font-family: 'Poppins', system-ui, sans-serif;
-        font-weight: 600; font-size: 0.98rem;
-        color: #0044A4;
-        display: inline-flex; align-items: center; gap: 0.5rem;
-    }
-    .flux-baseline .flux-dashboard-title i { font-size: 1.05rem; color: #00C781; }
-
-    /* Cards de resumen */
-    .flux-bl-card {
-        position: relative;
-        background: #fff;
-        border: 1px solid #E4E9F0;
-        border-radius: 12px;
-        padding: 1rem 1.15rem 1rem 1.35rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-        overflow: hidden;
-        transition: transform 0.22s ease, box-shadow 0.22s ease;
-        height: 100%;
-    }
-    .flux-bl-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 18px rgba(0,68,164,0.10);
-    }
-    .flux-bl-card::before {
-        content: ''; position: absolute; top: 0; left: 0; bottom: 0;
-        width: 4px; background: #0044A4;
-    }
-    .flux-bl-card--comparison::before { background: #4A5568; }
-    .flux-bl-card--savings::before { background: #00C781; }
-    .flux-bl-card--overconsumption::before { background: #E53935; }
-
-    .flux-bl-card__header {
-        display: flex; align-items: center; gap: 0.55rem;
-        font-family: 'Inter', system-ui, sans-serif;
-        font-size: 0.72rem; font-weight: 600;
-        text-transform: uppercase; letter-spacing: 0.06em;
-        color: #4A5568;
-        margin-bottom: 0.4rem;
-    }
-    .flux-bl-card__header i {
-        width: 28px; height: 28px; border-radius: 8px;
-        display: inline-flex; align-items: center; justify-content: center;
-        font-size: 0.85rem;
-        background: rgba(0,68,164,0.08); color: #0044A4;
-    }
-    .flux-bl-card--comparison .flux-bl-card__header i {
-        background: rgba(74,85,104,0.10); color: #4A5568;
-    }
-    .flux-bl-card--savings .flux-bl-card__header i {
-        background: rgba(0,199,129,0.12); color: #00A56B;
-    }
-    .flux-bl-card--overconsumption .flux-bl-card__header i {
-        background: rgba(229,57,53,0.12); color: #B71C1C;
-    }
-
-    .flux-bl-card__value {
-        display: flex; align-items: baseline; gap: 0.35rem;
-        line-height: 1.15;
-    }
-    .flux-bl-card__number {
-        font-family: 'Poppins', system-ui, sans-serif;
-        font-weight: 700; font-size: 1.65rem;
-        color: #1A202C;
-        letter-spacing: -0.01em;
-    }
-    .flux-bl-card--savings .flux-bl-card__number { color: #00A56B; }
-    .flux-bl-card--overconsumption .flux-bl-card__number { color: #B71C1C; }
-    .flux-bl-card__unit {
-        font-family: 'Inter', system-ui, sans-serif;
-        font-weight: 500; font-size: 0.72rem; color: #4A5568;
-        text-transform: uppercase; letter-spacing: 0.06em;
-    }
-    .flux-bl-card__hint {
-        display: block;
-        font-family: 'Inter', system-ui, sans-serif;
-        font-size: 0.72rem; color: #A0AEC0;
-        margin-top: 0.2rem;
-    }
-    .flux-bl-card__percent {
-        display: inline-flex; align-items: center; gap: 0.25rem;
-        margin-left: 0.45rem;
-        padding: 0.1rem 0.45rem;
-        border-radius: 999px;
-        font-size: 0.7rem; font-weight: 600;
-    }
-    .flux-bl-card--savings .flux-bl-card__percent {
-        background: rgba(0,199,129,0.12); color: #00A56B;
-    }
-    .flux-bl-card--overconsumption .flux-bl-card__percent {
-        background: rgba(229,57,53,0.12); color: #B71C1C;
-    }
-
-    /* Form inputs row */
-    .flux-baseline__form {
-        background: #fff;
-        border: 1px solid #E4E9F0;
-        border-radius: 12px;
-        padding: 0.5rem 1rem 0.75rem;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    /* Chart container */
-    .flux-baseline__chart {
-        background: #fff;
-        border: 1px solid #E4E9F0;
-        border-radius: 12px;
-        padding: 0.5rem 0.5rem 1rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-    }
-    .flux-baseline__chart-loading {
-        display: inline-flex; align-items: center; gap: 0.4rem;
-        padding: 0.5rem 1rem;
-        color: #4A5568; font-size: 0.85rem;
-    }
-
-    @media (max-width: 768px) {
-        .flux-bl-card__number { font-size: 1.3rem; }
-    }
-</style>
 
 <div class="flux-baseline"
      x-data="{
@@ -157,6 +23,144 @@
         pct = Math.abs($event.detail.pct).toFixed(2);
         isSaving = $event.detail.isSaving;
      ">
+
+    {{-- Style embebido dentro del root <div class="flux-baseline">
+         para respetar single-root de Livewire 2. --}}
+    <style>
+        .flux-baseline { padding-top: 1rem; }
+    
+        /* Reutiliza flux-dashboard-controlbar + subheader del dashboard unificado.
+           Si el navegador no cargó esos estilos (navegación directa), aquí hay
+           respaldo mínimo. */
+        .flux-baseline .flux-dashboard-controlbar {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: #fff; border: 1px solid #E4E9F0;
+            border-radius: 10px; margin-bottom: 1.25rem;
+        }
+        .flux-baseline .flux-dashboard-title {
+            font-family: 'Poppins', system-ui, sans-serif;
+            font-weight: 600; font-size: 0.98rem;
+            color: #0044A4;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .flux-baseline .flux-dashboard-title i { font-size: 1.05rem; color: #00C781; }
+    
+        /* Cards de resumen */
+        .flux-bl-card {
+            position: relative;
+            background: #fff;
+            border: 1px solid #E4E9F0;
+            border-radius: 12px;
+            padding: 1rem 1.15rem 1rem 1.35rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            overflow: hidden;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+            height: 100%;
+        }
+        .flux-bl-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,68,164,0.10);
+        }
+        .flux-bl-card::before {
+            content: ''; position: absolute; top: 0; left: 0; bottom: 0;
+            width: 4px; background: #0044A4;
+        }
+        .flux-bl-card--comparison::before { background: #4A5568; }
+        .flux-bl-card--savings::before { background: #00C781; }
+        .flux-bl-card--overconsumption::before { background: #E53935; }
+    
+        .flux-bl-card__header {
+            display: flex; align-items: center; gap: 0.55rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.72rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            color: #4A5568;
+            margin-bottom: 0.4rem;
+        }
+        .flux-bl-card__header i {
+            width: 28px; height: 28px; border-radius: 8px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 0.85rem;
+            background: rgba(0,68,164,0.08); color: #0044A4;
+        }
+        .flux-bl-card--comparison .flux-bl-card__header i {
+            background: rgba(74,85,104,0.10); color: #4A5568;
+        }
+        .flux-bl-card--savings .flux-bl-card__header i {
+            background: rgba(0,199,129,0.12); color: #00A56B;
+        }
+        .flux-bl-card--overconsumption .flux-bl-card__header i {
+            background: rgba(229,57,53,0.12); color: #B71C1C;
+        }
+    
+        .flux-bl-card__value {
+            display: flex; align-items: baseline; gap: 0.35rem;
+            line-height: 1.15;
+        }
+        .flux-bl-card__number {
+            font-family: 'Poppins', system-ui, sans-serif;
+            font-weight: 700; font-size: 1.65rem;
+            color: #1A202C;
+            letter-spacing: -0.01em;
+        }
+        .flux-bl-card--savings .flux-bl-card__number { color: #00A56B; }
+        .flux-bl-card--overconsumption .flux-bl-card__number { color: #B71C1C; }
+        .flux-bl-card__unit {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-weight: 500; font-size: 0.72rem; color: #4A5568;
+            text-transform: uppercase; letter-spacing: 0.06em;
+        }
+        .flux-bl-card__hint {
+            display: block;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.72rem; color: #A0AEC0;
+            margin-top: 0.2rem;
+        }
+        .flux-bl-card__percent {
+            display: inline-flex; align-items: center; gap: 0.25rem;
+            margin-left: 0.45rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            font-size: 0.7rem; font-weight: 600;
+        }
+        .flux-bl-card--savings .flux-bl-card__percent {
+            background: rgba(0,199,129,0.12); color: #00A56B;
+        }
+        .flux-bl-card--overconsumption .flux-bl-card__percent {
+            background: rgba(229,57,53,0.12); color: #B71C1C;
+        }
+    
+        /* Form inputs row */
+        .flux-baseline__form {
+            background: #fff;
+            border: 1px solid #E4E9F0;
+            border-radius: 12px;
+            padding: 0.5rem 1rem 0.75rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    
+        /* Chart container */
+        .flux-baseline__chart {
+            background: #fff;
+            border: 1px solid #E4E9F0;
+            border-radius: 12px;
+            padding: 0.5rem 0.5rem 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .flux-baseline__chart-loading {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.5rem 1rem;
+            color: #4A5568; font-size: 0.85rem;
+        }
+    
+        @media (max-width: 768px) {
+            .flux-bl-card__number { font-size: 1.3rem; }
+        }
+    </style>
+
 
     {{-- ------------ Header ------------ --}}
     <div class="flux-dashboard-controlbar">
