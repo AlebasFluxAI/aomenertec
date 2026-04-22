@@ -306,34 +306,6 @@
                 'data_frame'=>$data_frame
             ], key('rt-chart'))
         </div>
-
-        {{-- Reactivos + HeatMap se muestran atenuados en LIVE (contexto
-             visual: el foco está en el streaming, pero el operador
-             sigue viendo la calidad de energía y el heatmap). --}}
-        <div class="flux-dashboard-section flux-rt-dimmable flux-rt-dim">
-            <div class="flux-dashboard-subheader">
-                <i class="fas fa-bolt"></i>
-                <span>Reactivos</span>
-            </div>
-            @livewire('v1.admin.client.monitoring.charts.reactive-chart', [
-                'client'=>$client,
-                'reactive_variables' => $reactive_variables,
-                'data_chart_reactive'=>$data_chart,
-                'time'=>$time
-            ], key('reactive-chart-live'))
-        </div>
-
-        <div class="flux-dashboard-section flux-rt-dimmable flux-rt-dim">
-            <div class="flux-dashboard-subheader">
-                <i class="fas fa-table-cells"></i>
-                <span>HeatMap</span>
-            </div>
-            @livewire('v1.admin.client.monitoring.charts.heat-map-chart', [
-                'client'=>$client,
-                'reactive_variables' => $reactive_variables,
-                'data_chart_heat_map'=>$data_chart
-            ], key('heatmap-chart-live'))
-        </div>
     @else
         {{-- ============ MODO HISTÓRICO (default) ============ --}}
         {{-- Cards superiores con últimos valores persistidos. --}}
