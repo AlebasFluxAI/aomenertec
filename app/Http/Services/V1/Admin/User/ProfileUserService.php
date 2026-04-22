@@ -269,7 +269,11 @@ class ProfileUserService extends Singleton
 
     private function buildTechnicianDashboard($model): array
     {
-        $recentClients = $model->clients()->orderByDesc("id")->limit(5)->get(["id", "name", "last_name", "created_at"]);
+        // Technician::clients() es belongsToMany(Client::class, 'client_technicians') y ambos
+        // modelos tienen OrderIdScope con orderBy('id') sin calificar tabla. El JOIN con
+        // client_technicians hace que "id" sea ambigua en PostgreSQL, por eso calificamos
+        // explícitamente con "clients.id" en order y select.
+        $recentClients = $model->clients()->orderByDesc("clients.id")->limit(5)->get(["clients.id", "clients.name", "clients.last_name", "clients.created_at"]);
         $equipments    = method_exists($model, 'allEquipments') ? $model->allEquipments() : $model->equipments()->get();
 
         $kpis = [
@@ -302,7 +306,11 @@ class ProfileUserService extends Singleton
 
     private function buildSupervisorDashboard($model): array
     {
-        $recentClients = $model->clients()->orderByDesc("id")->limit(5)->get(["id", "name", "last_name", "created_at"]);
+        // Supervisor::clients() es belongsToMany(Client::class, 'client_supervisors') y ambos
+        // modelos tienen OrderIdScope con orderBy('id') sin calificar tabla. El JOIN con
+        // client_supervisors hace que "id" sea ambigua en PostgreSQL, por eso calificamos
+        // explícitamente con "clients.id" en order y select.
+        $recentClients = $model->clients()->orderByDesc("clients.id")->limit(5)->get(["clients.id", "clients.name", "clients.last_name", "clients.created_at"]);
 
         $kpis = [
             ["accent" => "clients", "icon" => "fas fa-users", "label" => "Clientes supervisados",
