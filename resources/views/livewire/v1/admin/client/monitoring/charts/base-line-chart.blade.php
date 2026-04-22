@@ -318,19 +318,35 @@
             }));
         }
 
-        window.initBaseLineChart = window.initBaseLineChart || function ($wire) {
-            // Guard against double-init if the component remounts or x-init fires twice.
+        window.initBaseLineChart = function ($wire) {
             var _el = document.querySelector('#chart_baseline');
-            if (!_el || _el.__chartInitialized) return;
-            _el.__chartInitialized = true;
+            if (!_el) return;
 
-            $('input[name="datetimes_baseline_reference"]').daterangepicker({
+            // Destroy previous ApexCharts instance if present (Livewire re-mount safety).
+            if (_el._apexChart) {
+                try { _el._apexChart.destroy(); } catch (err) {}
+                _el._apexChart = null;
+            }
+
+            // Unbind previous daterangepicker instances before re-binding on re-mount.
+            var $dateRef = $('input[name="datetimes_baseline_reference"]');
+            if ($dateRef.data('daterangepicker')) {
+                $dateRef.data('daterangepicker').remove();
+            }
+            $dateRef.off('apply.daterangepicker');
+            $dateRef.daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
                 locale: { format: 'YYYY-MM-DD HH:mm' }
             });
-            $('input[name="datetimes_baseline_result"]').daterangepicker({
+
+            var $dateRes = $('input[name="datetimes_baseline_result"]');
+            if ($dateRes.data('daterangepicker')) {
+                $dateRes.data('daterangepicker').remove();
+            }
+            $dateRes.off('apply.daterangepicker');
+            $dateRes.daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
@@ -388,8 +404,9 @@
                 tooltip: { style: { fontFamily: 'Inter, sans-serif', fontSize: '12px' } }
             };
 
-            var chart_baseline = new ApexCharts(document.querySelector("#chart_baseline"), options);
+            var chart_baseline = new ApexCharts(_el, options);
             chart_baseline.render();
+            _el._apexChart = chart_baseline;
 
             /* Render inicial con los datos que trae Livewire */
             var initialSeries = @js($series);

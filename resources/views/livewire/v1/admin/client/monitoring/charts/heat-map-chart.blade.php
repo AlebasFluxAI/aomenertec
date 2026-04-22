@@ -48,13 +48,23 @@
         </div>
     </div>
     <script>
-        window.initHeatMapChart = window.initHeatMapChart || function ($wire) {
-            // Guard against double-init if the component remounts or x-init fires twice.
+        window.initHeatMapChart = function ($wire) {
             var _el = document.querySelector('#chart_heat_map');
-            if (!_el || _el.__chartInitialized) return;
-            _el.__chartInitialized = true;
+            if (!_el) return;
 
-            $('input[name="datetime_heat_map"]').daterangepicker({
+            // Destroy previous ApexCharts instance if present (Livewire re-mount safety).
+            if (_el._apexChart) {
+                try { _el._apexChart.destroy(); } catch (err) {}
+                _el._apexChart = null;
+            }
+
+            // Unbind previous daterangepicker instance before re-binding on re-mount.
+            var $dateInput = $('input[name="datetime_heat_map"]');
+            if ($dateInput.data('daterangepicker')) {
+                $dateInput.data('daterangepicker').remove();
+            }
+            $dateInput.off('apply.daterangepicker');
+            $dateInput.daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: false,
                 maxSpan: {
@@ -115,9 +125,10 @@
                 },
             }
 
-            var chart_heat_map = new ApexCharts(document.querySelector("#chart_heat_map"), options_heat_map);
+            var chart_heat_map = new ApexCharts(_el, options_heat_map);
 
             chart_heat_map.render();
+            _el._apexChart = chart_heat_map;
 
             $wire.on('changeAxisHeatMap', (e) => {
                 ApexCharts.exec('heat_map_chart', "updateOptions", {
