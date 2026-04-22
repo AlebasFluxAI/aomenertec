@@ -132,11 +132,15 @@
         </div>
     @endif
     <script>
-        window.initRealTimeChart = window.initRealTimeChart || function ($wire) {
-            // Guard against double-init if the component remounts or x-init fires twice.
+        window.initRealTimeChart = function ($wire) {
             var _el = document.querySelector('#chart_real_time');
-            if (!_el || _el.__chartInitialized) return;
-            _el.__chartInitialized = true;
+            if (!_el) return;
+
+            // Destroy previous ApexCharts instance if present (Livewire re-mount safety).
+            if (_el._apexChart) {
+                try { _el._apexChart.destroy(); } catch (err) {}
+                _el._apexChart = null;
+            }
 
             const elements = document.querySelectorAll('.animated-element');
             $wire.on('animatedRealTime', (e) => {
@@ -215,11 +219,11 @@
                 }
             }
 
-            var chart_real_time = new ApexCharts(document.querySelector("#chart_real_time"), options_real_time);
+            var chart_real_time = new ApexCharts(_el, options_real_time);
             chart_real_time.render();
+            _el._apexChart = chart_real_time;
 
-            var phasor;
-            var wfSet;
+            var phasor = null;
             var sampleData = {
                 title: "Sample Data",
                 lineFrequency: 100,
@@ -277,12 +281,17 @@
             }, false, false);
             // Actualizar solo la serie con animación suave
             chart_real_time.updateSeries(e.series, true);
-            phasor = new ACWF.PhasorDiagram("phasor_rt")
-            // wfSet = ACWF.WaveformSet.create(sampleData);
-            //phasor.plotWaveformSet(wfSet, 0);
-            wfSet = ACWF.WaveformSet.create(e.data);
-            phasor.plotWaveformSet(wfSet, 0);
 
+            // Phasor: el contenedor #phasor_rt solo existe cuando $select_data es truthy
+            // (Blade @if guard). Creamos el fasor lazily en el primer callback que lo
+            // encuentre y lo reusamos en los siguientes. Limpiamos innerHTML para evitar
+            // acumulación de SVGs del ACWF que se re-adjuntan en cada render.
+            var phasorEl = document.querySelector('#phasor_rt');
+            if (phasorEl) {
+                phasorEl.innerHTML = '';
+                phasor = new ACWF.PhasorDiagram('phasor_rt');
+                phasor.plotWaveformSet(ACWF.WaveformSet.create(e.data), 0);
+            }
         })
         };
     </script>

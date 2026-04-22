@@ -84,13 +84,23 @@
         </div>
     </div>
     <script>
-        window.initReactiveChart = window.initReactiveChart || function ($wire) {
-            // Guard against double-init if the component remounts or x-init fires twice.
+        window.initReactiveChart = function ($wire) {
             var _el = document.querySelector('#chart_reactive');
-            if (!_el || _el.__chartInitialized) return;
-            _el.__chartInitialized = true;
+            if (!_el) return;
 
-            $('input[name="datetime_reactive"]').daterangepicker({
+            // Destroy previous ApexCharts instance if present (Livewire re-mount safety).
+            if (_el._apexChart) {
+                try { _el._apexChart.destroy(); } catch (err) {}
+                _el._apexChart = null;
+            }
+
+            // Unbind previous daterangepicker instance before re-binding on re-mount.
+            var $dateInput = $('input[name="datetime_reactive"]');
+            if ($dateInput.data('daterangepicker')) {
+                $dateInput.data('daterangepicker').remove();
+            }
+            $dateInput.off('apply.daterangepicker');
+            $dateInput.daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
@@ -147,9 +157,10 @@
 
             }
 
-            var chart_reactive = new ApexCharts(document.querySelector("#chart_reactive"), options_reactive);
+            var chart_reactive = new ApexCharts(_el, options_reactive);
 
             chart_reactive.render();
+            _el._apexChart = chart_reactive;
 
             $wire.on('changeAxisReactive', (e) => {
 

@@ -51,6 +51,7 @@
             </div>
             <div wire:ignore
                  id="chart_line"
+                 style="max-width:100%;"
                  x-data
                  x-init="$nextTick(() => window.initDataChart($wire))">
 
@@ -151,13 +152,23 @@
 
 
     <script>
-        window.initDataChart = window.initDataChart || function ($wire) {
-            // Guard against double-init if the component remounts or x-init fires twice.
+        window.initDataChart = function ($wire) {
             var _el = document.querySelector('#chart_line');
-            if (!_el || _el.__chartInitialized) return;
-            _el.__chartInitialized = true;
+            if (!_el) return;
 
-            $('input[name="datetimes"]').daterangepicker({
+            // Destroy previous ApexCharts instance if present (Livewire re-mount safety).
+            if (_el._apexChart) {
+                try { _el._apexChart.destroy(); } catch (err) {}
+                _el._apexChart = null;
+            }
+
+            // Unbind previous daterangepicker instance before re-binding on re-mount.
+            var $dateInput = $('input[name="datetimes"]');
+            if ($dateInput.data('daterangepicker')) {
+                $dateInput.data('daterangepicker').remove();
+            }
+            $dateInput.off('apply.daterangepicker');
+            $dateInput.daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
                 timePicker24Hour: true,
@@ -244,9 +255,10 @@
 
             }
 
-            var chart_line = new ApexCharts(document.querySelector("#chart_line"), options);
+            var chart_line = new ApexCharts(_el, options);
 
             chart_line.render();
+            _el._apexChart = chart_line;
             ApexCharts.exec('line_chart', "updateOptions", {
                 series: @js($series),
                 xaxis: {
