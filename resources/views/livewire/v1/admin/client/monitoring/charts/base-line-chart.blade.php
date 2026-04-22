@@ -292,7 +292,9 @@
             <i class="fas fa-circle-notch fa-spin"></i>
             <span>Actualizando gráfica...</span>
         </div>
-        <div id="chart_baseline"></div>
+        <div id="chart_baseline"
+             x-data
+             x-init="$nextTick(() => window.initBaseLineChart($wire))"></div>
     </div>
 
     <script>
@@ -316,7 +318,12 @@
             }));
         }
 
-        $(function () {
+        window.initBaseLineChart = window.initBaseLineChart || function ($wire) {
+            // Guard against double-init if the component remounts or x-init fires twice.
+            var _el = document.querySelector('#chart_baseline');
+            if (!_el || _el.__chartInitialized) return;
+            _el.__chartInitialized = true;
+
             $('input[name="datetimes_baseline_reference"]').daterangepicker({
                 applyButtonClasses: 'text-primary',
                 timePicker: true,
@@ -329,9 +336,7 @@
                 timePicker24Hour: true,
                 locale: { format: 'YYYY-MM-DD HH:mm' }
             });
-        });
 
-        document.addEventListener('livewire:load', function () {
             var options = {
                 chart: {
                     id: 'baseline_chart',
@@ -445,7 +450,7 @@
                 fluxBlDispatchUpdate({ refTotal: sumRef, cmpTotal: sumCmp });
             }
 
-            @this.on('changeAxis', (e) => {
+            $wire.on('changeAxis', (e) => {
                 if (!e.series || e.series.length < 2 || !e.series[0].data || !e.series[0].data.length) {
                     fluxBlDispatchUpdate({ refTotal: 0, cmpTotal: 0 });
                     ApexCharts.exec('baseline_chart', "updateOptions", {
@@ -511,7 +516,7 @@
                 fluxBlDispatchUpdate({ refTotal: sumRef, cmpTotal: sumCmp });
             });
 
-            @this.on('loading', (e) => {
+            $wire.on('loading', (e) => {
                 ApexCharts.exec('baseline_chart', "updateOptions", {
                     series: [], xaxis: { categories: [] },
                     noData: { text: 'Datos no encontrados' }
@@ -520,11 +525,11 @@
             });
 
             $('input[name="datetimes_baseline_result"]').on('apply.daterangepicker', function (ev, picker) {
-                @this.emit('changeDateRangeResult', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'));
+                $wire.emit('changeDateRangeResult', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'));
             });
             $('input[name="datetimes_baseline_reference"]').on('apply.daterangepicker', function (ev, picker) {
-                @this.emit('changeDateRangeReference', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'));
+                $wire.emit('changeDateRangeReference', picker.startDate.format('YYYY-MM-DD 00:00:00'), picker.endDate.format('YYYY-MM-DD 23:59:59'));
             });
-        });
+        };
     </script>
 </div>

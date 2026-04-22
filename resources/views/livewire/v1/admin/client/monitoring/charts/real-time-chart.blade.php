@@ -44,7 +44,10 @@
                         @endforeach
                     </div>
                 </div>
-                <div wire:ignore id="chart_real_time">
+                <div wire:ignore
+                     id="chart_real_time"
+                     x-data
+                     x-init="$nextTick(() => window.initRealTimeChart($wire))">
 
                 </div>
             </div>
@@ -129,9 +132,14 @@
         </div>
     @endif
     <script>
-        document.addEventListener('livewire:load', function () {
+        window.initRealTimeChart = window.initRealTimeChart || function ($wire) {
+            // Guard against double-init if the component remounts or x-init fires twice.
+            var _el = document.querySelector('#chart_real_time');
+            if (!_el || _el.__chartInitialized) return;
+            _el.__chartInitialized = true;
+
             const elements = document.querySelectorAll('.animated-element');
-            @this.on('animatedRealTime', (e) => {
+            $wire.on('animatedRealTime', (e) => {
                 elements.forEach(function (element, index) {
                     element.classList.add('animate__animated', 'animate__pulse', 'animate__repeat-2');
                     element.addEventListener('animationend', () => {
@@ -261,7 +269,7 @@
                     }
                 ]
             };
-        @this.on('addPointRealTime', (e) => {
+        $wire.on('addPointRealTime', (e) => {
             // Actualizar título / noData sin redibujar todo
             chart_real_time.updateOptions({
                 title:  { text: e.title },
@@ -276,7 +284,7 @@
             phasor.plotWaveformSet(wfSet, 0);
 
         })
-        })
+        };
     </script>
 </div>
 
