@@ -282,10 +282,10 @@
             // Actualizar solo la serie con animación suave
             chart_real_time.updateSeries(e.series, true);
 
-            // Phasor: el contenedor #phasor_rt solo existe cuando $select_data es truthy
-            // (Blade @if guard). Creamos el fasor lazily en el primer callback que lo
-            // encuentre y lo reusamos en los siguientes. Limpiamos innerHTML para evitar
-            // acumulación de SVGs del ACWF que se re-adjuntan en cada render.
+            // Phasor: the #phasor_rt container only exists when select_data is truthy
+            // (guarded by Blade conditional above). Create the phasor lazily on the first
+            // callback that finds it and reuse on subsequent events. Clear innerHTML to
+            // prevent ACWF SVG stacking on each render.
             var phasorEl = document.querySelector('#phasor_rt');
             if (phasorEl) {
                 phasorEl.innerHTML = '';
